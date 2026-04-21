@@ -1,0 +1,43 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+/**
+ * Button Components
+ *
+ * Defines styles for buttons, including the primary button.
+ */
+// Primary button styles
+.button-primary {
+  @include mixins.button-base(
+                  vars.$button-primary-bg,
+                  vars.$button-primary-color,
+                  vars.$button-primary-border-color,
+                  vars.$button-primary-hover-bg,
+                  vars.$button-primary-hover-color,
+                  vars.$button-primary-hover-border-color,
+                  vars.$button-primary-active-bg
+  );
+}
+
+.button-orange{
+  @include mixins.button-base(
+                  vars.$primary,
+                  vars.$white,
+                  vars.$primary,
+                  vars.$white,
+                  vars.$black,
+                  vars.$black,
+                  vars.$primary
+  );
+}
+
+.button-sing_up {
+  @include mixins.button-base(
+                  vars.$button-sing_up-bg,
+                  vars.$button-sing_up-color,
+                  vars.$button-sing_up-border-color,
+                  vars.$button-sing_up-hover-bg,
+                  vars.$button-sing_up-hover-color,
+                  vars.$button-sing_up-hover-border-color,
+                  vars.$button-sing_up-active-bg
+  );
+}

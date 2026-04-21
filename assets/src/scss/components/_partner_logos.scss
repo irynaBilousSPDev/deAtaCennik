@@ -1,0 +1,85 @@
+@use "../abstracts/variables"  as vars;
+
+.section_partner_logos {
+  background-color:  vars.$white;
+}
+.section_partner_logos {
+  padding: 24px 0;
+  background: #fff;
+
+  .partner_logos_slider {
+    overflow: hidden;
+
+    .slick-track {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-slide {
+      display: flex !important; /* important for Slick */
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      box-sizing: border-box;
+
+      img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        max-height: 56px;
+        object-fit: contain;
+        filter: grayscale(100%);
+        opacity: 0.8;
+        transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+      }
+
+      &:hover img {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: translateY(-1px);
+      }
+    }
+
+    .slick-dots {
+      margin-top: 10px;
+      li button:before {
+        font-size: 10px;
+        opacity: 0.4;
+      }
+      li.slick-active button:before {
+        opacity: 0.9;
+      }
+    }
+
+    .slick-prev,
+    .slick-next {
+      width: 36px;
+      height: 36px;
+      z-index: 2;
+    }
+    .slick-prev:before,
+    .slick-next:before {
+      font-size: 30px;
+      opacity: 0.6;
+    }
+    .slick-prev:hover:before,
+    .slick-next:hover:before {
+      opacity: 1;
+    }
+  }
+}
+
+/* Logo scaling by breakpoint */
+@media (min-width: 480px) {
+  .section_partner_logos .partner_logos_slider img { max-height: 64px; }
+}
+@media (min-width: 768px) {
+  .section_partner_logos .partner_logos_slider img { max-height: 72px; }
+}
+@media (min-width: 992px) {
+  .section_partner_logos .partner_logos_slider img { max-height: 80px; }
+}
+@media (min-width: 1200px) {
+  .section_partner_logos .partner_logos_slider img { max-height: 88px; }
+}
+

@@ -1,0 +1,82 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.slider-section {
+  text-align: center;
+  color: vars.$white;
+  background-color: vars.$black;
+  padding: 2rem;
+
+  .my_slider {
+    .slider-card {
+      background: vars.$background-light;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 1rem;
+      text-align: left;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+
+      .slider-content {
+        padding: 1rem;
+
+        h3 {
+          font-size: 1.2rem;
+          color: vars.$primary;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          font-size: 0.9rem;
+          color: vars.$color-gray;
+        }
+      }
+    }
+
+    .slick-arrow {
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      color: vars.$white;
+      font-size: vars.$font-size-xl;
+      width: 40px;
+      height: 40px;
+      @include mixins.flexbox(row, center, center);
+      border-radius: 50%;
+      z-index: 10;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.9);
+      }
+    }
+
+    .slick-prev {
+      left: -50px;
+    }
+
+    .slick-next {
+      right: -50px;
+    }
+
+    .slick-dots {
+      bottom: -30px;
+
+      li {
+        button {
+          &::before {
+            font-size: 10px;
+            color: vars.$white;
+          }
+        }
+      }
+
+      li.slick-active button::before {
+        color: vars.$primary;
+      }
+    }
+  }
+}

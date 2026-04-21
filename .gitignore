@@ -1,0 +1,12 @@
+# IDE
+/nbproject/
+.idea/*
+
+
+# Project
+.sass-cache
+#assets/src
+node_modules/
+
+
+#_RESSOURCES/

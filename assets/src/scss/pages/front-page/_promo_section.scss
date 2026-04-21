@@ -1,0 +1,242 @@
+@use "../../abstracts/variables" as vars;
+@use "../../abstracts/mixins" as mixins;
+
+.promo_section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  @media (min-width: 991px) and (max-width: 1080px) {
+    flex-wrap: nowrap;
+  }
+
+  .promo_box {
+    flex: 1 1 500px;
+    height: 776px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+    padding: 30px;
+    overflow: hidden;
+    box-sizing: border-box;
+    position: relative;
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      height: 480px;
+    }
+
+    &:before {
+      position: absolute;
+      content: "";
+      left: 0;
+      width: 100%;
+      height: 30%;
+    }
+
+    &.full_width {
+      flex: 1 1 100%;
+    }
+
+    .promo_content {
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+
+      h2 {
+        font-size: 26px;
+        margin-bottom: 20px;
+        line-height: 1.1;
+        color: #fff;
+
+        span {
+          font-weight: 400;
+        }
+
+        strong {
+          font-size: 32px;
+          font-weight: 800;
+          display: block;
+          margin-top: 5px;
+        }
+      }
+
+      .promo_button {
+        display: inline-block;
+        background: white;
+        color: black;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        max-width: 210px;
+        font-size: 16px;
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+    }
+
+    &.left {
+      &:before {
+        bottom: 0;
+        background: linear-gradient(180deg, transparent 0, #000 100%);
+      }
+
+      .promo_content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        h2 {
+          font-size: 44px;
+          color: rgba(255, 255, 255, 0.87);
+
+          strong {
+            font-size: 40px;
+          }
+        }
+
+        .button_wrapper {
+          display: flex;
+          justify-content: flex-end;
+        }
+      }
+    }
+
+    &.right {
+
+      &:before {
+        top: 0;
+        background: linear-gradient(0deg, transparent 0, #000 100%);
+      }
+      .promo_content {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        h2 {
+          font-size: 43px;
+          color: rgba(255, 255, 255, 0.89);
+
+          strong {
+            font-size: 40px;
+          }
+        }
+
+        .button_wrapper {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .promo_section {
+    .promo_box {
+      height: 500px;
+
+      &.left .promo_content h2 {
+        font-size: 38px;
+
+        strong {
+          font-size: 52px;
+        }
+      }
+
+      &.right .promo_content h2 {
+        font-size: 30px;
+
+        strong {
+          font-size: 32px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .promo_section {
+    flex-direction: column;
+
+    .promo_box {
+      height: 400px;
+
+      &.left .promo_content h2 {
+        font-size: 28px;
+
+        strong {
+          font-size: 36px;
+        }
+      }
+
+      &.right .promo_content h2 {
+        font-size: 24px;
+
+        strong {
+          font-size: 26px;
+        }
+      }
+
+      .promo_button {
+        font-size: 15px;
+      }
+
+      .promo_content {
+        padding: 15px;
+        justify-content: flex-end;
+
+        .button_wrapper {
+          justify-content: center !important;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .promo_box {
+    height: 320px;
+
+    &.left .promo_content h2 {
+      font-size: 22px;
+
+      strong {
+        font-size: 28px;
+      }
+    }
+
+    &.right .promo_content h2 {
+      font-size: 20px;
+
+      strong {
+        font-size: 24px;
+      }
+    }
+
+    .promo_content {
+      padding: 10px;
+
+      .promo_button {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+
+      .button_wrapper {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 1rem;
+      }
+    }
+  }
+}

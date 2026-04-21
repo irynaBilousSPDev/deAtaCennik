@@ -1,0 +1,114 @@
+.nav-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .8rem 1rem;
+  margin-right: 1rem;
+  background-color: rgba(0, 113, 227, 1);
+  color: #fff;
+  border-radius: 25px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: rgba(0, 113, 227, 0.9);
+    color: #fff;
+  }
+}
+
+.home,
+.page-template-page-aktualnosci,
+.page-template-page-contact,
+.single-post {
+  .mega-menu-button {
+    border: 0 !important;
+  }
+
+  #menu-main {
+    margin-bottom: 0 !important;
+  }
+}
+
+
+/* ======================
+   Desktop Medium
+====================== */
+@media (min-width: 1281px) and (max-width: 1600px) {
+  .home,
+  .page-template-page-aktualnosci,
+  .page-template-page-contact,
+  .single-post {
+    header {
+      #menu-main {
+        a {
+          font-weight: 600;
+          font-size: 1.6rem !important;
+          padding: 0.8rem !important;
+        }
+      }
+    }
+  }
+
+  .nav-cta-button {
+    font-size: 1.4rem;
+    padding: .8rem 1rem;
+    margin-right: 0.5rem;
+  }
+}
+
+/* ======================
+   Tablet
+====================== */
+@media (min-width: 991px) and (max-width: 1280px) {
+  .home,
+  .page-template-page-aktualnosci,
+  .page-template-page-contact,
+  .single-post {
+    header {
+      #menu-main {
+        a {
+          font-weight: 600;
+          font-size: 14px !important;
+          padding: 0.8rem !important;
+        }
+      }
+    }
+  }
+
+  .nav-cta-button {
+    font-size: 1.2rem;
+    padding: .8rem 1rem;
+    margin-right: 0.5rem;
+  }
+}
+
+/* ======================
+   Mobile
+====================== */
+
+
+@media (max-width: 540px) {
+  .home,
+  .page-template-page-aktualnosci,
+  .page-template-page-contact,
+  .single-post {
+    .site-header {
+      .site-branding {
+        a {
+          img {
+            max-width: 150px !important;
+          }
+        }
+      }
+    }
+  }
+
+  a.nav-cta-button {
+    font-size: 1rem;
+    padding: .4rem 0.8rem !important;
+    margin-right: 0;
+  }
+}

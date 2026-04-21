@@ -1,0 +1,108 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.accordion_container {
+  width: 100%;
+  margin: auto;
+
+  .accordion-item {
+    overflow: hidden;
+  }
+
+  .accordion-header {
+    @include mixins.flexbox(row, space-between, center);
+    padding: 18px 35px;
+    background-color: vars.$background-gray;
+    cursor: pointer;
+    transition: background 0.5s ease;
+    border-bottom: 1px solid vars.$primary;
+
+    @include mixins.max-ipad-air-screen  {
+      .small_title {
+         font-size: vars.$font-size-default;
+       }
+    }
+
+    &:hover {
+      background-color: vars.$background-gray;
+    }
+
+    .accordion-arrow {
+      width: 12px;
+      height: 12px;
+      border: solid vars.$primary;
+      border-width: 0 1px 1px 0;
+      display: inline-block;
+      padding: 5px;
+      transform: rotate(45deg);
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .accordion-item.active .accordion-header {
+    background-color: vars.$white;
+  }
+
+  .accordion-item.active .accordion-arrow {
+    transform: rotate(-135deg);
+  }
+
+  .accordion-content {
+    display: none;
+    padding: 15px;
+    animation: slideDown 0.3s ease-in-out;
+    display: flex;
+
+    .column {
+      flex: 1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      width: 100%;
+      column-count: 1;
+      column-gap: 40px;
+
+      @include mixins.ipad-air-screen {
+        column-count: 3;
+      }
+    }
+
+    li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+
+      @include mixins.max-ipad-air-screen {
+        padding-left: 10px;
+        font-size: vars.$font-size-s-medium;
+        font-weight: vars.$weight-bold;
+        line-height: 1.1;
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        height: 100%;
+        background-color: vars.$primary;
+
+        @include mixins.ipad-air-screen {
+          top: 50%;
+          width: 10px;
+          height: 10px;
+          background-color: vars.$primary;
+          border-radius: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+
+  .accordion-item.active .accordion-content {
+    display: flex;
+  }
+}

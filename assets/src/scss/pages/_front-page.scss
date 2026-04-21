@@ -1,0 +1,936 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.site {
+  h1 {
+    //font-family: "Neulis Sans Bold", serif;
+    font-family: "Nunito Sans", serif;
+  }
+}
+
+
+.section_main_banner {
+  overflow: hidden;
+}
+
+.main_slider {
+  position: relative;
+
+  @include mixins.max-sm-screen {
+    .slick-dotted.slick-slider {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .main_slider_active {
+    max-width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 0 10px;
+
+    .slide_item {
+      cursor: pointer;
+    }
+
+    .image_bg {
+      @include mixins.flexbox(row, space-between, flex-end);
+    }
+
+    @include mixins.ipad-mini-screen {
+      max-width: 480px !important;
+    }
+    @include mixins.ipad-screen {
+      max-width: 768px !important;
+      padding: 0 20px;
+    }
+    @include mixins.md-screen {
+      max-width: 991px !important;
+    }
+    @include mixins.mac-screen {
+      max-width: 1025px !important;
+    }
+    @include mixins.xxl-screen {
+      max-width: 1500px !important;
+    }
+  }
+
+  .main_slider_nav_wrapper {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    height: 84vh;
+    z-index: -1;
+
+    @include mixins.max-sm-screen {
+      display: none;
+    }
+
+    .image_bg {
+      @include mixins.flexbox(row, flex-end, flex-end);
+    }
+
+    .slick-slide {
+      width: 280px !important;
+
+      @include mixins.ipad-mini-screen {
+        width: 480px !important;
+      }
+      @include mixins.ipad-screen {
+        width: 768px !important;
+      }
+      @include mixins.md-screen {
+        width: 991px !important;
+      }
+      @include mixins.mac-screen {
+        width: 1025px !important;
+      }
+      @include mixins.xxl-screen {
+        width: 1500px !important;
+      }
+    }
+  }
+
+  .slide_item {
+    @include mixins.flexbox(row, center, center);
+
+    .small_title {
+      color: vars.$white;
+      margin: 0 2rem;
+
+      @include mixins.max-sm-screen {
+        font-size: 12px;
+      }
+      @include mixins.max-md-screen {
+        font-size: 16px;
+        margin: 0 1rem;
+      }
+    }
+
+  }
+
+  .image_bg {
+    height: 290px;
+    margin: 0 auto;
+    position: relative;
+    font-weight: vars.$weight-regular;
+
+    @include mixins.max-md-screen {
+      padding: 0 1em 1rem 1rem;
+    }
+    @media (max-width: 1440px) {
+      padding: 0 1em 2rem 1rem;
+    }
+    @media (max-width: 480px) {
+      padding: 0 .5em .5rem .5rem;
+    }
+
+    .button-primary {
+      padding: 5px 15px;
+      max-width: 200px;
+      font-size: vars.$font-size-default;
+
+      @include mixins.max-sm-screen {
+        padding: 5px 10px;
+        max-width: 90px;
+        font-size: vars.$font-size-little;
+      }
+
+      @include mixins.max-md-screen {
+        max-width: fit-content;
+        font-size: vars.$font-size-s-medium;
+      }
+    }
+
+
+    @include mixins.ipad-mini-screen {
+      height: 28vh;
+      min-height: 300px;
+    }
+
+    @include mixins.ipad-screen {
+      height: 36vh;
+      min-height: 440px;
+    }
+
+    @media (min-width: 991px) {
+      height: 560px;
+    }
+
+    @media (min-width: 1281px) {
+      height: 60vh;
+    }
+
+    @include mixins.lg-screen {
+      height: 65vh;
+      min-height: 480px;
+    }
+
+    @include mixins.mac-screen {
+      height: 78vh;
+    }
+
+    @media (min-width: 1400px) {
+      height: 65vh;
+    }
+
+    @include mixins.xl-screen {
+      height: 62vh;
+      padding: 20px;
+      font-size: vars.$font-size-lg;
+    }
+
+    @include mixins.xxl-screen {
+      height: 84vh;
+      padding: 0 3rem 4rem 3rem;
+    }
+
+    @media (min-width: 2200px) {
+      height: 884px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    img {
+      display: none !important;
+    }
+  }
+
+  .details {
+
+    @include mixins.flexbox(row, flex-start, flex-end);
+
+    @include mixins.ipad-mini-screen {
+
+      @include mixins.flexbox(row, flex-start, center);
+
+    }
+
+    @include mixins.max-sm-screen {
+
+      @include mixins.flexbox(row, flex-start, center);
+
+    }
+  }
+}
+
+.main_slider_controls {
+  position: relative;
+  padding: .85rem 0;
+  margin-top: -5px;
+
+  @include mixins.flexbox(row, center, center);
+
+  .slick-dots {
+    bottom: 0;
+    top: 0;
+    list-style: none;
+
+    @include mixins.flexbox(row, center, center);
+
+    li {
+      margin: 0 5px;
+      @include mixins.flexbox(row, center, center);
+
+      &:hover,
+      &.slick-active {
+
+        button {
+          background: rgba(vars.$border-gray, 1);
+        }
+      }
+
+      button {
+        width: 10px;
+        height: 10px;
+        background: rgba(vars.$border-gray, 0.48);
+        border: 2px solid #fff;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:focus-visible {
+          outline: 2px auto vars.$black !important;
+        }
+
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .slick-play-pause {
+    position: relative;
+    z-index: 11;
+    background: rgba(vars.$border-gray, 0.48);
+    color: #fff;
+    border: none;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-left: auto;
+    font-size: 12px;
+    @include mixins.flexbox(row, center, center);
+
+    &:focus {
+      outline: 0 auto vars.$black;
+    }
+
+    &:focus-visible {
+      outline: 2px auto vars.$black !important;
+    }
+  }
+}
+
+
+.home_main_title {
+  margin-bottom: 1.125rem;
+
+  .title_wrapper {
+    @include mixins.flexbox(row, flex-start, flex-end);
+  }
+
+  h1 {
+    margin: 0 1rem;
+    @include mixins.heading-style(vars.$font-size-default, 1, vars.$weight-bold, vars.$primary);
+
+    @include mixins.lg-screen {
+
+      @include mixins.heading-style(vars.$font-size-xl, 1, vars.$weight-bold, vars.$primary);
+    }
+  }
+}
+
+.our_offer {
+  background-color: vars.$black;
+  color: vars.$white;
+
+  .offer_category_title {
+
+    @include mixins.max-sm-screen {
+      justify-content: space-between;
+    }
+
+    a {
+      color: #7B9477;
+      margin: 0 2rem;
+      display: inline-block;
+
+      @include mixins.max-sm-screen {
+        color: vars.$primary;
+      }
+    }
+  }
+
+  .small_title {
+    color: vars.$white;
+    font-weight: vars.$weight-regular;
+  }
+
+  .slick-slide {
+    width: 400px;
+
+    @include mixins.max-sm-screen {
+      width: 286px;
+    }
+  }
+}
+
+.offer_category_slider {
+
+  .slick-dots {
+    bottom: -30px;
+    list-style: none;
+  }
+
+  .slick-dots li {
+    width: 8px;
+    height: 8px;
+    background: vars.$white;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .slick-dots li.slick-active {
+    background: vars.$border-gray;
+    transform: scale(1.2);
+  }
+
+  .slick-prev,
+  .slick-next {
+    width: 95px;
+    height: 100%;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0;
+    transition: background-color 0.3s ease, opacity 0.5s ease;
+
+    @include mixins.flexbox(row, center, center);
+
+    &.slick-disabled {
+      visibility: hidden;
+    }
+
+    &::before {
+      position: absolute;
+      content: "";
+      display: block;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(vars.$black, 0.68);
+      z-index: 1;
+      transition: all 0.3s ease-in-out;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      width: 36px;
+      height: 121px;
+      background-image: url('../../../static/img/arrow_offer_category_slider.webp');
+      z-index: 2;
+      transition: all 0.3s ease-in-out;
+    }
+
+    &:hover {
+
+      &::before {
+        background-color: rgba(vars.$black, 0.78);
+      }
+    }
+  }
+
+  .slick-prev {
+    left: 0;
+
+    &::after {
+      transform: rotate(180deg); // Left arrow
+    }
+  }
+
+  .slick-next {
+    right: 0;
+  }
+
+
+  &:hover {
+    .slick-prev,
+    .slick-next {
+      opacity: 1 !important;
+    }
+  }
+}
+
+.product_slide {
+  padding: 1rem 0.5rem;
+  position: relative;
+
+  overflow: hidden;
+  display: flex !important;
+  transform: scale(1);
+  transition: transform 0.3s ease-in-out;
+
+  @include mixins.flexbox(column, space-between, flex-end);
+
+  @include mixins.ipad-air-screen {
+    height: calc(230px + 2rem);
+
+    &:hover {
+      z-index: 2;
+      transform: scale(1.1);
+    }
+  }
+
+  @include mixins.max-sm-screen {
+    padding: 0 1rem;
+    height: 400px;
+  }
+
+  .image_bg {
+    height: 230px;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+
+    @include mixins.max-sm-screen {
+      max-width: 280px;
+      height: 400px;
+      border-radius: 17px;
+      overflow: hidden;
+    }
+
+    .ranking_icon {
+      max-width: 65px;
+    }
+
+    &:before {
+      position: absolute;
+      content: '';
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(180deg, transparent 0%, rgba(vars.$black, 1) 100%);
+    }
+  }
+
+  .category_name {
+    font-weight: vars.$weight-regular;
+    font-size: vars.$font-size-sm;
+    text-align: right;
+    line-height: 1.2;
+    margin-left: 1rem;
+    color: vars.$white;
+
+    @include mixins.max-sm-screen {
+      font-size: vars.$font-size-little;
+    }
+  }
+
+  .details {
+    padding: 1rem 1rem 1rem 2rem;
+    width: 100%;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+
+    @include mixins.flexbox(row, space-between, flex-end);
+
+    .small_title {
+      font-weight: vars.$weight-regular;
+      margin-bottom: 0;
+
+      @include mixins.max-sm-screen {
+        font-size: vars.$font-size-m;;
+      }
+
+    }
+  }
+
+  .more_details {
+    position: absolute;
+    bottom: 2rem;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateY(50%) scale(0.9);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    z-index: -1;
+
+    @include mixins.flexbox(column, flex-end, center);
+
+    .button-primary {
+      max-width: 120px;
+      margin-top: 4.375rem;
+    }
+  }
+
+
+  &:hover {
+    &:before {
+      //height: 100%;
+      //background-color: rgba(vars.$black, 0.75);
+    }
+
+    .details {
+      opacity: 1;
+    }
+
+    .more_details {
+      opacity: 1;
+      z-index: 2;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+.section_counter {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+
+  @media (min-width: 991px) and (max-width: 1280px) {
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+  }
+
+  .counter_wrapper {
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    @include mixins.flexbox(row, center, stretch);
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      gap: 10px;
+    }
+
+    @include mixins.lg-screen {
+      gap: 40px;
+    }
+    @include mixins.xxl-screen {
+      gap: 40px;
+      justify-content: space-between;
+      padding-left: 5vh;
+      padding-right: 5vh;
+    }
+
+  }
+
+  .counter-box {
+    width: 200px;
+    text-align: center;
+
+    @include mixins.flexbox(column, space-between, center);
+
+    @include mixins.max-ipad-air-screen {
+      width: 45%;
+    }
+
+    @include mixins.max-sm-screen {
+      width: 29%;
+    }
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      width: 190px;
+    }
+  }
+
+  .counter {
+    font-size: vars.$font-size-display-xl;
+    font-weight: bold;
+    color: vars.$black;
+
+    @include mixins.max-ipad-air-screen {
+      font-size: 50px;
+    }
+    @media (min-width: 991px) and (max-width: 1080px) {
+      font-size: 4.5rem;
+    }
+    @include mixins.max-sm-screen {
+      font-size: 26px;
+    }
+  }
+
+  .counter-title {
+    margin-top: 10px;
+    font-size: vars.$font-size-lg;
+    color: vars.$black;
+    text-transform: uppercase;
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      font-size: 1.6rem;
+    }
+
+    @include mixins.max-ipad-air-screen {
+      font-size: 18px;
+    }
+
+    @include mixins.max-sm-screen {
+      font-size: 12px;
+      margin-top: 0;
+    }
+
+  }
+
+  .even .counter-title {
+    text-align: center;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+}
+
+
+.section_about_us {
+  padding-top: 10vh;
+  padding-bottom: 5vh;
+
+  .image_bg {
+    height: 280px;
+    max-width: 661px;
+
+    @include mixins.ipad-mini-screen {
+      height: 380px;
+    }
+
+    @include mixins.md-screen {
+      height: 420px;
+    }
+
+    @include mixins.xxl-screen {
+      height: 479px;
+    }
+  }
+
+  .details {
+    font-size: 18px;
+    line-height: 24px;
+
+    @include mixins.md-screen {
+      padding-left: 3vw;
+    }
+  }
+
+
+}
+
+.section_our_students {
+  .small_title {
+    color: vars.$border-gray;
+    font-weight: vars.$weight-regular;
+  }
+}
+
+.section_study_your_interests {
+  background-color: vars.$black;
+
+  .small_title {
+    color: vars.$white;
+  }
+}
+
+
+.section_study_your_interests {
+  padding: 5rem 0;
+
+  .small_title {
+    font-size: vars.$font-size-lg;
+    font-weight: vars.$weight-bold;
+    margin-bottom: 3rem;
+
+    @include mixins.max-ipad-air-screen {
+      font-size: vars.$font-size-m;
+    }
+  }
+
+  .interests-grid {
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+
+    @include mixins.max-ipad-air-screen {
+      grid-template-columns: 1fr;
+      padding: 0 1.5rem;
+    }
+
+    .interest-item {
+      text-decoration: none;
+      width: 100%;
+
+      .image_bg {
+        height: 40vh;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+
+        @media (min-width: 991px) and (max-width: 1080px) {
+          height: 320px;
+        }
+
+
+        h3 {
+          font-size: vars.$font-size-display-sm;
+          font-weight: vars.$weight-extra-bold;
+          color: rgba(vars.$white, 0.96);
+          max-width: 90%;
+          text-transform: uppercase;
+
+          @include mixins.max-ipad-air-screen {
+            font-size: vars.$font-size-xl;
+          }
+
+          @include mixins.max-sm-screen {
+            font-size: vars.$font-size-lg;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.section_additional_for_you {
+
+  .image_bg {
+    padding: 2rem;
+    height: 78vh;
+    @include mixins.flexbox(row, center, flex-end);
+
+    h2 {
+      font-size: 68px;
+    }
+
+    h3 {
+      font-size: 40px;
+    }
+  }
+}
+
+//aktualnosci
+
+.section_aktualnosci {
+  padding: 5rem 0;
+}
+
+.aktualnosci-header-row {
+  @include mixins.flexbox(row, flex-start, center);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  .small_title {
+    margin: 0 2rem 0 0;
+    font-size: vars.$font-size-xl;
+    font-weight: vars.$weight-bold;
+  }
+
+  .see-all-link {
+    display: inline-block;
+    font-size: vars.$font-size-default;
+    color: #7B9477;
+    text-decoration: none;
+    font-weight: vars.$weight-semi-regular;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @include mixins.max-ipad-air-screen {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .see-all-link {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.front-aktualnosci-grid {
+  display: grid;
+  grid-template-columns: 536px 398px 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+
+  @media (min-width: 991px) and (max-width: 1080px) {
+    grid-template-columns: 320px 320px 1fr;
+  }
+
+  .aktualnosci-post {
+    .post-image {
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      color: vars.$white;
+      padding: 1rem;
+      font-size: vars.$font-size-default;
+
+      &:before {
+        position: absolute;
+        content: "";
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 30%;
+        background: linear-gradient(180deg, transparent 0, #000 100%);
+      }
+    }
+
+    .post-title-overlay {
+      color: vars.$white;
+      padding: 0.5rem 1rem;
+      width: 100%;
+      font-weight: vars.$weight-semi-regular;
+      font-size: vars.$font-size-lg;
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  .aktualnosci-first .post-image {
+    width: 536px;
+    height: 393px;
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      width: 320px;
+      height: 320px;
+    }
+
+    @include mixins.max-md-screen {
+      width: 100%;
+    }
+
+    @include mixins.max-ipad-air-screen {
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .aktualnosci-second .post-image {
+    width: 398px;
+    height: 393px;
+    position: relative;
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      width: 320px;
+      height: 320px;
+    }
+
+    @include mixins.max-md-screen {
+      width: 100%;
+    }
+
+    @include mixins.max-ipad-air-screen {
+      height: auto;
+      aspect-ratio: 16 / 9;
+    }
+
+  }
+
+  .aktualnosci-list {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding-bottom: 2rem;
+
+        a {
+          font-size: vars.$font-size-lg;
+          text-decoration: none;
+          color: vars.$black;
+          font-weight: vars.$weight-semi-regular;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    @include mixins.max-ipad-air-screen {
+      margin-top: 2rem;
+
+      ul li a {
+        font-size: vars.$font-size-s-medium;
+      }
+    }
+  }
+}
+

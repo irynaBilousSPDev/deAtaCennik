@@ -1,0 +1,295 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mixins;
+
+.ranking_ela_page {
+
+  .title_section {
+    font-family: "Nunito Sans", serif;
+  }
+
+  .our_offer {
+    background-color: transparent;
+    margin-bottom: 5rem;
+
+    .slick-dots li button:before {
+      top: -6px;
+      left: -6px;
+    }
+  }
+
+  .offer_category_title {
+    .small_title {
+      color: #000;
+    }
+  }
+}
+
+.investment_section {
+  background-color: #fff;
+
+  &__title {
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: #000;
+  }
+
+  &__text {
+    line-height: 1.2;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  &__image {
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  }
+}
+
+
+.ranking_section {
+  background: #fff;
+  text-align: center;
+
+  &__item {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__position {
+    color: #002542;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: -1rem;
+  }
+
+  &__badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    max-height: 200px;
+    overflow: hidden;
+
+    span {
+      font-size: 200px;
+      font-weight: 900;
+      color: #002542;
+      margin: 0 0.5rem;
+    }
+
+    img {
+      height: 200px;
+    }
+  }
+
+  &__columns {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__sub {
+    font-size: 40px;
+    font-weight: 900;
+    color: #002542;
+    margin-bottom: 1rem;
+    margin-top: -1rem;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 1rem;
+  }
+
+
+  &__col a {
+    width: 100%;
+    display: block;
+    font-size: 20px;
+    margin-bottom: 1rem;
+    text-align: left;
+    background-color: #F5F5F5;
+    padding: .5rem 1rem;
+    border: 1px solid #707070;
+    border-radius: 22px;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    line-height: 1;
+    color: #000;
+    font-weight: 300;
+
+    img {
+      margin-right: 1rem;
+    }
+  }
+
+}
+
+.right {
+  .ranking_section {
+    &__col {
+      justify-content: center;
+    }
+
+
+    &__position {
+      font-size: 24px;
+      font-weight: 400;
+      margin-bottom: -1rem;
+    }
+
+    &__sub {
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    &__badge {
+      max-height: 140px;
+      overflow: hidden;
+
+      span {
+        font-size: 136px;
+      }
+
+      img {
+        height: 140px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1680px) {
+  .ranking_section__columns {
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .ranking_section__col {
+      justify-content: center;
+    }
+  }
+
+  .right {
+
+    .ranking_section__col p {
+      text-align: center;
+    }
+
+    .ranking_section__col {
+      align-items: center;
+      margin: 0 auto;
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  .left {
+    .ranking_section__item {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .ranking_ela_page {
+    .title_section {
+      font-size: 4rem;
+    }
+  }
+
+  .ranking_section__col a {
+    font-size: 18px;
+  }
+
+  .right {
+    .ranking_section__item {
+      flex-direction: column;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .ranking_section__footer,
+  .ranking_section__col p {
+    font-size: 18px;
+    margin-bottom: .2rem;
+    flex-wrap: wrap;
+  }
+}
+
+
+.features_section {
+  background-color: #F5F5F5;
+
+
+  &__item {
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #000;
+      padding: 2rem 0 1rem 2rem;
+    }
+
+    .features_section__text {
+      font-size: 18px;
+      font-weight: 400;
+      color: #000;
+      padding: 0 0 1rem 2rem;
+    }
+  }
+}
+
+
+.value_section {
+  &__text {
+    font-size: 28px;
+    line-height: 1.2;
+    color: #000;
+  }
+}
+
+// Optional: tighter layout for small screens
+@media (max-width: 768px) {
+  .value_section__title {
+    text-align: center;
+  }
+
+  .value_section__content {
+    text-align: center;
+  }
+  .value_section__text {
+    font-size: 16px;
+  }
+}

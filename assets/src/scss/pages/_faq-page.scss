@@ -1,0 +1,64 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+
+.faq-page {
+
+  .faq-subtitle {
+    color: #F5682C;
+    font-weight: bold;
+    font-size: 3rem;
+    line-height: 1.2;
+  }
+
+  .contact_city_tab {
+    justify-content: inherit;
+  }
+
+  ul {
+    margin-bottom: 0 !important;
+  }
+
+  li {
+    a {
+      background: transparent !important;
+      height: auto !important;
+      padding: 1rem 0 !important;
+      border-radius: 20px !important;
+      font-weight: 500 !important;
+      font-size: 18px !important;
+    }
+  }
+
+  li.active {
+    a {
+      color: #F5682C !important;
+      background: transparent !important;
+    }
+  }
+
+  .accordion_universal {
+    margin: 0 !important;
+
+     .default_content {
+      max-width: 100%;
+      padding: 0!important;
+    }
+  }
+
+  .accordion_header {
+    padding: 20px 0!important;
+  }
+
+  .accordion_item:first-child {
+    .accordion_header {
+
+      &:before {
+        border-top: 1px solid #F5682C !important;
+      }
+
+    }
+  }
+
+
+}

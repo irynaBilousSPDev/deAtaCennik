@@ -1,0 +1,229 @@
+@use "../../abstracts/variables"  as vars;
+@use "../../abstracts/mixins" as mixins;
+
+.section_recruitment_rules {
+
+  .image_bg {
+    position: relative;
+    @include mixins.flexbox(row, flex-end, flex-end);
+
+    @include mixins.max-ipad-air-screen {
+      height: 310px;
+    }
+    @include mixins.ipad-air-screen {
+      height: 700px;
+    }
+
+    &:before {
+      position: absolute;
+      content: "";
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(vars.$black, 0.5);
+    }
+  }
+}
+
+.recruitment_rules {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  @include mixins.flexbox(column, flex-end, center);
+
+  @include mixins.lg-screen {
+    max-width: 60%;
+  }
+
+  h3 {
+    font-weight: vars.$weight-bold;
+    font-size: vars.$font-size-small-title;
+
+    @include mixins.ipad-screen {
+      font-size: vars.$font-size-medium-big;
+    }
+    @include mixins.lg-screen {
+      font-size: vars.$font-size-big;
+    }
+    @include mixins.xxl-screen {
+      font-size: vars.$font-size-mega;
+    }
+  }
+
+
+  .steps {
+    width: 100%;
+    @include mixins.flexbox(row, center, center);
+
+    .step {
+      background-color: vars.$white;
+      width: 100%;
+      max-width: 95px;
+      height: 105px;
+      margin: 2rem 1rem;
+      line-height: 1.1;
+      border-radius: 10px;
+      font-size: vars.$font-size-s;
+      padding: 0rem 1rem 2rem 1rem;
+      text-align: center;
+
+      @include mixins.flexbox(column, flex-start, center);
+      @include mixins.box-shadow(0px, 3px, 6px, rgba(vars.$border-gray, 0.5));
+
+
+      @include mixins.ipad-screen {
+        max-width: 210px;
+        height: 233px;
+        border-radius: 38px;
+
+        @include mixins.font-style(vars.$font-size-display-sm, 1.1, vars.$weight-bold);
+      }
+
+      .button-sing_up {
+        margin: 5px auto;
+        max-width: 65px;
+        font-size: 7px;
+
+        @include mixins.max-ipad-air-screen {
+          padding: 5px;
+        }
+        @include mixins.ipad-air-screen {
+          margin: 1rem auto;
+          max-width: 145px;
+          font-size: vars.$font-size-default;
+        }
+      }
+
+      .step_number {
+        font-weight: vars.$weight-bold;
+        font-size: vars.$font-size-display-sm;
+        line-height: 0.5;
+        padding-top: 2rem;
+
+        @include mixins.ipad-screen {
+          font-size: 72px;
+          padding-top: 4rem;
+        }
+      }
+    }
+  }
+
+}
+
+.portfolio_works {
+  margin-bottom: 4rem;
+  @include mixins.flexbox(row, flex-start, stretch);
+
+  .item {
+    margin-right: 3rem;
+
+    @include mixins.flexbox(column, flex-end, stretch);
+
+    .details {
+      max-width: 405px;
+      @include mixins.font-style(vars.$font-size-lg, 1.1, vars.$weight-medium);
+    }
+
+    img {
+      margin-right: 10px;
+    }
+  }
+}
+
+.portfolio {
+
+  .description {
+    margin-bottom: 4rem;
+
+    strong {
+      @include mixins.font-style(vars.$font-size-lg, 1.1, vars.$weight-extra-bold);
+
+    }
+
+    .button-sing_up {
+      margin-left: .5rem;
+      margin-right: .5rem;
+    }
+
+    span {
+      font-weight: vars.$weight-regular;
+    }
+  }
+
+  .title {
+    font-weight: vars.$weight-extra-bold;
+  }
+}
+
+// Responsive YouTube block (modern)
+.portfolio_video {
+  max-width: 1025px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: vars.$black;
+
+  @include mixins.flexbox(row, center, center);
+
+  .youtube-wrapper {
+    width: 100%;
+  }
+
+  .youtube_video {
+    // Make it fluid
+    width: 100%;
+    max-width: 968px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+
+
+    iframe,
+    video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+    }
+
+    .youtube-play {
+      display: none;
+    }
+  }
+}
+
+
+.kurs,
+.exam {
+
+  .content {
+    font-size: 18px;
+    line-height: 1.2
+  }
+
+}
+
+.kurs {
+  padding-bottom: 7rem;
+
+  .content {
+    max-width: 780px;
+  }
+
+  .button-orange {
+    border-radius: 11px;
+  }
+
+  .youtube_video {
+    width: 690px;
+    height: 374px;
+  }
+
+  .image_wrapper {
+    max-width: 690px;
+  }
+
+}
+

@@ -1,0 +1,78 @@
+.slideshow_vimeo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-right: -140px;
+
+  .slideshow__slide {
+    width: 301px;
+    height: 537px;
+    margin: 10px;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 17px;
+    overflow: hidden;
+    position: relative;
+
+    iframe {
+      border-radius: 17px;
+      overflow: hidden;
+      margin: 10px;
+      width: 100%;
+      max-width: 301px;
+      height: 537px;
+      border: none;
+    }
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+
+  // Navigation arrows
+  .slick-arrow {
+    position: absolute;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+    }
+
+    &.slick-prev {
+      top: 10px; // Position the up arrow
+      left: 50%; // Center horizontally
+      transform: translateX(-50%);
+    }
+
+    &.slick-next {
+      bottom: 10px; // Position the down arrow
+      left: 50%; // Center horizontally
+      transform: translateX(-50%);
+    }
+  }
+}

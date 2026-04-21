@@ -1,0 +1,422 @@
+.open-day {
+  padding: 40px 0 90px;
+
+  .top-row {
+    margin-bottom: 96px;
+    align-items: flex-start;
+  }
+
+  .bottom-row {
+    align-items: center;
+  }
+
+  .left-col {
+    padding-right: 48px;
+  }
+
+  .right-col {
+    padding-left: 12px;
+  }
+
+  .bottom-left {
+    display: flex;
+    align-items: center;
+    min-height: 100%;
+  }
+
+  .heading {
+    width: 100%;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .open-day-title {
+    margin: 0;
+    width: 100%;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .date-text {
+    width: 100%;
+    margin-top: 2rem;
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  }
+
+  .info-text {
+    margin-top: 28px;
+    font-size: 18px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #000;
+
+    strong,
+    b {
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0 0 3px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .hero-box {
+    overflow: hidden;
+    border-radius: 24px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .schedule {
+    margin-top: 5rem;
+    padding-left: 42px;
+  }
+
+  .schedule-title {
+    font-family: 'Nunito Sans', sans-serif;
+    margin: 0 3.5rem 3rem;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #F5682C;
+  }
+
+  .timeline {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 7px;
+      bottom: 8px;
+      left: 3px;
+      width: 1px;
+      background-color: #F5682C;
+    }
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 34px;
+    padding-bottom: 18px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .dot {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #f26a2e;
+  }
+
+  .timeline-text {
+    font-size: 18px;
+    line-height: 1.35;
+    color: #000;
+
+    strong,
+    b {
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .form-side {
+    position: relative;
+    padding: 48px 0;
+  }
+
+  .surface {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: calc((100vw - 100%) / -2);
+    background-color: #F5F5F5;
+    border-radius: 40px 0 0 40px;
+    z-index: 0;
+  }
+
+  .form-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-height: 100%;
+    padding: 86px 48px 78px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .od-form {
+    width: 100%;
+    max-width: 624px;
+    margin: 0 auto;
+  }
+
+  .wpcf7,
+  .wpcf7 form {
+    width: 100%;
+    margin: 0;
+  }
+
+  .od-form__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 36px;
+  }
+
+
+  .od-form__field  {
+    margin-bottom: 1rem;
+  }
+
+  .od-form__field label {
+    display: block;
+    margin: 0 10px 0;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #7D7D7D;
+  }
+
+  .od-form__field label br {
+    display: none;
+  }
+
+  .od-form input[type='text'],
+  .od-form input[type='email'],
+  .od-form input[type='tel'],
+  .od-form textarea,
+  .od-form__input {
+    display: block;
+    width: 100%;
+    height: 43px;
+    padding: 0 14px;
+    border: 0;
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+    font-size: 17px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #111;
+  }
+
+  .od-form textarea {
+    min-height: 110px;
+    padding-top: 12px;
+    resize: vertical;
+  }
+
+  .od-form input::placeholder,
+  .od-form textarea::placeholder {
+    color: #9d9d9d;
+    opacity: 1;
+  }
+
+  .od-form__consent {
+    max-width: 560px;
+    margin-top: 18px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: #8f8f8f;
+  }
+
+  .od-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 42px;
+  }
+
+  .od-form input[type='submit'],
+  .od-form__submit {
+    min-width: 152px;
+    height: 49px;
+    padding: 0 22px;
+    border: 0;
+    background-color: #000;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .od-form input[type='submit']:hover,
+  .od-form__submit:hover {
+    opacity: 0.88;
+  }
+
+  .wpcf7-not-valid-tip {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .wpcf7 form .wpcf7-response-output {
+    margin: 16px 0 0;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  @media (max-width: 1199.98px) {
+    .left-col {
+      padding-right: 32px;
+    }
+
+    .form-inner {
+      padding: 64px 36px;
+    }
+
+    .od-form {
+      max-width: 100%;
+    }
+    .date-text {
+      font-size: 96px;
+      line-height: 1;
+    }
+  }
+
+  @media (max-width: 991.98px) {
+    padding: 32px 0 70px;
+
+    .top-row {
+      margin-bottom: 64px;
+    }
+
+    .left-col,
+    .right-col {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .left-col {
+      margin-bottom: 28px;
+    }
+
+    .bottom-left {
+      margin-bottom: 28px;
+    }
+
+    .schedule {
+      padding-left: 0;
+    }
+
+    .form-side {
+      padding: 0;
+    }
+
+    .surface {
+      right: calc((100vw - 100%) / -30);
+      border-radius: 40px;
+    }
+
+    .form-inner {
+      padding: 36px 28px;
+      display: block;
+    }
+
+    .od-form__consent {
+      max-width: 100%;
+    }
+    .date-text {
+      width: 100%;
+      font-size: 72px;
+      line-height: 1;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .date-text {
+      margin-top: 18px;
+      font-size: 46px;
+    }
+
+    .top-row {
+      margin-bottom: 52px;
+    }
+
+    .schedule {
+      margin-top: 22px;
+    }
+
+    .form-inner {
+      padding: 24px 20px;
+    }
+
+    .od-form__row {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+      margin-bottom: 0;
+    }
+
+    .od-form__field {
+      margin-bottom: 18px;
+    }
+
+    .od-form__actions {
+      justify-content: flex-start;
+      margin-top: 28px;
+    }
+
+    .od-form input[type='submit'],
+    .od-form__submit {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .date-text {
+      font-size: 46px;
+      line-height: 1;
+      margin-top: 18px;
+    }
+  }
+}

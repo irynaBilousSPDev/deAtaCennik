@@ -1,0 +1,15 @@
+//@import "~bootstrap/scss/bootstrap";
+
+@use "abstracts";// abstracts
+
+@use "components" as components;// components
+
+@use "flexible_content" as flexible_content;// flexible_content
+
+@use "layout";// layout
+
+@use "pages";// pages
+
+@use "base" as base;// base
+
+@use 'vendors';//vendors

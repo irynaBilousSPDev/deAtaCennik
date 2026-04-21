@@ -1,0 +1,1753 @@
+{
+  "BASE": "https://smartapply.akademiata.pl/pl/apply/",
+  "BASE_EN": "https://smartapply.akademiata.pl/en/apply/",
+  "SA": {
+    "arch_i_wwa": "studia-i-stopnia/architektura-64",
+    "arch_wn_i": "studia-i-stopnia/architektura-wnetrz-18",
+    "arch_ii": "studia-ii-stopnia/architektura-9",
+    "arch_wn2": "studia-ii-stopnia/architektura-wnetrz-12",
+    "arch_kraj": "studia-i-stopnia/architektura-krajobrazu-17",
+    "arch_kraj2": "studia-ii-stopnia/architektura-krajobrazu-11",
+    "proj_rek": "studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16",
+    "proj_wf": "studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53",
+    "bud_i": "studia-i-stopnia/budownictwo-52",
+    "bud_ee": "studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58",
+    "bud_kb": "studia-i-stopnia/konstrukcje-budowlane-59",
+    "bud_kol1": "studia-i-stopnia/budownictwo-kolejowe-51",
+    "bud_ii": "studia-ii-stopnia/budownictwo-49",
+    "bud_kol2": "studia-ii-stopnia/budownictwo-kolejowe-50",
+    "wzo": "studia-i-stopnia/wzornictwo-15",
+    "proj_prod": "studia-i-stopnia/projektowanie-produktu-14",
+    "proj_kom": "studia-i-stopnia/projektowanie-komunikacji-wizualnej-i-reklamy-13",
+    "inf_i": "studia-i-stopnia/informatyka-29",
+    "inf_cy": "studia-i-stopnia/cyberbezpieczenstwo-27",
+    "inf_pa": "studia-i-stopnia/programowanie-aplikacji-28",
+    "inf_si": "studia-i-stopnia/sztuczna-inteligencja-26",
+    "anim3d": "studia-i-stopnia/animacja-3d-10",
+    "zar_i": "studia-i-stopnia/zarzadzanie-48",
+    "zar_siw": "studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42",
+    "zar_bm": "studia-i-stopnia/biznes-miedzynarodowy-47",
+    "zar_cm": "studia-i-stopnia/content-management-i-wizualizacja-30",
+    "zar_lo": "studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32",
+    "zar_ev": "studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46",
+    "zar_av": "studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33",
+    "zar_oz": "studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31",
+    "zar_ws": "studia-i-stopnia/wellness-i-spa-34",
+    "zar_ii": "studia-ii-stopnia/zarzadzanie-40",
+    "zar_zz": "studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35",
+    "zar_mp": "studia-ii-stopnia/marketing-i-pr-36",
+    "zar_pr": "studia-ii-stopnia/zarzadzanie-projektami-37",
+    "mech_i": "studia-i-stopnia/mechanika-i-budowa-maszyn-57",
+    "mech_bs": "studia-i-stopnia/budowa-i-serwisowanie-samochodow-55",
+    "mech_pk": "studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56",
+    "os_i": "studia-i-stopnia/ochrona-srodowiska-25",
+    "os_ef": "studia-i-stopnia/efektywnosc-energetyczna-24",
+    "os_odna": "studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23",
+    "os_zr": "studia-i-stopnia/zrownowazony-rozwoj-22",
+    "os_ii": "studia-ii-stopnia/ochrona-srodowiska-21",
+    "os_men": "studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19",
+    "zip_i": "studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45",
+    "zip_lp": "studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44",
+    "zip_zp": "studia-i-stopnia/zarzadzanie-produkcja-43",
+    "zip_ii": "studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41",
+    "zip_zb": "studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38",
+    "zip_tl": "studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39",
+    "arch_i_wro": "studia-i-stopnia/architektura-78",
+    "arch_wn_wro": "studia-i-stopnia/architektura-wnetrz-77",
+    "inf_i_wro": "studia-i-stopnia/informatyka-75",
+    "fin_i": "studia-i-stopnia/finanse-i-rachunkowosc-72",
+    "log_i": "studia-i-stopnia/logistyka-76",
+    "sm_i": "studia-i-stopnia/sprzedaz-i-marketing-71",
+    "kcdm_i": "studia-i-stopnia/komunikacja-cyfrowa-i-media-74",
+    "tur_i": "studia-i-stopnia/turystyka-i-rekreacja-73",
+    "zar_i_wro": "studia-i-stopnia/zarzadzanie-68",
+    "zar_ii_wro": "studia-ii-stopnia/zarzadzanie-79",
+    "tur_ii_wro": "studia-ii-stopnia/turystyka-i-rekreacja-82"
+  },
+  "SA_EN": {
+    "arch_i_wwa": "bachelor/architektura-64",
+    "arch_wn_i": "bachelor/architektura-wnetrz-18",
+    "arch_ii": "master/architecture-9",
+    "arch_wn2": "master/architektura-wnetrz-12",
+    "arch_kraj": "bachelor/architektura-krajobrazu-17",
+    "arch_kraj2": "master/architektura-krajobrazu-11",
+    "bud_i": "bachelor/budownictwo-52",
+    "bud_ii": "master/construction-49",
+    "inf_i": "bachelor/computer-engineering-29",
+    "inf_cy": "bachelor/cybersecurity-27",
+    "inf_pa": "bachelor/application-programming-28",
+    "zar_i": "bachelor/management-48",
+    "zar_ii": "master/management-40",
+    "mech_i": "bachelor/mechanika-i-budowa-maszyn-57",
+    "arch_i_wro": "bachelor/architecture-78",
+    "arch_wn_wro": "bachelor/interior-design-77",
+    "inf_i_wro": "bachelor/computer-engineering-75",
+    "zar_i_wro": "bachelor/management-68",
+    "zar_ii_wro": "master/zarzadzanie-79"
+  },
+  "RAW": {
+    "pl": {
+      "wwa": {
+        "s": [
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 1,
+            "r10": 1520,
+            "r12": 1300,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura",
+            "ak": "arch_i_wwa"
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 1310,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "arch_wn_i"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Energooszczędne technologie w budownictwie",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "bud_ee"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Konstrukcje budowlane",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "konstrukcje-budowlane",
+            "ak": "bud_kb"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "bud_kol1"
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie produktu",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-produktu",
+            "ak": "proj_prod"
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie komunikacji wizualnej i reklamy",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-komunikacji-wizualnej-i-reklamy",
+            "ak": "proj_kom"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "cyberbezpieczenstwo",
+            "ak": "inf_cy"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Programowanie aplikacji",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "programowanie-aplikacji",
+            "ak": "inf_pa"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Sztuczna inteligencja",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja",
+            "ak": "inf_si"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Animacja 3D",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "animacja-3d",
+            "ak": "anim3d"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Sztuczna inteligencja w zarządzaniu",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "zar_siw"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Biznes międzynarodowy",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "biznes-miedzynarodowy",
+            "ak": "zar_bm"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Content management i wizualizacja",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "content-management-i-wizualizacja",
+            "ak": "zar_cm"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie logistyką i łańcuchem dostaw",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "zar_lo"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Organizacja eventów, koncertów i imprez sportowych",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "zar_ev"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie w lotnictwie cywilnym",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "zar_av"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie placówkami ochrony zdrowia",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "zar_oz"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Wellness i SPA",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wellness-i-spa",
+            "ak": "zar_ws"
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Budowa i serwisowanie samochodów",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "mech_bs"
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Projektowanie i sterowanie komputerowe",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "mech_pk"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Efektywność energetyczna",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "efektywnosc-energetyczna",
+            "ak": "os_ef"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "os_odna"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Zrównoważony rozwój",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zrownowazony-rozwoj",
+            "ak": "os_zr"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Logistyka przedsiębiorstwa produkcyjnego",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "zip_lp"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie produkcją",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-produkcja",
+            "ak": "zip_zp"
+          },
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 2,
+            "r10": 1520,
+            "r12": 1300,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura",
+            "ak": "arch_ii"
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "Projektowanie krajobrazu o funkcji rekreacyjnej",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+            "ak": "proj_rek"
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "Projektowanie krajobrazu wielofunkcyjnego",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "projektowanie-krajobrazu-wielofunkcyjnego",
+            "ak": "proj_wf"
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "arch_wn_i"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Energooszczędne technologie w budownictwie",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "bud_ee"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Konstrukcje budowlane",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "konstrukcje-budowlane",
+            "ak": "bud_kb"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "bud_kol1"
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie produktu",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-produktu",
+            "ak": "proj_prod"
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie komunikacji wizualnej i reklamy",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-komunikacji-wizualnej-i-reklamy",
+            "ak": "proj_kom"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "cyberbezpieczenstwo",
+            "ak": "inf_cy"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Programowanie aplikacji",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "programowanie-aplikacji",
+            "ak": "inf_pa"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Sztuczna inteligencja",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja",
+            "ak": "inf_si"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Animacja 3D",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "animacja-3d",
+            "ak": "anim3d"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Sztuczna inteligencja w zarządzaniu",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "zar_siw"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Biznes międzynarodowy",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "biznes-miedzynarodowy",
+            "ak": "zar_bm"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Content management i wizualizacja",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "content-management-i-wizualizacja",
+            "ak": "zar_cm"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie logistyką i łańcuchem dostaw",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "zar_lo"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Organizacja eventów, koncertów i imprez sportowych",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "zar_ev"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie w lotnictwie cywilnym",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "zar_av"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie placówkami ochrony zdrowia",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "zar_oz"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Wellness i SPA",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wellness-i-spa",
+            "ak": "zar_ws"
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Budowa i serwisowanie samochodów",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "mech_bs"
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Projektowanie i sterowanie komputerowe",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "mech_pk"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Efektywność energetyczna",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "efektywnosc-energetyczna",
+            "ak": "os_ef"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "os_odna"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Zrównoważony rozwój",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zrownowazony-rozwoj",
+            "ak": "os_zr"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Logistyka przedsiębiorstwa produkcyjnego",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "zip_lp"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie produkcją",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-produkcja",
+            "ak": "zip_zp"
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "—",
+            "deg": 2,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "architektura-krajobrazu",
+            "ak": "arch_kraj2"
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 2,
+            "r10": 1510,
+            "r12": 1290,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "arch_wn2"
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "bud_kol2"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zrównoważonym rozwojem",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-zrownowazonym-rozwojem",
+            "ak": "zar_zz"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Marketing i PR",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "marketing-i-pr",
+            "ak": "zar_mp"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie projektami",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-projektami",
+            "ak": "zar_pr"
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Menedżer środowiska w przedsiębiorstwie",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "menedzer-srodowiska-w-przedsiebiorstwie",
+            "ak": "os_men"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie przedsiębiorstwem produkcyjnym",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-przedsiebiorstwem-produkcyjnym",
+            "ak": "zip_zb"
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie transportem i logistyka",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-transportem-i-logistyka",
+            "ak": "zip_tl"
+          }
+        ],
+        "n": []
+      },
+      "wro": {
+        "s": [
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 1,
+            "r10": 1030,
+            "r12": 875,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura",
+            "ak": "arch_i_wro"
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "arch_wn_wro"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Inżynieria oprogramowania",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "inf_i_wro"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Inżynieria sieci i cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "inf_i_wro"
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Rachunkowość i podatki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "finanse-i-rachunkowosc",
+            "ak": "fin_i"
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Fintech",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "finanse-i-rachunkowosc",
+            "ak": "fin_i"
+          },
+          {
+            "k": "Logistyka",
+            "s": "Projektowanie procesów logistycznych",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka",
+            "ak": "log_i"
+          },
+          {
+            "k": "Logistyka",
+            "s": "Menedżer logistyki i transportu",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka",
+            "ak": "log_i"
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Digital marketing z AI",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "sm_i"
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Menedżer sprzedaży",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "sm_i"
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Visual Storytelling i Content Marketing",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "komunikacja-cyfrowa-i-media",
+            "ak": "kcdm_i"
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Digital PR i zarządzanie komunikacją marki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "komunikacja-cyfrowa-i-media",
+            "ak": "kcdm_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Hotelarstwo",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Międzynarodowy biznes turystyczny",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Organizacja eventów",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie przedsiębiorstwem",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_i_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zasobami ludzkimi",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_i_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Nowoczesny e-marketing",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_ii_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Strategiczne zarządzanie kapitałem ludzkim",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_ii_wro"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Programowanie gier",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "inf_i_wro"
+          },
+          {
+            "k": "Informatyka",
+            "s": "Chmura obliczeniowa i serwery",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "inf_i_wro"
+          },
+          {
+            "k": "Informatyka",
+            "s": "AI i automatyzacja",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "inf_i_wro"
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Rachunkowość i podatki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "finanse-i-rachunkowosc",
+            "ak": "fin_i"
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Fintech",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "finanse-i-rachunkowosc",
+            "ak": "fin_i"
+          },
+          {
+            "k": "Logistyka",
+            "s": "Projektowanie procesów logistycznych",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka",
+            "ak": "log_i"
+          },
+          {
+            "k": "Logistyka",
+            "s": "Menedżer logistyki i transportu",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka",
+            "ak": "log_i"
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Digital marketing z AI",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "sm_i"
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Menedżer sprzedaży",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "sm_i"
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Visual Storytelling i Content Marketing",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "komunikacja-cyfrowa-i-media",
+            "ak": "kcdm_i"
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Digital PR i zarządzanie komunikacją marki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "komunikacja-cyfrowa-i-media",
+            "ak": "kcdm_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Hotelarstwo",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Międzynarodowy biznes turystyczny",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Organizacja eventów",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_i"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie przedsiębiorstwem",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_i_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zasobami ludzkimi",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_i_wro"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Zarządzanie hotelarstwem",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_ii_wro"
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Zarządzanie przemysłem spotkań i wydarzeń",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "turystyka-i-rekreacja",
+            "ak": "tur_ii_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Nowoczesny e-marketing",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_ii_wro"
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Strategiczne zarządzanie kapitałem ludzkim",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "zar_ii_wro"
+          }
+        ],
+        "n": []
+      }
+    },
+    "en": {
+      "wwa": [
+        {
+          "k": "Architecture",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3600,
+            "s": 1900
+          },
+          "ne": {
+            "r": 4500,
+            "s": 2350
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "architektura",
+          "ak": "arch_i_wwa"
+        },
+        {
+          "k": "Civil Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3000,
+            "s": 1600
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "budownictwo",
+          "ak": "bud_i"
+        },
+        {
+          "k": "Management",
+          "s": "Business management",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_i"
+        },
+        {
+          "k": "Management",
+          "s": "Digital marketing with AI",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_i"
+        },
+        {
+          "k": "Mechanical Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3300,
+            "s": 1750
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "mechanika-i-budowa-maszyn",
+          "ak": "mech_i"
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Computer networks and cybersecurity",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "cyberbezpieczenstwo",
+          "ak": "inf_cy"
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Software engineering",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "programowanie-aplikacji",
+          "ak": "inf_pa"
+        },
+        {
+          "k": "Architecture",
+          "s": "—",
+          "deg": 2,
+          "eu": {
+            "r": 3600,
+            "s": 1900
+          },
+          "ne": {
+            "r": 4500,
+            "s": 2350
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "architektura",
+          "ak": "arch_ii"
+        },
+        {
+          "k": "Management",
+          "s": "Brand Manager",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_ii"
+        },
+        {
+          "k": "Management",
+          "s": "Strategic Human Capital Management",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_ii"
+        }
+      ],
+      "wro": [
+        {
+          "k": "Management",
+          "s": "Business management",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_i_wro"
+        },
+        {
+          "k": "Management",
+          "s": "Digital marketing with AI",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_i_wro"
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Computer networks and cybersecurity",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "informatyka",
+          "ak": "inf_i_wro"
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Software engineering",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "informatyka",
+          "ak": "inf_i_wro"
+        },
+        {
+          "k": "Management",
+          "s": "Brand Manager",
+          "deg": 2,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_ii_wro"
+        },
+        {
+          "k": "Management",
+          "s": "Strategic Human Capital Management",
+          "deg": 2,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 150,
+          "ps": "zarzadzanie",
+          "ak": "zar_ii_wro"
+        }
+      ]
+    }
+  },
+  "UABY": {
+    "pl": {
+      "Architektura": {
+        "1": {
+          "r": 2250,
+          "s": 1300
+        }
+      },
+      "Architektura Wnętrz": {
+        "1": {
+          "r": 1780,
+          "s": 1040
+        }
+      },
+      "Informatyka": {
+        "1": {
+          "r": 1500,
+          "s": 900
+        }
+      },
+      "Finanse i rachunkowość": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        }
+      },
+      "Logistyka": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        }
+      },
+      "Sprzedaż i marketing": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        }
+      },
+      "Komunikacja cyfrowa i media": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        }
+      },
+      "Turystyka i rekreacja": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        }
+      },
+      "Zarządzanie": {
+        "1": {
+          "r": 1200,
+          "s": 750
+        },
+        "2": {
+          "r": 1400,
+          "s": 850
+        }
+      }
+    },
+    "en": {
+      "Management": {
+        "1": {
+          "r": 2200,
+          "s": 0
+        },
+        "2": {
+          "r": 2300,
+          "s": 0
+        }
+      },
+      "Computer Engineering": {
+        "1": {
+          "r": 2400,
+          "s": 0
+        }
+      }
+    }
+  },
+  "PROMOS": [
+    {
+      "id": "jednorazowo",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "both",
+      "name": "Płatność z góry (rabat jednorazowy)",
+      "tag": "−5% lub −10%",
+      "short": "Zapłać cały semestr lub rok z góry i uzyskaj rabat.",
+      "full": "Termin: do 10 września (rok/zima) lub 10 marca (lato). Nie łączy z przejsciem, absolwent_pl.",
+      "sw": [
+        "szybki",
+        "grupie",
+        "techart"
+      ],
+      "isBonus": true,
+      "disc": {
+        "t": "bonus",
+        "v": 0.0
+      }
+    },
+    {
+      "id": "szybki",
+      "lng": "pl",
+      "deg": 1,
+      "cty": "both",
+      "name": "Szybki Start",
+      "tag": "−1 000 zł",
+      "short": "Rejestracja do 30.06.2026 i podpisanie umowy do 31.07.2026.",
+      "full": "Dot. tylko I stopnia. Zniżka proporcjonalna w obu semestrach.",
+      "sw": [
+        "grupie",
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 1000.0
+      }
+    },
+    {
+      "id": "grupie",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "both",
+      "name": "W Grupie Taniej",
+      "tag": "−200 / −400 zł",
+      "short": "Zapis razem z grupą znajomych lub rodziny (do 30.09.2026).",
+      "full": "2–4 osoby=200 zł; 5+ osób=400 zł. Dokumenty tego samego dnia.",
+      "sw": [
+        "szybki",
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 200.0
+      },
+      "so": [
+        {
+          "v": 200,
+          "l": "2–4 osoby (−200 zł)"
+        },
+        {
+          "v": 400,
+          "l": "5+ osób (−400 zł)"
+        }
+      ]
+    },
+    {
+      "id": "techart",
+      "lng": "pl",
+      "deg": 1,
+      "cty": "wwa",
+      "name": "Absolwent szkoły tech./artystycznej",
+      "tag": "−1 200 zł",
+      "short": "Tegoroczny maturzysta z profilu technicznego lub artystycznego.",
+      "full": "Profil wynikający z nazwy szkoły lub kierunku na świadectwie.",
+      "sw": [
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 1200.0
+      }
+    },
+    {
+      "id": "przejscie",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "wwa",
+      "name": "Przejście do ATA",
+      "tag": "−30%",
+      "short": "Przeniesienie z innej uczelni – zniżka w semestrze startu.",
+      "full": "Nie łączy się z żadną inną. Nie dla wcześniej skreślonych z ATA.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.3
+      }
+    },
+    {
+      "id": "absolwent_pl",
+      "lng": "pl",
+      "deg": 2,
+      "cty": "both",
+      "name": "Absolwent Kontynuuje z Rabatem",
+      "tag": "−20% (lub −30%)",
+      "short": "Absolwenci I stopnia ATA/WAB na całe studia II stopnia.",
+      "full": "Wynik 5,0 (Wrocław) = 30%. Nie łączy się z innymi promocjami.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.2
+      },
+      "so": [
+        {
+          "v": 0.2,
+          "l": "Wynik standardowy (−20%)"
+        },
+        {
+          "v": 0.3,
+          "l": "Wynik 5,0 / Wrocław (−30%)"
+        }
+      ]
+    },
+    {
+      "id": "earlybirds",
+      "lng": "en",
+      "deg": 0,
+      "cty": "both",
+      "name": "Early Birds",
+      "tag": "−10%",
+      "short": "EU/CIS – rejestracja do 15.05.2026 + opłata roczna z góry.",
+      "full": "Wymaga wariantu rocznego. Nie łączy z absolwent_en.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.1
+      },
+      "needRok": true
+    },
+    {
+      "id": "absolwent_en",
+      "lng": "en",
+      "deg": 2,
+      "cty": "both",
+      "name": "Graduate Continues with Discount",
+      "tag": "−20%",
+      "short": "UTA/WSEiZ graduates – 20% off total Master's tuition.",
+      "full": "Cannot combine with Early Birds.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.2
+      }
+    }
+  ]
+}

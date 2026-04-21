@@ -1,0 +1,104 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.single-exams {
+  .right_space {
+    .container {
+      padding-left: 0;
+
+      @media (min-width: 768px) {
+        padding-right: 3vw;
+      }
+
+      @media (min-width: 1281px) {
+        padding-right: 5vw;
+      }
+    }
+  }
+
+  .offer_details_wrapper {
+    max-width: 540px;
+    padding: 0 7px;
+  }
+
+  .button-sing_up {
+    margin-top: 1rem;
+    background-color: #0f83ff !important;
+    color: #fff !important;
+    min-width: 150px !important;
+    padding: 8px 12px !important;
+  }
+
+  @media (min-width: 1441px) {
+    .button-sing_up {
+      margin-top: 10rem;
+    }
+
+    .offer_wrapper {
+      .offer_body {
+        padding: 2rem 5rem;
+      }
+    }
+  }
+}
+
+.exam-subtitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f5682c;
+
+  @media (min-width: 1441px) {
+    margin-top: 3rem;
+  }
+}
+
+.single-exam-content {
+  h1,
+  h2,
+  h3 {
+    font-family: "Nunito Sans", serif;
+  }
+
+  a {
+    color: #f5682c;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      background-color: #f5682c;
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .exam-note {
+    font-weight: 600;
+
+    &.is-highlight {
+      color: #f5682c;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .exam-note,
+    a,
+    li,
+    p {
+      font-size: 20px;
+    }
+  }
+}

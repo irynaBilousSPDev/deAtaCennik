@@ -1,0 +1,160 @@
+.pg-mba-cadre {
+  padding: 72px 0 80px;
+
+  &__title {
+    margin: 0 0 44px;
+    font-size: 56px;
+    line-height: 1.05;
+    font-weight: 700;
+    color: #000;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 40px 20px;
+  }
+
+  &__card {
+    min-width: 0;
+    cursor: pointer;
+  }
+
+  &__media {
+    margin-bottom: 12px;
+    overflow: hidden;
+    border-radius: 10px;
+    aspect-ratio: 130 / 169;
+    background: #ddd;
+ 
+    // aspect-ratio: 1173/ 169; 
+  }
+
+  
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__content {
+    position: relative;
+    padding-right: 34px;
+  }
+
+  &__name {
+    margin: 0 0 4px;
+    font-size: 14px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #000;
+  }
+
+  &__role {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.35;
+    color: #8a8a8a;
+  }
+
+  &__button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 700;
+    color: #ff6a2a;
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  .pg-mba-cadre__button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .pg-mba-cadre__icon {
+    width: 24px;
+    height: auto;
+    display: block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .pg-mba-cadre__button:hover .pg-mba-cadre__icon {
+    transform: translateX(3px);
+    opacity: 0.8;
+  }
+
+  @media (max-width: 1399px) {
+    &__grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 1199px) {
+    padding: 64px 0 72px;
+
+    &__title {
+      margin-bottom: 36px;
+      font-size: 46px;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 991px) {
+    &__title {
+      font-size: 38px;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 32px 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    padding: 48px 0 56px;
+
+    &__title {
+      margin-bottom: 28px;
+      font-size: 32px;
+    }
+
+    &__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px 14px;
+    }
+
+    &__name,
+    &__role,
+    &__button {
+      font-size: 13px;
+    }
+  }
+
+  // @media (max-width: 575px) {
+  //   &__grid {
+  //     grid-template-columns: 1fr;
+  //   }
+  // }
+}

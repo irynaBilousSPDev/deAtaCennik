@@ -1,0 +1,203 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.image_content_slider {
+  @include mixins.max-sm-screen {
+    .row {
+      flex-direction: column-reverse;
+    }
+  }
+}
+
+.slider_for_images {
+  position: relative;
+  max-height: 78vh;
+  overflow: hidden;
+
+  .image_bg {
+    height: 347px;
+    width: 100%;
+
+    @include mixins.ipad-air-screen {
+      height: 65vh;
+    }
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      height: 560px;
+    }
+
+    @include mixins.lg-screen {
+      height: 78vh;
+    }
+  }
+
+  .slick-prev,
+  .slick-next {
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 100%;
+    background-color: rgba(134, 134, 134, 0.27);
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.3s ease;
+
+    @include mixins.flexbox(row, center, center);
+
+    @media (max-width: 1280px) {
+      top: 49%;
+    }
+
+    &:hover {
+      background-color: rgba(134, 134, 134, 0.5);
+    }
+
+    &::before {
+      content: "";
+      display: block;
+
+      width: 15px;
+      height: 15px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+    }
+
+    @include mixins.ipad-air-screen {
+      width: 75px;
+
+      &::before {
+        width: 32px;
+        height: 32px;
+      }
+    }
+  }
+
+  .slick-prev {
+    left: 0;
+
+    &::before {
+      transform: rotate(135deg); // Left arrow
+    }
+  }
+
+  .slick-next {
+    right: 0;
+
+    &::before {
+      transform: rotate(-45deg); // Right arrow
+    }
+  }
+}
+
+
+.slider_nav_content {
+  height: 70%;
+
+  @include mixins.flexbox(row, center, center);
+}
+
+.slider_content_container {
+  max-width: 580px;
+  padding: 20px;
+  margin: 0 auto;
+
+  @include mixins.max-sm-screen {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  h3 {
+    font-size: 30px;
+    font-weight: bold;
+
+    @include mixins.max-sm-screen {
+      font-size: 24px;
+      margin-bottom: 1rem !important;
+    }
+  }
+}
+
+.controls_wrapper {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+
+  @include mixins.flexbox(row-reverse, flex-start, center);
+
+  @include mixins.max-sm-screen {
+    margin-bottom: 3rem;
+  }
+
+  .slick-dots {
+    width: calc(100% - 3rem);
+    position: relative;
+    bottom: -5px;
+    left: 2rem;
+    text-align: left;
+    list-style: none;
+    padding: 0;
+    gap: 8px;
+
+    @include mixins.max-sm-screen {
+      left: 5rem;
+    }
+
+    li {
+      width: 40px;
+      height: 6px;
+      background-color: #F5682C;
+      opacity: 0.5;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.slick-active {
+        width: 60px;
+        opacity: 1;
+      }
+    }
+
+    button {
+      display: none;
+    }
+
+    @include mixins.ipad-air-screen {
+      width: calc(100% - 2rem);
+
+      li {
+        width: 69px;
+        height: 12px;
+
+        &.slick-active {
+          width: 143px;
+        }
+      }
+    }
+  }
+
+  .slick-play-pause {
+    background: transparent;
+    color: #F5682C;
+    border: 1px solid #F5682C;
+    width: 32px;
+    height: 31px;
+    cursor: pointer;
+    font-size: 18px;
+    position: absolute;
+    bottom: -12px;
+    left: 4rem;
+    transform: translateX(-50%);
+    z-index: 10;
+    border-radius: 50%;
+    @include mixins.flexbox(column, flex-start, center);
+
+    @include mixins.ipad-air-screen {
+      left: 0;
+      bottom: -1rem;
+    }
+  }
+
+  button:focus {
+    outline: 3px auto #F5682C;
+  }
+}

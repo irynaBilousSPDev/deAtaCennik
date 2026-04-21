@@ -1,0 +1,220 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.quiz_page {
+  color: white;
+  background-color: #0B1823;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 5rem;
+
+  .quiz_image_bg {
+    width: 100%;
+    height: 100%;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: right center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: white;
+    padding: 3rem 0;
+  }
+
+
+  @media screen and (min-width: 768px) {
+    //.forminator-row,
+    //.forminator-quiz-intro {
+    //  max-width: 40% !important;
+    //}
+  }
+
+  .forminator-legend,
+  .forminator-quiz--title {
+    display: block;
+    font-size: 36px;
+    line-height: 44px;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    max-width: 280px;
+  }
+
+  .forminator-page-indicator {
+    display: block;
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    max-width: 280px;
+  }
+
+  .forminator-quiz--description {
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 300;
+  }
+
+  .forminator-button,
+  .forminator-quiz--title, h1 {
+    color: white;
+  }
+
+  .quiz_body__baner {
+    padding-top: 5rem;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .forminator-ui {
+    background-color: transparent !important;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    padding-top: 10rem;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+
+    @media (min-width: 1280px) {
+      max-width: 80%;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 991px) {
+      padding-top: 14rem;
+    }
+
+    @media (min-width: 481px) and (max-width: 768px) {
+      max-width: 80%;
+    }
+
+    .card_post_item {
+      width: 100% !important;
+    }
+  }
+
+  .forminator-button {
+    background-color: #00CFDE;
+    border: none;
+    padding: .75rem 2rem;
+    font-weight: bold;
+  }
+
+  .forminator-answer {
+    width: 360px;
+    background-color: #fff;
+    padding: 1rem 1rem 1rem 1.5rem;
+    margin-right: 1rem;
+    margin-bottom: 4rem;
+    min-height: 90px;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+    input {
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border: 1px solid #000;
+      background-color: #fff;
+      vertical-align: middle;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      // Custom checkmark
+      &::after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 9px;
+        top: 4px;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+
+      &:checked {
+        background-color: #00CFDE;
+        border-color: #00CFDE;
+
+        &::after {
+          display: block;
+        }
+      }
+
+      &:hover {
+        border-color: #000;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #555;
+        outline-offset: 2px;
+      }
+    }
+
+  }
+
+  .forminator-answer--name {
+    color: #000 !important;
+    max-width: 250px;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 300;
+  }
+
+  .forminator-button-back {
+    background-color: transparent !important;
+    margin-right: 2rem;
+  }
+
+  .quiz_body {
+    min-height: 100vh;
+
+    &__row {
+      @media (max-width: 991px) {
+        flex-direction: column-reverse;
+      }
+
+      h1 {
+        color: vars.$primary;
+        font-weight: 900;
+        font-size: 4rem;
+        line-height: 1;
+        text-transform: uppercase;
+
+        @media (min-width: 991px) {
+          font-size: 6rem;
+          padding-top: 9rem;
+        }
+
+        @media (min-width: 1025px) {
+          font-size: 8rem;
+        }
+
+        @media (min-width: 1441px) {
+          font-size: 10rem;
+        }
+      }
+
+    }
+
+    .card_property h3 {
+      color: black;
+    }
+
+    .card_post_image {
+      position: relative;
+    }
+
+    .ranking_icon {
+      max-width: 95px !important;
+    }
+  }
+}

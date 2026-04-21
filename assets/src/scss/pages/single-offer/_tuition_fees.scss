@@ -1,0 +1,123 @@
+@use "../../abstracts/variables"  as vars;
+@use "../../abstracts/mixins" as mixins;
+
+.section_tuition_fees {
+
+  @include mixins.max-ipad-air-screen {
+    padding: 15px;
+  }
+
+  @include mixins.max-sm-screen {
+    padding: 15px 0;
+  }
+
+  .price_table {
+    @include mixins.max-sm-screen {
+      .container {
+        padding-right: 0 !important;
+      }
+    }
+  }
+
+  .payments_item {
+    font-weight: vars.$weight-bold;
+    margin: 0 auto;
+
+    @include mixins.max-sm-screen {
+      .small_title {
+        font-size: vars.$font-size-default;
+        font-weight: vars.$weight-regular;
+      }
+    }
+
+    .normal_price {
+      display: block;
+      width: 90px;
+      height: 41px;
+      @include mixins.flexbox(row, center, center);
+      position: relative;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: vars.$background-gray;
+        z-index: -1;
+      }
+    }
+
+    .promotion {
+      &:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        border-top: 1px solid #707070;
+        transform: rotate(-25deg);
+        z-index: -1;
+      }
+    }
+
+    .description {
+      color: #0A9200;
+
+      @include mixins.max-sm-screen {
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  @include mixins.max-sm-screen {
+    .description {
+      font-size: vars.$font-size-m;
+      font-weight: vars.$weight-semi-regular;
+    }
+
+  }
+
+}
+
+.price_table {
+
+  .old_price {
+    color: #707070;
+    display: inline-block;
+    padding: 0 5px;
+    position: relative;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-top: 2px solid #707070;
+      transform: rotate(-25deg);
+    }
+  }
+
+  .new_price {
+    color: #0A9200;
+  }
+
+  .description {
+    line-height: 1.3;
+    color: rgba(vars.$border-gray, 0.8);
+
+    @include mixins.max-ipad-air-screen {
+      font-size: vars.$font-size-s-medium;
+    }
+
+
+    strong {
+      font-weight: vars.$weight-extra-bold;
+    }
+  }
+}
+

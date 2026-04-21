@@ -1,0 +1,139 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.tabs_container {
+  width: 100%;
+  margin: auto;
+
+  .tabs-header {
+    display: flex;
+    border-bottom: 1px solid vars.$background-gray;
+
+    .tab {
+      border-radius: 8px 8px 0 0;
+      padding: 13px 20px;
+      cursor: pointer;
+      border: 1px solid rgba(vars.$border-gray, 0.5);
+      border-bottom: none;
+      background-color: vars.$white;
+      transition: background 0.3s ease;
+      font-size: vars.$font-size-lg;
+      text-transform: uppercase;
+      font-weight: vars.$weight-bold;
+
+      @include mixins.max-ipad-air-screen {
+        line-height: 1.1;
+        font-size: vars.$font-size-s-medium;
+      }
+    }
+
+    .tab.active {
+      background-color: vars.$primary;
+      color: vars.$white;
+      border: 1px solid transparent;
+    }
+  }
+
+  .tabs-content {
+    border-radius: 0 0 20px 20px;
+    margin-top: -1px;
+    overflow: hidden;
+    @include mixins.box-shadow(0px, 3px, 6px, rgba(vars.$border-gray, 0.5));
+
+
+    @include mixins.max-sm-screen {
+      border-radius: 0 0 0 20px;
+    }
+  }
+
+  .tab-content {
+    display: none;
+
+    @include mixins.max-ipad-air-screen {
+      width: 100%;
+      overflow-x: auto;
+    }
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tr:not(:last-child) {
+    border-bottom: 1px solid rgba(vars.$border-gray, 0.5);
+  }
+
+  thead {
+    tr:first-child {
+      border-bottom: 1px solid rgba(vars.$border-gray, 0.5);
+    }
+  }
+
+  th, td {
+    max-width: 130px;
+    padding: 2rem;
+    text-align: center;
+
+    @include mixins.max-ipad-air-screen {
+      padding: 1.5rem 1rem;
+    }
+
+    @include mixins.max-sm-screen {
+      min-width: 160px;
+    }
+
+    span {
+      color: vars.$primary;
+    }
+  }
+
+  td:nth-child(even),
+  th:nth-child(even) {
+    background: vars.$background-gray;
+  }
+
+  td:nth-child(2),
+  th:nth-child(2) {
+    border-left: 1px solid vars.$border-green;
+    border-right: 1px solid vars.$border-green;
+  }
+
+  tr:first-child {
+    th:nth-child(2) {
+      border-top: 1px solid vars.$border-green;
+    }
+  }
+
+  tr:last-child {
+    td:nth-child(2) {
+      border-bottom: 1px solid vars.$border-green;
+    }
+  }
+
+  th:not(:first-child) {
+    font-size: vars.$font-size-default;
+    font-weight: vars.$weight-medium;
+
+    @include mixins.max-ipad-air-screen {
+      font-size: vars.$font-size-little
+    }
+  }
+
+  td,
+  th:first-child {
+    font-size: vars.$font-size-m;
+
+    @include mixins.max-ipad-air-screen {
+      font-size: vars.$font-size-s;
+    }
+  }
+
+  td {
+    font-weight: vars.$weight-bold;
+  }
+}

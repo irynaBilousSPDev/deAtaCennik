@@ -1,0 +1,151 @@
+@use "../../abstracts/variables"  as vars;
+@use "../../abstracts/mixins" as mixins;
+
+
+
+.section_study_program {
+  .download_program {
+    a {
+      @include mixins.button-base(
+                      vars.$primary,
+                      vars.$white,
+                      vars.$primary,
+                      vars.$white,
+                      vars.$black,
+                      vars.$black,
+                      vars.$primary
+      );
+      max-width: 330px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      padding: 6px 15px;
+      font-size: vars.$font-size-lg;
+      line-height: 1.1;
+    }
+  }
+}
+
+.program_percentages {
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .sub_title {
+    text-transform: uppercase;
+
+    @include mixins.max-ipad-air-screen {
+      font-size: vars.$font-size-m;
+    }
+
+    @include mixins.max-sm-screen {
+      font-size: vars.$font-size-s-medium;
+    }
+  }
+
+  .number {
+    @include mixins.font-style(vars.$font-size-display-xl, 1.2, vars.$weight-bold);
+
+    @include mixins.max-ipad-air-screen {
+      font-size: 45px;
+    }
+
+    @include mixins.max-sm-screen {
+      font-size: vars.$font-size-display-sm;
+    }
+  }
+}
+
+.program_info {
+  .image_bg {
+    height: 84vh;
+    width: 100%;
+
+    @include mixins.flexbox(row, flex-start, center);
+
+    @media (min-width: 991px) and (max-width: 1080px) {
+      height: 560px;
+    }
+
+    @include mixins.max-ipad-air-screen {
+      height: 230px;
+      margin-bottom: 150px;
+    }
+  }
+}
+
+.program_info_details {
+  width: 100%;
+  max-width: 60%;
+  flex-wrap: wrap;
+
+  @include mixins.flexbox(row, flex-start, center);
+
+  @include mixins.xl-screen {
+    max-width: 50%;
+  }
+
+  @include mixins.mac-screen {
+    margin-top: -10rem;
+  }
+
+  @include mixins.max-ipad-air-screen {
+    max-width: 100%;
+    margin-top: 300px;
+  }
+
+  .item {
+    width: 100%;
+    max-width: 400px;
+    height: 120px;
+    padding: 1.5rem;
+    margin-right: 1rem;
+    margin-bottom: 2rem;
+    background-color: vars.$white;
+    box-shadow: 0 3px 6px #00000029;
+
+    @include mixins.flexbox(column, flex-start, center);
+
+    @include mixins.ipad-air-screen {
+      width: calc(50% - 16px);
+    }
+
+    @include mixins.xl-screen {
+      max-width: 50%;
+    }
+
+    @include mixins.max-ipad-air-screen {
+      max-width: 47%;
+      height: 80px;
+      margin-bottom: 1rem;
+    }
+
+    .small_title {
+      margin-bottom: 1.5rem;
+      //max-width: 190px;
+      margin-left: auto;
+      margin-right: auto;
+
+      @include mixins.max-ipad-air-screen {
+        font-size: vars.$font-size-little;
+      }
+    }
+
+    h3.small_title {
+      font-weight: vars.$weight-semi-regular;
+    }
+
+    h4.small_title {
+      font-weight: vars.$weight-extra-bold;
+
+      @include mixins.max-ipad-air-screen {
+        font-size: vars.$font-size-s-medium;
+      }
+    }
+  }
+}
+
+ 

@@ -1,0 +1,149 @@
+// Base wrappers
+.single_btn_ended,
+.buttons_wrapper {
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.button-sing_up_wrapper {
+  display: inline-block;
+  min-width: 146px;
+}
+
+@media (max-width: 422px) {
+  .btn_ended_container,
+  .button-sing_up_wrapper {
+    margin: 0 auto !important;
+  }
+}
+
+@media (min-width: 541px) and (max-width: 822px) {
+  .btn_ended_container,
+  .button-sing_up_wrapper {
+    margin: 0 auto !important;
+  }
+}
+
+@media (min-width: 991px) and (max-width: 1149px) {
+
+  .btn_ended_container,
+  .button-sing_up_wrapper{
+    margin: 0 auto !important;
+  }
+
+}
+
+@media (min-width: 1281px) and (max-width: 1549px) {
+
+  .btn_ended_container,
+  .button-sing_up_wrapper {
+    margin: 0 auto !important;
+  }
+
+}
+
+@media (min-width: 2560px) {
+
+  .buttons_wrapper {
+    flex-wrap: nowrap;
+  }
+
+}
+
+// Button wrapper
+.btn-ended-wrapper {
+  display: inline-block;
+  min-width: 140px;
+  margin-bottom: 1rem;
+}
+
+// Disabled button
+.btn-ended {
+  width: 100% !important;
+  cursor: not-allowed;
+  background: #e5e5e5 !important;
+  color: #8a8a8a !important;
+  border: none !important;
+  padding: 12px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+}
+
+// Icon
+.btn-ended__icon {
+  background: #c7c7c7;
+  color: #fff;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Tooltip base
+.btn-ended__tooltip {
+  position: absolute;
+  left: 0;
+  bottom: 60px;
+  width: 100%;
+  background: #3b3b3b;
+  color: #fff;
+  padding: 16px 18px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 12px;
+  display: none;
+  z-index: 20;
+
+  a {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 75%;
+    transform: translateX(-75%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #3b3b3b;
+  }
+}
+
+// Show on hover
+.btn_ended_container:hover .btn-ended__tooltip {
+  display: block;
+}
+
+// Variation: tooltip under button
+.single_btn_ended {
+
+  .btn-ended-wrapper {
+    margin-right: 1rem;
+    margin-bottom: 0;
+  }
+
+  .btn-ended__tooltip {
+    bottom: auto !important;
+    top: 50px !important;
+
+    &::after {
+      top: -10px;
+      bottom: auto;
+      left: 80%;
+      transform: translateX(-80%);
+      border-top: none;
+      border-bottom: 10px solid #3b3b3b;
+    }
+  }
+}

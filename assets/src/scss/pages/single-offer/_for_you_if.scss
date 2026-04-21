@@ -1,0 +1,7 @@
+@use "../../abstracts/variables"  as vars;
+
+.section_for_you_if {
+  background-color: vars.$background-gray;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+}

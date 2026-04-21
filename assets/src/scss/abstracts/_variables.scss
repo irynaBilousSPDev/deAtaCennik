@@ -1,0 +1,102 @@
+/**
+ * Colors
+ */
+//$primary: #F5682C;
+$primary: #FF6D2D; //main
+$white: #fff;
+$black: #000;
+$blue: #0F83FF;
+$color-gray: #333;
+$color-nav-gray: #3A3A3A;
+$background-gray: #F5F5F5;
+$background-light: #fdfdfd;
+$background-beige: #E9DDC5;
+
+$border-gray: #707070;
+$border-green: #00EE4F;
+$shadow-gray: #000029;
+
+/**
+ * Font Sizes
+ */
+
+// Base font sizes
+$font-size-little: 1.2rem; // Extra small
+$font-size-s: 1.3rem; // Extra small
+$font-size-s-medium: 1.4rem; // small
+$font-size-default: 1.6rem; //default
+$font-size-sm: 1.7rem; // Medium
+$font-size-m: 1.8rem; // Medium
+$font-size-lg: 2rem; // Large
+$font-size-xl: 2.4rem; // Extra large
+$font-size-xxl: 2.8rem; // Double extra large
+
+// Display font sizes
+$font-size-display-sm: 3rem;
+$font-size-small-title: 5rem;
+$font-size-title: 6rem;
+$font-size-display-xl: 6.5rem;
+$font-size-medium-big: 12rem;
+$font-size-big: 15rem;
+$font-size-mega: 23rem;
+
+
+/**
+ * Font weight
+ */
+$weight-light: 300;
+$weight-regular: 400;
+$weight-semi-regular: 500;
+$weight-medium: 600;
+$weight-bold: 700;
+$weight-medium-bold: 800;
+$weight-extra-bold: 900;
+
+
+/**
+ * Bootstrap customised
+ *
+ * @see https://github.com/twbs/bootstrap/blob/main/scss/_variables.scss
+ */
+$prefix: '';
+$body-bg: $white;
+$font-size-root: 62.5%; // 1rem = 10px
+$font-size-base: 1.4rem;
+$line-height-base: 1.5;
+$font-weight-base: 400;
+$font-family-sans-serif: 'Lato', 'Ubuntu', "Helvetica Neue", Helvetica, Arial, sans-serif;
+$btn-transition: color .3s ease-in-out, background-color .3s ease-in-out, border-color .3s ease-in-out, box-shadow .3s ease-in-out;
+$border-radius: .4rem;
+$primary: #F5682C;
+$btn-box-shadow: none;
+$btn-active-box-shadow: none;
+$btn-focus-box-shadow: none;
+$input-btn-focus-box-shadow: none;
+$input-border-radius: 0;
+$grid-columns: 12;
+$grid-gutter-width: 3rem;
+$body-color: $black;
+
+// Variables button
+$button-font-size: 1.6rem; // Base font size for buttons
+$button-padding: 8px; // Padding for buttons
+$button-radius: 3.4rem; // Border radius for rounded corners
+$button-transition: 0.3s ease; // Smooth hover/active transitions
+
+// Colors button-primary
+$button-primary-bg: $white; // Primary button background
+$button-primary-color: $black; // Primary button text color
+$button-primary-border-color: $border-gray;
+$button-primary-hover-bg: $primary; // Primary button hover background
+$button-primary-hover-color: $white;
+$button-primary-hover-border-color: $primary;
+$button-primary-active-bg: $primary; // Primary button active background
+
+// Colors button-sing_up
+$button-sing_up-bg: $blue; // Primary button background
+$button-sing_up-color: $white; // Primary button text color
+$button-sing_up-border-color: $blue;
+$button-sing_up-hover-bg: $white; // Primary button hover background
+$button-sing_up-hover-color: $blue;
+$button-sing_up-hover-border-color: $blue;
+$button-sing_up-active-bg: $white; // Primary button active background

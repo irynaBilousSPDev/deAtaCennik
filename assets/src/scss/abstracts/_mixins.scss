@@ -1,0 +1,222 @@
+@use "../abstracts/variables"  as vars;
+@use "sass:color"; // Import the Sass color module
+/**
+ * Mixin for Heading Styles
+ *
+ */
+
+@mixin heading-style($font-size, $line-height, $font-weight, $font-color) {
+  font-size: $font-size;
+  line-height: $line-height;
+  font-weight: $font-weight;
+  color: $font-color;
+}
+
+// Mixin for flexbox
+@mixin flexbox($direction: row, $justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// Mixin for size
+@mixin font-style($size: $font-size-base, $lineHeight: 17px, $weight: 400) {
+  font-size: $size;
+  line-height: $lineHeight;
+  font-weight: $weight;
+}
+
+/**
+ * Mixin for Box Shadow
+ */
+@mixin box-shadow($x: 0px, $y: 0px, $blur: 0px,  $color) {
+  box-shadow: $x $y $blur $color;
+}
+
+// Mixin for reusable button styles
+@mixin button-base($bg, $color,$border-color, $hover-bg,$hover-color, $border-hover-color, $active-bg) {
+  display: inline-block;
+  font-size: vars.$button-font-size;
+  padding: vars.$button-padding 12px;
+  border: 1px solid $border-color;
+  border-radius: vars.$button-radius;
+  background-color: $bg;
+  color: $color;
+  width: 100%;
+  max-width: 150px;
+  @include flexbox(row, center, center);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color vars.$button-transition;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: $hover-bg;
+    border: 1px solid $border-hover-color;
+    color: $hover-color;
+  }
+
+  &:active {
+    background-color: $active-bg;
+  }
+
+  &:disabled {
+    //background-color: lighten($bg, 20%);
+    background-color: color.scale($bg, $lightness: 20%);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@mixin arrows_bottom_slick_slider() {
+  .slick-prev,
+  .slick-next {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid vars.$white;
+    @include flexbox(row, center, center);
+    cursor: pointer;
+    z-index: 10;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 21px;
+      height: 21px;
+      border: solid vars.$white;
+      border-width: 0 3px 3px 0;
+      opacity: 1;
+    }
+  }
+
+  .slick-prev {
+    right: 210px;
+    left: auto;
+
+    &::before {
+      margin-left: 6px;
+      transform: rotate(135deg); // Left arrow shape
+    }
+  }
+
+  .slick-next {
+    right: 140px;
+
+    &::before {
+      margin-right: 6px;
+      transform: rotate(-45deg); // Right arrow shape
+    }
+  }
+}
+
+@mixin left-space($padding-left: 7vw !important, $container-padding-right: 0, $width: 100%) {
+  width: $width;
+  padding-left: $padding-left;
+
+  .container {
+    padding-right: $container-padding-right;
+    max-width: 100%;
+    width: $width;
+  }
+}
+
+@mixin four-k-screen {
+  @media (min-width: 2560px) {
+    @content;
+  }
+}
+@mixin big-screen {
+  @media (min-width: 1921px) {
+    @content;
+  }
+}
+
+@mixin xxl-screen {
+  @media (min-width: 1681px) {
+    @content;
+  }
+}
+
+@mixin mac-screen {
+  @media (min-width: 1366px) {
+    @content;
+  }
+}
+
+@mixin xl-screen {
+  @media (min-width: 1441px) {
+    @content;
+  }
+}
+
+@mixin lg-screen {
+  @media (min-width: 1281px) {
+    @content;
+  }
+}
+
+@mixin md-screen {
+  @media (min-width: 1025px) {
+    @content;
+  }
+}
+
+@mixin ipad-pro-screen {
+  @media (min-width: 991px) {
+    @content;
+  }
+}
+
+@mixin ipad-screen {
+  @media (min-width: 821px) {
+    @content;
+  }
+}
+
+@mixin ipad-air-screen {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin ipad-mini-screen {
+  @media (min-width: 541px) {
+    @content;
+  }
+}
+
+@mixin sm-screen {
+  @media (min-width: 481px) {
+    @content;
+  }
+}
+
+@mixin max-md-screen {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin max-ipad-pro-screen {
+  @media (max-width: 990px) {
+    @content;
+  }
+}
+@mixin max-ipad-air-screen {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+@mixin max-sm-screen {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+

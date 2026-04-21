@@ -1,0 +1,22 @@
+@use "../../abstracts/variables"  as vars;
+@use "../../abstracts/mixins" as mixins;
+
+.section_student_testimonials {
+  background-color: vars.$black;
+  overflow: hidden;
+
+  @include mixins.max-ipad-air-screen {
+    padding-left: 15px;
+
+    .sub_title {
+      padding-left: 15px;
+      max-width: 320px;
+    }
+  }
+}
+
+
+
+
+
+

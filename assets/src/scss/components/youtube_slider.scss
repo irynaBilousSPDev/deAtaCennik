@@ -1,0 +1,102 @@
+@use "../abstracts/variables"  as vars;
+@use "../abstracts/mixins" as mixins;
+
+.youtube-slider {
+  margin: auto;
+  padding-bottom: 2rem;
+
+  @include mixins.sm-screen {
+    padding-bottom: 100px;
+  }
+
+
+  .ytp-more-videos-view,
+  .ytp-pause-overlay {
+    display: none !important;
+  }
+
+  .slick-list {
+    width: calc(100% + 40px);
+  }
+
+  .youtube-slide {
+    border-radius: 17px;
+    margin-right: 20px;
+    width: 100%;
+    min-width: 300px;
+    height: 535px;
+    @include mixins.flexbox(column, center, center);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .youtube-wrapper {
+    border-radius: 17px;
+    width: 100%;
+    max-width: 300px;
+    height: 535px;
+    position: relative;
+    overflow: hidden;
+
+    button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      border: 3px solid #fff;
+      font-size: 24px;
+      cursor: pointer;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      @include mixins.flexbox(row, center, center);
+    }
+
+    .youtube-play {
+      background: rgba(0, 0, 0, 0);
+    }
+
+    .youtube-pause {
+      background: rgba(0, 0, 0, 0);
+    }
+
+  }
+
+  .youtube-thumbnail,
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+
+  // Slick customization for vertical layout
+  .slick-slider {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @include mixins.arrows_bottom_slick_slider;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.gray_arrows {
+
+  .slick-prev,
+  .slick-next {
+    border: 2px solid #868686;
+
+    &::before {
+      border: solid #868686;
+      border-width: 0 3px 3px 0;
+    }
+  }
+
+}
