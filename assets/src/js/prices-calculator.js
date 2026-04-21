@@ -28,6 +28,13 @@ export default function initPricesCalculator(_$, opts = {}) {
   const LOCAL_JSON_URL = '/wp-content/themes/akademiata/prices.json'; 
   const GOOGLE_API_URL = opts.googleApiUrl || '';
   let lastGoogleHash = '';
+
+  const I18N = (() => {
+    const el = document.getElementById('prices-i18n');
+    if (!el) return {};
+    try { return JSON.parse(el.textContent || '{}') || {}; } catch (e) { return {}; }
+  })();
+  function t(key, fallback) { return (I18N && I18N[key]) ? I18N[key] : fallback; }
   
   // Init state
   window.SA = window.SA || {};
@@ -126,18 +133,14 @@ export default function initPricesCalculator(_$, opts = {}) {
               if (freshHash !== lastGoogleHash) {
                 lastGoogleHash = freshHash;
                 applyData(freshData);
-                if (noteBot) noteBot.textContent = (window.lang === 'en' ? 'Prices updated from Google Sheets.' : 'Cennik zaktualizowany z Google Sheets.');
               } else {
-                if (noteBot && !noteBot.textContent) noteBot.textContent = (window.lang === 'en' ? 'Prices are up to date.' : 'Cennik jest aktualny.');
               }
             } catch (e) {
               applyData(freshData);
-              if (noteBot) noteBot.textContent = (window.lang === 'en' ? 'Prices updated from Google Sheets.' : 'Cennik zaktualizowany z Google Sheets.');
             }
           })
           .catch(err => {
             console.warn('Google API sync failed', err);
-            if (noteBot && !noteBot.textContent) noteBot.textContent = (window.lang === 'en' ? 'Google Sheets sync failed (showing local/cached prices).' : 'Synchronizacja z Google Sheets nie powiodła się (pokazuję ceny lokalne/z cache).');
           });
       }
     })
@@ -233,6 +236,12 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function fmt(n) { return Math.round(n).toLocaleString('pl-PL'); }
+  function normTxt(v) { return (v === undefined || v === null) ? '' : String(v).trim(); }
+  function normSpec(v) {
+    const s = normTxt(v);
+    // In sheets/data, "—" often means "no specialization"
+    return (s === '—' || s === '-') ? '' : s;
+  }
 
   // Build program list with strict lang data sourcing
   function buildUnified() {
@@ -309,11 +318,12 @@ export default function initPricesCalculator(_$, opts = {}) {
       const cleanK = (it.k || '').trim().toLowerCase();
       const gk = it.deg + '|' + cleanK;
       if (!groups[gk]) { groups[gk] = { deg: it.deg, k: it.k, cleanK: cleanK, rep: it, specs: [] }; gOrd.push(gk); }
-      if (it.s) {
+      const sp = normSpec(it.s);
+      if (sp) {
         let dup = false;
-        const cleanS = (it.s || '').trim().toLowerCase();
+        const cleanS = sp.trim().toLowerCase();
         for (let i = 0; i < groups[gk].specs.length; i++) { 
-            if ((groups[gk].specs[i].s || '').trim().toLowerCase() === cleanS) { dup = true; break; } 
+            if (normSpec(groups[gk].specs[i].s).trim().toLowerCase() === cleanS) { dup = true; break; } 
         }
         if (!dup) groups[gk].specs.push(it);
       }
@@ -346,9 +356,13 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (window.lang === 'en' || u.uabyOnly) return u;
     const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
     const uK = (u.k || '').trim().toLowerCase();
-    const uS = (u.s || '').trim().toLowerCase();
+    const uS = normSpec(u.s).trim().toLowerCase();
     for (let i = 0; i < list.length; i++) {
-      if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK && (list[i].s || '').trim().toLowerCase() === uS) return list[i];
+      if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK && normSpec(list[i].s).trim().toLowerCase() === uS) return list[i];
+    }
+    // Fallback: if specialization row isn't present in RAW, match by degree+course name.
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK) return list[i];
     }
     return u;
   }
@@ -374,7 +388,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       const tbl = window.lang === 'pl' ? window.UABY.pl : window.UABY.en, ub = tbl && tbl[u.k] && tbl[u.k][u.deg];
       if (!ub) return null;
       if (pid === 'rok') return { pr: ub.r, un: 'EUR / rok', cur: 'EUR' };
-      if (pid === 'sem' && window.lang === 'pl') return { pr: ub.s, un: 'EUR / semestr', cur: 'EUR' };
+      if (pid === 'sem') return { pr: ub.s, un: 'EUR / semestr', cur: 'EUR' };
       return null;
     }
 
@@ -404,9 +418,28 @@ export default function initPricesCalculator(_$, opts = {}) {
       return null;
     }
 
-    const bAnn = (item.r12 || 0) * 12, ea = getEA(bAnn), bon = window.selP['jednorazowo'];
-    if (pid === 'r12') return item.r12 > 0 ? { pr: Math.round(ea.eff / 12), un: 'zł / ratę (12 rat)', cur: 'PLN' } : null;
-    if (pid === 'r10') return item.r10 > 0 ? { pr: Math.round(ea.eff / 10), un: 'zł / ratę (10 rat)', cur: 'PLN' } : null;
+    const bon = window.selP['jednorazowo'];
+
+    // IMPORTANT: Use exact sheet columns for installment plans:
+    // - r12 => R12 column (12 payments)
+    // - r10 => R10 column (10 payments)
+    // Discounts should apply to the total amount for the selected plan.
+    if (pid === 'r12') {
+      if (!item.r12 || item.r12 <= 0) return null;
+      const baseTot = Math.round(item.r12 * 12);
+      const ea = getEA(baseTot);
+      return { pr: Math.round(ea.eff / 12), un: 'zł / ratę (12 rat)', cur: 'PLN' };
+    }
+    if (pid === 'r10') {
+      if (!item.r10 || item.r10 <= 0) return null;
+      const baseTot = Math.round(item.r10 * 10);
+      const ea = getEA(baseTot);
+      return { pr: Math.round(ea.eff / 10), un: 'zł / ratę (10 rat)', cur: 'PLN' };
+    }
+
+    // For upfront payment variants, use annual total based on R12 column.
+    const bAnn = (item.r12 || 0) * 12;
+    const ea = getEA(bAnn);
     if (pid === 'sem') {
       if (item.r12 <= 0) return null;
       if (bon) {
@@ -540,7 +573,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       const enDeg = item.deg === 1 ? 'bachelor' : 'master';
       const plDeg = item.deg === 1 ? 'studia-1-stopnia' : 'studia-2-stopnia';
       bm.href = urlStr.startsWith('http') ? urlStr : (window.lang === 'en' ? 'https://akademiata.pl/en/offer/' + enDeg + '/' : 'https://akademiata.pl/oferta/' + plDeg + '/') + urlStr + '/';
-      bm.textContent = window.lang === 'en' ? 'More about the program →' : 'Więcej o programie →';
+      bm.textContent = t('ctaMore', 'Więcej o programie →');
     } else bm.style.display = 'none';
 
     const rawAk = (item.ak || '').trim();
@@ -554,7 +587,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (saVal) {
       ba.style.display = '';
       ba.href = saVal.startsWith('http') ? saVal : (window.lang === 'en' ? window.BASE_EN : window.BASE) + saVal;
-      ba.textContent = window.lang === 'en' ? 'Apply now →' : 'Zapisz się →';
+      ba.textContent = t('ctaApply', 'Zapisz się →');
     } else {
       ba.style.display = 'none';
     }
@@ -615,7 +648,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       let prH = '';
       elig.forEach(promo => {
         const isSel = window.selP[promo.id], isExp = window.expP[promo.id], canS = !isSel && canSel(promo.id);
-        prH += '<div class="promo-card' + (isSel ? ' sel' : '') + (!isSel && !canS ? ' dis' : '') + '"><div class="pc-head" onclick="window.togglePromo(\'' + promo.id + '\')"><div class="pc-chk"></div><div class="pc-info"><div class="pc-name">' + promo.name + '</div><div class="pc-short">' + promo.short + '</div></div><div class="pc-tag">' + (isSel ? promo.tag : '') + '</div><button class="pc-arr' + (isExp ? ' open' : '') + '" onclick="window.toggleExp(\'' + promo.id + '\',event)">▾</button></div>' + (isExp ? '<div class="pc-body">' + promo.full + '</div>' : '') + '</div>';
+        const sh = (promo.short || '').trim();
+        const isGoodShort = /^rata\s*:|^rate\s*:/i.test(sh);
+        prH += '<div class="promo-card' + (isSel ? ' sel' : '') + (!isSel && !canS ? ' dis' : '') + '"><div class="pc-head" onclick="window.togglePromo(\'' + promo.id + '\')"><div class="pc-chk"></div><div class="pc-info"><div class="pc-name">' + promo.name + '</div><div class="pc-short' + (isGoodShort ? ' good' : '') + '">' + promo.short + '</div></div><div class="pc-tag">' + (promo.tag || '') + '</div><button class="pc-arr' + (isExp ? ' open' : '') + '" onclick="window.toggleExp(\'' + promo.id + '\',event)">▾</button></div>' + (isExp ? '<div class="pc-body">' + promo.full + '</div>' : '') + '</div>';
       });
       if (pi) pi.innerHTML = prH;
     } else if (ps2) ps2.style.display = 'none';
@@ -636,10 +671,16 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (window.uaby && window.city === 'wro') {
         const ub = (window.lang === 'pl' ? window.UABY.pl : window.UABY.en)[u.k]?.[u.deg];
         const r = ub?.rekr || 20, a = ub?.apl || 100;
-        enrItems.innerHTML = '<div class="ei"><div class="en">' + (window.lang === 'en' ? 'Admission fee' : 'Opłata rekrutacyjna') + '</div><div class="ev">' + fmt(r) + ' EUR</div></div><div class="ei"><div class="en">' + (window.lang === 'en' ? 'Application fee' : 'Opłata aplikacyjna') + '</div><div class="ev">' + fmt(a) + ' EUR</div></div><div class="ei"><div class="en">Razem przy zapisie</div><div class="ev">' + fmt(r + a) + ' EUR</div></div>';
+        const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
+        const applicationLbl = t('feeApplication', 'Opłata aplikacyjna');
+        const totalLbl = t('feeTotal', 'Razem przy zapisie');
+        enrItems.innerHTML = '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(r) + ' EUR</div></div><div class="ei"><div class="en">' + applicationLbl + '</div><div class="ev">' + fmt(a) + ' EUR</div></div><div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(r + a) + ' EUR</div></div>';
       } else {
         const cur = window.lang === 'pl' ? ' PLN' : ' EUR';
-        enrItems.innerHTML = '<div class="ei"><div class="en">Opłata rekrutacyjna</div><div class="ev">' + fmt(item.rekr) + cur + '</div></div><div class="ei"><div class="en">Wpisowe</div><div class="ev">' + fmt(item.wps) + cur + '</div></div><div class="ei"><div class="en">Razem przy zapisie</div><div class="ev">' + fmt(item.rekr + item.wps) + cur + '</div></div>';
+        const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
+        const entryLbl = t('feeEntry', 'Wpisowe');
+        const totalLbl = t('feeTotal', 'Razem przy zapisie');
+        enrItems.innerHTML = '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(item.rekr) + cur + '</div></div><div class="ei"><div class="en">' + entryLbl + '</div><div class="ev">' + fmt(item.wps) + cur + '</div></div><div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(item.rekr + item.wps) + cur + '</div></div>';
       }
     }
   }

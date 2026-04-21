@@ -20,6 +20,17 @@ get_header();
 		</div>
 
 		<div class="kalkulator-wse w" id="kalkulator-content">
+			<script type="application/json" id="prices-i18n">
+				<?php echo wp_json_encode([
+					'ctaMore' => __('Więcej o programie →', 'akademiata'),
+					'ctaApply' => __('Zapisz się →', 'akademiata'),
+					'feeAdmission' => __('Opłata rekrutacyjna', 'akademiata'),
+					'feeApplication' => __('Opłata aplikacyjna', 'akademiata'),
+					'feeEntry' => __('Wpisowe', 'akademiata'),
+					'feeTotal' => __('Razem przy zapisie', 'akademiata'),
+				], JSON_UNESCAPED_UNICODE); ?>
+			</script>
+
 			<div class="sec">Miasto</div>
 			<div class="seg" id="city-row">
 				<button type="button" class="seg-btn on" data-val="wwa">Warszawa</button>
@@ -73,11 +84,13 @@ get_header();
 			</div>
 
 			<div class="cta-row">
-				<a id="btn-more" class="btn-sec" href="#" target="_blank" rel="noopener noreferrer">Więcej o programie →</a>
-				<a id="btn-apply" class="btn-pri" href="#" target="_blank" rel="noopener noreferrer">Zapisz się →</a>
+				<a id="btn-more" class="btn-sec" href="#"  rel="noopener noreferrer">Więcej o programie →</a>
+				<a id="btn-apply" class="btn-pri" href="#" rel="noopener noreferrer">Zapisz się →</a>
 			</div>
 
-			<div class="note" id="note-bot"></div>
+			<div class="note" id="note-bot">
+				<?php echo esc_html__('Rata płatna do 10. dnia każdego miesiąca.', 'akademiata'); ?>
+			</div>
 		</div>
 	</div>
 </div>
