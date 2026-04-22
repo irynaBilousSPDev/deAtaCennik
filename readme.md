@@ -1,66 +1,94 @@
-# Akademiata 
-#### Contributors: Avista Consulting & Management  
-#### Author: Avista Consulting & Management  
-#### Author URI: https://avistacm.com/  
-#### Tags: custom, responsive, modern, slick-slider, sass, gulp, webpack
-#### License: GNU General Public License v2 or later  
-#### License URI: https://www.gnu.org/licenses/gpl-2.0.html
+# Akademiata
 
-# Akademiata is a custom WordPress theme developed by Avista Consulting & Management.
+**Akademiata** is a custom WordPress theme developed by Avista Consulting & Management.
+
+- **Contributors**: Avista Consulting & Management
+- **Author**: Avista Consulting & Management
+- **Author URI**: `https://avistacm.com/`
+- **Tags**: custom, responsive, modern, slick-slider, sass, gulp, webpack
+- **License**: GNU General Public License v2 or later
+- **License URI**: `https://www.gnu.org/licenses/gpl-2.0.html`
 
 ![](screenshot.png)
+
 ## Requirements
 
-* [Node](https://nodejs.org/)
-* [Gulp](https://gulpjs.com/docs/en/getting-started/quick-start)
-* 
-## Usage
+- [Node.js](https://nodejs.org/)
+- npm (comes with Node.js)
 
-First, clone this repository in your WordPress themes directory.
+## Local development
 
-Then, run the following commands in the theme's directory :
+Run in the theme directory (inside `wp-content/themes/akademiata`):
 
-	npm install
+```bash
+npm install
+```
 
-Launch your watch for assets with - npx webpack && gulp :
+- **Dev/watch (recommended)**:
 
-	npm run build
+```bash
+npm run dev
+```
 
-Launch your watch for assets with :
+- **Build (production)**:
 
-	npm run start
+```bash
+npm run build
+```
 
+- **Gulp only**:
 
-Launch your watch for assets with :
+```bash
+npm run start
+```
 
-	npx webpack
- 
+## Cleaning dependencies
 
-Remove node_modules for PowerShell:
+- **Cross-platform (recommended)**:
 
-	Remove-Item -Recurse -Force node_modules 
+```bash
+npm run remove
+```
 
-Remove  package-lock.json for PowerShell:
+- **PowerShell manual**:
 
-    Remove-Item package-lock.json 
+```powershell
+Remove-Item -Recurse -Force node_modules
+Remove-Item package-lock.json
+```
 
+## Prices calculator (key files)
 
-### phpshtorm deployment :
+The “Prices” page template and calculator live here:
 
-    ftp/sftp
-    mappings
-    excluded paths
-    upload to server
-    option save always or ctrl+s or never
+- **Template**: `page-template-prices.php`
+- **Calculator JS (source)**: `assets/src/js/prices-calculator.js`
+- **Styles (source)**: `assets/src/scss/pages/_prices-page.scss`
+- **Local JSON data**: `prices.json`
 
+Important: if your site serves compiled assets, make sure you run `npm run build` (or `npm run dev`) after editing `assets/src/*`.
 
+## Apps Script backup (pricing JSON web app)
 
-# License & Credits 
-Akademiata is licensed under the **GNU General Public License v2 or later**.  
-You can modify and distribute it under the GPL.
+Backup copy is kept in:
 
-**Third-Party Libraries Used:**
-- [Slick Slider](https://kenwheeler.github.io/slick/) – MIT License
-- [Bootstrap (if used)](https://getbootstrap.com/) – MIT License
+- `apps-script/prices-json-webapp.gs`
+- `apps-script/README.md`
 
-For full details, see **LICENSE.txt** in the theme folder.
+## Deployment notes (PhpStorm)
+
+- Configure **FTP/SFTP**
+- Configure **Mappings**
+- Configure **Excluded paths**
+- Upload theme to server
+
+## License & credits
+
+Akademiata is licensed under the **GNU General Public License v2 or later**.
+
+**Third-party libraries:**
+
+- [Slick Slider](https://kenwheeler.github.io/slick/) (MIT)
+- [Bootstrap](https://getbootstrap.com/) (MIT)
+
+For full details, see `LICENSE.txt`.

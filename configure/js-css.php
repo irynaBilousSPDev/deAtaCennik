@@ -80,13 +80,13 @@ function akademiata_enqueue_styles()
         'bootstrap-css',
         'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css');
 
-    // Enqueue Typekit Fonts
-//    wp_enqueue_style(
-//        'adobe-fonts',
-//        'https://use.typekit.net/dic8cvr.css',
-//        array(),
-//        null
-//    );
+    // Enqueue Adobe Typekit Fonts
+    wp_enqueue_style(
+        'adobe-fonts',
+        'https://use.typekit.net/dic8cvr.css',
+        array(),
+        null
+    );
 
     // Enqueue the main stylesheet
     wp_enqueue_style(

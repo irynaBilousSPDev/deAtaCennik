@@ -242,6 +242,112 @@ export default function initPricesCalculator(_$, opts = {}) {
     // In sheets/data, "—" often means "no specialization"
     return (s === '—' || s === '-') ? '' : s;
   }
+  function decodeHtmlEntities(str) {
+    // Google Sheets/API sometimes returns escaped HTML like &lt;strong&gt;...&lt;/strong&gt;.
+    if (!str) return '';
+    const el = document.createElement('textarea');
+    el.innerHTML = String(str);
+    return el.value;
+  }
+  function formatPromoHtml(str) {
+    // Supports:
+    // - **bold** / __bold__
+    // - escaped <strong>/<b> from sheets
+    // - newlines -> <br>
+    const raw = decodeHtmlEntities(str);
+    const normalizedTags = raw
+      // Normalize <b> to <strong> so styling is consistent.
+      .replace(/<\s*\/\s*b\s*>/gi, '</strong>')
+      .replace(/<\s*b(\s+[^>]*)?>/gi, '<strong$1>');
+
+    const withBold = normalizedTags
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/__(.+?)__/g, '<strong>$1</strong>');
+
+    // If the source contains no explicit bold markers/tags, rich-text bold from Sheets is lost.
+    // Fallback: highlight common "important" fragments in PL promos (dates, amounts, UWAGA).
+    let out = withBold;
+    const hasExplicitBold = /<\s*strong\b/i.test(out);
+    if (!hasExplicitBold) {
+      out = out
+        // "UWAGA:" label
+        .replace(/\b(UWAGA)\s*:/gi, '<strong>$1:</strong>')
+        // dd.mm.yyyy
+        .replace(/\b(\d{1,2}\.\d{1,2}\.\d{4})\b/g, '<strong>$1</strong>')
+        // "do 10 marca", "lub 10 marca" etc.
+        .replace(/\b(do|lub)\s+(\d{1,2})\s+([A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+)\b/gi, '$1 <strong>$2 $3</strong>')
+        // amounts like "1 000 zł", "1000 zł", "200 zł"
+        .replace(/\b(\d{1,3}(?:\s?\d{3})*)\s*(zł|PLN|EUR|€)\b/g, '<strong>$1 $2</strong>')
+        // percentages like "5%" or "−10%"
+        .replace(/([−-]?\s*\d{1,2})\s*%/g, '<strong>$1%</strong>');
+    }
+
+    return out.replace(/\r\n|\r|\n/g, '<br>');
+  }
+  function setPromoCardBody(el, show) {
+    // IMPORTANT: promo body markup lives in the HTML <template>.
+    // Do not overwrite innerHTML here, only toggle visibility.
+    if (!el) return;
+    el.style.display = show ? '' : 'none';
+  }
+  function inferSubOptions(promo) {
+    if (!promo) return [];
+    if (Array.isArray(promo.so) && promo.so.length) return promo.so;
+
+    // Try to infer two-option promos from text (tag/short/full).
+    const txt = [promo.tag, promo.short, promo.full].filter(Boolean).join(' ');
+    if (!txt) return [];
+
+    // If pct: allow 0.20 lub 0.30 OR 20% lub 30%
+    if (promo.disc && promo.disc.t === 'pct') {
+      const vals = new Set();
+      // decimals like 0.20
+      (txt.match(/\b0\.\d{1,3}\b/g) || []).forEach(s => {
+        const n = parseFloat(s);
+        if (Number.isFinite(n) && n > 0 && n < 1) vals.add(n);
+      });
+      // percentages like 20%
+      (txt.match(/\b\d{1,2}\s*%/g) || []).forEach(s => {
+        const n = parseFloat(s.replace('%', '').trim());
+        if (Number.isFinite(n) && n > 0 && n < 100) vals.add(n / 100);
+      });
+      const arr = Array.from(vals).sort((a, b) => a - b);
+      if (arr.length >= 2) {
+        const a = arr[0], b = arr[arr.length - 1];
+        return [
+          { v: a, l: `−${Math.round(a * 100)}%` },
+          { v: b, l: `−${Math.round(b * 100)}%` },
+        ];
+      }
+      return [];
+    }
+
+    // If fix: pick distinct integers (e.g. 200, 400) from text
+    if (promo.disc && promo.disc.t === 'fix') {
+      const vals = new Set();
+      (txt.match(/\b\d{1,3}(?:\s?\d{3})*\b/g) || []).forEach(s => {
+        const n = parseInt(s.replace(/\s/g, ''), 10);
+        if (Number.isFinite(n) && n > 0) vals.add(n);
+      });
+      const arr = Array.from(vals).sort((a, b) => a - b);
+      if (arr.length >= 2) {
+        const a = arr[0], b = arr[arr.length - 1];
+        return [
+          { v: a, l: `−${fmt(a)} zł` },
+          { v: b, l: `−${fmt(b)} zł` },
+        ];
+      }
+    }
+    return [];
+  }
+  function getEndOfCurrentMonthPL() {
+    const now = new Date();
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const dd = String(lastDay.getDate()).padStart(2, '0');
+    const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+    const yyyy = String(lastDay.getFullYear());
+    return `${dd}.${mm}.${yyyy}`;
+  }
 
   // Build program list with strict lang data sourcing
   function buildUnified() {
@@ -645,21 +751,108 @@ export default function initPricesCalculator(_$, opts = {}) {
     const elig = getElig(u), ps2 = document.getElementById('promos-section'), pi = document.getElementById('promos-inner');
     if (elig.length && !window.uaby) {
       if (ps2) ps2.style.display = '';
-      let prH = '';
+      const tpl = document.getElementById('promo-card-template');
+      if (pi) pi.innerHTML = '';
       elig.forEach(promo => {
-        const isSel = window.selP[promo.id], isExp = window.expP[promo.id], canS = !isSel && canSel(promo.id);
+        const isSel = window.selP[promo.id];
+        const isExp = window.expP[promo.id];
+        const canS = !isSel && canSel(promo.id);
         const sh = (promo.short || '').trim();
         const isGoodShort = /^rata\s*:|^rate\s*:/i.test(sh);
-        prH += '<div class="promo-card' + (isSel ? ' sel' : '') + (!isSel && !canS ? ' dis' : '') + '"><div class="pc-head" onclick="window.togglePromo(\'' + promo.id + '\')"><div class="pc-chk"></div><div class="pc-info"><div class="pc-name">' + promo.name + '</div><div class="pc-short' + (isGoodShort ? ' good' : '') + '">' + promo.short + '</div></div><div class="pc-tag">' + (promo.tag || '') + '</div><button class="pc-arr' + (isExp ? ' open' : '') + '" onclick="window.toggleExp(\'' + promo.id + '\',event)">▾</button></div>' + (isExp ? '<div class="pc-body">' + promo.full + '</div>' : '') + '</div>';
+
+        if (!pi || !tpl || !('content' in tpl)) return;
+        const card = tpl.content.firstElementChild.cloneNode(true);
+
+        card.classList.toggle('sel', !!isSel);
+        card.classList.toggle('dis', !isSel && !canS);
+
+        const head = card.querySelector('.pc-head');
+        if (head) head.setAttribute('onclick', `window.togglePromo('${promo.id}')`);
+
+        const nameEl = card.querySelector('[data-promo-name]');
+        if (nameEl) nameEl.textContent = promo.name || '';
+
+        const shortEl = card.querySelector('[data-promo-short]');
+        if (shortEl) {
+          shortEl.classList.toggle('good', isGoodShort);
+          shortEl.innerHTML = formatPromoHtml(promo.short);
+        }
+
+        const tagEl = card.querySelector('[data-promo-tag]');
+        if (tagEl) tagEl.textContent = promo.tag || '';
+
+        const arr = card.querySelector('[data-promo-arr]');
+        if (arr) {
+          arr.classList.toggle('open', !!isExp);
+          arr.setAttribute('onclick', `window.toggleExp('${promo.id}',event)`);
+        }
+
+        const body = card.querySelector('[data-promo-body]');
+        setPromoCardBody(body, !!isExp);
+        if (body && isExp) {
+          const bodyText = body.querySelector('[data-promo-body-text]');
+          if (bodyText) bodyText.innerHTML = formatPromoHtml(promo.full);
+
+          const subWrap = body.querySelector('[data-promo-subopts]');
+          const subOpts = inferSubOptions(promo);
+          const shouldShowSubopts = !!isSel && subOpts.length >= 2;
+
+          if (subWrap) {
+            subWrap.innerHTML = '';
+            if (shouldShowSubopts) {
+              subWrap.style.display = '';
+              subOpts.slice(0, 5).forEach(so => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'pc-so' + (window.subP[promo.id] === so.v ? ' on' : '');
+                b.textContent = so.l || String(so.v);
+                b.onclick = (ev) => {
+                  if (ev) ev.stopPropagation();
+                  window.setSub(promo.id, so.v);
+                };
+                subWrap.appendChild(b);
+              });
+            } else {
+              subWrap.style.display = 'none';
+            }
+          }
+        } else if (body) {
+          // When collapsed, clear dynamic content but keep skeleton nodes.
+          const bodyText = body.querySelector('[data-promo-body-text]');
+          if (bodyText) bodyText.innerHTML = '';
+          const subWrap = body.querySelector('[data-promo-subopts]');
+          if (subWrap) { subWrap.innerHTML = ''; subWrap.style.display = 'none'; }
+        }
+
+        pi.appendChild(card);
       });
-      if (pi) pi.innerHTML = prH;
     } else if (ps2) ps2.style.display = 'none';
 
     const ppS = getPP(window.plan, item, u), sb = document.getElementById('sum-box');
     if (ppS && sb) {
       const degL = u.deg === 1 ? (window.lang === 'pl' ? 'Studia I stopnia' : 'Bachelor studies') : (window.lang === 'pl' ? 'Studia II stopnia' : 'Master studies');
       const tsv = (window.lang === 'pl' && !window.uaby ? getEA(item.r12 * 12).disc : 0) + (ppS.sv || 0);
-      sb.innerHTML = '<div class="sum"><div class="sl"><div class="sp">' + (u.s ? u.k + ' · ' + degL : degL) + '</div><div class="sn">' + (u.s || u.k) + '</div></div><div class="sr"><div class="sprice">' + fmt(ppS.pr) + ' ' + ppS.cur + '</div>' + (tsv > 0 ? '<div class="ssave">oszczędzasz ' + fmt(tsv) + ' ' + ppS.cur + '/rok</div>' : '') + '</div></div>';
+      // Design: header line should always be "KIERUNEK · POZIOM" (course name from column D).
+      const spLine = (u.k ? String(u.k) : '') + (degL ? ' · ' + degL : '');
+      const snLine = (u.s || u.k || '');
+      const spEl = sb.querySelector('[data-sum-sp]');
+      const snEl = sb.querySelector('[data-sum-sn]');
+      const priceEl = sb.querySelector('[data-sum-price]');
+      const saveEl = sb.querySelector('[data-sum-save]');
+
+      if (spEl) spEl.textContent = spLine;
+      if (snEl) snEl.textContent = snLine;
+      if (priceEl) priceEl.textContent = fmt(ppS.pr) + ' ' + ppS.cur;
+
+      if (saveEl) {
+        if (tsv > 0) {
+          saveEl.textContent = 'oszczędzasz ' + fmt(tsv) + ' ' + ppS.cur + '/rok';
+          saveEl.style.display = '';
+        } else {
+          saveEl.textContent = '';
+          saveEl.style.display = 'none';
+        }
+      }
       sb.style.display = '';
     } else if (sb) sb.style.display = 'none';
 
@@ -680,7 +873,49 @@ export default function initPricesCalculator(_$, opts = {}) {
         const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
         const entryLbl = t('feeEntry', 'Wpisowe');
         const totalLbl = t('feeTotal', 'Razem przy zapisie');
-        enrItems.innerHTML = '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(item.rekr) + cur + '</div></div><div class="ei"><div class="en">' + entryLbl + '</div><div class="ev">' + fmt(item.wps) + cur + '</div></div><div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(item.rekr + item.wps) + cur + '</div></div>';
+        if (window.lang === 'pl') {
+          const promoEntry = 0;
+          const regularTotal = (item.rekr || 0) + (item.wps || 0);
+          const promoTotal = (item.rekr || 0) + promoEntry;
+          const savings = Math.max(0, regularTotal - promoTotal);
+          const validTo = getEndOfCurrentMonthPL();
+          // Prefer updating the static HTML skeleton (page-template-prices.php).
+          const admissionLabelEl = enrItems.querySelector('[data-enr-label="admission"]');
+          const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
+          const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
+          const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
+          const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
+          const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
+          const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
+          const entryBadgeTextEl = enrItems.querySelector('[data-enr-badge-text="entry"]');
+          const savingsEl = enrItems.querySelector('[data-enr-savings]');
+
+          if (admissionLabelEl) admissionLabelEl.textContent = admissionLbl;
+          if (entryLabelEl) entryLabelEl.textContent = entryLbl;
+          if (totalLabelEl) totalLabelEl.textContent = totalLbl;
+
+          if (admissionValEl) admissionValEl.textContent = fmt(item.rekr) + cur;
+          if (entryValEl) entryValEl.textContent = fmt(promoEntry) + cur;
+          if (totalValEl) totalValEl.textContent = fmt(promoTotal) + cur;
+
+          if (entryBadgeTextEl) entryBadgeTextEl.textContent = 'do ' + validTo;
+          if (entryBadgeEl) entryBadgeEl.style.display = '';
+
+          if (savingsEl) {
+            if (savings > 0) {
+              savingsEl.innerHTML = 'zamiast ' + fmt(regularTotal) + ' PLN — oszczędzasz <strong>' + fmt(savings) + ' zł</strong>';
+              savingsEl.style.display = '';
+            } else {
+              savingsEl.textContent = '';
+              savingsEl.style.display = 'none';
+            }
+          }
+        } else {
+          enrItems.innerHTML =
+            '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(item.rekr) + cur + '</div></div>' +
+            '<div class="ei"><div class="en">' + entryLbl + '</div><div class="ev">' + fmt(item.wps) + cur + '</div></div>' +
+            '<div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(item.rekr + item.wps) + cur + '</div></div>';
+        }
       }
     }
   }
