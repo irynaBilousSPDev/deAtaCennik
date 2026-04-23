@@ -2,7 +2,8 @@
 body.page-template-page-template-prices{
   background-color: #FAFAFC;
 }
-.page-prices {
+.page-prices,
+.section_tuition_fees {
   .kalkulator-wse {
     // CSS variables (from provided snippet)
     --ata: #FF6D2D;
@@ -758,6 +759,19 @@ body.page-template-page-template-prices{
       margin-bottom: 20px;
     }
 
+    // Single specjalność: only show primary CTA on the right.
+    &[data-layout="single-offer"] {
+      .cta-row {
+        display: flex !important;
+        justify-content: flex-end;
+        gap: 0;
+      }
+
+      #btn-apply.btn-pri {
+        min-width: 220px;
+      }
+    }
+
     .btn-sec,
     .btn-pri {
       display: flex;
@@ -814,6 +828,25 @@ body.page-template-page-template-prices{
       font-weight: 500;
     }
 
+    .prices-empty {
+      padding: 6px 0 14px;
+      margin: 10px 0 10px;
+    }
+
+    .prices-empty__title {
+      font-family: "Nunito Sans", serif;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .prices-empty__text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
     #kalkulator-content {
       display: none;
     }
@@ -846,7 +879,8 @@ body.page-template-page-template-prices{
   }
 }
 
-.page-prices {
+.page-prices,
+.section_tuition_fees {
   /* Loader (under the title, before calculator) */
   #ata-loader {
     width: 100%;

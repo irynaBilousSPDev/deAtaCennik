@@ -207,7 +207,6 @@ $sections = [
     'section_for_you_if',
     'section_study_program',
     'section_tuition_fees',
-    'section_discounts',
     'section_recruitment_rules'
 ];
 

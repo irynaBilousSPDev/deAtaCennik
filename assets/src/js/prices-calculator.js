@@ -6,6 +6,15 @@ export default function initPricesCalculator(_$, opts = {}) {
   const loaderShownAt = Date.now();
   const MIN_LOADER_MS = 350;
 
+  // If calculator markup isn't on this page, do nothing.
+  if (!content && !loader) return;
+
+  const FIXED_KEY = (content && content.dataset && content.dataset.fixedKey) ? String(content.dataset.fixedKey).trim() : '';
+  const FIXED_LANG = (content && content.dataset && content.dataset.fixedLang) ? String(content.dataset.fixedLang).trim() : '';
+  const HIDE_MORE_BTN = !!(content && content.dataset && (content.dataset.hideMoreBtn === '1' || content.dataset.hideMoreBtn === 'true'));
+  const emptyBox = document.getElementById('prices-empty');
+  const PARSED_FIXED = FIXED_KEY ? parseFixedKey(FIXED_KEY) : null;
+
   function setLoading(isLoading) {
     if (isLoading) {
       if (loader) loader.style.display = '';
@@ -35,6 +44,32 @@ export default function initPricesCalculator(_$, opts = {}) {
     try { return JSON.parse(el.textContent || '{}') || {}; } catch (e) { return {}; }
   })();
   function t(key, fallback) { return (I18N && I18N[key]) ? I18N[key] : fallback; }
+
+  function setEmptyState(isEmpty, reason = '') {
+    if (!emptyBox) return;
+    if (!isEmpty) {
+      emptyBox.style.display = 'none';
+      document.querySelectorAll('[data-hide-when-empty]').forEach(el => { el.style.display = ''; });
+      return;
+    }
+
+    const titleEl = emptyBox.querySelector('[data-empty-title]');
+    const textEl = emptyBox.querySelector('[data-empty-text]');
+    const baseTitle = t('emptyTitle', 'Cennik w przygotowaniu');
+    const baseText = t(
+      'emptyText',
+      'Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.'
+    );
+
+    if (titleEl) titleEl.textContent = baseTitle;
+    // Keep this client-friendly (no technical keys shown).
+    if (textEl) textEl.textContent = baseText;
+
+    emptyBox.style.display = '';
+
+    // Hide the rest of calculator blocks so the UI is just the message.
+    document.querySelectorAll('[data-hide-when-empty]').forEach(el => { el.style.display = 'none'; });
+  }
   
   // Init state
   window.SA = window.SA || {};
@@ -97,8 +132,53 @@ export default function initPricesCalculator(_$, opts = {}) {
       bindUI();
       isUIBound = true;
     }
+
+    // Single-offer (fixed key) defaults
+    if (FIXED_KEY) {
+      const parsed = parseFixedKey(FIXED_KEY);
+      if (parsed && parsed.city) window.city = parsed.city;
+      if (FIXED_LANG) window.lang = FIXED_LANG;
+
+      // Hide locked rows (city/lang/program) on single offer page.
+      document.querySelectorAll('[data-prices-row="city"],[data-prices-row="lang"],[data-prices-row="program"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
     render();
     setLoading(false);
+  }
+
+  function parseFixedKey(key) {
+    // Expected: "<deg>_<city>_<slug>" e.g. "1_wwa_architektura"
+    const m = String(key || '').trim().toLowerCase().match(/^(\d+)_([a-z]{3})_(.+)$/);
+    if (!m) return null;
+    return { deg: parseInt(m[1], 10), city: m[2], slug: m[3] };
+  }
+
+  function matchItemByFixedKey(item, fixedKey, parsed) {
+    if (!item || !fixedKey) return false;
+
+    // Preferred: if the data includes the key (future-proof for your sheets column)
+    const candidateKey = (item.lk || item.key || item.logical_key || item.logical_sync_key || item.sync_key || '').toString().trim().toLowerCase();
+    if (candidateKey && candidateKey === fixedKey.toLowerCase()) return true;
+
+    // Backward-compat / testing support:
+    // Some sheets currently store the logical key in the "Klucz SmartApply" column (mapped to `ak` in JSON).
+    // Allow matching by `ak` as well, but note this can affect SmartApply CTA mapping.
+    const akKey = (item.ak || '').toString().trim().toLowerCase();
+    if (akKey && akKey === fixedKey.toLowerCase()) return true;
+
+    // Fallback: match by degree + slug in program URL (ps)
+    if (!parsed) return false;
+    if (Number(item.deg) !== Number(parsed.deg)) return false;
+    const ps = (item.ps || '').toString().trim().toLowerCase();
+    if (!ps) return false;
+
+    // `ps` can be either:
+    // - a full URL containing "/<slug>/"
+    // - a plain slug (because `prices_generate_json.py` extracts last segment)
+    if (ps === parsed.slug) return true;
+    return ps.includes('/' + parsed.slug + '/');
   }
 
   function stableHash(str) {
@@ -115,48 +195,41 @@ export default function initPricesCalculator(_$, opts = {}) {
     return url + sep + '_=' + Date.now();
   }
 
-  // Fetch from local file
-  fetch(LOCAL_JSON_URL)
-    .then(r => r.json())
-    .then(localData => {
-      applyData(localData);
-      
-      // Sync with Google API in background
-      if (GOOGLE_API_URL) {
-        fetch(withNoCache(GOOGLE_API_URL), { cache: 'no-store' })
-          .then(r => r.json())
-          .then(freshData => {
-            // Only update UI if something actually changed.
-            try {
-              const freshJson = JSON.stringify(freshData);
-              const freshHash = stableHash(freshJson);
-              if (freshHash !== lastGoogleHash) {
-                lastGoogleHash = freshHash;
-                applyData(freshData);
-              } else {
-              }
-            } catch (e) {
-              applyData(freshData);
-            }
-          })
-          .catch(err => {
-            console.warn('Google API sync failed', err);
-          });
-      }
-    })
-    .catch(err => {
-      if (GOOGLE_API_URL) {
-        fetch(withNoCache(GOOGLE_API_URL), { cache: 'no-store' })
-          .then(r => r.json())
-          .then(freshData => {
-            applyData(freshData);
-          })
-          .catch(e => console.error('Data source failed', e));
-      } else {
-        // No data sources available → stop loader (leave UI hidden)
+  // Data loading strategy:
+  // If `googleApiUrl` is provided, treat Google Apps Script as the ONLY source of truth.
+  // (No local `prices.json` fetch; avoids stale/cached local data.)
+  // If `googleApiUrl` is missing, fall back to local `prices.json`.
+
+  function fetchGoogleOnly() {
+    return fetch(withNoCache(GOOGLE_API_URL), { cache: 'no-store' })
+      .then(r => r.json())
+      .then(freshData => {
+        try {
+          lastGoogleHash = stableHash(JSON.stringify(freshData));
+        } catch (e) {}
+        applyData(freshData);
+      })
+      .catch(err => {
+        console.warn('Google API failed', err);
+        // Keep UI client-friendly: stop loader and render empty-state (render() will handle it)
         setLoading(false);
-      }
-    });
+        try { setEmptyState(true); } catch (e) {}
+      });
+  }
+
+  function fetchLocalOnly() {
+    return fetch(LOCAL_JSON_URL)
+      .then(r => r.json())
+      .then(localData => applyData(localData))
+      .catch(err => {
+        console.error('Local data source failed', err);
+        setLoading(false);
+        try { setEmptyState(true); } catch (e) {}
+      });
+  }
+
+  if (GOOGLE_API_URL) fetchGoogleOnly();
+  else fetchLocalOnly();
 
   // Event listeners
   function bindUI() {
@@ -290,8 +363,16 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (!el) return;
     el.style.display = show ? '' : 'none';
   }
+  function isDiscountValuePromo(promo) {
+    if (!promo) return false;
+    const txt = [promo.short, promo.full].filter(Boolean).join(' ');
+    return /Wartość rabatu/i.test(txt);
+  }
   function inferSubOptions(promo) {
     if (!promo) return [];
+    // Promos that describe "discount value (PLN or %)" should not render pc-subopts buttons,
+    // even if the data includes explicit suboptions.
+    if (isDiscountValuePromo(promo)) return [];
     if (Array.isArray(promo.so) && promo.so.length) return promo.so;
 
     // Try to infer two-option promos from text (tag/short/full).
@@ -352,6 +433,35 @@ export default function initPricesCalculator(_$, opts = {}) {
   // Build program list with strict lang data sourcing
   function buildUnified() {
     const lang = window.lang;
+
+    // Single-offer mode: lock the program list to the post key.
+    if (FIXED_KEY) {
+      const parsed = parseFixedKey(FIXED_KEY);
+      const city = (parsed && parsed.city) ? parsed.city : window.city;
+      const deg = (parsed && Number.isFinite(parsed.deg)) ? parsed.deg : null;
+
+      if (lang === 'en') {
+        const list = (window.RAW.en && window.RAW.en[city]) || [];
+        const hit = list.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+        if (!hit) return [];
+        return [Object.assign({}, hit, { modes: ['s'], dn: hit.s ? (hit.k + ' — ' + hit.s) : hit.k })];
+      }
+
+      const sl = window.RAW.pl[city] ? (window.RAW.pl[city].s || []) : [];
+      const nl = window.RAW.pl[city] ? (window.RAW.pl[city].n || []) : [];
+
+      const sHit = sl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+      const nHit = nl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+
+      const rep = sHit || nHit;
+      if (!rep) return [];
+
+      const modes = [];
+      if (sHit) modes.push('s');
+      if (nHit) modes.push('n');
+
+      return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
+    }
     
     // Filter list if UABY is active
     if (window.uaby && window.city === 'wro') {
@@ -460,6 +570,18 @@ export default function initPricesCalculator(_$, opts = {}) {
     const u = window.unified[window.progIdx];
     if (!u) return null;
     if (window.lang === 'en' || u.uabyOnly) return u;
+
+    // Single-offer mode: always match the exact row by key + mode.
+    // This avoids incorrect matches when multiple rows share the same course name/degree.
+    if (FIXED_KEY) {
+      const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
+      for (let i = 0; i < list.length; i++) {
+        if (matchItemByFixedKey(list[i], FIXED_KEY, PARSED_FIXED)) return list[i];
+      }
+      // If no exact match, return null so empty-state can show.
+      return null;
+    }
+
     const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
     const uK = (u.k || '').trim().toLowerCase();
     const uS = normSpec(u.s).trim().toLowerCase();
@@ -634,7 +756,17 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function updateMB() {
     const u = window.unified[window.progIdx], mw = document.getElementById('mode-wrap');
-    if (!u || window.lang === 'en' || u.uabyOnly) { if (mw) mw.style.display = 'none'; return; }
+    // Hide "Forma studiów" if:
+    // - no program
+    // - EN (no stacjonarne/niestacjonarne split here)
+    // - UABY-only program
+    // - only 1 mode available (no choice)
+    if (!u || window.lang === 'en' || u.uabyOnly || !Array.isArray(u.modes) || u.modes.length <= 1) {
+      if (mw) mw.style.display = 'none';
+      // Still keep window.mode consistent when there's exactly one mode.
+      if (u && Array.isArray(u.modes) && u.modes.length === 1) window.mode = u.modes[0];
+      return;
+    }
     if (mw) mw.style.display = 'block';
     if (u.modes.indexOf(window.mode) < 0) window.mode = u.modes[0];
     const mr = document.getElementById('mode-row');
@@ -672,10 +804,14 @@ export default function initPricesCalculator(_$, opts = {}) {
   function updateCTAs(item) {
     const bm = document.getElementById('btn-more'), ba = document.getElementById('btn-apply');
     if (!bm || !ba) return;
+
+    if (HIDE_MORE_BTN) {
+      bm.style.display = 'none';
+    }
     
     const urlStr = (item.ps || '').trim();
     if (urlStr && urlStr !== '—') {
-      bm.style.display = '';
+      if (!HIDE_MORE_BTN) bm.style.display = '';
       const enDeg = item.deg === 1 ? 'bachelor' : 'master';
       const plDeg = item.deg === 1 ? 'studia-1-stopnia' : 'studia-2-stopnia';
       bm.href = urlStr.startsWith('http') ? urlStr : (window.lang === 'en' ? 'https://akademiata.pl/en/offer/' + enDeg + '/' : 'https://akademiata.pl/oferta/' + plDeg + '/') + urlStr + '/';
@@ -701,20 +837,96 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function getPL(pid) { return pid === 'r12' ? '12 rat miesięcznych' : pid === 'r10' ? '10 rat miesięcznych' : pid === 'sem' ? 'Semestr z góry' : 'Rok z góry'; }
 
+  function updatePriceFromBanner(pp, pid) {
+    const wrap = document.getElementById('priseScroll');
+    if (!wrap) return;
+
+    const strong = wrap.querySelector('strong');
+    if (!strong) return;
+
+    if (!pp || !pid) return;
+
+    const isEn = window.lang === 'en';
+    const fromTxt = isEn ? 'from' : 'już od';
+
+    // Unit formatting aligned with existing banner expectations:
+    // - PL installments are monthly ("zł/mies.")
+    // - EN installs typically show "/month"
+    let unit = pp.cur || '';
+    if (pid === 'r12' || pid === 'r10') {
+      if (pp.cur === 'PLN') unit = 'zł/mies.';
+      else if (pp.cur === 'EUR') unit = isEn ? '€/month' : 'EUR/mies.';
+    } else {
+      // Keep currency only for upfront variants.
+      if (pp.cur === 'PLN') unit = 'zł';
+      if (pp.cur === 'EUR') unit = '€';
+    }
+
+    strong.textContent = `${fromTxt} ${fmt(pp.pr)} ${unit}`.trim();
+  }
+
   function render() {
     window.unified = buildUnified();
     const progCount = document.getElementById('prog-count');
     if (progCount) progCount.textContent = window.unified.length + ' opcji';
-    if (!window.unified.length) return;
+    if (!window.unified.length) {
+      // Show friendly empty state instead of leaving UI with blanks.
+      setEmptyState(true);
 
-    buildSel();
+      // Developer diagnostics (do not show in UI).
+      try {
+        console.warn('[PricesCalculator] No matching data for calculator', {
+          fixedKey: FIXED_KEY || null,
+          fixedLang: FIXED_LANG || null,
+          city: window.city || null,
+          lang: window.lang || null,
+        });
+      } catch (e) {}
+
+      const plansWrap = document.getElementById('plans-wrap');
+      if (plansWrap) plansWrap.innerHTML = '';
+      document.getElementById('promos-section')?.style && (document.getElementById('promos-section').style.display = 'none');
+      document.getElementById('sum-box')?.style && (document.getElementById('sum-box').style.display = 'none');
+      document.getElementById('enr-box')?.style && (document.getElementById('enr-box').style.display = 'none');
+      document.getElementById('btn-apply')?.style && (document.getElementById('btn-apply').style.display = 'none');
+      document.getElementById('mode-wrap')?.style && (document.getElementById('mode-wrap').style.display = 'none');
+      document.getElementById('uaby-wrap')?.style && (document.getElementById('uaby-wrap').style.display = 'none');
+      return;
+    }
+
+    setEmptyState(false);
+
+    if (!FIXED_KEY) buildSel();
     if (window.progIdx >= window.unified.length) window.progIdx = 0;
     const progSel = document.getElementById('prog-sel');
-    if (progSel) progSel.value = window.progIdx;
+    if (progSel) {
+      if (FIXED_KEY) {
+        progSel.innerHTML = '';
+        const o = document.createElement('option');
+        o.value = '0';
+        o.textContent = window.unified[0].dn || window.unified[0].k || '';
+        progSel.appendChild(o);
+        progSel.value = '0';
+        window.progIdx = 0;
+      } else {
+        progSel.value = window.progIdx;
+      }
+    }
 
     updateMB();
     const u = window.unified[window.progIdx], item = getItem();
-    if (!item) return;
+    if (!item) {
+      setEmptyState(true);
+      try {
+        console.warn('[PricesCalculator] No matching RAW row for current selection', {
+          fixedKey: FIXED_KEY || null,
+          city: window.city || null,
+          mode: window.mode || null,
+          lang: window.lang || null,
+        });
+      } catch (e) {}
+      return;
+    }
     updateCTAs(item);
 
     let pids = window.lang === 'pl' ? ['r12', 'r10', 'sem', 'rok'] : ['rok', 'sem'];
@@ -748,7 +960,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (plansWrap) plansWrap.innerHTML = ph;
     }
 
-    const elig = getElig(u), ps2 = document.getElementById('promos-section'), pi = document.getElementById('promos-inner');
+    const elig = getElig(u), ps2 = document.getElementById('promos') || document.getElementById('promos-section'), pi = document.getElementById('promos-inner');
     if (elig.length && !window.uaby) {
       if (ps2) ps2.style.display = '';
       const tpl = document.getElementById('promo-card-template');
@@ -795,7 +1007,11 @@ export default function initPricesCalculator(_$, opts = {}) {
 
           const subWrap = body.querySelector('[data-promo-subopts]');
           const subOpts = inferSubOptions(promo);
-          const shouldShowSubopts = !!isSel && subOpts.length >= 2;
+          // Only render sub-option buttons for promos that are truly user-configurable
+          // (i.e. we have a dedicated entry in window.subP for that promo id).
+          // This prevents accidental pc-subopts for fixed-value promos if data contains stray `so`.
+          const isConfigurablePromo = !!(window.subP && Object.prototype.hasOwnProperty.call(window.subP, promo.id));
+          const shouldShowSubopts = !!isSel && isConfigurablePromo && subOpts.length >= 2;
 
           if (subWrap) {
             subWrap.innerHTML = '';
@@ -855,6 +1071,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       }
       sb.style.display = '';
     } else if (sb) sb.style.display = 'none';
+
+    // Update the "CENA / już od" banner on single offer header (if present).
+    if (ppS) updatePriceFromBanner(ppS, window.plan);
 
     const enrBox = document.getElementById('enr-box');
     if (enrBox) enrBox.style.display = '';

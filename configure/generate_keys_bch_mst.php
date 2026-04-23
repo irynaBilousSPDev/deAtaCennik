@@ -35,35 +35,82 @@ add_action('save_post', 'ata_auto_save_smart_key', 10, 2);
 function ata_auto_save_smart_key($post_id, $post) {
     if (!in_array($post->post_type, ['bachelor', 'master'])) return;
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+    if (wp_is_post_revision($post_id)) return;
+    if (wp_is_post_autosave($post_id)) return;
 
     $meta_key = 'logical_sync_key';
     $stored_key = get_post_meta($post_id, $meta_key, true);
 
-    if (empty($stored_key)) {
-        $new_key = ata_build_smart_key($post_id, $post);
-        // Sprawdzamy czy miasto zdążyło się zapisać (brak 'uni')
-        if (!empty($new_key) && strpos($new_key, 'uni') === false) { 
-            update_post_meta($post_id, $meta_key, $new_key);
-        }
+    $expected_key = ata_build_smart_key($post_id, $post);
+    if (empty($expected_key) || strpos($expected_key, 'uni') !== false) {
+        // City/slug not ready yet.
+        return;
     }
+
+    // If key was copied by duplication, or the slug/city changed, refresh it.
+    $needs_refresh = empty($stored_key) || strtolower((string)$stored_key) !== strtolower((string)$expected_key);
+
+    // Also refresh if another post already uses this stored key.
+    if (!$needs_refresh && !empty($stored_key)) {
+        $dup = new WP_Query([
+            'post_type'      => ['bachelor', 'master'],
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'post__not_in'   => [$post_id],
+            'meta_query'     => [
+                [
+                    'key'   => $meta_key,
+                    'value' => $stored_key,
+                ],
+            ],
+        ]);
+        $needs_refresh = $dup->have_posts();
+        wp_reset_postdata();
+    }
+
+    if (!$needs_refresh) return;
+
+    $final_key = $expected_key;
+
+    // Ensure uniqueness. If even expected key collides (rare), suffix with post_id.
+    $dup2 = new WP_Query([
+        'post_type'      => ['bachelor', 'master'],
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'post__not_in'   => [$post_id],
+        'meta_query'     => [
+            [
+                'key'   => $meta_key,
+                'value' => $final_key,
+            ],
+        ],
+    ]);
+    if ($dup2->have_posts()) {
+        $final_key = $expected_key . '-' . $post_id;
+    }
+    wp_reset_postdata();
+
+    update_post_meta($post_id, $meta_key, $final_key);
 }
 
 /**
  * 3. JEDNORAZOWY AUTOMAT W TLE 
  */
-// add_action('admin_init', 'ata_background_key_generator');
-// function ata_background_key_generator() {
-//     if (!get_option('ata_smart_keys_generated_v8')) {
+add_action('admin_init', 'ata_background_key_generator');
+function ata_background_key_generator() {
+    if (!get_option('ata_smart_keys_generated_v8')) {
         
-//         $posts = get_posts(['post_type' => ['bachelor', 'master'], 'numberposts' => -1, 'post_status' => 'any']);
-//         foreach ($posts as $p) {
-//             $key = ata_build_smart_key($p->ID, $p);
-//             if ($key) update_post_meta($p->ID, 'logical_sync_key', $key);
-//         }
+        $posts = get_posts(['post_type' => ['bachelor', 'master'], 'numberposts' => -1, 'post_status' => 'any']);
+        foreach ($posts as $p) {
+            $key = ata_build_smart_key($p->ID, $p);
+            if ($key) update_post_meta($p->ID, 'logical_sync_key', $key);
+        }
         
-//         add_option('ata_smart_keys_generated_v8', '1');
-//     }
-// }
+        add_option('ata_smart_keys_generated_v8', '1');
+    }
+}
 
 /**
  * 4. PANEL BOCZNY W EDYCJI: Pokazuje gotowy klucz i przycisk do skopiowania

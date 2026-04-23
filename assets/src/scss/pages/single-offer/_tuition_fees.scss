@@ -2,6 +2,10 @@
 @use "../../abstracts/mixins" as mixins;
 
 .section_tuition_fees {
+  background-color: #FAFAFC;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  margin-bottom: 60px;
 
   @include mixins.max-ipad-air-screen {
     padding: 15px;
@@ -120,4 +124,5 @@
     }
   }
 }
+
 

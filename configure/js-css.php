@@ -47,8 +47,8 @@ function akademiata_enqueue_scripts()
         true
     );
 
-    // Prices page: pass Google Sheets endpoint to JS.
-    if (is_page_template('page-template-prices.php')) {
+    // Prices calculator: pass Google Sheets endpoint to JS (Prices page + single offers).
+    if (is_page_template('page-template-prices.php') || is_singular(['bachelor', 'master'])) {
         wp_localize_script('name-main-js', 'akademiataPrices', [
             'googleApiUrl' => 'https://script.google.com/macros/s/AKfycby89Mt7UgeY6jKnq2YQNwumt_CBp46UVd1mbKvxqEkg_46vjGAeN-8lcL_OokQVFnAW/exec',
         ]);

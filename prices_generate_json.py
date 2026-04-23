@@ -105,10 +105,11 @@ def _detect_city_key(v: str) -> str:
 
 def _detect_mode_key(v: str) -> str:
     v = v.lower()
-    if "stac" in v or v in {"s", "stacjonarne"}:
-        return "s"
     if "niest" in v or v in {"n", "niestacjonarne"}:
         return "n"
+    # IMPORTANT: check "niest" before "stac" because "niestacjonarne" contains "stac"
+    if "stac" in v or v in {"s", "stacjonarne"}:
+        return "s"
     # fallback
     return "s"
 
@@ -145,6 +146,7 @@ def _parse_programy_pl(df: pd.DataFrame) -> Dict[str, Dict[str, List[Dict[str, A
       - Wpisowe
       - URL strony ATA (pełny link)   (can be slug or full URL)
       - Klucz SmartApply
+      - Klucz (Google Sheets / logical_sync_key)   (optional but recommended)
     """
 
     # Column aliases (match your exact headers, with tolerant fallbacks)
@@ -160,6 +162,17 @@ def _parse_programy_pl(df: pd.DataFrame) -> Dict[str, Dict[str, List[Dict[str, A
         "wps": next((c for c in df.columns if c.lower().startswith("wpis")), None),
         "ps": next((c for c in df.columns if "url" in c.lower() and "ata" in c.lower()), None),
         "ak": next((c for c in df.columns if "klucz smartapply" in c.lower() or "smartapply" in c.lower()), None),
+        # Logical key used to match single offer pages (e.g. 1_wwa_architektura)
+        "lk": next(
+            (
+                c
+                for c in df.columns
+                if "klucz" in c.lower()
+                and "smartapply" not in c.lower()
+                and ("google" in c.lower() or "sheets" in c.lower() or "logical" in c.lower() or "sync" in c.lower())
+            ),
+            None,
+        ),
     }
 
     missing = [k for k, v in col.items() if v is None and k in {"miasto", "forma", "kierunek", "stopien"}]
@@ -184,6 +197,7 @@ def _parse_programy_pl(df: pd.DataFrame) -> Dict[str, Dict[str, List[Dict[str, A
             # JS expects slug, not full URL
             "ps": _extract_slug(row[col["ps"]]) if col["ps"] else "",
             "ak": _norm_str(row[col["ak"]]) if col["ak"] else "",
+            "lk": _norm_str(row[col["lk"]]) if col["lk"] else "",
         }
 
         # Skip empty rows
@@ -228,6 +242,16 @@ def _parse_programy_en(df: pd.DataFrame) -> Dict[str, List[Dict[str, Any]]]:
         "wps": next((c for c in df.columns if c.lower().startswith("wpis") or "enroll" in c.lower()), None),
         "ps": next((c for c in df.columns if "url" in c.lower() and "ata" in c.lower()), None),
         "ak": next((c for c in df.columns if "klucz smartapply" in c.lower() or "smartapply" in c.lower()), None),
+        "lk": next(
+            (
+                c
+                for c in df.columns
+                if "klucz" in c.lower()
+                and "smartapply" not in c.lower()
+                and ("google" in c.lower() or "sheets" in c.lower() or "logical" in c.lower() or "sync" in c.lower())
+            ),
+            None,
+        ),
     }
 
     if col["city"] is None or col["k"] is None or col["deg"] is None:
@@ -248,6 +272,7 @@ def _parse_programy_en(df: pd.DataFrame) -> Dict[str, List[Dict[str, Any]]]:
             "wps": _to_int(row[col["wps"]], 0) if col["wps"] else 0,
             "ps": _extract_slug(row[col["ps"]]) if col["ps"] else "",
             "ak": _norm_str(row[col["ak"]]) if col["ak"] else "",
+            "lk": _norm_str(row[col["lk"]]) if col["lk"] else "",
         }
         if not item["k"] or not item["deg"]:
             continue
