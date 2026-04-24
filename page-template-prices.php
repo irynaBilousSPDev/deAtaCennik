@@ -10,15 +10,15 @@ get_header();
 <div class="page page-prices my-5 py-3">
 	<div class="container">
 		<?php the_breadcrumb(); ?>
-		<h1><?php the_title(); ?></h1>
-		<h2 class="title_section primary_color mb-3" style="font-size: 30px; font-weight: 700; font-family: 'Nunito Sans', serif;">
-		W ATA to Ty decydujesz, jak chcesz zaplanować wydatki na studia!
+		<h1>Kalkulator czesnego</h1>
+		<h2 class="title_section primary_color mb-3 page-prices__subtitle">
+		Sprawdź koszt studiów i zapisz się w kilka minut.
 		</h2>
-		<div class="content" style="font-size: 20px; font-weight: 400; font-family: 'Lato', sans-serif;max-width: 90%;">
+		<!-- <div class="content" style="font-size: 20px; font-weight: 400; font-family: 'Lato', sans-serif;max-width: 90%;">
 			Oferujemy kilka elastycznych wariantów płatności — możesz rozłożyć czesne na wygodne raty miesięczne lub zapłacić z góry za semestr 
 			albo cały rok i skorzystać ze zniżki nawet do 10%. Do tego czekają na Ciebie promocje, które możesz łączyć: zapisz się wcześniej, 
 			przyjdź z grupą znajomych lub skorzystaj z rabatu dla absolwentów szkół technicznych i artystycznych. Wybierz swój kierunek i sprawdź, ile dokładnie zapłacisz.
-		</div>
+		</div> -->
 
 		<?php
 		set_query_var('prices_calculator_fixed_key', '');

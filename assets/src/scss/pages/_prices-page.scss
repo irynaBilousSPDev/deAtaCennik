@@ -4,7 +4,22 @@ body.page-template-page-template-prices{
 }
 .page-prices,
 .section_tuition_fees {
+  .page-prices__subtitle {
+    font-size: 30px;
+    font-weight: 700;
+    font-family: 'Nunito Sans', serif;
+
+    @media (max-width: 600px) {
+      font-size: 20px;
+    }
+  }
+
+  // Global base.scss sets `section { overflow: hidden; }` which clips shadows
+  // and can block horizontal scrollers. Allow overflow for the calculator area.
+  overflow: visible;
+
   .kalkulator-wse {
+    overflow: visible;
     // CSS variables (from provided snippet)
     --ata: #FF6D2D;
     --ata-dk: #E65A1F;
@@ -107,6 +122,20 @@ body.page-template-page-template-prices{
       border-left: 7px solid var(--ata);
     }
 
+    .sec-hint {
+      display: none;
+      font: inherit;
+      font-family: "neulis-sans", "Nunito Sans", sans-serif;
+      color: #1677ff;
+      font-weight: 700;
+      text-transform: none;
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      user-select: none;
+    }
+
     /* Segment Controls (Przełączniki) */
     .seg {
       display: flex;
@@ -139,6 +168,27 @@ body.page-template-page-template-prices{
       &:not(.on):hover {
         color: var(--text-main);
       }
+    }
+
+    // Allow mobile-friendly short labels for language toggle.
+    .seg-btn__short {
+      display: none;
+    }
+
+    .seg-btn__long {
+      display: inline;
+    }
+
+    // Allow mobile-friendly section title variants (e.g. WYBRANY KIERUNEK).
+    .sec__short {
+      display: none;
+    }
+    .sec__long {
+      display: inline;
+    }
+
+    .sel-mobile {
+      display: none;
     }
 
     /* Pigułki / Warianty */
@@ -292,6 +342,45 @@ body.page-template-page-template-prices{
       grid-template-columns: 1fr 1fr;
       gap: 16px;
       margin-bottom: 28px;
+    }
+
+    // Hide mobile-only plan card parts on desktop.
+    .pc-h--mobile,
+    .pc-price--mobile,
+    .pc-unit,
+    .pc-disc,
+    .pc-ic {
+      display: none;
+    }
+
+    // Desktop can still show "Najczęściej wybierany" when JS enables it.
+    .pc-pick {
+      display: none; // default off; JS flips to visible for r12
+      margin-top: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ata);
+      letter-spacing: 0.01em;
+    }
+
+    // Desktop label/price should stay visible.
+    .pc-lbl--desktop,
+    .pc-pr--desktop {
+      display: block;
+    }
+
+    .pc-price--desktop {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .pc-unit--desktop {
+      display: inline-flex;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: -0.01em;
     }
 
     .pc {
@@ -852,19 +941,467 @@ body.page-template-page-template-prices{
     }
 
     /* Mobilność */
-    @media (max-width: 600px) {
+    // Mobile/tablet: enable the horizontal plans scroller.
+    @media (max-width: 820px) {
+      // Make the whole calculator feel like a mobile-native block (no "card in the middle").
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 18px 16px;
+      background-color: var(--bg-page);
+      border-radius: 18px;
+      margin-top: 0;
+      margin-bottom: 0;
+
+      // Phone-only: transparent container + no side padding (as requested).
+      @media (max-width: 600px) {
+        padding: 1rem 0;
+        background: transparent;
+        border-radius: 0;
+      }
+
+      .sec {
+        margin-top: 18px;
+        margin-bottom: 10px;
+      }
+
+      .seg {
+        margin-bottom: 16px;
+      }
+
+      // Mobile layout from designs: toggles without "Miasto / Język studiów" labels.
+      .sec[data-prices-row="city"],
+      .sec[data-prices-row="lang"] {
+        display: none;
+      }
+
+      // Program header becomes "WYBRANY KIERUNEK".
+      .sec__short {
+        display: inline;
+      }
+      .sec__long {
+        display: none;
+      }
+
+      // Use short labels (Polski / English) like the mobile designs.
+      #lang-row .seg-btn__short {
+        display: inline;
+      }
+      #lang-row .seg-btn__long {
+        display: none;
+      }
+
+      // Mobile "select card" (pixel-ish to design) + hide native select.
+      .sel-mobile {
+        display: flex;
+        width: 100%;
+        border: 2px solid var(--border-light);
+        border-radius: var(--radius-lg);
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+        padding: 16px 18px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        text-align: left;
+        cursor: pointer;
+        font-family: 'Lato', sans-serif;
+      }
+
+      .sel-mobile__text {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .sel-mobile__title {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text-main);
+        line-height: 1.15;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sel-mobile__meta {
+        margin-top: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sel-mobile__arr {
+        flex-shrink: 0;
+        width: 12px;
+        height: 7px;
+        background: var(--ata);
+        clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        transform: translateY(1px);
+      }
+
+      .sel-wrap::after {
+        display: none;
+      }
+
+      .sel-wrap select {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: auto;
+        width: 100%;
+        height: 100%;
+        z-index: 2; // capture taps to open native picker
+      }
+
+      .sel-mobile {
+        position: relative;
+        z-index: 1;
+        // Let taps go to the invisible native <select> overlay.
+        pointer-events: none;
+      }
+
+      // Plans: horizontal scroller like mobile designs.
+      .sec-hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       .plans {
-        grid-template-columns: 1fr;
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        // Allow normal vertical page scroll when swiping on the scroller.
+        // Horizontal scroll still works because this element is overflow-x: auto.
+        touch-action: auto;
+        // Extra padding so card shadows are not clipped by overflow container.
+        padding: 14px 6px 16px;
+        margin-bottom: 18px;
+      }
+
+      // Mobile: show mobile-only plan parts, hide desktop legacy parts.
+      .pc-h--mobile,
+      .pc-price--mobile,
+      .pc-unit,
+      .pc-pick,
+      .pc-disc,
+      .pc-ic {
+        display: flex;
+      }
+
+      .pc-price--mobile {
+        display: flex;
+      }
+
+      .pc-unit,
+      .pc-pick,
+      .pc-disc {
+        display: inline-flex;
+      }
+
+      .pc-lbl--desktop,
+      .pc-pr--desktop {
+        display: none;
+      }
+
+      .pc-price--desktop,
+      .pc-unit--desktop {
+        display: none;
+      }
+
+      .plans::-webkit-scrollbar {
+        display: none;
+      }
+
+      .plans {
+        scrollbar-width: none; // Firefox
+      }
+
+      .pc {
+        min-width: 270px;
+        flex: 0 0 auto;
+        padding: 18px 18px 16px;
+        border-radius: 22px;
+        box-shadow: none;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        transform: none !important;
+
+        &:hover {
+          transform: none;
+        }
+      }
+
+      // Selected plan card matches the design (orange border + warm background).
+      .pc.sel {
+        border-color: #ff6d2d;
+        background: #fff0e9;
+        box-shadow: none;
+      }
+
+      .pc-h {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .pc-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: #fff;
+        border: 2px solid rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .pc.sel .pc-ic {
+        background: #ff6d2d;
+        border-color: #ff6d2d;
+        box-shadow: none;
+      }
+
+      .pc.sel .pc-ic::after {
+        content: '';
+        width: 8px;
+        height: 14px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-left: none;
+        transform: rotate(45deg) translate(-1px, -1px);
+      }
+
+      .pc .lbl {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        color: #ff6d2d; // label orange in design
+      }
+
+      .pc-price {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+
+      .pc .pr {
+        font-size: 54px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+      }
+
+      .pc-unit {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--text-muted);
+        letter-spacing: -0.02em;
+      }
+
+      .pc-pick {
+        font-size: 18px;
+        font-weight: 900;
+        color: #ff6d2d;
+        margin-top: 10px;
+      }
+
+      .pc-disc {
+        align-self: flex-start;
+        margin-top: 10px;
+        font-size: 14px;
+        font-weight: 900;
+        color: #00a651;
+        background: rgba(0, 166, 81, 0.12);
+        padding: 8px 14px;
+        border-radius: 999px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      // Plan savings badge (sv) on mobile.
+      .pc .sv {
+        display: inline-flex;
+        align-items: center;
+        align-self: flex-start;
+        margin-top: 10px;
+        font-size: 12px;
+        font-weight: 900;
+        color: #00a651;
+        background: rgba(0, 166, 81, 0.12);
+        padding: 8px 14px;
+        border-radius: 999px;
+        line-height: 1;
+        white-space: nowrap;
       }
 
       .cta-row {
         grid-template-columns: 1fr;
       }
 
+      /* Promos (mobile pixel) */
+      .promos-section {
+        margin-bottom: 18px;
+      }
+
+      .promo-card {
+        border-width: 2px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: none;
+      }
+
+      .promo-card.sel {
+        border-color: #ff6d2d;
+        background: #fff;
+        box-shadow: none;
+      }
+
+      .pc-head {
+        padding: 12px 12px;
+        gap: 0 12px;
+        // Grid layout so the green line sits on its own row.
+        display: grid;
+        grid-template-columns: 26px 1fr auto 34px;
+        grid-template-rows: auto auto;
+        align-items: center;
+      }
+
+      .pc-chk {
+        grid-column: 1;
+        grid-row: 1;
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        border: 2px solid rgba(0, 0, 0, 0.14);
+        background: #fff;
+      }
+
+      .pc-info {
+        // Let children participate in the grid.
+        display: contents;
+      }
+
+      .promo-card.sel .pc-chk {
+        background: #ff6d2d;
+        border-color: #ff6d2d;
+      }
+
+      .promo-card.sel .pc-chk::after {
+        width: 7px;
+        height: 12px;
+        border-width: 3px;
+        transform: rotate(45deg) translate(-1px, -2px);
+      }
+
+      .pc-name {
+        grid-column: 2;
+        grid-row: 1;
+        font-size: 14px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+
+      .pc-short {
+        grid-column: 2 / 5;
+        grid-row: 2;
+        margin-top: 2px;
+        font-size: 14px;
+        line-height: 1.25;
+      }
+
+      // Mobile design:
+      // - show pc-short when selected
+      // - or when expanded (open)
+      .promo-card:not(.sel):not(.open) .pc-short {
+        display: none;
+      }
+
+      .pc-short.good,
+      .promo-card.sel .pc-short {
+        color: #00a651;
+        font-weight: 800;
+      }
+
+      .pc-tag {
+        grid-column: 3;
+        grid-row: 1;
+        background: #fff0e9;
+        color: #ff6d2d;
+        border-radius: 999px;
+        padding: 12px 12px;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: -0.01em;
+      }
+
+      .pc-arr {
+        grid-column: 4;
+        grid-row: 1;
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.42);
+      }
+
+      .pc-arr.open {
+        color: #ff6d2d;
+      }
+
+      .pc-body {
+        padding: 0 18px 18px 18px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: rgba(0, 0, 0, 0.56);
+      }
+
+      .pc-body::before {
+        content: '';
+        display: block;
+        height: 1px;
+        margin: 10px 0 14px;
+        background: rgba(0, 0, 0, 0.10);
+      }
+
+      .pc-subopts {
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .pc-so {
+        flex: 1;
+        min-width: 0;
+        padding: 14px 16px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        text-align: center;
+        border-width: 2px;
+        background: #fff;
+        color: rgba(0, 0, 0, 0.55);
+      }
+
+      .pc-so.on {
+        background: #ff6d2d;
+        border-color: #ff6d2d;
+        color: #fff;
+        box-shadow: none;
+      }
+
       .sum {
         flex-direction: column;
         text-align: center;
         align-items: stretch;
+        gap: 0;
       }
 
       .sr {
@@ -874,6 +1411,75 @@ body.page-template-page-template-prices{
 
       .enr-items {
         grid-template-columns: 1fr;
+      }
+
+      /* Enrollment fees (mobile design) */
+      .enr {
+        padding: 0;
+        margin-bottom: 18px;
+      }
+
+      .enr-title {
+        text-align: left;
+        margin-bottom: 12px;
+      }
+
+      .enr-items {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        background: #f5f5f7;
+        border-radius: 18px;
+        padding: 14px 14px;
+        box-shadow: none;
+      }
+
+      .ei {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 12px 6px;
+        min-height: 0;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .ei + .ei {
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 0;
+      }
+
+      .ei .en {
+        font-size: 16px;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0;
+        color: rgba(0, 0, 0, 0.45);
+      }
+
+      .ei .ev {
+        font-size: 16px;
+        font-weight: 900;
+        color: var(--text-main);
+        white-space: nowrap;
+      }
+
+      // Keep optional badge/savings readable if present.
+      .eb {
+        margin-top: 6px;
+      }
+
+      // UABY checkbox row (mobile)
+      .uaby-row {
+        padding: 8px 12px;
+        border-radius: 14px;
+        border-width: 1px;
+      }
+
+      .uaby-lbl {
+        font-size: 12px;
       }
     }
   }

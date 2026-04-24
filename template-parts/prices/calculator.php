@@ -65,8 +65,14 @@ $is_single_offer_layout = ($layout === 'single-offer');
 
 	<div class="sec" data-prices-row="lang"><?php echo esc_html__('Język studiów', 'akademiata'); ?></div>
 	<div class="seg" id="lang-row" data-prices-row="lang">
-		<button type="button" class="seg-btn on" data-val="pl"><?php echo esc_html__('Studia w języku polskim', 'akademiata'); ?></button>
-		<button type="button" class="seg-btn" data-val="en"><?php echo esc_html__('Studia w języku angielskim', 'akademiata'); ?></button>
+		<button type="button" class="seg-btn on" data-val="pl">
+			<span class="seg-btn__short"><?php echo esc_html__('Polski', 'akademiata'); ?></span>
+			<span class="seg-btn__long"><?php echo esc_html__('Studia w języku polskim', 'akademiata'); ?></span>
+		</button>
+		<button type="button" class="seg-btn" data-val="en">
+			<span class="seg-btn__short"><?php echo esc_html__('English', 'akademiata'); ?></span>
+			<span class="seg-btn__long"><?php echo esc_html__('Studia w języku angielskim', 'akademiata'); ?></span>
+		</button>
 	</div>
 
 	<div id="uaby-wrap" style="display:none">
@@ -77,12 +83,22 @@ $is_single_offer_layout = ($layout === 'single-offer');
 	</div>
 
 	<div class="sec" data-prices-row="program">
-		<?php echo esc_html__('Program', 'akademiata'); ?> <span class="badge" id="prog-count">—</span>
-		<span style="font-size: 14px; font-weight: 400; font-family: 'Lato', sans-serif; text-transform: lowercase; letter-spacing: 0.05em;">
-			(<?php echo esc_html__('wybierz swój program', 'akademiata'); ?>)
+		<span class="sec__short"><?php echo esc_html__('Wybrany kierunek', 'akademiata'); ?></span>
+		<span class="sec__long">
+			<?php echo esc_html__('Program', 'akademiata'); ?> <span class="badge" id="prog-count">—</span>
+			<span style="font-size: 14px; font-weight: 400; font-family: 'Lato', sans-serif; text-transform: lowercase; letter-spacing: 0.05em;">
+				(<?php echo esc_html__('wybierz swój program', 'akademiata'); ?>)
+			</span>
 		</span>
 	</div>
 	<div class="sel-wrap" data-prices-row="program">
+		<button type="button" class="sel-mobile" id="prog-sel-mobile" aria-haspopup="listbox" aria-controls="prog-sel">
+			<div class="sel-mobile__text">
+				<div class="sel-mobile__title" data-prog-mobile-title>—</div>
+				<div class="sel-mobile__meta" data-prog-mobile-meta>—</div>
+			</div>
+			<span class="sel-mobile__arr" aria-hidden="true"></span>
+		</button>
 		<select id="prog-sel"></select>
 	</div>
 
@@ -99,8 +115,45 @@ $is_single_offer_layout = ($layout === 'single-offer');
 		</div>
 	</div>
 
-	<div class="sec" data-hide-when-empty><?php echo esc_html__('Wariant płatności', 'akademiata'); ?></div>
+	<div class="sec sec--row" data-hide-when-empty>
+		<span><?php echo esc_html__('Wariant płatności', 'akademiata'); ?></span>
+		<span
+			class="sec-hint"
+			data-plans-hint
+			data-hint-right="<?php echo esc_attr__('Przesuń →', 'akademiata'); ?>"
+			data-hint-left="<?php echo esc_attr__('← Przesuń', 'akademiata'); ?>"
+			data-dir="right"
+		>
+			<?php echo esc_html__('Przesuń →', 'akademiata'); ?>
+		</span>
+	</div>
 	<div id="plans-wrap" data-hide-when-empty></div>
+
+	<template id="plan-card-template">
+		<div class="pc" data-plan-card>
+			<!-- Mobile-only header -->
+			<div class="pc-h pc-h--mobile">
+				<div class="pc-ic" aria-hidden="true"></div>
+				<div class="lbl" data-plan-label></div>
+			</div>
+
+			<!-- Desktop-only legacy layout (keeps existing desktop styles) -->
+			<div class="lbl pc-lbl--desktop" data-plan-label-desktop></div>
+			<div class="pc-price--desktop">
+				<span class="pr pc-pr--desktop" data-plan-price-desktop></span>
+				<span class="pc-unit pc-unit--desktop" data-plan-unit-desktop></span>
+			</div>
+
+			<!-- Mobile-only price row -->
+			<div class="pc-price pc-price--mobile">
+				<span class="pr" data-plan-price></span>
+				<span class="pc-unit" data-plan-unit></span>
+			</div>
+			<div class="pc-disc" data-plan-disc style="display:none"></div>
+			<div class="sv" data-plan-sv style="display:none"></div>
+			<div class="pc-pick" data-plan-pick style="display:none"><?php echo esc_html__('Najczęściej wybierany', 'akademiata'); ?></div>
+		</div>
+	</template>
 
 	<div id="promos" class="promos-section" style="display:none" data-hide-when-empty>
 		<?php $regulamin_url = apply_filters('ata_prices_regulamin_url', 'https://chmurka.wseiz.pl/index.php/s/tsE4yJ8ftXGkXdf#pdfviewer'); ?>

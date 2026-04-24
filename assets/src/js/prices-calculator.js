@@ -233,6 +233,68 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   // Event listeners
   function bindUI() {
+    function updatePlansHint(plansEl) {
+      const hintEl = document.querySelector('[data-plans-hint]');
+      if (!hintEl || !plansEl) return;
+      const maxLeft = Math.max(0, plansEl.scrollWidth - plansEl.clientWidth);
+      const atEnd = (plansEl.scrollLeft || 0) >= (maxLeft - 1);
+      const atStart = (plansEl.scrollLeft || 0) <= 8;
+      const rightTxt = hintEl.getAttribute('data-hint-right') || 'Przesuń →';
+      const leftTxt = hintEl.getAttribute('data-hint-left') || '← Przesuń';
+
+      // Slider-like behavior:
+      // - when user reaches the end, lock direction to "left"
+      // - keep showing "← Przesuń" and keep scrolling left until reaching the start
+      // - at the start, unlock back to "right"
+      if (atEnd) hintEl.dataset.lockDir = 'left';
+      if (atStart) hintEl.dataset.lockDir = '';
+      const locked = (hintEl.dataset.lockDir || '') === 'left';
+
+      if (locked && !atStart) {
+        hintEl.dataset.dir = 'left';
+        hintEl.textContent = leftTxt;
+        return;
+      }
+
+      if (atEnd) {
+        hintEl.dataset.dir = 'left';
+        hintEl.textContent = leftTxt;
+      } else {
+        hintEl.dataset.dir = 'right';
+        hintEl.textContent = rightTxt;
+      }
+    }
+
+    function nudgePlans(dir) {
+      const wrap = document.getElementById('plans-wrap');
+      const plans = wrap ? wrap.querySelector('.plans') : null;
+      if (!plans) return;
+
+      const firstCard = plans.querySelector('.pc');
+      const gap = 14;
+      const delta = firstCard ? (firstCard.getBoundingClientRect().width + gap) : 280;
+      const maxLeft = Math.max(0, plans.scrollWidth - plans.clientWidth);
+      const curLeft = plans.scrollLeft || 0;
+      const nextLeft = dir === 'left'
+        ? Math.max(0, curLeft - delta)
+        : Math.min(maxLeft, curLeft + delta);
+
+      // If no movement possible, just update hint state.
+      if (Math.abs(nextLeft - curLeft) < 1) {
+        updatePlansHint(plans);
+        return;
+      }
+
+      try {
+        plans.scrollTo({ left: nextLeft, top: 0, behavior: 'smooth' });
+      } catch (e) {
+        plans.scrollLeft = nextLeft;
+      }
+
+      // Update hint after scrolling.
+      window.setTimeout(() => updatePlansHint(plans), 220);
+    }
+
     if ($ && $.fn && typeof $.fn.on === 'function') {
       $(document)
         .on('click', '#city-row .seg-btn', function () {
@@ -252,6 +314,10 @@ export default function initPricesCalculator(_$, opts = {}) {
           const val = this.getAttribute('data-val');
           if (!val) return;
           window.setEU(val === 'eu' || val === 'true');
+        })
+        .on('click', '[data-plans-hint]', function () {
+          const dir = (this && this.dataset && this.dataset.dir) ? this.dataset.dir : 'right';
+          nudgePlans(dir);
         });
       // Ensure EU pills initial state is correct when UI binds.
       $('#eu-row .pill').each(function () {
@@ -290,6 +356,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         window.onProgChange();
       });
     }
+    // Mobile: native <select> is overlayed and captures taps (CSS).
 
     const euRow = document.getElementById('eu-row');
     if (euRow) {
@@ -306,9 +373,81 @@ export default function initPricesCalculator(_$, opts = {}) {
         window.setEU(val === 'eu' || val === 'true');
       });
     }
+
+    // Mobile/tablet: tap "Przesuń →" to nudge plans scroller.
+    document.querySelectorAll('[data-plans-hint]').forEach(el => {
+      el.addEventListener('click', () => {
+        const dir = (el && el.dataset && el.dataset.dir) ? el.dataset.dir : 'right';
+        nudgePlans(dir);
+      });
+    });
   }
 
   function fmt(n) { return Math.round(n).toLocaleString('pl-PL'); }
+  function setTextAll(root, selector, text) {
+    if (!root) return;
+    const els = root.querySelectorAll(selector);
+    if (!els || !els.length) return;
+    els.forEach(el => { el.textContent = text; });
+  }
+  function buildPlanCardFallback() {
+    const card = document.createElement('div');
+    card.className = 'pc';
+
+    const mobileHead = document.createElement('div');
+    mobileHead.className = 'pc-h pc-h--mobile';
+    mobileHead.innerHTML = `
+      <div class="pc-ic" aria-hidden="true"></div>
+      <div class="lbl" data-plan-label></div>
+      <div class="pc-disc" data-plan-disc style="display:none"></div>
+    `.trim();
+
+    const lblDesktop = document.createElement('div');
+    lblDesktop.className = 'lbl pc-lbl--desktop';
+    lblDesktop.setAttribute('data-plan-label-desktop', '');
+
+    const priceDesktop = document.createElement('div');
+    priceDesktop.className = 'pc-price--desktop';
+    priceDesktop.innerHTML = `
+      <span class="pr pc-pr--desktop" data-plan-price-desktop></span>
+      <span class="pc-unit pc-unit--desktop" data-plan-unit-desktop></span>
+    `.trim();
+
+    const priceMobile = document.createElement('div');
+    priceMobile.className = 'pc-price pc-price--mobile';
+    priceMobile.innerHTML = `
+      <span class="pr" data-plan-price></span>
+      <span class="pc-unit" data-plan-unit></span>
+    `.trim();
+
+    const sv = document.createElement('div');
+    sv.className = 'sv';
+    sv.setAttribute('data-plan-sv', '');
+    sv.style.display = 'none';
+
+    const pick = document.createElement('div');
+    pick.className = 'pc-pick';
+    pick.setAttribute('data-plan-pick', '');
+    pick.style.display = 'none';
+    pick.textContent = 'Najczęściej wybierany';
+
+    card.appendChild(mobileHead);
+    card.appendChild(lblDesktop);
+    card.appendChild(priceDesktop);
+    card.appendChild(priceMobile);
+    card.appendChild(sv);
+    card.appendChild(pick);
+    return card;
+  }
+  function getCurSymbol(cur) {
+    if (cur === 'PLN') return 'zł';
+    if (cur === 'EUR') return '€';
+    return cur || '';
+  }
+  function inferPercentPill(txt) {
+    const m = String(txt || '').match(/([−-]\s*\d{1,2}\s*%)/);
+    return m ? m[1].replace(/\s+/g, '') : '';
+  }
   function normTxt(v) { return (v === undefined || v === null) ? '' : String(v).trim(); }
   function normSpec(v) {
     const s = normTxt(v);
@@ -470,6 +609,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       Object.keys(uabyData).forEach(courseName => {
         Object.keys(uabyData[courseName]).forEach(degree => {
           let ps = '', ak = '';
+          let rekr = 0, wps = 0;
           const cleanName = courseName.trim().toLowerCase();
           const d = parseInt(degree, 10);
           
@@ -483,14 +623,24 @@ export default function initPricesCalculator(_$, opts = {}) {
             const list = (window.RAW.pl.wro && window.RAW.pl.wro.s) || [];
             for (let i = 0; i < list.length; i++) {
                if (list[i].deg === d && matchCourse(list[i].k)) {
-                  ps = list[i].ps; ak = list[i].ak; break;
+                  ps = list[i].ps;
+                  ak = list[i].ak;
+                  // Enrollment fees should stay PLN for PL flow even in UABY view.
+                  rekr = Number(list[i].rekr || 0);
+                  wps = Number(list[i].wps || 0);
+                  break;
                }
             }
           } else {
             const list = window.RAW.en.wro || [];
             for (let i = 0; i < list.length; i++) {
                if (list[i].deg === d && matchCourse(list[i].k)) {
-                  ps = list[i].ps; ak = list[i].ak; break;
+                  ps = list[i].ps;
+                  ak = list[i].ak;
+                  // Keep these for completeness (EN may render different fee block).
+                  rekr = Number(list[i].rekr || 0);
+                  wps = Number(list[i].wps || 0);
+                  break;
                }
             }
           }
@@ -502,7 +652,9 @@ export default function initPricesCalculator(_$, opts = {}) {
             dn: courseName,
             uabyOnly: true,
             ps: ps,
-            ak: ak
+            ak: ak,
+            rekr: rekr,
+            wps: wps
           });
         });
       });
@@ -949,15 +1101,101 @@ export default function initPricesCalculator(_$, opts = {}) {
     } else {
       if (plansWrap) plansWrap.style.display = '';
       if (planHeader) planHeader.style.display = '';
-      
-      let ph = '<div class="plans">';
+
+      const tpl = document.getElementById('plan-card-template');
+      if (!plansWrap) return;
+      // Preserve horizontal scroll position across re-renders (promos/plan changes call render()).
+      const prevPlansEl = plansWrap.querySelector('.plans');
+      const prevScrollLeft = prevPlansEl ? prevPlansEl.scrollLeft : 0;
+      const shouldPreserveScroll = window.matchMedia ? window.matchMedia('(max-width: 820px)').matches : false;
+
+      plansWrap.innerHTML = '';
+
+      const plansEl = document.createElement('div');
+      plansEl.className = 'plans';
+
       pids.forEach(pid => {
         const pp = getPP(pid, item, u);
         if (!pp) return;
-        ph += '<div class="pc' + (window.plan === pid ? ' sel' : '') + '" onclick="window.plan=\'' + pid + '\'; window.render()"><div class="lbl">' + getPL(pid) + '</div><div class="pr">' + fmt(pp.pr) + '</div><div class="un">' + pp.un + '</div>' + (pp.sv ? '<div class="sv">' + pp.svl + '</div>' : '') + '</div>';
+
+        // Use template if present; otherwise fallback to legacy markup.
+        let card = null;
+        if (tpl && 'content' in tpl && tpl.content && tpl.content.firstElementChild) {
+          card = tpl.content.firstElementChild.cloneNode(true);
+        } else {
+          card = buildPlanCardFallback();
+        }
+
+        card.classList.toggle('sel', window.plan === pid);
+        card.setAttribute('data-plan-id', pid);
+        card.onclick = () => { window.plan = pid; window.render(); };
+
+        const label = getPL(pid);
+        setTextAll(card, '[data-plan-label]', label);
+        setTextAll(card, '[data-plan-label-desktop]', label);
+
+        const price = fmt(pp.pr);
+        setTextAll(card, '[data-plan-price]', price);
+        setTextAll(card, '[data-plan-price-desktop]', price);
+
+        const unitEl = card.querySelector('[data-plan-unit]');
+        const unitDesktopEl = card.querySelector('[data-plan-unit-desktop]');
+        const unitTxt = (() => {
+          if (pid === 'r12' || pid === 'r10') {
+            return pp.cur === 'PLN' ? 'zł/m-c' : (pp.cur === 'EUR' ? '€/month' : '');
+          }
+          return getCurSymbol(pp.cur);
+        })();
+        if (unitEl) unitEl.textContent = unitTxt;
+        if (unitDesktopEl) unitDesktopEl.textContent = unitTxt;
+
+        const svEl = card.querySelector('[data-plan-sv]');
+        if (svEl) {
+          if (pp.sv && pp.svl) {
+            svEl.textContent = pp.svl;
+            svEl.style.display = '';
+          } else {
+            svEl.textContent = '';
+            svEl.style.display = 'none';
+          }
+        }
+
+        const pickEl = card.querySelector('[data-plan-pick]');
+        const isPick = window.lang === 'pl' && pid === 'r12';
+        if (pickEl) pickEl.style.display = isPick ? 'block' : 'none';
+
+        const discEl = card.querySelector('[data-plan-disc]');
+        if (discEl) {
+          const pill = inferPercentPill(pp.un);
+          if (pill) {
+            discEl.textContent = pill;
+            discEl.style.display = '';
+          } else {
+            discEl.textContent = '';
+            discEl.style.display = 'none';
+          }
+        }
+
+        plansEl.appendChild(card);
       });
-      ph += '</div>';
-      if (plansWrap) plansWrap.innerHTML = ph;
+
+      plansWrap.appendChild(plansEl);
+
+      // Restore scroll, then keep selected card in view.
+      if (shouldPreserveScroll) {
+        plansEl.scrollLeft = prevScrollLeft;
+        const sel = plansEl.querySelector('.pc.sel');
+        if (sel && typeof sel.scrollIntoView === 'function') {
+          try { sel.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) {}
+        }
+        // Sync hint label with current scroll position.
+        try { window.setTimeout(() => updatePlansHint(plansEl), 0); } catch (e) {}
+
+        // Update hint as user scrolls.
+        plansEl.addEventListener('scroll', () => {
+          updatePlansHint(plansEl);
+        }, { passive: true });
+      }
     }
 
     const elig = getElig(u), ps2 = document.getElementById('promos') || document.getElementById('promos-section'), pi = document.getElementById('promos-inner');
@@ -976,6 +1214,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         const card = tpl.content.firstElementChild.cloneNode(true);
 
         card.classList.toggle('sel', !!isSel);
+        card.classList.toggle('open', !!isExp);
         card.classList.toggle('dis', !isSel && !canS);
 
         const head = card.querySelector('.pc-head');
@@ -1070,6 +1309,22 @@ export default function initPricesCalculator(_$, opts = {}) {
         }
       }
       sb.style.display = '';
+
+      // Mobile "WYBRANY KIERUNEK" card: title + meta (use the same sl line as sum-box).
+      const mobileTitleEl = document.querySelector('[data-prog-mobile-title]');
+      const mobileMetaEl = document.querySelector('[data-prog-mobile-meta]');
+      if (mobileTitleEl) mobileTitleEl.textContent = (u && u.k) ? String(u.k) : (snLine || '—');
+      if (mobileMetaEl) {
+        // Always show "Forma studiów" in the select meta on PL mobile.
+        // If the program has only one mode, reflect that single mode even when mode selector is hidden.
+        const effectiveMode = (u && Array.isArray(u.modes) && u.modes.length === 1) ? u.modes[0] : window.mode;
+        const modeLabel =
+          window.lang === 'pl'
+            ? (effectiveMode === 'n' ? 'Niestacjonarne' : 'Stacjonarne')
+            : '';
+        const meta = [degL, modeLabel].filter(Boolean).join(' · ');
+        mobileMetaEl.textContent = meta || spLine || '—';
+      }
     } else if (sb) sb.style.display = 'none';
 
     // Update the "CENA / już od" banner on single offer header (if present).
@@ -1080,6 +1335,7 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const enrItems = document.getElementById('enr-items');
     if (enrItems) {
+      // UABY checkbox: show UABY enrollment fees (EUR) only when checked.
       if (window.uaby && window.city === 'wro') {
         const ub = (window.lang === 'pl' ? window.UABY.pl : window.UABY.en)[u.k]?.[u.deg];
         const r = ub?.rekr || 20, a = ub?.apl || 100;
@@ -1088,6 +1344,32 @@ export default function initPricesCalculator(_$, opts = {}) {
         const totalLbl = t('feeTotal', 'Razem przy zapisie');
         enrItems.innerHTML = '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(r) + ' EUR</div></div><div class="ei"><div class="en">' + applicationLbl + '</div><div class="ev">' + fmt(a) + ' EUR</div></div><div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(r + a) + ' EUR</div></div>';
       } else {
+        // Ensure PLN/standard skeleton exists (EN/UABY branches may overwrite innerHTML).
+        const hasSkeleton = !!enrItems.querySelector('[data-enr-value="admission"]');
+        if (!hasSkeleton) {
+          enrItems.innerHTML = `
+            <div class="ei" data-enr-item="admission">
+              <div class="en" data-enr-label="admission">—</div>
+              <div class="ev" data-enr-value="admission">—</div>
+            </div>
+
+            <div class="ei ei--promo" data-enr-item="entry">
+              <div class="en" data-enr-label="entry">—</div>
+              <div class="ev" data-enr-value="entry">—</div>
+              <div class="eb" data-enr-badge="entry" style="display:none">
+                <span class="eb-ic" aria-hidden="true">⏰</span>
+                <span data-enr-badge-text="entry"></span>
+              </div>
+            </div>
+
+            <div class="ei ei--total" data-enr-item="total">
+              <div class="en" data-enr-label="total">—</div>
+              <div class="ev" data-enr-value="total">—</div>
+              <div class="es" data-enr-savings style="display:none"></div>
+            </div>
+          `.trim();
+        }
+
         const cur = window.lang === 'pl' ? ' PLN' : ' EUR';
         const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
         const entryLbl = t('feeEntry', 'Wpisowe');
@@ -1130,10 +1412,26 @@ export default function initPricesCalculator(_$, opts = {}) {
             }
           }
         } else {
-          enrItems.innerHTML =
-            '<div class="ei"><div class="en">' + admissionLbl + '</div><div class="ev">' + fmt(item.rekr) + cur + '</div></div>' +
-            '<div class="ei"><div class="en">' + entryLbl + '</div><div class="ev">' + fmt(item.wps) + cur + '</div></div>' +
-            '<div class="ei"><div class="en">' + totalLbl + '</div><div class="ev">' + fmt(item.rekr + item.wps) + cur + '</div></div>';
+          // EN: update skeleton if present (so switching back to PL works).
+          const admissionLabelEl = enrItems.querySelector('[data-enr-label="admission"]');
+          const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
+          const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
+          const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
+          const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
+          const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
+          const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
+          const savingsEl = enrItems.querySelector('[data-enr-savings]');
+
+          if (admissionLabelEl) admissionLabelEl.textContent = admissionLbl;
+          if (entryLabelEl) entryLabelEl.textContent = entryLbl;
+          if (totalLabelEl) totalLabelEl.textContent = totalLbl;
+
+          if (admissionValEl) admissionValEl.textContent = fmt(item.rekr) + cur;
+          if (entryValEl) entryValEl.textContent = fmt(item.wps) + cur;
+          if (totalValEl) totalValEl.textContent = fmt(item.rekr + item.wps) + cur;
+
+          if (entryBadgeEl) entryBadgeEl.style.display = 'none';
+          if (savingsEl) { savingsEl.textContent = ''; savingsEl.style.display = 'none'; }
         }
       }
     }
