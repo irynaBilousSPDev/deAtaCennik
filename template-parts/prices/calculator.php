@@ -13,12 +13,21 @@ $fixed_lang = (string) get_query_var('prices_calculator_fixed_lang', '');
 $hide_more_btn = (bool) get_query_var('prices_calculator_hide_more_btn', false);
 $layout = (string) get_query_var('prices_calculator_layout', '');
 $is_single_offer_layout = ($layout === 'single-offer');
+
+// Temporary inline EN copy (until proper .po translations are added).
+$is_en = false;
+if (!empty($fixed_lang)) {
+	$is_en = (strtolower(trim($fixed_lang)) === 'en');
+} else {
+	$loc = function_exists('determine_locale') ? determine_locale() : get_locale();
+	$is_en = (is_string($loc) && stripos($loc, 'en') === 0);
+}
 ?>
 
 <div id="ata-loader" class="prices-loader" role="status" aria-live="polite">
 	<div class="prices-loader__spinner" aria-hidden="true"></div>
 	<div class="prices-loader__text">
-		<?php echo esc_html__('Ładowanie aktualnych cen...', 'akademiata'); ?>
+		<?php echo $is_en ? esc_html__('Loading current prices...', 'akademiata') : esc_html__('Ładowanie aktualnych cen...', 'akademiata'); ?>
 	</div>
 </div>
 
@@ -40,54 +49,56 @@ $is_single_offer_layout = ($layout === 'single-offer');
 >
 	<script type="application/json" id="prices-i18n">
 		<?php echo wp_json_encode([
-			'ctaMore' => __('Więcej o programie →', 'akademiata'),
-			'ctaApply' => __('Zapisz się →', 'akademiata'),
-			'feeAdmission' => __('Opłata rekrutacyjna', 'akademiata'),
-			'feeApplication' => __('Opłata aplikacyjna', 'akademiata'),
-			'feeEntry' => __('Wpisowe', 'akademiata'),
-			'feeTotal' => __('Razem przy zapisie', 'akademiata'),
-			'emptyTitle' => __('Cennik w przygotowaniu', 'akademiata'),
-			'emptyText' => __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
+			'ctaMore' => $is_en ? __('More about the program →', 'akademiata') : __('Więcej o programie →', 'akademiata'),
+			'ctaApply' => $is_en ? __('Apply now →', 'akademiata') : __('Zapisz się →', 'akademiata'),
+			'feeAdmission' => $is_en ? __('Recruitment fee', 'akademiata') : __('Opłata rekrutacyjna', 'akademiata'),
+			'feeApplication' => $is_en ? __('Application fee', 'akademiata') : __('Opłata aplikacyjna', 'akademiata'),
+			'feeEntry' => $is_en ? __('Enrollment fee', 'akademiata') : __('Wpisowe', 'akademiata'),
+			'feeTotal' => $is_en ? __('Total on enrollment', 'akademiata') : __('Razem przy zapisie', 'akademiata'),
+			'emptyTitle' => $is_en ? __('Pricing coming soon', 'akademiata') : __('Cennik w przygotowaniu', 'akademiata'),
+			'emptyText' => $is_en
+				? __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata')
+				: __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
 		], JSON_UNESCAPED_UNICODE); ?>
 	</script>
 
 	<div class="prices-empty" id="prices-empty" style="display:none" role="status" aria-live="polite">
-		<div class="prices-empty__title" data-empty-title><?php echo esc_html__('Cennik w przygotowaniu', 'akademiata'); ?></div>
-		<div class="prices-empty__text" data-empty-text><?php echo esc_html__('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'); ?></div>
+		<div class="prices-empty__title" data-empty-title><?php echo $is_en ? esc_html__('Pricing coming soon', 'akademiata') : esc_html__('Cennik w przygotowaniu', 'akademiata'); ?></div>
+		<div class="prices-empty__text" data-empty-text><?php echo $is_en ? esc_html__('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata') : esc_html__('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'); ?></div>
 	</div>
 
 	<!-- Hidden/locked rows on single offer; JS will hide if fixed-key is present -->
-	<div class="sec" data-prices-row="city"><?php echo esc_html__('Miasto', 'akademiata'); ?></div>
+	<div class="sec" data-prices-row="city"><?php echo $is_en ? esc_html__('City', 'akademiata') : esc_html__('Miasto', 'akademiata'); ?></div>
 	<div class="seg" id="city-row" data-prices-row="city">
 		<button type="button" class="seg-btn on" data-val="wwa"><?php echo esc_html__('Warszawa', 'akademiata'); ?></button>
 		<button type="button" class="seg-btn" data-val="wro"><?php echo esc_html__('Wrocław', 'akademiata'); ?></button>
 	</div>
 
-	<div class="sec" data-prices-row="lang"><?php echo esc_html__('Język studiów', 'akademiata'); ?></div>
+	<div class="sec" data-prices-row="lang"><?php echo $is_en ? esc_html__('Study language', 'akademiata') : esc_html__('Język studiów', 'akademiata'); ?></div>
 	<div class="seg" id="lang-row" data-prices-row="lang">
 		<button type="button" class="seg-btn on" data-val="pl">
-			<span class="seg-btn__short"><?php echo esc_html__('Polski', 'akademiata'); ?></span>
-			<span class="seg-btn__long"><?php echo esc_html__('Studia w języku polskim', 'akademiata'); ?></span>
+			<span class="seg-btn__short"><?php echo $is_en ? esc_html__('Polish', 'akademiata') : esc_html__('Polski', 'akademiata'); ?></span>
+			<span class="seg-btn__long"><?php echo $is_en ? esc_html__('Studies in Polish', 'akademiata') : esc_html__('Studia w języku polskim', 'akademiata'); ?></span>
 		</button>
 		<button type="button" class="seg-btn" data-val="en">
 			<span class="seg-btn__short"><?php echo esc_html__('English', 'akademiata'); ?></span>
-			<span class="seg-btn__long"><?php echo esc_html__('Studia w języku angielskim', 'akademiata'); ?></span>
+			<span class="seg-btn__long"><?php echo $is_en ? esc_html__('Studies in English', 'akademiata') : esc_html__('Studia w języku angielskim', 'akademiata'); ?></span>
 		</button>
 	</div>
 
 	<div id="uaby-wrap" style="display:none">
 		<div class="uaby-row" id="uaby-row">
 			<div class="uaby-chk" id="uaby-chk"></div>
-			<span class="uaby-lbl"><?php echo esc_html__('Jestem obywatelem Ukrainy lub Białorusi', 'akademiata'); ?></span>
+			<span class="uaby-lbl"><?php echo $is_en ? esc_html__('I am a citizen of Ukraine or Belarus', 'akademiata') : esc_html__('Jestem obywatelem Ukrainy lub Białorusi', 'akademiata'); ?></span>
 		</div>
 	</div>
 
 	<div class="sec" data-prices-row="program">
-		<span class="sec__short"><?php echo esc_html__('Wybrany kierunek', 'akademiata'); ?></span>
+		<span class="sec__short"><?php echo $is_en ? esc_html__('Selected program', 'akademiata') : esc_html__('Wybrany kierunek', 'akademiata'); ?></span>
 		<span class="sec__long">
-			<?php echo esc_html__('Program', 'akademiata'); ?> <span class="badge" id="prog-count">—</span>
+			<?php echo $is_en ? esc_html__('Program', 'akademiata') : esc_html__('Program', 'akademiata'); ?> <span class="badge" id="prog-count">—</span>
 			<span style="font-size: 14px; font-weight: 400; font-family: 'Lato', sans-serif; text-transform: lowercase; letter-spacing: 0.05em;">
-				(<?php echo esc_html__('wybierz swój program', 'akademiata'); ?>)
+				(<?php echo $is_en ? esc_html__('choose your program', 'akademiata') : esc_html__('wybierz swój program', 'akademiata'); ?>)
 			</span>
 		</span>
 	</div>
@@ -103,7 +114,7 @@ $is_single_offer_layout = ($layout === 'single-offer');
 	</div>
 
 	<div id="mode-wrap" style="display:none;margin-bottom:12px">
-		<div class="sec"><?php echo esc_html__('Forma studiów', 'akademiata'); ?></div>
+		<div class="sec"><?php echo $is_en ? esc_html__('Study mode', 'akademiata') : esc_html__('Forma studiów', 'akademiata'); ?></div>
 		<div class="pills" id="mode-row"></div>
 	</div>
 
@@ -116,15 +127,15 @@ $is_single_offer_layout = ($layout === 'single-offer');
 	</div>
 
 	<div class="sec sec--row" data-hide-when-empty>
-		<span><?php echo esc_html__('Wariant płatności', 'akademiata'); ?></span>
+		<span><?php echo $is_en ? esc_html__('Payment option', 'akademiata') : esc_html__('Wariant płatności', 'akademiata'); ?></span>
 		<span
 			class="sec-hint"
 			data-plans-hint
-			data-hint-right="<?php echo esc_attr__('Przesuń →', 'akademiata'); ?>"
-			data-hint-left="<?php echo esc_attr__('← Przesuń', 'akademiata'); ?>"
+			data-hint-right="<?php echo $is_en ? esc_attr__('Swipe →', 'akademiata') : esc_attr__('Przesuń →', 'akademiata'); ?>"
+			data-hint-left="<?php echo $is_en ? esc_attr__('← Swipe', 'akademiata') : esc_attr__('← Przesuń', 'akademiata'); ?>"
 			data-dir="right"
 		>
-			<?php echo esc_html__('Przesuń →', 'akademiata'); ?>
+			<?php echo $is_en ? esc_html__('Swipe →', 'akademiata') : esc_html__('Przesuń →', 'akademiata'); ?>
 		</span>
 	</div>
 	<div id="plans-wrap" data-hide-when-empty></div>
@@ -151,16 +162,16 @@ $is_single_offer_layout = ($layout === 'single-offer');
 			</div>
 			<div class="pc-disc" data-plan-disc style="display:none"></div>
 			<div class="sv" data-plan-sv style="display:none"></div>
-			<div class="pc-pick" data-plan-pick style="display:none"><?php echo esc_html__('Najczęściej wybierany', 'akademiata'); ?></div>
+			<div class="pc-pick" data-plan-pick style="display:none"><?php echo $is_en ? esc_html__('Most popular', 'akademiata') : esc_html__('Najczęściej wybierany', 'akademiata'); ?></div>
 		</div>
 	</template>
 
 	<div id="promos" class="promos-section" style="display:none" data-hide-when-empty>
 		<?php $regulamin_url = apply_filters('ata_prices_regulamin_url', 'https://chmurka.wseiz.pl/index.php/s/tsE4yJ8ftXGkXdf#pdfviewer'); ?>
 		<div class="sec sec--row">
-			<span><?php echo esc_html__('Zniżki i promocje', 'akademiata'); ?></span>
+			<span><?php echo $is_en ? esc_html__('Discounts and promotions', 'akademiata') : esc_html__('Zniżki i promocje', 'akademiata'); ?></span>
 			<a class="sec-link" href="<?php echo esc_url($regulamin_url); ?>" target="_blank" rel="noopener noreferrer">
-				<?php echo esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
+				<?php echo $is_en ? esc_html__('Terms', 'akademiata') : esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
 			</a>
 		</div>
 		<div id="promos-inner"></div>
@@ -174,7 +185,7 @@ $is_single_offer_layout = ($layout === 'single-offer');
 						<div class="pc-short" data-promo-short></div>
 					</div>
 					<div class="pc-tag" data-promo-tag></div>
-					<button class="pc-arr" type="button" aria-label="<?php echo esc_attr__('Rozwiń', 'akademiata'); ?>" data-promo-arr>▾</button>
+					<button class="pc-arr" type="button" aria-label="<?php echo $is_en ? esc_attr__('Expand', 'akademiata') : esc_attr__('Rozwiń', 'akademiata'); ?>" data-promo-arr>▾</button>
 				</div>
 				<div class="pc-body" data-promo-body style="display:none">
 					<div data-promo-body-text></div>
@@ -198,15 +209,15 @@ $is_single_offer_layout = ($layout === 'single-offer');
 	</div>
 
 	<div class="enr" id="enr-box" data-hide-when-empty>
-		<div class="enr-title"><?php echo esc_html__('Opłaty jednorazowe przy zapisie', 'akademiata'); ?></div>
+		<div class="enr-title"><?php echo $is_en ? esc_html__('One-time fees on enrollment', 'akademiata') : esc_html__('Opłaty jednorazowe przy zapisie', 'akademiata'); ?></div>
 		<div class="enr-items" id="enr-items">
 			<div class="ei" data-enr-item="admission">
-				<div class="en" data-enr-label="admission"><?php echo esc_html__('Opłata rekrutacyjna', 'akademiata'); ?></div>
+				<div class="en" data-enr-label="admission"><?php echo $is_en ? esc_html__('Recruitment fee', 'akademiata') : esc_html__('Opłata rekrutacyjna', 'akademiata'); ?></div>
 				<div class="ev" data-enr-value="admission">—</div>
 			</div>
 
 			<div class="ei ei--promo" data-enr-item="entry">
-				<div class="en" data-enr-label="entry"><?php echo esc_html__('Wpisowe', 'akademiata'); ?></div>
+				<div class="en" data-enr-label="entry"><?php echo $is_en ? esc_html__('Enrollment fee', 'akademiata') : esc_html__('Wpisowe', 'akademiata'); ?></div>
 				<div class="ev" data-enr-value="entry">—</div>
 				<div class="eb" data-enr-badge="entry" style="display:none">
 					<span class="eb-ic" aria-hidden="true">⏰</span>
@@ -215,7 +226,7 @@ $is_single_offer_layout = ($layout === 'single-offer');
 			</div>
 
 			<div class="ei ei--total" data-enr-item="total">
-				<div class="en" data-enr-label="total"><?php echo esc_html__('Razem przy zapisie', 'akademiata'); ?></div>
+				<div class="en" data-enr-label="total"><?php echo $is_en ? esc_html__('Total on enrollment', 'akademiata') : esc_html__('Razem przy zapisie', 'akademiata'); ?></div>
 				<div class="ev" data-enr-value="total">—</div>
 				<div class="es" data-enr-savings style="display:none"></div>
 			</div>
@@ -230,9 +241,9 @@ $is_single_offer_layout = ($layout === 'single-offer');
 		<?php endif; ?>
 	>
 		<a id="btn-more" class="btn-sec" href="#" rel="noopener noreferrer"<?php echo $hide_more_btn ? ' style="display:none"' : ''; ?>>
-			<?php echo esc_html__('Więcej o programie →', 'akademiata'); ?>
+			<?php echo $is_en ? esc_html__('More about the program →', 'akademiata') : esc_html__('Więcej o programie →', 'akademiata'); ?>
 		</a>
-		<a id="btn-apply" class="btn-pri" href="#" rel="noopener noreferrer"><?php echo esc_html__('Zapisz się →', 'akademiata'); ?></a>
+		<a id="btn-apply" class="btn-pri" href="#" rel="noopener noreferrer"><?php echo $is_en ? esc_html__('Apply now →', 'akademiata') : esc_html__('Zapisz się →', 'akademiata'); ?></a>
 	</div>
 
 	<div class="note" id="note-bot"></div>
