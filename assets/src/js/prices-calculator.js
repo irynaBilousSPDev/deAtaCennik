@@ -74,6 +74,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   // Init state
   window.SA = window.SA || {};
   window.SA_EN = window.SA_EN || {};
+  window.SA_ROWS = window.SA_ROWS || [];
   window.RAW = window.RAW || { pl: { wwa: { s: [], n: [] }, wro: { s: [], n: [] } }, en: { wwa: [], wro: [] } };
   window.UABY = window.UABY || { pl: {}, en: {} };
   window.PROMOS = window.PROMOS || [];
@@ -116,6 +117,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (!data || !data.RAW) return;
     window.SA = data.SA || {};
     window.SA_EN = data.SA_EN || {};
+    window.SA_ROWS = Array.isArray(data.SA_ROWS) ? data.SA_ROWS : (window.SA_ROWS || []);
     window.RAW = data.RAW || window.RAW;
     window.UABY = data.UABY || window.UABY;
     window.PROMOS = data.PROMOS || [];
@@ -970,12 +972,38 @@ export default function initPricesCalculator(_$, opts = {}) {
       bm.textContent = t('ctaMore', 'Więcej o programie →');
     } else bm.style.display = 'none';
 
-    const rawAk = (item.ak || '').trim();
+    function mapGetCI(map, key) {
+      if (!map || !key) return null;
+      if (map[key]) return map[key];
+      const lk = String(key).trim().toLowerCase();
+      if (!lk) return null;
+      if (map[lk]) return map[lk];
+      // Last resort: scan keys (handles accidental case differences in sheet)
+      const hit = Object.keys(map).find(k => String(k).toLowerCase() === lk);
+      return hit ? map[hit] : null;
+    }
+
+    // RULE: btn-apply URL comes from 🔗 SmartApply_URLs by "Klucz SmartApply".
+    // `item.ak` must contain that key for the selected program.
     let saVal = null;
-    
-    // Strict fallback: if raw link is present in EN data, use it directly if mapping fails
+    const rawAk = (item.ak || '').trim();
     if (rawAk && rawAk !== '—') {
-      saVal = window.lang === 'en' ? (window.SA_EN[rawAk] || rawAk) : (window.SA[rawAk] || rawAk);
+      const map = window.lang === 'en' ? window.SA_EN : window.SA;
+      // If rawAk is already a full URL, accept it.
+      if (/^https?:\/\//i.test(rawAk)) {
+        saVal = rawAk;
+      } else {
+        // Only accept mapped URL from SmartApply_URLs.
+        // Do NOT fall back to BASE + key (that creates broken links).
+        saVal = mapGetCI(map, rawAk);
+      }
+    }
+
+    // Fallback: if program row has no key, try SA_ROWS by key (rare, but keeps new format usable)
+    if (!saVal && Array.isArray(window.SA_ROWS) && window.SA_ROWS.length) {
+      const wantLang = window.lang === 'en' ? 'en' : 'pl';
+      const hit = window.SA_ROWS.find(r => r && String(r.lang || '').toLowerCase() === wantLang && mapGetCI({ [r.key]: r.url }, rawAk));
+      if (hit && hit.url) saVal = String(hit.url).trim();
     }
 
     if (saVal) {

@@ -90,6 +90,7 @@ function generateJSON() {
   const data = {
     SA: {},
     SA_EN: {},
+    SA_ROWS: [],
     RAW: { pl: { wwa: { s: [], n: [] }, wro: { s: [], n: [] } }, en: { wwa: [], wro: [] } },
     UABY: { pl: {}, en: {} },
     PROMOS: []
@@ -99,11 +100,108 @@ function generateJSON() {
   const sheetSA = ss.getSheetByName("🔗 SmartApply_URLs");
   if (sheetSA) {
     const rowsSA = sheetSA.getDataRange().getValues();
-    for (let i = 1; i < rowsSA.length; i++) {
-      const key = clean(rowsSA[i][0]);
-      if (!key) continue;
-      if (clean(rowsSA[i][2])) data.SA[key] = clean(rowsSA[i][2]);
-      if (clean(rowsSA[i][3])) data.SA_EN[key] = clean(rowsSA[i][3]);
+    // Some sheets have extra rows above the header (notes, blank rows, merged cells),
+    // or the header may start far below row 1.
+    // Find the first row that looks like a header.
+    let headerRowIdx = -1;
+    for (let i = 0; i < Math.min(250, rowsSA.length); i++) {
+      const row = rowsSA[i] || [];
+      const h = row.map(x => clean(x).toLowerCase());
+      const hasLang = h.includes("lang");
+      const hasKey = h.some(v => v.includes("klucz") && v.includes("smartapply"));
+      const hasUrl = h.some(v => v.includes("url") && v.includes("smartapply"));
+      if (hasLang && hasKey && hasUrl) { headerRowIdx = i; break; }
+    }
+    const header = (headerRowIdx >= 0) ? rowsSA[headerRowIdx].map(x => clean(x).toLowerCase()) : ((rowsSA && rowsSA.length) ? rowsSA[0].map(x => clean(x).toLowerCase()) : []);
+
+    // Support BOTH formats:
+    // 1) New format (your screenshot):
+    //    Lang | Klucz SmartApply | ... | URL SmartApply
+    //    where PL and EN have different keys + links.
+    // 2) Old format:
+    //    key | ... | URL_PL | URL_EN
+    const idxLang = header.indexOf("lang");
+    const idxKey = header.findIndex(h => h.includes("klucz") && h.includes("smartapply"));
+    const idxUrl = header.findIndex(h => h.includes("url") && h.includes("smartapply"));
+    const idxCity = header.findIndex(h => h.includes("miasto"));
+    const idxDeg = header.findIndex(h => h.includes("stop"));
+    const idxProg = header.findIndex(h => h.includes("kierunek"));
+    const idxSpec = header.findIndex(h => h.includes("specjal"));
+
+    const isNewFormat = idxLang >= 0 && idxKey >= 0 && idxUrl >= 0;
+
+    const startRow = headerRowIdx >= 0 ? (headerRowIdx + 1) : 1;
+    for (let i = startRow; i < rowsSA.length; i++) {
+      if (isNewFormat) {
+        const lang = clean(rowsSA[i][idxLang]).toLowerCase();
+        const key = clean(rowsSA[i][idxKey]);
+        const url = clean(rowsSA[i][idxUrl]);
+        if (!key || !url) continue;
+        if (lang === "en") data.SA_EN[key] = url;
+        else data.SA[key] = url; // default to PL
+
+        // Provide row-level data for robust matching (program tabs may not carry the right key).
+        const cityRaw = idxCity >= 0 ? clean(rowsSA[i][idxCity]) : "";
+        const city = cityRaw.toLowerCase().includes("wroc") ? "wro" : (cityRaw.toLowerCase().includes("warsz") ? "wwa" : "");
+        const deg = idxDeg >= 0 ? parseInt(clean(rowsSA[i][idxDeg]), 10) || 0 : 0;
+        const prog = idxProg >= 0 ? clean(rowsSA[i][idxProg]) : "";
+        const spec = idxSpec >= 0 ? clean(rowsSA[i][idxSpec]) : "";
+
+        data.SA_ROWS.push({
+          lang: lang === "en" ? "en" : "pl",
+          key: key,
+          city: city,
+          deg: deg,
+          k: prog,
+          s: spec,
+          url: url
+        });
+        continue;
+      }
+
+      // If we couldn't detect the header, DO NOT assume old positional format.
+      // Your new structure has data rows like: PL | 1_wwa_architektura | ... | https://smartapply...
+      // We'll infer columns by content.
+      const row = rowsSA[i] || [];
+
+      const looksLikeLang = (v) => {
+        const s = clean(v).toLowerCase();
+        return s === "pl" || s === "en";
+      };
+      const looksLikeSmartApplyUrl = (v) => {
+        const s = clean(v);
+        return /^https?:\/\/smartapply\.akademiata\.pl\//i.test(s);
+      };
+      const looksLikeKey = (v) => {
+        const s = clean(v);
+        // e.g. "1_wwa_architektura", "2_wro_zarzadzanie-projektami"
+        return /^\d+_(wwa|wro)_[a-z0-9-]+$/i.test(s);
+      };
+
+      // Try common new-format positions (Lang, Key, URL) by scanning the row.
+      let lang = "";
+      let key = "";
+      let url = "";
+      for (let c = 0; c < row.length; c++) {
+        if (!lang && looksLikeLang(row[c])) lang = clean(row[c]).toLowerCase();
+        if (!key && looksLikeKey(row[c])) key = clean(row[c]);
+        if (!url && looksLikeSmartApplyUrl(row[c])) url = clean(row[c]);
+      }
+
+      if (lang && key && url) {
+        if (lang === "en") data.SA_EN[key] = url;
+        else data.SA[key] = url;
+        continue;
+      }
+
+      // Final fallback: old positional (ONLY if values actually look like URLs).
+      const posKey = clean(row[0]);
+      const posPl = clean(row[2]);
+      const posEn = clean(row[3]);
+      if (posKey && (looksLikeSmartApplyUrl(posPl) || looksLikeSmartApplyUrl(posEn))) {
+        if (posPl) data.SA[posKey] = posPl;
+        if (posEn) data.SA_EN[posKey] = posEn;
+      }
     }
   }
  

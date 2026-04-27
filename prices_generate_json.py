@@ -444,20 +444,45 @@ def generate_json(sheet: str, out_path: str) -> None:
     df = _read_sheet(xls, TAB_SMARTAPPLY)
     if df is not None:
         try:
-            key_col = "Klucz (ak)"
-            pl_col = "URL PL (SmartApply)"
-            en_col = "URL EN (SmartApply)"
-            for _, row in df.iterrows():
-                k = _norm_str(row.get(key_col, ""))
-                if not k:
-                    continue
-                url_pl = _norm_str(row.get(pl_col, ""))
-                url_en = _norm_str(row.get(en_col, ""))
-                if url_pl:
-                    data["SA"][k] = url_pl.replace(DEFAULT_BASE, "")
-                if url_en:
-                    data["SA_EN"][k] = url_en.replace(DEFAULT_BASE_EN, "")
-            _safe_print("Parsed: SmartApply_URLs")
+            # Support BOTH formats:
+            # 1) New format (2026): Lang | Klucz SmartApply | ... | URL SmartApply
+            #    - PL and EN use different keys and full URLs.
+            # 2) Old format: Klucz (ak) | URL PL (SmartApply) | URL EN (SmartApply)
+
+            cols_lower = {c.lower(): c for c in df.columns}
+            lang_col = cols_lower.get("lang")
+            url_col = next((c for c in df.columns if "url" in c.lower() and "smartapply" in c.lower()), None)
+            key_col_new = next((c for c in df.columns if "klucz" in c.lower() and "smartapply" in c.lower()), None)
+
+            is_new = bool(lang_col and url_col and key_col_new)
+
+            if is_new:
+                for _, row in df.iterrows():
+                    lng = _norm_str(row.get(lang_col, "")).lower()
+                    k = _norm_str(row.get(key_col_new, ""))
+                    url = _norm_str(row.get(url_col, ""))
+                    if not k or not url:
+                        continue
+                    if lng == "en":
+                        data["SA_EN"][k] = url
+                    else:
+                        data["SA"][k] = url
+                _safe_print("Parsed: SmartApply_URLs (new format)")
+            else:
+                key_col = "Klucz (ak)"
+                pl_col = "URL PL (SmartApply)"
+                en_col = "URL EN (SmartApply)"
+                for _, row in df.iterrows():
+                    k = _norm_str(row.get(key_col, ""))
+                    if not k:
+                        continue
+                    url_pl = _norm_str(row.get(pl_col, ""))
+                    url_en = _norm_str(row.get(en_col, ""))
+                    if url_pl:
+                        data["SA"][k] = url_pl.replace(DEFAULT_BASE, "")
+                    if url_en:
+                        data["SA_EN"][k] = url_en.replace(DEFAULT_BASE_EN, "")
+                _safe_print("Parsed: SmartApply_URLs (old format)")
         except Exception as e:
             _safe_print(f"Warning: SmartApply_URLs parse failed: {e}")
 
