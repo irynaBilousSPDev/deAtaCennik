@@ -8,6 +8,18 @@ $term_slug = get_query_var('term_slug', '');
 $data_city = get_query_var('data_city', 'all');
 
 $register_url = get_field('register_url');
+
+// If the exam date taxonomy marks registration as closed, hide the signup button.
+$is_registration_closed = false;
+$exam_date_terms = wp_get_post_terms(get_the_ID(), 'exam_date');
+if (!empty($exam_date_terms) && !is_wp_error($exam_date_terms)) {
+	foreach ($exam_date_terms as $t) {
+		if (isset($t->slug) && $t->slug === 'rejestracja-na-egzamin-zamknieta') {
+			$is_registration_closed = true;
+			break;
+		}
+	}
+}
 ?>
 
 <style>
@@ -92,7 +104,7 @@ $register_url = get_field('register_url');
                     <?php _e('SZCZEGÓŁY', 'akademiata'); ?>
                 </a>
 
-                <?php if (!empty($register_url)) : ?>
+                <?php if (!empty($register_url) && !$is_registration_closed) : ?>
                     <a class="button-sing_up" target="_blank" href="<?php echo esc_url($register_url); ?>">
                         <?php _e('ZAPISZ SIĘ', 'akademiata'); ?>
                     </a>

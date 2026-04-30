@@ -14,15 +14,33 @@ $hide_more_btn = (bool) get_query_var('prices_calculator_hide_more_btn', false);
 $layout = (string) get_query_var('prices_calculator_layout', '');
 $is_single_offer_layout = ($layout === 'single-offer');
 
-// Temporary inline EN copy (until proper .po translations are added).
+// Language detection (WPML-first, with fallbacks).
+// This controls:
+// - initial UI state (default selected language button)
+// - EN copy for a few strings until translations are finalized
 $is_en = false;
 if (!empty($fixed_lang)) {
 	$is_en = (strtolower(trim($fixed_lang)) === 'en');
 } else {
-	$loc = function_exists('determine_locale') ? determine_locale() : get_locale();
-	$is_en = (is_string($loc) && stripos($loc, 'en') === 0);
+	$wpml_lang = apply_filters('wpml_current_language', null);
+	if (is_string($wpml_lang) && $wpml_lang !== '') {
+		$is_en = (strtolower($wpml_lang) === 'en');
+	} else {
+		$loc = function_exists('determine_locale') ? determine_locale() : get_locale();
+		$is_en = (is_string($loc) && stripos($loc, 'en') === 0);
+	}
 }
+
+$initial_lang = $is_en ? 'en' : 'pl';
 ?>
+
+<script>
+	// Ensure calculator starts in the correct language for the current WPML version.
+	// (The JS bundle defaults to 'pl' unless this is set before it runs.)
+	window.lang = window.lang || <?php echo wp_json_encode($initial_lang); ?>;
+	// UI language (WPML). This should NOT change when user switches "study language".
+	window.PRICES_UI_LANG = window.PRICES_UI_LANG || <?php echo wp_json_encode($initial_lang); ?>;
+</script>
 
 <div id="ata-loader" class="prices-loader" role="status" aria-live="polite">
 	<div class="prices-loader__spinner" aria-hidden="true"></div>
@@ -55,6 +73,58 @@ if (!empty($fixed_lang)) {
 			'feeApplication' => $is_en ? __('Application fee', 'akademiata') : __('Opłata aplikacyjna', 'akademiata'),
 			'feeEntry' => $is_en ? __('Enrollment fee', 'akademiata') : __('Wpisowe', 'akademiata'),
 			'feeTotal' => $is_en ? __('Total on enrollment', 'akademiata') : __('Razem przy zapisie', 'akademiata'),
+			'mostPopular' => $is_en ? __('Most popular', 'akademiata') : __('Najczęściej wybierany', 'akademiata'),
+			'savePrefix' => $is_en ? __('You save', 'akademiata') : __('oszczędzasz', 'akademiata'),
+			'savePerYearSuffix' => $is_en ? __('/year', 'akademiata') : __('/rok', 'akademiata'),
+			'insteadOfPrefix' => $is_en ? __('instead of', 'akademiata') : __('zamiast', 'akademiata'),
+			'andSaveText' => $is_en ? __('— you save', 'akademiata') : __('— oszczędzasz', 'akademiata'),
+			// Temporary EN overrides for PL promos (edit here).
+			'promoOverrides' => $is_en ? [
+				'jednorazowo' => [
+					'name' => 'Upfront payment (one-time discount)',
+					'tag' => '−5% or −10%',
+					'short' => 'Pay the semester or the full year upfront and get a discount.',
+					'full' => 'Deadline: 10 September (winter / full year) or 10 March (summer). Cannot be combined with "Transfer to ATA" and "Graduate continues with discount (PL)".',
+				],
+				'szybki' => [
+					'name' => 'Fast start',
+					'tag' => '−1,000 PLN',
+					'short' => 'Registration by 30.06.2026 and contract signed by 31.07.2026.',
+					'full' => 'Applies to Bachelor (1st cycle) only. Discount is split proportionally across both semesters.',
+				],
+				'grupie' => [
+					'name' => 'Cheaper in a group',
+					'tag' => '−200 / −400 PLN',
+					'short' => 'Apply together with friends or family (until 30.09.2026).',
+					'full' => '2–4 people = 200 PLN, 5+ people = 400 PLN. Documents must be submitted on the same day.',
+					'so' => [
+						[ 'v' => 200, 'l' => '2–4 people (−200 PLN)' ],
+						[ 'v' => 400, 'l' => '5+ people (−400 PLN)' ],
+					],
+				],
+				'techart' => [
+					'name' => 'Technical / arts school graduate',
+					'tag' => '−1,200 PLN',
+					'short' => 'This year’s high school graduate from a technical or arts profile.',
+					'full' => 'The profile must be clearly indicated by the school name or track on the diploma/certificate.',
+				],
+				'przejscie' => [
+					'name' => 'Transfer to ATA',
+					'tag' => '−30%',
+					'short' => 'Transfer from another university — discount in the starting semester.',
+					'full' => 'Cannot be combined with any other promotion. Not available to candidates previously removed from ATA/WSEiZ.',
+				],
+				'absolwent_pl' => [
+					'name' => 'Graduate continues with discount (PL)',
+					'tag' => '−20% (or −30%)',
+					'short' => 'ATA/WAB Bachelor graduates — discount for the entire Master’s program.',
+					'full' => 'Grade 5.0 (Wrocław) = 30%. Cannot be combined with other promotions.',
+					'so' => [
+						[ 'v' => 0.2, 'l' => 'Standard result (−20%)' ],
+						[ 'v' => 0.3, 'l' => 'Grade 5.0 / Wrocław (−30%)' ],
+					],
+				],
+			] : [],
 			'emptyTitle' => $is_en ? __('Pricing coming soon', 'akademiata') : __('Cennik w przygotowaniu', 'akademiata'),
 			'emptyText' => $is_en
 				? __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata')
@@ -76,11 +146,11 @@ if (!empty($fixed_lang)) {
 
 	<div class="sec" data-prices-row="lang"><?php echo $is_en ? esc_html__('Study language', 'akademiata') : esc_html__('Język studiów', 'akademiata'); ?></div>
 	<div class="seg" id="lang-row" data-prices-row="lang">
-		<button type="button" class="seg-btn on" data-val="pl">
+		<button type="button" class="seg-btn<?php echo $initial_lang === 'pl' ? ' on' : ''; ?>" data-val="pl">
 			<span class="seg-btn__short"><?php echo $is_en ? esc_html__('Polish', 'akademiata') : esc_html__('Polski', 'akademiata'); ?></span>
 			<span class="seg-btn__long"><?php echo $is_en ? esc_html__('Studies in Polish', 'akademiata') : esc_html__('Studia w języku polskim', 'akademiata'); ?></span>
 		</button>
-		<button type="button" class="seg-btn" data-val="en">
+		<button type="button" class="seg-btn<?php echo $initial_lang === 'en' ? ' on' : ''; ?>" data-val="en">
 			<span class="seg-btn__short"><?php echo esc_html__('English', 'akademiata'); ?></span>
 			<span class="seg-btn__long"><?php echo $is_en ? esc_html__('Studies in English', 'akademiata') : esc_html__('Studia w języku angielskim', 'akademiata'); ?></span>
 		</button>
@@ -96,7 +166,13 @@ if (!empty($fixed_lang)) {
 	<div class="sec" data-prices-row="program">
 		<span class="sec__short"><?php echo $is_en ? esc_html__('Selected program', 'akademiata') : esc_html__('Wybrany kierunek', 'akademiata'); ?></span>
 		<span class="sec__long">
-			<?php echo $is_en ? esc_html__('Program', 'akademiata') : esc_html__('Program', 'akademiata'); ?> <span class="badge" id="prog-count">—</span>
+			<?php echo $is_en ? esc_html__('Program', 'akademiata') : esc_html__('Program', 'akademiata'); ?>
+			<span class="badge" id="prog-count">
+				<span data-prog-count-num>—</span>&nbsp;
+				<span data-prog-count-label<?php echo $is_en ? ' style="text-transform: lowercase;"' : ''; ?>>
+					<?php echo $is_en ? esc_html__('options', 'akademiata') : esc_html__('opcji', 'akademiata'); ?>
+				</span>
+			</span>
 			<span style="font-size: 14px; font-weight: 400; font-family: 'Lato', sans-serif; text-transform: lowercase; letter-spacing: 0.05em;">
 				(<?php echo $is_en ? esc_html__('choose your program', 'akademiata') : esc_html__('wybierz swój program', 'akademiata'); ?>)
 			</span>

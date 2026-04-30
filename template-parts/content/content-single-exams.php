@@ -8,6 +8,18 @@ $is_mobile = wp_is_mobile();
 
 $register_url = !empty($acf_fields['register_url']) ? $acf_fields['register_url'] : '';
 $subtitle = get_field('exam_subtitle');
+
+// If the exam date taxonomy marks registration as closed, hide the signup button.
+$is_registration_closed = false;
+$exam_date_terms = get_the_terms(get_the_ID(), 'exam_date');
+if (!empty($exam_date_terms) && !is_wp_error($exam_date_terms)) {
+	foreach ($exam_date_terms as $t) {
+		if (isset($t->slug) && $t->slug === 'rejestracja-na-egzamin-zamknieta') {
+			$is_registration_closed = true;
+			break;
+		}
+	}
+}
 // Top taxonomy (same header structure as courses)
 $top_taxonomies_with_labels = [
     'exam_city' => __('MIASTO', 'akademiata'),
@@ -96,7 +108,7 @@ if (!function_exists('render_exam_taxonomy_details')) {
                         ?>
                     </div>
 
-                    <?php if (!empty($register_url)) : ?>
+                    <?php if (!empty($register_url) && !$is_registration_closed) : ?>
                         <a id="sourceLink"
                            href="<?= esc_url($register_url); ?>"
                            target="_blank"

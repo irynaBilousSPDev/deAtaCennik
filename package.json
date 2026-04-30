@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp",
     "dev": "concurrently \"webpack --watch\" \"gulp\"",
-    "build": "webpack && gulp",
+    "build": "webpack && gulp build",
     "remove": "rimraf node_modules package-lock.json"
   },
   "author": "Avista consulting & management",

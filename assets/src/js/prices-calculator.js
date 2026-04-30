@@ -44,6 +44,19 @@ export default function initPricesCalculator(_$, opts = {}) {
     try { return JSON.parse(el.textContent || '{}') || {}; } catch (e) { return {}; }
   })();
   function t(key, fallback) { return (I18N && I18N[key]) ? I18N[key] : fallback; }
+  const UI_LANG = (window.PRICES_UI_LANG || '').toString().trim() || (window.lang || 'pl');
+
+  function applyPromoOverride(promo) {
+    // Keep eligibility based on promo.lng (study language),
+    // but display text based on WPML UI language (UI_LANG).
+    if (!promo || UI_LANG !== 'en') return promo;
+    const map = I18N && I18N.promoOverrides ? I18N.promoOverrides : null;
+    const ov = map && promo.id ? map[promo.id] : null;
+    if (!ov) return promo;
+    const out = Object.assign({}, promo, ov);
+    if (ov.so && Array.isArray(ov.so)) out.so = ov.so;
+    return out;
+  }
 
   function setEmptyState(isEmpty, reason = '') {
     if (!emptyBox) return;
@@ -126,9 +139,13 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const uabyWrap = document.getElementById('uaby-wrap');
     const euWrap = document.getElementById('eu-wrap');
+
+    const syncVisibility = () => {
+      if (uabyWrap) uabyWrap.style.display = window.city === 'wro' ? 'block' : 'none';
+      if (euWrap) euWrap.style.display = (window.lang === 'en' && !window.uaby) ? 'block' : 'none';
+    };
     
-    if (uabyWrap) uabyWrap.style.display = window.city === 'wro' ? 'block' : 'none';
-    if (euWrap) euWrap.style.display = (window.lang === 'en' && !window.uaby) ? 'block' : 'none';
+    syncVisibility();
 
     if (!isUIBound) {
       bindUI();
@@ -145,6 +162,10 @@ export default function initPricesCalculator(_$, opts = {}) {
       document.querySelectorAll('[data-prices-row="city"],[data-prices-row="lang"],[data-prices-row="program"]').forEach(el => {
         el.style.display = 'none';
       });
+
+      // Re-sync UI-only blocks after applying fixed city/lang.
+      // (Otherwise the page can keep the default "wwa" visibility state.)
+      syncVisibility();
     }
     render();
     setLoading(false);
@@ -386,6 +407,12 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function fmt(n) { return Math.round(n).toLocaleString('pl-PL'); }
+  function saveLabel(amount, cur, perYear = false) {
+    const prefix = t('savePrefix', 'oszczędzasz');
+    const suffix = perYear ? t('savePerYearSuffix', '/rok') : '';
+    const parts = [prefix, fmt(amount), cur || ''].filter(Boolean).join(' ').trim();
+    return (suffix ? (parts + suffix) : parts).trim();
+  }
   function setTextAll(root, selector, text) {
     if (!root) return;
     const els = root.querySelectorAll(selector);
@@ -431,7 +458,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     pick.className = 'pc-pick';
     pick.setAttribute('data-plan-pick', '');
     pick.style.display = 'none';
-    pick.textContent = 'Najczęściej wybierany';
+    pick.textContent = t('mostPopular', 'Najczęściej wybierany');
 
     card.appendChild(mobileHead);
     card.appendChild(lblDesktop);
@@ -826,7 +853,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (item.r12 <= 0) return null;
       if (bon) {
         const sd = Math.round(ea.eff / 2 * .05);
-        return { pr: Math.round(ea.eff / 2 * .95), un: 'zł za semestr (−5%)', cur: 'PLN', sv: sd, svl: 'oszczędzasz ' + fmt(sd) + ' zł' };
+        return { pr: Math.round(ea.eff / 2 * .95), un: 'zł za semestr (−5%)', cur: 'PLN', sv: sd, svl: saveLabel(sd, 'zł') };
       }
       return { pr: Math.round(ea.eff / 2), un: 'zł za semestr', cur: 'PLN' };
     }
@@ -834,7 +861,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (item.r12 <= 0) return null;
       if (bon) {
         const rd = Math.round(ea.eff * .10);
-        return { pr: Math.round(ea.eff * .90), un: 'zł za rok (−10%)', cur: 'PLN', sv: rd, svl: 'oszczędzasz ' + fmt(rd) + ' zł' };
+        return { pr: Math.round(ea.eff * .90), un: 'zł za rok (−10%)', cur: 'PLN', sv: rd, svl: saveLabel(rd, 'zł') };
       }
       return { pr: ea.eff, un: 'zł za rok', cur: 'PLN' };
     }
@@ -943,7 +970,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       const items = window.unified.filter(x => x.deg === deg);
       if (!items.length) return;
       const g = document.createElement('optgroup');
-      g.label = window.lang === 'pl' ? (deg === 1 ? 'Studia I stopnia' : 'Studia II stopnia') : (deg === 1 ? 'Bachelor / BSc' : 'Master / MA');
+      g.label = UI_LANG === 'pl'
+        ? (deg === 1 ? 'Studia I stopnia' : 'Studia II stopnia')
+        : (deg === 1 ? 'Bachelor / BSc' : 'Master / MA');
       items.forEach(it => {
         const o = document.createElement('option');
         o.value = window.unified.indexOf(it);
@@ -1015,7 +1044,23 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
   }
 
-  function getPL(pid) { return pid === 'r12' ? '12 rat miesięcznych' : pid === 'r10' ? '10 rat miesięcznych' : pid === 'sem' ? 'Semestr z góry' : 'Rok z góry'; }
+  function getPL(pid) {
+    const isEn = UI_LANG === 'en';
+    if (isEn) {
+      if (pid === 'r12') return '12 monthly instalments';
+      if (pid === 'r10') return '10 monthly instalments';
+      if (pid === 'sem') return 'Pay per semester';
+      if (pid === 'rok') return 'Pay annually';
+      return pid;
+    }
+    return pid === 'r12'
+      ? '12 rat miesięcznych'
+      : pid === 'r10'
+        ? '10 rat miesięcznych'
+        : pid === 'sem'
+          ? 'Semestr z góry'
+          : 'Rok z góry';
+  }
 
   function updatePriceFromBanner(pp, pid) {
     const wrap = document.getElementById('priseScroll');
@@ -1048,7 +1093,11 @@ export default function initPricesCalculator(_$, opts = {}) {
   function render() {
     window.unified = buildUnified();
     const progCount = document.getElementById('prog-count');
-    if (progCount) progCount.textContent = window.unified.length + ' opcji';
+    if (progCount) {
+      const numEl = progCount.querySelector('[data-prog-count-num]');
+      if (numEl) numEl.textContent = String(window.unified.length);
+      else progCount.textContent = String(window.unified.length);
+    }
     if (!window.unified.length) {
       // Show friendly empty state instead of leaving UI with blanks.
       setEmptyState(true);
@@ -1231,7 +1280,8 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (ps2) ps2.style.display = '';
       const tpl = document.getElementById('promo-card-template');
       if (pi) pi.innerHTML = '';
-      elig.forEach(promo => {
+      elig.forEach(promoRaw => {
+        const promo = applyPromoOverride(promoRaw);
         const isSel = window.selP[promo.id];
         const isExp = window.expP[promo.id];
         const canS = !isSel && canSel(promo.id);
@@ -1313,7 +1363,9 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const ppS = getPP(window.plan, item, u), sb = document.getElementById('sum-box');
     if (ppS && sb) {
-      const degL = u.deg === 1 ? (window.lang === 'pl' ? 'Studia I stopnia' : 'Bachelor studies') : (window.lang === 'pl' ? 'Studia II stopnia' : 'Master studies');
+      const degL = u.deg === 1
+        ? (UI_LANG === 'pl' ? 'Studia I stopnia' : 'Bachelor studies')
+        : (UI_LANG === 'pl' ? 'Studia II stopnia' : 'Master studies');
       const tsv = (window.lang === 'pl' && !window.uaby ? getEA(item.r12 * 12).disc : 0) + (ppS.sv || 0);
       // Design: header line should always be "KIERUNEK · POZIOM" (course name from column D).
       const spLine = (u.k ? String(u.k) : '') + (degL ? ' · ' + degL : '');
@@ -1329,7 +1381,7 @@ export default function initPricesCalculator(_$, opts = {}) {
 
       if (saveEl) {
         if (tsv > 0) {
-          saveEl.textContent = 'oszczędzasz ' + fmt(tsv) + ' ' + ppS.cur + '/rok';
+          saveEl.textContent = saveLabel(tsv, ppS.cur, true);
           saveEl.style.display = '';
         } else {
           saveEl.textContent = '';
@@ -1432,7 +1484,9 @@ export default function initPricesCalculator(_$, opts = {}) {
 
           if (savingsEl) {
             if (savings > 0) {
-              savingsEl.innerHTML = 'zamiast ' + fmt(regularTotal) + ' PLN — oszczędzasz <strong>' + fmt(savings) + ' zł</strong>';
+              const insteadOf = t('insteadOfPrefix', 'zamiast');
+              const andSave = t('andSaveText', '— oszczędzasz');
+              savingsEl.innerHTML = insteadOf + ' ' + fmt(regularTotal) + ' PLN ' + andSave + ' <strong>' + fmt(savings) + ' zł</strong>';
               savingsEl.style.display = '';
             } else {
               savingsEl.textContent = '';

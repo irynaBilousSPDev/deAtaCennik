@@ -57,4 +57,5 @@ function watchFiles() {
 exports.clearCache = clearCache;
 exports.styles = styles;
 exports.scripts = scripts;
-exports.default = gulp.series(gulp.parallel(styles, scripts, clearCache), watchFiles);
+exports.build = gulp.series(gulp.parallel(styles, scripts, clearCache));
+exports.default = gulp.series(exports.build, watchFiles);
