@@ -1,1 +1,4839 @@
-{"SA":{"arch_i_wwa_new":"https://smartapply.akademiata.pl/en/apply/bachelor/architektura-64","arch_i_wwa":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64","arch_wn_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-18","arch_ii":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-9","arch_wn2":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-wnetrz-12","arch_kraj":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-krajobrazu-17","arch_kraj2":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-krajobrazu-11","proj_rek":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16","proj_wf":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53","bud_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-52","bud_ee":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58","bud_kb":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/konstrukcje-budowlane-59","bud_kol1":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-kolejowe-51","bud_ii":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-49","bud_kol2":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-kolejowe-50","wzo":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wzornictwo-15","proj_prod":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-produktu-14","proj_kom":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-komunikacji-wizualnej-i-reklamy-13","inf_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-29","inf_cy":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/cyberbezpieczenstwo-27","inf_pa":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-aplikacji-28","inf_si":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-26","anim3d":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/animacja-3d-10","zar_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-48","zar_siw":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42","zar_bm":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/biznes-miedzynarodowy-47","zar_cm":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/content-management-i-wizualizacja-30","zar_lo":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32","zar_ev":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46","zar_av":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33","zar_oz":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31","zar_ws":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wellness-i-spa-34","zar_ii":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-40","zar_zz":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35","zar_mp":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/marketing-i-pr-36","zar_pr":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-projektami-37","mech_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/mechanika-i-budowa-maszyn-57","mech_bs":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-samochodow-55","mech_pk":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56","os_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ochrona-srodowiska-25","os_ef":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/efektywnosc-energetyczna-24","os_odna":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23","os_zr":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zrownowazony-rozwoj-22","os_ii":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/ochrona-srodowiska-21","os_men":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19","zip_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45","zip_lp":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44","zip_zp":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-produkcja-43","zip_ii":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41","zip_zb":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38","zip_tl":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39","arch_i_wro":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-78","arch_wn_wro":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-77","inf_i_wro":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-75","fin_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/finanse-i-rachunkowosc-72","log_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-76","sm_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sprzedaz-i-marketing-71","kcdm_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/komunikacja-cyfrowa-i-media-74","tur_i":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/turystyka-i-rekreacja-73","zar_i_wro":"https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-68","zar_ii_wro":"https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-79"},"SA_EN":{"arch_i_wwa_new":"https://smartapply.akademiata.pl/en/apply/bachelor/architektura-64","arch_i_wwa":"https://smartapply.akademiata.pl/en/apply/bachelor/architektura-64","arch_wn_i":"https://smartapply.akademiata.pl/en/apply/bachelor/architektura-wnetrz-18","arch_ii":"https://smartapply.akademiata.pl/en/apply/master/architecture-9","arch_wn2":"https://smartapply.akademiata.pl/en/apply/master/architektura-wnetrz-12","arch_kraj":"https://smartapply.akademiata.pl/en/apply/bachelor/architektura-krajobrazu-17","arch_kraj2":"https://smartapply.akademiata.pl/en/apply/master/architektura-krajobrazu-11","bud_i":"https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-52","bud_ii":"https://smartapply.akademiata.pl/en/apply/master/construction-49","inf_i":"https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-29","inf_cy":"https://smartapply.akademiata.pl/en/apply/bachelor/cybersecurity-27","inf_pa":"https://smartapply.akademiata.pl/en/apply/bachelor/application-programming-28","zar_i":"https://smartapply.akademiata.pl/en/apply/bachelor/management-48","zar_ii":"https://smartapply.akademiata.pl/en/apply/master/management-40","mech_i":"https://smartapply.akademiata.pl/en/apply/bachelor/mechanika-i-budowa-maszyn-57","arch_i_wro":"https://smartapply.akademiata.pl/en/apply/bachelor/architecture-78","arch_wn_wro":"https://smartapply.akademiata.pl/en/apply/bachelor/interior-design-77","inf_i_wro":"https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75","zar_i_wro":"https://smartapply.akademiata.pl/en/apply/bachelor/management-68","zar_ii_wro":"https://smartapply.akademiata.pl/en/apply/master/zarzadzanie-79"},"RAW":{"pl":{"wwa":{"s":[{"k":"Architektura","s":null,"deg":1,"r10":1520,"r12":1300,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura/","ak":"arch_i_wwa"},{"k":"Architektura","s":null,"deg":1,"r10":1520,"r12":1300,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura/","ak":"arch_i_wwa"},{"k":"Architektura Wnętrz","s":null,"deg":1,"r10":1310,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/","ak":"arch_wn_i"},{"k":"Budownictwo","s":"Energooszczędne technologie w budownictwie","deg":1,"r10":1290,"r12":1090,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/","ak":"bud_ee"},{"k":"Budownictwo","s":"Konstrukcje budowlane","deg":1,"r10":1290,"r12":1090,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/","ak":"bud_kb"},{"k":"Budownictwo","s":"Budownictwo kolejowe","deg":1,"r10":1290,"r12":1090,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/","ak":"bud_kol1"},{"k":"Wzornictwo","s":"Projektowanie produktu","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/","ak":"proj_prod"},{"k":"Wzornictwo","s":"Projektowanie komunikacji wizualnej i reklamy","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-komunikacji-wizualnej-i-reklamy/","ak":"proj_kom"},{"k":"Informatyka","s":"Cyberbezpieczeństwo","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/","ak":"inf_cy"},{"k":"Informatyka","s":"Programowanie aplikacji","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/","ak":"inf_pa"},{"k":"Informatyka","s":"Sztuczna inteligencja","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/","ak":"inf_si"},{"k":"Informatyka","s":"Animacja 3D","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/","ak":"anim3d"},{"k":"Zarządzanie","s":"Sztuczna inteligencja w zarządzaniu","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/","ak":"zar_siw"},{"k":"Zarządzanie","s":"Biznes międzynarodowy","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/","ak":"zar_bm"},{"k":"Zarządzanie","s":"Content management i wizualizacja","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/","ak":"zar_cm"},{"k":"Zarządzanie","s":"Zarządzanie logistyką i łańcuchem dostaw","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/","ak":"zar_lo"},{"k":"Zarządzanie","s":"Organizacja eventów, koncertów i imprez sportowych","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/","ak":"zar_ev"},{"k":"Zarządzanie","s":"Zarządzanie w lotnictwie cywilnym","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/","ak":"zar_av"},{"k":"Zarządzanie","s":"Zarządzanie placówkami ochrony zdrowia","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/","ak":"zar_oz"},{"k":"Zarządzanie","s":"Wellness i SPA","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/","ak":"zar_ws"},{"k":"Mechanika i budowa maszyn","s":"Budowa i serwisowanie samochodów","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/","ak":"mech_bs"},{"k":"Mechanika i budowa maszyn","s":"Projektowanie i sterowanie komputerowe","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/","ak":"mech_pk"},{"k":"Ochrona środowiska","s":"Efektywność energetyczna","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/","ak":"os_ef"},{"k":"Ochrona środowiska","s":"Odnawialne źródła energii, gospodarka wodna i odpadowa","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/","ak":"os_odna"},{"k":"Ochrona środowiska","s":"Zrównoważony rozwój","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/","ak":"os_zr"},{"k":"Zarządzanie i inżynieria produkcji","s":"Logistyka przedsiębiorstwa produkcyjnego","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/","ak":"zip_lp"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie produkcją","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/","ak":"zip_zp"},{"k":"Architektura","s":null,"deg":2,"r10":1520,"r12":1300,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura/","ak":"arch_ii"},{"k":"Architektura Krajobrazu","s":"Projektowanie krajobrazu o funkcji rekreacyjnej","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej/","ak":"proj_rek"},{"k":"Architektura Krajobrazu","s":"Projektowanie krajobrazu wielofunkcyjnego","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-wielofunkcyjnego/","ak":"proj_wf"},{"k":"Architektura Wnętrz","s":null,"deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/","ak":"arch_wn_i"},{"k":"Budownictwo","s":"Energooszczędne technologie w budownictwie","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/","ak":"bud_ee"},{"k":"Budownictwo","s":"Konstrukcje budowlane","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/","ak":"bud_kb"},{"k":"Budownictwo","s":"Budownictwo kolejowe","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/","ak":"bud_kol1"},{"k":"Wzornictwo","s":"Projektowanie produktu","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/","ak":"proj_prod"},{"k":"Wzornictwo","s":"Projektowanie komunikacji wizualnej i reklamy","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-komunikacji-wizualnej-i-reklamy/","ak":"proj_kom"},{"k":"Informatyka","s":"Cyberbezpieczeństwo","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/","ak":"inf_cy"},{"k":"Informatyka","s":"Programowanie aplikacji","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/","ak":"inf_pa"},{"k":"Informatyka","s":"Sztuczna inteligencja","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/","ak":"inf_si"},{"k":"Informatyka","s":"Animacja 3D","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/","ak":"anim3d"},{"k":"Zarządzanie","s":"Sztuczna inteligencja w zarządzaniu","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/","ak":"zar_siw"},{"k":"Zarządzanie","s":"Biznes międzynarodowy","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/","ak":"zar_bm"},{"k":"Zarządzanie","s":"Content management i wizualizacja","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/","ak":"zar_cm"},{"k":"Zarządzanie","s":"Zarządzanie logistyką i łańcuchem dostaw","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/","ak":"zar_lo"},{"k":"Zarządzanie","s":"Organizacja eventów, koncertów i imprez sportowych","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/","ak":"zar_ev"},{"k":"Zarządzanie","s":"Zarządzanie w lotnictwie cywilnym","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/","ak":"zar_av"},{"k":"Zarządzanie","s":"Zarządzanie placówkami ochrony zdrowia","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/","ak":"zar_oz"},{"k":"Zarządzanie","s":"Wellness i SPA","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/","ak":"zar_ws"},{"k":"Mechanika i budowa maszyn","s":"Budowa i serwisowanie samochodów","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/","ak":"mech_bs"},{"k":"Mechanika i budowa maszyn","s":"Projektowanie i sterowanie komputerowe","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/","ak":"mech_pk"},{"k":"Ochrona środowiska","s":"Efektywność energetyczna","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/","ak":"os_ef"},{"k":"Ochrona środowiska","s":"Odnawialne źródła energii, gospodarka wodna i odpadowa","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/","ak":"os_odna"},{"k":"Ochrona środowiska","s":"Zrównoważony rozwój","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/","ak":"os_zr"},{"k":"Zarządzanie i inżynieria produkcji","s":"Logistyka przedsiębiorstwa produkcyjnego","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/","ak":"zip_lp"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie produkcją","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/","ak":"zip_zp"},{"k":"Architektura Krajobrazu","s":null,"deg":2,"r10":1000,"r12":890,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura-krajobrazu/","ak":"arch_kraj2"},{"k":"Architektura Wnętrz","s":null,"deg":2,"r10":1510,"r12":1290,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura-wnetrz/","ak":"arch_wn2"},{"k":"Budownictwo","s":"Budownictwo kolejowe","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/budownictwo-kolejowe/","ak":"bud_kol2"},{"k":"Zarządzanie","s":"Zarządzanie zrównoważonym rozwojem","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-zrownowazonym-rozwojem/","ak":"zar_zz"},{"k":"Zarządzanie","s":"Marketing i PR","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/marketing-i-pr/","ak":"zar_mp"},{"k":"Zarządzanie","s":"Zarządzanie projektami","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-projektami/","ak":"zar_pr"},{"k":"Ochrona środowiska","s":"Menedżer środowiska w przedsiębiorstwie","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/menedzer-srodowiska-w-przedsiebiorstwie/","ak":"os_men"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie przedsiębiorstwem produkcyjnym","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym/","ak":"zip_zb"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie transportem i logistyka","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-transportem-i-logistyka/","ak":"zip_tl"}],"n":[{"k":"Architektura Krajobrazu","s":"Projektowanie krajobrazu o funkcji rekreacyjnej","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej/","ak":"proj_rek"},{"k":"Architektura Krajobrazu","s":"Projektowanie krajobrazu wielofunkcyjnego","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-wielofunkcyjnego/","ak":"proj_wf"},{"k":"Architektura Wnętrz","s":null,"deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/","ak":"arch_wn_i"},{"k":"Budownictwo","s":"Energooszczędne technologie w budownictwie","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/","ak":"bud_ee"},{"k":"Budownictwo","s":"Konstrukcje budowlane","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/","ak":"bud_kb"},{"k":"Budownictwo","s":"Budownictwo kolejowe","deg":1,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/","ak":"bud_kol1"},{"k":"Wzornictwo","s":"Projektowanie produktu","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/","ak":"proj_prod"},{"k":"Wzornictwo","s":"Projektowanie komunikacji wizualnej i reklamy","deg":1,"r10":1390,"r12":1190,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-komunikacji-wizualnej-i-reklamy/","ak":"proj_kom"},{"k":"Informatyka","s":"Cyberbezpieczeństwo","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/","ak":"inf_cy"},{"k":"Informatyka","s":"Programowanie aplikacji","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/","ak":"inf_pa"},{"k":"Informatyka","s":"Sztuczna inteligencja","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/","ak":"inf_si"},{"k":"Informatyka","s":"Animacja 3D","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/","ak":"anim3d"},{"k":"Zarządzanie","s":"Sztuczna inteligencja w zarządzaniu","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/","ak":"zar_siw"},{"k":"Zarządzanie","s":"Biznes międzynarodowy","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/","ak":"zar_bm"},{"k":"Zarządzanie","s":"Content management i wizualizacja","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/","ak":"zar_cm"},{"k":"Zarządzanie","s":"Zarządzanie logistyką i łańcuchem dostaw","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/","ak":"zar_lo"},{"k":"Zarządzanie","s":"Organizacja eventów, koncertów i imprez sportowych","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/","ak":"zar_ev"},{"k":"Zarządzanie","s":"Zarządzanie w lotnictwie cywilnym","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/","ak":"zar_av"},{"k":"Zarządzanie","s":"Zarządzanie placówkami ochrony zdrowia","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/","ak":"zar_oz"},{"k":"Zarządzanie","s":"Wellness i SPA","deg":1,"r10":1120,"r12":950,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/","ak":"zar_ws"},{"k":"Mechanika i budowa maszyn","s":"Budowa i serwisowanie samochodów","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/","ak":"mech_bs"},{"k":"Mechanika i budowa maszyn","s":"Projektowanie i sterowanie komputerowe","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/","ak":"mech_pk"},{"k":"Ochrona środowiska","s":"Efektywność energetyczna","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/","ak":"os_ef"},{"k":"Ochrona środowiska","s":"Odnawialne źródła energii, gospodarka wodna i odpadowa","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/","ak":"os_odna"},{"k":"Ochrona środowiska","s":"Zrównoważony rozwój","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/","ak":"os_zr"},{"k":"Zarządzanie i inżynieria produkcji","s":"Logistyka przedsiębiorstwa produkcyjnego","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/","ak":"zip_lp"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie produkcją","deg":1,"r10":1000,"r12":890,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/","ak":"zip_zp"},{"k":"Architektura Krajobrazu","s":null,"deg":2,"r10":1000,"r12":890,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura-krajobrazu/","ak":"arch_kraj2"},{"k":"Architektura Wnętrz","s":null,"deg":2,"r10":1510,"r12":1290,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura-wnetrz/","ak":"arch_wn2"},{"k":"Budownictwo","s":"Budownictwo kolejowe","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":690,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/budownictwo-kolejowe/","ak":"bud_kol2"},{"k":"Zarządzanie","s":"Zarządzanie zrównoważonym rozwojem","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-zrownowazonym-rozwojem/","ak":"zar_zz"},{"k":"Zarządzanie","s":"Marketing i PR","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/marketing-i-pr/","ak":"zar_mp"},{"k":"Zarządzanie","s":"Zarządzanie projektami","deg":2,"r10":1270,"r12":1090,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-projektami/","ak":"zar_pr"},{"k":"Ochrona środowiska","s":"Menedżer środowiska w przedsiębiorstwie","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/menedzer-srodowiska-w-przedsiebiorstwie/","ak":"os_men"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie przedsiębiorstwem produkcyjnym","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym/","ak":"zip_zb"},{"k":"Zarządzanie i inżynieria produkcji","s":"Zarządzanie transportem i logistyka","deg":2,"r10":1160,"r12":990,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-transportem-i-logistyka/","ak":"zip_tl"}]},"wro":{"s":[{"k":"Architektura","s":null,"deg":1,"r10":1030,"r12":875,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura/","ak":"arch_i_wro"},{"k":"Architektura Wnętrz","s":null,"deg":1,"r10":840,"r12":710,"rekr":150,"wps":690,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/","ak":"arch_wn_wro"},{"k":"Informatyka","s":"Inżynieria oprogramowania","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Informatyka","s":"Inżynieria sieci i cyberbezpieczeństwo","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Finanse i rachunkowość","s":"Rachunkowość i podatki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Finanse i rachunkowość","s":"Fintech","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Logistyka","s":"Projektowanie procesów logistycznych","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Logistyka","s":"Menedżer logistyki i transportu","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Sprzedaż i marketing","s":"Digital marketing z AI","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Sprzedaż i marketing","s":"Menedżer sprzedaży","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Komunikacja cyfrowa i media","s":"Visual Storytelling i Content Marketing","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Komunikacja cyfrowa i media","s":"Digital PR i zarządzanie komunikacją marki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Turystyka i rekreacja","s":"Hotelarstwo","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Międzynarodowy biznes turystyczny","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Organizacja eventów","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Zarządzanie","s":"Zarządzanie przedsiębiorstwem","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Zarządzanie zasobami ludzkimi","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Nowoczesny e-marketing","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"},{"k":"Zarządzanie","s":"Strategiczne zarządzanie kapitałem ludzkim","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"},{"k":"Informatyka","s":"Programowanie gier","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Informatyka","s":"Chmura obliczeniowa i serwery","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Informatyka","s":"AI i automatyzacja","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Finanse i rachunkowość","s":"Rachunkowość i podatki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Finanse i rachunkowość","s":"Fintech","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Logistyka","s":"Projektowanie procesów logistycznych","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Logistyka","s":"Menedżer logistyki i transportu","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Sprzedaż i marketing","s":"Digital marketing z AI","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Sprzedaż i marketing","s":"Menedżer sprzedaży","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Komunikacja cyfrowa i media","s":"Visual Storytelling i Content Marketing","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Komunikacja cyfrowa i media","s":"Digital PR i zarządzanie komunikacją marki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Turystyka i rekreacja","s":"Hotelarstwo","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Międzynarodowy biznes turystyczny","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Organizacja eventów","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Zarządzanie","s":"Zarządzanie przedsiębiorstwem","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Zarządzanie zasobami ludzkimi","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Nowoczesny e-marketing","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"},{"k":"Zarządzanie","s":"Strategiczne zarządzanie kapitałem ludzkim","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"}],"n":[{"k":"Informatyka","s":"Programowanie gier","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Informatyka","s":"Chmura obliczeniowa i serwery","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Informatyka","s":"AI i automatyzacja","deg":1,"r10":840,"r12":710,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Finanse i rachunkowość","s":"Rachunkowość i podatki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Finanse i rachunkowość","s":"Fintech","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/finanse-i-rachunkowosc/","ak":"fin_i"},{"k":"Logistyka","s":"Projektowanie procesów logistycznych","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Logistyka","s":"Menedżer logistyki i transportu","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/logistyka/","ak":"log_i"},{"k":"Sprzedaż i marketing","s":"Digital marketing z AI","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Sprzedaż i marketing","s":"Menedżer sprzedaży","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/","ak":"sm_i"},{"k":"Komunikacja cyfrowa i media","s":"Visual Storytelling i Content Marketing","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Komunikacja cyfrowa i media","s":"Digital PR i zarządzanie komunikacją marki","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/komunikacja-cyfrowa-i-media/","ak":"kcdm_i"},{"k":"Turystyka i rekreacja","s":"Hotelarstwo","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Międzynarodowy biznes turystyczny","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Turystyka i rekreacja","s":"Organizacja eventów","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/turystyka-i-rekreacja/","ak":"tur_i"},{"k":"Zarządzanie","s":"Zarządzanie przedsiębiorstwem","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Zarządzanie zasobami ludzkimi","deg":1,"r10":680,"r12":575,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Zarządzanie","s":"Nowoczesny e-marketing","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"},{"k":"Zarządzanie","s":"Strategiczne zarządzanie kapitałem ludzkim","deg":2,"r10":735,"r12":625,"rekr":85,"wps":490,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"}]}},"en":{"wwa":[{"k":"Architecture","s":null,"deg":1,"eu":{"r":3600,"s":1900},"ne":{"r":4500,"s":2350},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/architektura/","ak":"arch_i_wwa"},{"k":"Civil Engineering","s":null,"deg":1,"eu":{"r":3000,"s":1600},"ne":{"r":4000,"s":2100},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/budownictwo/","ak":"bud_i"},{"k":"Management","s":"Business management","deg":1,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i"},{"k":"Management","s":"Digital marketing with AI","deg":1,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i"},{"k":"Mechanical Engineering","s":null,"deg":1,"eu":{"r":3300,"s":1750},"ne":{"r":4000,"s":2100},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/mechanika-i-budowa-maszyn/","ak":"mech_i"},{"k":"Computer Engineering","s":"Computer networks and cybersecurity","deg":1,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/","ak":"inf_cy"},{"k":"Computer Engineering","s":"Software engineering","deg":1,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/","ak":"inf_pa"},{"k":"Architecture","s":null,"deg":2,"eu":{"r":3600,"s":1900},"ne":{"r":4500,"s":2350},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/architektura/","ak":"arch_ii"},{"k":"Management","s":"Brand Manager","deg":2,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii"},{"k":"Management","s":"Strategic Human Capital Management","deg":2,"eu":{"r":2900,"s":1550},"ne":{"r":3500,"s":1850},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii"}],"wro":[{"k":"Management","s":"Business management","deg":1,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Management","s":"Digital marketing with AI","deg":1,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/","ak":"zar_i_wro"},{"k":"Computer Engineering","s":"Computer networks and cybersecurity","deg":1,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Computer Engineering","s":"Software engineering","deg":1,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-1-stopnia/informatyka/","ak":"inf_i_wro"},{"k":"Management","s":"Brand Manager","deg":2,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/en/offer/master/management/","ak":"zar_ii_wro"},{"k":"Management","s":"Strategic Human Capital Management","deg":2,"eu":{"r":2600,"s":1400},"ne":{"r":3000,"s":1600},"rekr":200,"wps":150,"ps":"https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/","ak":"zar_ii_wro"}]}},"UABY":{"pl":{"Architektura":{"1":{"r":2250,"s":1300,"rekr":20,"apl":100}},"Architektura Wnętrz":{"1":{"r":1780,"s":1040,"rekr":20,"apl":100}},"Informatyka":{"1":{"r":1500,"s":900,"rekr":20,"apl":100}},"Finanse i rachunkowość":{"1":{"r":1200,"s":750,"rekr":20,"apl":100}},"Logistyka":{"1":{"r":1200,"s":750,"rekr":20,"apl":100}},"Sprzedaż i marketing":{"1":{"r":1200,"s":750,"rekr":20,"apl":100}},"Komunikacja cyfrowa i media":{"1":{"r":1200,"s":750,"rekr":20,"apl":100}},"Turystyka i rekreacja":{"1":{"r":1200,"s":750,"rekr":20,"apl":100}},"Zarządzanie":{"1":{"r":1200,"s":750,"rekr":20,"apl":100},"2":{"r":1400,"s":850,"rekr":20,"apl":100}}},"en":{"Management":{"1":{"r":2200,"s":0,"rekr":20,"apl":100},"2":{"r":2300,"s":0,"rekr":20,"apl":100}},"Computer Engineering":{"1":{"r":2400,"s":0,"rekr":20,"apl":100}}}},"PROMOS":[{"id":"jednorazowo","lng":"pl","deg":0,"cty":"both","name":"Płatność z góry (rabat jednorazowy)","tag":"−5% lub −10%","short":"Zapłać cały semestr lub rok z góry i uzyskaj rabat.","full":"Termin: do 10 września (rok/zima) lub 10 marca (lato). Nie łączy z przejsciem, absolwent_pl.","sw":["szybki","grupie","techart"],"isBonus":true,"disc":{"t":"bonus","v":0}},{"id":"szybki","lng":"pl","deg":1,"cty":"both","name":"Szybki Start","tag":"−1 000 zł","short":"Rejestracja do 30.06.2026 i podpisanie umowy do 31.07.2026.","full":"Dot. tylko I stopnia. Zniżka proporcjonalna w obu semestrach.","sw":["grupie","jednorazowo"],"isBonus":false,"disc":{"t":"fix","v":1000}},{"id":"grupie","lng":"pl","deg":0,"cty":"both","name":"W Grupie Taniej","tag":"−200 / −400 zł","short":"Zapis razem z grupą znajomych lub rodziny (do 30.09.2026).","full":"2–4 osoby=200 zł; 5+ osób=400 zł. Dokumenty tego samego dnia.","sw":["szybki","jednorazowo"],"isBonus":false,"disc":{"t":"fix","v":200},"so":[{"v":200,"l":"2–4 osoby (−200 zł)"},{"v":400,"l":"5+ osób (−400 zł)"}]},{"id":"techart","lng":"pl","deg":1,"cty":"wwa","name":"Absolwent szkoły tech./artystycznej","tag":"−1 200 zł","short":"Tegoroczny maturzysta z profilu technicznego lub artystycznego.","full":"Profil wynikający z nazwy szkoły lub kierunku na świadectwie.","sw":["jednorazowo"],"isBonus":false,"disc":{"t":"fix","v":1200}},{"id":"przejscie","lng":"pl","deg":0,"cty":"wwa","name":"Przejście do ATA","tag":"−30%","short":"Przeniesienie z innej uczelni – zniżka w semestrze startu.","full":"Nie łączy się z żadną inną. Nie dla wcześniej skreślonych z ATA.","sw":[],"isBonus":false,"disc":{"t":"pct","v":0.3}},{"id":"absolwent_pl","lng":"pl","deg":2,"cty":"both","name":"Absolwent Kontynuuje z Rabatem","tag":"−20% (lub −30%)","short":"Absolwenci I stopnia ATA/WAB na całe studia II stopnia.","full":"Wynik 5,0 (Wrocław) = 30%. Nie łączy się z innymi promocjami.","sw":[],"isBonus":false,"disc":{"t":"pct","v":0.2},"so":[{"v":0.2,"l":"Wynik standardowy (−20%)"},{"v":0.3,"l":"Wynik 5,0 / Wrocław (−30%)"}]},{"id":"earlybirds","lng":"en","deg":0,"cty":"both","name":"Early Birds","tag":"−10%","short":"EU/CIS – rejestracja do 15.05.2026 + opłata roczna z góry.","full":"Wymaga wariantu rocznego. Nie łączy z absolwent_en.","sw":[],"isBonus":false,"disc":{"t":"pct","v":0.1},"needRok":true},{"id":"absolwent_en","lng":"en","deg":2,"cty":"both","name":"Graduate Continues with Discount","tag":"−20%","short":"UTA/WSEiZ graduates – 20% off total Master's tuition.","full":"Cannot combine with Early Birds.","sw":[],"isBonus":false,"disc":{"t":"pct","v":0.2}}]}
+{
+  "BASE": "https://smartapply.akademiata.pl/pl/apply/",
+  "BASE_EN": "https://smartapply.akademiata.pl/en/apply/",
+  "SA": {
+    "1_wwa_architektura": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64",
+    "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53",
+    "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16",
+    "1_wwa_architektura-krajobrazu": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-krajobrazu-17",
+    "1_wwa_architektura-wnetrz": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-18",
+    "1_wwa_konstrukcje-budowlane": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/konstrukcje-budowlane-59",
+    "1_wwa_energooszczedne-technologie-w-budownictwie": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58",
+    "1_wwa_budownictwo-kolejowe": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-kolejowe-51",
+    "1_wwa_budownictwo": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-52",
+    "1_wwa_sztuczna-inteligencja": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-26",
+    "1_wwa_programowanie-aplikacji": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-aplikacji-28",
+    "1_wwa_cyberbezpieczenstwo": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/cyberbezpieczenstwo-27",
+    "1_wwa_animacja-3d": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/animacja-3d-10",
+    "1_wwa_informatyka": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-29",
+    "1_wwa_projektowanie-i-sterowanie-komputerowe": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56",
+    "1_wwa_budowa-i-serwisowanie-samochodow": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-samochodow-55",
+    "1_wwa_mechanika-i-budowa-maszyn": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/mechanika-i-budowa-maszyn-57",
+    "1_wwa_zrownowazony-rozwoj": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zrownowazony-rozwoj-22",
+    "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23",
+    "1_wwa_efektywnosc-energetyczna": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/efektywnosc-energetyczna-24",
+    "1_wwa_ochrona-srodowiska": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ochrona-srodowiska-25",
+    "1_wwa_projektowanie-produktu": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-produktu-14",
+    "1_wwa_projektowanie-interakcji": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-interakcji-13",
+    "1_wwa_wzornictwo": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wzornictwo-15",
+    "1_wwa_zarzadzanie-w-lotnictwie-cywilnym": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33",
+    "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31",
+    "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32",
+    "1_wwa_wellness-i-spa": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wellness-i-spa-34",
+    "1_wwa_sztuczna-inteligencja-w-zarzadzaniu": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42",
+    "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46",
+    "1_wwa_content-management-i-wizualizacja": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/content-management-i-wizualizacja-30",
+    "1_wwa_biznes-miedzynarodowy": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/biznes-miedzynarodowy-47",
+    "1_wwa_zarzadzanie": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-48",
+    "1_wwa_zarzadzanie-produkcja": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-produkcja-43",
+    "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44",
+    "1_wwa_zarzadzanie-i-inzynieria-produkcji": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45",
+    "1_wro_architektura-wroclaw": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-78",
+    "1_wro_wroclaw-architektura-wnetrz": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-77",
+    "1_wro_rachunkowosc-i-podatki": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/rachunkowosc-i-podatki-124",
+    "1_wro_fintech": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/fintech-125",
+    "1_wro_wroclaw-finanse-i-rachunkowosc": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/finanse-i-rachunkowosc-72",
+    "1_wro_programowanie-gier": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-gier-117",
+    "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-sieci-i-cyberbezpieczenstwo-116",
+    "1_wro_inzynieria-oprogramowania": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-oprogramowania-115",
+    "1_wro_chmura-obliczeniowa-i-serwery": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/chmura-obliczeniowa-i-serwery-118",
+    "1_wro_ai-i-automatyzacja": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ai-i-automatyzacja-119",
+    "1_wro_wroclaw-informatyka": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-75",
+    "1_wro_visual-storytelling-i-content-marketing": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/visual-storytelling-i-content-marketing-126",
+    "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki-127",
+    "1_wro_wroclaw-komunikacja-cyfrowa-i-media": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/komunikacja-cyfrowa-i-media-74",
+    "1_wro_projektowanie-procesow-logistycznych": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-procesow-logistycznych-120",
+    "1_wro_menedzer-logistyki-i-transportu": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-logistyki-i-transportu-121",
+    "1_wro_wroclaw-logistyka": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-76",
+    "1_wro_menedzer-sprzedazy": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-sprzedazy-123",
+    "1_wro_digital-marketing-z-ai": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-marketing-z-ai-122",
+    "1_wro_wroclaw-sprzedaz-i-marketing": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sprzedaz-i-marketing-71",
+    "1_wro_organizacja-eventow": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-164",
+    "1_wro_miedzynarodowy-biznes-turystyczny": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/miedzynarodowy-biznes-turystyczny-163",
+    "1_wro_hotelarstwo": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/hotelarstwo-162",
+    "1_wro_wroclaw-turystyka-i-rekreacja": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/turystyka-i-rekreacja-73",
+    "1_wro_zarzadzanie-zasobami-ludzkimi": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-zasobami-ludzkimi-112",
+    "1_wro_zarzadzanie-przedsiebiorstwem": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-przedsiebiorstwem-111",
+    "1_wro_wroclaw-zarzadzanie": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-68",
+    "2_wwa_architektura": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-9",
+    "2_wwa_architektura-krajobrazu": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-krajobrazu-11",
+    "2_wwa_architektura-wnetrz": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-wnetrz-12",
+    "2_wwa_konstrukcje-budowlane": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/konstrukcje-budowlane-i-inzynierskie-54",
+    "2_wwa_budownictwo-kolejowe": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-kolejowe-50",
+    "2_wwa_budownictwo": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-49",
+    "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/odnawialne-zrodla-energii-i-gospodarka-odpadowa-20",
+    "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19",
+    "2_wwa_ochrona-srodowiska": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/ochrona-srodowiska-21",
+    "2_wwa_zarzadzanie-zrownowazonym-rozwojem": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35",
+    "2_wwa_zarzadzanie-projektami": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-projektami-37",
+    "2_wwa_marketing-i-pr": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/marketing-i-pr-36",
+    "2_wwa_zarzadzanie": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-40",
+    "2_wwa_zarzadzanie-transportem-i-logistyka": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39",
+    "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38",
+    "2_wwa_zarzadzanie-i-inzynieria-produkcji": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41",
+    "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
+    "2_wro_nowoczesny-e-marketing": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/nowoczesny-e-marketing-113",
+    "2_wro_wroclaw-zarzadzanie": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-80"
+  },
+  "SA_EN": {
+    "1_wwa_architecture": "https://smartapply.akademiata.pl/en/apply/bachelor/architecture-78",
+    "1_wwa_railway-construction": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-kolejowe-51",
+    "1_wwa_energy-saving-technologies-in-civil-engineering": "https://smartapply.akademiata.pl/en/apply/bachelor/energooszczedne-technologie-w-budownictwie-58",
+    "1_wwa_building-structures": "https://smartapply.akademiata.pl/en/apply/bachelor/konstrukcje-budowlane-59",
+    "1_wwa_civil-engineering": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-52",
+    "1_wwa_cybersecurity": "https://smartapply.akademiata.pl/en/apply/bachelor/cybersecurity-27",
+    "1_wwa_artificial-intelligence": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-26",
+    "1_wwa_applications-programming": "https://smartapply.akademiata.pl/en/apply/bachelor/application-programming-28",
+    "1_wwa_3d-animation": "https://smartapply.akademiata.pl/en/apply/bachelor/3d-animation-10",
+    "1_wwa_computer-engineering": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
+    "1_wwa_wellness-and-spa": "https://smartapply.akademiata.pl/en/apply/bachelor/wellness-spa-34",
+    "1_wwa_sport-concert-and-civil-management": "https://smartapply.akademiata.pl/en/apply/bachelor/the-organization-of-events-concerts-and-sports-events-46",
+    "1_wwa_logistics-and-supply-chain-management": "https://smartapply.akademiata.pl/en/apply/bachelor/logistics-and-supply-chain-management-32",
+    "1_wwa_international-business": "https://smartapply.akademiata.pl/en/apply/bachelor/international-business-47",
+    "1_wwa_content-management-and-visualization": "https://smartapply.akademiata.pl/en/apply/bachelor/content-management-and-visualization-30",
+    "1_wwa_civil-aviation-management": "https://smartapply.akademiata.pl/en/apply/bachelor/management-in-civil-aviation-33",
+    "1_wwa_artificial-intelligence-in-management": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-in-management-42",
+    "1_wwa_management": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
+    "1_wwa_construction-and-maintenance-of-vehicles": "https://smartapply.akademiata.pl/en/apply/bachelor/construction-and-maintenance-of-vehicles-55",
+    "1_wwa_computer-aided-design-and-control": "https://smartapply.akademiata.pl/en/apply/bachelor/projektowanie-i-sterowanie-komputerowe-56",
+    "1_wwa_mechanical-engineering": "https://smartapply.akademiata.pl/en/apply/bachelor/mechanika-i-budowa-maszyn-57",
+    "1_wro_inzynieria-oprogramowania": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-oprogramowania-115",
+    "1_wro_wroclaw-computer-networks-and-cybersecurity": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-sieci-i-cyberbezpieczenstwo-116",
+    "1_wro_wroclaw-computer-engineering": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
+    "1_wro_wroclaw-digital-marketing-with-ai": "https://smartapply.akademiata.pl/en/apply/bachelor/digital-marketing-with-ai-106",
+    "1_wro_business-management": "https://smartapply.akademiata.pl/en/apply/bachelor/zarzadzanie-przedsiebiorstwem-111",
+    "1_wro_wroclaw-management": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
+    "2_wwa_architektura": "https://smartapply.akademiata.pl/en/apply/master/architecture-9",
+    "2_wwa_sustainable-development-management": "https://smartapply.akademiata.pl/en/apply/master/sustainable-development-management-35",
+    "2_wwa_project-management": "https://smartapply.akademiata.pl/en/apply/master/project-management-37",
+    "2_wwa_marketing-and-public-relations": "https://smartapply.akademiata.pl/en/apply/master/marketing-pr-36",
+    "2_wwa_management": "https://smartapply.akademiata.pl/en/apply/master/management-40",
+    "2_wro_wroclaw-strategic-human-capital-management": "https://smartapply.akademiata.pl/en/apply/master/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
+    "2_wro_wroclaw-brand-management": "https://smartapply.akademiata.pl/en/apply/master/brand-manager-109",
+    "2_wro_wroclaw-management": "https://smartapply.akademiata.pl/en/apply/master/management-80"
+  },
+  "SA_ROWS": [
+    {
+      "lang": "pl",
+      "key": "1_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architektura",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architektura Krajobrazu",
+      "s": "Projektowanie krajobrazu wielofunkcyjnego"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architektura Krajobrazu",
+      "s": "Projektowanie krajobrazu o funkcji rekreacyjnej"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_architektura-krajobrazu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-krajobrazu-17",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architektura Krajobrazu",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-18",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architektura Wnętrz",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_konstrukcje-budowlane",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/konstrukcje-budowlane-59",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Budownictwo",
+      "s": "Konstrukcje budowlane"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_energooszczedne-technologie-w-budownictwie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Budownictwo",
+      "s": "Energooszczędne technologie w budownictwie"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_budownictwo-kolejowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-kolejowe-51",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Budownictwo",
+      "s": "Budownictwo kolejowe"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_budownictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-52",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Budownictwo",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_sztuczna-inteligencja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-26",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Sztuczna inteligencja"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_programowanie-aplikacji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-aplikacji-28",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Programowanie aplikacji"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_cyberbezpieczenstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/cyberbezpieczenstwo-27",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Cyberbezpieczeństwo"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_animacja-3d",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/animacja-3d-10",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Animacja 3D"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_informatyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-29",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanika i budowa maszyn",
+      "s": "Projektowanie i sterowanie komputerowe"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_budowa-i-serwisowanie-samochodow",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-samochodow-55",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanika i budowa maszyn",
+      "s": "Budowa i serwisowanie samochodów"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_mechanika-i-budowa-maszyn",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/mechanika-i-budowa-maszyn-57",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanika i budowa maszyn",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zrownowazony-rozwoj",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zrownowazony-rozwoj-22",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Ochrona środowiska",
+      "s": "Zrównoważony rozwój"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Ochrona środowiska",
+      "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_efektywnosc-energetyczna",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/efektywnosc-energetyczna-24",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Ochrona środowiska",
+      "s": "Efektywność energetyczna"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_ochrona-srodowiska",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ochrona-srodowiska-25",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Ochrona środowiska",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_projektowanie-produktu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-produktu-14",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Wzornictwo",
+      "s": "Projektowanie produktu"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_projektowanie-interakcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-interakcji-13",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Wzornictwo",
+      "s": "Projektowanie interakcji"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_wzornictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wzornictwo-15",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Wzornictwo",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie w lotnictwie cywilnym"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie placówkami ochrony zdrowia"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie logistyką i łańcuchem dostaw"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_wellness-i-spa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wellness-i-spa-34",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Wellness i SPA"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Sztuczna inteligencja w zarządzaniu"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Organizacja eventów, koncertów i imprez sportowych"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_content-management-i-wizualizacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/content-management-i-wizualizacja-30",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Content management i wizualizacja"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_biznes-miedzynarodowy",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/biznes-miedzynarodowy-47",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Biznes międzynarodowy"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-48",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie-produkcja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-produkcja-43",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": "Zarządzanie produkcją"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": "Logistyka przedsiębiorstwa produkcyjnego"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wwa_zarzadzanie-i-inzynieria-produkcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_architektura-wroclaw",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-78",
+      "city": "wro",
+      "deg": 1,
+      "k": "Architektura",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-77",
+      "city": "wro",
+      "deg": 1,
+      "k": "Architektura Wnętrz",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_rachunkowosc-i-podatki",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/rachunkowosc-i-podatki-124",
+      "city": "wro",
+      "deg": 1,
+      "k": "Finanse i rachunkowość",
+      "s": "Rachunkowość i podatki"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_fintech",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/fintech-125",
+      "city": "wro",
+      "deg": 1,
+      "k": "Finanse i rachunkowość",
+      "s": "Fintech"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-finanse-i-rachunkowosc",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/finanse-i-rachunkowosc-72",
+      "city": "wro",
+      "deg": 1,
+      "k": "Finanse i rachunkowość",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_programowanie-gier",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-gier-117",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Programowanie gier"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-sieci-i-cyberbezpieczenstwo-116",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Inżynieria sieci i cyberbezpieczeństwo"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_inzynieria-oprogramowania",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-oprogramowania-115",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Inżynieria oprogramowania"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_chmura-obliczeniowa-i-serwery",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/chmura-obliczeniowa-i-serwery-118",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "Chmura obliczeniowa i serwery"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_ai-i-automatyzacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ai-i-automatyzacja-119",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": "AI i automatyzacja"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-informatyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-75",
+      "city": "wro",
+      "deg": 1,
+      "k": "Informatyka",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_visual-storytelling-i-content-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/visual-storytelling-i-content-marketing-126",
+      "city": "wro",
+      "deg": 1,
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Visual Storytelling i Content Marketing"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki-127",
+      "city": "wro",
+      "deg": 1,
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Digital PR i zarządzanie komunikacją marki"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-komunikacja-cyfrowa-i-media",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/komunikacja-cyfrowa-i-media-74",
+      "city": "wro",
+      "deg": 1,
+      "k": "Komunikacja cyfrowa i media",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_projektowanie-procesow-logistycznych",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-procesow-logistycznych-120",
+      "city": "wro",
+      "deg": 1,
+      "k": "Logistyka",
+      "s": "Projektowanie procesów logistycznych"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_menedzer-logistyki-i-transportu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-logistyki-i-transportu-121",
+      "city": "wro",
+      "deg": 1,
+      "k": "Logistyka",
+      "s": "Menedżer logistyki i transportu"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-logistyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-76",
+      "city": "wro",
+      "deg": 1,
+      "k": "Logistyka",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_menedzer-sprzedazy",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-sprzedazy-123",
+      "city": "wro",
+      "deg": 1,
+      "k": "Sprzedaż i marketing",
+      "s": "Menedżer sprzedaży"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_digital-marketing-z-ai",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-marketing-z-ai-122",
+      "city": "wro",
+      "deg": 1,
+      "k": "Sprzedaż i marketing",
+      "s": "Digital marketing z AI"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-sprzedaz-i-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sprzedaz-i-marketing-71",
+      "city": "wro",
+      "deg": 1,
+      "k": "Sprzedaż i marketing",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_organizacja-eventow",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-164",
+      "city": "wro",
+      "deg": 1,
+      "k": "Turystyka i rekreacja",
+      "s": "Organizacja eventów"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_miedzynarodowy-biznes-turystyczny",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/miedzynarodowy-biznes-turystyczny-163",
+      "city": "wro",
+      "deg": 1,
+      "k": "Turystyka i rekreacja",
+      "s": "Międzynarodowy biznes turystyczny"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_hotelarstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/hotelarstwo-162",
+      "city": "wro",
+      "deg": 1,
+      "k": "Turystyka i rekreacja",
+      "s": "Hotelarstwo"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-turystyka-i-rekreacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/turystyka-i-rekreacja-73",
+      "city": "wro",
+      "deg": 1,
+      "k": "Turystyka i rekreacja",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_zarzadzanie-zasobami-ludzkimi",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-zasobami-ludzkimi-112",
+      "city": "wro",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie zasobami ludzkimi"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_zarzadzanie-przedsiebiorstwem",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-przedsiebiorstwem-111",
+      "city": "wro",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie przedsiębiorstwem"
+    },
+    {
+      "lang": "pl",
+      "key": "1_wro_wroclaw-zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-68",
+      "city": "wro",
+      "deg": 1,
+      "k": "Zarządzanie",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_architecture",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/architecture-78",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Architecture",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_railway-construction",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-kolejowe-51",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Civil Engineering",
+      "s": "Railway Construction"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_energy-saving-technologies-in-civil-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/energooszczedne-technologie-w-budownictwie-58",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Civil Engineering",
+      "s": "Energy-Saving Technologies In Civil Engineering"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_building-structures",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/konstrukcje-budowlane-59",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Civil Engineering",
+      "s": "Building Structures"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_civil-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-52",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Civil Engineering",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_cybersecurity",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/cybersecurity-27",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "Cybersecurity"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_artificial-intelligence",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-26",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "Artificial Intelligence"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_applications-programming",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/application-programming-28",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "Applications Programming"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_3d-animation",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/3d-animation-10",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "3D Animation"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_computer-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_wellness-and-spa",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/wellness-spa-34",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Wellness and SPA"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_sport-concert-and-civil-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/the-organization-of-events-concerts-and-sports-events-46",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Sport, Concert and Event Management"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_logistics-and-supply-chain-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/logistics-and-supply-chain-management-32",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Logistics and Supply Chain Management"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_international-business",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/international-business-47",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "International Business"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_content-management-and-visualization",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/content-management-and-visualization-30",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Content Management and Visualization"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_civil-aviation-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-in-civil-aviation-33",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Civil Aviation Management"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_artificial-intelligence-in-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-in-management-42",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": "Artificial Intelligence in Management"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Management",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_construction-and-maintenance-of-vehicles",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/construction-and-maintenance-of-vehicles-55",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanical Engineering",
+      "s": "Construction and Maintenance of Vehicles"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_computer-aided-design-and-control",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/projektowanie-i-sterowanie-komputerowe-56",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanical Engineering",
+      "s": "Computer Aided Design and Control"
+    },
+    {
+      "lang": "en",
+      "key": "1_wwa_mechanical-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/mechanika-i-budowa-maszyn-57",
+      "city": "wwa",
+      "deg": 1,
+      "k": "Mechanical Engineering",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_inzynieria-oprogramowania",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-oprogramowania-115",
+      "city": "wro",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "Software engineering"
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_wroclaw-computer-networks-and-cybersecurity",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-sieci-i-cyberbezpieczenstwo-116",
+      "city": "wro",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": "Computer networks and cybersecurity"
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_wroclaw-computer-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
+      "city": "wro",
+      "deg": 1,
+      "k": "Computer Engineering",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_wroclaw-digital-marketing-with-ai",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/digital-marketing-with-ai-106",
+      "city": "wro",
+      "deg": 1,
+      "k": "Management",
+      "s": "Digital Marketing"
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_business-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/zarzadzanie-przedsiebiorstwem-111",
+      "city": "wro",
+      "deg": 1,
+      "k": "Management",
+      "s": "Business management"
+    },
+    {
+      "lang": "en",
+      "key": "1_wro_wroclaw-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
+      "city": "wro",
+      "deg": 1,
+      "k": "Management",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-9",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Architektura",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_architektura-krajobrazu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-krajobrazu-11",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Architektura Krajobrazu",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-wnetrz-12",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Architektura Wnętrz",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_konstrukcje-budowlane",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/konstrukcje-budowlane-i-inzynierskie-54",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Budownictwo",
+      "s": "Konstrukcje budowlane i inżynierskie"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_budownictwo-kolejowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-kolejowe-50",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Budownictwo",
+      "s": "Budownictwo kolejowe"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_budownictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-49",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Budownictwo",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/odnawialne-zrodla-energii-i-gospodarka-odpadowa-20",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Ochrona środowiska",
+      "s": "Odnawialne źródła energii i gospodarka odpadowa"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Ochrona środowiska",
+      "s": "Menedżer środowiska w przedsiębiorstwie"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_ochrona-srodowiska",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/ochrona-srodowiska-21",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Ochrona środowiska",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie-zrownowazonym-rozwojem",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie zrównoważonym rozwojem"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie-projektami",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-projektami-37",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": "Zarządzanie projektami"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_marketing-i-pr",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/marketing-i-pr-36",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": "Marketing i PR"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-40",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie-transportem-i-logistyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": "Zarządzanie transportem i logistyka"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": "Zarządzanie przedsiębiorstwem produkcyjnym"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wwa_zarzadzanie-i-inzynieria-produkcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Zarządzanie i inżynieria produkcji",
+      "s": ""
+    },
+    {
+      "lang": "pl",
+      "key": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
+      "city": "wro",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": "Strategiczne zarządzanie kapitałem ludzkim"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wro_nowoczesny-e-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/nowoczesny-e-marketing-113",
+      "city": "wro",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": "Nowoczesny e-marketing"
+    },
+    {
+      "lang": "pl",
+      "key": "2_wro_wroclaw-zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-80",
+      "city": "wro",
+      "deg": 2,
+      "k": "Zarządzanie",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "2_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/architecture-9",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Architecture",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "2_wwa_sustainable-development-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/sustainable-development-management-35",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Management",
+      "s": "Sustainable Development Management"
+    },
+    {
+      "lang": "en",
+      "key": "2_wwa_project-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/project-management-37",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Management",
+      "s": "Project Management"
+    },
+    {
+      "lang": "en",
+      "key": "2_wwa_marketing-and-public-relations",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/marketing-pr-36",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Management",
+      "s": "Marketing and Public Relations"
+    },
+    {
+      "lang": "en",
+      "key": "2_wwa_management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/management-40",
+      "city": "wwa",
+      "deg": 2,
+      "k": "Management",
+      "s": ""
+    },
+    {
+      "lang": "en",
+      "key": "2_wro_wroclaw-strategic-human-capital-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
+      "city": "wro",
+      "deg": 2,
+      "k": "Management",
+      "s": "Strategic Human Capital Management"
+    },
+    {
+      "lang": "en",
+      "key": "2_wro_wroclaw-brand-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/brand-manager-109",
+      "city": "wro",
+      "deg": 2,
+      "k": "Management",
+      "s": "Brand Manager"
+    },
+    {
+      "lang": "en",
+      "key": "2_wro_wroclaw-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/management-80",
+      "city": "wro",
+      "deg": 2,
+      "k": "Management",
+      "s": ""
+    }
+  ],
+  "RAW": {
+    "pl": {
+      "wwa": {
+        "s": [
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 1,
+            "r10": 1520,
+            "r12": 1300,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura",
+            "ak": "1_wwa_architektura",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "1_wwa_architektura-wnetrz",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "—",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo",
+            "ak": "1_wwa_budownictwo",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Energooszczędne technologie w budownictwie",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Konstrukcje budowlane",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "konstrukcje-budowlane",
+            "ak": "1_wwa_konstrukcje-budowlane",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 1,
+            "r10": 1290,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "1_wwa_budownictwo-kolejowe",
+            "lk": ""
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "—",
+            "deg": 1,
+            "r10": 1310,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "wzornictwo",
+            "ak": "1_wwa_wzornictwo",
+            "lk": ""
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie produktu",
+            "deg": 1,
+            "r10": 1310,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-produktu",
+            "ak": "1_wwa_projektowanie-produktu",
+            "lk": ""
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie interakcji",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-interakcji",
+            "ak": "1_wwa_projektowanie-interakcji",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "—",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "informatyka",
+            "ak": "1_wwa_informatyka",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "cyberbezpieczenstwo",
+            "ak": "1_wwa_cyberbezpieczenstwo",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Programowanie aplikacji",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "programowanie-aplikacji",
+            "ak": "1_wwa_programowanie-aplikacji",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Sztuczna inteligencja",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja",
+            "ak": "1_wwa_sztuczna-inteligencja",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Animacja 3D",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "animacja-3d",
+            "ak": "1_wwa_animacja-3d",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "—",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "1_wwa_zarzadzanie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Sztuczna inteligencja w zarządzaniu",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Biznes międzynarodowy",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "biznes-miedzynarodowy",
+            "ak": "1_wwa_biznes-miedzynarodowy",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Content management i wizualizacja",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "content-management-i-wizualizacja",
+            "ak": "1_wwa_content-management-i-wizualizacja",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie logistyką i łańcuchem dostaw",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Organizacja eventów, koncertów i imprez sportowych",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie w lotnictwie cywilnym",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie placówkami ochrony zdrowia",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Wellness i SPA",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wellness-i-spa",
+            "ak": "1_wwa_wellness-i-spa",
+            "lk": ""
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "—",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "mechanika-i-budowa-maszyn",
+            "ak": "1_wwa_mechanika-i-budowa-maszyn",
+            "lk": ""
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Budowa i serwisowanie samochodów",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "1_wwa_budowa-i-serwisowanie-samochodow",
+            "lk": ""
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Projektowanie i sterowanie komputerowe",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "—",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "ochrona-srodowiska",
+            "ak": "1_wwa_ochrona-srodowiska",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Efektywność energetyczna",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "efektywnosc-energetyczna",
+            "ak": "1_wwa_efektywnosc-energetyczna",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Zrównoważony rozwój",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zrownowazony-rozwoj",
+            "ak": "1_wwa_zrownowazony-rozwoj",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "—",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-i-inzynieria-produkcji",
+            "ak": "1_wwa_zarzadzanie-i-inzynieria-produkcji",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Logistyka przedsiębiorstwa produkcyjnego",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie produkcją",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-produkcja",
+            "ak": "1_wwa_zarzadzanie-produkcja",
+            "lk": ""
+          },
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 2,
+            "r10": 1520,
+            "r12": 1300,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura",
+            "ak": "2_wwa_architektura",
+            "lk": ""
+          }
+        ],
+        "n": [
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "—",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "architektura-krajobrazu",
+            "ak": "1_wwa_architektura-krajobrazu",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "Projektowanie krajobrazu o funkcji rekreacyjnej",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+            "ak": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "Projektowanie krajobrazu wielofunkcyjnego",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "projektowanie-krajobrazu-wielofunkcyjnego",
+            "ak": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "1_wwa_architektura-wnetrz",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Energooszczędne technologie w budownictwie",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Konstrukcje budowlane",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "konstrukcje-budowlane",
+            "ak": "1_wwa_konstrukcje-budowlane",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 1,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "1_wwa_budownictwo-kolejowe",
+            "lk": ""
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie produktu",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-produktu",
+            "ak": "1_wwa_projektowanie-produktu",
+            "lk": ""
+          },
+          {
+            "k": "Wzornictwo",
+            "s": "Projektowanie interakcji",
+            "deg": 1,
+            "r10": 1390,
+            "r12": 1190,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "projektowanie-interakcji",
+            "ak": "1_wwa_projektowanie-interakcji",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "cyberbezpieczenstwo",
+            "ak": "1_wwa_cyberbezpieczenstwo",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Programowanie aplikacji",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "programowanie-aplikacji",
+            "ak": "1_wwa_programowanie-aplikacji",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Sztuczna inteligencja",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja",
+            "ak": "1_wwa_sztuczna-inteligencja",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Animacja 3D",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "animacja-3d",
+            "ak": "1_wwa_animacja-3d",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Sztuczna inteligencja w zarządzaniu",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Biznes międzynarodowy",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "biznes-miedzynarodowy",
+            "ak": "1_wwa_biznes-miedzynarodowy",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Content management i wizualizacja",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "content-management-i-wizualizacja",
+            "ak": "1_wwa_content-management-i-wizualizacja",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie logistyką i łańcuchem dostaw",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Organizacja eventów, koncertów i imprez sportowych",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie w lotnictwie cywilnym",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie placówkami ochrony zdrowia",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Wellness i SPA",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wellness-i-spa",
+            "ak": "1_wwa_wellness-i-spa",
+            "lk": ""
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Budowa i serwisowanie samochodów",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "1_wwa_budowa-i-serwisowanie-samochodow",
+            "lk": ""
+          },
+          {
+            "k": "Mechanika i budowa maszyn",
+            "s": "Projektowanie i sterowanie komputerowe",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Efektywność energetyczna",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "efektywnosc-energetyczna",
+            "ak": "1_wwa_efektywnosc-energetyczna",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Zrównoważony rozwój",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zrownowazony-rozwoj",
+            "ak": "1_wwa_zrownowazony-rozwoj",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Logistyka przedsiębiorstwa produkcyjnego",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie produkcją",
+            "deg": 1,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-produkcja",
+            "ak": "1_wwa_zarzadzanie-produkcja",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Krajobrazu",
+            "s": "—",
+            "deg": 2,
+            "r10": 1000,
+            "r12": 890,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "architektura-krajobrazu",
+            "ak": "2_wwa_architektura-krajobrazu",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 2,
+            "r10": 1510,
+            "r12": 1290,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wnetrz",
+            "ak": "2_wwa_architektura-wnetrz",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "—",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo",
+            "ak": "2_wwa_budownictwo",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Budownictwo kolejowe",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "budownictwo-kolejowe",
+            "ak": "2_wwa_budownictwo-kolejowe",
+            "lk": ""
+          },
+          {
+            "k": "Budownictwo",
+            "s": "Konstrukcje budowlane i inżynierskie",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 690,
+            "ps": "konstrukcje-budowlane",
+            "ak": "2_wwa_konstrukcje-budowlane",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "—",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "2_wwa_zarzadzanie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zrównoważonym rozwojem",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-zrownowazonym-rozwojem",
+            "ak": "2_wwa_zarzadzanie-zrownowazonym-rozwojem",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Marketing i PR",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "marketing-i-pr",
+            "ak": "2_wwa_marketing-i-pr",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie projektami",
+            "deg": 2,
+            "r10": 1270,
+            "r12": 1090,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-projektami",
+            "ak": "2_wwa_zarzadzanie-projektami",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "—",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "ochrona-srodowiska",
+            "ak": "2_wwa_ochrona-srodowiska",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Menedżer środowiska w przedsiębiorstwie",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "menedzer-srodowiska-w-przedsiebiorstwie",
+            "ak": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
+          },
+          {
+            "k": "Ochrona środowiska",
+            "s": "Odnawialne źródła energii i gospodarka odpadowa",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "—",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-i-inzynieria-produkcji",
+            "ak": "2_wwa_zarzadzanie-i-inzynieria-produkcji",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie przedsiębiorstwem produkcyjnym",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-przedsiebiorstwem-produkcyjnym",
+            "ak": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie i inżynieria produkcji",
+            "s": "Zarządzanie transportem i logistyka",
+            "deg": 2,
+            "r10": 1160,
+            "r12": 990,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-transportem-i-logistyka",
+            "ak": "2_wwa_zarzadzanie-transportem-i-logistyka",
+            "lk": ""
+          }
+        ]
+      },
+      "wro": {
+        "s": [
+          {
+            "k": "Architektura",
+            "s": "—",
+            "deg": 1,
+            "r10": 1030,
+            "r12": 875,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "architektura-wroclaw",
+            "ak": "1_wro_architektura-wroclaw",
+            "lk": ""
+          },
+          {
+            "k": "Architektura Wnętrz",
+            "s": "—",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 150,
+            "wps": 690,
+            "ps": "wroclaw-architektura-wnetrz",
+            "ak": "1_wro_wroclaw-architektura-wnetrz",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "—",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-informatyka",
+            "ak": "1_wro_wroclaw-informatyka",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Inżynieria oprogramowania",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "inzynieria-oprogramowania",
+            "ak": "1_wro_inzynieria-oprogramowania",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Inżynieria sieci i cyberbezpieczeństwo",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "inzynieria-sieci-i-cyberbezpieczenstwo",
+            "ak": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo",
+            "lk": ""
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-finanse-i-rachunkowosc",
+            "ak": "1_wro_wroclaw-finanse-i-rachunkowosc",
+            "lk": ""
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Rachunkowość i podatki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "rachunkowosc-i-podatki",
+            "ak": "1_wro_rachunkowosc-i-podatki",
+            "lk": ""
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Fintech",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "fintech",
+            "ak": "1_wro_fintech",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-logistyka",
+            "ak": "1_wro_wroclaw-logistyka",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "Projektowanie procesów logistycznych",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-procesow-logistycznych",
+            "ak": "1_wro_projektowanie-procesow-logistycznych",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "Menedżer logistyki i transportu",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "menedzer-logistyki-i-transportu",
+            "ak": "1_wro_menedzer-logistyki-i-transportu",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_wroclaw-sprzedaz-i-marketing",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Digital marketing z AI",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_digital-marketing-z-ai",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Menedżer sprzedaży",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_menedzer-sprzedazy",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-komunikacja-cyfrowa-i-media",
+            "ak": "1_wro_wroclaw-komunikacja-cyfrowa-i-media",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Visual Storytelling i Content Marketing",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "visual-storytelling-i-content-marketing",
+            "ak": "1_wro_visual-storytelling-i-content-marketing",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Digital PR i zarządzanie komunikacją marki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "digital-pr-i-zarzadzanie-komunikacja-marki",
+            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-turystyka-i-rekreacja",
+            "ak": "1_wro_wroclaw-turystyka-i-rekreacja",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Hotelarstwo",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "hotelarstwo",
+            "ak": "1_wro_hotelarstwo",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Międzynarodowy biznes turystyczny",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "miedzynarodowy-biznes-turystyczny",
+            "ak": "1_wro_miedzynarodowy-biznes-turystyczny",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Organizacja eventów",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow",
+            "ak": "1_wro_organizacja-eventow",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-zarzadzanie",
+            "ak": "1_wro_wroclaw-zarzadzanie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie przedsiębiorstwem",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-przedsiebiorstwem",
+            "ak": "1_wro_zarzadzanie-przedsiebiorstwem",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zasobami ludzkimi",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-zasobami-ludzkimi",
+            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "—",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-zarzadzanie",
+            "ak": "2_wro_wroclaw-zarzadzanie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Nowoczesny e-marketing",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "nowoczesny-e-marketing",
+            "ak": "2_wro_nowoczesny-e-marketing",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Strategiczne zarządzanie kapitałem ludzkim",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "lk": ""
+          }
+        ],
+        "n": [
+          {
+            "k": "Informatyka",
+            "s": "Programowanie gier",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "programowanie-gier",
+            "ak": "1_wro_programowanie-gier",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "Chmura obliczeniowa i serwery",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "chmura-obliczeniowa-i-serwery",
+            "ak": "1_wro_chmura-obliczeniowa-i-serwery",
+            "lk": ""
+          },
+          {
+            "k": "Informatyka",
+            "s": "AI i automatyzacja",
+            "deg": 1,
+            "r10": 840,
+            "r12": 710,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "ai-i-automatyzacja",
+            "ak": "1_wro_ai-i-automatyzacja",
+            "lk": ""
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Rachunkowość i podatki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "rachunkowosc-i-podatki",
+            "ak": "1_wro_rachunkowosc-i-podatki",
+            "lk": ""
+          },
+          {
+            "k": "Finanse i rachunkowość",
+            "s": "Fintech",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "fintech",
+            "ak": "1_wro_fintech",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "Projektowanie procesów logistycznych",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "projektowanie-procesow-logistycznych",
+            "ak": "1_wro_projektowanie-procesow-logistycznych",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "Menedżer logistyki i transportu",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "menedzer-logistyki-i-transportu",
+            "ak": "1_wro_menedzer-logistyki-i-transportu",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Digital marketing z AI",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "digital-marketing-z-ai",
+            "ak": "1_wro_digital-marketing-z-ai",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "Menedżer sprzedaży",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "menedzer-sprzedazy",
+            "ak": "1_wro_menedzer-sprzedazy",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Visual Storytelling i Content Marketing",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "visual-storytelling-i-content-marketing",
+            "ak": "1_wro_visual-storytelling-i-content-marketing",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "Digital PR i zarządzanie komunikacją marki",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "digital-pr-i-zarzadzanie-komunikacja-marki",
+            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Hotelarstwo",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "hotelarstwo",
+            "ak": "1_wro_hotelarstwo",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Międzynarodowy biznes turystyczny",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "miedzynarodowy-biznes-turystyczny",
+            "ak": "1_wro_miedzynarodowy-biznes-turystyczny",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "Organizacja eventów",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "organizacja-eventow",
+            "ak": "1_wro_organizacja-eventow",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie przedsiębiorstwem",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-przedsiebiorstwem",
+            "ak": "1_wro_zarzadzanie-przedsiebiorstwem",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Zarządzanie zasobami ludzkimi",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie-zasobami-ludzkimi",
+            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Nowoczesny e-marketing",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "nowoczesny-e-marketing",
+            "ak": "2_wro_nowoczesny-e-marketing",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "Strategiczne zarządzanie kapitałem ludzkim",
+            "deg": 2,
+            "r10": 735,
+            "r12": 625,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "lk": ""
+          }
+        ]
+      }
+    },
+    "en": {
+      "wwa": [
+        {
+          "k": "Architecture",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3600,
+            "s": 1900
+          },
+          "ne": {
+            "r": 4500,
+            "s": 2350
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "architecture",
+          "ak": "1_wwa_architecture",
+          "lk": ""
+        },
+        {
+          "k": "Civil Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3000,
+            "s": 1600
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "civil-engineering",
+          "ak": "1_wwa_civil-engineering",
+          "lk": ""
+        },
+        {
+          "k": "Civil Engineering",
+          "s": "Building Structures",
+          "deg": 1,
+          "eu": {
+            "r": 3000,
+            "s": 1600
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "building-structures",
+          "ak": "1_wwa_building-structures",
+          "lk": ""
+        },
+        {
+          "k": "Civil Engineering",
+          "s": "Energy-Saving Technologies In Civil Engineering",
+          "deg": 1,
+          "eu": {
+            "r": 3000,
+            "s": 1600
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "energy-saving-technologies-in-civil-engineering",
+          "ak": "1_wwa_energy-saving-technologies-in-civil-engineering",
+          "lk": ""
+        },
+        {
+          "k": "Civil Engineering",
+          "s": "Railway Construction",
+          "deg": 1,
+          "eu": {
+            "r": 3000,
+            "s": 1600
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "railway-construction",
+          "ak": "1_wwa_railway-construction",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "management",
+          "ak": "1_wwa_management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Artificial Intelligence in Management",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "artificial-intelligence-in-management",
+          "ak": "1_wwa_artificial-intelligence-in-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Civil Aviation Management",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "civil-aviation-management",
+          "ak": "1_wwa_civil-aviation-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Content Management and Visualization",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "content-management-and-visualization",
+          "ak": "1_wwa_content-management-and-visualization",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "International Business",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "international-business",
+          "ak": "1_wwa_international-business",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Logistics and Supply Chain Management",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "logistics-and-supply-chain-management",
+          "ak": "1_wwa_logistics-and-supply-chain-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Sport, Concert and Event Management",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "sport-concert-and-civil-management",
+          "ak": "1_wwa_sport-concert-and-civil-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Wellness and SPA",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wellness-and-spa",
+          "ak": "1_wwa_wellness-and-spa",
+          "lk": ""
+        },
+        {
+          "k": "Mechanical Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 3300,
+            "s": 1750
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "mechanical-engineering",
+          "ak": "1_wwa_mechanical-engineering",
+          "lk": ""
+        },
+        {
+          "k": "Mechanical Engineering",
+          "s": "Construction and Maintenance of Vehicles",
+          "deg": 1,
+          "eu": {
+            "r": 3300,
+            "s": 1750
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "construction-and-maintenance-of-vehicles",
+          "ak": "1_wwa_construction-and-maintenance-of-vehicles",
+          "lk": ""
+        },
+        {
+          "k": "Mechanical Engineering",
+          "s": "Computer Aided Design and Control",
+          "deg": 1,
+          "eu": {
+            "r": 3300,
+            "s": 1750
+          },
+          "ne": {
+            "r": 4000,
+            "s": 2100
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "computer-aided-design-and-control",
+          "ak": "1_wwa_computer-aided-design-and-control",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "computer-engineering",
+          "ak": "1_wwa_computer-engineering",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "3D Animation",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "3d-animation",
+          "ak": "1_wwa_3d-animation",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Applications Programming",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "applications-programming",
+          "ak": "1_wwa_applications-programming",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Artificial Intelligence",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "artificial-intelligence",
+          "ak": "1_wwa_artificial-intelligence",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Cybersecurity",
+          "deg": 1,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "cybersecurity",
+          "ak": "1_wwa_cybersecurity",
+          "lk": ""
+        },
+        {
+          "k": "Architecture",
+          "s": "—",
+          "deg": 2,
+          "eu": {
+            "r": 3600,
+            "s": 1900
+          },
+          "ne": {
+            "r": 4500,
+            "s": 2350
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "architektura",
+          "ak": "2_wwa_architektura",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "—",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "management",
+          "ak": "2_wwa_management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Marketing and Public Relations",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "marketing-and-public-relations",
+          "ak": "2_wwa_marketing-and-public-relations",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Project Management",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "project-management",
+          "ak": "2_wwa_project-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Sustainable Development Management",
+          "deg": 2,
+          "eu": {
+            "r": 2900,
+            "s": 1550
+          },
+          "ne": {
+            "r": 3500,
+            "s": 1850
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "sustainable-development-management",
+          "ak": "2_wwa_sustainable-development-management",
+          "lk": ""
+        }
+      ],
+      "wro": [
+        {
+          "k": "Management",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-management",
+          "ak": "1_wro_wroclaw-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Business management",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-business-management",
+          "ak": "1_wro_business-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Digital Marketing",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-digital-marketing-with-ai",
+          "ak": "1_wro_wroclaw-digital-marketing-with-ai",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "—",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-computer-engineering",
+          "ak": "1_wro_wroclaw-computer-engineering",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Computer networks and cybersecurity",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-computer-networks-and-cybersecurity",
+          "ak": "1_wro_wroclaw-computer-networks-and-cybersecurity",
+          "lk": ""
+        },
+        {
+          "k": "Computer Engineering",
+          "s": "Software engineering",
+          "deg": 1,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-software-engineering",
+          "ak": "1_wro_inzynieria-oprogramowania",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "—",
+          "deg": 2,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-management",
+          "ak": "2_wro_wroclaw-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Brand Manager",
+          "deg": 2,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-brand-management",
+          "ak": "2_wro_wroclaw-brand-management",
+          "lk": ""
+        },
+        {
+          "k": "Management",
+          "s": "Strategic Human Capital Management",
+          "deg": 2,
+          "eu": {
+            "r": 2600,
+            "s": 1400
+          },
+          "ne": {
+            "r": 3000,
+            "s": 1600
+          },
+          "rekr": 200,
+          "wps": 0,
+          "ps": "wroclaw-strategic-human-capital-management",
+          "ak": "2_wro_wroclaw-strategic-human-capital-management",
+          "lk": ""
+        }
+      ]
+    }
+  },
+  "UABY": {
+    "pl": {
+      "Architektura": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2250,
+              "s": 1300,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_architektura-wroclaw"
+            }
+          }
+        }
+      },
+      "Architektura Wnętrz": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1780,
+              "s": 1040,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-architektura-wnetrz"
+            }
+          }
+        }
+      },
+      "Informatyka": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-informatyka"
+            }
+          }
+        }
+      },
+      "Informatyka|Inżynieria oprogramowania": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_inzynieria-oprogramowania"
+            }
+          }
+        }
+      },
+      "Informatyka|Inżynieria sieci i cyberbezpieczeństwo": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo"
+            }
+          }
+        }
+      },
+      "Finanse i rachunkowość": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-finanse-i-rachunkowosc"
+            }
+          }
+        }
+      },
+      "Finanse i rachunkowość|Rachunkowość i podatki": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_rachunkowosc-i-podatki"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_rachunkowosc-i-podatki"
+            }
+          }
+        }
+      },
+      "Finanse i rachunkowość|Fintech": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_fintech"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_fintech"
+            }
+          }
+        }
+      },
+      "Logistyka": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-logistyka"
+            }
+          }
+        }
+      },
+      "Logistyka|Projektowanie procesów logistycznych": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_projektowanie-procesow-logistycznych"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_projektowanie-procesow-logistycznych"
+            }
+          }
+        }
+      },
+      "Logistyka|Menedżer logistyki i transportu": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_menedzer-logistyki-i-transportu"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_menedzer-logistyki-i-transportu"
+            }
+          }
+        }
+      },
+      "Sprzedaż i marketing": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-sprzedaz-i-marketing"
+            }
+          }
+        }
+      },
+      "Sprzedaż i marketing|Digital marketing z AI": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_digital-marketing-z-ai"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_digital-marketing-z-ai"
+            }
+          }
+        }
+      },
+      "Sprzedaż i marketing|Menedżer sprzedaży": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_menedzer-sprzedazy"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_menedzer-sprzedazy"
+            }
+          }
+        }
+      },
+      "Komunikacja cyfrowa i media": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-komunikacja-cyfrowa-i-media"
+            }
+          }
+        }
+      },
+      "Komunikacja cyfrowa i media|Visual Storytelling i Content Marketing": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_visual-storytelling-i-content-marketing"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_visual-storytelling-i-content-marketing"
+            }
+          }
+        }
+      },
+      "Komunikacja cyfrowa i media|Digital PR i zarządzanie komunikacją marki": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+            }
+          }
+        }
+      },
+      "Turystyka i rekreacja": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-turystyka-i-rekreacja"
+            }
+          }
+        }
+      },
+      "Turystyka i rekreacja|Hotelarstwo": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_hotelarstwo"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_hotelarstwo"
+            }
+          }
+        }
+      },
+      "Turystyka i rekreacja|Międzynarodowy biznes turystyczny": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+            }
+          }
+        }
+      },
+      "Turystyka i rekreacja|Organizacja eventów": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_organizacja-eventow"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_organizacja-eventow"
+            }
+          }
+        }
+      },
+      "Zarządzanie": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-zarzadzanie"
+            }
+          }
+        },
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 1400,
+              "s": 850,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_wroclaw-zarzadzanie"
+            }
+          }
+        }
+      },
+      "Zarządzanie|Zarządzanie przedsiębiorstwem": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+            }
+          }
+        }
+      },
+      "Zarządzanie|Zarządzanie zasobami ludzkimi": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+            },
+            "n": {
+              "r": 1200,
+              "s": 750,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+            }
+          }
+        }
+      },
+      "Zarządzanie|Nowoczesny e-marketing": {
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 1400,
+              "s": 850,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_nowoczesny-e-marketing"
+            },
+            "n": {
+              "r": 1400,
+              "s": 850,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_nowoczesny-e-marketing"
+            }
+          }
+        }
+      },
+      "Zarządzanie|Strategiczne zarządzanie kapitałem ludzkim": {
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 1400,
+              "s": 850,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+            },
+            "n": {
+              "r": 1400,
+              "s": 850,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+            }
+          }
+        }
+      },
+      "Informatyka|Programowanie gier": {
+        "1": {
+          "byMode": {
+            "n": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_programowanie-gier"
+            }
+          }
+        }
+      },
+      "Informatyka|Chmura obliczeniowa i serwery": {
+        "1": {
+          "byMode": {
+            "n": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_chmura-obliczeniowa-i-serwery"
+            }
+          }
+        }
+      },
+      "Informatyka|AI i automatyzacja": {
+        "1": {
+          "byMode": {
+            "n": {
+              "r": 1500,
+              "s": 900,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_ai-i-automatyzacja"
+            }
+          }
+        }
+      }
+    },
+    "en": {
+      "Management": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2200,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-management"
+            }
+          }
+        },
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 2300,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_wroclaw-management"
+            }
+          }
+        }
+      },
+      "Management|Business management": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2200,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_business-management"
+            }
+          }
+        }
+      },
+      "Management|Digital Marketing": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2200,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-digital-marketing-with-ai"
+            }
+          }
+        }
+      },
+      "Computer Engineering": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2400,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-computer-engineering"
+            }
+          }
+        }
+      },
+      "Computer Engineering|Computer networks and cybersecurity": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2400,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_wroclaw-computer-networks-and-cybersecurity"
+            }
+          }
+        }
+      },
+      "Computer Engineering|Software engineering": {
+        "1": {
+          "byMode": {
+            "s": {
+              "r": 2400,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "1_wro_inzynieria-oprogramowania"
+            }
+          }
+        }
+      },
+      "Management|Brand Manager": {
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 2300,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_wroclaw-brand-management"
+            }
+          }
+        }
+      },
+      "Management|Strategic Human Capital Management": {
+        "2": {
+          "byMode": {
+            "s": {
+              "r": 2300,
+              "s": 0,
+              "rekr": 20,
+              "apl": 100,
+              "ak": "2_wro_wroclaw-strategic-human-capital-management"
+            }
+          }
+        }
+      }
+    }
+  },
+  "UABY_ROWS": [
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Architektura",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 2250,
+        "s": 1300,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_architektura-wroclaw"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Architektura Wnętrz",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1780,
+        "s": 1040,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-architektura-wnetrz"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Informatyka",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-informatyka"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Informatyka",
+      "s": "Inżynieria oprogramowania",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_inzynieria-oprogramowania"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Informatyka",
+      "s": "Inżynieria sieci i cyberbezpieczeństwo",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Finanse i rachunkowość",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-finanse-i-rachunkowosc"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Finanse i rachunkowość",
+      "s": "Rachunkowość i podatki",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_rachunkowosc-i-podatki"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Finanse i rachunkowość",
+      "s": "Fintech",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_fintech"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Logistyka",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-logistyka"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Logistyka",
+      "s": "Projektowanie procesów logistycznych",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_projektowanie-procesow-logistycznych"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Logistyka",
+      "s": "Menedżer logistyki i transportu",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_menedzer-logistyki-i-transportu"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Sprzedaż i marketing",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-sprzedaz-i-marketing"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Sprzedaż i marketing",
+      "s": "Digital marketing z AI",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_digital-marketing-z-ai"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Sprzedaż i marketing",
+      "s": "Menedżer sprzedaży",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_menedzer-sprzedazy"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Komunikacja cyfrowa i media",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-komunikacja-cyfrowa-i-media"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Visual Storytelling i Content Marketing",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_visual-storytelling-i-content-marketing"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Digital PR i zarządzanie komunikacją marki",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Turystyka i rekreacja",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-turystyka-i-rekreacja"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Turystyka i rekreacja",
+      "s": "Hotelarstwo",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_hotelarstwo"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Turystyka i rekreacja",
+      "s": "Międzynarodowy biznes turystyczny",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Turystyka i rekreacja",
+      "s": "Organizacja eventów",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_organizacja-eventow"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-zarzadzanie"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "Zarządzanie przedsiębiorstwem",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "Zarządzanie zasobami ludzkimi",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "",
+      "deg": 2,
+      "fees": {
+        "r": 1400,
+        "s": 850,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_wroclaw-zarzadzanie"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "Nowoczesny e-marketing",
+      "deg": 2,
+      "fees": {
+        "r": 1400,
+        "s": 850,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_nowoczesny-e-marketing"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "s",
+      "k": "Zarządzanie",
+      "s": "Strategiczne zarządzanie kapitałem ludzkim",
+      "deg": 2,
+      "fees": {
+        "r": 1400,
+        "s": 850,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Informatyka",
+      "s": "Programowanie gier",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_programowanie-gier"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Informatyka",
+      "s": "Chmura obliczeniowa i serwery",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_chmura-obliczeniowa-i-serwery"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Informatyka",
+      "s": "AI i automatyzacja",
+      "deg": 1,
+      "fees": {
+        "r": 1500,
+        "s": 900,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_ai-i-automatyzacja"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Finanse i rachunkowość",
+      "s": "Rachunkowość i podatki",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_rachunkowosc-i-podatki"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Finanse i rachunkowość",
+      "s": "Fintech",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_fintech"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Logistyka",
+      "s": "Projektowanie procesów logistycznych",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_projektowanie-procesow-logistycznych"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Logistyka",
+      "s": "Menedżer logistyki i transportu",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_menedzer-logistyki-i-transportu"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Sprzedaż i marketing",
+      "s": "Digital marketing z AI",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_digital-marketing-z-ai"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Sprzedaż i marketing",
+      "s": "Menedżer sprzedaży",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_menedzer-sprzedazy"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Visual Storytelling i Content Marketing",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_visual-storytelling-i-content-marketing"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Komunikacja cyfrowa i media",
+      "s": "Digital PR i zarządzanie komunikacją marki",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Turystyka i rekreacja",
+      "s": "Hotelarstwo",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_hotelarstwo"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Turystyka i rekreacja",
+      "s": "Międzynarodowy biznes turystyczny",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Turystyka i rekreacja",
+      "s": "Organizacja eventów",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_organizacja-eventow"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Zarządzanie",
+      "s": "Zarządzanie przedsiębiorstwem",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Zarządzanie",
+      "s": "Zarządzanie zasobami ludzkimi",
+      "deg": 1,
+      "fees": {
+        "r": 1200,
+        "s": 750,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Zarządzanie",
+      "s": "Nowoczesny e-marketing",
+      "deg": 2,
+      "fees": {
+        "r": 1400,
+        "s": 850,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_nowoczesny-e-marketing"
+      }
+    },
+    {
+      "lang": "pl",
+      "mode": "n",
+      "k": "Zarządzanie",
+      "s": "Strategiczne zarządzanie kapitałem ludzkim",
+      "deg": 2,
+      "fees": {
+        "r": 1400,
+        "s": 850,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 2200,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-management"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "Business management",
+      "deg": 1,
+      "fees": {
+        "r": 2200,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_business-management"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "Digital Marketing",
+      "deg": 1,
+      "fees": {
+        "r": 2200,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-digital-marketing-with-ai"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Computer Engineering",
+      "s": "",
+      "deg": 1,
+      "fees": {
+        "r": 2400,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-computer-engineering"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Computer Engineering",
+      "s": "Computer networks and cybersecurity",
+      "deg": 1,
+      "fees": {
+        "r": 2400,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_wroclaw-computer-networks-and-cybersecurity"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Computer Engineering",
+      "s": "Software engineering",
+      "deg": 1,
+      "fees": {
+        "r": 2400,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "1_wro_inzynieria-oprogramowania"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "",
+      "deg": 2,
+      "fees": {
+        "r": 2300,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_wroclaw-management"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "Brand Manager",
+      "deg": 2,
+      "fees": {
+        "r": 2300,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_wroclaw-brand-management"
+      }
+    },
+    {
+      "lang": "en",
+      "mode": "s",
+      "k": "Management",
+      "s": "Strategic Human Capital Management",
+      "deg": 2,
+      "fees": {
+        "r": 2300,
+        "s": 0,
+        "rekr": 20,
+        "apl": 100,
+        "ak": "2_wro_wroclaw-strategic-human-capital-management"
+      }
+    }
+  ],
+  "PROMOS": [
+    {
+      "id": "jednorazowo",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "both",
+      "name": "Płatność z góry (rabat jednorazowy)",
+      "tag": "−5% lub −10%",
+      "short": "Zapłać za semestr lub rok z góry i uzyskaj rabat.",
+      "full": "Termin: do 10 września (semestr zimowy / cały rok) lub 10 marca (semestr letni).  \n5% przy płatności semestralnej, \n10% przy płatności za rok.",
+      "sw": [
+        "szybki",
+        "grupie",
+        "techart"
+      ],
+      "isBonus": true,
+      "disc": {
+        "t": "bonus",
+        "v": 0.0
+      }
+    },
+    {
+      "id": "szybki",
+      "lng": "pl",
+      "deg": 1,
+      "cty": "both",
+      "name": "Szybki Start",
+      "tag": "−1 000 zł",
+      "short": "Rejestracja do 30.06.2026 i podpisanie umowy do 31.07.2026.",
+      "full": "Zarejestruj się do 30.06.2026 i podpisz umowę do 31.07.2026.\nZniżka 1 000 zł rozliczona proporcjonalnie w obu semestrach. \nŁączy się z „W Grupie Taniej\" i rabatem za płatność z góry.",
+      "sw": [
+        "grupie",
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 1000.0
+      }
+    },
+    {
+      "id": "grupie",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "both",
+      "name": "W Grupie Taniej",
+      "tag": "−200 / −400 zł",
+      "short": "Zapis razem z grupą znajomych lub rodziny (do 30.09.2026).",
+      "full": "Zapisz się razem z grupą. Jeden z grupy zgłasza wszystkich z 7-dniowym wyprzedzeniem. \nDokumenty wszyscy składają tego samego dnia (do 30.09.2026). Łączy się z „Szybki Start\" i rabatem za płatność z góry.",
+      "sw": [
+        "szybki",
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 200.0
+      },
+      "so": [
+        {
+          "v": 200,
+          "l": "2–4 osoby (−200 zł)"
+        },
+        {
+          "v": 400,
+          "l": "5+ osób (−400 zł)"
+        }
+      ]
+    },
+    {
+      "id": "techart",
+      "lng": "pl",
+      "deg": 1,
+      "cty": "wwa",
+      "name": "Absolwent szkoły tech./artystycznej",
+      "tag": "−1 200 zł",
+      "short": "Tegoroczny maturzysta z profilu technicznego lub artystycznego.",
+      "full": "Tegoroczni maturzyści ze szkoły technicznej lub artystycznej (profil wynikający z nazwy szkoły lub kierunku na świadectwie). Zniżka 1 200 zł rozliczona proporcjonalnie. Łączy się z rabatem za płatność z góry.",
+      "sw": [
+        "jednorazowo"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "fix",
+        "v": 1200.0
+      }
+    },
+    {
+      "id": "przejscie",
+      "lng": "pl",
+      "deg": 0,
+      "cty": "wwa",
+      "name": "Przejście do ATA",
+      "tag": "−30%",
+      "short": "Przeniesienie z innej uczelni – zniżka w semestrze startu.",
+      "full": "Kandydaci przenoszący się z innej uczelni. Zniżka 30% od czesnego w semestrze rozpoczęcia studiów. \nWysokość miesięcznej raty czesnego po uwzględnieniu zniżki, wskazana w kalkulatorze, obowiązuje wyłącznie w odniesieniu do pierwszych rat: 6 rat w przypadku płatności w 12 ratach oraz 5 rat w przypadku płatności w 10 ratach.\nZniżka nie przysługuje osobom wcześniej skreślonym z listy studentów ATA/WSEiZ. Nie łączy się z innymi promocjami.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.3
+      }
+    },
+    {
+      "id": "absolwent_pl",
+      "lng": "pl",
+      "deg": 2,
+      "cty": "both",
+      "name": "Absolwent Kontynuuje z Rabatem",
+      "tag": "−20% / −30%",
+      "short": "Absolwenci I stopnia ATA/WAB na całe studia II stopnia.",
+      "full": "Absolwenci studiów I stopnia ATA, WAB lub WSH: 20% zniżki na całe czesne studiów II stopnia. Wynik końcowy 5,0 (Wrocław): 30%. Nie łączy się z innymi promocjami.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.2
+      },
+      "so": [
+        {
+          "v": 0.2,
+          "l": "Wynik standardowy (−20%)"
+        },
+        {
+          "v": 0.3,
+          "l": "Wynik 5,0 / Wrocław (−30%)"
+        }
+      ]
+    },
+    {
+      "id": "earlybirds",
+      "lng": "en",
+      "deg": 0,
+      "cty": "both",
+      "name": "Early Birds",
+      "tag": "−10%",
+      "short": "EU/CIS – rejestracja do 15.05.2026 + opłata roczna z góry.",
+      "full": "For EU/CIS applicants: register by 15.05.2026 and pay full year upfront. 10% off for 2026/2027.\n Requires annual payment plan. Cannot be combined with \"Graduate Continues\".",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.1
+      },
+      "needRok": true
+    },
+    {
+      "id": "absolwent_en",
+      "lng": "en",
+      "deg": 2,
+      "cty": "both",
+      "name": "Graduate Continues with Discount",
+      "tag": "−20%",
+      "short": "UTA/WSEiZ graduates – 20% off total Master's tuition.",
+      "full": "Cannot combine with Early Birds.",
+      "sw": [
+        "—"
+      ],
+      "isBonus": false,
+      "disc": {
+        "t": "pct",
+        "v": 0.2
+      }
+    }
+  ]
+}

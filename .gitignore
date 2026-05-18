@@ -5,6 +5,7 @@
 
 # Project
 .sass-cache
+_google_prices.json
 #assets/src
 node_modules/
 

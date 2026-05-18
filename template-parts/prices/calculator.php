@@ -32,6 +32,19 @@ if (!empty($fixed_lang)) {
 }
 
 $initial_lang = $is_en ? 'en' : 'pl';
+
+$regulamin_urls = apply_filters('ata_prices_regulamin_urls', [
+	'wwa' => [
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/LgF9TpCerLtGHb2',
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/HafmSQsZjqdZEwg',
+	],
+	'wro' => [
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/Jc3zWDzGwQgXPGB',
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/of9kNrHXxdMEjYT',
+	],
+]);
+$initial_study_lang = !empty($fixed_lang) ? strtolower(trim($fixed_lang)) : $initial_lang;
+$regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls['wwa']['pl'];
 ?>
 
 <script>
@@ -129,6 +142,7 @@ $initial_lang = $is_en ? 'en' : 'pl';
 			'emptyText' => $is_en
 				? __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata')
 				: __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
+			'regulaminUrls' => $regulamin_urls,
 		], JSON_UNESCAPED_UNICODE); ?>
 	</script>
 
@@ -243,10 +257,9 @@ $initial_lang = $is_en ? 'en' : 'pl';
 	</template>
 
 	<div id="promos" class="promos-section" style="display:none" data-hide-when-empty>
-		<?php $regulamin_url = apply_filters('ata_prices_regulamin_url', 'https://chmurka.wseiz.pl/index.php/s/tsE4yJ8ftXGkXdf#pdfviewer'); ?>
 		<div class="sec sec--row">
 			<span><?php echo $is_en ? esc_html__('Discounts and promotions', 'akademiata') : esc_html__('Zniżki i promocje', 'akademiata'); ?></span>
-			<a class="sec-link" href="<?php echo esc_url($regulamin_url); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="sec-link" data-regulamin-link href="<?php echo esc_url($regulamin_url); ?>" target="_blank" rel="noopener noreferrer">
 				<?php echo $is_en ? esc_html__('Terms', 'akademiata') : esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
 			</a>
 		</div>

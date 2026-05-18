@@ -5,7 +5,7 @@
  */
 function ata_build_smart_key($post_id, $post) {
     // 1. Stopień
-    $stopien = ($post->post_type === 'bachelor') ? '1' : '2';
+    $stopien =  ($post->post_type === 'bachelor') ? '1' : '2';
 
     // 2. Miasto (Pobierane poprawnie z taksonomii 'city')
     $city_code = 'uni'; 
@@ -98,19 +98,19 @@ function ata_auto_save_smart_key($post_id, $post) {
 /**
  * 3. JEDNORAZOWY AUTOMAT W TLE 
  */
-add_action('admin_init', 'ata_background_key_generator');
-function ata_background_key_generator() {
-    if (!get_option('ata_smart_keys_generated_v8')) {
+// add_action('admin_init', 'ata_background_key_generator');
+// function ata_background_key_generator() {
+//     if (!get_option('ata_smart_keys_generated_v8')) {
         
-        $posts = get_posts(['post_type' => ['bachelor', 'master'], 'numberposts' => -1, 'post_status' => 'any']);
-        foreach ($posts as $p) {
-            $key = ata_build_smart_key($p->ID, $p);
-            if ($key) update_post_meta($p->ID, 'logical_sync_key', $key);
-        }
+//         $posts = get_posts(['post_type' => ['bachelor', 'master'], 'numberposts' => -1, 'post_status' => 'any']);
+//         foreach ($posts as $p) {
+//             $key = ata_build_smart_key($p->ID, $p);
+//             if ($key) update_post_meta($p->ID, 'logical_sync_key', $key);
+//         }
         
-        add_option('ata_smart_keys_generated_v8', '1');
-    }
-}
+//         add_option('ata_smart_keys_generated_v8', '1');
+//     }
+// }
 
 /**
  * 4. PANEL BOCZNY W EDYCJI: Pokazuje gotowy klucz i przycisk do skopiowania

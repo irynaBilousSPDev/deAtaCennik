@@ -121,6 +121,32 @@ def _read_sheet(xls: pd.ExcelFile, name: str) -> Optional[pd.DataFrame]:
     df = pd.read_excel(xls, name)
     return df.fillna("")
 
+
+def _find_header_row(raw: pd.DataFrame, hints: List[str], max_scan: int = 25) -> int:
+    limit = min(max_scan, len(raw))
+    for i in range(limit):
+        cells = [_norm_str(v).lower() for v in raw.iloc[i].tolist()]
+        if all(any(hint in cell for cell in cells) for hint in hints):
+            return i
+    return -1
+
+
+def _read_uaby_sheet(xls: pd.ExcelFile) -> pd.DataFrame:
+    """Read 🇺🇦 Ceny_UABY with auto-detected header (A Język, B Tryb, …)."""
+    raw = pd.read_excel(xls, TAB_UABY, header=None).fillna("")
+    header_idx = _find_header_row(raw, ["język", "tryb", "kierunek", "stop"])
+    if header_idx < 0:
+        header_idx = _find_header_row(raw, ["język", "kierunek", "stop"])
+    if header_idx < 0:
+        raise ValueError("Ceny_UABY: header row not found (need Język, Tryb, Kierunek, Stopień).")
+    df = pd.read_excel(xls, TAB_UABY, header=header_idx).fillna("")
+    return df
+
+
+def _norm_spec(v: Any) -> str:
+    s = _norm_str(v)
+    return "" if s in {"—", "-"} else s
+
 def _extract_slug(url: Any) -> str:
     """Extract last URL segment for page slug matching the JS logic."""
     url = _norm_str(url)
@@ -285,32 +311,93 @@ def _parse_sa_map(df: pd.DataFrame) -> Dict[str, str]:
     raise NotImplementedError("Not used for the current emoji-based sheet.")
 
 
+def _uaby_storage_key(k: str, spec: str) -> str:
+    kk = _norm_str(k)
+    ss = _norm_str(spec)
+    if not ss or ss in {"—", "-"}:
+        return kk
+    return f"{kk}|{ss}"
+
+
+def _parse_eur(v: Any) -> int:
+    s = _norm_str(v).replace(" ", "").replace("€", "").replace(",", ".")
+    m = re.search(r"[-+]?\d*\.?\d+", s)
+    return int(float(m.group(0))) if m else 0
+
+
+def _parse_tryb(v: Any) -> str:
+    t = _norm_str(v).lower()
+    if "niestacjonarne" in t:
+        return "n"
+    return "s"
+
+
+def _ensure_uaby_by_mode(slot: Any) -> Dict[str, Any]:
+    if isinstance(slot, dict) and "byMode" in slot:
+        return slot
+    if isinstance(slot, dict) and ("r" in slot or "rekr" in slot):
+        return {"byMode": {"s": slot}}
+    return {"byMode": {}}
+
+
 def _parse_uaby(df: pd.DataFrame) -> Dict[str, Dict[str, Dict[int, Dict[str, int]]]]:
-    # Matches your headers:
-    #   Język, Kierunek, Stopień, Opłata roczna (EUR), Opłata semestralna (EUR)
+    # New layout: Język | Tryb | Stopień | Kierunek | Specjalność | Opłata roczna | …
+    # Legacy: Język | Kierunek | Stopień | Opłata roczna | Opłata semestralna | …
     lang_col = next((c for c in df.columns if c.lower() in {"język", "jezyk", "lang"}), None)
-    prog_col = next((c for c in df.columns if c.lower() == "kierunek" or c.lower() == "program"), None)
+    tryb_col = next((c for c in df.columns if "tryb" in c.lower()), None)
+    prog_col = next(
+        (c for c in df.columns if "kierunek" in c.lower() or c.lower() == "program"),
+        None,
+    )
+    spec_col = next((c for c in df.columns if c.lower().startswith("specjal")), None)
     deg_col = next((c for c in df.columns if c.lower().startswith("stop")), None)
     ann_col = next((c for c in df.columns if "opłata roczna" in c.lower() or "annual" in c.lower()), None)
     sem_col = next((c for c in df.columns if "opłata semestralna" in c.lower() or "semester" in c.lower()), None)
-    if not (lang_col and prog_col and deg_col and ann_col and sem_col):
+    rekr_col = next((c for c in df.columns if "rekrutacyjna" in c.lower()), None)
+    apl_col = next((c for c in df.columns if "aplikacyjna" in c.lower()), None)
+    ak_col = next((c for c in df.columns if "klucz" in c.lower() and "smartapply" in c.lower()), None)
+    if not (lang_col and prog_col and deg_col and ann_col):
         raise ValueError("Ceny_UABY: missing required columns.")
 
     out: Dict[str, Dict[str, Dict[int, Dict[str, int]]]] = {"pl": {}, "en": {}}
+    rows_out: List[Dict[str, Any]] = []
     for _, row in df.iterrows():
         lng = _norm_str(row[lang_col]).lower() or "pl"
         if lng not in out:
             continue
         prog = _norm_str(row[prog_col])
+        spec = _norm_spec(row[spec_col]) if spec_col else ""
         deg = _to_int(row[deg_col], 0)
         if not prog or not deg:
             continue
-        ann = _to_int(row[ann_col], 0)
-        sem = _to_int(row[sem_col], 0) if sem_col else 0
+        ann = _parse_eur(row[ann_col])
+        sem = _parse_eur(row[sem_col]) if sem_col else 0
+        rekr = _parse_eur(row[rekr_col]) if rekr_col else 20
+        apl = _parse_eur(row[apl_col]) if apl_col else 100
+        ak = _norm_str(row[ak_col]) if ak_col else ""
+        mode_key = _parse_tryb(row[tryb_col]) if tryb_col else "s"
 
-        out[lng].setdefault(prog, {})
-        out[lng][prog][deg] = {"r": ann, "s": sem}
-    return out
+        key = _uaby_storage_key(prog, spec)
+        out[lng].setdefault(key, {})
+        out[lng][key].setdefault(deg, {"byMode": {}})
+        out[lng][key][deg] = _ensure_uaby_by_mode(out[lng][key][deg])
+        fees = {
+            "r": ann,
+            "s": sem,
+            "rekr": rekr or 20,
+            "apl": apl or 100,
+            "ak": ak,
+        }
+        out[lng][key][deg]["byMode"][mode_key] = fees
+        rows_out.append({
+            "lang": lng,
+            "mode": mode_key,
+            "k": prog,
+            "s": spec,
+            "deg": deg,
+            "fees": fees,
+        })
+    return out, rows_out
 
 
 def _parse_promos(df: pd.DataFrame) -> List[Dict[str, Any]]:
@@ -432,11 +519,13 @@ def generate_json(sheet: str, out_path: str) -> None:
         "BASE_EN": DEFAULT_BASE_EN,
         "SA": {},
         "SA_EN": {},
+        "SA_ROWS": [],
         "RAW": {
             "pl": {"wwa": {"s": [], "n": []}, "wro": {"s": [], "n": []}},
             "en": {"wwa": [], "wro": []},
         },
         "UABY": {"pl": {}, "en": {}},
+        "UABY_ROWS": [],
         "PROMOS": [],
     }
 
@@ -457,6 +546,10 @@ def generate_json(sheet: str, out_path: str) -> None:
             is_new = bool(lang_col and url_col and key_col_new)
 
             if is_new:
+                city_col = next((c for c in df.columns if "miasto" in c.lower()), None)
+                deg_col = next((c for c in df.columns if str(c).lower().startswith("stop")), None)
+                prog_col = next((c for c in df.columns if "kierunek" in c.lower()), None)
+                spec_col = next((c for c in df.columns if str(c).lower().startswith("specjal")), None)
                 for _, row in df.iterrows():
                     lng = _norm_str(row.get(lang_col, "")).lower()
                     k = _norm_str(row.get(key_col_new, ""))
@@ -467,6 +560,17 @@ def generate_json(sheet: str, out_path: str) -> None:
                         data["SA_EN"][k] = url
                     else:
                         data["SA"][k] = url
+                    city_raw = _norm_str(row.get(city_col, "")).lower() if city_col else ""
+                    city = "wro" if "wroc" in city_raw else ("wwa" if "warsz" in city_raw else "")
+                    data["SA_ROWS"].append({
+                        "lang": "en" if lng == "en" else "pl",
+                        "key": k,
+                        "url": url,
+                        "city": city,
+                        "deg": _to_int(row.get(deg_col, 0), 0) if deg_col else 0,
+                        "k": _norm_str(row.get(prog_col, "")) if prog_col else "",
+                        "s": _norm_spec(row.get(spec_col, "")) if spec_col else "",
+                    })
                 _safe_print("Parsed: SmartApply_URLs (new format)")
             else:
                 key_col = "Klucz (ak)"
@@ -504,12 +608,14 @@ def generate_json(sheet: str, out_path: str) -> None:
         except Exception as e:
             _safe_print(f"Warning: Programy_EN parse failed: {e}")
 
-    # --- 🇺🇦 Ceny_UABY (skip first row with instructions) ---
+    # --- 🇺🇦 Ceny_UABY (header auto-detect: A Język, B Tryb, …) ---
     if TAB_UABY in xls.sheet_names:
         try:
-            df = pd.read_excel(xls, TAB_UABY, skiprows=1).fillna("")
-            data["UABY"] = _parse_uaby(df)
-            _safe_print("Parsed: Ceny_UABY")
+            df = _read_uaby_sheet(xls)
+            data["UABY"], data["UABY_ROWS"] = _parse_uaby(df)
+            pl_rows = sum(1 for r in data["UABY_ROWS"] if r.get("lang") == "pl")
+            en_rows = sum(1 for r in data["UABY_ROWS"] if r.get("lang") == "en")
+            _safe_print(f"Parsed: Ceny_UABY ({len(data['UABY_ROWS'])} rows: PL={pl_rows}, EN={en_rows})")
         except Exception as e:
             _safe_print(f"Warning: Ceny_UABY parse failed: {e}")
     else:
@@ -533,7 +639,7 @@ def generate_json(sheet: str, out_path: str) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sheet", required=True, help="Google Sheet URL or sheet ID")
-    ap.add_argument("--out", default="kalkulator-data.json", help="Output JSON path")
+    ap.add_argument("--out", default="prices.json", help="Output JSON path (theme fallback: prices.json)")
     args = ap.parse_args()
 
     generate_json(args.sheet, args.out)

@@ -70,10 +70,12 @@ Important: if your site serves compiled assets, make sure you run `npm run build
 
 ## Apps Script backup (pricing JSON web app)
 
-Backup copy is kept in:
+Full script + step-by-step setup (new Google account, deploy, WordPress URL):
 
-- `apps-script/prices-json-webapp.gs`
-- `apps-script/README.md`
+- **`apps-script/README.md`** — start here
+- **`apps-script/prices-json-webapp.gs`** — copy entire file into Google Apps Script
+
+Quick test URL after deploy: `https://script.google.com/macros/s/YOUR_ID/exec?force=1`
 
 ## Deployment notes (PhpStorm)
 

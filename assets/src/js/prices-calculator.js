@@ -46,6 +46,23 @@ export default function initPricesCalculator(_$, opts = {}) {
   function t(key, fallback) { return (I18N && I18N[key]) ? I18N[key] : fallback; }
   const UI_LANG = (window.PRICES_UI_LANG || '').toString().trim() || (window.lang || 'pl');
 
+  function getRegulaminUrl(city, lang) {
+    const urls = I18N && I18N.regulaminUrls ? I18N.regulaminUrls : null;
+    if (!urls) return null;
+    const c = city || window.city || 'wwa';
+    const l = lang || window.lang || 'pl';
+    const cityUrls = urls[c];
+    if (!cityUrls) return null;
+    return cityUrls[l] || cityUrls.pl || null;
+  }
+
+  function updateRegulaminLink() {
+    const href = getRegulaminUrl();
+    if (!href) return;
+    const link = document.querySelector('[data-regulamin-link]');
+    if (link) link.setAttribute('href', href);
+  }
+
   function applyPromoOverride(promo) {
     // Keep eligibility based on promo.lng (study language),
     // but display text based on WPML UI language (UI_LANG).
@@ -90,6 +107,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.SA_ROWS = window.SA_ROWS || [];
   window.RAW = window.RAW || { pl: { wwa: { s: [], n: [] }, wro: { s: [], n: [] } }, en: { wwa: [], wro: [] } };
   window.UABY = window.UABY || { pl: {}, en: {} };
+  window.UABY_ROWS = window.UABY_ROWS || [];
   window.PROMOS = window.PROMOS || [];
 
   window.BASE = window.BASE || 'https://smartapply.akademiata.pl/pl/apply/';
@@ -132,7 +150,8 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.SA_EN = data.SA_EN || {};
     window.SA_ROWS = Array.isArray(data.SA_ROWS) ? data.SA_ROWS : (window.SA_ROWS || []);
     window.RAW = data.RAW || window.RAW;
-    window.UABY = data.UABY || window.UABY;
+    window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
+    window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
     window.PROMOS = data.PROMOS || [];
     window.BASE = data.BASE || window.BASE;
     window.BASE_EN = data.BASE_EN || window.BASE_EN;
@@ -483,6 +502,282 @@ export default function initPricesCalculator(_$, opts = {}) {
     // In sheets/data, "—" often means "no specialization"
     return (s === '—' || s === '-') ? '' : s;
   }
+  function uabyLookupKey(k, s) {
+    const kk = normTxt(k);
+    const ss = normSpec(s);
+    return ss ? `${kk}|${ss}` : kk;
+  }
+  function parseUabyStorageKey(storageKey) {
+    const key = normTxt(storageKey);
+    const idx = key.indexOf('|');
+    if (idx < 0) return { k: key, s: null };
+    return { k: key.slice(0, idx), s: key.slice(idx + 1) || null };
+  }
+  function isUabyFeeObject(o) {
+    return !!(o && typeof o === 'object' && (o.r !== undefined || o.rekr !== undefined || o.apl !== undefined));
+  }
+  function unpackUabyDegCell(cell) {
+    if (!cell) return null;
+    if (cell.byMode && typeof cell.byMode === 'object') return cell.byMode;
+    if (isUabyFeeObject(cell)) return { s: cell };
+    const byMode = {};
+    if (isUabyFeeObject(cell.s)) byMode.s = cell.s;
+    if (isUabyFeeObject(cell.n)) byMode.n = cell.n;
+    if (Object.keys(byMode).length) return byMode;
+    return null;
+  }
+  function rebuildUabyTree(uaby, rows) {
+    if (Array.isArray(rows) && rows.length) {
+      const out = { pl: {}, en: {} };
+      rows.forEach(row => {
+        if (!row) return;
+        const lang = String(row.lang || '').toLowerCase() === 'en' ? 'en' : 'pl';
+        const k = normTxt(row.k);
+        if (!k) return;
+        const spec = normSpec(row.s) || '';
+        const deg = String(parseInt(row.deg, 10) || 0);
+        if (!deg || deg === '0') return;
+        const mode = row.mode === 'n' ? 'n' : 's';
+        const sk = uabyLookupKey(k, spec);
+        const fees = row.fees || row;
+        if (!out[lang][sk]) out[lang][sk] = {};
+        if (!out[lang][sk][deg] || !out[lang][sk][deg].byMode) out[lang][sk][deg] = { byMode: {} };
+        out[lang][sk][deg].byMode[mode] = {
+          r: Number(fees.r || 0),
+          s: Number(fees.s || 0),
+          rekr: Number(fees.rekr != null ? fees.rekr : 20),
+          apl: Number(fees.apl != null ? fees.apl : 100),
+          ak: normTxt(fees.ak)
+        };
+      });
+      return out;
+    }
+    const out = { pl: {}, en: {} };
+    ['pl', 'en'].forEach(lang => {
+      const src = (uaby && uaby[lang]) ? uaby[lang] : {};
+      Object.keys(src).forEach(sk => {
+        if (!out[lang][sk]) out[lang][sk] = {};
+        Object.keys(src[sk]).forEach(deg => {
+          const unpacked = unpackUabyDegCell(src[sk][deg]);
+          if (!unpacked) return;
+          out[lang][sk][deg] = { byMode: {} };
+          if (unpacked.s) out[lang][sk][deg].byMode.s = unpacked.s;
+          if (unpacked.n) out[lang][sk][deg].byMode.n = unpacked.n;
+        });
+      });
+    });
+    return out;
+  }
+  function resolveUabyFees(lang, courseName, specName, deg, mode) {
+    const tbl = window.UABY[lang] || {};
+    const d = String(deg);
+    const m = mode || window.mode || 's';
+    const lkSpec = uabyLookupKey(courseName, specName);
+    const lkBase = uabyLookupKey(courseName, null);
+    let byMode = null;
+    if (tbl[lkSpec] && tbl[lkSpec][d]) byMode = unpackUabyDegCell(tbl[lkSpec][d]);
+    if (!byMode && normSpec(specName) && tbl[lkBase] && tbl[lkBase][d]) byMode = unpackUabyDegCell(tbl[lkBase][d]);
+    if (!byMode && !normSpec(specName) && tbl[lkBase] && tbl[lkBase][d]) byMode = unpackUabyDegCell(tbl[lkBase][d]);
+    if (!byMode) return null;
+    return byMode[m] || null;
+  }
+  function getUabyModesForProgram(lang, courseName, specName, deg) {
+    const modes = [];
+    if (resolveUabyFees(lang, courseName, specName, deg, 's')) modes.push('s');
+    if (resolveUabyFees(lang, courseName, specName, deg, 'n')) modes.push('n');
+    return modes;
+  }
+  function getWroPlModes(k, spec, deg) {
+    const sl = (window.RAW.pl.wro && window.RAW.pl.wro.s) || [];
+    const nl = (window.RAW.pl.wro && window.RAW.pl.wro.n) || [];
+    const cleanK = normTxt(k).toLowerCase();
+    const wantSpec = normSpec(spec).trim().toLowerCase();
+    const matchRow = (it) => {
+      if (Number(it.deg) !== Number(deg)) return false;
+      if (!matchCourseName(cleanK, it.k)) return false;
+      const itemSpec = normSpec(it.s).trim().toLowerCase();
+      if (wantSpec) return itemSpec === wantSpec;
+      return !itemSpec;
+    };
+    const modes = [];
+    if (sl.some(matchRow)) modes.push('s');
+    if (nl.some(matchRow)) modes.push('n');
+    return modes;
+  }
+  function modesForUabyProgram(u) {
+    if (!u) return [];
+    const modes = new Set();
+    getUabyModesForProgram(window.lang, u.k, u.s, u.deg).forEach(m => modes.add(m));
+    if (u.uabyByMode) {
+      if (u.uabyByMode.s) modes.add('s');
+      if (u.uabyByMode.n) modes.add('n');
+    }
+    // PL only: optional tryb from Programy_PL (EN UABY sheet has Stacjonarne only).
+    if (window.lang === 'pl') {
+      getWroPlModes(u.k, u.s, u.deg).forEach(m => modes.add(m));
+    }
+    if (Array.isArray(u.modes)) u.modes.forEach(m => modes.add(m));
+    const ordered = ['s', 'n'].filter(m => modes.has(m));
+    return ordered.length ? ordered : ['s'];
+  }
+  function buildUabyByMode(lang, courseName, specName, deg) {
+    const byMode = {};
+    ['s', 'n'].forEach(m => {
+      const f = resolveUabyFees(lang, courseName, specName, deg, m);
+      if (f) byMode[m] = f;
+    });
+    return byMode;
+  }
+  function getUabyRow(u) {
+    if (!u) return null;
+    // EN 🇺🇦 Ceny_UABY: Stacjonarne only (column B); no semester column used.
+    const m = window.lang === 'en' ? 's' : (window.mode || 's');
+    if (u.uabyByMode && u.uabyByMode[m]) return u.uabyByMode[m];
+    if (u.uabyByMode && u.uabyByMode.s) return u.uabyByMode.s;
+    return resolveUabyFees(window.lang, u.k, u.s, u.deg, m);
+  }
+  function uabyCoversProgram(lang, courseName, deg) {
+    const tbl = window.UABY[lang] || {};
+    const cleanName = (courseName || '').trim().toLowerCase();
+    const d = String(deg);
+    return Object.keys(tbl).some(storageKey => {
+      const { k } = parseUabyStorageKey(storageKey);
+      if (!matchCourseName(cleanName, k)) return false;
+      const byMode = unpackUabyDegCell(tbl[storageKey] && tbl[storageKey][d]);
+      return !!(byMode && (byMode.s || byMode.n));
+    });
+  }
+  function matchCourseName(cleanName, origK) {
+    const kName = (origK || '').trim().toLowerCase();
+    return kName === cleanName || ('en' + kName) === cleanName || kName === ('en' + cleanName) || cleanName.replace(/^en\s*/, '') === kName;
+  }
+  function findRawMetaForUaby(lang, courseName, specName, deg) {
+    let ps = '', ak = '';
+    let rekr = 0, wps = 0;
+    const cleanName = courseName.trim().toLowerCase();
+    const wantSpec = normSpec(specName).trim().toLowerCase();
+    const matchSpec = (origS) => {
+      const itemSpec = normSpec(origS).trim().toLowerCase();
+      if (wantSpec) return itemSpec === wantSpec;
+      return !itemSpec;
+    };
+
+    const list = lang === 'pl'
+      ? [
+        ...((window.RAW.pl.wro && window.RAW.pl.wro.s) || []),
+        ...((window.RAW.pl.wro && window.RAW.pl.wro.n) || [])
+      ]
+      : (window.RAW.en.wro || []);
+
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].deg !== deg || !matchCourseName(cleanName, list[i].k) || !matchSpec(list[i].s)) continue;
+      ps = list[i].ps || '';
+      ak = list[i].ak || '';
+      rekr = Number(list[i].rekr || 0);
+      wps = Number(list[i].wps || 0);
+      break;
+    }
+    return { ps, ak, rekr, wps };
+  }
+  function findSaRowForProgram(item) {
+    if (!Array.isArray(window.SA_ROWS) || !item) return null;
+    const wantLang = window.lang === 'en' ? 'en' : 'pl';
+    const cleanName = (item.k || '').trim().toLowerCase();
+    const wantSpec = normSpec(item.s).trim().toLowerCase();
+    return window.SA_ROWS.find(r => {
+      if (!r || String(r.lang || '').toLowerCase() !== wantLang) return false;
+      if (r.city && r.city !== 'wro') return false;
+      if (Number(r.deg) !== Number(item.deg)) return false;
+      if (!matchCourseName(cleanName, r.k)) return false;
+      const rs = normSpec(r.s).trim().toLowerCase();
+      if (wantSpec) return rs === wantSpec;
+      return !rs;
+    }) || null;
+  }
+  function buildUabyUnified(lang) {
+    const lng = lang === 'en' ? 'en' : 'pl';
+    const langRows = (window.UABY_ROWS || []).filter(r => r && String(r.lang || '').toLowerCase() === lng);
+
+    // One dropdown option per kierunek + specjalność + stopień; Tryb → Forma studiów (s/n).
+    if (langRows.length) {
+      const grouped = new Map();
+      langRows.forEach(row => {
+        const k = normTxt(row.k);
+        const spec = normSpec(row.s) || null;
+        const deg = parseInt(row.deg, 10);
+        const mode = row.mode === 'n' ? 'n' : 's';
+        const fees = row.fees || {};
+        if (!k || !deg) return;
+        const gkey = deg + '|' + k + '|' + (spec || '');
+        if (!grouped.has(gkey)) {
+          grouped.set(gkey, { k, s: spec, deg, uabyByMode: {} });
+        }
+        grouped.get(gkey).uabyByMode[mode] = fees;
+      });
+
+      const res = [];
+      grouped.forEach(entry => {
+        const byMode = entry.uabyByMode;
+        const modes = modesForUabyProgram({ k: entry.k, s: entry.s, deg: entry.deg, uabyByMode: byMode });
+        if (!modes.length) return;
+        const activeMode = modes.includes(window.mode) ? window.mode : modes[0];
+        const fees = byMode[activeMode];
+        const raw = findRawMetaForUaby(lng, entry.k, entry.s, entry.deg);
+        const saRow = findSaRowForProgram({ k: entry.k, s: entry.s, deg: entry.deg });
+        res.push({
+          k: entry.k,
+          s: entry.s,
+          deg: entry.deg,
+          modes,
+          dn: entry.s ? `${entry.k} — ${entry.s}` : entry.k,
+          uabyOnly: true,
+          uabyByMode: byMode,
+          uabyFees: fees,
+          ps: raw.ps,
+          ak: normTxt(fees.ak || raw.ak || (saRow && saRow.key) || ''),
+          rekr: Number(fees.rekr != null ? fees.rekr : (raw.rekr || 0)),
+          wps: raw.wps
+        });
+      });
+
+      res.sort((a, b) => (a.deg - b.deg) || String(a.dn).localeCompare(String(b.dn), 'pl', { sensitivity: 'base' }));
+      return res;
+    }
+
+    // Fallback when API has no UABY_ROWS (old JSON): merge by kierunek + specjalność + stopień.
+    const res = [];
+    const uabyData = window.UABY[lng] || {};
+    Object.keys(uabyData).forEach(storageKey => {
+      const { k: courseName, s: specName } = parseUabyStorageKey(storageKey);
+      Object.keys(uabyData[storageKey]).forEach(degree => {
+        const d = parseInt(degree, 10);
+        if (!d) return;
+        const byMode = buildUabyByMode(lng, courseName, specName, d);
+        const modes = modesForUabyProgram({ k: courseName, s: normSpec(specName) || null, deg: d, uabyByMode: byMode });
+        if (!modes.length) return;
+        const activeMode = modes.includes(window.mode) ? window.mode : modes[0];
+        const fees = byMode[activeMode];
+        const raw = findRawMetaForUaby(lng, courseName, specName, d);
+        const saRow = findSaRowForProgram({ k: courseName, s: specName, deg: d });
+        res.push({
+          k: courseName,
+          s: normSpec(specName) || null,
+          deg: d,
+          modes,
+          dn: specName ? `${courseName} — ${specName}` : courseName,
+          uabyOnly: true,
+          uabyByMode: byMode,
+          uabyFees: fees,
+          ps: raw.ps,
+          ak: normTxt(fees.ak || raw.ak || (saRow && saRow.key) || ''),
+          rekr: Number(fees.rekr != null ? fees.rekr : (raw.rekr || 0)),
+          wps: raw.wps
+        });
+      });
+    });
+    res.sort((a, b) => (a.deg - b.deg) || String(a.dn).localeCompare(String(b.dn), 'pl', { sensitivity: 'base' }));
+    return res;
+  }
   function decodeHtmlEntities(str) {
     // Google Sheets/API sometimes returns escaped HTML like &lt;strong&gt;...&lt;/strong&gt;.
     if (!str) return '';
@@ -604,6 +899,12 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     // Single-offer mode: lock the program list to the post key.
     if (FIXED_KEY) {
+      if (window.uaby && window.city === 'wro') {
+        const uabyList = buildUabyUnified(lang);
+        const hit = uabyList.find(it => matchItemByFixedKey(it, FIXED_KEY, PARSED_FIXED));
+        if (hit) return [hit];
+      }
+
       const parsed = parseFixedKey(FIXED_KEY);
       const city = (parsed && parsed.city) ? parsed.city : window.city;
       const deg = (parsed && Number.isFinite(parsed.deg)) ? parsed.deg : null;
@@ -631,63 +932,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
     }
     
-    // Filter list if UABY is active
+    // Wrocław + UABY checkbox: program list = every row from 🇺🇦 Ceny_UABY (current study language).
     if (window.uaby && window.city === 'wro') {
-      const uabyData = window.UABY[lang] || {};
-      const res = [];
-      Object.keys(uabyData).forEach(courseName => {
-        Object.keys(uabyData[courseName]).forEach(degree => {
-          let ps = '', ak = '';
-          let rekr = 0, wps = 0;
-          const cleanName = courseName.trim().toLowerCase();
-          const d = parseInt(degree, 10);
-          
-          const matchCourse = (origK) => {
-             const kName = (origK || '').trim().toLowerCase();
-             return kName === cleanName || 'en' + kName === cleanName || kName === 'en' + cleanName || cleanName.replace(/^en\s*/, '') === kName;
-          };
-
-          // Strict source separation based on language
-          if (lang === 'pl') {
-            const list = (window.RAW.pl.wro && window.RAW.pl.wro.s) || [];
-            for (let i = 0; i < list.length; i++) {
-               if (list[i].deg === d && matchCourse(list[i].k)) {
-                  ps = list[i].ps;
-                  ak = list[i].ak;
-                  // Enrollment fees should stay PLN for PL flow even in UABY view.
-                  rekr = Number(list[i].rekr || 0);
-                  wps = Number(list[i].wps || 0);
-                  break;
-               }
-            }
-          } else {
-            const list = window.RAW.en.wro || [];
-            for (let i = 0; i < list.length; i++) {
-               if (list[i].deg === d && matchCourse(list[i].k)) {
-                  ps = list[i].ps;
-                  ak = list[i].ak;
-                  // Keep these for completeness (EN may render different fee block).
-                  rekr = Number(list[i].rekr || 0);
-                  wps = Number(list[i].wps || 0);
-                  break;
-               }
-            }
-          }
-
-          res.push({
-            k: courseName,
-            deg: d,
-            modes: ['s'],
-            dn: courseName,
-            uabyOnly: true,
-            ps: ps,
-            ak: ak,
-            rekr: rekr,
-            wps: wps
-          });
-        });
-      });
-      return res;
+      return buildUabyUnified(lang);
     }
 
     // Default build for standard view
@@ -794,10 +1041,15 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function getPP(pid, item, u) {
     if (window.uaby && window.city === 'wro') {
-      const tbl = window.lang === 'pl' ? window.UABY.pl : window.UABY.en, ub = tbl && tbl[u.k] && tbl[u.k][u.deg];
+      const ub = getUabyRow(u);
       if (!ub) return null;
-      if (pid === 'rok') return { pr: ub.r, un: 'EUR / rok', cur: 'EUR' };
-      if (pid === 'sem') return { pr: ub.s, un: 'EUR / semestr', cur: 'EUR' };
+      const isEn = window.lang === 'en';
+      if (pid === 'rok' && ub.r > 0) {
+        return { pr: ub.r, un: isEn ? 'EUR / year' : 'EUR / rok', cur: 'EUR' };
+      }
+      if (pid === 'sem' && ub.s > 0) {
+        return { pr: ub.s, un: isEn ? 'EUR / semester' : 'EUR / semestr', cur: 'EUR' };
+      }
       return null;
     }
 
@@ -914,6 +1166,10 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
     window.plan = l === 'pl' ? 'r12' : 'rok';
+    if (window.uaby && window.city === 'wro') {
+      window.mode = 's';
+      if (l === 'en') window.plan = 'rok';
+    }
     document.querySelectorAll('#lang-row .seg-btn').forEach(b => b.classList.toggle('on', b.getAttribute('data-val') === l));
     const euWrap = document.getElementById('eu-wrap');
     if (euWrap) euWrap.style.display = (l === 'en' && !window.uaby) ? 'block' : 'none';
@@ -924,6 +1180,10 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.uaby = !window.uaby;
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
+    if (window.uaby && window.city === 'wro') {
+      window.mode = 's';
+      window.plan = window.lang === 'en' ? 'rok' : (window.plan === 'sem' ? 'sem' : 'rok');
+    }
     document.getElementById('uaby-row')?.classList.toggle('on', window.uaby);
     document.getElementById('uaby-chk')?.classList.toggle('on', window.uaby);
     const euWrap = document.getElementById('eu-wrap');
@@ -937,26 +1197,26 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function updateMB() {
     const u = window.unified[window.progIdx], mw = document.getElementById('mode-wrap');
-    // Hide "Forma studiów" if:
-    // - no program
-    // - EN (no stacjonarne/niestacjonarne split here)
-    // - UABY-only program
-    // - only 1 mode available (no choice)
-    if (!u || window.lang === 'en' || u.uabyOnly || !Array.isArray(u.modes) || u.modes.length <= 1) {
+    if (!u || window.lang === 'en') {
       if (mw) mw.style.display = 'none';
-      // Still keep window.mode consistent when there's exactly one mode.
-      if (u && Array.isArray(u.modes) && u.modes.length === 1) window.mode = u.modes[0];
       return;
     }
+    const modes = (window.uaby && window.city === 'wro') ? modesForUabyProgram(u) : (Array.isArray(u.modes) ? u.modes : []);
+    if (!modes.length) {
+      if (mw) mw.style.display = 'none';
+      return;
+    }
+    u.modes = modes;
+    if (modes.indexOf(window.mode) < 0) window.mode = modes[0];
     if (mw) mw.style.display = 'block';
-    if (u.modes.indexOf(window.mode) < 0) window.mode = u.modes[0];
     const mr = document.getElementById('mode-row');
     if (!mr) return;
     mr.innerHTML = '';
-    u.modes.forEach(m => {
+    modes.forEach(m => {
       const btn = document.createElement('button');
       btn.className = 'pill' + (window.mode === m ? ' on' : '');
       btn.textContent = m === 's' ? 'Stacjonarne' : 'Niestacjonarne';
+      btn.type = 'button';
       btn.onclick = () => setMode(m);
       mr.appendChild(btn);
     });
@@ -1015,7 +1275,11 @@ export default function initPricesCalculator(_$, opts = {}) {
     // RULE: btn-apply URL comes from 🔗 SmartApply_URLs by "Klucz SmartApply".
     // `item.ak` must contain that key for the selected program.
     let saVal = null;
-    const rawAk = (item.ak || '').trim();
+    let rawAk = (item.ak || '').trim();
+    if ((!rawAk || rawAk === '—') && item.uabyOnly) {
+      const saRow = findSaRowForProgram(item);
+      if (saRow && saRow.key) rawAk = String(saRow.key).trim();
+    }
     if (rawAk && rawAk !== '—') {
       const map = window.lang === 'en' ? window.SA_EN : window.SA;
       // If rawAk is already a full URL, accept it.
@@ -1028,10 +1292,14 @@ export default function initPricesCalculator(_$, opts = {}) {
       }
     }
 
-    // Fallback: if program row has no key, try SA_ROWS by key (rare, but keeps new format usable)
+    // Fallback: match SA_ROWS by program (UABY rows) or by key string.
     if (!saVal && Array.isArray(window.SA_ROWS) && window.SA_ROWS.length) {
       const wantLang = window.lang === 'en' ? 'en' : 'pl';
-      const hit = window.SA_ROWS.find(r => r && String(r.lang || '').toLowerCase() === wantLang && mapGetCI({ [r.key]: r.url }, rawAk));
+      let hit = null;
+      if (rawAk) {
+        hit = window.SA_ROWS.find(r => r && String(r.lang || '').toLowerCase() === wantLang && mapGetCI({ [r.key]: r.url }, rawAk));
+      }
+      if (!hit && item.uabyOnly) hit = findSaRowForProgram(item);
       if (hit && hit.url) saVal = String(hit.url).trim();
     }
 
@@ -1091,6 +1359,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function render() {
+    updateRegulaminLink();
     window.unified = buildUnified();
     const progCount = document.getElementById('prog-count');
     if (progCount) {
@@ -1172,12 +1441,16 @@ export default function initPricesCalculator(_$, opts = {}) {
       });
     }
 
-    if (window.uaby && validPids.length <= 1) {
+    // UABY + EN: one annual price (column F) → hide plan cards, show price only in sum-box.
+    const uabyEnSinglePrice = window.uaby && window.city === 'wro' && window.lang === 'en' && validPids.length <= 1;
+    if (uabyEnSinglePrice && validPids.length) window.plan = validPids[0];
+
+    if ((window.uaby && !validPids.length) || uabyEnSinglePrice) {
       if (plansWrap) plansWrap.style.display = 'none';
       if (planHeader) planHeader.style.display = 'none';
     } else {
       if (plansWrap) plansWrap.style.display = '';
-      if (planHeader) planHeader.style.display = '';
+      if (planHeader) planHeader.style.display = (window.uaby && validPids.length <= 1) ? 'none' : '';
 
       const tpl = document.getElementById('plan-card-template');
       if (!plansWrap) return;
@@ -1191,7 +1464,8 @@ export default function initPricesCalculator(_$, opts = {}) {
       const plansEl = document.createElement('div');
       plansEl.className = 'plans';
 
-      pids.forEach(pid => {
+      const renderPids = (window.uaby && validPids.length) ? validPids : pids;
+      renderPids.forEach(pid => {
         const pp = getPP(pid, item, u);
         if (!pp) return;
 
@@ -1401,7 +1675,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         const modeLabel =
           window.lang === 'pl'
             ? (effectiveMode === 'n' ? 'Niestacjonarne' : 'Stacjonarne')
-            : '';
+            : (window.uaby && window.city === 'wro' ? 'Full-time' : '');
         const meta = [degL, modeLabel].filter(Boolean).join(' · ');
         mobileMetaEl.textContent = meta || spLine || '—';
       }
@@ -1417,8 +1691,9 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (enrItems) {
       // UABY checkbox: show UABY enrollment fees (EUR) only when checked.
       if (window.uaby && window.city === 'wro') {
-        const ub = (window.lang === 'pl' ? window.UABY.pl : window.UABY.en)[u.k]?.[u.deg];
-        const r = ub?.rekr || 20, a = ub?.apl || 100;
+        const ub = getUabyRow(u);
+        const r = (ub && ub.rekr) ? ub.rekr : 20;
+        const a = (ub && ub.apl) ? ub.apl : 100;
         const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
         const applicationLbl = t('feeApplication', 'Opłata aplikacyjna');
         const totalLbl = t('feeTotal', 'Razem przy zapisie');
