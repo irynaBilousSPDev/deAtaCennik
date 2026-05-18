@@ -33,18 +33,30 @@ if (!empty($fixed_lang)) {
 
 $initial_lang = $is_en ? 'en' : 'pl';
 
-$regulamin_urls = apply_filters('ata_prices_regulamin_urls', [
+// Miasto × Język studiów → zarządzenie (chmurka). Two separate link sets.
+$regulamin_urls_plans = apply_filters('ata_prices_regulamin_urls_plans', [
 	'wwa' => [
-		'pl' => 'https://chmurka.wseiz.pl/index.php/s/LgF9TpCerLtGHb2',
-		'en' => 'https://chmurka.wseiz.pl/index.php/s/HafmSQsZjqdZEwg',
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/LgF9TpCerLtGHb2', // ZARZĄDZENIE 7/2026
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/HafmSQsZjqdZEwg', // ZARZĄDZENIE 9/2026
 	],
 	'wro' => [
-		'pl' => 'https://chmurka.wseiz.pl/index.php/s/Jc3zWDzGwQgXPGB',
-		'en' => 'https://chmurka.wseiz.pl/index.php/s/of9kNrHXxdMEjYT',
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/Jc3zWDzGwQgXPGB', // ZARZĄDZENIE 8/2026
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/of9kNrHXxdMEjYT', // ZARZĄDZENIE 10/2026
+	],
+]);
+$regulamin_urls_promos = apply_filters('ata_prices_regulamin_urls_promos', [
+	'wwa' => [
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja', // ZARZĄDZENIE 5/2025 (ogólne)
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/FwxKrLBGtgEPNcQ', // ZARZĄDZENIE 18/2026
+	],
+	'wro' => [
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja', // ZARZĄDZENIE 5/2025 (ogólne)
+		'en' => 'https://chmurka.wseiz.pl/index.php/s/tbbQ2nTs8wtzTXH', // ZARZĄDZENIE 17/2026
 	],
 ]);
 $initial_study_lang = !empty($fixed_lang) ? strtolower(trim($fixed_lang)) : $initial_lang;
-$regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls['wwa']['pl'];
+$regulamin_url_plans = $regulamin_urls_plans['wwa'][$initial_study_lang] ?? $regulamin_urls_plans['wwa']['pl'];
+$regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $regulamin_urls_promos['wwa']['pl'];
 ?>
 
 <script>
@@ -86,6 +98,8 @@ $regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls[
 			'feeApplication' => $is_en ? __('Application fee', 'akademiata') : __('Opłata aplikacyjna', 'akademiata'),
 			'feeEntry' => $is_en ? __('Enrollment fee', 'akademiata') : __('Wpisowe', 'akademiata'),
 			'feeTotal' => $is_en ? __('Total on enrollment', 'akademiata') : __('Razem przy zapisie', 'akademiata'),
+			'modeFullTime' => $is_en ? __('Full-time', 'akademiata') : __('Stacjonarne', 'akademiata'),
+			'modePartTime' => $is_en ? __('Part-time', 'akademiata') : __('Niestacjonarne', 'akademiata'),
 			'mostPopular' => $is_en ? __('Most popular', 'akademiata') : __('Najczęściej wybierany', 'akademiata'),
 			'savePrefix' => $is_en ? __('You save', 'akademiata') : __('oszczędzasz', 'akademiata'),
 			'savePerYearSuffix' => $is_en ? __('/year', 'akademiata') : __('/rok', 'akademiata'),
@@ -142,7 +156,8 @@ $regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls[
 			'emptyText' => $is_en
 				? __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata')
 				: __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
-			'regulaminUrls' => $regulamin_urls,
+			'regulaminUrlsPlans' => $regulamin_urls_plans,
+			'regulaminUrlsPromos' => $regulamin_urls_promos,
 		], JSON_UNESCAPED_UNICODE); ?>
 	</script>
 
@@ -218,14 +233,19 @@ $regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls[
 
 	<div class="sec sec--row" data-hide-when-empty>
 		<span><?php echo $is_en ? esc_html__('Payment option', 'akademiata') : esc_html__('Wariant płatności', 'akademiata'); ?></span>
-		<span
-			class="sec-hint"
-			data-plans-hint
+		<span class="sec-row__aside">
+			<a class="sec-link" data-regulamin-link="plans" href="<?php echo esc_url($regulamin_url_plans); ?>" target="_blank" rel="noopener noreferrer">
+				<?php echo $is_en ? esc_html__('Terms', 'akademiata') : esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
+			</a>
+			<span
+				class="sec-hint"
+				data-plans-hint
 			data-hint-right="<?php echo $is_en ? esc_attr__('Swipe →', 'akademiata') : esc_attr__('Przesuń →', 'akademiata'); ?>"
 			data-hint-left="<?php echo $is_en ? esc_attr__('← Swipe', 'akademiata') : esc_attr__('← Przesuń', 'akademiata'); ?>"
 			data-dir="right"
 		>
 			<?php echo $is_en ? esc_html__('Swipe →', 'akademiata') : esc_html__('Przesuń →', 'akademiata'); ?>
+			</span>
 		</span>
 	</div>
 	<div id="plans-wrap" data-hide-when-empty></div>
@@ -259,7 +279,7 @@ $regulamin_url = $regulamin_urls['wwa'][$initial_study_lang] ?? $regulamin_urls[
 	<div id="promos" class="promos-section" style="display:none" data-hide-when-empty>
 		<div class="sec sec--row">
 			<span><?php echo $is_en ? esc_html__('Discounts and promotions', 'akademiata') : esc_html__('Zniżki i promocje', 'akademiata'); ?></span>
-			<a class="sec-link" data-regulamin-link href="<?php echo esc_url($regulamin_url); ?>" target="_blank" rel="noopener noreferrer">
+			<a class="sec-link" data-regulamin-link="promos" href="<?php echo esc_url($regulamin_url_promos); ?>" target="_blank" rel="noopener noreferrer">
 				<?php echo $is_en ? esc_html__('Terms', 'akademiata') : esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
 			</a>
 		</div>

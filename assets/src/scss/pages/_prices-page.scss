@@ -90,6 +90,14 @@ body.page-template-page-template-prices{
       gap: 12px;
     }
 
+    .sec-row__aside {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
     .sec-link {
       font: inherit;
       font-family: "neulis-sans", "Nunito Sans", sans-serif;

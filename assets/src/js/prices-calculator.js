@@ -46,8 +46,9 @@ export default function initPricesCalculator(_$, opts = {}) {
   function t(key, fallback) { return (I18N && I18N[key]) ? I18N[key] : fallback; }
   const UI_LANG = (window.PRICES_UI_LANG || '').toString().trim() || (window.lang || 'pl');
 
-  function getRegulaminUrl(city, lang) {
-    const urls = I18N && I18N.regulaminUrls ? I18N.regulaminUrls : null;
+  function getRegulaminUrl(kind, city, lang) {
+    const mapKey = kind === 'promos' ? 'regulaminUrlsPromos' : 'regulaminUrlsPlans';
+    const urls = I18N && I18N[mapKey] ? I18N[mapKey] : null;
     if (!urls) return null;
     const c = city || window.city || 'wwa';
     const l = lang || window.lang || 'pl';
@@ -57,10 +58,13 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function updateRegulaminLink() {
-    const href = getRegulaminUrl();
-    if (!href) return;
-    const link = document.querySelector('[data-regulamin-link]');
-    if (link) link.setAttribute('href', href);
+    ['plans', 'promos'].forEach(kind => {
+      const href = getRegulaminUrl(kind);
+      if (!href) return;
+      document.querySelectorAll('[data-regulamin-link="' + kind + '"]').forEach(link => {
+        link.setAttribute('href', href);
+      });
+    });
   }
 
   function applyPromoOverride(promo) {
@@ -1191,17 +1195,29 @@ export default function initPricesCalculator(_$, opts = {}) {
     render();
   }
 
+  function modePillLabel(m) {
+    // WPML / URL language (UI_LANG), not study-language toggle (window.lang).
+    return m === 'n' ? t('modePartTime', 'Niestacjonarne') : t('modeFullTime', 'Stacjonarne');
+  }
   function setMode(m) { window.mode = m; updateMB(); render(); }
   function setEU(v) { window.isEU = v; document.querySelectorAll('#eu-row .pill').forEach(b => b.classList.toggle('on', (b.getAttribute('data-val') === 'eu' || b.getAttribute('data-val') === 'true') === v)); render(); }
   function onProgChange() { window.selP = { jednorazowo: false }; updateMB(); render(); }
 
   function updateMB() {
     const u = window.unified[window.progIdx], mw = document.getElementById('mode-wrap');
-    if (!u || window.lang === 'en') {
+    const uabyWro = window.uaby && window.city === 'wro';
+
+    if (!u) {
       if (mw) mw.style.display = 'none';
       return;
     }
-    const modes = (window.uaby && window.city === 'wro') ? modesForUabyProgram(u) : (Array.isArray(u.modes) ? u.modes : []);
+    // EN without UABY: no forma studiów. UABY (PL + EN): show Stacjonarne / Niestacjonarne when sheet has them.
+    if (window.lang === 'en' && !uabyWro) {
+      if (mw) mw.style.display = 'none';
+      return;
+    }
+
+    const modes = uabyWro ? modesForUabyProgram(u) : (Array.isArray(u.modes) ? u.modes : []);
     if (!modes.length) {
       if (mw) mw.style.display = 'none';
       return;
@@ -1215,9 +1231,9 @@ export default function initPricesCalculator(_$, opts = {}) {
     modes.forEach(m => {
       const btn = document.createElement('button');
       btn.className = 'pill' + (window.mode === m ? ' on' : '');
-      btn.textContent = m === 's' ? 'Stacjonarne' : 'Niestacjonarne';
+      btn.textContent = modePillLabel(m);
       btn.type = 'button';
-      btn.onclick = () => setMode(m);
+      if (modes.length > 1) btn.onclick = () => setMode(m);
       mr.appendChild(btn);
     });
   }
@@ -1671,11 +1687,11 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (mobileMetaEl) {
         // Always show "Forma studiów" in the select meta on PL mobile.
         // If the program has only one mode, reflect that single mode even when mode selector is hidden.
-        const effectiveMode = (u && Array.isArray(u.modes) && u.modes.length === 1) ? u.modes[0] : window.mode;
-        const modeLabel =
-          window.lang === 'pl'
-            ? (effectiveMode === 'n' ? 'Niestacjonarne' : 'Stacjonarne')
-            : (window.uaby && window.city === 'wro' ? 'Full-time' : '');
+        const uabyWroMeta = window.uaby && window.city === 'wro';
+        const effectiveMode = (u && Array.isArray(u.modes) && u.modes.length >= 1) ? (u.modes.indexOf(window.mode) >= 0 ? window.mode : u.modes[0]) : window.mode;
+        const metaModes = u ? (uabyWroMeta ? modesForUabyProgram(u) : (u.modes || [])) : [];
+        const canShowModeMeta = metaModes.length && !(window.lang === 'en' && !uabyWroMeta);
+        const modeLabel = canShowModeMeta ? modePillLabel(effectiveMode) : '';
         const meta = [degL, modeLabel].filter(Boolean).join(' · ');
         mobileMetaEl.textContent = meta || spLine || '—';
       }
