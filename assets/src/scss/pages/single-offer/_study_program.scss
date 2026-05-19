@@ -1,21 +1,32 @@
 @use "../../abstracts/variables"  as vars;
 @use "../../abstracts/mixins" as mixins;
 
-
+// =============================================================================
+// section_study_program
+// =============================================================================
 
 .section_study_program {
+  overflow: visible;
+
   .download_program {
+    @include mixins.max-ipad-air-screen {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 1.5rem;
+    }
+
     a {
       @include mixins.button-base(
-                      vars.$primary,
-                      vars.$white,
-                      vars.$primary,
-                      vars.$white,
-                      vars.$black,
-                      vars.$black,
-                      vars.$primary
+        vars.$primary,
+        vars.$white,
+        vars.$primary,
+        vars.$white,
+        vars.$black,
+        vars.$black,
+        vars.$primary
       );
       max-width: 330px;
+      width: 100%;
       border-radius: 5px;
       text-transform: uppercase;
       padding: 6px 15px;
@@ -23,10 +34,28 @@
       line-height: 1.1;
     }
   }
+
+  .section_subjects_study {
+    @include mixins.max-ipad-air-screen {
+      position: relative;
+      z-index: 1;
+      clear: both;
+      margin-top: 0;
+      padding-top: 1.5rem;
+      padding-bottom: 2.5rem;
+
+      .sub_title {
+        font-size: clamp(1.25rem, 4vw, vars.$font-size-m);
+        line-height: 1.25;
+        margin-bottom: 1.5rem;
+        word-break: break-word;
+        hyphens: auto;
+      }
+    }
+  }
 }
 
 .program_percentages {
-
   .item {
     display: flex;
     flex-direction: column;
@@ -60,19 +89,47 @@
 }
 
 .program_info {
+  @include mixins.max-ipad-air-screen {
+    overflow: visible;
+    padding-bottom: 5.5rem;
+    margin-bottom: 0;
+    background-color: vars.$white;
+  }
+
   .image_bg {
     height: 84vh;
+    max-height: 768px;
     width: 100%;
+    position: relative;
+    overflow: visible;
 
     @include mixins.flexbox(row, flex-start, center);
 
     @media (min-width: 991px) and (max-width: 1080px) {
       height: 560px;
+      max-height: 768px;
     }
 
     @include mixins.max-ipad-air-screen {
-      height: 230px;
-      margin-bottom: 150px;
+      display: block;
+      height: clamp(220px, 55vw, 320px);
+      max-height: 768px;
+      margin-bottom: 0;
+      background-size: cover;
+      background-position: center center;
+
+      > .container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        max-width: 100%;
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+        transform: translateY(50%);
+        margin-top: 0;
+      }
     }
   }
 }
@@ -94,7 +151,14 @@
 
   @include mixins.max-ipad-air-screen {
     max-width: 100%;
-    margin-top: 300px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    position: relative;
+    z-index: 2;
   }
 
   .item {
@@ -118,19 +182,24 @@
     }
 
     @include mixins.max-ipad-air-screen {
-      max-width: 47%;
-      height: 80px;
-      margin-bottom: 1rem;
+      width: auto;
+      max-width: none;
+      height: auto;
+      min-height: 72px;
+      margin: 0;
+      padding: 0.75rem 0.5rem;
+      justify-content: center;
+      box-shadow: 0 3px 6px #00000029;
     }
 
     .small_title {
       margin-bottom: 1.5rem;
-      //max-width: 190px;
       margin-left: auto;
       margin-right: auto;
 
       @include mixins.max-ipad-air-screen {
         font-size: vars.$font-size-little;
+        margin-bottom: 0.5rem;
       }
     }
 
@@ -143,9 +212,8 @@
 
       @include mixins.max-ipad-air-screen {
         font-size: vars.$font-size-s-medium;
+        line-height: 1.2;
       }
     }
   }
 }
-
- 

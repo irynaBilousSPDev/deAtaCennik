@@ -1,59 +1,90 @@
 <?php
+/**
+ * Cards for section_for_you_if only.
+ * Styles: assets/src/scss/pages/single-offer/_for_you_if.scss
+ */
 $cards = get_query_var('cards', []);
 
-if (!empty($cards)) : ?>
-    <div class="cards">
-        <div class="row">
-            <?php foreach ($cards as $item) :
-                // Ensure $item['image'] exists before accessing its keys
-                $image = $item['image'] ?? [];
+if (empty($cards)) {
+    return;
+}
 
-                // Get the original image URL as a fallback
-                $fallback_image_url = !empty($image['url']) ? esc_url($image['url']) : '';
+$img_sizes = '(max-width: 990px) 380px, 532px';
 
-                //  Get Both Mobile & Desktop Image URLs
-                $image_url_mobile = !empty($image['sizes']['card_image_mobile'])
-                    ? esc_url($image['sizes']['card_image_mobile'])
-                    : $fallback_image_url;
+$for_you_strip_img_dims = static function (array $attr) {
+    if (!empty($attr['class']) && str_contains($attr['class'], 'for-you-card__img')) {
+        unset($attr['width'], $attr['height']);
+    }
+    return $attr;
+};
+add_filter('wp_get_attachment_image_attributes', $for_you_strip_img_dims);
+?>
+<div class="for-you-cards">
+    <?php foreach ($cards as $item) :
+        $image = $item['image'] ?? [];
+        $attachment_id = !empty($image['ID']) ? (int) $image['ID'] : 0;
 
-                $image_url_desktop = !empty($image['sizes']['card_image'])
-                    ? esc_url($image['sizes']['card_image'])
-                    : $fallback_image_url;
+        $fallback_url = !empty($image['url']) ? esc_url($image['url']) : '';
+        $mobile_url = !empty($image['sizes']['card_image_mobile'])
+            ? esc_url($image['sizes']['card_image_mobile'])
+            : $fallback_url;
+        $desktop_url = !empty($image['sizes']['card_image'])
+            ? esc_url($image['sizes']['card_image'])
+            : $fallback_url;
 
-                // Get Alt Text (with a safe fallback)
-                $image_alt = !empty($image['alt']) ? esc_attr($image['alt']) : __('Card Image', 'akademiata');
-
-                // Get Title & Content
-                $title = trim($item['title'] ?? '');
-                $content = trim($item['content'] ?? '');
-                ?>
-                <div class="col-lg-4 mb-3">
-                    <div class="card_wrapper">
-                        <div class="card_item">
-                            <div class="image_wrapper mb-3">
-                                <div class="image_bg responsive-image" role="img"
-                                     aria-label="<?php echo $image_alt; ?>"
-                                     data-mobile="<?php echo esc_url($image_url_mobile); ?>"
-                                     data-desktop="<?php echo esc_url($image_url_desktop); ?>"
-                                     style="background-image: url('<?php echo esc_url($image_url_desktop); ?>');">
-                                </div>
-                            </div>
-                            <div class="card_body">
-                                <?php if (!empty($title)) : ?>
-                                    <h3 class="title primary_color mb-3">
-                                        <?php echo esc_html($title); ?>
-                                    </h3>
-                                <?php endif; ?>
-                                <?php if (!empty($content)) : ?>
-                                    <div class="content">
-                                        <?php echo wp_kses_post($content); ?>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
+        $image_alt = !empty($image['alt']) ? esc_attr($image['alt']) : __('Card Image', 'akademiata');
+        $title = trim($item['title'] ?? '');
+        $content = trim($item['content'] ?? '');
+        ?>
+        <article class="for-you-card">
+            <?php if ($attachment_id || $desktop_url) : ?>
+                <div class="for-you-card__media">
+                    <?php if ($attachment_id) : ?>
+                        <?php
+                        echo wp_get_attachment_image(
+                            $attachment_id,
+                            'card_image',
+                            false,
+                            [
+                                'class' => 'for-you-card__img',
+                                'sizes' => $img_sizes,
+                                'loading' => 'lazy',
+                                'decoding' => 'async',
+                                'alt' => $image_alt,
+                            ]
+                        );
+                        ?>
+                    <?php else : ?>
+                        <picture>
+                            <?php if ($mobile_url && $mobile_url !== $desktop_url) : ?>
+                                <source media="(max-width: 990px)" srcset="<?php echo esc_url($mobile_url); ?>">
+                            <?php endif; ?>
+                            <img
+                                class="for-you-card__img"
+                                src="<?php echo esc_url($desktop_url); ?>"
+                                alt="<?php echo $image_alt; ?>"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </picture>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-<?php endif; ?>
+            <?php endif; ?>
+
+            <?php if ($title || $content) : ?>
+                <div class="for-you-card__body">
+                    <?php if ($title) : ?>
+                        <h3 class="for-you-card__title primary_color"><?php echo esc_html($title); ?></h3>
+                    <?php endif; ?>
+                    <?php if ($content) : ?>
+                        <div class="for-you-card__text">
+                            <?php echo wp_kses_post($content); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </article>
+    <?php endforeach; ?>
+</div>
+<?php
+remove_filter('wp_get_attachment_image_attributes', $for_you_strip_img_dims);

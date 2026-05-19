@@ -22,8 +22,8 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
                 </h2>
                 <?php if (!empty($button['button']['button_link'])) : ?>
                     <span class="download_program d-none d-md-block">
-                    <a href="<?php echo $button['button']['button_link']; ?>" class="button-orange" target="_blank"
-                       rel="\&quot;noopener" noreferrer\"="">
+                    <a href="<?php echo esc_url($button['button']['button_link']); ?>" class="button-orange" target="_blank"
+                       rel="noopener noreferrer">
                    <?php _e('POBIERZ PROGRAM STUDIÓW', 'akademiata') ?>
                     </a>
                 </span>
@@ -60,19 +60,19 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
                             </div>
                         </div>
                     <?php endif; ?>
-                    <?php endforeach;; ?>
+                    <?php endforeach; ?>
                 </div>
-                <?php endif; ?>
+            </div>
+            <?php endif; ?>
 
-                <?php if (!empty($button['button']['button_link'])) : ?>
-                    <span class="download_program d-block d-md-none d-flex justify-content-center">
-                    <a href="<?php echo $button['button']['button_link']; ?>" class="button-orange" target="_blank"
-                       rel="\&quot;noopener" noreferrer\"="">
-                   <?php _e('POBIERZ PROGRAM STUDIÓW', 'akademiata') ?>
+            <?php if (!empty($button['button']['button_link'])) : ?>
+                <span class="download_program d-block d-md-none d-flex justify-content-center my-4">
+                    <a href="<?php echo esc_url($button['button']['button_link']); ?>" class="button-orange" target="_blank"
+                       rel="noopener noreferrer">
+                        <?php _e('POBIERZ PROGRAM STUDIÓW', 'akademiata') ?>
                     </a>
                 </span>
-                <?php endif; ?>
-            </div>
+            <?php endif; ?>
         </div>
     <?php endif; ?>
 

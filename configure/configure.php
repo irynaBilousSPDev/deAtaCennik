@@ -86,8 +86,9 @@ function custom_setup()
     add_image_size('study_slider_image_mobile', 300, 200, true);
     add_image_size('image_content_slider', 950, 840, true);
     add_image_size('image_content_slider_mobile', 400, 350, true);
-    add_image_size('card_image', 460, 450, true);
-    add_image_size('card_image_mobile', 360, 360, true);
+    add_image_size('card_image', 460, 448, true);
+    add_image_size('card_image_mobile', 768, 748, true);
+    add_image_size('card_image_2x', 920, 896, true);
     add_image_size('program_image', 1920, 770, true);
     add_image_size('program_image_mobile', 380, 230, true);
     add_image_size('interests_image', 905, 384, true);

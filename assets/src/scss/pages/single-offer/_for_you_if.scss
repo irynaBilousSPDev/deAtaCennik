@@ -1,7 +1,177 @@
-@use "../../abstracts/variables"  as vars;
+@use "../../abstracts/variables" as vars;
+
+// =============================================================================
+// section_for_you_if — all styles for this section live in this file only
+// =============================================================================
+//
+// Columns:
+//   max 767px       — 1 card per row
+//   768px – 1280px  — 2 cards per row
+//   min 1281px      — 3 cards per row
+//
+// Card max-width: 380px (max 990px), 532px (min 991px)
+//
+// =============================================================================
+
+$for-you-card-w-wide: 532px;
+$for-you-card-w-narrow: 380px;
+$for-you-gap: 24px;
+
+$for-you-bp-1col-max: 767px;
+$for-you-bp-2col-min: 768px;
+$for-you-bp-2col-max: 1280px;
+$for-you-bp-3col-min: 1281px;
+$for-you-bp-narrow-card-max: 990px;
+$for-you-bp-wide-card-min: 991px;
+$for-you-bp-pad-desktop-min: 1441px;
 
 .section_for_you_if {
+  overflow: visible;
+
+  // --- General settings (design tokens) ---
+  --for-you-card-w: #{$for-you-card-w-narrow};
+  --for-you-gap: #{$for-you-gap};
+  --for-you-card-pad-y: 40px;
+  --for-you-card-pad-x: 35px;
+  --for-you-card-pad-mobile-tablet: 2rem;
+  --for-you-card-font-mobile-tablet: 1.5rem;
+  --for-you-card-radius: 18px;
+  --for-you-img-ratio: 460 / 448;
+  --for-you-grid-pad-mobile: 15px;
+  --for-you-title-size-mobile-tablet: 22px;
+  --for-you-title-size-max: 30px;
+
+  @media (min-width: $for-you-bp-wide-card-min) {
+    --for-you-card-w: #{$for-you-card-w-wide};
+  }
+
   background-color: vars.$background-gray;
   padding-top: 4rem;
   padding-bottom: 6rem;
+
+  .container {
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  .for-you-cards {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    gap: var(--for-you-gap);
+    margin-inline: auto;
+    justify-content: center;
+    align-items: stretch;
+    box-sizing: border-box;
+    padding-inline: var(--for-you-grid-pad-mobile);
+
+    // max 767px — 1 card
+    grid-template-columns: minmax(0, var(--for-you-card-w));
+
+    // 768px – 1280px — 2 cards
+    @media (min-width: $for-you-bp-2col-min) and (max-width: $for-you-bp-2col-max) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: calc(var(--for-you-card-w) * 2 + var(--for-you-gap));
+      padding-inline: 0;
+
+      .for-you-card:last-child:nth-child(odd):not(:only-child) {
+        grid-column: 1 / -1;
+        justify-self: center;
+        max-width: var(--for-you-card-w);
+      }
+    }
+
+    // min 1281px — 3 cards
+    @media (min-width: $for-you-bp-3col-min) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      max-width: calc(var(--for-you-card-w) * 3 + var(--for-you-gap) * 2);
+      padding-inline: 0;
+
+      .for-you-card:last-child:nth-child(odd):not(:only-child) {
+        grid-column: auto;
+        justify-self: stretch;
+        max-width: var(--for-you-card-w);
+      }
+    }
+  }
+
+  .for-you-card {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: var(--for-you-card-w);
+    min-width: 0;
+    margin-inline: auto;
+    padding: var(--for-you-card-pad-mobile-tablet);
+    font-size: var(--for-you-card-font-mobile-tablet);
+    background-color: vars.$white;
+    border-radius: var(--for-you-card-radius);
+    box-shadow: 0 3px 6px #00000029;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 1440px) {
+      padding: var(--for-you-card-pad-mobile-tablet);
+    }
+
+    @media (min-width: $for-you-bp-pad-desktop-min) {
+      padding: var(--for-you-card-pad-y) var(--for-you-card-pad-x);
+    }
+
+    @media (min-width: $for-you-bp-wide-card-min) {
+      font-size: inherit;
+    }
+
+    &:hover .for-you-card__img {
+      transform: scale(1.02);
+    }
+  }
+
+  .for-you-card__media {
+    margin-bottom: 1rem;
+    border-radius: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .for-you-card__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--for-you-img-ratio);
+    object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+    transition: transform 0.65s ease-in-out;
+  }
+
+  .for-you-card__body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .for-you-card__title {
+    margin: 0 0 1rem;
+    font-size: var(--for-you-title-size-mobile-tablet);
+    font-weight: 700;
+    line-height: 1.2;
+
+    @media (min-width: $for-you-bp-wide-card-min) {
+      font-size: var(--for-you-title-size-max);
+    }
+  }
+
+  .for-you-card__text {
+    font-size: inherit;
+
+    @media (min-width: $for-you-bp-wide-card-min) {
+      font-size: vars.$font-size-m;
+    }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

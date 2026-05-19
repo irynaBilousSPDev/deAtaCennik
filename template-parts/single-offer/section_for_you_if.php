@@ -13,10 +13,9 @@ if (!empty($program_for_you)) :
                 <?php echo esc_html($title); ?>
             </h2>
             <?php
-            //  Pass `image_content_slider` only if it exists
             if (!empty($cards)) {
                 set_query_var('cards', $cards);
-                get_template_part('./template-parts/cards');
+                get_template_part('template-parts/cards');
             }
             ?>
         </div>
