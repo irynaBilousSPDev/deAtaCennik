@@ -106,25 +106,48 @@ function akademiata_preload_main_slider_image(array $slides) {
         return;
     }
 
-    $preload_urls = [];
-    $limit = min(3, count($slides));
+    $preload_links = [];
 
-    for ($i = 0; $i < $limit; $i++) {
-        $urls = akademiata_hero_slide_image_urls($slides[$i]);
-        $url = $urls['main'] ?? '';
+    foreach ($slides as $slide) {
+        $urls = akademiata_hero_slide_image_urls($slide);
+        $desktop = $urls['desktop'] ?? '';
+        $mobile = $urls['mobile'] ?? '';
 
-        if ($url && !in_array($url, $preload_urls, true)) {
-            $preload_urls[] = $url;
+        if ($desktop) {
+            $preload_links[] = [
+                'href' => $desktop,
+                'media' => '(min-width: 768px)',
+            ];
+        }
+
+        if ($mobile) {
+            $preload_links[] = [
+                'href' => $mobile,
+                'media' => $mobile !== $desktop ? '(max-width: 767px)' : '',
+            ];
         }
     }
 
-    if (empty($preload_urls)) {
+    if (empty($preload_links)) {
         return;
     }
 
-    add_action('wp_head', static function () use ($preload_urls) {
-        foreach ($preload_urls as $url) {
-            echo '<link rel="preload" as="image" href="' . esc_url($url) . '">' . "\n";
+    add_action('wp_head', static function () use ($preload_links) {
+        $seen = [];
+
+        foreach ($preload_links as $link) {
+            $key = ($link['media'] ?? '') . '|' . $link['href'];
+
+            if (isset($seen[$key])) {
+                continue;
+            }
+
+            $seen[$key] = true;
+            $media = !empty($link['media'])
+                ? ' media="' . esc_attr($link['media']) . '"'
+                : '';
+
+            echo '<link rel="preload" as="image" href="' . esc_url($link['href']) . '"' . $media . '>' . "\n";
         }
     }, 1);
 }

@@ -22,6 +22,9 @@ export function initHeroSlider(root) {
 
     hydrateSlideImages(swiperEl);
 
+    let pendingDotIndex = null;
+    let isDotNavigation = false;
+
     const swiper = new Swiper(swiperEl, {
         modules: [Autoplay, A11y],
         slidesPerView: 1,
@@ -29,6 +32,7 @@ export function initHeroSlider(root) {
         centeredSlides: true,
         loop: canLoop,
         loopAdditionalSlides: 1,
+        loopPreventsSliding: false,
         speed: SLIDE_SPEED,
         grabCursor: true,
         watchSlidesProgress: true,
@@ -43,12 +47,15 @@ export function initHeroSlider(root) {
         on: {
             init(swiperInstance) {
                 if (canLoop) {
+                    refreshHeroLoop(swiperInstance);
                     swiperInstance.slideToLoop(0, 0, false);
                 } else {
                     swiperInstance.slideTo(0, 0, false);
                 }
                 swiperInstance.update();
                 updateHeroDots(root, swiperInstance);
+                preloadAllHeroImages(swiperEl);
+                preloadAdjacentHeroImages(swiperEl);
 
                 if (canAutoplay) {
                     swiperInstance.params.autoplay = {
@@ -60,15 +67,55 @@ export function initHeroSlider(root) {
                     swiperInstance.autoplay.start();
                 }
             },
+            slideChange(swiperInstance) {
+                if (!isDotNavigation) {
+                    updateHeroDots(root, swiperInstance);
+                }
+                preloadAdjacentHeroImages(swiperEl);
+            },
             slideChangeTransitionEnd(swiperInstance) {
+                if (isDotNavigation && pendingDotIndex !== null && swiperInstance.params.loop) {
+                    const targetIndex = pendingDotIndex;
+
+                    if (swiperInstance.realIndex !== targetIndex) {
+                        swiperInstance.slideToLoop(targetIndex, 0, false);
+                    }
+
+                    swiperInstance.loopFix();
+
+                    const activeSlide = swiperInstance.slides[swiperInstance.activeIndex];
+                    const activeHeroIndex = parseInt(activeSlide?.dataset?.heroIndex ?? '-1', 10);
+
+                    if (activeHeroIndex !== targetIndex) {
+                        swiperInstance.slideToLoop(targetIndex, 0, false);
+                        swiperInstance.loopFix();
+                    }
+                }
+
+                if (swiperInstance.params.loop && !isDotNavigation) {
+                    const idx = getHeroActiveIndex(swiperInstance, slideCount);
+                    if (idx === 0 || idx === slideCount - 1) {
+                        swiperInstance.loopFix();
+                    }
+                }
+
+                isDotNavigation = false;
+                pendingDotIndex = null;
                 updateHeroDots(root, swiperInstance);
+                preloadAdjacentHeroImages(swiperEl);
             },
         },
     });
 
-    buildHeroDots(root, swiper, slideCount);
+    buildHeroDots(root, swiper, slideCount, (index) => {
+        isDotNavigation = true;
+        pendingDotIndex = index;
+        goToHeroSlide(swiper, index);
+        setHeroDotsActive(root, index);
+    });
     bindSlideLinkNavigation(swiperEl, swiper);
-    preloadHeroImages(swiperEl);
+    preloadAllHeroImages(swiperEl);
+    preloadAdjacentHeroImages(swiperEl);
 
     if (!autoplayBtn || !canAutoplay) {
         autoplayBtn?.setAttribute('hidden', '');
@@ -114,8 +161,9 @@ export function initHeroSlider(root) {
  * @param {HTMLElement} root
  * @param {import('swiper').Swiper} swiper
  * @param {number} slideCount
+ * @param {(index: number) => void} onDotClick
  */
-function buildHeroDots(root, swiper, slideCount) {
+function buildHeroDots(root, swiper, slideCount, onDotClick) {
     const dotsEl = root.querySelector('.hero-slider__dots');
     if (!dotsEl || slideCount < 2) {
         return;
@@ -129,11 +177,7 @@ function buildHeroDots(root, swiper, slideCount) {
         dot.className = 'hero-slider__dot';
         dot.setAttribute('aria-label', `Slajd ${i + 1}`);
         dot.addEventListener('click', () => {
-            if (swiper.params.loop) {
-                swiper.slideToLoop(i);
-            } else {
-                swiper.slideTo(i);
-            }
+            onDotClick(i);
         });
         dotsEl.appendChild(dot);
     }
@@ -142,15 +186,82 @@ function buildHeroDots(root, swiper, slideCount) {
 }
 
 /**
- * @param {HTMLElement} root
  * @param {import('swiper').Swiper} swiper
+ * @param {number} index
  */
-function updateHeroDots(root, swiper) {
-    const activeIndex = swiper.realIndex;
+function goToHeroSlide(swiper, index) {
+    if (swiper.params.loop) {
+        swiper.slideToLoop(index, SLIDE_SPEED);
+        return;
+    }
+
+    swiper.slideTo(index, SLIDE_SPEED);
+}
+
+/**
+ * @param {HTMLElement} root
+ * @param {number} activeIndex
+ */
+function setHeroDotsActive(root, activeIndex) {
     root.querySelectorAll('.hero-slider__dot').forEach((dot, index) => {
         const isActive = index === activeIndex;
         dot.classList.toggle('is-active', isActive);
         dot.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+}
+
+/**
+ * @param {import('swiper').Swiper} swiper
+ * @returns {number}
+ */
+function getHeroActiveIndex(swiper, slideCount) {
+    const activeSlide = swiper.slides[swiper.activeIndex];
+
+    if (activeSlide?.dataset?.heroIndex !== undefined) {
+        const heroIndex = parseInt(activeSlide.dataset.heroIndex, 10);
+
+        if (!Number.isNaN(heroIndex) && slideCount > 0) {
+            return heroIndex % slideCount;
+        }
+    }
+
+    if (slideCount > 0) {
+        return swiper.realIndex % slideCount;
+    }
+
+    return swiper.realIndex;
+}
+
+/**
+ * @param {HTMLElement} root
+ * @param {import('swiper').Swiper} swiper
+ */
+function updateHeroDots(root, swiper) {
+    const logicalCount = parseInt(root.dataset.slideCount || '0', 10);
+    setHeroDotsActive(root, getHeroActiveIndex(swiper, logicalCount));
+}
+
+/**
+ * Rebuild loop clones after DOM / breakpoint changes.
+ *
+ * @param {import('swiper').Swiper} swiper
+ */
+function refreshHeroLoop(swiper) {
+    if (!swiper.params.loop) {
+        return;
+    }
+
+    swiper.loopDestroy();
+    swiper.loopCreate();
+    swiper.update();
+}
+
+/**
+ * @param {HTMLElement} swiperEl
+ */
+function preloadAllHeroImages(swiperEl) {
+    swiperEl.querySelectorAll('img.hero-slider__image').forEach((img) => {
+        eagerLoadHeroImage(img);
     });
 }
 
@@ -164,17 +275,43 @@ function hydrateSlideImages(swiperEl) {
 }
 
 /**
+ * Eager-load banner images for active and peek slides (fixes empty side gaps on prod).
+ *
  * @param {HTMLElement} swiperEl
  */
-function preloadHeroImages(swiperEl) {
-    swiperEl.querySelectorAll('img.hero-slider__image').forEach((img) => {
-        const src = img.getAttribute('src');
-        if (!src || img.complete) {
-            return;
-        }
-        const loader = new Image();
-        loader.src = src;
+function preloadAdjacentHeroImages(swiperEl) {
+    const selector =
+        '.swiper-slide-active img.hero-slider__image, ' +
+        '.swiper-slide-prev img.hero-slider__image, ' +
+        '.swiper-slide-next img.hero-slider__image, ' +
+        '.swiper-slide-duplicate-active img.hero-slider__image, ' +
+        '.swiper-slide-duplicate-prev img.hero-slider__image, ' +
+        '.swiper-slide-duplicate-next img.hero-slider__image';
+
+    swiperEl.querySelectorAll(selector).forEach((img) => {
+        eagerLoadHeroImage(img);
     });
+}
+
+/**
+ * @param {HTMLImageElement} img
+ */
+function eagerLoadHeroImage(img) {
+    if (img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+    }
+
+    img.loading = 'eager';
+
+    const src = img.currentSrc || img.getAttribute('src');
+
+    if (!src || img.complete) {
+        return;
+    }
+
+    const loader = new Image();
+    loader.src = src;
 }
 
 /**

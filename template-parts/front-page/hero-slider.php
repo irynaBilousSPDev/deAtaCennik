@@ -12,6 +12,11 @@ if (empty($slides) || !is_array($slides)) {
 }
 
 $slide_count = count($slides);
+// Duplicate slides so Swiper loop can fill left/right peeks (needs enough DOM slides with slidesPerView: auto).
+$swiper_slides = $slides;
+if ($slide_count > 1 && $slide_count < 8) {
+    $swiper_slides = array_merge($slides, $slides);
+}
 $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.webp';
 ?>
 
@@ -19,7 +24,7 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
     <div class="hero-slider__viewport">
         <div class="swiper hero-slider__swiper">
             <div class="swiper-wrapper">
-                <?php foreach ($slides as $slide_index => $slide) :
+                <?php foreach ($swiper_slides as $slide_index => $slide) :
                     $urls = akademiata_hero_slide_image_urls($slide);
                     $image_desktop = $urls['desktop'];
                     $image_mobile = $urls['mobile'] ?: $image_desktop;
@@ -32,9 +37,11 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
                     $slide_target = !empty($button_group['button_target']) ? '_blank' : '_self';
                     $img_width = (int) ($image['sizes']['main_slider_banner-width'] ?? $image['width'] ?? 1500);
                     $img_height = (int) ($image['sizes']['main_slider_banner-height'] ?? $image['height'] ?? 804);
+                    $hero_index = $slide_count > 0 ? $slide_index % $slide_count : $slide_index;
                     $is_first_slide = ($slide_index === 0);
                     ?>
                     <div class="swiper-slide<?php echo $slide_href ? ' hero-slider__slide--linked' : ''; ?>"
+                        data-hero-index="<?php echo esc_attr((string) $hero_index); ?>"
                         <?php if ($slide_href) : ?>
                             data-href="<?php echo $slide_href; ?>"
                             data-target="<?php echo esc_attr($slide_target); ?>"
@@ -52,12 +59,9 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
                                         width="<?php echo esc_attr((string) $img_width); ?>"
                                         height="<?php echo esc_attr((string) $img_height); ?>"
                                         decoding="async"
+                                        loading="eager"
                                         <?php if ($is_first_slide) : ?>
                                             fetchpriority="high"
-                                        <?php elseif ($slide_index === 1) : ?>
-                                            loading="eager"
-                                        <?php else : ?>
-                                            loading="lazy"
                                         <?php endif; ?>
                                     >
                                 </picture>
