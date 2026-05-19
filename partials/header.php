@@ -6,42 +6,6 @@
  */
 ?>
 
-<?php
-if ( is_singular( [ 'bachelor', 'master', 'postgraduate', 'mba' ] ) ) :
-
-	$post_id = get_queried_object_id(); // <- IMPORTANT (header-safe)
-
-	// All slugs for March 2026 in all languages
-//	$target_slugs = [
-//		'marzec-2026',   // PL
-//		'march-2026',    // EN
-//		'mart-2026',     // RU
-//		'berezen-2026',  // UK
-//	];
-//
-//	$has_march_2026 = false;
-
-	// Get recruitment_date terms for this post
-//	$terms = get_the_terms( $post_id, 'recruitment_date' );
-//
-//	if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
-//		foreach ( $terms as $term ) {
-//			if ( in_array( $term->slug, $target_slugs, true ) ) {
-//				$has_march_2026 = true;
-//				break;
-//			}
-//		}
-//	}
-
-	// Make it accessible in templates/partials
-//	set_query_var( 'has_march_2026', $has_march_2026 );
-
-else :
-	// Optional: define default for non-matching pages
-	set_query_var( 'has_march_2026', false );
-endif;
-?>
-
 <header id="masthead" class="site-header">
 
     <div class="header_top_lang_nav">

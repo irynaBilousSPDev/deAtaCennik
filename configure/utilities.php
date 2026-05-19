@@ -67,18 +67,321 @@ function enqueue_slider_front_scripts() {
 }
 add_action('wp_enqueue_scripts', 'enqueue_slider_front_scripts');
 
+/**
+ * Hero slider slides: show_slide on + desktop image present.
+ *
+ * @param array|null $main_slider ACF main_slider repeater; uses current post if null.
+ * @return array<int, array>
+ */
+function akademiata_get_hero_slider_slides($main_slider = null) {
+    if ($main_slider === null) {
+        $acf_fields = get_fields();
+        $main_slider = $acf_fields['main_slider'] ?? [];
+    }
 
+    if (!is_array($main_slider)) {
+        return [];
+    }
+
+    $slides = [];
+
+    foreach ($main_slider as $slide) {
+        if (isset($slide['show_slide']) && (int) $slide['show_slide'] !== 1) {
+            continue;
+        }
+        if (empty(akademiata_hero_slide_image_urls($slide)['desktop'])) {
+            continue;
+        }
+        $slides[] = $slide;
+    }
+
+    return $slides;
+}
+
+/**
+ * Preload first hero slides in wp_head (call before get_header()).
+ */
+function akademiata_preload_main_slider_image(array $slides) {
+    if (empty($slides)) {
+        return;
+    }
+
+    $preload_urls = [];
+    $limit = min(3, count($slides));
+
+    for ($i = 0; $i < $limit; $i++) {
+        $urls = akademiata_hero_slide_image_urls($slides[$i]);
+        $url = $urls['main'] ?? '';
+
+        if ($url && !in_array($url, $preload_urls, true)) {
+            $preload_urls[] = $url;
+        }
+    }
+
+    if (empty($preload_urls)) {
+        return;
+    }
+
+    add_action('wp_head', static function () use ($preload_urls) {
+        foreach ($preload_urls as $url) {
+            echo '<link rel="preload" as="image" href="' . esc_url($url) . '">' . "\n";
+        }
+    }, 1);
+}
+
+/**
+ * Resolve hero slide image URLs for desktop, mobile, and nav thumb.
+ *
+ * @return array{main: string, desktop: string, mobile: string, thumb: string}
+ */
+function akademiata_hero_slide_image_urls(array $slide) {
+    $image = $slide['image'] ?? [];
+
+    if (empty($image) || !is_array($image)) {
+        return ['main' => '', 'desktop' => '', 'mobile' => '', 'thumb' => ''];
+    }
+
+    $desktop = !empty($image['sizes']['main_slider_banner'])
+        ? esc_url($image['sizes']['main_slider_banner'])
+        : esc_url($image['url'] ?? '');
+
+    $mobile = !empty($image['sizes']['mobile_slider_banner'])
+        ? esc_url($image['sizes']['mobile_slider_banner'])
+        : $desktop;
+
+    $thumb = !empty($image['sizes']['program_banner'])
+        ? esc_url($image['sizes']['program_banner'])
+        : $desktop;
+
+    $main = wp_is_mobile() ? $mobile : $desktop;
+
+    return [
+        'main' => $main,
+        'desktop' => $desktop,
+        'mobile' => $mobile,
+        'thumb' => $thumb,
+    ];
+}
+
+/**
+ * Taxonomies used on single bachelor/master offer pages.
+ */
+function akademiata_single_offer_taxonomies() {
+    return [
+        'city',
+        'program',
+        'degree',
+        'obtained_title',
+        'duration',
+        'language',
+        'mode',
+        'recruitment_date',
+    ];
+}
+
+/**
+ * When false (default), offer pages always show open registration and standard promos.
+ * Enable via filter for date-gated campaigns (e.g. March 2027 recruitment terms).
+ */
+function akademiata_recruitment_date_gating_enabled() {
+    return (bool) apply_filters('akademiata_recruitment_date_gating_enabled', false);
+}
+
+/**
+ * recruitment_date term slugs that count as an active campaign (all WPML languages).
+ *
+ * @return string[]
+ */
+function akademiata_active_recruitment_slugs() {
+    return apply_filters('akademiata_active_recruitment_slugs', [
+        // Example for 2027:
+        // 'marzec-2027', 'march-2027', 'mart-2027', 'berezen-2027',
+    ]);
+}
+
+/**
+ * Whether the offer should show an active registration CTA.
+ */
+function akademiata_post_has_active_recruitment($post_id) {
+    if (!akademiata_recruitment_date_gating_enabled()) {
+        return true;
+    }
+
+    $slugs = akademiata_active_recruitment_slugs();
+    if (empty($slugs)) {
+        return true;
+    }
+
+    $terms = akademiata_get_offer_terms($post_id, 'recruitment_date');
+
+    foreach ($terms as $term) {
+        if (in_array($term->slug, $slugs, true)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Load and cache all offer taxonomies for a post in one query.
+ *
+ * @return array<string, WP_Term[]>
+ */
+function akademiata_get_offer_terms($post_id, $taxonomy = null) {
+    static $cache = [];
+
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return $taxonomy ? [] : [];
+    }
+
+    if (!isset($cache[$post_id])) {
+        $terms = wp_get_object_terms($post_id, akademiata_single_offer_taxonomies(), [
+            'update_term_meta_cache' => false,
+        ]);
+
+        $grouped = [];
+        if (!is_wp_error($terms) && !empty($terms)) {
+            foreach ($terms as $term) {
+                $grouped[$term->taxonomy][] = $term;
+            }
+        }
+
+        $cache[$post_id] = $grouped;
+    }
+
+    if ($taxonomy === null) {
+        return $cache[$post_id];
+    }
+
+    return $cache[$post_id][$taxonomy] ?? [];
+}
+
+/**
+ * @param string[]|null $taxonomies
+ * @return array<string, string[]>
+ */
+function akademiata_get_offer_term_slugs($post_id, $taxonomies = null) {
+    $taxonomies = $taxonomies ?: ['program', 'degree', 'city'];
+    $grouped = akademiata_get_offer_terms($post_id);
+    $slugs = [];
+
+    foreach ($taxonomies as $taxonomy) {
+        if (empty($grouped[$taxonomy])) {
+            continue;
+        }
+        foreach ($grouped[$taxonomy] as $term) {
+            $slugs[$taxonomy][] = $term->slug;
+        }
+    }
+
+    return $slugs;
+}
+
+/**
+ * Find the price CPT post that exactly matches offer taxonomies.
+ */
+function akademiata_find_matched_price_post_id($post_id) {
+    static $cache = [];
+
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return null;
+    }
+
+    if (array_key_exists($post_id, $cache)) {
+        return $cache[$post_id];
+    }
+
+    $taxonomies = ['program', 'degree', 'city'];
+    $current_slugs = akademiata_get_offer_term_slugs($post_id, $taxonomies);
+
+    if (empty($current_slugs)) {
+        $cache[$post_id] = null;
+        return null;
+    }
+
+    $tax_query = [];
+    foreach ($taxonomies as $taxonomy) {
+        if (!empty($current_slugs[$taxonomy])) {
+            $tax_query[] = [
+                'taxonomy' => $taxonomy,
+                'field'    => 'slug',
+                'terms'    => $current_slugs[$taxonomy],
+            ];
+        }
+    }
+
+    $query = new WP_Query([
+        'post_type'              => 'price',
+        'posts_per_page'         => 50,
+        'post_status'            => 'publish',
+        'fields'                 => 'ids',
+        'no_found_rows'          => true,
+        'update_post_meta_cache' => false,
+        'update_post_term_cache' => true,
+        'tax_query'              => [
+            'relation' => 'AND',
+            ...$tax_query,
+        ],
+    ]);
+
+    $matched_post_id = null;
+
+    if ($query->have_posts()) {
+        $price_post_ids = $query->posts;
+        update_object_term_cache($price_post_ids, $taxonomies);
+
+        foreach ($price_post_ids as $price_post_id) {
+            $match = true;
+
+            foreach ($taxonomies as $taxonomy) {
+                $price_terms = get_the_terms($price_post_id, $taxonomy);
+                $price_slugs = !empty($price_terms) && !is_wp_error($price_terms)
+                    ? wp_list_pluck($price_terms, 'slug')
+                    : [];
+
+                sort($price_slugs);
+                $post_slugs = $current_slugs[$taxonomy] ?? [];
+                sort($post_slugs);
+
+                if ($price_slugs !== $post_slugs) {
+                    $match = false;
+                    break;
+                }
+            }
+
+            if ($match) {
+                $matched_post_id = (int) $price_post_id;
+                break;
+            }
+        }
+    }
+
+    wp_reset_postdata();
+    $cache[$post_id] = $matched_post_id;
+
+    return $matched_post_id;
+}
 
 function render_taxonomy_info($taxonomy_labels) {
     if (empty($taxonomy_labels) || !is_array($taxonomy_labels)) {
         return;
     }
 
+    $post_id = get_the_ID();
+    $post_type = get_post_type($post_id);
+    $post_type_obj = $post_type ? get_post_type_object($post_type) : null;
+    $base_slug = ($post_type_obj && !empty($post_type_obj->rewrite['slug']))
+        ? $post_type_obj->rewrite['slug']
+        : $post_type;
+
     foreach ($taxonomy_labels as $taxonomy => $label) {
-        $terms = get_the_terms(get_the_ID(), $taxonomy);
+        $terms = akademiata_get_offer_terms($post_id, $taxonomy);
 
         if (!empty($terms) && !is_wp_error($terms)) {
-            $term_links = array_map(function ($term) use ($taxonomy) {
+            $term_links = array_map(function ($term) use ($taxonomy, $base_slug) {
                 if ($taxonomy === 'program') {
                     // Standard taxonomy archive link
                     return sprintf(
@@ -89,10 +392,6 @@ function render_taxonomy_info($taxonomy_labels) {
                     );
                 } elseif ($taxonomy === 'city') {
                     // Custom city filter link
-                    $post_type = get_post_type();
-                    $post_type_obj = get_post_type_object($post_type);
-                    $base_slug = !empty($post_type_obj->rewrite['slug']) ? $post_type_obj->rewrite['slug'] : $post_type;
-
                     $base_url = home_url("/$base_slug/");
                     $city_url = add_query_arg('city', $term->slug, $base_url);
 
@@ -129,10 +428,12 @@ function render_taxonomy_details($taxonomy_labels, $custom_degree_slug = 'oferta
         return;
     }
 
-    foreach ($taxonomy_labels as $taxonomy => $label) {
-        $terms = get_the_terms(get_the_ID(), $taxonomy);
+    $post_id = get_the_ID();
 
-        if (!empty($terms) && !is_wp_error($terms)) {
+    foreach ($taxonomy_labels as $taxonomy => $label) {
+        $terms = akademiata_get_offer_terms($post_id, $taxonomy);
+
+        if (!empty($terms)) {
             $term_links = array_map(function ($term) use ($taxonomy, $custom_degree_slug) {
                 $term_slug = $term->slug;
 
@@ -176,10 +477,12 @@ function render_taxonomy_details($taxonomy_labels, $custom_degree_slug = 'oferta
  * @return string The YouTube playlist ID or an empty string if not found.
  */
 function get_youtube_playlist_id($post_id, $category, $youtube_acf_field, $youtube_playlist = '') {
-    // Get taxonomy terms for the given category
-    $terms = get_the_terms($post_id, $category);
-    if (!$terms || is_wp_error($terms)) {
-        return ''; // Return empty if no terms are found
+    $terms = ($category === 'program')
+        ? akademiata_get_offer_terms($post_id, $category)
+        : get_the_terms($post_id, $category);
+
+    if (empty($terms) || is_wp_error($terms)) {
+        return '';
     }
 
     // Extract term IDs
@@ -296,74 +599,11 @@ add_action('wp_ajax_nopriv_load_more_slides', 'load_more_slides');
  * @return array|null Returns an associative array with 'full_time' and 'part_time' arrays, or null if no match or prices found.
  */
 function get_first_price_row_for_post($post_id) {
-    $taxonomies = ['program', 'degree', 'city'];
-    $current_slugs = [];
+    $matched_post_id = akademiata_find_matched_price_post_id($post_id);
 
-    // Collect term slugs for the current post by taxonomy
-    foreach ($taxonomies as $taxonomy) {
-        $terms = get_the_terms($post_id, $taxonomy);
-        if (!empty($terms) && !is_wp_error($terms)) {
-            foreach ($terms as $term) {
-                $current_slugs[$taxonomy][] = $term->slug;
-            }
-        }
+    if (!$matched_post_id) {
+        return null;
     }
-
-    if (empty($current_slugs)) return null;
-
-    // Build a tax_query for WP_Query
-    $tax_query = [];
-    foreach ($taxonomies as $taxonomy) {
-        if (!empty($current_slugs[$taxonomy])) {
-            $tax_query[] = [
-                'taxonomy' => $taxonomy,
-                'field'    => 'slug',
-                'terms'    => $current_slugs[$taxonomy],
-            ];
-        }
-    }
-
-    // Query all 'price' posts that match all taxonomies
-    $query = new WP_Query([
-        'post_type'      => 'price',
-        'posts_per_page' => -1,
-        'post_status'    => 'publish',
-        'tax_query'      => [
-            'relation' => 'AND',
-            ...$tax_query,
-        ],
-    ]);
-
-    if (!$query->have_posts()) return null;
-
-    $matched_post_id = null;
-
-    foreach ($query->posts as $price_post) {
-        $match = true;
-
-        foreach ($taxonomies as $taxonomy) {
-            $price_terms = get_the_terms($price_post->ID, $taxonomy);
-            $price_slugs = !empty($price_terms) && !is_wp_error($price_terms)
-                ? wp_list_pluck($price_terms, 'slug')
-                : [];
-
-            sort($price_slugs);
-            $post_slugs = $current_slugs[$taxonomy] ?? [];
-            sort($post_slugs);
-
-            if ($price_slugs !== $post_slugs) {
-                $match = false;
-                break;
-            }
-        }
-
-        if ($match) {
-            $matched_post_id = $price_post->ID;
-            break;
-        }
-    }
-
-    if (!$matched_post_id) return null;
 
     $full_time = get_field('full_time', $matched_post_id);
     $part_time = get_field('part_time', $matched_post_id);

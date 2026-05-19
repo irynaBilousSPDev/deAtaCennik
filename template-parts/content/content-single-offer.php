@@ -11,35 +11,12 @@ $top_taxonomies_with_labels = [
 ];
 
 
-if (is_singular(array('bachelor', 'master'))) :
+if (is_singular(array('bachelor', 'master'))) {
+    akademiata_get_offer_terms(get_the_ID());
+}
 
-    $post_id = get_the_ID();
-
-// All slugs for March 2026 in all languages
-    $target_slugs = [
-        'marzec-2026',   // PL
-        'march-2026',    // EN
-        'mart-2026',     // RU
-        'berezen-2026',  // UK
-    ];
-
-// Get recruitment_date terms for this post
-    $terms = get_the_terms($post_id, 'recruitment_date');
-
-    $has_march_2026 = false;
-
-    if (!empty($terms) && !is_wp_error($terms)) {
-        foreach ($terms as $term) {
-            if (in_array($term->slug, $target_slugs, true)) {
-                $has_march_2026 = true;
-                break;
-            }
-        }
-    }
-
-
-    ?>
-<?php endif; ?>
+$show_register_button = akademiata_post_has_active_recruitment(get_the_ID()) && !empty($register_url);
+?>
     <section class="section_header left_space">
         <div class="container">
 
@@ -142,9 +119,9 @@ if (is_singular(array('bachelor', 'master'))) :
 
                                 <div class="d-flex justify-content-center my-5">
 
-                                    <?php if ($has_march_2026) : ?>
-                                        <!-- ACTIVE BUTTON -->
-                                        <a id="offerButton" href="<?php echo $register_url; ?>" target="_blank"
+                                    <?php if ($show_register_button) : ?>
+                                        <a id="offerButton" href="<?php echo esc_url($register_url); ?>" target="_blank"
+                                           rel="noopener noreferrer"
                                            class="button-sing_up"><?php _e('ZAPISZ SIĘ', 'akademiata'); ?></a>
                                     <?php else : ?>
                                         <div class="single_btn_ended">
@@ -211,15 +188,6 @@ $sections = [
 ];
 
 foreach ($sections as $section) {
-
-    if ($section === 'section_tuition_fees') {
-        set_query_var('has_march_2026', $has_march_2026);
-        locate_template("template-parts/single-offer/{$section}.php", true, true);
-        set_query_var('has_march_2026', null);
-        continue;
-    }
-
     get_template_part("template-parts/single-offer/{$section}");
-
 }
 ?>

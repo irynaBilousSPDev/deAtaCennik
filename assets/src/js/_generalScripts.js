@@ -36,7 +36,9 @@ class General {
     }
 
     bindEvents() {
-
+        document.querySelectorAll('.hero-slider').forEach((slider) => {
+            Sliders.initHeroSlider(slider);
+        });
 
         CustomFunctions.initializeAccordion('.accordion_container');
         CustomFunctions.accordionUniversal('.accordion_universal');
@@ -67,10 +69,6 @@ class General {
 
         CustomFunctions.filterAccordion('.filter_accordion_header');
         CustomFunctions.initMobileFilterToggle();
-
-        document.querySelectorAll('.main_slider').forEach(slider => {
-            Sliders.initializeMainSlider(slider);
-        });
 
         // Initialize for all instances of .image_content_slider
         document.querySelectorAll('.image_content_slider').forEach(slider => {

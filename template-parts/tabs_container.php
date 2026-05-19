@@ -92,8 +92,6 @@ function render_price_row( $price_data, $columns, $available_columns, $tab_key )
 							<?php echo ! empty( $col_data[ $col['promo'] ] ) ? esc_html( $col_data[ $col['promo'] ] ) . ' ' . $currency : ''; ?>
 
 							<?php
-							$has_march_2026 = get_query_var( 'has_march_2026', false );
-
 							$tooltip_map = [
 								'col_12_rat'   => 'tooltip_text',
 								'col_semester' => 'semester_tooltip_text',
@@ -103,7 +101,7 @@ function render_price_row( $price_data, $columns, $available_columns, $tab_key )
 							$tooltip_key  = $tooltip_map[$col['key']] ?? '';
 							$tooltip_text = ($tooltip_key && !empty($col_data[$tooltip_key])) ? $col_data[$tooltip_key] : '';
 
-							if ( $has_march_2026 && ! empty( $tooltip_text ) ): ?>
+							if ( ! empty( $tooltip_text ) ): ?>
                                 <span class="price-tooltip">
                                     <span class="tooltip-icon">?</span>
                                     <span class="tooltip-content">

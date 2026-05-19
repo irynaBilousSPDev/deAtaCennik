@@ -1,7 +1,11 @@
 <?php
-get_header();
-$acf_fields = get_fields();// Get all ACF fields
+$acf_fields = get_fields();
 $is_mobile = wp_is_mobile();
+
+$hero_slider_slides = akademiata_get_hero_slider_slides($acf_fields['main_slider'] ?? []);
+akademiata_preload_main_slider_image($hero_slider_slides);
+
+get_header();
 //$acf_fields = get_cached_acf_fields(); // Get all ACF fields from cache
 
 ?>
@@ -26,83 +30,11 @@ $is_mobile = wp_is_mobile();
     </div>
 
 <?php endif; ?>
-<?php $main_slider = !empty($acf_fields['main_slider']) ? $acf_fields['main_slider'] : [];
+<?php
+set_query_var('hero_slider_slides', $hero_slider_slides);
+get_template_part('template-parts/front-page/hero-slider');
 
-// Filter: keep slides where show_slide is ON (or missing -> treat as ON)
-$slides = array_values(array_filter($main_slider, function ($slide) {
-	return !isset($slide['show_slide']) || (int)$slide['show_slide'] === 1;
-}));
-if (!empty($slides)) : ?>
-    <section class="section_main_banner">
-        <div class="main_slider">
-            <div class="main_slider_active">
-                <?php foreach ($slides as $slide) :
-                    $image_url = '';
-
-                    if (!empty($slide['image'])) {
-                        if (wp_is_mobile()) {
-                            //  Load mobile-optimized image
-                            $image_url = !empty($slide['image']['sizes']['mobile_slider_banner'])
-                                ? esc_url($slide['image']['sizes']['mobile_slider_banner'])
-                                : esc_url($slide['image']['url']); // Fallback to original
-                        } else {
-                            //  Load desktop-optimized image
-                            $image_url = !empty($slide['image']['sizes']['main_slider_banner'])
-                                ? esc_url($slide['image']['sizes']['main_slider_banner'])
-                                : esc_url($slide['image']['url']); // Fallback to original
-                        }
-                    }
-                    $title = !empty($slide['title']) ? $slide['title'] : '';
-                    // Ensure the button field exists within the slide
-                    $button = !empty($slide['button']) ? $slide['button'] : null;
-                    ?>
-                    <div class="slide_item">
-                        <div class="image_bg" role="img" aria-label="<?php echo $title; ?>"
-                             style="background-image: url('<?php echo $image_url; ?>')">
-                            <div class="details w-100">
-                                <!-- Include ACF Button Component -->
-                                <?php if (!empty($button)) : ?>
-                                    <?php render_acf_button($button); ?>
-                                <?php else : ?>
-                                    <p style="color: red;">Button field is missing!</p>
-                                <?php endif; ?>
-                                <div class="small_title"><?php echo $title; ?></div>
-                            </div>
-                            <img src="<?php echo get_template_directory_uri() ?>/static/img/logo_ata_compact.webp"
-                                 alt="<?php echo _e('Logo ATA compact', 'akademiata'); ?>">
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <?php if (!$is_mobile) : ?>
-                <div class="main_slider_nav_wrapper">
-                    <div class="main_slider_nav">
-                        <?php foreach ($slides as $slide) :
-                            $image = $slide['image']["sizes"]["program_banner"];
-                            $image_url = !empty($image) ? $image : '';
-                            $title = !empty($slide['title']) ? $slide['title'] : '';
-                            ?>
-                            <div class="slide_item">
-                                <div class="image_bg" role="img" aria-label="<?php echo $title; ?>"
-                                     style="background-image: url('<?php echo $image_url; ?>')">
-                                    <img src="<?php echo get_template_directory_uri() ?>/static/img/logo_ata_compact.webp"
-                                         alt="<?php echo _e('Logo ATA compact', 'akademiata'); ?>">
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-            <?php endif; ?>
-
-            <div class="container">
-                <div class="main_slider_controls"></div>
-            </div>
-        </div>
-    </section>
-<?php endif; ?>
-
-<?php $counter = $acf_fields['counter'];
+$counter = $acf_fields['counter'];
 if (!empty($counter)) : ?>
     <section class="section_counter mb-5">
         <div class="container">
