@@ -26,7 +26,7 @@ Audit the Akademiata theme and **update `.cursor/rules/*.mdc`** so they match th
 - Invent features not present in the repo.
 - Bloat rules with chat-only history or “do not restore” lists unless still relevant architecture.
 - Change `.cursor/commands/` unless the user asked.
-- Commit unless the user also invoked `/commit` or asked to commit.
+- Commit unless the user invoked `/pr` or asked to commit.
 
 ## Output
 

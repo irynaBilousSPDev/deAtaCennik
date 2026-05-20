@@ -1,36 +1,68 @@
-Create a pull request for this theme using the GitHub CLI.
+Commit (if needed), push to GitHub, and optionally open a pull request.
 
-## Before the PR
+The user invoked `/pr` — committing and pushing are allowed.
 
-1. Run `git status`, `git diff`, and `git log -5` to see uncommitted work and commit message style.
-2. If there are uncommitted changes the user wants in the PR, stage and commit them first (only when appropriate — user may have asked explicitly for a PR).
-3. Ensure new files are not left untracked (e.g. `configure/offer-pricing.php`, `template-parts/single-offer/pg-mba/`, `template-parts/single-offer/bachelor-master/`).
+**Team context:** Solo developer — **`main` only is the normal workflow**. Do not require feature branches unless the user asks for a PR with review or the repo blocks direct pushes to `main`.
 
-## Push target
+## 1. Inspect (run in parallel)
 
-- Default: push to **`origin`** → https://github.com/irynaBilousSPDev/deAtaCennik.git
-- Use remote **`ata2026`** only if the user says so.
+- `git status`
+- `git diff` (staged and unstaged)
+- `git log -5 --oneline`
+
+## 2. Commit (if there are uncommitted changes)
+
+Skip if the working tree is already clean.
+
+**Before staging**
+
+- Do not stage secrets (`.env`, credentials, keys).
+- Fix broken Polish text in PHP (mojibake like `studiĂłw`, `ZAPISZ SIÄ`) before commit.
+- Include untracked files that belong to the change.
+
+**Commit rules**
+
+- Never change `git config` or use `--no-verify` unless the user asked.
+- Never `git commit --amend` unless the user asked and the last commit is yours and not pushed.
+- **Commit messages: English only** (imperative, concise). UI copy in PHP stays Polish — separate from git text.
+- Message: 1–2 sentences, focus on **why** (match recent `git log` style).
+
+**Steps:** `git add` (relevant paths only) → `git commit` → `git status`.
+
+If a hook fails: fix and make a **new** commit (do not amend).
+
+## 3. Push to `main` (default)
+
+- Branch: stay on **`main`** unless the user asked for a feature branch.
+- Remote: **`origin`** → https://github.com/irynaBilousSPDev/deAtaCennik.git
+- Use **`ata2026`** only if the user says so.
 
 ```bash
-git push -u origin HEAD
+git push -u origin main
 ```
 
-## Create PR
+(If already on another branch they chose, `git push -u origin HEAD`.)
 
-Always use `gh pr create` with a **descriptive title** and a body that includes:
+## 4. Pull request (optional)
 
-### Summary
+Try **`gh pr create`** only if the user asked for a PR **or** you are on a branch other than `main`.
 
-- 1–3 bullets: what changed and why.
+- On **`main`** after push: a PR is usually **not needed**. Return:
+  - confirmation that `origin/main` is updated
+  - **compare link** for the last push if useful: `https://github.com/irynaBilousSPDev/deAtaCennik/compare/<before>...<after>`
+- If they want a PR from `main` anyway: create `feature/...` first (English slug), push that branch, then `gh pr create --base main --head feature/...` with English title and body (Summary + Test plan).
 
-### Test plan
+**Branch names (when used):** English only — `feature/hero-slider`, `fix/tuition-tabs`, `chore/cursor-rules`.
 
-Checklist tailored to the diff, for example:
+### Test plan (PR body or push summary)
 
-- [ ] Bachelor/master single offer: calculator loads (`logical_sync_key`), `#tuition_fees`, “SPRAWDZ CENNIK”
-- [ ] PG/MBA single offer: ACF payments + price table tabs + bank info (PL)
-- [ ] Prices page template still works
+- [ ] Bachelor/master offer: calculator, `#tuition_fees`
+- [ ] PG/MBA offer: ACF payments + price table
+- [ ] Prices page calculator
 - [ ] `npm run build` if `assets/src/` changed
 - [ ] Permalinks flushed if CPT/taxonomies changed
 
-Return the PR URL when done.
+## Commit or push only?
+
+- **Commit only:** step 2, then stop.
+- **Push only:** step 3, then stop.
