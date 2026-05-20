@@ -15,7 +15,7 @@ if (is_singular(array('bachelor', 'master'))) {
     akademiata_get_offer_terms(get_the_ID());
 }
 
-$show_register_button = akademiata_post_has_active_recruitment(get_the_ID()) && !empty($register_url);
+$show_register_button = !empty($register_url);
 ?>
     <section class="section_header left_space">
         <div class="container">

@@ -203,53 +203,30 @@ function akademiata_single_offer_taxonomies() {
 }
 
 /**
- * When false (default), offer pages always show open registration and standard promos.
- * Enable via filter for date-gated campaigns (e.g. March 2027 recruitment terms).
- */
-function akademiata_recruitment_date_gating_enabled() {
-    return (bool) apply_filters('akademiata_recruitment_date_gating_enabled', false);
-}
-
-/**
- * recruitment_date term slugs that count as an active campaign (all WPML languages).
+ * Taxonomies registered for a post type (bachelor/master, postgraduate, mba, etc.).
  *
  * @return string[]
  */
-function akademiata_active_recruitment_slugs() {
-    return apply_filters('akademiata_active_recruitment_slugs', [
-        // Example for 2027:
-        // 'marzec-2027', 'march-2027', 'mart-2027', 'berezen-2027',
-    ]);
+function akademiata_get_post_taxonomies($post_id) {
+    $post_type = get_post_type((int) $post_id);
+
+    if (!$post_type) {
+        return [];
+    }
+
+    $taxonomies = get_object_taxonomies($post_type);
+
+    if (in_array($post_type, ['bachelor', 'master'], true)) {
+        $taxonomies = array_values(array_unique(array_merge($taxonomies, akademiata_single_offer_taxonomies())));
+    }
+
+    return $taxonomies;
 }
 
 /**
- * Whether the offer should show an active registration CTA.
- */
-function akademiata_post_has_active_recruitment($post_id) {
-    if (!akademiata_recruitment_date_gating_enabled()) {
-        return true;
-    }
-
-    $slugs = akademiata_active_recruitment_slugs();
-    if (empty($slugs)) {
-        return true;
-    }
-
-    $terms = akademiata_get_offer_terms($post_id, 'recruitment_date');
-
-    foreach ($terms as $term) {
-        if (in_array($term->slug, $slugs, true)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-/**
- * Load and cache all offer taxonomies for a post in one query.
+ * Load and cache taxonomy terms for a post (all post types).
  *
- * @return array<string, WP_Term[]>
+ * @return array<string, WP_Term[]>|WP_Term[]
  */
 function akademiata_get_offer_terms($post_id, $taxonomy = null) {
     static $cache = [];
@@ -260,14 +237,18 @@ function akademiata_get_offer_terms($post_id, $taxonomy = null) {
     }
 
     if (!isset($cache[$post_id])) {
-        $terms = wp_get_object_terms($post_id, akademiata_single_offer_taxonomies(), [
-            'update_term_meta_cache' => false,
-        ]);
-
+        $taxonomies = akademiata_get_post_taxonomies($post_id);
         $grouped = [];
-        if (!is_wp_error($terms) && !empty($terms)) {
-            foreach ($terms as $term) {
-                $grouped[$term->taxonomy][] = $term;
+
+        if (!empty($taxonomies)) {
+            $terms = wp_get_object_terms($post_id, $taxonomies, [
+                'update_term_meta_cache' => false,
+            ]);
+
+            if (!is_wp_error($terms) && !empty($terms)) {
+                foreach ($terms as $term) {
+                    $grouped[$term->taxonomy][] = $term;
+                }
             }
         }
 
@@ -278,7 +259,19 @@ function akademiata_get_offer_terms($post_id, $taxonomy = null) {
         return $cache[$post_id];
     }
 
-    return $cache[$post_id][$taxonomy] ?? [];
+    if (!empty($cache[$post_id][$taxonomy])) {
+        return $cache[$post_id][$taxonomy];
+    }
+
+    $terms = get_the_terms($post_id, $taxonomy);
+
+    if (empty($terms) || is_wp_error($terms)) {
+        return [];
+    }
+
+    $cache[$post_id][$taxonomy] = $terms;
+
+    return $terms;
 }
 
 /**
@@ -338,7 +331,7 @@ function akademiata_find_matched_price_post_id($post_id) {
 
     $query = new WP_Query([
         'post_type'              => 'price',
-        'posts_per_page'         => 50,
+        'posts_per_page'         => -1,
         'post_status'            => 'publish',
         'fields'                 => 'ids',
         'no_found_rows'          => true,
@@ -401,7 +394,7 @@ function render_taxonomy_info($taxonomy_labels) {
         : $post_type;
 
     foreach ($taxonomy_labels as $taxonomy => $label) {
-        $terms = akademiata_get_offer_terms($post_id, $taxonomy);
+        $terms = get_the_terms($post_id, $taxonomy);
 
         if (!empty($terms) && !is_wp_error($terms)) {
             $term_links = array_map(function ($term) use ($taxonomy, $base_slug) {
@@ -413,8 +406,15 @@ function render_taxonomy_info($taxonomy_labels) {
                         esc_url(get_term_link($term)),
                         esc_html($term->name)
                     );
+                } elseif ($taxonomy === 'city_pg_mba') {
+                    return sprintf(
+                        '<a title="%s" href="%s">%s</a>',
+                        esc_attr($term->name),
+                        esc_url(get_term_link($term)),
+                        esc_html($term->name)
+                    );
                 } elseif ($taxonomy === 'city') {
-                    // Custom city filter link
+                    // Custom city filter link (bachelor / master archives)
                     $base_url = home_url("/$base_slug/");
                     $city_url = add_query_arg('city', $term->slug, $base_url);
 
@@ -454,9 +454,9 @@ function render_taxonomy_details($taxonomy_labels, $custom_degree_slug = 'oferta
     $post_id = get_the_ID();
 
     foreach ($taxonomy_labels as $taxonomy => $label) {
-        $terms = akademiata_get_offer_terms($post_id, $taxonomy);
+        $terms = get_the_terms($post_id, $taxonomy);
 
-        if (!empty($terms)) {
+        if (!empty($terms) && !is_wp_error($terms)) {
             $term_links = array_map(function ($term) use ($taxonomy, $custom_degree_slug) {
                 $term_slug = $term->slug;
 

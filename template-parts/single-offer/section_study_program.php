@@ -114,8 +114,8 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
 
                     <div class="program_info_details">
                         <?php foreach ($taxonomies as $taxonomy => $label) :
-                            $terms = akademiata_get_offer_terms($post_id, $taxonomy);
-                            if (!empty($terms)) :
+                            $terms = get_the_terms($post_id, $taxonomy);
+                            if (!empty($terms) && !is_wp_error($terms)) :
                                 // Show first taxonomy
                                 ?>
                                 <div class="item text-center">

@@ -29,7 +29,7 @@ if (!$show_calculator) {
 
 	$full_time_price = get_field('full_time', $matched_post_id) ?: [];
 	$part_time_price = get_field('part_time', $matched_post_id) ?: [];
-	$more_info = get_field('more_info', $matched_post_id) ?: [];
+	$more_info = get_field('more_info', $matched_post_id) ?: '';
 	$payments = get_field('payments', $matched_post_id) ?: [];
 
 	$warsaw_variants = [
