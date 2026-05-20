@@ -99,84 +99,6 @@ function master_post_type()
 
 add_action('init', 'master_post_type', 0);
 
-function register_discounts_cpt()
-{
-    $labels = [
-        'name' => __('Discounts', 'akademiata'),
-        'singular_name' => __('Discount', 'akademiata'),
-        'menu_name' => __('Discounts Bachelor/Master', 'akademiata'),
-        'name_admin_bar' => __('Discounts Bachelor/Master', 'akademiata'),
-        'add_new' => __('Add New', 'akademiata'),
-        'add_new_item' => __('Add New Discount', 'akademiata'),
-        'new_item' => __('New Discount', 'akademiata'),
-        'edit_item' => __('Edit Discount', 'akademiata'),
-        'view_item' => __('View Discount', 'akademiata'),
-        'all_items' => __('All Discounts', 'akademiata'),
-        'search_items' => __('Search Discounts', 'akademiata'),
-        'parent_item_colon' => __('Parent Discounts:', 'akademiata'),
-        'not_found' => __('No discounts found.', 'akademiata'),
-        'not_found_in_trash' => __('No discounts found in Trash.', 'akademiata')
-    ];
-
-    $args = [
-        'label' => __('Discounts Bachelor/Master', 'akademiata'),
-        'labels' => $labels,
-        'public' => true,
-        'has_archive' => true,
-//        'menu_position'       => 6,
-        'menu_icon' => 'dashicons-tag', // WordPress Dashicon for tags
-        'show_in_rest' => true, // Enable Gutenberg
-        'supports' => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'],
-//        'taxonomies'          => ['discount_category'], // Attach Taxonomy
-        'taxonomies' => array('discount_category', 'program', 'degree', 'city'), // Attach Taxonomy
-        'capability_type' => 'post',
-        'rewrite' => [
-            'slug' => apply_filters('wpml_translate_single_string', 'promocje', 'akademiata', 'Promocje Slug'),
-        ],
-    ];
-
-    register_post_type('discounts', $args);
-}
-
-add_action('init', 'register_discounts_cpt');
-
-function register_price_cpt()
-{
-    $labels = array(
-        'name' => _x('Prices', 'post type general name', 'akademiata'),
-        'singular_name' => _x('Price', 'post type singular name', 'akademiata'),
-        'menu_name' => _x('Prices', 'admin menu', 'akademiata'),
-        'name_admin_bar' => _x('Price', 'add new on admin bar', 'akademiata'),
-        'add_new' => _x('Add New', 'price', 'akademiata'),
-        'add_new_item' => __('Add New Price', 'akademiata'),
-        'new_item' => __('New Price', 'akademiata'),
-        'edit_item' => __('Edit Price', 'akademiata'),
-        'view_item' => __('View Price', 'akademiata'),
-        'all_items' => __('All Prices', 'akademiata'),
-        'search_items' => __('Search Prices', 'akademiata'),
-        'parent_item_colon' => __('Parent Prices:', 'akademiata'),
-        'not_found' => __('No prices found.', 'akademiata'),
-        'not_found_in_trash' => __('No prices found in Trash.', 'akademiata'),
-    );
-
-    $args = array(
-        'labels' => $labels,
-        'public' => true,
-        'has_archive' => true,
-        'rewrite' => array('slug' => 'prices'),
-        'supports' => array('title', 'editor', 'thumbnail'),
-        'taxonomies' => array('price_category', 'degree', 'program', 'city'), // Attach Taxonomy
-//        'show_in_rest'       => true, // enable for Gutenberg & REST API
-//        'menu_position'       => 5,
-        'menu_icon' => 'dashicons-money-alt',
-    );
-
-    register_post_type('price', $args);
-}
-
-add_action('init', 'register_price_cpt');
-
-
 function register_youtube_shorts_cpt()
 {
     $labels = array(
@@ -252,7 +174,7 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('degree', array('bachelor', 'master', 'price'), $args);
+    register_taxonomy('degree', array('bachelor', 'master'), $args);
 
     // Add new taxonomy, make it hierarchical (like categories) programs - kierunek studiow
     $labels = array(
@@ -281,7 +203,7 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts', 'discounts', 'price'), $args);
+    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts'), $args);
 
 
     // Add new taxonomy, make it hierarchical (like categories) Study mode - Tryb
@@ -483,7 +405,7 @@ function wpdocs_create_study_taxonomies()
             'rewrite' => array('slug' => 'miasto'),
         );
 
-        register_taxonomy('city', array('bachelor', 'master', 'discounts', 'price'), $args);
+        register_taxonomy('city', array('bachelor', 'master'), $args);
     }
 
     add_action('init', 'register_city_taxonomy');

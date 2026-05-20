@@ -8,6 +8,8 @@ include('configure/cpt-taxonomy.php');
 
 include('configure/utilities.php');
 
+include('configure/offer-pricing.php');
+
 // ajax filter
 
 include('configure/ajax_filters.php');

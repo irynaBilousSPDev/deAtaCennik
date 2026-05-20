@@ -1,0 +1,45 @@
+---
+description: Akademiata theme — repo, stack, configure, conventions
+alwaysApply: true
+---
+
+# Akademiata WordPress theme
+
+- **Repo:** https://github.com/irynaBilousSPDev/deAtaCennik.git (`origin`)
+- **Optional remote:** `ata2026` → https://github.com/arinabilous/ata2026.git (only when user asks)
+- **Text domain:** `akademiata` for all `__()`, `_e()`, `_x()`, `esc_html_e()`
+- **Stack:** WordPress, ACF, WPML, Gulp (SCSS), Webpack (JS), Bootstrap 4 CDN (not npm BS5 on front)
+
+## `functions.php` load order
+
+`cpt-taxonomy.php` → `utilities.php` → `offer-pricing.php` → `ajax_filters.php` → `configure.php` → `js-css.php` → `shortcodes.php` → `breadcrumbs-functions.php` → `duplicate-cpt-posts.php` → `acf.php` → `load-cpt-slider.php` → `class-wp-mega-menu-walker.php` → `generate_keys_bch_mst.php` → `admin.php` (admin only). `wpml-string.php` is commented out.
+
+## Build
+
+```bash
+npm install && npm run build   # or npm run dev
+```
+
+Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{main,ajaxFilter,ajaxSlider,vendors}.js`. Rebuild after SCSS/JS changes.
+
+## PHP conventions
+
+- New helpers: prefer `akademiata_*` prefix; legacy `ata_*` for smart keys / news URLs.
+- Match existing style in the file you edit (tabs vs spaces, `get_template_part` vs `locate_template`).
+- **Windows:** never use PowerShell `Set-Content -Encoding UTF8` on theme PHP (breaks Polish characters).
+
+## Cross-cutting behavior
+
+- **Registration CTA:** show when `register_url` ACF is non-empty (`!empty($register_url)`).
+- **Bachelor/master terms cache:** `akademiata_get_offer_terms()` in `utilities.php` — for performance on offer singles/cards, not for PG/MBA detail blocks (use `get_the_terms()` there).
+- **logical_sync_key:** auto-generated on bachelor/master save (`configure/generate_keys_bch_mst.php`); powers Google calculator on single offers.
+
+## External data
+
+- Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`.
+- YouTube: `youtube-proxy.php` + `__YouTubeSlider.js`.
+
+## Cursor rules
+
+- Architecture docs: `.cursor/rules/*.mdc` — update when code changes (`akademiata-maintain-rules.mdc`).
+- Full audit: run **`/sync-rules`** in chat after large refactors.

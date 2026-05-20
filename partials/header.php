@@ -75,12 +75,8 @@
                     <div class="mobile_visible">
                         <div class="d-flex">
 
-<!--							--><?php //if ( $has_march_2026 || is_singular( [ 'courses', 'postgraduate', 'mba' ] ) ) : ?>
-                                <!-- ACTIVE BUTTON -->
                                 <a href=""
                                    class="button-sing_up registration_link mr-3"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
-
-<!--							--><?php //endif; ?>
                             <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
                                 <span class="menu-icon">
                                     <span class="bar top-bar"></span>
@@ -97,15 +93,8 @@
 								<?php locate_template( 'partials/nav_single_offer.php', true, true ); ?>
 							<?php endif; ?>
 
-<!--							--><?php //if ( $has_march_2026 || is_singular( [ 'courses', 'postgraduate', 'mba' ] ) ) : ?>
-                                <!-- ACTIVE BUTTON -->
                                 <a href=""
                                    class="button-sing_up registration_link"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
-<!--							--><?php //elseif ( ! is_singular( [ 'courses', 'postgraduate', 'mba' ] ) ) : ?>
-<!--                                <div class="single_btn_ended">-->
-<!--									--><?php //get_template_part( 'partials/button_ended' ); ?>
-<!--                                </div>-->
-<!--							--><?php //endif; ?>
 
 
                             <button class="megaMenuToggle mega-menu-button">

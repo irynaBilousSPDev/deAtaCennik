@@ -1,0 +1,32 @@
+---
+description: Two pricing systems — calculator vs PG/MBA ACF tables
+globs: template-parts/single-offer/**,template-parts/prices/**,configure/offer-pricing.php,configure/js-css.php,assets/src/js/prices-calculator.js,page-template-prices.php
+alwaysApply: false
+---
+
+# Pricing (two systems)
+
+## Bachelor / Master
+
+- **UI:** `.kalkulator-wse` in `template-parts/prices/calculator.php`.
+- **Wiring:** `section_tuition_fees.php` → `bachelor-master/section-tuition-calculator.php` (needs post meta `logical_sync_key`).
+- **Data:** `akademiataPrices.googleApiUrl` (Apps Script); JS `assets/src/js/prices-calculator.js` (bundled in `main.js`); optional fallback `prices.json`.
+- **Header teaser:** link “SPRAWDZ CENNIK” to `#tuition_fees` when `logical_sync_key` is set (no CPT price row).
+
+## Postgraduate / MBA
+
+- **Data:** ACF on the offer post — `payments`, `full_time`, `part_time`, column title fields, `more_info`.
+- **PHP:** `configure/offer-pricing.php` (`akademiata_pg_mba_*`).
+- **Templates:** `template-parts/single-offer/pg-mba/` (`section-tuition-fees.php`, `partials/price-table-acf.php`, `tuition-payments.php`, `bank-transfer-info.php`).
+- **Payments repeater:** title, price, currency, optional `description` (no `promotion` checkbox on rows).
+- **Table promos:** column flags like `add_promotion_rat8` in `full_time` / `part_time` grids.
+- **Teaser price:** `akademiata_pg_mba_get_teaser_price_text()` from first row `col_8_rat`.
+
+## Prices page
+
+`page-template-prices.php` includes the same `calculator.php` without fixed key (full program picker).
+
+## Maintenance
+
+- Calculator/script changes: update `apps-script/`, redeploy web app URL in `js-css.php` if deployment ID changes.
+- After taxonomy rewrite changes affecting `promocje`: flush permalinks.

@@ -75,34 +75,11 @@ $show_register_button = !empty($register_url);
                             ?>
 
                             <?php
-                            $price_data = get_first_price_row_for_post(get_the_ID());
-                            $currency = apply_filters('wpml_current_language', null) === 'en' ? '€' : 'zł/mies.';
-                            $price_text = '';
-
-                            if ($price_data) {
-                                $first_row = !empty($price_data['full_time'])
-                                    ? $price_data['full_time'][0]
-                                    : ($price_data['part_time'][0] ?? []);
-
-                                $col_data = $first_row['col_12_rat'] ?? [];
-
-                                $has_promo = !empty($col_data['add_promotion']) && in_array('promotion', $col_data['add_promotion']);
-
-                                if ($has_promo && !empty($col_data['promotion_price'])) {
-                                    $price_text = esc_html($col_data['promotion_price']) . ' ' . $currency;
-                                } elseif (!empty($col_data['normal_price'])) {
-                                    $price_text = esc_html($col_data['normal_price']) . ' ' . $currency;
-                                }
-                            }
-                            ?>
-
-                            <?php if (!empty($price_text)) : ?>
+                            $logical_sync_key = trim((string) get_post_meta(get_the_ID(), 'logical_sync_key', true));
+                            if ($logical_sync_key !== '') :
+                                ?>
                                 <div id="priseScroll" class="taxonomy_info price_from_single my-5">
                                     <?php _e('CENA', 'akademiata'); ?>:
-                                    <strong>
-                                        <?php _e('już od', 'akademiata'); ?>
-                                        <?php echo $price_text; ?>
-                                    </strong>
                                     <a href="#tuition_fees" class="primary_color">
                                         <?php _e('SPRAWDZ CENNIK', 'akademiata'); ?>
                                     </a>

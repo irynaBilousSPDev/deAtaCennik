@@ -1,0 +1,37 @@
+---
+description: CPTs and taxonomies (configure/cpt-taxonomy.php)
+globs: configure/cpt-taxonomy.php,single-*.php,archive-*.php,taxonomy-*.php,partials/card_post*.php
+alwaysApply: false
+---
+
+# Post types and taxonomies
+
+Source of truth: `configure/cpt-taxonomy.php`. Flush permalinks after CPT/taxonomy/rewrite changes.
+
+## Offer CPTs
+
+| CPT | Archive / slug notes | Taxonomies |
+|-----|----------------------|------------|
+| `bachelor` | `oferta/studia-1-stopnia` | `program`, `degree`, `mode`, `obtained_title`, `promotions`, `department`, `city`, `recruitment_date`, `language`, `duration`, `post_tag` |
+| `master` | `oferta/studia-2-stopnia` | same as bachelor |
+| `postgraduate` | `studia-podyplomowe` | `type_of_study_pg_mba`, `duration_pg_mba`, `language_pg_mba`, `diploma_pg_mba`, `form_pg_mba`, `city_pg_mba` |
+| `mba` | `studia-mba` | same PG/MBA set |
+
+`promotions` taxonomy uses rewrite slug `promocje` (bachelor/master only).
+
+## Other CPTs
+
+| CPT | Taxonomies (main) |
+|-----|-------------------|
+| `courses` | `course_type`, `mode_course`, `duration_course`, `language`, `city_pg_mba`, `instructor_course`, `price_course`, `fee_course` |
+| `exams` | `exam_price`, `exam_date`, `exam_location`, `exam_city` |
+| `contact` | `contact_city` |
+| `cadre` | `cadre_group` |
+| `faq` | `faq_topics` |
+| `youtube_shorts` | `program` |
+
+## WPML
+
+- Queries often pass `'lang' => apply_filters('wpml_current_language', null)`.
+- PG/MBA permalink filters and city-in-URL rules live at bottom of `cpt-taxonomy.php`.
+- News bases: PL `aktualnosci`, EN `news`, UK `novyny`, RU `novosti` (`ata_news_base_by_lang()` in `configure.php`).

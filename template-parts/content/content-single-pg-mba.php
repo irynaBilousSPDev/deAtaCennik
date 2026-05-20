@@ -1,4 +1,4 @@
-<?php $acf_fields = get_fields();
+﻿<?php $acf_fields = get_fields();
 //  Pass ACF fields to templates
 set_query_var('acf_fields', $acf_fields);
 $is_mobile = wp_is_mobile();
@@ -16,66 +16,6 @@ $register_url = !empty($acf_fields['register_url']) ? $acf_fields['register_url'
 $top_taxonomies_with_labels = [
         'city_pg_mba' => __('Lokalizacja', 'akademiata'),
 ];
-
-$payments = $acf_fields['payments'] ?? [];
-$more_info = $acf_fields['more_info'] ?? '';
-$full_time_price = get_field('full_time') ?: '';
-$part_time_price = get_field('part_time') ?: '';
-
-// Helper functions
-function has_price_data($price_data)
-{
-    $columns = ['col_12_rat', 'col_semester', 'col_year', 'col_8_rat'];
-    foreach ($price_data as $year_data) {
-        foreach ($columns as $col) {
-            if (!empty($year_data[$col])) return true;
-        }
-    }
-    return false;
-}
-
-function get_available_columns($price_data, $columns)
-{
-    $available = [];
-    foreach ($columns as $col_index => $col) {
-        foreach ($price_data as $year_data) {
-            $col_data = $year_data[$col['key']] ?? [];
-            if (!empty($col_data[$col['normal']])) {
-                $available[$col_index] = true;
-                break;
-            }
-        }
-    }
-    return $available;
-}
-
-function render_price_row($price_data, $columns, $available_columns, $tab_key)
-{
-    // Currency rule: Polish-language studies => ZŁ, English-language studies => €
-    $currency = ($tab_key === 'part_time') ? '€' : 'ZŁ';
-
-    foreach ($price_data as $row) : ?>
-        <tr>
-            <?php foreach ($columns as $col_index => $col) :
-                if (empty($available_columns[$col_index])) continue;
-                $col_data = $row[$col['key']] ?? [];
-                $has_promo = !empty($col_data[$col['flag']]) && in_array('promotion', $col_data[$col['flag']]);
-                ?>
-                <td>
-                    <div class="<?php echo $has_promo ? 'old_price' : ''; ?>">
-                        <?php echo esc_html($col_data[$col['normal']] ?? '') . ' ' . $currency; ?>
-                    </div>
-                    <?php if ($has_promo && !empty($col_data[$col['promo']])) : ?>
-                        <div class="new_price">
-                            <?php echo esc_html($col_data[$col['promo']]) . ' ' . $currency; ?>
-                        </div>
-                    <?php endif; ?>
-                </td>
-            <?php endforeach; ?>
-        </tr>
-    <?php endforeach;
-}
-
 
 ?>
 <section class="section_header left_space">
@@ -126,45 +66,8 @@ function render_price_row($price_data, $columns, $available_columns, $tab_key)
 
                         render_taxonomy_details($taxonomies_with_labels, __('oferta', 'akademiata')); ?>
 
-                        <?php
-                        $currency = apply_filters('wpml_current_language', null) === 'en' ? '€/month' : 'zł';
-                        $price_text = '';
-
-                        // Decide which dataset is used to show the "from" price
-                        $source_data = [];
-                        $using_part_time = false;
-
-                        if (!empty($full_time_price) && is_array($full_time_price)) {
-                            $source_data = $full_time_price;
-                            $using_part_time = false;
-                        } elseif (!empty($part_time_price) && is_array($part_time_price)) {
-                            $source_data = $part_time_price;
-                            $using_part_time = true;
-                        }
-
-                        // Currency rule consistent with tabs: PL studies => ZŁ (or 'zł' if you prefer lowercase), EN studies => €/month
-                        $currency = $using_part_time ? '€/month' : 'zł';
-
-                        $price_text = '';
-
-                        if (!empty($source_data)) {
-                            $row = $source_data[0] ?? [];
-                            $col_data = $row['col_8_rat'] ?? [];
-
-                            if (is_array($col_data)) {
-                                $add_promotion = $col_data['add_promotion_rat8'] ?? [];
-                                $has_promo = (is_array($add_promotion) && in_array('promotion', $add_promotion))
-                                        || $add_promotion === 'promotion';
-
-                                if ($has_promo && !empty($col_data['rat8_promotion_price'])) {
-                                    $price_text = esc_html($col_data['rat8_promotion_price']) . ' ' . $currency;
-                                } elseif (!empty($col_data['rat8_normal_price'])) {
-                                    $price_text = esc_html($col_data['rat8_normal_price']) . ' ' . $currency;
-                                }
-                            }
-                        }
-                        ?>
-                        <?php if (!empty($price_text)) : ?>
+                        <?php $price_text = akademiata_pg_mba_get_teaser_price_text($post_id); ?>
+                        <?php if ($price_text !== '') : ?>
                             <div id="priseScroll" class="taxonomy_info price_from_single my-5">
                                 <?php _e('CENA', 'akademiata'); ?>:
                                 <strong>
@@ -523,222 +426,14 @@ if ($show_cadre_section) {
 <?php endif; ?>
 
 
+
 <?php
-$sub_title = __('Opłaty za studia', 'akademiata');
-$section_title = __('W ATA to Ty decydujesz, jak chcesz zaplanować wydatki na studia!', 'akademiata');
-$table_price_title = __('Elastyczne płatności dla Twojej wygody', 'akademiata');
+set_query_var('pg_mba_wroclaw_slug', $wroclaw_slug);
+set_query_var('pg_mba_warszawa_slug', $warszawa_slug);
+set_query_var('pg_mba_online_slug', $online_slug);
+get_template_part('template-parts/single-offer/pg-mba/section-tuition-fees');
 ?>
-<section id="tuition_fees" class="section_tuition_fees">
-    <div class="container">
-        <h2 class="small_title primary_color mb-3"><?php echo esc_html($sub_title); ?></h2>
-        <h3 class="title_section col-xl-10 p-0 mb-3"><?php echo esc_html($section_title); ?></h3>
-    </div>
 
-    <div class="container">
-        <div class="small_container py-md-5 py-3">
-            <?php if (!empty($payments)) : ?>
-                <?php foreach ($payments as $key => $item) :
-                    $title = $item['title'] ?? '';
-                    $price = $item['price'] ?? '';
-                    $currency = $item['currency'] ?? '';
-                    $promotion = $item['promotion'] ?? [];
-                    $description = $item['description'] ?? '';
-                    ?>
-                    <div class="row payments_item mb-5">
-                        <div class="small_title d-flex align-items-center mr-5">
-                            <?php
-                            if ($title) {
-                                echo esc_html($title);
-                            } elseif (in_array($key, [0, 1])) {
-                                $label = $key === 0 ? __('Opłata rekrutacyjna', 'akademiata') : __('Wpisowe', 'akademiata');
-                                $suffix = __('(opłata jednorazowa)', 'akademiata');
-                                echo wp_kses_post($label . '<br>' . $suffix);
-                            }
-                            ?>
-                        </div>
-
-                        <?php if ($price) : ?>
-                            <div class="d-flex align-items-center mr-5">
-                                <div class="normal_price <?php echo in_array('promotion', $promotion) ? 'promotion' : ''; ?>">
-                                    <?php echo esc_html($price . ' ' . $currency); ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <?php if (in_array('promotion', $promotion)) : ?>
-                            <div class="d-flex align-items-center mr-5">
-                                <div class="description">
-                                    <?php echo $description ? wp_kses_post($description) :
-                                            __('Zapisz się do końca miesiąca', 'akademiata') . ' ' .
-                                            ($key === 0 ? __('- zapłacisz 0 zł opłaty rekrutacyjnej', 'akademiata') : __('- zapłacisz 0 zł wpisowego', 'akademiata')); ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
-
-        <?php if (!empty($more_info)) : ?>
-            <div class="description py-3 mb-md-5 mb-3">
-                <?php echo wp_kses_post($more_info); ?>
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <div class="table_header small_container">
-        <div class="container">
-            <?php if (!empty($table_price_title)) : ?>
-                <h4 class="small_title pb-3 mb-md-5 mb-3">
-                    <?php echo esc_html($table_price_title); ?>
-                </h4>
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <div class="price_table">
-        <div class="container">
-            <div class="small_container">
-                <?php
-                $columns = [
-                        ['key' => 'col_12_rat', 'normal' => 'normal_price', 'promo' => 'promotion_price', 'flag' => 'add_promotion'],
-                        ['key' => 'col_semester', 'normal' => 'semester_normal_price', 'promo' => 'semester_promotion_price', 'flag' => 'add_promotion_semester'],
-                        ['key' => 'col_year', 'normal' => 'year_normal_price', 'promo' => 'year_promotion_price', 'flag' => 'add_promotion_year'],
-                        ['key' => 'col_8_rat', 'normal' => 'rat8_normal_price', 'promo' => 'rat8_promotion_price', 'flag' => 'add_promotion_rat8'],
-                        ['key' => 'col_6_rat', 'normal' => 'rat6_normal_price', 'promo' => 'rat6_promotion_price', 'flag' => 'add_promotion_rat6'],
-                        ['key' => 'col_9_rat', 'normal' => 'rat9_normal_price', 'promo' => 'rat9_promotion_price', 'flag' => 'add_promotion_rat9'],
-                ];
-
-                // Read custom tab labels from current post (fallback to defaults)
-                $label_full_time = trim((string)get_field('tab_label_full_time'));
-                $label_part_time = trim((string)get_field('tab_label_part_time'));
-
-                $label_full_time = $label_full_time !== '' ? $label_full_time : __('STUDIA W JĘZYKU POLSKIM', 'akademiata');
-                $label_part_time = $label_part_time !== '' ? $label_part_time : __('STUDIA W JĘZYKU ANGIELSKIM', 'akademiata');
-
-                $tabs = [
-                        'full_time' => [
-                                'label' => esc_html($label_full_time),
-                                'data' => $full_time_price,
-                        ],
-                        'part_time' => [
-                                'label' => esc_html($label_part_time),
-                                'data' => $part_time_price,
-                        ],
-                ];
-
-                $tabs = array_filter($tabs, fn($tab) => has_price_data($tab['data']));
-                ?>
-
-                <div class="tabs_container pb-md-5 mb-md-5 mb-3">
-                    <?php if (!empty($tabs)) : ?>
-                        <div class="tabs-header">
-                            <?php $first = true; ?>
-                            <?php foreach ($tabs as $key => $tab) : ?>
-                                <div class="tab<?php echo $first ? ' active' : ''; ?>"
-                                     data-tab="<?php echo esc_attr($key); ?>">
-                                    <?php echo esc_html($tab['label']); ?>
-                                </div>
-                                <?php $first = false; ?>
-                            <?php endforeach; ?>
-                        </div>
-
-                        <div class="tabs-content">
-                            <?php $first = true; ?>
-                            <?php foreach ($tabs as $key => $tab) :
-                                $available_columns = get_available_columns($tab['data'], $columns); ?>
-                                <div id="<?php echo esc_attr($key); ?>"
-                                     class="tab-content<?php echo $first ? ' active' : ''; ?>">
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <?php
-                                            // Get ACF fields (options page or post, depending on your setup)
-                                            $title_first_column = get_field('title_first_column') ?: __('1 RATA', 'akademiata');
-                                            $title_second_column = get_field('title_second_column') ?: __('2 RATY', 'akademiata');
-                                            $title_third_column = get_field('title_third_column') ?: __('4 RATY', 'akademiata');
-                                            $title_fourth_column = get_field('title_fourth_column') ?: __('8 RAT', 'akademiata');
-                                            $title_fifth_column = get_field('title_fifth_column') ?: __('6 RAT', 'akademiata');
-                                            $title_sixth_column = get_field('title_sixth_column') ?: __('9 RAT', 'akademiata');
-                                            ?>
-
-                                            <?php if (!empty($available_columns[0])) : ?>
-                                                <th><span><?php echo $title_first_column; ?></span></th>
-                                            <?php endif; ?>
-                                            <?php if (!empty($available_columns[1])) : ?>
-                                                <th><span><?php echo $title_second_column; ?></span></th>
-                                            <?php endif; ?>
-                                            <?php if (!empty($available_columns[2])) : ?>
-                                                <th><span><?php echo $title_third_column; ?></span></th>
-                                            <?php endif; ?>
-                                            <?php if (!empty($available_columns[3])) : ?>
-                                                <th><span><?php echo $title_fourth_column; ?></span></th>
-                                            <?php endif; ?>
-                                            <?php if (!empty($available_columns[4])) : ?>
-                                                <th><span><?php echo $title_fifth_column; ?></span></th>
-                                            <?php endif; ?>
-                                            <?php if (!empty($available_columns[5])) : ?>
-                                                <th><span><?php echo $title_sixth_column; ?></span></th>
-                                            <?php endif; ?>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php render_price_row($tab['data'], $columns, $available_columns, $key); ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <?php $first = false; ?>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else : ?>
-                        <p><?php _e('Brak dostępnych cenników w tym momencie.', 'akademiata'); ?></p>
-                    <?php endif; ?>
-                </div>
-                <?php
-                $current_lang = apply_filters('wpml_current_language', null);
-
-                if ($current_lang !== 'en') :
-                    ?>
-                    <?php
-//                    $pay_warsaw = get_field('info_for_pay_warsaw', 'option');
-
-                    $pay_wroclaw = get_field('info_for_pay_wroclaw', 'option');
-                    $pay_warsaw = $pay_wroclaw;
-
-//                    $account_number_warsaw = get_field('account_number_warsaw', 'option');
-
-                    $account_number_wroclaw = get_field('account_number_wroclaw', 'option');
-                    $account_number_warsaw = $account_number_wroclaw;
-
-                    if (in_array($post_type, ['mba', 'postgraduate'], true) && has_term($warszawa_slug, 'city_pg_mba', $post_id)) : ?>
-                        <div class="description">
-                            <?php echo $pay_warsaw; ?>
-                            <strong><?php _e('Nr rachunku', 'akademiata'); ?>
-                                <span class="copy_account_number"><?php echo $account_number_warsaw; ?></span></strong>
-                        </div>
-                    <?php elseif (
-                            in_array($post_type, ['mba', 'postgraduate'], true)
-                            && (
-                                    has_term($wroclaw_slug, 'city_pg_mba', $post_id)
-                                    || has_term($online_slug, 'city_pg_mba', $post_id)
-                            )
-                    ) : ?>
-                        <div class="description">
-                            <?php echo $pay_wroclaw; ?>
-                            <strong>
-                                <?php _e('Nr rachunku', 'akademiata'); ?>
-                                <span class="copy_account_number"><?php echo $account_number_wroclaw; ?></span></strong>
-                        </div>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </div>
-
-        </div>
-    </div>
-
-
-</section>
 
 
 <section id="discounts" class="section_discounts_pg_mba">
@@ -925,7 +620,7 @@ $section_title = __('KONTAKT', 'akademiata');
                                 }
 
                             } else {
-                                // Wrocław + Online →  email
+                                // Wrocław + Online → email
                                 $final_email = $email_value;
                             }
 

@@ -1,0 +1,44 @@
+---
+description: Front-end build — Gulp, Webpack, SCSS/JS layout
+globs: assets/src/**,assets/dist/**,webpack.config.js,gulpfile.js,package.json
+alwaysApply: false
+---
+
+# Assets pipeline
+
+## Scripts (`package.json`)
+
+- `npm run dev` — webpack watch + gulp
+- `npm run build` — webpack + gulp production
+- `npm start` — gulp only
+
+## Webpack entries → `assets/dist/js/`
+
+| Entry | Source |
+|-------|--------|
+| `main` | `assets/src/js/main.js` |
+| `ajaxFilter` | `assets/src/js/ajax-filter.js` |
+| `ajaxSlider` | `assets/src/js/ajax-load-cpt.js` |
+
+`main.js` imports `_generalScripts.js` (sliders, tabs, YouTube) and `prices-calculator.js`.
+
+## SCSS (`assets/src/scss/main.scss`)
+
+`abstracts/` → `base/` → `components/` → `layout/` → `pages/` (per template: `front-page/`, `single-offer/`, `_prices-page.scss`, etc.) → `vendors/`.
+
+Output: `assets/dist/css/main.css` (+ some page-specific CSS if built separately).
+
+## Enqueued (`configure/js-css.php`)
+
+Bootstrap 4 CDN, Typekit, `main.css`, jQuery, Popper, Bootstrap JS, `vendors.js`, `main.js`. Conditional: `ajaxFilter.js`, `ajaxSlider.js`. Fancybox from `configure.php`.
+
+## Hero slider (homepage)
+
+- ACF `main_slider` on front page
+- PHP: `utilities.php` helpers + `template-parts/front-page/hero-slider.php`
+- JS: `hero-slider.js` via `__sliders.js` (Swiper 11)
+- SCSS: `pages/front-page/_hero-slider.scss`
+
+## Legacy
+
+`templates/` at repo root is an old prototype — not used in live hierarchy. `static/` has legacy assets.

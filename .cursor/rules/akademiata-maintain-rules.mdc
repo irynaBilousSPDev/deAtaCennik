@@ -1,0 +1,30 @@
+---
+description: Keep .cursor/rules accurate when the theme architecture changes
+alwaysApply: true
+---
+
+# Maintain project rules
+
+Project context lives in `.cursor/rules/*.mdc`. **Rules must match the codebase**, not old conversations.
+
+## When to update rules (same task as the code change)
+
+Update the relevant `.mdc` file(s) when you:
+
+- Add/remove/rename a **CPT or taxonomy** → `akademiata-cpts.mdc`
+- Change **template paths**, section lists, or `partials/` vs `template-parts/` → `akademiata-templates.mdc`
+- Change **pricing** (calculator, ACF fields, new helpers) → `akademiata-pricing.mdc`
+- Change **build**, enqueue, or `assets/src` layout → `akademiata-assets.mdc`
+- Change **functions.php includes**, remotes, or global conventions → `akademiata-theme.mdc`
+
+Do **not** document removed features (e.g. deleted CPTs) as “do not restore” unless the user asks — describe what **exists now**.
+
+## How to update
+
+1. Read the real source (`configure/cpt-taxonomy.php`, `functions.php`, affected templates).
+2. Edit only the matching `.mdc` sections; keep each file concise.
+3. Remove stale bullets that no longer apply.
+
+## Full refresh
+
+After a large refactor, tell the user to run **`/sync-rules`** or run it yourself if they asked for a rules audit.

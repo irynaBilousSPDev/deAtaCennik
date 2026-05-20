@@ -71,68 +71,12 @@
                 </div>
             <?php endif; ?>
 
-            <?php
-            $current_lang  = apply_filters('wpml_current_language', null);
-
-            // All slugs for March 2026 in all languages
-//            $target_slugs = [
-//                'marzec-2026',   // PL
-//                'march-2026',    // EN
-//                'mart-2026',     // RU
-//                'berezen-2026',  // UK
-//            ];
-//
-//            $terms = get_the_terms(get_the_ID(), 'recruitment_date');
-//            $has_march_2026 = false;
-//
-//            if (!empty($terms) && !is_wp_error($terms)) {
-//                foreach ($terms as $term) {
-//                    if (in_array($term->slug, $target_slugs, true)) {
-//                        $has_march_2026 = true;
-//                        break;
-//                    }
-//                }
-//            }
-
-            // If recruitment_date has March 2026 (any language) → show "Studiuj od Marca" in ALL languages
-//            if ($has_march_2026) : ?>
-                <div class="price_from">
-                    <div class="price_from__title"><?php _e('Studiuj', 'akademiata'); ?></div>
-                    <div>
-                        <?php _e('od Października', 'akademiata'); ?>
-                    </div>
+            <div class="price_from">
+                <div class="price_from__title"><?php _e('Studiuj', 'akademiata'); ?></div>
+                <div>
+                    <?php _e('od Października', 'akademiata'); ?>
                 </div>
-            <?php
-// Else → old price logic (only if not EN)
-//            elseif ($current_lang !== 'en') :
-//
-//                $price_data = get_first_price_row_for_post(get_the_ID());
-//                $currency   = 'zł';
-//                $price_text = '';
-//
-//                if ($price_data) {
-//                    $first_row = !empty($price_data['full_time'])
-//                        ? $price_data['full_time'][0]
-//                        : ($price_data['part_time'][0] ?? []);
-//
-//                    $col_data   = $first_row['col_12_rat'] ?? [];
-//                    $has_promo  = !empty($col_data['add_promotion']) && in_array('promotion', $col_data['add_promotion']);
-//                    $raw_price  = '';
-//
-//                    if ($has_promo && !empty($col_data['promotion_price'])) {
-//                        $raw_price = $col_data['promotion_price'];
-//                    } elseif (!empty($col_data['normal_price'])) {
-//                        $raw_price = $col_data['normal_price'];
-//                    }
-//
-//                    if (!empty($raw_price)) {
-//                        $number     = floatval(str_replace([' ', ','], ['', '.'], $raw_price));
-//                        $price_text = number_format($number, 0, '.', ' ') . ' ' . $currency;
-//                    }
-//                }
-//                ?>
-<!--            --><?php //endif; ?>
-
+            </div>
 
             <?php
             $thumbnail_id = get_post_thumbnail_id($post->ID);
@@ -199,21 +143,12 @@
                 <?php
                 $register_url = get_field('register_url') ?: home_url();
                 ?>
-<!--                --><?php //if ($has_march_2026) : ?>
-
-                    <!-- ACTIVE BUTTON -->
                 <div class="button-sing_up_wrapper">
                     <a class="button-sing_up mb-3" style="width: 100%"
                        href="<?php echo esc_url($register_url); ?>">
                         <?php _e('ZAPISZ SIĘ', 'akademiata'); ?>
                     </a>
                 </div>
-
-<!--                --><?php //else : ?>
-<!---->
-<!--                    --><?php //get_template_part('partials/button_ended'); ?>
-<!---->
-<!--                --><?php //endif; ?>
             </div>
         </div>
     </div>
