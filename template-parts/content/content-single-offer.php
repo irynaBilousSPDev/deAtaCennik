@@ -80,6 +80,7 @@ $show_register_button = !empty($register_url);
                                 ?>
                                 <div id="priseScroll" class="taxonomy_info price_from_single my-5">
                                     <?php _e('CENA', 'akademiata'); ?>:
+                                    <strong></strong>
                                     <a href="#tuition_fees" class="primary_color">
                                         <?php _e('SPRAWDZ CENNIK', 'akademiata'); ?>
                                     </a>
