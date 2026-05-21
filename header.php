@@ -17,6 +17,9 @@
     <!--or add to .htaccess-->
     <!--    Header always set Permissions-Policy "compute-pressure=()"-->
     <?php wp_head(); ?>
+
+    <!-- <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7d62c502-b225-4caf-86f4-ecff5cd1b119" data-blockingmode="auto" type="text/javascript"></script> -->
+
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NXVN3ZZHC8"></script>
     <script>   window.dataLayer = window.dataLayer || [];
@@ -34,8 +37,6 @@
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-PN9RQ2C');</script>
     <!-- End Google Tag Manager -->
-
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="7d62c502-b225-4caf-86f4-ecff5cd1b119" data-blockingmode="auto" type="text/javascript"></script>
 </head>
 <body <?php body_class(); ?>>
 <!-- Google Tag Manager (noscript) -->
