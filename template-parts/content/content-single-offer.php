@@ -82,7 +82,7 @@ $show_register_button = !empty($register_url);
                                     <?php _e('CENA', 'akademiata'); ?>:
                                     <strong></strong>
                                     <a href="#tuition_fees" class="primary_color">
-                                        <?php _e('SPRAWDZ CENNIK', 'akademiata'); ?>
+                                        <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
                                     </a>
                                 </div>
                             <?php endif; ?>

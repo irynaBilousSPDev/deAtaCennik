@@ -11,7 +11,7 @@ alwaysApply: false
 - **UI:** `.kalkulator-wse` in `template-parts/prices/calculator.php`.
 - **Wiring:** `section_tuition_fees.php` → `bachelor-master/section-tuition-calculator.php` (needs post meta `logical_sync_key`).
 - **Data:** `akademiataPrices.googleApiUrl` (Apps Script); JS `assets/src/js/prices-calculator.js` (bundled in `main.js`); optional fallback `prices.json`.
-- **Header teaser:** link “SPRAWDZ CENNIK” to `#tuition_fees` when `logical_sync_key` is set (no CPT price row).
+- **Header teaser:** link “SPRAWDŹ CENNIK” to `#tuition_fees` when `logical_sync_key` is set (no CPT price row).
 
 ## Postgraduate / MBA
 

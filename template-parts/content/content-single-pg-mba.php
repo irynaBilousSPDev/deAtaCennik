@@ -75,7 +75,7 @@ $top_taxonomies_with_labels = [
                                     <?php echo $price_text; ?>
                                 </strong>
                                 <a href="#tuition_fees" class="primary_color">
-                                    <?php _e('SPRAWDZ CENNIK', 'akademiata'); ?>
+                                    <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
                                 </a>
                             </div>
                         <?php endif; ?>
