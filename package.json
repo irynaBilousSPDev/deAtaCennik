@@ -7,6 +7,7 @@
     "start": "gulp",
     "dev": "concurrently \"webpack --watch\" \"gulp\"",
     "build": "webpack && gulp build",
+    "deploy:dev": "node scripts/deploy-dev.js",
     "remove": "rimraf node_modules package-lock.json"
   },
   "author": "Avista consulting & management",
@@ -48,6 +49,7 @@
     "rimraf": "^6.0.1",
     "sass": "^1.83.4",
     "sass-loader": "^16.0.4",
+    "ssh2-sftp-client": "^12.1.1",
     "style-loader": "^4.0.0",
     "webp-loader": "^0.4.0",
     "webpack": "^5.97.1",

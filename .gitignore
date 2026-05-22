@@ -6,6 +6,7 @@
 # Project
 .sass-cache
 _google_prices.json
+deploy.local.env
 #assets/src
 node_modules/
 

@@ -44,3 +44,4 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 - Architecture docs: `.cursor/rules/*.mdc` — update when code changes (`akademiata-maintain-rules.mdc`).
 - Full audit: run **`/sync-rules`** after large refactors.
 - Git: solo workflow on **`main`** — **`/pr`** = commit (if needed) + push `origin main`; PR optional. Commit messages: **English only**. UI strings in PHP stay Polish (`akademiata` text domain). Say “commit only” or “push only” to limit `/pr` steps.
+- **Dev deploy:** **`/deploy-dev`** = commit (if dirty) → push `origin main` (if ahead) → `npm run deploy:dev` (SFTP). Say **deploy only** / **without commit** to SFTP-upload only (skip git).
