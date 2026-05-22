@@ -2,11 +2,6 @@
 
 // Utilities functions here
 
-/**
- * Production host only — GTM / gtag must not load on dev (Cookiebot via WP plugin).
- *
- * @return bool
- */
 function akademiata_is_production() {
 	$host = wp_parse_url( home_url(), PHP_URL_HOST );
 	$host = strtolower( (string) $host );

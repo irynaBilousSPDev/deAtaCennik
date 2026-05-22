@@ -43,7 +43,7 @@ Remote: **`origin`** → https://github.com/irynaBilousSPDev/deAtaCennik.git
 
 ### 4. SFTP to production
 
-**Prerequisites:** `deploy.local.env` has **`SFTP_PROD_HOST`**, **`SFTP_PROD_USER`**, **`SFTP_PROD_REMOTE_PATH`** (password or key). Falls back to `SFTP_*` for user/password if `SFTP_PROD_*` omitted.
+**Prerequisites:** `deploy.local.env` has `SFTP_PROD_HOST`, `SFTP_PROD_USER`, `SFTP_PROD_PASSWORD` (or `SFTP_PROD_PRIVATE_KEY`), `SFTP_PROD_REMOTE_PATH`.
 
 ```bash
 npm run deploy:prod

@@ -79,7 +79,7 @@ function envFlag(env, key) {
 
 function cfg(env, target, key) {
 	if (target === 'prod') {
-		return env[`SFTP_PROD_${key}`] || env[`SFTP_${key}`];
+		return env[`SFTP_PROD_${key}`];
 	}
 	return env[`SFTP_${key}`];
 }
@@ -125,6 +125,10 @@ function buildSftpConfig(env, target) {
 		throw new Error(
 			`${prefix}HOST, ${prefix}USER, and ${prefix}REMOTE_PATH are required in deploy.local.env`
 		);
+	}
+
+	if (target === 'prod' && !cfg(env, 'prod', 'PASSWORD') && !cfg(env, 'prod', 'PRIVATE_KEY')) {
+		throw new Error('Set SFTP_PROD_PASSWORD or SFTP_PROD_PRIVATE_KEY in deploy.local.env');
 	}
 
 	const config = { host, port, username, readyTimeout: 30000 };
