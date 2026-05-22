@@ -84,7 +84,9 @@ Quick test URL after deploy: `https://script.google.com/macros/s/YOUR_ID/exec?fo
 3. `npm install`
 4. `npm run deploy:dev` — builds assets, uploads changed theme files.
 
-**Cursor:** **`/deploy-dev`** — commit (if you have uncommitted changes) → push to `origin/main` → SFTP deploy. Already committed? Deploy only, no extra commit. Say **deploy only** to skip git and upload current files.
+**Git:** branch **`dev`** for dev work; **`main`** for production (**`/pr`**). **Cursor:** **`/deploy-dev`** — commit on `dev` (if needed) → push `origin dev` → SFTP. Say **deploy only** to skip git.
+
+**Analytics:** GTM and gtag load only on production (`akademiata_is_production()`). Cookiebot is handled by the WordPress plugin, not the theme.
 
 **Dry run:** set `DRY_RUN=true` in `deploy.local.env`. **Skip build:** `SKIP_BUILD=true`.
 
