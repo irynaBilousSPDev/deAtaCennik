@@ -28,7 +28,7 @@ function bachelor_post_type()
         'labels' => $labels,
         'hierarchical' => false,
         'description' => "Bachelor's degree specializations",
-        'supports' => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'post-formats', 'custom-fields'),
+        'supports' => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'post-formats', 'custom-fields', 'revisions'),
         'taxonomies' => array('post_tag', 'degree', 'mode', 'obtained_title', 'promotions', 'department', 'city', 'recruitment_date'),
         'show_ui' => true,
         'show_in_menu' => true,
@@ -78,7 +78,7 @@ function master_post_type()
         'labels' => $labels,
         'hierarchical' => false,
         'description' => "Master's degree specializations",
-        'supports' => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'post-formats', 'custom-fields'),
+        'supports' => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'post-formats', 'custom-fields', 'revisions'),
         'taxonomies' => array('post_tag', 'degree', 'mode', 'obtained_title', 'promotions', 'department', 'city','recruitment_date'),
         'show_ui' => true,
         'show_in_menu' => true,
@@ -131,7 +131,7 @@ function register_youtube_shorts_cpt()
         'hierarchical' => false,
 //        'menu_position'       => 5,
         'menu_icon' => 'dashicons-video-alt3', // YouTube-style icon
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'comments'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'comments', 'revisions'),
 //        'show_in_rest'        => true, // Enables Gutenberg editor
     );
 
@@ -469,7 +469,7 @@ function register_postgraduate_cpt()
             'slug' => 'studia-podyplomowe',
             'with_front' => false,
         ),
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-welcome-learn-more',
         'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
     );
@@ -502,7 +502,7 @@ function register_mba_cpt()
             'slug' => 'studia-mba',
             'with_front' => false,
         ),
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-businessman',
         'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
     );
@@ -579,7 +579,7 @@ function register_courses_cpt()
             'slug' => 'kursy',
             'with_front' => false,
         ),
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-welcome-learn-more',
         'taxonomies' => array(
             'mode_course',
@@ -741,7 +741,7 @@ add_action('init', function () {
         'show_ui' => true,
         'show_in_menu' => true,
         'menu_icon' => 'dashicons-id',
-        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],
+        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields', 'revisions'],
         'has_archive' => true,
         'rewrite' => ['slug' => 'contacts', 'with_front' => false],
         'show_in_rest' => true,
@@ -804,7 +804,7 @@ add_action('init', function () {
         'show_in_rest'       => true,
         'menu_position'      => 25,
         'menu_icon'          => 'dashicons-id-alt',
-        'supports'           => ['title', 'thumbnail', 'editor'],
+        'supports'           => ['title', 'thumbnail', 'editor', 'revisions'],
         'rewrite'            => ['slug' => 'cadre'],
     ]);
 
@@ -869,7 +869,7 @@ function register_faq_cpt_and_taxonomy()
         'has_archive' => true,
         'hierarchical' => false,
         'menu_position' => 20,
-        'supports' => ['title', 'editor'],
+        'supports' => ['title', 'editor', 'revisions'],
         'show_in_rest' => true, // Gutenberg / API support
     ];
 
@@ -1068,7 +1068,7 @@ function register_exams_cpt()
             'slug' => 'egzaminy',
             'with_front' => false,
         ),
-        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields'),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-welcome-write-blog',
         'taxonomies' => array(
             'exam_price',     // PRICE

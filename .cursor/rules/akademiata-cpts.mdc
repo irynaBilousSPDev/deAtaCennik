@@ -8,6 +8,11 @@ alwaysApply: false
 
 Source of truth: `configure/cpt-taxonomy.php`. Flush permalinks after CPT/taxonomy/rewrite changes.
 
+## Admin history
+
+- **Simple History** plugin — logs create/update/delete for all theme CPTs (install on dev + prod).
+- CPTs use `'revisions'` in `supports` — native revision compare in post editor.
+
 ## Offer CPTs
 
 | CPT | Archive / slug notes | Taxonomies |

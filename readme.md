@@ -97,6 +97,15 @@ Quick test URL after deploy: `https://script.google.com/macros/s/YOUR_ID/exec?fo
 - Configure **Excluded paths**
 - Upload theme to server (or use `npm run deploy:dev` above)
 
+## Admin: post history (CPT)
+
+1. Install **[Simple History](https://wordpress.org/plugins/simple-history/)** on dev and production (Dashboard → Wtyczki).
+2. **Ustawienia → Simple History** — leave default loggers on; optional email alerts.
+3. View log: **Dashboard → Simple History** or widget on home screen.
+4. Theme CPTs include **`revisions`** — when editing an offer, open **Rewizje** in the sidebar to compare older saves.
+
+ACF field-level diffs may appear only as “Post updated” unless you use a Simple History premium add-on.
+
 ## License & credits
 
 Akademiata is licensed under the **GNU General Public License v2 or later**.
