@@ -52,3 +52,4 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 - Full audit: run **`/sync-rules`** after large refactors.
 - Git: **`dev`** = daily work. **`main`** = production. **`/deploy-dev`** = commit on `dev` (if dirty) + SFTP dev — **no push** (say **push dev** or **`/push-dev`** for GitHub). **`/deploy-prod`** = merge `dev` → `main`, push `main`, `npm run deploy:prod`. **`/pr`** = `main` only when not using deploy-prod.
 - **GTM / gtag:** `akademiata_is_production()` — prod hosts only. **Cookiebot:** WP plugin only.
+- **New CPT:** `akademiata_register_post_type()` — auto `author` + `revisions` + native admin boxes.

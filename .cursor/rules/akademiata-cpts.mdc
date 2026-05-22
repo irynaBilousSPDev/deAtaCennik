@@ -8,10 +8,14 @@ alwaysApply: false
 
 Source of truth: `configure/cpt-taxonomy.php`. Flush permalinks after CPT/taxonomy/rewrite changes.
 
+## Registering a new CPT
+
+Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_post_type()` — auto-adds `author`, `revisions`, and `akademiata_theme` flag.
+
 ## Admin history
 
-- **Simple History** plugin — logs create/update/delete for all theme CPTs (install on dev + prod).
-- CPTs use `'revisions'` in `supports` — native revision compare in post editor.
+- **Simple History** — kto / kiedy (log).
+- **Autor** + **Rewizje** — native WP meta boxes (unhidden for theme CPTs). ACF Pro fills revision field diffs.
 
 ## Offer CPTs
 

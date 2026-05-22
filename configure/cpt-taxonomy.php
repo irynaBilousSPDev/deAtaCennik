@@ -1,5 +1,35 @@
 <?php
 
+function akademiata_register_post_type( $post_type, $args ) {
+	$supports = isset( $args['supports'] ) ? (array) $args['supports'] : array();
+	foreach ( array( 'author', 'revisions' ) as $feature ) {
+		if ( ! in_array( $feature, $supports, true ) ) {
+			$supports[] = $feature;
+		}
+	}
+	$args['supports']         = $supports;
+	$args['akademiata_theme'] = true;
+
+	register_post_type( $post_type, $args );
+}
+
+function akademiata_theme_post_types() {
+	static $cache = null;
+
+	if ( null !== $cache ) {
+		return $cache;
+	}
+
+	$cache = array();
+	foreach ( get_post_types( array(), 'objects' ) as $name => $object ) {
+		if ( ! empty( $object->akademiata_theme ) ) {
+			$cache[] = $name;
+		}
+	}
+
+	return apply_filters( 'akademiata_theme_post_types', $cache );
+}
+
 // Custom Post types & Taxonomies
 function bachelor_post_type()
 {
@@ -44,7 +74,7 @@ function bachelor_post_type()
         'has_archive' => 'bachelor',
         'capability_type' => 'post'
     );
-    register_post_type('bachelor', $args); // max 20 character cannot contain capital letters and spaces
+    akademiata_register_post_type('bachelor', $args); // max 20 character cannot contain capital letters and spaces
 }
 
 add_action('init', 'bachelor_post_type', 0);
@@ -94,7 +124,7 @@ function master_post_type()
         'has_archive' => 'master',
         'capability_type' => 'post'
     );
-    register_post_type('master', $args); // max 20 character cannot contain capital letters and spaces
+    akademiata_register_post_type('master', $args); // max 20 character cannot contain capital letters and spaces
 }
 
 add_action('init', 'master_post_type', 0);
@@ -135,7 +165,7 @@ function register_youtube_shorts_cpt()
 //        'show_in_rest'        => true, // Enables Gutenberg editor
     );
 
-    register_post_type('youtube_shorts', $args);
+    akademiata_register_post_type('youtube_shorts', $args);
 }
 
 add_action('init', 'register_youtube_shorts_cpt');
@@ -474,7 +504,7 @@ function register_postgraduate_cpt()
         'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
     );
 
-    register_post_type('postgraduate', $args);
+    akademiata_register_post_type('postgraduate', $args);
 }
 
 add_action('init', 'register_postgraduate_cpt');
@@ -507,7 +537,7 @@ function register_mba_cpt()
         'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
     );
 
-    register_post_type('mba', $args);
+    akademiata_register_post_type('mba', $args);
 }
 
 add_action('init', 'register_mba_cpt');
@@ -592,7 +622,7 @@ function register_courses_cpt()
         ),
     );
 
-    register_post_type('courses', $args);
+    akademiata_register_post_type('courses', $args);
 }
 add_action('init', 'register_courses_cpt');
 
@@ -735,7 +765,7 @@ add_action('init', function () {
         'menu_name' => __('Contacts', 'akademiata'),
     ];
 
-    register_post_type('contact', [
+    akademiata_register_post_type('contact', [
         'labels' => $labels,
         'public' => true,
         'show_ui' => true,
@@ -797,7 +827,7 @@ add_action('init', function () {
         'not_found_in_trash'    => __('No cadre members found in Trash.', 'akademiata'),
     ];
 
-    register_post_type('cadre', [
+    akademiata_register_post_type('cadre', [
         'labels'             => $labels,
         'public'             => true,
         'has_archive'        => true,
@@ -873,7 +903,7 @@ function register_faq_cpt_and_taxonomy()
         'show_in_rest' => true, // Gutenberg / API support
     ];
 
-    register_post_type('faq', $faq_args);
+    akademiata_register_post_type('faq', $faq_args);
 
 
     // ----- Register Taxonomy: FAQ Topics -----
@@ -1079,7 +1109,7 @@ function register_exams_cpt()
         'show_in_rest' => true,
     );
 
-    register_post_type('exams', $args);
+    akademiata_register_post_type('exams', $args);
 }
 
 add_action('init', 'register_exams_cpt');
