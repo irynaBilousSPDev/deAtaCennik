@@ -80,7 +80,7 @@ Quick test URL after deploy: `https://script.google.com/macros/s/YOUR_ID/exec?fo
 ## Deploy to dev (SFTP)
 
 1. Copy `deploy.local.env.example` → `deploy.local.env` (gitignored).
-2. Fill SFTP host, user, remote path `/wp-content/themes/akademiata`, and SSH key or password (same as PhpStorm SFTP).
+2. Fill SFTP host, user, remote path `wp-content/themes/akademiata` (relative to SFTP root — usually the WordPress root), and SSH key or password.
 3. `npm install`
 4. `npm run deploy:dev` — builds assets, uploads changed theme files.
 

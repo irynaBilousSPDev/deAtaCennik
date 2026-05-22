@@ -17,6 +17,7 @@ const EXCLUDE_DIR_NAMES = new Set([
 	'.sass-cache',
 	'.idea',
 	'nbproject',
+	'scripts',
 ]);
 
 const EXCLUDE_FILE_NAMES = new Set([
@@ -138,16 +139,15 @@ function buildSftpConfig(env) {
 }
 
 async function ensureRemoteDir(sftp, remoteDir) {
-	const parts = remoteDir.split('/').filter(Boolean);
-	let current = '';
-	for (const part of parts) {
-		current += `/${part}`;
-		try {
-			await sftp.mkdir(current, true);
-		} catch (err) {
-			if (err.code !== 4) {
-				throw err;
-			}
+	const normalized = remoteDir.replace(/\\/g, '/').replace(/\/+$/, '');
+	if (!normalized) {
+		return;
+	}
+	try {
+		await sftp.mkdir(normalized, true);
+	} catch (err) {
+		if (err.code !== 4) {
+			throw err;
 		}
 	}
 }

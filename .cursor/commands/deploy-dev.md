@@ -63,7 +63,7 @@ npm run deploy:dev
 ```
 
 - Runs `npm run build` unless `SKIP_BUILD=true` in `deploy.local.env`.
-- Uploads changed theme files to `SFTP_REMOTE_PATH` (default `/wp-content/themes/akademiata`).
+- Uploads changed theme files to `SFTP_REMOTE_PATH` (default `wp-content/themes/akademiata`, relative to SFTP login root).
 - **Dry run:** `DRY_RUN=true` in `deploy.local.env` — list only, no upload.
 
 **SFTP failures:** wrong host/port, auth, or remote path — fix `deploy.local.env`; never print passwords in chat.
