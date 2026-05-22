@@ -45,17 +45,12 @@ function akademiata_admin_register_edit_info_metabox() {
 add_action( 'add_meta_boxes', 'akademiata_admin_register_edit_info_metabox' );
 
 function akademiata_admin_render_edit_info_metabox( $post ) {
-	wp_nonce_field( 'akademiata_edit_info', 'akademiata_edit_info_nonce' );
+	$author_id   = (int) $post->post_author;
+	$author_user = $author_id ? get_userdata( $author_id ) : null;
 
-	echo '<p><strong>' . esc_html__( 'Autor wpisu', 'akademiata' ) . '</strong></p>';
-	wp_dropdown_users(
-		array(
-			'name'             => 'post_author',
-			'selected'         => (int) $post->post_author,
-			'include_selected' => true,
-			'show_option_none' => false,
-		)
-	);
+	echo '<p><strong>' . esc_html__( 'Autor wpisu', 'akademiata' ) . '</strong><br>';
+	echo esc_html( $author_user ? $author_user->display_name : '—' );
+	echo '</p>';
 
 	$last_id = (int) get_post_meta( $post->ID, '_edit_last', true );
 	if ( ! $last_id ) {
@@ -83,31 +78,3 @@ function akademiata_admin_render_edit_info_metabox( $post ) {
 	}
 	echo '</p>';
 }
-
-function akademiata_admin_save_post_author( $post_id ) {
-	if ( ! isset( $_POST['akademiata_edit_info_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['akademiata_edit_info_nonce'] ) ), 'akademiata_edit_info' ) ) {
-		return;
-	}
-	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-		return;
-	}
-	if ( ! isset( $_POST['post_type'] ) || ! in_array( $_POST['post_type'], akademiata_admin_cpts(), true ) ) {
-		return;
-	}
-	if ( ! current_user_can( 'edit_post', $post_id ) ) {
-		return;
-	}
-	if ( ! isset( $_POST['post_author'] ) ) {
-		return;
-	}
-
-	remove_action( 'save_post', 'akademiata_admin_save_post_author' );
-	wp_update_post(
-		array(
-			'ID'          => $post_id,
-			'post_author' => (int) $_POST['post_author'],
-		)
-	);
-	add_action( 'save_post', 'akademiata_admin_save_post_author' );
-}
-add_action( 'save_post', 'akademiata_admin_save_post_author' );
