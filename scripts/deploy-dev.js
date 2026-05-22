@@ -1,6 +1,7 @@
 /**
- * Deploy theme to dev via SFTP (reads deploy.local.env).
- * Usage: npm run deploy:dev
+ * Deploy theme via SFTP (reads deploy.local.env).
+ * Usage: npm run deploy:dev | npm run deploy:prod
+ * Target: node scripts/deploy-dev.js [dev|prod]
  */
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +10,12 @@ const SftpClient = require('ssh2-sftp-client');
 
 const ROOT = path.resolve(__dirname, '..');
 const ENV_FILE = path.join(ROOT, 'deploy.local.env');
+const TARGET = (process.argv[2] || 'dev').toLowerCase();
+
+if (TARGET !== 'dev' && TARGET !== 'prod') {
+	console.error('Usage: node scripts/deploy-dev.js [dev|prod]');
+	process.exit(1);
+}
 
 const EXCLUDE_DIR_NAMES = new Set([
 	'node_modules',
@@ -70,6 +77,13 @@ function envFlag(env, key) {
 	return String(env[key] || '').toLowerCase() === 'true';
 }
 
+function cfg(env, target, key) {
+	if (target === 'prod') {
+		return env[`SFTP_PROD_${key}`] || env[`SFTP_${key}`];
+	}
+	return env[`SFTP_${key}`];
+}
+
 function shouldSkip(relativePosix) {
 	const parts = relativePosix.split('/');
 	for (const part of parts) {
@@ -100,39 +114,46 @@ function walkFiles(dir, baseDir, list) {
 	}
 }
 
-function buildSftpConfig(env) {
-	const host = env.SFTP_HOST;
-	const port = parseInt(env.SFTP_PORT || '22', 10);
-	const username = env.SFTP_USER;
-	const remotePath = env.SFTP_REMOTE_PATH;
+function buildSftpConfig(env, target) {
+	const host = cfg(env, target, 'HOST');
+	const port = parseInt(cfg(env, target, 'PORT') || '22', 10);
+	const username = cfg(env, target, 'USER');
+	const remotePath = cfg(env, target, 'REMOTE_PATH');
+	const prefix = target === 'prod' ? 'SFTP_PROD_' : 'SFTP_';
 
 	if (!host || !username || !remotePath) {
-		throw new Error('SFTP_HOST, SFTP_USER, and SFTP_REMOTE_PATH are required in deploy.local.env');
+		throw new Error(
+			`${prefix}HOST, ${prefix}USER, and ${prefix}REMOTE_PATH are required in deploy.local.env`
+		);
 	}
 
 	const config = { host, port, username, readyTimeout: 30000 };
+	const usePasswordOnly = envFlag(env, target === 'prod' ? 'SFTP_PROD_USE_PASSWORD' : 'SFTP_USE_PASSWORD')
+		|| envFlag(env, 'SFTP_USE_PASSWORD');
+	const privateKey = cfg(env, target, 'PRIVATE_KEY');
+	const password = cfg(env, target, 'PASSWORD');
+	const passphrase = cfg(env, target, 'PASSPHRASE');
 
-	const usePasswordOnly = envFlag(env, 'SFTP_USE_PASSWORD');
-	if (env.SFTP_PRIVATE_KEY && !usePasswordOnly) {
+	if (privateKey && !usePasswordOnly) {
 		const keyPath = path.resolve(
-			env.SFTP_PRIVATE_KEY.replace(/^~/, process.env.USERPROFILE || process.env.HOME || '')
+			privateKey.replace(/^~/, process.env.USERPROFILE || process.env.HOME || '')
 		);
 		if (fs.existsSync(keyPath)) {
 			config.privateKey = fs.readFileSync(keyPath, 'utf8');
-			if (env.SFTP_PASSPHRASE) {
-				config.passphrase = env.SFTP_PASSPHRASE;
+			if (passphrase) {
+				config.passphrase = passphrase;
 			}
-		} else if (!env.SFTP_PASSWORD) {
-			throw new Error(`SFTP_PRIVATE_KEY not found: ${keyPath}`);
+		} else if (!password) {
+			throw new Error(`SFTP private key not found: ${keyPath}`);
 		}
 	}
 
-	if (env.SFTP_PASSWORD) {
-		config.password = env.SFTP_PASSWORD;
+	if (password) {
+		config.password = password;
 	}
 
 	if (!config.privateKey && !config.password) {
-		throw new Error('Set SFTP_PRIVATE_KEY or SFTP_PASSWORD in deploy.local.env');
+		throw new Error(`Set ${prefix}PASSWORD or ${prefix}PRIVATE_KEY in deploy.local.env`);
 	}
 
 	return { config, remotePath: remotePath.replace(/\\/g, '/').replace(/\/+$/, '') };
@@ -172,7 +193,9 @@ async function main() {
 	const env = loadEnv(ENV_FILE);
 	const dryRun = envFlag(env, 'DRY_RUN');
 	const skipBuild = envFlag(env, 'SKIP_BUILD');
-	const { config, remotePath } = buildSftpConfig(env);
+	const { config, remotePath } = buildSftpConfig(env, TARGET);
+
+	console.log(`Deploy target: ${TARGET} → ${config.host}`);
 
 	if (!skipBuild) {
 		console.log('Running npm run build...');

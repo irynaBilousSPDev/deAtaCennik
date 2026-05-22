@@ -43,5 +43,5 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 
 - Architecture docs: `.cursor/rules/*.mdc` — update when code changes (`akademiata-maintain-rules.mdc`).
 - Full audit: run **`/sync-rules`** after large refactors.
-- Git: **`main`** = production-ready (**`/pr`** → commit + push `origin main`). **`dev`** = dev server work (**`/deploy-dev`** → commit + push `origin dev` + SFTP). Commit messages: **English only**. UI strings in PHP stay Polish.
-- **Dev deploy:** branch **`dev`** only; SFTP to dev.akademiata.pl. **GTM / gtag:** `akademiata_is_production()` — prod hosts only. **Cookiebot:** WP plugin only, not in theme.
+- Git: **`dev`** = daily work. **`main`** = production. **`/deploy-dev`** = commit on `dev` (if dirty) + SFTP dev — **no push** (say **push dev** or **`/push-dev`** for GitHub). **`/deploy-prod`** = merge `dev` → `main`, push `main`, `npm run deploy:prod`. **`/pr`** = `main` only when not using deploy-prod.
+- **GTM / gtag:** `akademiata_is_production()` — prod hosts only. **Cookiebot:** WP plugin only.
