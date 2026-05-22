@@ -15,7 +15,7 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 ## Admin history
 
 - **Simple History** — kto / kiedy (log).
-- **Autor** + **Rewizje** — native WP meta boxes (unhidden for theme CPTs). ACF Pro fills revision field diffs.
+- **Autor i historia** — theme meta box (author dropdown, last save, revisions link). Native **authordiv** removed (empty on CPT). **Rewizje** meta box stays visible.
 
 ## Offer CPTs
 
