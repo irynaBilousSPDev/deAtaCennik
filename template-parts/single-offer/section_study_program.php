@@ -25,6 +25,7 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
                     <a href="<?php echo esc_url($button['button']['button_link']); ?>" class="button-orange" target="_blank"
                        rel="noopener noreferrer">
                    <?php _e('POBIERZ PROGRAM STUDIÓW', 'akademiata') ?>
+                   test
                     </a>
                 </span>
                 <?php endif; ?>
