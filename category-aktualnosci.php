@@ -20,7 +20,14 @@ if (isset($category->slug)) {
                     <?php get_template_part('partials/card_post_news'); ?>
                 <?php endwhile; ?>
             </div>
-            <?php the_posts_pagination(); ?>
+            <?php
+            akademiata_render_news_pagination(
+                array(
+                    'current' => max(1, (int) get_query_var('paged')),
+                    'total'   => (int) $GLOBALS['wp_query']->max_num_pages,
+                )
+            );
+            ?>
         <?php else : ?>
             <p><?php _e('Nie znaleziono żadnych wyników', 'akademiata'); ?></p>
         <?php endif; ?>

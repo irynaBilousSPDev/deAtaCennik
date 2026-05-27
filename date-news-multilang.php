@@ -96,17 +96,14 @@ $archive_class_mod = 'date_' . ($year ?: 'na') . '_' . ($monthnum ?: 'na') . '_'
 
             <?php
 
-            if ($query->max_num_pages > 1) {
-                echo paginate_links([
-                    'total'     => (int) $query->max_num_pages,
-                    'current'   => $paged,
-                    'mid_size'  => 2,
-                    'prev_text' => '&laquo;',
-                    'next_text' => '&raquo;',
-                    'base'      => $pagination_base,
-                    'format'    => '', // already in base
-                ]);
-            }
+            akademiata_render_news_pagination(
+                array(
+                    'base'    => $pagination_base,
+                    'format'  => '',
+                    'current' => $paged,
+                    'total'   => (int) $query->max_num_pages,
+                )
+            );
             ?>
 
         <?php else : ?>

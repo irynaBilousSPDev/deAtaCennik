@@ -488,6 +488,67 @@ function akademiata_get_news_archive_url_without_filters(array $remove_keys = ar
 }
 
 /**
+ * Render aktualności archive pagination (label + boxed page numbers).
+ *
+ * @param array $args paginate_links args: current, total; optional base, format, add_args.
+ */
+function akademiata_render_news_pagination(array $args) {
+    $total = isset($args['total']) ? max(1, (int) $args['total']) : 1;
+
+    if ($total <= 1) {
+        return;
+    }
+
+    $prev_label = akademiata_get_theme_lang_string('pagination_prev');
+    $next_label = akademiata_get_theme_lang_string('pagination_next');
+
+    $pagination_args = array(
+        'current'   => max(1, (int) ($args['current'] ?? 1)),
+        'total'     => $total,
+        'type'      => 'array',
+        'mid_size'  => 2,
+        'end_size'  => 1,
+        'prev_text' => '<span class="news-pagination__icon news-pagination__icon--prev" aria-hidden="true"></span>'
+            . '<span class="screen-reader-text">' . esc_html($prev_label) . '</span>',
+        'next_text' => '<span class="news-pagination__text">' . esc_html($next_label) . '</span>'
+            . '<span class="news-pagination__icon news-pagination__icon--next" aria-hidden="true"></span>',
+    );
+
+    if (!empty($args['base'])) {
+        $pagination_args['base'] = $args['base'];
+    }
+
+    if (isset($args['format'])) {
+        $pagination_args['format'] = $args['format'];
+    }
+
+    if (!empty($args['add_args'])) {
+        $pagination_args['add_args'] = $args['add_args'];
+    }
+
+    $links = paginate_links($pagination_args);
+
+    if (empty($links) || !is_array($links)) {
+        return;
+    }
+
+    $aria  = akademiata_get_theme_lang_string('news_pagination_aria');
+    $title = akademiata_get_theme_lang_string('news_pagination_heading');
+    ?>
+    <nav class="news-pagination navigation pagination" aria-label="<?php echo esc_attr($aria); ?>">
+        <p class="news-pagination__title"><?php echo esc_html($title); ?></p>
+        <div class="news-pagination__links nav-links">
+            <?php
+            foreach ($links as $link) {
+                echo $link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            }
+            ?>
+        </div>
+    </nav>
+    <?php
+}
+
+/**
  * Apply date_query to aktualności WP_Query args.
  *
  * @param array $args       WP_Query args (by reference).

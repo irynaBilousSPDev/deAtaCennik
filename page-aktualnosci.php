@@ -216,33 +216,18 @@ if ($order_filter) {
 
             wp_reset_postdata();
 
-            // Pagination for a static Page
-            $pagination_args = [
-                'base'      => trailingslashit($archive_url) . '%_%',
-                'format'    => 'page/%#%/',
-                'current'   => $paged,
-                'total'     => max(1, (int) $query->max_num_pages),
-                'type'      => 'array',
-                'prev_text' => akademiata_get_theme_lang_string('pagination_prev'),
-                'next_text' => akademiata_get_theme_lang_string('pagination_next'),
-            ];
+            $pagination_args = array(
+                'base'    => trailingslashit($archive_url) . '%_%',
+                'format'  => 'page/%#%/',
+                'current' => $paged,
+                'total'   => max(1, (int) $query->max_num_pages),
+            );
 
             if (!empty($archive_filter_args)) {
                 $pagination_args['add_args'] = $archive_filter_args;
             }
 
-            $pagination_links = paginate_links($pagination_args);
-
-            if ($pagination_links) : ?>
-                <nav class="navigation pagination" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('news_pagination_aria')); ?>">
-                    <h2 class="screen-reader-text"><?php echo esc_html(akademiata_get_theme_lang_string('news_pagination_heading')); ?></h2>
-                    <div class="nav-links">
-                        <?php foreach ($pagination_links as $link) {
-                            echo $link;
-                        } ?>
-                    </div>
-                </nav>
-            <?php endif; ?>
+            akademiata_render_news_pagination($pagination_args);
 
         <?php else : ?>
             <p>
