@@ -22,11 +22,16 @@ $index          = 0;
     <div class="container">
         <div class="aktualnosci-header-row">
             <h2 class="small_title"><?php echo esc_html($section_title); ?></h2>
-            <?php if ($see_all_url) : ?>
-                <a class="see-all-link" href="<?php echo esc_url($see_all_url); ?>">
-                    <?php esc_html_e('Zobacz wszystkie', 'akademiata'); ?>
-                </a>
-            <?php endif; ?>
+            <?php
+            get_template_part(
+                'partials/aktualnosci',
+                'header-actions',
+                array(
+                    'see_all_url'       => $see_all_url,
+                    'current_city_slug' => '',
+                )
+            );
+            ?>
         </div>
 
         <div class="front-aktualnosci-grid">

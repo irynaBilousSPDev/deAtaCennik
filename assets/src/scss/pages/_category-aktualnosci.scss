@@ -7,6 +7,12 @@
   h1 {
     font-weight: vars.$weight-medium-bold;
   }
+
+  .news-city-filter-info {
+    font-size: vars.$font-size-m;
+    color: vars.$primary;
+    font-weight: vars.$weight-semi-regular;
+  }
   .navigation {
 
     .nav-links {

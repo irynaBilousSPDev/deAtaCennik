@@ -515,6 +515,7 @@
   @include mixins.flexbox(row, flex-start, center);
   margin-bottom: 2rem;
   flex-wrap: wrap;
+  gap: 1rem;
 
   .small_title {
     margin: 0 2rem 0 0;
@@ -522,25 +523,9 @@
     font-weight: vars.$weight-bold;
   }
 
-  .see-all-link {
-    display: inline-block;
-    font-size: vars.$font-size-default;
-    color: #7B9477;
-    text-decoration: none;
-    font-weight: vars.$weight-semi-regular;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
   @include mixins.max-ipad-air-screen {
     flex-direction: column;
     align-items: flex-start;
-
-    .see-all-link {
-      margin-top: 0.5rem;
-    }
   }
 }
 

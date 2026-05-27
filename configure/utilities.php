@@ -355,6 +355,108 @@ function akademiata_get_aktualnosci_page_url() {
 }
 
 /**
+ * Aktualności archive URL with optional query args (e.g. miasto filter).
+ *
+ * @param array $args Query args; values are sanitized.
+ * @return string
+ */
+function akademiata_get_aktualnosci_page_url_with_args(array $args = array()) {
+    $base = akademiata_get_aktualnosci_page_url();
+    if ($base === '') {
+        return '';
+    }
+
+    $clean = array();
+    foreach ($args as $key => $value) {
+        if ($value === null || $value === '') {
+            continue;
+        }
+        $key = sanitize_key($key);
+        if ($key === 'miasto') {
+            $clean[ $key ] = sanitize_title((string) $value);
+        } elseif ($key === 'q') {
+            $clean[ $key ] = sanitize_text_field((string) $value);
+        }
+    }
+
+    if (empty($clean)) {
+        return $base;
+    }
+
+    return add_query_arg($clean, $base);
+}
+
+/**
+ * news_city slug from ?miasto= (front-end filter).
+ *
+ * @return string Empty when not set.
+ */
+function akademiata_get_current_news_city_slug_from_request() {
+    if (!isset($_GET['miasto'])) {
+        return '';
+    }
+
+    return sanitize_title(wp_unslash((string) $_GET['miasto']));
+}
+
+/**
+ * news_city terms for current language (WPML-aware via get_terms).
+ *
+ * @return WP_Term[]
+ */
+function akademiata_get_news_city_terms() {
+    if (!taxonomy_exists('news_city')) {
+        return array();
+    }
+
+    $terms = get_terms(
+        array(
+            'taxonomy'   => 'news_city',
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        )
+    );
+
+    if (is_wp_error($terms) || empty($terms)) {
+        return array();
+    }
+
+    return $terms;
+}
+
+/**
+ * Resolve news_city term by slug in the current language.
+ *
+ * @param string $slug Term slug.
+ * @return WP_Term|null
+ */
+function akademiata_get_news_city_term_by_slug($slug) {
+    $slug = sanitize_title((string) $slug);
+    if ($slug === '') {
+        return null;
+    }
+
+    $term = get_term_by('slug', $slug, 'news_city');
+    if (!$term || is_wp_error($term)) {
+        return null;
+    }
+
+    if (function_exists('icl_object_id')) {
+        $lang = apply_filters('wpml_current_language', null);
+        $translated_id = (int) apply_filters('wpml_object_id', (int) $term->term_id, 'news_city', false, $lang);
+        if ($translated_id > 0) {
+            $translated = get_term($translated_id, 'news_city');
+            if ($translated && !is_wp_error($translated)) {
+                $term = $translated;
+            }
+        }
+    }
+
+    return $term;
+}
+
+/**
  * Whether a degree term slug maps to studia I stopnia (bachelor).
  */
 function akademiata_degree_slug_is_bachelor_level($slug) {
