@@ -204,7 +204,7 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('degree', array('bachelor', 'master'), $args);
+    register_taxonomy('degree', array('bachelor', 'master', 'post'), $args);
 
     // Add new taxonomy, make it hierarchical (like categories) programs - kierunek studiow
     $labels = array(
@@ -233,8 +233,36 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts'), $args);
+    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts', 'post'), $args);
 
+    // News city (wpisy) — Warszawa, Wrocław
+    $news_city_labels = array(
+        'name'              => _x('News cities', 'taxonomy general name', 'akademiata'),
+        'singular_name'     => _x('News city', 'taxonomy singular name', 'akademiata'),
+        'search_items'      => __('Search cities', 'akademiata'),
+        'all_items'         => __('All cities', 'akademiata'),
+        'parent_item'       => __('Parent city', 'akademiata'),
+        'parent_item_colon' => __('Parent city:', 'akademiata'),
+        'edit_item'         => __('Edit city', 'akademiata'),
+        'update_item'       => __('Update city', 'akademiata'),
+        'add_new_item'      => __('Add new city', 'akademiata'),
+        'new_item_name'     => __('New city name', 'akademiata'),
+        'menu_name'         => __('Miasto', 'akademiata'),
+    );
+
+    register_taxonomy(
+        'news_city',
+        array('post'),
+        array(
+            'hierarchical'      => true,
+            'labels'            => $news_city_labels,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'rewrite'           => array('slug' => 'aktualnosci-miasto'),
+            'show_in_rest'      => true,
+        )
+    );
 
     // Add new taxonomy, make it hierarchical (like categories) Study mode - Tryb
     $labels = array(
@@ -474,6 +502,28 @@ function wpdocs_create_study_taxonomies()
 
 // hook into the init action and call create_study_taxonomies when it fires
 add_action('init', 'wpdocs_create_study_taxonomies', 0);
+
+/**
+ * Default news_city terms (Warszawa, Wrocław).
+ */
+function akademiata_ensure_default_news_city_terms() {
+    if (!taxonomy_exists('news_city')) {
+        return;
+    }
+
+    $cities = array(
+        'warszawa' => 'Warszawa',
+        'wroclaw'  => 'Wrocław',
+    );
+
+    foreach ($cities as $slug => $name) {
+        if (!term_exists($slug, 'news_city')) {
+            wp_insert_term($name, 'news_city', array('slug' => $slug));
+        }
+    }
+}
+
+add_action('init', 'akademiata_ensure_default_news_city_terms', 20);
 
 
 // Register CPT: Studia Podyplomowe

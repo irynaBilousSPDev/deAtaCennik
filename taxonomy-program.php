@@ -18,43 +18,64 @@ get_header(); ?>
 
         <?php
         $term = get_queried_object();
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
-        // Query for Bachelor
-        $bachelor_query = new WP_Query(array(
-            'post_type' => 'bachelor',
-            'posts_per_page' => -1,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => $term->taxonomy,
-                    'field'    => 'slug',
-                    'terms'    => $term->slug,
+        $bachelor_query = new WP_Query(
+            array(
+                'post_type'      => 'bachelor',
+                'posts_per_page' => -1,
+                'tax_query'      => array(
+                    array(
+                        'taxonomy' => $term->taxonomy,
+                        'field'    => 'slug',
+                        'terms'    => $term->slug,
+                    ),
                 ),
-            ),
-        ));
+                'lang'           => apply_filters('wpml_current_language', null),
+            )
+        );
 
-        // Query for Master
-        $master_query = new WP_Query(array(
-            'post_type' => 'master',
-            'posts_per_page' => -1,
-            'tax_query' => array(
-                array(
-                    'taxonomy' => $term->taxonomy,
-                    'field'    => 'slug',
-                    'terms'    => $term->slug,
+        $master_query = new WP_Query(
+            array(
+                'post_type'      => 'master',
+                'posts_per_page' => -1,
+                'tax_query'      => array(
+                    array(
+                        'taxonomy' => $term->taxonomy,
+                        'field'    => 'slug',
+                        'terms'    => $term->slug,
+                    ),
                 ),
-            ),
-        ));
+                'lang'           => apply_filters('wpml_current_language', null),
+            )
+        );
+
+        $bachelor_news = akademiata_query_program_related_news($term, 'bachelor');
+        $master_news   = akademiata_query_program_related_news($term, 'master');
         ?>
 
         <?php if ($bachelor_query->have_posts()) : ?>
             <h2 class="mt-5"><?php _e('Studia I stopnia', 'akademiata'); ?></h2>
             <div class="taxonomy-posts">
                 <div class="row">
-                    <?php while ($bachelor_query->have_posts()) : $bachelor_query->the_post(); ?>
-                        <?php get_template_part('./partials/card_post'); ?>
-                    <?php endwhile; ?>
+                    <?php
+                    while ($bachelor_query->have_posts()) :
+                        $bachelor_query->the_post();
+                        get_template_part('./partials/card_post');
+                    endwhile;
+                    ?>
                 </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($bachelor_news->have_posts()) : ?>
+            <h3 class="mt-4"><?php _e('Aktualności', 'akademiata'); ?></h3>
+            <div class="posts_wrapper_news taxonomy-program-news">
+                <?php
+                while ($bachelor_news->have_posts()) :
+                    $bachelor_news->the_post();
+                    get_template_part('partials/card_post_news');
+                endwhile;
+                ?>
             </div>
         <?php endif; ?>
 
@@ -62,20 +83,40 @@ get_header(); ?>
             <h2 class="mt-5"><?php _e('Studia II stopnia', 'akademiata'); ?></h2>
             <div class="taxonomy-posts">
                 <div class="row">
-                    <?php while ($master_query->have_posts()) : $master_query->the_post(); ?>
-                        <?php get_template_part('./partials/card_post'); ?>
-                    <?php endwhile; ?>
+                    <?php
+                    while ($master_query->have_posts()) :
+                        $master_query->the_post();
+                        get_template_part('./partials/card_post');
+                    endwhile;
+                    ?>
                 </div>
             </div>
         <?php endif; ?>
 
-        <?php if (!$bachelor_query->have_posts() && !$master_query->have_posts()) : ?>
-            <p><?php esc_html_e('No programs found for this category.', 'akademiata'); ?></p>
+        <?php if ($master_news->have_posts()) : ?>
+            <h3 class="mt-4"><?php _e('Aktualności', 'akademiata'); ?></h3>
+            <div class="posts_wrapper_news taxonomy-program-news">
+                <?php
+                while ($master_news->have_posts()) :
+                    $master_news->the_post();
+                    get_template_part('partials/card_post_news');
+                endwhile;
+                ?>
+            </div>
         <?php endif; ?>
 
         <?php
-        wp_reset_postdata();
-        ?>
+        if (
+            !$bachelor_query->have_posts()
+            && !$master_query->have_posts()
+            && !$bachelor_news->have_posts()
+            && !$master_news->have_posts()
+        ) :
+            ?>
+            <p><?php esc_html_e('No programs found for this category.', 'akademiata'); ?></p>
+        <?php endif; ?>
+
+        <?php wp_reset_postdata(); ?>
     </div>
 </div>
 

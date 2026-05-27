@@ -286,6 +286,252 @@ function akademiata_get_offer_terms($post_id, $taxonomy = null) {
     return $terms;
 }
 
+/**
+ * Translated category term ID for slug "aktualnosci" (WPML-safe).
+ *
+ * @return int 0 if not found.
+ */
+function akademiata_get_aktualnosci_category_term_id() {
+    static $cached = null;
+
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $cached = 0;
+    $term   = get_term_by('slug', 'aktualnosci', 'category');
+
+    if (!$term || is_wp_error($term)) {
+        return $cached;
+    }
+
+    $term_id = (int) $term->term_id;
+
+    if (function_exists('icl_object_id')) {
+        $lang = apply_filters('wpml_current_language', null);
+        $translated = (int) apply_filters('wpml_object_id', $term_id, 'category', false, $lang);
+        if ($translated > 0) {
+            $term_id = $translated;
+        }
+    }
+
+    $cached = $term_id;
+
+    return $cached;
+}
+
+/**
+ * Whether a degree term slug maps to studia I stopnia (bachelor).
+ */
+function akademiata_degree_slug_is_bachelor_level($slug) {
+    $slug = (string) $slug;
+
+    return (bool) preg_match(
+        '/(?:^|-)(?:studia-)?(?:1|i)(?:-st|stopn)/i',
+        $slug
+    );
+}
+
+/**
+ * Whether a degree term slug maps to studia II stopnia (master).
+ */
+function akademiata_degree_slug_is_master_level($slug) {
+    $slug = (string) $slug;
+
+    return (bool) preg_match(
+        '/(?:^|-)(?:studia-)?(?:2|ii)(?:-st|stopn)/i',
+        $slug
+    );
+}
+
+/**
+ * Degree term IDs used on published offers of a given CPT (fallback when slugs are ambiguous).
+ *
+ * @param string $post_type bachelor|master
+ * @return int[]
+ */
+function akademiata_collect_degree_term_ids_for_post_type($post_type) {
+    $post_type = sanitize_key($post_type);
+
+    if (!in_array($post_type, array('bachelor', 'master'), true)) {
+        return array();
+    }
+
+    $post_ids = get_posts(
+        array(
+            'post_type'              => $post_type,
+            'post_status'            => 'publish',
+            'posts_per_page'         => 50,
+            'fields'                 => 'ids',
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+            'lang'                   => apply_filters('wpml_current_language', null),
+        )
+    );
+
+    $term_ids = array();
+
+    foreach ($post_ids as $post_id) {
+        $terms = get_the_terms((int) $post_id, 'degree');
+        if (empty($terms) || is_wp_error($terms)) {
+            continue;
+        }
+        foreach ($terms as $term) {
+            $term_ids[] = (int) $term->term_id;
+        }
+    }
+
+    return array_values(array_unique($term_ids));
+}
+
+/**
+ * Degree term IDs for filtering wpisy by studia I / II stopnia on kierunek pages.
+ *
+ * @param string $level bachelor|master
+ * @return int[]
+ */
+function akademiata_get_news_degree_term_ids_for_level($level) {
+    static $cache = array();
+
+    $level = sanitize_key($level);
+    if (!in_array($level, array('bachelor', 'master'), true)) {
+        return array();
+    }
+
+    if (isset($cache[$level])) {
+        return $cache[$level];
+    }
+
+    $bachelor_ids = array();
+    $master_ids   = array();
+    $terms        = get_terms(
+        array(
+            'taxonomy'   => 'degree',
+            'hide_empty' => false,
+        )
+    );
+
+    if (!is_wp_error($terms) && !empty($terms)) {
+        foreach ($terms as $term) {
+            if (akademiata_degree_slug_is_bachelor_level($term->slug)) {
+                $bachelor_ids[] = (int) $term->term_id;
+            }
+            if (akademiata_degree_slug_is_master_level($term->slug)) {
+                $master_ids[] = (int) $term->term_id;
+            }
+        }
+    }
+
+    if (empty($bachelor_ids)) {
+        $bachelor_ids = akademiata_collect_degree_term_ids_for_post_type('bachelor');
+    }
+    if (empty($master_ids)) {
+        $master_ids = akademiata_collect_degree_term_ids_for_post_type('master');
+    }
+
+    $cache['bachelor'] = $bachelor_ids;
+    $cache['master']   = $master_ids;
+
+    return $cache[$level];
+}
+
+/**
+ * Aktualności linked to a program term for one study level.
+ * Empty degree on post = both levels (oba).
+ *
+ * @param WP_Term|int $program_term Program term or term ID.
+ * @param string      $level        bachelor|master
+ * @param array       $query_args   Optional WP_Query overrides.
+ * @return WP_Query
+ */
+function akademiata_query_program_related_news($program_term, $level = 'bachelor', $query_args = array()) {
+    if (is_numeric($program_term)) {
+        $program_term = get_term((int) $program_term, 'program');
+    }
+
+    if (!$program_term || is_wp_error($program_term)) {
+        return new WP_Query(array('post__in' => array(0)));
+    }
+
+    $level = sanitize_key($level);
+    if (!in_array($level, array('bachelor', 'master'), true)) {
+        $level = 'bachelor';
+    }
+
+    $degree_ids = akademiata_get_news_degree_term_ids_for_level($level);
+
+    $tax_query = array(
+        'relation' => 'AND',
+        array(
+            'taxonomy' => 'program',
+            'field'    => 'term_id',
+            'terms'    => array((int) $program_term->term_id),
+        ),
+    );
+
+    if (!empty($degree_ids)) {
+        $tax_query[] = array(
+            'relation' => 'OR',
+            array(
+                'taxonomy' => 'degree',
+                'operator' => 'NOT EXISTS',
+            ),
+            array(
+                'taxonomy' => 'degree',
+                'field'    => 'term_id',
+                'terms'    => $degree_ids,
+                'operator' => 'IN',
+            ),
+        );
+    }
+
+    $defaults = array(
+        'post_type'           => 'post',
+        'post_status'         => 'publish',
+        'posts_per_page'      => 6,
+        'orderby'             => 'date',
+        'order'               => 'DESC',
+        'ignore_sticky_posts' => true,
+        'tax_query'           => $tax_query,
+        'lang'                => apply_filters('wpml_current_language', null),
+    );
+
+    $cat_id = akademiata_get_aktualnosci_category_term_id();
+    if ($cat_id > 0) {
+        $defaults['cat'] = $cat_id;
+    }
+
+    return new WP_Query(wp_parse_args($query_args, $defaults));
+}
+
+/**
+ * Friendlier taxonomy labels on the post edit screen.
+ */
+function akademiata_news_post_taxonomy_gettext($translated, $text, $domain) {
+    if ($domain !== 'akademiata' || !is_admin()) {
+        return $translated;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->base !== 'post' || $screen->post_type !== 'post') {
+        return $translated;
+    }
+
+    $map = array(
+        'Programs' => __('Kierunki, których dotyczy wpis', 'akademiata'),
+        'Degree'   => __('Stopień studiów (puste = oba)', 'akademiata'),
+    );
+
+    if (isset($map[$text])) {
+        return $map[$text];
+    }
+
+    return $translated;
+}
+
+add_filter('gettext', 'akademiata_news_post_taxonomy_gettext', 10, 3);
+
 function render_taxonomy_info($taxonomy_labels) {
     if (empty($taxonomy_labels) || !is_array($taxonomy_labels)) {
         return;
