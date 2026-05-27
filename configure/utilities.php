@@ -584,7 +584,16 @@ function akademiata_get_theme_lang_string($key) {
 }
 
 /**
- * First news_city term on a wpis.
+ * Default news city when Miasto is not set on a wpis.
+ *
+ * @return string Term slug.
+ */
+function akademiata_get_default_news_city_slug() {
+    return 'warszawa';
+}
+
+/**
+ * Assigned news_city term on a wpis (empty if editor left Miasto unchecked).
  *
  * @param int $post_id Post ID.
  * @return WP_Term|null
@@ -601,6 +610,102 @@ function akademiata_get_post_news_city_term($post_id = 0) {
     }
 
     return $terms[0];
+}
+
+/**
+ * Effective city slug for a wpis (assigned term or default Warszawa).
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function akademiata_get_post_news_city_slug($post_id = 0) {
+    $term = akademiata_get_post_news_city_term($post_id);
+
+    if ($term) {
+        return $term->slug;
+    }
+
+    return akademiata_get_default_news_city_slug();
+}
+
+/**
+ * City label for cards and UI (defaults to Warszawa / Warsaw when Miasto is empty).
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function akademiata_get_post_news_city_label($post_id = 0) {
+    $term = akademiata_get_post_news_city_term($post_id);
+
+    if ($term) {
+        return akademiata_get_news_city_display_name($term);
+    }
+
+    $default_slug = akademiata_get_default_news_city_slug();
+    $map          = akademiata_news_city_label_map();
+    $lang         = apply_filters('wpml_current_language', 'pl');
+
+    if (isset($map[ $default_slug ][ $lang ])) {
+        return $map[ $default_slug ][ $lang ];
+    }
+
+    return $map[ $default_slug ]['pl'] ?? 'Warszawa';
+}
+
+/**
+ * tax_query for aktualności archive city filter.
+ * Warszawa includes posts with no Miasto (default city rule).
+ *
+ * @param string $city_slug news_city slug from ?miasto=
+ * @return array|null Tax query array or null when no city filter.
+ */
+function akademiata_build_news_city_tax_query($city_slug) {
+    $city_slug = sanitize_title((string) $city_slug);
+
+    if ($city_slug === '') {
+        return null;
+    }
+
+    if ($city_slug === akademiata_get_default_news_city_slug()) {
+        $tax_query = array(
+            'relation' => 'OR',
+            array(
+                'taxonomy' => 'news_city',
+                'operator' => 'NOT EXISTS',
+            ),
+        );
+
+        $warsaw = akademiata_get_news_city_term_by_slug($city_slug);
+        if ($warsaw) {
+            $tax_query[] = array(
+                'taxonomy' => 'news_city',
+                'field'    => 'term_id',
+                'terms'    => array((int) $warsaw->term_id),
+                'operator' => 'IN',
+            );
+        }
+
+        return $tax_query;
+    }
+
+    $term = akademiata_get_news_city_term_by_slug($city_slug);
+    if (!$term) {
+        return array(
+            array(
+                'taxonomy' => 'news_city',
+                'field'    => 'term_id',
+                'terms'    => array(0),
+            ),
+        );
+    }
+
+    return array(
+        array(
+            'taxonomy' => 'news_city',
+            'field'    => 'term_id',
+            'terms'    => array((int) $term->term_id),
+        ),
+    );
 }
 
 /**

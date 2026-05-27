@@ -62,14 +62,9 @@ $args = [
     'lang'           => apply_filters('wpml_current_language', null),
 ];
 
-if ($active_city_term) {
-    $args['tax_query'] = [
-        [
-            'taxonomy' => 'news_city',
-            'field'    => 'term_id',
-            'terms'    => [ (int) $active_city_term->term_id ],
-        ],
-    ];
+$city_tax_query = $city_slug ? akademiata_build_news_city_tax_query($city_slug) : null;
+if ($city_tax_query) {
+    $args['tax_query'] = $city_tax_query;
 }
 
 // Apply custom search via filters to support quoted phrases and robust term logic
@@ -179,12 +174,15 @@ if ($order_filter) {
             ?>
         </div>
 
-        <?php if ($active_city_term) : ?>
+        <?php if ($city_slug) : ?>
             <p class="news-city-filter-info mb-4">
                 <?php
+                $filter_city_label = $active_city_term
+                    ? akademiata_get_news_city_display_name($active_city_term)
+                    : akademiata_get_post_news_city_label(0);
                 printf(
                     esc_html__('Aktualności: %s', 'akademiata'),
-                    esc_html(akademiata_get_news_city_display_name($active_city_term))
+                    esc_html($filter_city_label)
                 );
                 ?>
             </p>
