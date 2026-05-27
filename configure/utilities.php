@@ -471,6 +471,23 @@ function akademiata_get_news_archive_active_filter_args() {
 }
 
 /**
+ * Aktualności archive URL with specific filter keys removed.
+ *
+ * @param array<int, string> $remove_keys e.g. miasto, rok, miesiac, q.
+ * @return string
+ */
+function akademiata_get_news_archive_url_without_filters(array $remove_keys = array()) {
+    $args = akademiata_get_news_archive_active_filter_args();
+
+    foreach ($remove_keys as $key) {
+        $key = sanitize_key((string) $key);
+        unset($args[ $key ]);
+    }
+
+    return akademiata_get_aktualnosci_page_url_with_args($args);
+}
+
+/**
  * Apply date_query to aktualności WP_Query args.
  *
  * @param array $args       WP_Query args (by reference).
@@ -696,6 +713,36 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Очистити',
                 'ru' => 'Очистить',
             ),
+            'news_clear_all_filters' => array(
+                'pl' => 'Wyczyść wszystkie filtry',
+                'en' => 'Clear all filters',
+                'uk' => 'Очистити всі фільтри',
+                'ru' => 'Очистить все фильтры',
+            ),
+            'news_more_filters' => array(
+                'pl' => 'Więcej filtrów',
+                'en' => 'More filters',
+                'uk' => 'Більше фільтрів',
+                'ru' => 'Больше фильтров',
+            ),
+            'news_less_filters' => array(
+                'pl' => 'Mniej filtrów',
+                'en' => 'Less filters',
+                'uk' => 'Менше фільтрів',
+                'ru' => 'Меньше фильтров',
+            ),
+            'news_results_count' => array(
+                'pl' => 'Liczba wyników: %d',
+                'en' => 'Results: %d',
+                'uk' => 'Кількість результатів: %d',
+                'ru' => 'Количество результатов: %d',
+            ),
+            'news_remove_filter' => array(
+                'pl' => 'Usuń filtr',
+                'en' => 'Remove filter',
+                'uk' => 'Видалити фільтр',
+                'ru' => 'Удалить фильтр',
+            ),
             'see_all_news' => array(
                 'pl' => 'Zobacz wszystkie',
                 'en' => 'See all',
@@ -713,6 +760,18 @@ function akademiata_get_theme_lang_string($key) {
                 'en' => 'Month',
                 'uk' => 'Місяць',
                 'ru' => 'Месяц',
+            ),
+            'news_filter_month_colon' => array(
+                'pl' => 'Miesiąc:',
+                'en' => 'Month:',
+                'uk' => 'Місяць:',
+                'ru' => 'Месяц:',
+            ),
+            'news_filter_year_colon' => array(
+                'pl' => 'Rok:',
+                'en' => 'Year:',
+                'uk' => 'Рік:',
+                'ru' => 'Год:',
             ),
             'news_filter_all_years' => array(
                 'pl' => 'Wszystkie lata',
@@ -743,6 +802,78 @@ function akademiata_get_theme_lang_string($key) {
                 'en' => 'No news in the selected period.',
                 'uk' => 'Немає новин за обраний період.',
                 'ru' => 'Нет новостей за выбранный период.',
+            ),
+            'news_active_filter' => array(
+                'pl' => 'Aktualności: %s',
+                'en' => 'News: %s',
+                'uk' => 'Новини: %s',
+                'ru' => 'Новости: %s',
+            ),
+            'news_results_for' => array(
+                'pl' => 'Wyniki dla: „%s”',
+                'en' => 'Results for: “%s”',
+                'uk' => 'Результати для: «%s»',
+                'ru' => 'Результаты для: «%s»',
+            ),
+            'news_no_city_found' => array(
+                'pl' => 'Nie znaleziono wybranego miasta.',
+                'en' => 'Selected city was not found.',
+                'uk' => 'Обране місто не знайдено.',
+                'ru' => 'Выбранный город не найден.',
+            ),
+            'news_no_results_search' => array(
+                'pl' => 'Brak wyników spełniających kryteria wyszukiwania.',
+                'en' => 'No results match your search.',
+                'uk' => 'Немає результатів за вашим запитом.',
+                'ru' => 'Нет результатов по вашему запросу.',
+            ),
+            'news_no_results_city' => array(
+                'pl' => 'Brak aktualności dla wybranego miasta.',
+                'en' => 'No news for the selected city.',
+                'uk' => 'Немає новин для обраного міста.',
+                'ru' => 'Нет новостей для выбранного города.',
+            ),
+            'news_no_results_generic' => array(
+                'pl' => 'Nie znaleziono żadnych wyników.',
+                'en' => 'No results found.',
+                'uk' => 'Нічого не знайдено.',
+                'ru' => 'Ничего не найдено.',
+            ),
+            'news_read_more' => array(
+                'pl' => 'Czytaj więcej',
+                'en' => 'Read more',
+                'uk' => 'Читати далі',
+                'ru' => 'Читать далее',
+            ),
+            'news_filter_city_nav' => array(
+                'pl' => 'Filtruj po mieście',
+                'en' => 'Filter by city',
+                'uk' => 'Фільтр за містом',
+                'ru' => 'Фильтр по городу',
+            ),
+            'news_pagination_aria' => array(
+                'pl' => 'Stronicowanie wpisów',
+                'en' => 'Posts pagination',
+                'uk' => 'Пагінація записів',
+                'ru' => 'Пагинация записей',
+            ),
+            'news_pagination_heading' => array(
+                'pl' => 'Stronicowanie wpisów',
+                'en' => 'Posts pagination',
+                'uk' => 'Пагінація записів',
+                'ru' => 'Пагинация записей',
+            ),
+            'pagination_prev' => array(
+                'pl' => 'Poprzedni',
+                'en' => 'Previous',
+                'uk' => 'Попередня',
+                'ru' => 'Предыдущая',
+            ),
+            'pagination_next' => array(
+                'pl' => 'Następny',
+                'en' => 'Next',
+                'uk' => 'Наступна',
+                'ru' => 'Следующая',
             ),
         );
     }

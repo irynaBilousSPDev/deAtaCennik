@@ -48,6 +48,56 @@ function the_breadcrumb()
             }
             the_title();
         }
+        // Breadcrumbs for date-based news archives like /aktualnosci/2025/04/
+        elseif (is_date()) {
+            $year     = (int) get_query_var('year');
+            $monthnum = (int) get_query_var('monthnum');
+            $day      = (int) get_query_var('day');
+
+            $lang = apply_filters('wpml_current_language', null);
+            if (!$lang) {
+                $lang = defined('ICL_LANGUAGE_CODE') ? ICL_LANGUAGE_CODE : 'pl';
+            }
+
+            // Prefer the translated "aktualnosci" category link + label (WPML-safe).
+            $news_term = get_term_by('slug', 'aktualnosci', 'category');
+            if ($news_term && !is_wp_error($news_term) && function_exists('icl_object_id')) {
+                $translated_term_id = (int) apply_filters('wpml_object_id', (int) $news_term->term_id, 'category', true, $lang);
+                if ($translated_term_id) {
+                    $maybe = get_term($translated_term_id, 'category');
+                    if ($maybe && !is_wp_error($maybe)) {
+                        $news_term = $maybe;
+                    }
+                }
+            }
+
+            $news_label = $news_term && !is_wp_error($news_term) ? $news_term->name : __('News', 'akademiata');
+            $news_url   = '';
+            if ($news_term && !is_wp_error($news_term)) {
+                $news_url = get_term_link($news_term);
+                if (!is_wp_error($news_url)) {
+                    $news_url = str_replace('/category/', '/', $news_url);
+                } else {
+                    $news_url = '';
+                }
+            }
+
+            if ($news_url) {
+                echo '<a href="' . esc_url($news_url) . '">' . esc_html($news_label) . '</a>' . $sep;
+            } else {
+                echo esc_html($news_label) . $sep;
+            }
+
+            if ($day && $year && $monthnum) {
+                echo esc_html(date_i18n('j F Y', mktime(0, 0, 0, $monthnum, $day, $year)));
+            } elseif ($monthnum && $year) {
+                echo esc_html(date_i18n('F Y', mktime(0, 0, 0, $monthnum, 1, $year)));
+            } elseif ($year) {
+                echo esc_html((string) $year);
+            } else {
+                echo esc_html(__('Archiwum', 'akademiata'));
+            }
+        }
         elseif (is_singular(array('bachelor', 'master'))) {
             echo $offer_link . $sep;
             the_title();

@@ -91,20 +91,7 @@
   }
 }
 
-// Archive: active city keeps pill highlight (black bg)
-.news_archive {
-  .aktualnosci-city-link.is-active {
-    color: vars.$white;
-    background-color: vars.$black;
-    font-weight: vars.$weight-semi-regular;
-    text-decoration: none;
-
-    &:hover {
-      background-color: vars.$black;
-      color: vars.$white;
-    }
-  }
-}
+// Archive panel uses .aktualnosci-city-link--archive in _category-aktualnosci.scss
 
 .section_aktualnosci--program {
   .aktualnosci-header-row--section {

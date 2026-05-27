@@ -2,6 +2,7 @@ import 'bootstrap';
 
 import General from './_generalScripts';
 import initPricesCalculator from './prices-calculator';
+import initNewsArchiveFilters from './news-archive-filters';
 
 const App = {
     init() {
@@ -14,6 +15,7 @@ const App = {
 
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
+    initNewsArchiveFilters();
 
     if (window.jQuery) {
         initPricesCalculator(window.jQuery, window.akademiataPrices || {});
