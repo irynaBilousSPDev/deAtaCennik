@@ -1,16 +1,92 @@
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mixins;
 
+// Section header: title + cities (left), see-all (right)
+.aktualnosci-header-row--section {
+  @include mixins.flexbox(row, flex-start, flex-start);
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: 2rem;
+
+  .aktualnosci-header-left {
+    @include mixins.flexbox(column, flex-start, flex-start);
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 1rem;
+  }
+
+  .small_title {
+    margin: 0;
+    font-size: vars.$font-size-xl;
+    font-weight: vars.$weight-bold;
+    line-height: 1.2;
+  }
+
+  .see-all-link--section {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 0.15em;
+    font-size: vars.$font-size-default;
+    color: #7b9477;
+    text-decoration: none;
+    font-weight: vars.$weight-semi-regular;
+    white-space: nowrap;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @include mixins.max-ipad-air-screen {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+
+    .see-all-link--section {
+      margin-top: 0;
+      white-space: normal;
+    }
+  }
+
+  @include mixins.max-sm-screen {
+    .small_title {
+      font-size: vars.$font-size-lg;
+    }
+
+    .aktualnosci-header-left {
+      gap: 0.75rem;
+    }
+  }
+}
+
+// Archive: cities row (+ optional see-all)
 .aktualnosci-header-actions {
   @include mixins.flexbox(row, flex-start, center);
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 0.75rem 1.5rem;
-  margin-left: auto;
+  width: 100%;
+
+  .see-all-link {
+    display: inline-block;
+    font-size: vars.$font-size-default;
+    color: #7b9477;
+    text-decoration: none;
+    font-weight: vars.$weight-semi-regular;
+    margin-left: auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   @include mixins.max-ipad-air-screen {
-    margin-left: 0;
-    margin-top: 0.75rem;
-    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .see-all-link {
+      margin-left: 0;
+    }
   }
 }
 
@@ -40,7 +116,6 @@
   &.is-active {
     color: vars.$white;
     background-color: vars.$black;
-    font-weight: vars.$weight-semi-regular;
     text-decoration: none;
 
     &:hover {
@@ -48,22 +123,20 @@
       color: vars.$white;
     }
   }
-}
 
-.aktualnosci-header-row {
-  .aktualnosci-header-actions .see-all-link {
-    display: inline-block;
-    font-size: vars.$font-size-default;
-    color: #7b9477;
-    text-decoration: none;
-    font-weight: vars.$weight-semi-regular;
-
-    &:hover {
-      text-decoration: underline;
-    }
+  @include mixins.max-sm-screen {
+    padding: 0.4rem 0.85rem;
+    font-size: vars.$font-size-s-medium;
   }
 }
 
 .news_archive .aktualnosci-city-filter {
   margin-bottom: 2rem;
+}
+
+// Kierunek / program section uses same header layout
+.section_aktualnosci--program {
+  .aktualnosci-header-row--section {
+    margin-bottom: 2rem;
+  }
 }

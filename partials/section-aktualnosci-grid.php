@@ -20,18 +20,22 @@ $index          = 0;
 ?>
 <section class="<?php echo esc_attr($section_class); ?>">
     <div class="container">
-        <div class="aktualnosci-header-row">
-            <h2 class="small_title"><?php echo esc_html($section_title); ?></h2>
-            <?php
-            get_template_part(
-                'partials/aktualnosci',
-                'header-actions',
-                array(
-                    'see_all_url'       => $see_all_url,
-                    'current_city_slug' => '',
-                )
-            );
-            ?>
+        <div class="aktualnosci-header-row aktualnosci-header-row--section">
+            <div class="aktualnosci-header-left">
+                <h2 class="small_title"><?php echo esc_html($section_title); ?></h2>
+                <?php
+                get_template_part(
+                    'partials/aktualnosci',
+                    'city-links',
+                    array('current_city_slug' => '')
+                );
+                ?>
+            </div>
+            <?php if ($see_all_url) : ?>
+                <a class="see-all-link see-all-link--section" href="<?php echo esc_url($see_all_url); ?>">
+                    <?php esc_html_e('Zobacz wszystkie', 'akademiata'); ?>
+                </a>
+            <?php endif; ?>
         </div>
 
         <div class="front-aktualnosci-grid">

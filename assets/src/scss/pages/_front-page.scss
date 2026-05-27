@@ -509,23 +509,13 @@
 
 .section_aktualnosci {
   padding: 5rem 0;
-}
-
-.aktualnosci-header-row {
-  @include mixins.flexbox(row, flex-start, center);
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  .small_title {
-    margin: 0 2rem 0 0;
-    font-size: vars.$font-size-xl;
-    font-weight: vars.$weight-bold;
-  }
 
   @include mixins.max-ipad-air-screen {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 3rem 0;
+  }
+
+  @include mixins.max-sm-screen {
+    padding: 2.5rem 0;
   }
 }
 
@@ -537,6 +527,12 @@
 
   @media (min-width: 991px) and (max-width: 1080px) {
     grid-template-columns: 320px 320px 1fr;
+  }
+
+  @include mixins.max-ipad-pro-screen {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
   }
 
   .aktualnosci-post {

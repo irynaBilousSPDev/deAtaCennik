@@ -1,8 +1,6 @@
 <?php
 /**
- * City links + "Zobacz wszystkie" for aktualności sections/archives.
- *
- * @package akademiata
+ * City links + optional "Zobacz wszystkie" (archive / inline layout).
  *
  * Args: current_city_slug, see_all_url, show_see_all (default true).
  */
@@ -17,22 +15,13 @@ if (empty($cities) && (!$show_see_all || $see_all_url === '')) {
 }
 ?>
 <div class="aktualnosci-header-actions">
-    <?php if (!empty($cities)) : ?>
-        <nav class="aktualnosci-city-links" aria-label="<?php esc_attr_e('Filtruj po mieście', 'akademiata'); ?>">
-            <?php
-            foreach ($cities as $city) :
-                $is_active = ($current_city_slug === $city->slug);
-                $city_url  = akademiata_get_aktualnosci_page_url_with_args(
-                    array('miasto' => $city->slug)
-                );
-                ?>
-                <a class="aktualnosci-city-link<?php echo $is_active ? ' is-active' : ''; ?>"
-                   href="<?php echo esc_url($city_url); ?>">
-                    <?php echo esc_html($city->name); ?>
-                </a>
-            <?php endforeach; ?>
-        </nav>
-    <?php endif; ?>
+    <?php
+    get_template_part(
+        'partials/aktualnosci',
+        'city-links',
+        array('current_city_slug' => $current_city_slug)
+    );
+    ?>
 
     <?php if ($show_see_all && $see_all_url !== '') : ?>
         <a class="see-all-link" href="<?php echo esc_url($see_all_url); ?>">
