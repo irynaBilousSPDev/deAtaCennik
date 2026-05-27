@@ -8,6 +8,11 @@
     padding: 0;
     margin-bottom: 2rem;
 
+    li[id^="city-"],
+    li#tab-all {
+      scroll-margin-top: 12rem;
+    }
+
     li {
       a {
         padding: 0.6rem 1.2rem;

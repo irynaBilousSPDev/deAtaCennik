@@ -40,12 +40,12 @@ if (!empty($cities) && !is_wp_error($cities)) :
 
     <div class="city-tabs city-tabs--exams">
         <ul class="city-tabs__nav">
-            <li class="active">
+            <li id="tab-all" class="active">
                 <a href="#tab-all"><?= __('Wszystkie miasta', 'akademiata'); ?></a>
             </li>
 
             <?php foreach ($cities_with_posts as $city) : ?>
-                <li>
+                <li id="city-<?= esc_attr($city->slug); ?>">
                     <a href="#city-<?= esc_attr($city->slug); ?>">
                         <?= esc_html($city->name); ?>
                     </a>
@@ -55,7 +55,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
 
         <div class="city-tabs__content">
             <!-- All cities -->
-            <div id="tab-all" class="city-tabs__pane active">
+            <div class="city-tabs__pane active" data-city-pane="tab-all">
                 <div class="city-tabs__accordion">
                     <?= __('All cities', 'akademiata'); ?> <span class="accordion-icon">+</span>
                 </div>
@@ -84,7 +84,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
 
             <!-- City panes -->
             <?php foreach ($cities_with_posts as $city) : ?>
-                <div id="city-<?= esc_attr($city->slug); ?>" class="city-tabs__pane">
+                <div class="city-tabs__pane" data-city-pane="city-<?= esc_attr($city->slug); ?>">
                     <div class="city-tabs__accordion">
                         <?= esc_html($city->name); ?> <span class="accordion-icon">+</span>
                     </div>

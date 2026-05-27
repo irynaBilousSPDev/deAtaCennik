@@ -39,7 +39,7 @@ endif;
         $first_active = true;
         foreach ($nav_cities as $city) :
             ?>
-            <li class="<?php echo $first_active ? 'active' : ''; ?>">
+            <li id="city-<?php echo esc_attr($city->slug); ?>" class="<?php echo $first_active ? 'active' : ''; ?>">
                 <a href="#city-<?php echo esc_attr($city->slug); ?>">
                     <?php echo esc_html($city->name); ?>
                 </a>
@@ -57,7 +57,7 @@ endif;
             $pane = $content_map[ $city->slug ];
             $query = $pane['query'];
             ?>
-            <div id="city-<?php echo esc_attr($city->slug); ?>" class="city-tabs__pane<?php echo $first_active ? ' active' : ''; ?>">
+            <div class="city-tabs__pane<?php echo $first_active ? ' active' : ''; ?>" data-city-pane="city-<?php echo esc_attr($city->slug); ?>">
                 <div class="city-tabs__accordion">
                     <?php echo esc_html($city->name); ?> <span class="accordion-icon">+</span>
                 </div>
