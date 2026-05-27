@@ -545,6 +545,14 @@
       color: vars.$white;
       padding: 1rem;
       font-size: vars.$font-size-default;
+      overflow: hidden;
+
+      .city_block {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 3;
+      }
 
       &:before {
         position: absolute;

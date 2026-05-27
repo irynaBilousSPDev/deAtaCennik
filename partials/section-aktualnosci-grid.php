@@ -45,6 +45,7 @@ $index          = 0;
                         <a href="<?php the_permalink(); ?>">
                             <div class="post-image"
                                  style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>');">
+                                <?php get_template_part('partials/news', 'city-block', array('variant' => 'image')); ?>
                                 <div class="post-title-overlay"><?php the_title(); ?></div>
                             </div>
                         </a>
@@ -54,6 +55,7 @@ $index          = 0;
                         <a href="<?php the_permalink(); ?>">
                             <div class="post-image"
                                  style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'medium_large')); ?>');">
+                                <?php get_template_part('partials/news', 'city-block', array('variant' => 'image')); ?>
                                 <div class="post-title-overlay"><?php the_title(); ?></div>
                             </div>
                         </a>
