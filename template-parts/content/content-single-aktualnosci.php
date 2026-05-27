@@ -38,12 +38,9 @@
                     <h1 class="entry-title"><?php the_title(); ?></h1>
                     <div class="entry-meta-row mb-3">
                         <span class="date"><?php echo get_the_date('d.m.Y'); ?></span>
-
-                        <?php
-                        if (!empty($categories)) {
-                            echo '<span class="category-name">' . esc_html($categories[0]->name) . '</span>';
-                        }
-                        ?>
+                        <span class="entry-meta-news">
+                            <?php echo esc_html(sprintf(akademiata_get_theme_lang_string('news_active_filter'), akademiata_get_post_news_city_label())); ?>
+                        </span>
                     </div>
                 </header>
 

@@ -514,19 +514,67 @@ function akademiata_apply_news_archive_date_query(array &$args, $year, $month) {
 }
 
 /**
- * Years for archive date filter dropdown.
+ * Years for archive date filter dropdown (only years with published aktualności posts).
  *
  * @return int[]
  */
 function akademiata_get_news_archive_year_options() {
-    $current = (int) gmdate('Y');
-    $years   = array();
+    global $wpdb;
 
-    for ($y = $current; $y >= $current - 15; $y--) {
-        $years[] = $y;
+    static $cache = array();
+
+    $cat_id = akademiata_get_aktualnosci_category_term_id();
+    $lang   = apply_filters('wpml_current_language', 'pl');
+    $cache_key = $cat_id . '_' . $lang;
+
+    if (isset($cache[ $cache_key ])) {
+        return $cache[ $cache_key ];
     }
 
-    return $years;
+    if ($cat_id <= 0) {
+        $cache[ $cache_key ] = array();
+        return $cache[ $cache_key ];
+    }
+
+    $sql = "
+        SELECT DISTINCT YEAR(p.post_date) AS year
+        FROM {$wpdb->posts} p
+        INNER JOIN {$wpdb->term_relationships} tr ON p.ID = tr.object_id
+        INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+            AND tt.taxonomy = 'category'
+            AND tt.term_id = %d
+        WHERE p.post_type = 'post'
+            AND p.post_status = 'publish'
+    ";
+
+    $params = array($cat_id);
+
+    if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}icl_translations'") === $wpdb->prefix . 'icl_translations') {
+        $sql .= "
+            AND EXISTS (
+                SELECT 1
+                FROM {$wpdb->prefix}icl_translations t
+                WHERE t.element_id = p.ID
+                    AND t.element_type = 'post_post'
+                    AND t.language_code = %s
+            )
+        ";
+        $params[] = $lang;
+    }
+
+    $sql .= ' ORDER BY year DESC';
+
+    $years = array_map('intval', $wpdb->get_col($wpdb->prepare($sql, $params)));
+
+    $active = akademiata_get_news_archive_date_from_request();
+    if ($active['year'] > 0 && !in_array($active['year'], $years, true)) {
+        $years[] = $active['year'];
+        rsort($years, SORT_NUMERIC);
+    }
+
+    $cache[ $cache_key ] = $years;
+
+    return $cache[ $cache_key ];
 }
 
 /**
