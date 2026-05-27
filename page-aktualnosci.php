@@ -228,6 +228,7 @@ if ($order_filter) {
             }
 
             akademiata_render_news_pagination($pagination_args);
+            ?>
 
         <?php else : ?>
             <p>
