@@ -63,6 +63,7 @@
   align-items: flex-end;
 
   .post-image {
+    position: relative;
     width: 100%;
     height: 275px;
     background-size: cover;
@@ -89,6 +90,28 @@
           text-decoration: underline;
         }
       }
+    }
+
+    h3 {
+      font-size: 24px;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+
+      a {
+        text-decoration: none;
+        color: vars.$black;
+        font-weight: vars.$weight-bold;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .post-date {
+      display: block;
+      font-size: vars.$font-size-s-medium;
+      color: vars.$color-gray;
     }
 
     p {

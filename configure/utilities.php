@@ -584,6 +584,26 @@ function akademiata_get_theme_lang_string($key) {
 }
 
 /**
+ * First news_city term on a wpis.
+ *
+ * @param int $post_id Post ID.
+ * @return WP_Term|null
+ */
+function akademiata_get_post_news_city_term($post_id = 0) {
+    $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+    if ($post_id <= 0) {
+        return null;
+    }
+
+    $terms = get_the_terms($post_id, 'news_city');
+    if (empty($terms) || is_wp_error($terms)) {
+        return null;
+    }
+
+    return $terms[0];
+}
+
+/**
  * Ensure news_city term exists in a language; return term ID.
  *
  * @param string $slug Term slug (e.g. warszawa).

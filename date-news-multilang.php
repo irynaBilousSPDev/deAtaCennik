@@ -90,17 +90,7 @@ $archive_class_mod = 'date_' . ($year ?: 'na') . '_' . ($monthnum ?: 'na') . '_'
         <?php if ($query->have_posts()) : ?>
             <div class="posts_wrapper_news">
                 <?php while ($query->have_posts()) : $query->the_post(); ?>
-                    <?php
-                    $thumb = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                    $style = $thumb ? ' style="background-image: url(' . esc_url($thumb) . ');"' : '';
-                    ?>
-                    <div <?php post_class('post_news'); ?>>
-                        <div class="post-image"<?php echo $style; ?>></div>
-                        <div class="post-content">
-                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                        </div>
-                        <a class="post-button" href="<?php the_permalink(); ?>" aria-label="<?php esc_attr_e('Read more', 'akademiata'); ?>"></a>
-                    </div>
+                    <?php get_template_part('partials/card_post_news'); ?>
                 <?php endwhile; wp_reset_postdata(); ?>
             </div>
 
