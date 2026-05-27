@@ -184,7 +184,7 @@ if ($order_filter) {
                 <?php
                 printf(
                     esc_html__('Aktualności: %s', 'akademiata'),
-                    esc_html($active_city_term->name)
+                    esc_html(akademiata_get_news_city_display_name($active_city_term))
                 );
                 ?>
             </p>

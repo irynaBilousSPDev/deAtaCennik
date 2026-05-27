@@ -14,28 +14,25 @@ if (!$query || !$query->have_posts()) {
 }
 
 $see_all_url    = !empty($args['see_all_url']) ? $args['see_all_url'] : akademiata_get_aktualnosci_page_url();
-$section_title  = !empty($args['section_title']) ? $args['section_title'] : __('AKTUALNOŚCI', 'akademiata');
+$section_title  = !empty($args['section_title']) ? $args['section_title'] : akademiata_get_section_aktualnosci_title();
 $section_class  = !empty($args['section_class']) ? $args['section_class'] : 'section_aktualnosci mb-5';
 $index          = 0;
 ?>
 <section class="<?php echo esc_attr($section_class); ?>">
     <div class="container">
         <div class="aktualnosci-header-row aktualnosci-header-row--section">
-            <div class="aktualnosci-header-left">
-                <h2 class="small_title"><?php echo esc_html($section_title); ?></h2>
-                <?php
-                get_template_part(
-                    'partials/aktualnosci',
-                    'city-links',
-                    array('current_city_slug' => '')
-                );
-                ?>
-            </div>
-            <?php if ($see_all_url) : ?>
-                <a class="see-all-link see-all-link--section" href="<?php echo esc_url($see_all_url); ?>">
-                    <?php esc_html_e('Zobacz wszystkie', 'akademiata'); ?>
-                </a>
-            <?php endif; ?>
+            <h2 class="small_title"><?php echo esc_html($section_title); ?></h2>
+            <?php
+            get_template_part(
+                'partials/aktualnosci',
+                'city-links',
+                array(
+                    'current_city_slug' => '',
+                    'see_all_url'       => $see_all_url,
+                    'show_see_all'      => (bool) $see_all_url,
+                )
+            );
+            ?>
         </div>
 
         <div class="front-aktualnosci-grid">

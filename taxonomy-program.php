@@ -101,7 +101,7 @@ get_header(); ?>
             array(
                 'query'          => $program_news,
                 'section_class'  => 'section_aktualnosci section_aktualnosci--program mb-5',
-                'section_title'  => __('AKTUALNOŚCI', 'akademiata'),
+                'section_title'  => akademiata_get_section_aktualnosci_title(),
                 'see_all_url'    => akademiata_get_aktualnosci_page_url(),
             )
         );

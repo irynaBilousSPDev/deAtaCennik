@@ -1,19 +1,18 @@
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mixins;
 
-// Section header: title + cities (left), see-all (right)
-.aktualnosci-header-row--section {
-  @include mixins.flexbox(row, flex-start, flex-start);
-  justify-content: space-between;
-  gap: 1rem 2rem;
-  margin-bottom: 2rem;
+.aktualnosci-header-toolbar {
+  @include mixins.flexbox(row, flex-start, center);
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  width: 100%;
+}
 
-  .aktualnosci-header-left {
-    @include mixins.flexbox(column, flex-start, flex-start);
-    flex: 1 1 auto;
-    min-width: 0;
-    gap: 1rem;
-  }
+// Section: title, then cities + see-all inline
+.aktualnosci-header-row--section {
+  @include mixins.flexbox(column, flex-start, flex-start);
+  gap: 1rem;
+  margin-bottom: 2rem;
 
   .small_title {
     margin: 0;
@@ -22,78 +21,39 @@
     line-height: 1.2;
   }
 
-  .see-all-link--section {
-    flex-shrink: 0;
-    align-self: flex-start;
-    margin-top: 0.15em;
-    font-size: vars.$font-size-default;
-    color: #7b9477;
-    text-decoration: none;
-    font-weight: vars.$weight-semi-regular;
-    white-space: nowrap;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  @include mixins.max-ipad-air-screen {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-
-    .see-all-link--section {
-      margin-top: 0;
-      white-space: normal;
-    }
-  }
-
   @include mixins.max-sm-screen {
     .small_title {
       font-size: vars.$font-size-lg;
     }
-
-    .aktualnosci-header-left {
-      gap: 0.75rem;
-    }
   }
 }
 
-// Archive: cities row (+ optional see-all)
+// Archive filter row
 .aktualnosci-header-actions {
-  @include mixins.flexbox(row, flex-start, center);
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.75rem 1.5rem;
   width: 100%;
-
-  .see-all-link {
-    display: inline-block;
-    font-size: vars.$font-size-default;
-    color: #7b9477;
-    text-decoration: none;
-    font-weight: vars.$weight-semi-regular;
-    margin-left: auto;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  @include mixins.max-ipad-air-screen {
-    flex-direction: column;
-    align-items: flex-start;
-
-    .see-all-link {
-      margin-left: 0;
-    }
-  }
 }
 
 .aktualnosci-city-links {
   @include mixins.flexbox(row, flex-start, center);
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.see-all-link {
+  display: inline-block;
+  font-size: vars.$font-size-default;
+  color: #7b9477;
+  text-decoration: none;
+  font-weight: vars.$weight-semi-regular;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include mixins.max-sm-screen {
+    white-space: normal;
+  }
 }
 
 .aktualnosci-city-link {
@@ -114,13 +74,14 @@
   }
 
   &.is-active {
-    color: vars.$white;
-    background-color: vars.$black;
-    text-decoration: none;
+    color: vars.$black;
+    background-color: vars.$background-gray;
+    font-weight: vars.$weight-bold;
+    text-decoration: underline;
 
     &:hover {
-      background-color: vars.$black;
-      color: vars.$white;
+      background-color: #e8e8e8;
+      color: vars.$black;
     }
   }
 
@@ -130,11 +91,25 @@
   }
 }
 
+// Archive: active city keeps pill highlight (black bg)
+.news_archive {
+  .aktualnosci-city-link.is-active {
+    color: vars.$white;
+    background-color: vars.$black;
+    font-weight: vars.$weight-semi-regular;
+    text-decoration: none;
+
+    &:hover {
+      background-color: vars.$black;
+      color: vars.$white;
+    }
+  }
+}
+
 .news_archive .aktualnosci-city-filter {
   margin-bottom: 2rem;
 }
 
-// Kierunek / program section uses same header layout
 .section_aktualnosci--program {
   .aktualnosci-header-row--section {
     margin-bottom: 2rem;

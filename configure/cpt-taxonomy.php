@@ -526,23 +526,16 @@ function akademiata_ensure_default_news_city_terms() {
 add_action('init', 'akademiata_ensure_default_news_city_terms', 20);
 
 /**
- * One-time: assign Warszawa to all aktualności posts (all languages).
+ * One-time: assign Warszawa to all aktualności posts (per WPML language).
  */
 function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
-    if (get_option('akademiata_news_city_warsaw_bulk_v1')) {
+    if (get_option('akademiata_news_city_warsaw_bulk_v2')) {
         return;
     }
 
     if (!taxonomy_exists('news_city')) {
         return;
     }
-
-    $warsaw = get_term_by('slug', 'warszawa', 'news_city');
-    if (!$warsaw || is_wp_error($warsaw)) {
-        return;
-    }
-
-    $warsaw_id = (int) $warsaw->term_id;
 
     $category_ids = array();
     $news_slugs   = array('aktualnosci', 'news', 'novyny', 'novosti');
@@ -557,7 +550,7 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
     $category_ids = array_values(array_unique($category_ids));
 
     if (empty($category_ids)) {
-        update_option('akademiata_news_city_warsaw_bulk_v1', 1, false);
+        update_option('akademiata_news_city_warsaw_bulk_v2', 1, false);
         return;
     }
 
@@ -576,10 +569,29 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
     );
 
     foreach ($post_ids as $post_id) {
-        wp_set_object_terms((int) $post_id, array($warsaw_id), 'news_city', false);
+        $post_id = (int) $post_id;
+        $lang    = 'pl';
+
+        if (function_exists('apply_filters')) {
+            $lang = apply_filters(
+                'wpml_element_language_code',
+                'pl',
+                array(
+                    'element_id'   => $post_id,
+                    'element_type' => 'post_post',
+                )
+            );
+        }
+
+        $lang = $lang ? sanitize_key($lang) : 'pl';
+        $term_id = akademiata_ensure_news_city_term_id('warszawa', $lang);
+
+        if ($term_id > 0) {
+            wp_set_object_terms($post_id, array($term_id), 'news_city', false);
+        }
     }
 
-    update_option('akademiata_news_city_warsaw_bulk_v1', 1, false);
+    update_option('akademiata_news_city_warsaw_bulk_v2', 1, false);
 }
 
 add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
