@@ -661,15 +661,20 @@ function activateCityTabsFromHash({ scroll = false } = {}) {
     });
 }
 
+const CITY_TABS_MOBILE_MQ = '(max-width: 768px)';
+
+function isCityTabsMobileViewport() {
+    return window.matchMedia(CITY_TABS_MOBILE_MQ).matches;
+}
+
 function getCityTabsFixedTopPx() {
     const header = document.querySelector('.site-header');
-    const headerHeight = header ? header.getBoundingClientRect().height : 0;
-    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 10;
-
-    return headerHeight + rootFontSize * 2;
+    return header ? header.getBoundingClientRect().height : 0;
 }
 
 function initCityTabsFixedNav() {
+    const mobileMq = window.matchMedia(CITY_TABS_MOBILE_MQ);
+
     document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
         const nav = tabContainer.querySelector('.city-tabs__nav');
 
@@ -691,25 +696,37 @@ function initCityTabsFixedNav() {
         let scrollRaf = null;
 
         const alignFixedNav = () => {
-            const { left, width } = tabContainer.getBoundingClientRect();
+            const container = tabContainer.closest('.container');
 
-            nav.style.left = `${left}px`;
-            nav.style.width = `${width}px`;
+            nav.style.left = '0';
+            nav.style.width = '100%';
+
+            if (container) {
+                const containerRect = container.getBoundingClientRect();
+                nav.style.paddingLeft = `${containerRect.left}px`;
+                nav.style.paddingRight = `${window.innerWidth - containerRect.right}px`;
+            }
         };
 
         const clearFixedNavPosition = () => {
             nav.style.left = '';
             nav.style.width = '';
+            nav.style.paddingLeft = '';
+            nav.style.paddingRight = '';
+        };
+
+        const releaseFixedNav = () => {
+            nav.classList.remove('city-tabs__nav--is-fixed');
+            placeholder.classList.remove('is-active');
+            placeholder.style.height = '';
+            clearFixedNavPosition();
         };
 
         const measure = () => {
             const wasFixed = nav.classList.contains('city-tabs__nav--is-fixed');
 
             if (wasFixed) {
-                nav.classList.remove('city-tabs__nav--is-fixed');
-                placeholder.classList.remove('is-active');
-                placeholder.style.height = '';
-                clearFixedNavPosition();
+                releaseFixedNav();
             }
 
             nav.style.setProperty('--city-tabs-fixed-top', `${getCityTabsFixedTopPx()}px`);
@@ -719,6 +736,11 @@ function initCityTabsFixedNav() {
         };
 
         const updateFixedNav = () => {
+            if (!isCityTabsMobileViewport()) {
+                releaseFixedNav();
+                return;
+            }
+
             const fixedTop = getCityTabsFixedTopPx();
 
             nav.style.setProperty('--city-tabs-fixed-top', `${fixedTop}px`);
@@ -734,10 +756,7 @@ function initCityTabsFixedNav() {
                 return;
             }
 
-            nav.classList.remove('city-tabs__nav--is-fixed');
-            placeholder.classList.remove('is-active');
-            placeholder.style.height = '';
-            clearFixedNavPosition();
+            releaseFixedNav();
         };
 
         const onScroll = () => {
@@ -756,6 +775,10 @@ function initCityTabsFixedNav() {
 
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', () => {
+            measure();
+            updateFixedNav();
+        });
+        mobileMq.addEventListener('change', () => {
             measure();
             updateFixedNav();
         });

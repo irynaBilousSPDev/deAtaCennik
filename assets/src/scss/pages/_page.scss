@@ -19,18 +19,9 @@
     margin-bottom: 2rem;
     background-color: vars.$white;
 
-    &.city-tabs__nav--is-fixed {
-      position: fixed;
-      top: var(--city-tabs-fixed-top, 12rem);
-      z-index: 900;
-      margin-top: 0;
-      margin-bottom: 0;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    }
-
     li[id^="city-"],
     li#tab-all {
-      scroll-margin-top: var(--city-tabs-fixed-top, 14rem);
+      scroll-margin-top: 12rem;
     }
 
     li {
@@ -99,10 +90,31 @@
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       gap: 0.6rem;
-      margin-top: 2rem;
-      margin-bottom: 1.6rem;
-      padding-bottom: 0.4rem;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 2rem;
+      padding-bottom: 1.6rem;
       scrollbar-width: thin;
+      box-sizing: border-box;
+
+      &.city-tabs__nav--is-fixed {
+        position: fixed;
+        top: var(--city-tabs-fixed-top, 8rem);
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 900;
+        margin: 0;
+        padding-top: 2rem;
+        padding-bottom: 1.6rem;
+        background-color: vars.$white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      li[id^="city-"],
+      li#tab-all {
+        scroll-margin-top: var(--city-tabs-fixed-top, 12rem);
+      }
 
       li {
         flex-shrink: 0;
