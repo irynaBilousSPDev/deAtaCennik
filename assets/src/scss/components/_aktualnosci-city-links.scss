@@ -17,24 +17,36 @@
 .aktualnosci-city-links {
   @include mixins.flexbox(row, flex-start, center);
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  gap: 0.5rem;
 }
 
 .aktualnosci-city-link {
   display: inline-block;
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
   font-size: vars.$font-size-default;
-  color: #7b9477;
-  text-decoration: none;
   font-weight: vars.$weight-semi-regular;
+  line-height: 1.25;
+  text-decoration: none;
+  color: vars.$black;
+  background-color: vars.$background-gray;
+  transition: background-color 0.2s ease, color 0.2s ease;
 
   &:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: #e8e8e8;
   }
 
   &.is-active {
-    color: vars.$primary;
-    font-weight: vars.$weight-bold;
-    text-decoration: underline;
+    color: vars.$white;
+    background-color: vars.$black;
+    font-weight: vars.$weight-semi-regular;
+    text-decoration: none;
+
+    &:hover {
+      background-color: vars.$black;
+      color: vars.$white;
+    }
   }
 }
 

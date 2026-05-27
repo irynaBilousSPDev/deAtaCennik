@@ -525,6 +525,65 @@ function akademiata_ensure_default_news_city_terms() {
 
 add_action('init', 'akademiata_ensure_default_news_city_terms', 20);
 
+/**
+ * One-time: assign Warszawa to all aktualności posts (all languages).
+ */
+function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
+    if (get_option('akademiata_news_city_warsaw_bulk_v1')) {
+        return;
+    }
+
+    if (!taxonomy_exists('news_city')) {
+        return;
+    }
+
+    $warsaw = get_term_by('slug', 'warszawa', 'news_city');
+    if (!$warsaw || is_wp_error($warsaw)) {
+        return;
+    }
+
+    $warsaw_id = (int) $warsaw->term_id;
+
+    $category_ids = array();
+    $news_slugs   = array('aktualnosci', 'news', 'novyny', 'novosti');
+
+    foreach ($news_slugs as $slug) {
+        $cat = get_term_by('slug', $slug, 'category');
+        if ($cat && !is_wp_error($cat)) {
+            $category_ids[] = (int) $cat->term_id;
+        }
+    }
+
+    $category_ids = array_values(array_unique($category_ids));
+
+    if (empty($category_ids)) {
+        update_option('akademiata_news_city_warsaw_bulk_v1', 1, false);
+        return;
+    }
+
+    $post_ids = get_posts(
+        array(
+            'post_type'              => 'post',
+            'post_status'            => array('publish', 'draft', 'future', 'pending', 'private'),
+            'posts_per_page'         => -1,
+            'fields'                 => 'ids',
+            'suppress_filters'       => true,
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+            'category__in'           => $category_ids,
+        )
+    );
+
+    foreach ($post_ids as $post_id) {
+        wp_set_object_terms((int) $post_id, array($warsaw_id), 'news_city', false);
+    }
+
+    update_option('akademiata_news_city_warsaw_bulk_v1', 1, false);
+}
+
+add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
+
 
 // Register CPT: Studia Podyplomowe
 function register_postgraduate_cpt()

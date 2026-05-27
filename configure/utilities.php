@@ -422,6 +422,19 @@ function akademiata_get_news_city_terms() {
         return array();
     }
 
+    $order = array('warszawa' => 0, 'wroclaw' => 1);
+    usort(
+        $terms,
+        static function ($a, $b) use ($order) {
+            $a_order = $order[ $a->slug ] ?? 99;
+            $b_order = $order[ $b->slug ] ?? 99;
+            if ($a_order === $b_order) {
+                return strcasecmp($a->name, $b->name);
+            }
+            return $a_order <=> $b_order;
+        }
+    );
+
     return $terms;
 }
 
