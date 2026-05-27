@@ -53,6 +53,11 @@ if ($city_slug && !$active_city_term) {
     $city_slug = '';
 }
 
+$archive_date      = akademiata_get_news_archive_date_from_request();
+$filter_year       = $archive_date['year'];
+$filter_month      = $archive_date['month'];
+$archive_filter_args = akademiata_get_news_archive_active_filter_args();
+
 // Build base query (category restricted)
 $args = [
     'post_type'      => 'post',
@@ -66,6 +71,8 @@ $city_tax_query = $city_slug ? akademiata_build_news_city_tax_query($city_slug) 
 if ($city_tax_query) {
     $args['tax_query'] = $city_tax_query;
 }
+
+akademiata_apply_news_archive_date_query($args, $filter_year, $filter_month);
 
 // Apply custom search via filters to support quoted phrases and robust term logic
 $search_filter = null;
@@ -160,36 +167,8 @@ if ($order_filter) {
         <?php the_breadcrumb(); ?>
         <h1 class="mb-5"><?php the_title(); ?></h1>
 
-        <div class="aktualnosci-city-filter">
-            <?php
-            get_template_part(
-                'partials/aktualnosci',
-                'header-actions',
-                [
-                    'current_city_slug' => $city_slug,
-                    'see_all_url'       => $archive_url,
-                    'show_see_all'      => (bool) $city_slug,
-                ]
-            );
-            ?>
-        </div>
-
-        <?php if ($city_slug) : ?>
-            <p class="news-city-filter-info mb-4">
-                <?php
-                $filter_city_label = $active_city_term
-                    ? akademiata_get_news_city_display_name($active_city_term)
-                    : akademiata_get_post_news_city_label(0);
-                printf(
-                    esc_html__('Aktualności: %s', 'akademiata'),
-                    esc_html($filter_city_label)
-                );
-                ?>
-            </p>
-        <?php endif; ?>
-
         <!-- Search form (uses ?q=... to stay on this Page, avoid is_search) -->
-        <form class="news-search mb-5" method="get" action="<?php echo esc_url($archive_url); ?>">
+        <form class="news-search mb-4" method="get" action="<?php echo esc_url($archive_url); ?>">
             <label for="news-search-input" class="screen-reader-text">
                 <?php echo esc_html(akademiata_get_theme_lang_string('news_search_label')); ?>
             </label>
@@ -205,12 +184,72 @@ if ($order_filter) {
             <?php if ($city_slug !== '') : ?>
                 <input type="hidden" name="miasto" value="<?php echo esc_attr($city_slug); ?>" />
             <?php endif; ?>
+            <?php if ($filter_year > 0) : ?>
+                <input type="hidden" name="rok" value="<?php echo (int) $filter_year; ?>" />
+            <?php endif; ?>
+            <?php if ($filter_month > 0) : ?>
+                <input type="hidden" name="miesiac" value="<?php echo (int) $filter_month; ?>" />
+            <?php endif; ?>
             <?php if ($q !== '') : ?>
-                <a class="clear-search" href="<?php echo esc_url(akademiata_get_aktualnosci_page_url_with_args(['miasto' => $city_slug])); ?>">
+                <?php
+                $clear_search_args = $archive_filter_args;
+                unset($clear_search_args['q']);
+                ?>
+                <a class="clear-search" href="<?php echo esc_url(akademiata_get_aktualnosci_page_url_with_args($clear_search_args)); ?>">
                     <?php echo esc_html(akademiata_get_theme_lang_string('news_search_clear')); ?>
                 </a>
             <?php endif; ?>
         </form>
+
+        <?php
+        get_template_part(
+            'partials/aktualnosci',
+            'archive-filters',
+            array(
+                'archive_url'   => $archive_url,
+                'city_slug'     => $city_slug,
+                'filter_year'   => $filter_year,
+                'filter_month'  => $filter_month,
+                'search_q'      => $q,
+            )
+        );
+        ?>
+
+        <?php if ($city_slug) : ?>
+            <p class="news-city-filter-info mb-4">
+                <?php
+                $filter_city_label = $active_city_term
+                    ? akademiata_get_news_city_display_name($active_city_term)
+                    : akademiata_get_post_news_city_label(0);
+                printf(
+                    esc_html__('Aktualności: %s', 'akademiata'),
+                    esc_html($filter_city_label)
+                );
+                ?>
+            </p>
+        <?php endif; ?>
+
+        <?php if ($filter_year > 0 || $filter_month > 0) : ?>
+            <p class="search-results-info mb-4">
+                <?php
+                if ($filter_month > 0 && isset(akademiata_get_news_archive_month_options()[ $filter_month ])) {
+                    $date_label = akademiata_get_news_archive_month_options()[ $filter_month ] . ' ' . $filter_year;
+                } elseif ($filter_year > 0) {
+                    $date_label = (string) $filter_year;
+                } else {
+                    $date_label = '';
+                }
+                if ($date_label !== '') {
+                    echo esc_html(
+                        sprintf(
+                            akademiata_get_theme_lang_string('news_filter_period'),
+                            $date_label
+                        )
+                    );
+                }
+                ?>
+            </p>
+        <?php endif; ?>
 
         <?php if ($q !== '') : ?>
             <p class="search-results-info">
@@ -246,16 +285,8 @@ if ($order_filter) {
                 'next_text' => __('Następny', 'akademiata'),
             ];
 
-            // Preserve search + city filter across pages
-            $pagination_add_args = [];
-            if ($q !== '') {
-                $pagination_add_args['q'] = $q;
-            }
-            if ($city_slug !== '') {
-                $pagination_add_args['miasto'] = $city_slug;
-            }
-            if (!empty($pagination_add_args)) {
-                $pagination_args['add_args'] = $pagination_add_args;
+            if (!empty($archive_filter_args)) {
+                $pagination_args['add_args'] = $archive_filter_args;
             }
 
             $pagination_links = paginate_links($pagination_args);
@@ -278,6 +309,8 @@ if ($order_filter) {
                     esc_html_e('Brak wyników spełniających kryteria wyszukiwania.', 'akademiata');
                 } elseif ($active_city_term) {
                     esc_html_e('Brak aktualności dla wybranego miasta.', 'akademiata');
+                } elseif ($filter_year > 0 || $filter_month > 0) {
+                    echo esc_html(akademiata_get_theme_lang_string('news_no_results_period'));
                 } else {
                     esc_html_e('Nie znaleziono żadnych wyników.', 'akademiata');
                 }

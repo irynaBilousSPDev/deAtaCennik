@@ -376,6 +376,16 @@ function akademiata_get_aktualnosci_page_url_with_args(array $args = array()) {
             $clean[ $key ] = sanitize_title((string) $value);
         } elseif ($key === 'q') {
             $clean[ $key ] = sanitize_text_field((string) $value);
+        } elseif ($key === 'rok') {
+            $year = (int) $value;
+            if ($year >= 2000 && $year <= (int) gmdate('Y') + 1) {
+                $clean[ $key ] = $year;
+            }
+        } elseif ($key === 'miesiac') {
+            $month = (int) $value;
+            if ($month >= 1 && $month <= 12) {
+                $clean[ $key ] = $month;
+            }
         }
     }
 
@@ -397,6 +407,127 @@ function akademiata_get_current_news_city_slug_from_request() {
     }
 
     return sanitize_title(wp_unslash((string) $_GET['miasto']));
+}
+
+/**
+ * Year / month from ?rok= & ?miesiac= on aktualności archive.
+ *
+ * @return array{year: int, month: int} 0 = not set.
+ */
+function akademiata_get_news_archive_date_from_request() {
+    $year  = 0;
+    $month = 0;
+
+    if (isset($_GET['rok'])) {
+        $year = (int) wp_unslash($_GET['rok']);
+    }
+    if (isset($_GET['miesiac'])) {
+        $month = (int) wp_unslash($_GET['miesiac']);
+    }
+
+    $max_year = (int) gmdate('Y') + 1;
+    if ($year < 2000 || $year > $max_year) {
+        $year = 0;
+    }
+    if ($month < 1 || $month > 12) {
+        $month = 0;
+    }
+
+    return array(
+        'year'  => $year,
+        'month' => $month,
+    );
+}
+
+/**
+ * Active archive filters for pagination / forms (q, miasto, rok, miesiac).
+ *
+ * @return array<string, string|int>
+ */
+function akademiata_get_news_archive_active_filter_args() {
+    $args = array();
+
+    if (isset($_GET['q'])) {
+        $q = trim(wp_unslash((string) $_GET['q']));
+        if ($q !== '') {
+            $args['q'] = $q;
+        }
+    }
+
+    $city = akademiata_get_current_news_city_slug_from_request();
+    if ($city !== '') {
+        $args['miasto'] = $city;
+    }
+
+    $date = akademiata_get_news_archive_date_from_request();
+    if ($date['year'] > 0) {
+        $args['rok'] = $date['year'];
+    }
+    if ($date['month'] > 0) {
+        $args['miesiac'] = $date['month'];
+    }
+
+    return $args;
+}
+
+/**
+ * Apply date_query to aktualności WP_Query args.
+ *
+ * @param array $args       WP_Query args (by reference).
+ * @param int   $year       Four-digit year or 0.
+ * @param int   $month      1–12 or 0.
+ */
+function akademiata_apply_news_archive_date_query(array &$args, $year, $month) {
+    $year  = (int) $year;
+    $month = (int) $month;
+
+    if ($year <= 0) {
+        return;
+    }
+
+    $date_query = array(
+        'year' => $year,
+    );
+
+    if ($month >= 1 && $month <= 12) {
+        $date_query['month'] = $month;
+    }
+
+    $args['date_query'] = array($date_query);
+}
+
+/**
+ * Years for archive date filter dropdown.
+ *
+ * @return int[]
+ */
+function akademiata_get_news_archive_year_options() {
+    $current = (int) gmdate('Y');
+    $years   = array();
+
+    for ($y = $current; $y >= $current - 15; $y--) {
+        $years[] = $y;
+    }
+
+    return $years;
+}
+
+/**
+ * Localized month names for archive filter (1–12).
+ *
+ * @return array<int, string>
+ */
+function akademiata_get_news_archive_month_options() {
+    $lang = apply_filters('wpml_current_language', 'pl');
+
+    $sets = array(
+        'pl' => array(1 => 'Styczeń', 2 => 'Luty', 3 => 'Marzec', 4 => 'Kwiecień', 5 => 'Maj', 6 => 'Czerwiec', 7 => 'Lipiec', 8 => 'Sierpień', 9 => 'Wrzesień', 10 => 'Październik', 11 => 'Listopad', 12 => 'Grudzień'),
+        'en' => array(1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June', 7 => 'July', 8 => 'August', 9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December'),
+        'uk' => array(1 => 'Січень', 2 => 'Лютий', 3 => 'Березень', 4 => 'Квітень', 5 => 'Травень', 6 => 'Червень', 7 => 'Липень', 8 => 'Серпень', 9 => 'Вересень', 10 => 'Жовтень', 11 => 'Листопад', 12 => 'Грудень'),
+        'ru' => array(1 => 'Январь', 2 => 'Февраль', 3 => 'Март', 4 => 'Апрель', 5 => 'Май', 6 => 'Июнь', 7 => 'Июль', 8 => 'Август', 9 => 'Сентябрь', 10 => 'Октябрь', 11 => 'Ноябрь', 12 => 'Декабрь'),
+    );
+
+    return $sets[ $lang ] ?? $sets['pl'];
 }
 
 /**
@@ -570,6 +701,48 @@ function akademiata_get_theme_lang_string($key) {
                 'en' => 'See all',
                 'uk' => 'Дивитися всі',
                 'ru' => 'Смотреть все',
+            ),
+            'news_filter_year' => array(
+                'pl' => 'Rok',
+                'en' => 'Year',
+                'uk' => 'Рік',
+                'ru' => 'Год',
+            ),
+            'news_filter_month' => array(
+                'pl' => 'Miesiąc',
+                'en' => 'Month',
+                'uk' => 'Місяць',
+                'ru' => 'Месяц',
+            ),
+            'news_filter_all_years' => array(
+                'pl' => 'Wszystkie lata',
+                'en' => 'All years',
+                'uk' => 'Усі роки',
+                'ru' => 'Все годы',
+            ),
+            'news_filter_all_months' => array(
+                'pl' => 'Wszystkie miesiące',
+                'en' => 'All months',
+                'uk' => 'Усі місяці',
+                'ru' => 'Все месяцы',
+            ),
+            'news_filter_apply' => array(
+                'pl' => 'Filtruj',
+                'en' => 'Filter',
+                'uk' => 'Фільтрувати',
+                'ru' => 'Фильтр',
+            ),
+            'news_filter_period' => array(
+                'pl' => 'Okres: %s',
+                'en' => 'Period: %s',
+                'uk' => 'Період: %s',
+                'ru' => 'Период: %s',
+            ),
+            'news_no_results_period' => array(
+                'pl' => 'Brak aktualności w wybranym okresie.',
+                'en' => 'No news in the selected period.',
+                'uk' => 'Немає новин за обраний період.',
+                'ru' => 'Нет новостей за выбранный период.',
             ),
         );
     }
