@@ -47,7 +47,7 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 | `program` | Kierunki (same terms as offers) | Shown on `taxonomy-program.php` when tagged |
 | `degree` | Stopień (optional) | **Unchecked = oba** (I + II); filters related news per section |
 
-Helpers: `akademiata_query_program_related_news()`, `akademiata_get_aktualnosci_category_term_id()` in `configure/utilities.php`. Card: `partials/card_post_news.php`.
+Helpers: `akademiata_query_program_related_news()`, `akademiata_get_aktualnosci_category_term_id()`, `akademiata_get_aktualnosci_page_url()` in `configure/utilities.php`. Grid: `partials/section-aktualnosci-grid.php` (front page + `taxonomy-program.php`; pass `null` level for all news on kierunek).
 
 ## WPML
 

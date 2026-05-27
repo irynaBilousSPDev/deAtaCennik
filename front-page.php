@@ -196,103 +196,28 @@ if (!empty($your_interests)) :
 
 
 <?php
-// Get translated 'aktualnosci' category ID
-$category_id = 0;
+$aktualnosci_cat_id = akademiata_get_aktualnosci_category_term_id();
 
-if (function_exists('icl_object_id')) {
-    $default_term = get_term_by('slug', 'aktualnosci', 'category');
-    if ($default_term && !is_wp_error($default_term)) {
-        $current_lang = apply_filters('wpml_current_language', null);
-        $translated_term_id = apply_filters('wpml_object_id', $default_term->term_id, 'category', true, $current_lang);
-        if (!empty($translated_term_id)) {
-            $category_id = $translated_term_id;
-        }
-    }
+if ($aktualnosci_cat_id > 0) {
+    $aktualnosci = new WP_Query(
+        array(
+            'posts_per_page' => 6,
+            'post_status'    => 'publish',
+            'post_type'      => 'post',
+            'cat'            => $aktualnosci_cat_id,
+            'lang'           => apply_filters('wpml_current_language', null),
+        )
+    );
+
+    get_template_part(
+        'partials/section',
+        'aktualnosci-grid',
+        array(
+            'query'       => $aktualnosci,
+            'see_all_url' => akademiata_get_aktualnosci_page_url(),
+        )
+    );
 }
-
-// Fallback if WPML is not active
-if (!$category_id) {
-    $default_term = get_term_by('slug', 'aktualnosci', 'category');
-    if ($default_term && !is_wp_error($default_term)) {
-        $category_id = $default_term->term_id;
-    }
-}
-
-// Build query only if category ID found
-$aktualnosci = new WP_Query([
-    'posts_per_page' => 6,
-    'post_status' => 'publish',
-    'post_type' => 'post',
-    'cat' => $category_id, // filter by category ID!
-]);
-
-if ($aktualnosci->have_posts()) :
-    $index = 0;
-    ?>
-    <?php
-// Get ID of the "Aktualnosci" page (in default language)
-    $page_slug = 'aktualnosci';
-    $page = get_page_by_path($page_slug);
-
-    if ($page) {
-        // Get current language
-        $lang = apply_filters('wpml_current_language', null);
-
-        // Get translated page ID
-        $translated_id = apply_filters('wpml_object_id', $page->ID, 'page', false, $lang);
-
-        // Get URL of translated page
-        $page_url = get_permalink($translated_id);
-    }
-    ?>
-    <section class="section_aktualnosci mb-5">
-        <div class="container">
-            <div class="aktualnosci-header-row">
-                <h2 class="small_title"><?php _e('AKTUALNOŚCI', 'akademiata'); ?></h2>
-                <a class="see-all-link" href="<?php echo esc_url($page_url); ?>">
-                    <?php _e('Zobacz wszystkie', 'akademiata'); ?>
-                </a>
-            </div>
-
-            <div class="front-aktualnosci-grid">
-                <?php while ($aktualnosci->have_posts()) :
-                $aktualnosci->the_post(); ?>
-                <?php if ($index === 0): ?>
-                    <div class="aktualnosci-post aktualnosci-first">
-                        <a href="<?php the_permalink(); ?>">
-                            <div class="post-image"
-                                 style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'large'); ?>');">
-                                <div class="post-title-overlay"><?php the_title(); ?></div>
-                            </div>
-                        </a>
-                    </div>
-                <?php elseif ($index === 1): ?>
-                    <div class="aktualnosci-post aktualnosci-second">
-                        <a href="<?php the_permalink(); ?>">
-                            <div class="post-image"
-                                 style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'medium_large'); ?>');">
-                                <div class="post-title-overlay"><?php the_title(); ?></div>
-                            </div>
-                        </a>
-                    </div>
-                <?php elseif ($index === 2): ?>
-                <div class="aktualnosci-post aktualnosci-list">
-                    <ul>
-                        <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                        <?php else: ?>
-                            <li><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></li>
-                        <?php endif; ?>
-                        <?php $index++; ?>
-                        <?php endwhile; ?>
-                    </ul>
-                </div> <!-- close .aktualnosci-list -->
-            </div> <!-- close .front-aktualnosci-grid -->
-        </div> <!-- close .container -->
-    </section>
-
-    <?php
-    wp_reset_postdata();
-endif;
 ?>
 
 <?php

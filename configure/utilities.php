@@ -321,6 +321,40 @@ function akademiata_get_aktualnosci_category_term_id() {
 }
 
 /**
+ * Permalink of the Aktualności page (WPML-safe).
+ *
+ * @return string Empty if page not found.
+ */
+function akademiata_get_aktualnosci_page_url() {
+    static $cached = null;
+
+    if ($cached !== null) {
+        return $cached;
+    }
+
+    $cached = '';
+    $page   = get_page_by_path('aktualnosci');
+
+    if (!$page) {
+        return $cached;
+    }
+
+    $page_id = (int) $page->ID;
+
+    if (function_exists('icl_object_id')) {
+        $lang = apply_filters('wpml_current_language', null);
+        $translated_id = (int) apply_filters('wpml_object_id', $page_id, 'page', false, $lang);
+        if ($translated_id > 0) {
+            $page_id = $translated_id;
+        }
+    }
+
+    $cached = (string) get_permalink($page_id);
+
+    return $cached;
+}
+
+/**
  * Whether a degree term slug maps to studia I stopnia (bachelor).
  */
 function akademiata_degree_slug_is_bachelor_level($slug) {
@@ -437,15 +471,15 @@ function akademiata_get_news_degree_term_ids_for_level($level) {
 }
 
 /**
- * Aktualności linked to a program term for one study level.
- * Empty degree on post = both levels (oba).
+ * Aktualności linked to a program term.
+ * Empty degree on post = both levels (oba) when $level is bachelor|master.
  *
- * @param WP_Term|int $program_term Program term or term ID.
- * @param string      $level        bachelor|master
- * @param array       $query_args   Optional WP_Query overrides.
+ * @param WP_Term|int     $program_term Program term or term ID.
+ * @param string|null     $level        bachelor|master, or null for all levels on this kierunek.
+ * @param array           $query_args   Optional WP_Query overrides.
  * @return WP_Query
  */
-function akademiata_query_program_related_news($program_term, $level = 'bachelor', $query_args = array()) {
+function akademiata_query_program_related_news($program_term, $level = null, $query_args = array()) {
     if (is_numeric($program_term)) {
         $program_term = get_term((int) $program_term, 'program');
     }
@@ -453,13 +487,6 @@ function akademiata_query_program_related_news($program_term, $level = 'bachelor
     if (!$program_term || is_wp_error($program_term)) {
         return new WP_Query(array('post__in' => array(0)));
     }
-
-    $level = sanitize_key($level);
-    if (!in_array($level, array('bachelor', 'master'), true)) {
-        $level = 'bachelor';
-    }
-
-    $degree_ids = akademiata_get_news_degree_term_ids_for_level($level);
 
     $tax_query = array(
         'relation' => 'AND',
@@ -470,20 +497,26 @@ function akademiata_query_program_related_news($program_term, $level = 'bachelor
         ),
     );
 
-    if (!empty($degree_ids)) {
-        $tax_query[] = array(
-            'relation' => 'OR',
-            array(
-                'taxonomy' => 'degree',
-                'operator' => 'NOT EXISTS',
-            ),
-            array(
-                'taxonomy' => 'degree',
-                'field'    => 'term_id',
-                'terms'    => $degree_ids,
-                'operator' => 'IN',
-            ),
-        );
+    if ($level !== null && $level !== '') {
+        $level = sanitize_key($level);
+        if (in_array($level, array('bachelor', 'master'), true)) {
+            $degree_ids = akademiata_get_news_degree_term_ids_for_level($level);
+            if (!empty($degree_ids)) {
+                $tax_query[] = array(
+                    'relation' => 'OR',
+                    array(
+                        'taxonomy' => 'degree',
+                        'operator' => 'NOT EXISTS',
+                    ),
+                    array(
+                        'taxonomy' => 'degree',
+                        'field'    => 'term_id',
+                        'terms'    => $degree_ids,
+                        'operator' => 'IN',
+                    ),
+                );
+            }
+        }
     }
 
     $defaults = array(
