@@ -193,23 +193,23 @@ if ($order_filter) {
         <!-- Search form (uses ?q=... to stay on this Page, avoid is_search) -->
         <form class="news-search mb-5" method="get" action="<?php echo esc_url($archive_url); ?>">
             <label for="news-search-input" class="screen-reader-text">
-                <?php esc_html_e('Szukaj w aktualnościach', 'akademiata'); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('news_search_label')); ?>
             </label>
             <input
                     id="news-search-input"
                     type="search"
                     name="q"
                     value="<?php echo esc_attr($q); ?>"
-                    placeholder="<?php esc_attr_e('Wpisz tytuł lub tekst…', 'akademiata'); ?>"
-                    aria-label="<?php esc_attr_e('Szukaj w aktualnościach', 'akademiata'); ?>"
+                    placeholder="<?php echo esc_attr(akademiata_get_theme_lang_string('news_search_placeholder')); ?>"
+                    aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('news_search_label')); ?>"
             />
-            <button type="submit"><?php esc_html_e('Szukaj', 'akademiata'); ?></button>
+            <button type="submit"><?php echo esc_html(akademiata_get_theme_lang_string('news_search_submit')); ?></button>
             <?php if ($city_slug !== '') : ?>
                 <input type="hidden" name="miasto" value="<?php echo esc_attr($city_slug); ?>" />
             <?php endif; ?>
             <?php if ($q !== '') : ?>
                 <a class="clear-search" href="<?php echo esc_url(akademiata_get_aktualnosci_page_url_with_args(['miasto' => $city_slug])); ?>">
-                    <?php esc_html_e('Wyczyść', 'akademiata'); ?>
+                    <?php echo esc_html(akademiata_get_theme_lang_string('news_search_clear')); ?>
                 </a>
             <?php endif; ?>
         </form>

@@ -34,7 +34,7 @@ if (empty($cities) && !($show_see_all && $see_all_url !== '')) {
 
     <?php if ($show_see_all && $see_all_url !== '') : ?>
         <a class="see-all-link" href="<?php echo esc_url($see_all_url); ?>">
-            <?php esc_html_e('Zobacz wszystkie', 'akademiata'); ?>
+            <?php echo esc_html(akademiata_get_theme_lang_string('see_all_news')); ?>
         </a>
     <?php endif; ?>
 </div>

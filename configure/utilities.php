@@ -531,6 +531,59 @@ function akademiata_get_section_aktualnosci_title() {
 }
 
 /**
+ * Theme UI strings by WPML language (when .mo / WPML String Translation is unavailable).
+ *
+ * @param string $key String identifier.
+ * @return string
+ */
+function akademiata_get_theme_lang_string($key) {
+    static $strings = null;
+
+    if ($strings === null) {
+        $strings = array(
+            'news_search_label' => array(
+                'pl' => 'Szukaj w aktualnościach',
+                'en' => 'Search news',
+                'uk' => 'Шукати в новинах',
+                'ru' => 'Искать в новостях',
+            ),
+            'news_search_placeholder' => array(
+                'pl' => 'Wpisz tytuł lub tekst…',
+                'en' => 'Enter title or text…',
+                'uk' => 'Введіть заголовок або текст…',
+                'ru' => 'Введите заголовок или текст…',
+            ),
+            'news_search_submit' => array(
+                'pl' => 'Szukaj',
+                'en' => 'Search',
+                'uk' => 'Шукати',
+                'ru' => 'Искать',
+            ),
+            'news_search_clear' => array(
+                'pl' => 'Wyczyść',
+                'en' => 'Clear',
+                'uk' => 'Очистити',
+                'ru' => 'Очистить',
+            ),
+            'see_all_news' => array(
+                'pl' => 'Zobacz wszystkie',
+                'en' => 'See all',
+                'uk' => 'Дивитися всі',
+                'ru' => 'Смотреть все',
+            ),
+        );
+    }
+
+    $lang = apply_filters('wpml_current_language', 'pl');
+
+    if (isset($strings[ $key ][ $lang ])) {
+        return $strings[ $key ][ $lang ];
+    }
+
+    return $strings[ $key ]['pl'] ?? '';
+}
+
+/**
  * Ensure news_city term exists in a language; return term ID.
  *
  * @param string $slug Term slug (e.g. warszawa).
