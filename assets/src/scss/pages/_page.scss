@@ -2,6 +2,14 @@
 @use "../abstracts/variables" as vars;
 
 .city-tabs {
+  .city-tabs__nav-placeholder {
+    display: none;
+
+    &.is-active {
+      display: block;
+    }
+  }
+
   .city-tabs__nav {
     display: flex;
     gap: 1rem;
@@ -9,14 +17,20 @@
     padding: 0;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    position: sticky;
-    top: var(--city-tabs-sticky-top, 12rem);
-    z-index: 900;
     background-color: vars.$white;
+
+    &.city-tabs__nav--is-fixed {
+      position: fixed;
+      top: var(--city-tabs-fixed-top, 12rem);
+      z-index: 900;
+      margin-top: 0;
+      margin-bottom: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
 
     li[id^="city-"],
     li#tab-all {
-      scroll-margin-top: calc(var(--city-tabs-sticky-top, 12rem) + 2rem);
+      scroll-margin-top: var(--city-tabs-fixed-top, 14rem);
     }
 
     li {
@@ -85,7 +99,6 @@
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       gap: 0.6rem;
-      top: var(--city-tabs-sticky-top-mobile, 9rem);
       margin-top: 2rem;
       margin-bottom: 1.6rem;
       padding-bottom: 0.4rem;

@@ -661,6 +661,107 @@ function activateCityTabsFromHash({ scroll = false } = {}) {
     });
 }
 
+function getCityTabsFixedTopPx() {
+    const header = document.querySelector('.site-header');
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 10;
+
+    return headerHeight + rootFontSize * 2;
+}
+
+function initCityTabsFixedNav() {
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        const nav = tabContainer.querySelector('.city-tabs__nav');
+
+        if (!nav) {
+            return;
+        }
+
+        let placeholder = nav.previousElementSibling;
+
+        if (!placeholder?.classList.contains('city-tabs__nav-placeholder')) {
+            placeholder = document.createElement('div');
+            placeholder.className = 'city-tabs__nav-placeholder';
+            placeholder.setAttribute('aria-hidden', 'true');
+            nav.before(placeholder);
+        }
+
+        let navOffsetTop = 0;
+        let navHeight = 0;
+        let scrollRaf = null;
+
+        const alignFixedNav = () => {
+            const { left, width } = tabContainer.getBoundingClientRect();
+
+            nav.style.left = `${left}px`;
+            nav.style.width = `${width}px`;
+        };
+
+        const clearFixedNavPosition = () => {
+            nav.style.left = '';
+            nav.style.width = '';
+        };
+
+        const measure = () => {
+            const wasFixed = nav.classList.contains('city-tabs__nav--is-fixed');
+
+            if (wasFixed) {
+                nav.classList.remove('city-tabs__nav--is-fixed');
+                placeholder.classList.remove('is-active');
+                placeholder.style.height = '';
+                clearFixedNavPosition();
+            }
+
+            nav.style.setProperty('--city-tabs-fixed-top', `${getCityTabsFixedTopPx()}px`);
+            const navRect = nav.getBoundingClientRect();
+            navOffsetTop = navRect.top + window.scrollY;
+            navHeight = nav.offsetHeight;
+        };
+
+        const updateFixedNav = () => {
+            const fixedTop = getCityTabsFixedTopPx();
+
+            nav.style.setProperty('--city-tabs-fixed-top', `${fixedTop}px`);
+
+            if (window.scrollY + fixedTop >= navOffsetTop) {
+                if (!nav.classList.contains('city-tabs__nav--is-fixed')) {
+                    nav.classList.add('city-tabs__nav--is-fixed');
+                    placeholder.classList.add('is-active');
+                    placeholder.style.height = `${navHeight}px`;
+                }
+
+                alignFixedNav();
+                return;
+            }
+
+            nav.classList.remove('city-tabs__nav--is-fixed');
+            placeholder.classList.remove('is-active');
+            placeholder.style.height = '';
+            clearFixedNavPosition();
+        };
+
+        const onScroll = () => {
+            if (scrollRaf) {
+                return;
+            }
+
+            scrollRaf = requestAnimationFrame(() => {
+                scrollRaf = null;
+                updateFixedNav();
+            });
+        };
+
+        measure();
+        updateFixedNav();
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            measure();
+            updateFixedNav();
+        });
+    });
+}
+
 export function initCityTabs() {
     const initialTabId = getCityTabIdFromHash(window.location.hash);
 
@@ -688,6 +789,7 @@ export function initCityTabs() {
         });
     });
 
+    initCityTabsFixedNav();
     activateCityTabsFromHash({ scroll: Boolean(initialTabId) });
 
     window.addEventListener('popstate', () => {
