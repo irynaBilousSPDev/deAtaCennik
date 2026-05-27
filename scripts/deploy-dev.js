@@ -186,7 +186,8 @@ async function remoteNeedsUpload(sftp, remoteFile, localMeta) {
 		const remoteMtime = (stat.modifyTime || stat.mtime || 0) * 1000;
 		return localMeta.mtime > remoteMtime + 1000;
 	} catch (err) {
-		if (err.code === 2) {
+		const msg = String(err.message || '');
+		if (err.code === 2 || /no such file/i.test(msg)) {
 			return true;
 		}
 		throw err;
