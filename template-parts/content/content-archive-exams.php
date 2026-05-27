@@ -56,10 +56,6 @@ if (!empty($cities) && !is_wp_error($cities)) :
         <div class="city-tabs__content">
             <!-- All cities -->
             <div class="city-tabs__pane active" data-city-pane="tab-all">
-                <div class="city-tabs__accordion">
-                    <?= __('All cities', 'akademiata'); ?> <span class="accordion-icon">+</span>
-                </div>
-
                 <div class="city-tabs__body">
                     <div class="studia_cards exams_cards">
                         <?php
@@ -85,10 +81,6 @@ if (!empty($cities) && !is_wp_error($cities)) :
             <!-- City panes -->
             <?php foreach ($cities_with_posts as $city) : ?>
                 <div class="city-tabs__pane" data-city-pane="city-<?= esc_attr($city->slug); ?>">
-                    <div class="city-tabs__accordion">
-                        <?= esc_html($city->name); ?> <span class="accordion-icon">+</span>
-                    </div>
-
                     <div class="city-tabs__body">
                         <div class="studia_cards exams_cards">
                             <?php

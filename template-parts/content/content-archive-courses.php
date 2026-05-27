@@ -51,9 +51,6 @@ if (!empty($cities) && !is_wp_error($cities)) :
         <div class="city-tabs__content">
             <!-- Tab: Wszystkie miasta -->
             <div class="city-tabs__pane active" data-city-pane="tab-all">
-                <div class="city-tabs__accordion">
-                    <?= __('Wszystkie', 'akademiata'); ?> <span class="accordion-icon">+</span>
-                </div>
                 <div class="city-tabs__body">
                     <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
                         <div class="taxonomy-tabs" data-city="all" data-taxonomy="<?= esc_attr($filter_taxonomy); ?>">
@@ -103,10 +100,6 @@ if (!empty($cities) && !is_wp_error($cities)) :
             <!-- Individual city tabs -->
             <?php foreach ($cities as $city) : ?>
                 <div class="city-tabs__pane" data-city-pane="city-<?= esc_attr($city->slug); ?>">
-                    <div class="city-tabs__accordion">
-                        <?= esc_html($city->name); ?> <span class="accordion-icon">+</span>
-                    </div>
-
                     <div class="city-tabs__body">
                         <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
                             <div class="taxonomy-tabs" data-city="<?= esc_attr($city->slug); ?>"

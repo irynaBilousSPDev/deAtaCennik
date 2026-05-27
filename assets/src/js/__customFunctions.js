@@ -671,7 +671,6 @@ export function initCityTabs() {
     document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
         const tabNav = tabContainer.querySelector('.city-tabs__nav');
         const tabLinks = tabNav?.querySelectorAll('a') || [];
-        const tabPanes = tabContainer.querySelectorAll('.city-tabs__pane');
 
         tabLinks.forEach((link) => {
             link.addEventListener('click', function (e) {
@@ -685,38 +684,6 @@ export function initCityTabs() {
                 const tabId = href.slice(1);
                 activateCityTab(tabContainer, tabId);
                 setCityTabHash(tabId);
-            });
-        });
-
-        tabPanes.forEach((pane) => {
-            const accordion = pane.querySelector('.city-tabs__accordion');
-
-            if (!accordion) {
-                return;
-            }
-
-            accordion.addEventListener('click', () => {
-                const isActive = pane.classList.contains('active');
-                tabPanes.forEach((p) => p.classList.remove('active'));
-
-                if (!isActive) {
-                    pane.classList.add('active');
-
-                    const tabId = pane.getAttribute('data-city-pane');
-
-                    if (tabId) {
-                        const tabLink = tabNav?.querySelector(`a[href="#${tabId}"]`);
-
-                        if (tabLink) {
-                            tabNav.querySelectorAll('li').forEach((li) => li.classList.remove('active'));
-                            tabLink.parentElement.classList.add('active');
-                        }
-
-                        setCityTabHash(tabId);
-                    }
-
-                    pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
             });
         });
     });

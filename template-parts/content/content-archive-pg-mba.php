@@ -58,9 +58,6 @@ endif;
             $query = $pane['query'];
             ?>
             <div class="city-tabs__pane<?php echo $first_active ? ' active' : ''; ?>" data-city-pane="city-<?php echo esc_attr($city->slug); ?>">
-                <div class="city-tabs__accordion">
-                    <?php echo esc_html($city->name); ?> <span class="accordion-icon">+</span>
-                </div>
                 <div class="city-tabs__body">
                     <div class="studia_cards">
                         <?php
