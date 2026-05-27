@@ -547,33 +547,101 @@ export function initTaxonomyTabs() {
     });
 }
 
+export function activateCityTab(tabContainer, tabId) {
+    if (!tabContainer || !tabId) {
+        return false;
+    }
+
+    const tabNav = tabContainer.querySelector('.city-tabs__nav');
+    const tabLink = tabNav?.querySelector(`a[href="#${tabId}"]`);
+    const target = tabContainer.querySelector(`#${CSS.escape(tabId)}`);
+
+    if (!tabLink || !target) {
+        return false;
+    }
+
+    tabNav.querySelectorAll('li').forEach((li) => li.classList.remove('active'));
+    tabContainer.querySelectorAll('.city-tabs__pane').forEach((pane) => pane.classList.remove('active'));
+
+    tabLink.parentElement.classList.add('active');
+    target.classList.add('active');
+
+    return true;
+}
+
+function getCityTabIdFromHash(rawHash) {
+    if (!rawHash) {
+        return '';
+    }
+
+    return rawHash.replace(/^#/, '').split('&').find((part) => part.startsWith('city-') || part === 'tab-all') || '';
+}
+
+function activateCityTabsFromHash() {
+    const tabId = getCityTabIdFromHash(window.location.hash);
+
+    if (!tabId) {
+        return;
+    }
+
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        if (!activateCityTab(tabContainer, tabId)) {
+            return;
+        }
+
+        const rawHash = window.location.hash;
+        const termPart = rawHash.replace(/^#/, '').split('&').find((part) => part.startsWith('term='));
+
+        if (termPart) {
+            const term = termPart.split('=')[1];
+            setTimeout(() => {
+                const tabPane = tabContainer.querySelector(`#${CSS.escape(tabId)}`);
+                if (!tabPane) {
+                    return;
+                }
+
+                const termBtn = tabPane.querySelector(`.taxonomy-tabs__nav li[data-term="${term}"]`);
+                if (termBtn) {
+                    termBtn.click();
+                }
+            }, 200);
+        }
+    });
+}
+
 export function initCityTabs() {
-    document.querySelectorAll('.city-tabs').forEach(tabContainer => {
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
         const tabNav = tabContainer.querySelector('.city-tabs__nav');
         const tabLinks = tabNav?.querySelectorAll('a') || [];
         const tabPanes = tabContainer.querySelectorAll('.city-tabs__pane');
 
-        tabLinks.forEach(link => {
+        tabLinks.forEach((link) => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const href = this.getAttribute('href');
 
-                tabNav.querySelectorAll('li').forEach(li => li.classList.remove('active'));
-                tabPanes.forEach(pane => pane.classList.remove('active'));
+                if (!href || !href.startsWith('#')) {
+                    return;
+                }
 
-                this.parentElement.classList.add('active');
-                const target = tabContainer.querySelector(href);
-                if (target) target.classList.add('active');
+                const tabId = href.slice(1);
+                activateCityTab(tabContainer, tabId);
+
+                if (window.location.hash !== href) {
+                    history.replaceState(null, '', href);
+                }
             });
         });
 
-        tabPanes.forEach(pane => {
+        tabPanes.forEach((pane) => {
             const accordion = pane.querySelector('.city-tabs__accordion');
-            if (!accordion) return;
+            if (!accordion) {
+                return;
+            }
 
             accordion.addEventListener('click', () => {
                 const isActive = pane.classList.contains('active');
-                tabPanes.forEach(p => p.classList.remove('active'));
+                tabPanes.forEach((p) => p.classList.remove('active'));
 
                 if (!isActive) {
                     pane.classList.add('active');
@@ -583,31 +651,8 @@ export function initCityTabs() {
         });
     });
 
-    //  Handle deep-link with tab + term
-    const rawHash = window.location.hash;
-    if (rawHash.includes('#city-')) {
-        const hashParts = rawHash.replace('#', '').split('&');
-        const tabId = hashParts.find(part => part.startsWith('city-'));
-        const termPart = hashParts.find(part => part.startsWith('term='));
-
-        if (tabId) {
-            const tabLink = document.querySelector(`.city-tabs__nav a[href="#${tabId}"]`);
-            if (tabLink) {
-                tabLink.click();
-            }
-
-            if (termPart) {
-                const term = termPart.split('=')[1];
-                setTimeout(() => {
-                    const tabPane = document.querySelector(`#${tabId}`);
-                    if (!tabPane) return;
-
-                    const termBtn = tabPane.querySelector(`.taxonomy-tabs__nav li[data-term="${term}"]`);
-                    if (termBtn) termBtn.click();
-                }, 200);
-            }
-        }
-    }
+    activateCityTabsFromHash();
+    window.addEventListener('hashchange', activateCityTabsFromHash);
 }
 
 

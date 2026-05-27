@@ -558,6 +558,83 @@ function akademiata_render_news_pagination(array $args) {
 }
 
 /**
+ * city_pg_mba terms for archive tabs (current WPML language, unique slug).
+ *
+ * @return WP_Term[]
+ */
+function akademiata_get_city_pg_mba_terms() {
+    $cities = get_terms(
+        array(
+            'taxonomy'   => 'city_pg_mba',
+            'hide_empty' => false,
+        )
+    );
+
+    if (empty($cities) || is_wp_error($cities)) {
+        return array();
+    }
+
+    $current_lang = apply_filters('wpml_current_language', null);
+    $by_slug      = array();
+
+    foreach ($cities as $city) {
+        if ($current_lang && function_exists('apply_filters')) {
+            $lang_term_id = apply_filters('wpml_object_id', (int) $city->term_id, 'city_pg_mba', false, $current_lang);
+
+            if (!$lang_term_id || (int) $lang_term_id !== (int) $city->term_id) {
+                continue;
+            }
+        }
+
+        if (isset($by_slug[ $city->slug ])) {
+            continue;
+        }
+
+        $by_slug[ $city->slug ] = $city;
+    }
+
+    return array_values($by_slug);
+}
+
+/**
+ * WP_Query for PG/MBA/courses archive city tab.
+ *
+ * @param int         $term_id   city_pg_mba term ID.
+ * @param string|null $post_type Post type; defaults to current archive type.
+ * @return WP_Query
+ */
+function akademiata_query_posts_by_city_pg_mba($term_id, $post_type = null) {
+    if (!$post_type) {
+        $post_type = get_post_type();
+    }
+
+    if (!$post_type) {
+        $post_type = 'postgraduate';
+    }
+
+    $args = array(
+        'post_type'      => $post_type,
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+        'tax_query'      => array(
+            array(
+                'taxonomy' => 'city_pg_mba',
+                'field'    => 'term_id',
+                'terms'    => (int) $term_id,
+            ),
+        ),
+    );
+
+    $lang = apply_filters('wpml_current_language', null);
+    if ($lang) {
+        $args['lang'] = $lang;
+    }
+
+    return new WP_Query($args);
+}
+
+/**
  * Apply date_query to aktualności WP_Query args.
  *
  * @param array $args       WP_Query args (by reference).
