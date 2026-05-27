@@ -79,8 +79,12 @@ $news-archive-control-h: 4.4rem;
       }
 
       &.prev {
+        width: 4.4rem;
         min-width: 4.4rem;
+        max-width: 4.4rem;
         padding: 0;
+        font-size: 0;
+        line-height: 0;
       }
 
       &.next {
@@ -111,7 +115,6 @@ $news-archive-control-h: 4.4rem;
     border-width: 0 2px 2px 0;
 
     &--prev {
-      margin-left: 0.15rem;
       transform: rotate(135deg);
     }
 

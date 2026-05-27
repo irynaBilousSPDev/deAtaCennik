@@ -508,8 +508,7 @@ function akademiata_render_news_pagination(array $args) {
         'type'      => 'array',
         'mid_size'  => 2,
         'end_size'  => 1,
-        'prev_text' => '<span class="news-pagination__icon news-pagination__icon--prev" aria-hidden="true"></span>'
-            . '<span class="screen-reader-text">' . esc_html($prev_label) . '</span>',
+        'prev_text' => '<span class="news-pagination__icon news-pagination__icon--prev" aria-hidden="true"></span>',
         'next_text' => '<span class="news-pagination__text">' . esc_html($next_label) . '</span>'
             . '<span class="news-pagination__icon news-pagination__icon--next" aria-hidden="true"></span>',
     );
@@ -540,6 +539,16 @@ function akademiata_render_news_pagination(array $args) {
         <div class="news-pagination__links nav-links">
             <?php
             foreach ($links as $link) {
+                if (strpos($link, 'page-numbers prev') !== false) {
+                    $icon = '<span class="news-pagination__icon news-pagination__icon--prev" aria-hidden="true"></span>';
+                    $link = preg_replace(
+                        '/(<(?:a|span)[^>]*class="[^"]*\bprev\b[^"]*"[^>]*)(>).*?(<\/(?:a|span)>)/',
+                        '$1 aria-label="' . esc_attr($prev_label) . '"$2' . $icon . '$3',
+                        $link,
+                        1
+                    );
+                }
+
                 echo $link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             }
             ?>
