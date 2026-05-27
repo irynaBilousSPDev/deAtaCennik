@@ -696,23 +696,13 @@ function initCityTabsFixedNav() {
         let scrollRaf = null;
 
         const alignFixedNav = () => {
-            const container = tabContainer.closest('.container');
-
             nav.style.left = '0';
             nav.style.width = '100%';
-
-            if (container) {
-                const containerRect = container.getBoundingClientRect();
-                nav.style.paddingLeft = `${containerRect.left}px`;
-                nav.style.paddingRight = `${window.innerWidth - containerRect.right}px`;
-            }
         };
 
         const clearFixedNavPosition = () => {
             nav.style.left = '';
             nav.style.width = '';
-            nav.style.paddingLeft = '';
-            nav.style.paddingRight = '';
         };
 
         const releaseFixedNav = () => {
