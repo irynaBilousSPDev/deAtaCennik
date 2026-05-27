@@ -498,16 +498,20 @@ function akademiata_apply_news_archive_date_query(array &$args, $year, $month) {
     $year  = (int) $year;
     $month = (int) $month;
 
-    if ($year <= 0) {
+    // Allow filtering by month even when year is not selected.
+    if ($year <= 0 && ($month < 1 || $month > 12)) {
         return;
     }
 
-    $date_query = array(
-        'year' => $year,
-    );
+    $date_query = array();
+
+    if ($year > 0) {
+        $date_query['year'] = $year;
+    }
 
     if ($month >= 1 && $month <= 12) {
-        $date_query['month'] = $month;
+        // WordPress date_query uses "monthnum" (1–12).
+        $date_query['monthnum'] = $month;
     }
 
     $args['date_query'] = array($date_query);
