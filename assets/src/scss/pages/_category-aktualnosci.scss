@@ -109,18 +109,17 @@ $news-archive-control-h: 4.4rem;
   &__icon {
     display: block;
     flex-shrink: 0;
-    width: 0.9rem;
-    height: 0.9rem;
-    border: solid currentColor;
-    border-width: 0 2px 2px 0;
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    background: center / contain no-repeat;
 
     &--prev {
-      transform: rotate(135deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 6l-6 6 6 6'/%3E%3C/svg%3E");
     }
 
     &--next {
-      margin-right: 0.15rem;
-      transform: rotate(-45deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E");
     }
   }
 
