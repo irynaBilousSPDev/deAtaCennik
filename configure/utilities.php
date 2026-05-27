@@ -518,13 +518,14 @@ function akademiata_news_post_taxonomy_gettext($translated, $text, $domain) {
         return $translated;
     }
 
+    // Plain strings only — __() here would recurse via gettext and crash admin.
     $map = array(
-        'Programs' => __('Kierunki, których dotyczy wpis', 'akademiata'),
-        'Degree'   => __('Stopień studiów (puste = oba)', 'akademiata'),
+        'Programs' => 'Kierunki, których dotyczy wpis',
+        'Degree'   => 'Stopień studiów (puste = oba)',
     );
 
-    if (isset($map[$text])) {
-        return $map[$text];
+    if (isset($map[ $text ])) {
+        return $map[ $text ];
     }
 
     return $translated;
