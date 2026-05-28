@@ -105,6 +105,24 @@
                         </nav>
                     </div>
 
+				<?php elseif ( is_singular( 'podcast-ata' ) ) : ?>
+
+                    <div class="desktop_visible">
+                        <div class="d-flex align-items-center">
+                            <nav id="podcast-navigation" class="podcast-navigation" aria-label="Podcast navigation">
+                                <a href="#o-czym"><?php _e( 'O czym porozmawiamy', 'akademiata' ); ?></a>
+                                <a href="#goscie"><?php _e( 'Nasi goście', 'akademiata' ); ?></a>
+                                <a href="#zapisz" class="button-sing_up podcast-cta"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="mobile_visible">
+                        <div class="d-flex align-items-center">
+                            <a href="#zapisz" class="button-sing_up podcast-cta mr-3"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
+                        </div>
+                    </div>
+
 				<?php else: ?>
 
                     <div class="desktop_visible">

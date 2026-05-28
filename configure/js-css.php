@@ -53,6 +53,22 @@ function akademiata_enqueue_scripts()
             'googleApiUrl' => 'https://script.google.com/macros/s/AKfycby89Mt7UgeY6jKnq2YQNwumt_CBp46UVd1mbKvxqEkg_46vjGAeN-8lcL_OokQVFnAW/exec',
         ]);
     }
+
+    // Smooth anchor scrolling for Podcast ATA (some browsers/themes ignore CSS scroll-behavior).
+    if (is_singular('podcast-ata')) {
+        wp_add_inline_script(
+            'name-main-js',
+            "(function(){function s(sel){var el=document.querySelector(sel);if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});}document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href^=\"#\"]'):null;if(!a)return;var href=a.getAttribute('href');if(!href||href==='#')return;try{var id=decodeURIComponent(href);}catch(_e){var id=href;}if(id==='#o-czym'||id==='#goscie'||id==='#zapisz'){e.preventDefault();s(id);}});})();",
+            'after'
+        );
+
+        // Hero sticker "realistic signups" counter: persistent + random growth.
+        wp_add_inline_script(
+            'name-main-js',
+            "(function(){var page=document.body&&document.body.classList&&document.body.classList.contains('single-podcast-ata');if(!page)return;var el=document.querySelector('.hero-sticker-text');if(!el)return;var textNode=(function(){for(var i=0;i<el.childNodes.length;i++){var n=el.childNodes[i];if(n.nodeType===3&&String(n.textContent||'').trim())return n;}return null;})();function parseCount(){var t=(el.textContent||'').replace(/\\s+/g,' ').trim();var m=t.match(/(\\d+)/);return m?parseInt(m[1],10):0;}function renderCount(v){var base=String(v)+' zapisanych';if(textNode){textNode.textContent='\\n                        '+base+'\\n                        ';}else{var small=el.querySelector('small');el.innerHTML='';el.appendChild(document.createTextNode(base+' '));if(small)el.appendChild(small);}el.setAttribute('data-count',String(v));}function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}function choice(arr){return arr[Math.floor(Math.random()*arr.length)];}var STORAGE_KEY='ata_podcast_signups_v1';var now=Date.now();var initial=parseCount();if(!initial||initial<1)initial=randInt(280,360);var state=null;try{state=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');}catch(_e){state=null;}if(!state||typeof state!=='object'){state={count:initial,nextAt:now+choice([15,30,120,1440])*60*1000};}if(typeof state.count!=='number'||state.count<1)state.count=initial;if(typeof state.nextAt!=='number'||state.nextAt<now-7*24*60*60*1000)state.nextAt=now+choice([15,30,120,1440])*60*1000;function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(_e){}}function maybeTick(){var n=Date.now();if(n>=state.nextAt){state.count=state.count+randInt(1,15);state.nextAt=n+choice([15,30,120,1440])*60*1000;save();renderCount(state.count);} }renderCount(state.count);save();maybeTick();setInterval(maybeTick,30000);})();",
+            'after'
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'akademiata_enqueue_scripts', 100);
 
