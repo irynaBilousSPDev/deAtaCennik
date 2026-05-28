@@ -1114,6 +1114,41 @@ function register_exams_cpt()
 
 add_action('init', 'register_exams_cpt');
 
+/**
+ * CPT: Podcast ATA
+ */
+function register_podcast_ata_cpt()
+{
+    $labels = array(
+        'name' => __('Podcast ATA', 'akademiata'),
+        'singular_name' => __('Podcast episode', 'akademiata'),
+        'menu_name' => __('Podcast ATA', 'akademiata'),
+        'add_new_item' => __('Add New Episode', 'akademiata'),
+        'edit_item' => __('Edit Episode', 'akademiata'),
+        'new_item' => __('New Episode', 'akademiata'),
+        'view_item' => __('View Episode', 'akademiata'),
+        'search_items' => __('Search Episodes', 'akademiata'),
+        'not_found' => __('No episodes found.', 'akademiata'),
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => true,
+        'rewrite' => array(
+            'slug' => 'podcast-ata',
+            'with_front' => false,
+        ),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'author', 'custom-fields', 'revisions'),
+        'menu_icon' => 'dashicons-microphone',
+        'show_in_rest' => true,
+    );
+
+    akademiata_register_post_type('podcast-ata', $args);
+}
+
+add_action('init', 'register_podcast_ata_cpt');
+
 
 // Taxonomy: PRICE
 function register_exam_price_taxonomy()
