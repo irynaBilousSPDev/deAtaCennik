@@ -17,16 +17,17 @@ if (isset($category->slug)) {
         <?php if (have_posts()) : ?>
             <div class="posts_wrapper_news">
                 <?php while (have_posts()) : the_post(); ?>
-                    <div class="post_news">
-                        <div class="post-image" style="background-image: url('<?php echo get_the_post_thumbnail_url(get_the_ID(), 'medium'); ?>');"></div>
-                        <div class="post-content">
-                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                        </div>
-                        <a class="post-button" href="<?php the_permalink(); ?>" aria-label="Read more"></a>
-                    </div>
+                    <?php get_template_part('partials/card_post_news'); ?>
                 <?php endwhile; ?>
             </div>
-            <?php the_posts_pagination(); ?>
+            <?php
+            akademiata_render_news_pagination(
+                array(
+                    'current' => max(1, (int) get_query_var('paged')),
+                    'total'   => (int) $GLOBALS['wp_query']->max_num_pages,
+                )
+            );
+            ?>
         <?php else : ?>
             <p><?php _e('Nie znaleziono żadnych wyników', 'akademiata'); ?></p>
         <?php endif; ?>

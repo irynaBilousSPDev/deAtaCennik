@@ -16,7 +16,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
     <div class="city-tabs">
         <ul class="city-tabs__nav">
             <!-- Reset tab: Wszystkie miasta -->
-            <li class="active">
+            <li id="tab-all" class="active">
                 <a href="#tab-all"><?= __('Wszystkie miasta', 'akademiata'); ?></a>
             </li>
 
@@ -37,7 +37,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
                 ?>
 
                 <?php if ($city_query->have_posts()) : ?>
-                    <li>
+                    <li id="city-<?= esc_attr($city->slug); ?>">
                         <a href="#city-<?= esc_attr($city->slug); ?>">
                             <?= esc_html($city->name); ?>
                         </a>
@@ -50,10 +50,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
 
         <div class="city-tabs__content">
             <!-- Tab: Wszystkie miasta -->
-            <div id="tab-all" class="city-tabs__pane active">
-                <div class="city-tabs__accordion">
-                    <?= __('Wszystkie', 'akademiata'); ?> <span class="accordion-icon">+</span>
-                </div>
+            <div class="city-tabs__pane active" data-city-pane="tab-all">
                 <div class="city-tabs__body">
                     <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
                         <div class="taxonomy-tabs" data-city="all" data-taxonomy="<?= esc_attr($filter_taxonomy); ?>">
@@ -102,11 +99,7 @@ if (!empty($cities) && !is_wp_error($cities)) :
 
             <!-- Individual city tabs -->
             <?php foreach ($cities as $city) : ?>
-                <div id="city-<?= esc_attr($city->slug); ?>" class="city-tabs__pane">
-                    <div class="city-tabs__accordion">
-                        <?= esc_html($city->name); ?> <span class="accordion-icon">+</span>
-                    </div>
-
+                <div class="city-tabs__pane" data-city-pane="city-<?= esc_attr($city->slug); ?>">
                     <div class="city-tabs__body">
                         <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
                             <div class="taxonomy-tabs" data-city="<?= esc_attr($city->slug); ?>"

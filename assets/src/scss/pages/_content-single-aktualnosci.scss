@@ -182,15 +182,20 @@
   margin-top: 0.5rem;
 
   .date,
-  .category-name {
+  .category-name,
+  .entry-meta-news {
     font-size: vars.$font-size-s-medium;
     font-weight: vars.$weight-medium;
   }
 
-  .category-name {
+  .category-name,
+  .entry-meta-news {
     color: vars.$primary;
     border-left: 1px solid #ccc;
     padding-left: 1rem;
+  }
+
+  .category-name {
     text-transform: uppercase;
   }
 }

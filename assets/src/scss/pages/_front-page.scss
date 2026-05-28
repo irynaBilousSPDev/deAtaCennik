@@ -509,38 +509,13 @@
 
 .section_aktualnosci {
   padding: 5rem 0;
-}
-
-.aktualnosci-header-row {
-  @include mixins.flexbox(row, flex-start, center);
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-
-  .small_title {
-    margin: 0 2rem 0 0;
-    font-size: vars.$font-size-xl;
-    font-weight: vars.$weight-bold;
-  }
-
-  .see-all-link {
-    display: inline-block;
-    font-size: vars.$font-size-default;
-    color: #7B9477;
-    text-decoration: none;
-    font-weight: vars.$weight-semi-regular;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 
   @include mixins.max-ipad-air-screen {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 3rem 0;
+  }
 
-    .see-all-link {
-      margin-top: 0.5rem;
-    }
+  @include mixins.max-sm-screen {
+    padding: 2.5rem 0;
   }
 }
 
@@ -554,6 +529,12 @@
     grid-template-columns: 320px 320px 1fr;
   }
 
+  @include mixins.max-ipad-pro-screen {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
   .aktualnosci-post {
     .post-image {
       background-size: cover;
@@ -564,6 +545,14 @@
       color: vars.$white;
       padding: 1rem;
       font-size: vars.$font-size-default;
+      overflow: hidden;
+
+      .city_block {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 3;
+      }
 
       &:before {
         position: absolute;

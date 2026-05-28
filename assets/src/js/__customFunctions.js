@@ -547,67 +547,267 @@ export function initTaxonomyTabs() {
     });
 }
 
+export function activateCityTab(tabContainer, tabId) {
+    if (!tabContainer || !tabId) {
+        return false;
+    }
+
+    const tabNav = tabContainer.querySelector('.city-tabs__nav');
+    const tabLink = tabNav?.querySelector(`a[href="#${tabId}"]`);
+    const target = tabContainer.querySelector(`[data-city-pane="${tabId}"]`)
+        || tabContainer.querySelector(`#${CSS.escape(tabId)}`);
+
+    if (!tabLink || !target) {
+        return false;
+    }
+
+    tabNav.querySelectorAll('li').forEach((li) => li.classList.remove('active'));
+    tabContainer.querySelectorAll('.city-tabs__pane').forEach((pane) => pane.classList.remove('active'));
+
+    tabLink.parentElement.classList.add('active');
+    target.classList.add('active');
+
+    return true;
+}
+
+function resetCityTabsToFirst(tabContainer) {
+    const firstLink = tabContainer.querySelector('.city-tabs__nav a[href^="#"]');
+
+    if (!firstLink) {
+        return;
+    }
+
+    const tabId = firstLink.getAttribute('href')?.slice(1);
+
+    if (tabId) {
+        activateCityTab(tabContainer, tabId);
+    }
+}
+
+function scrollCityTabsNavIntoView(tabContainer) {
+    const tabId = getCityTabIdFromHash(window.location.hash);
+    const anchor = tabId
+        ? tabContainer.querySelector(`.city-tabs__nav li#${CSS.escape(tabId)}`)
+        : null;
+
+    if (anchor) {
+        anchor.scrollIntoView({ behavior: 'auto', block: 'start' });
+        return;
+    }
+
+    tabContainer.scrollIntoView({ behavior: 'auto', block: 'start' });
+}
+
+function setCityTabHash(tabId, { replace = false } = {}) {
+    const href = `#${tabId}`;
+
+    if (window.location.hash === href) {
+        return;
+    }
+
+    if (replace) {
+        history.replaceState({ cityTab: tabId }, '', href);
+        return;
+    }
+
+    history.pushState({ cityTab: tabId }, '', href);
+}
+
+function getCityTabIdFromHash(rawHash) {
+    if (!rawHash) {
+        return '';
+    }
+
+    return rawHash.replace(/^#/, '').split('&').find((part) => part.startsWith('city-') || part === 'tab-all') || '';
+}
+
+function activateCityTabsFromHash({ scroll = false } = {}) {
+    const tabId = getCityTabIdFromHash(window.location.hash);
+
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        if (!tabId) {
+            resetCityTabsToFirst(tabContainer);
+            return;
+        }
+
+        if (!activateCityTab(tabContainer, tabId)) {
+            return;
+        }
+
+        if (scroll) {
+            scrollCityTabsNavIntoView(tabContainer);
+        }
+
+        const rawHash = window.location.hash;
+        const termPart = rawHash.replace(/^#/, '').split('&').find((part) => part.startsWith('term='));
+
+        if (termPart) {
+            const term = termPart.split('=')[1];
+            setTimeout(() => {
+                const tabPane = tabContainer.querySelector(`[data-city-pane="${tabId}"]`)
+                    || tabContainer.querySelector(`#${CSS.escape(tabId)}`);
+
+                if (!tabPane) {
+                    return;
+                }
+
+                const termBtn = tabPane.querySelector(`.taxonomy-tabs__nav li[data-term="${term}"]`);
+
+                if (termBtn) {
+                    termBtn.click();
+                }
+            }, 200);
+        }
+    });
+}
+
+const CITY_TABS_MOBILE_MQ = '(max-width: 768px)';
+
+function isCityTabsMobileViewport() {
+    return window.matchMedia(CITY_TABS_MOBILE_MQ).matches;
+}
+
+function getCityTabsFixedTopPx() {
+    const header = document.querySelector('.site-header');
+    return header ? header.getBoundingClientRect().height : 0;
+}
+
+function initCityTabsFixedNav() {
+    const mobileMq = window.matchMedia(CITY_TABS_MOBILE_MQ);
+
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        const nav = tabContainer.querySelector('.city-tabs__nav');
+
+        if (!nav) {
+            return;
+        }
+
+        let placeholder = nav.previousElementSibling;
+
+        if (!placeholder?.classList.contains('city-tabs__nav-placeholder')) {
+            placeholder = document.createElement('div');
+            placeholder.className = 'city-tabs__nav-placeholder';
+            placeholder.setAttribute('aria-hidden', 'true');
+            nav.before(placeholder);
+        }
+
+        let navOffsetTop = 0;
+        let navHeight = 0;
+        let scrollRaf = null;
+
+        const alignFixedNav = () => {
+            nav.style.left = '0';
+            nav.style.width = '100%';
+        };
+
+        const clearFixedNavPosition = () => {
+            nav.style.left = '';
+            nav.style.width = '';
+        };
+
+        const releaseFixedNav = () => {
+            nav.classList.remove('city-tabs__nav--is-fixed');
+            placeholder.classList.remove('is-active');
+            placeholder.style.height = '';
+            clearFixedNavPosition();
+        };
+
+        const measure = () => {
+            const wasFixed = nav.classList.contains('city-tabs__nav--is-fixed');
+
+            if (wasFixed) {
+                releaseFixedNav();
+            }
+
+            nav.style.setProperty('--city-tabs-fixed-top', `${getCityTabsFixedTopPx()}px`);
+            const navRect = nav.getBoundingClientRect();
+            navOffsetTop = navRect.top + window.scrollY;
+            navHeight = nav.offsetHeight;
+        };
+
+        const updateFixedNav = () => {
+            if (!isCityTabsMobileViewport()) {
+                releaseFixedNav();
+                return;
+            }
+
+            const fixedTop = getCityTabsFixedTopPx();
+
+            nav.style.setProperty('--city-tabs-fixed-top', `${fixedTop}px`);
+
+            if (window.scrollY + fixedTop >= navOffsetTop) {
+                if (!nav.classList.contains('city-tabs__nav--is-fixed')) {
+                    nav.classList.add('city-tabs__nav--is-fixed');
+                    placeholder.classList.add('is-active');
+                    placeholder.style.height = `${navHeight}px`;
+                }
+
+                alignFixedNav();
+                return;
+            }
+
+            releaseFixedNav();
+        };
+
+        const onScroll = () => {
+            if (scrollRaf) {
+                return;
+            }
+
+            scrollRaf = requestAnimationFrame(() => {
+                scrollRaf = null;
+                updateFixedNav();
+            });
+        };
+
+        measure();
+        updateFixedNav();
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => {
+            measure();
+            updateFixedNav();
+        });
+        mobileMq.addEventListener('change', () => {
+            measure();
+            updateFixedNav();
+        });
+    });
+}
+
 export function initCityTabs() {
-    document.querySelectorAll('.city-tabs').forEach(tabContainer => {
+    const initialTabId = getCityTabIdFromHash(window.location.hash);
+
+    if (initialTabId && 'scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+
+    document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
         const tabNav = tabContainer.querySelector('.city-tabs__nav');
         const tabLinks = tabNav?.querySelectorAll('a') || [];
-        const tabPanes = tabContainer.querySelectorAll('.city-tabs__pane');
 
-        tabLinks.forEach(link => {
+        tabLinks.forEach((link) => {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const href = this.getAttribute('href');
 
-                tabNav.querySelectorAll('li').forEach(li => li.classList.remove('active'));
-                tabPanes.forEach(pane => pane.classList.remove('active'));
-
-                this.parentElement.classList.add('active');
-                const target = tabContainer.querySelector(href);
-                if (target) target.classList.add('active');
-            });
-        });
-
-        tabPanes.forEach(pane => {
-            const accordion = pane.querySelector('.city-tabs__accordion');
-            if (!accordion) return;
-
-            accordion.addEventListener('click', () => {
-                const isActive = pane.classList.contains('active');
-                tabPanes.forEach(p => p.classList.remove('active'));
-
-                if (!isActive) {
-                    pane.classList.add('active');
-                    pane.scrollIntoView({ behavior: 'smooth' });
+                if (!href || !href.startsWith('#')) {
+                    return;
                 }
+
+                const tabId = href.slice(1);
+                activateCityTab(tabContainer, tabId);
+                setCityTabHash(tabId);
             });
         });
     });
 
-    //  Handle deep-link with tab + term
-    const rawHash = window.location.hash;
-    if (rawHash.includes('#city-')) {
-        const hashParts = rawHash.replace('#', '').split('&');
-        const tabId = hashParts.find(part => part.startsWith('city-'));
-        const termPart = hashParts.find(part => part.startsWith('term='));
+    initCityTabsFixedNav();
+    activateCityTabsFromHash({ scroll: Boolean(initialTabId) });
 
-        if (tabId) {
-            const tabLink = document.querySelector(`.city-tabs__nav a[href="#${tabId}"]`);
-            if (tabLink) {
-                tabLink.click();
-            }
-
-            if (termPart) {
-                const term = termPart.split('=')[1];
-                setTimeout(() => {
-                    const tabPane = document.querySelector(`#${tabId}`);
-                    if (!tabPane) return;
-
-                    const termBtn = tabPane.querySelector(`.taxonomy-tabs__nav li[data-term="${term}"]`);
-                    if (termBtn) termBtn.click();
-                }, 200);
-            }
-        }
-    }
+    window.addEventListener('popstate', () => {
+        activateCityTabsFromHash({ scroll: true });
+    });
 }
 
 

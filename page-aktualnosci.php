@@ -47,13 +47,32 @@ if ($term && !is_wp_error($term)) {
 // Save archive page permalink BEFORE the loop so it won't be affected by the custom query's global $post
 $archive_url = get_permalink(get_queried_object_id());
 
+$city_slug         = akademiata_get_current_news_city_slug_from_request();
+$active_city_term  = $city_slug ? akademiata_get_news_city_term_by_slug($city_slug) : null;
+if ($city_slug && !$active_city_term) {
+    $city_slug = '';
+}
+
+$archive_date      = akademiata_get_news_archive_date_from_request();
+$filter_year       = $archive_date['year'];
+$filter_month      = $archive_date['month'];
+$archive_filter_args = akademiata_get_news_archive_active_filter_args();
+
 // Build base query (category restricted)
 $args = [
     'post_type'      => 'post',
     'posts_per_page' => 9,
     'paged'          => $paged,
     'cat'            => $translated_term_id,
+    'lang'           => apply_filters('wpml_current_language', null),
 ];
+
+$city_tax_query = $city_slug ? akademiata_build_news_city_tax_query($city_slug) : null;
+if ($city_tax_query) {
+    $args['tax_query'] = $city_tax_query;
+}
+
+akademiata_apply_news_archive_date_query($args, $filter_year, $filter_month);
 
 // Apply custom search via filters to support quoted phrases and robust term logic
 $search_filter = null;
@@ -146,45 +165,50 @@ if ($order_filter) {
 <div class="news_archive category_<?php echo esc_attr($category_slug); ?>">
     <div class="container">
         <?php the_breadcrumb(); ?>
-        <h1 class="mb-5"><?php the_title(); ?></h1>
+        <h1 class="news-archive-title">
+            <span class="news-archive-title__text"><?php the_title(); ?></span>
+            <span class="news-archive-title__accent" aria-hidden="true"></span>
+        </h1>
 
-        <!-- Search form (uses ?q=... to stay on this Page, avoid is_search) -->
-        <form class="news-search mb-5" method="get" action="<?php echo esc_url($archive_url); ?>">
-            <label for="news-search-input" class="screen-reader-text">
-                <?php esc_html_e('Szukaj w aktualnościach', 'akademiata'); ?>
-            </label>
-            <input
-                    id="news-search-input"
-                    type="search"
-                    name="q"
-                    value="<?php echo esc_attr($q); ?>"
-                    placeholder="<?php esc_attr_e('Wpisz tytuł lub tekst…', 'akademiata'); ?>"
-                    aria-label="<?php esc_attr_e('Szukaj w aktualnościach', 'akademiata'); ?>"
-            />
-            <button type="submit"><?php esc_html_e('Szukaj', 'akademiata'); ?></button>
-            <?php if ($q !== '') : ?>
-                <a class="clear-search" href="<?php echo esc_url($archive_url); ?>">
-                    <?php esc_html_e('Wyczyść', 'akademiata'); ?>
-                </a>
-            <?php endif; ?>
-        </form>
+        <?php
+        get_template_part(
+            'partials/aktualnosci',
+            'archive-panel',
+            array(
+                'archive_url'  => $archive_url,
+                'city_slug'    => $city_slug,
+                'filter_year'  => $filter_year,
+                'filter_month' => $filter_month,
+                'search_q'     => $q,
+            )
+        );
+        ?>
 
-        <?php if ($q !== '') : ?>
+        <?php
+        get_template_part(
+            'partials/aktualnosci',
+            'archive-status',
+            array(
+                'city_slug'        => $city_slug,
+                'active_city_term' => $active_city_term,
+                'filter_year'      => $filter_year,
+                'filter_month'     => $filter_month,
+                'search_q'         => $q,
+                'found_posts'      => (int) $query->found_posts,
+            )
+        );
+        ?>
+
+        <?php if ($city_slug && !$active_city_term) : ?>
             <p class="search-results-info">
-                <?php printf(esc_html__('Wyniki dla: “%s”', 'akademiata'), esc_html($q)); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('news_no_city_found')); ?>
             </p>
         <?php endif; ?>
 
         <?php if ($query->have_posts()) : ?>
             <div class="posts_wrapper_news">
                 <?php while ($query->have_posts()) : $query->the_post(); ?>
-                    <div class="post_news">
-                        <div class="post-image" style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'medium')); ?>');"></div>
-                        <div class="post-content">
-                            <h2><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
-                        </div>
-                        <a class="post-button" href="<?php the_permalink(); ?>" aria-label="<?php esc_attr_e('Czytaj więcej', 'akademiata'); ?>"></a>
-                    </div>
+                    <?php get_template_part('partials/card_post_news'); ?>
                 <?php endwhile; ?>
             </div>
 
@@ -192,42 +216,31 @@ if ($order_filter) {
 
             wp_reset_postdata();
 
-            // Pagination for a static Page
-            $pagination_args = [
-                'base'      => trailingslashit($archive_url) . '%_%',
-                'format'    => 'page/%#%/',
-                'current'   => $paged,
-                'total'     => max(1, (int) $query->max_num_pages),
-                'type'      => 'array',
-                'prev_text' => __('Poprzedni', 'akademiata'),
-                'next_text' => __('Następny', 'akademiata'),
-            ];
+            $pagination_args = array(
+                'base'    => trailingslashit($archive_url) . '%_%',
+                'format'  => 'page/%#%/',
+                'current' => $paged,
+                'total'   => max(1, (int) $query->max_num_pages),
+            );
 
-            // Preserve custom search param across pages
-            if ($q !== '') {
-                $pagination_args['add_args'] = ['q' => $q];
+            if (!empty($archive_filter_args)) {
+                $pagination_args['add_args'] = $archive_filter_args;
             }
 
-            $pagination_links = paginate_links($pagination_args);
-
-            if ($pagination_links) : ?>
-                <nav class="navigation pagination" aria-label="<?php esc_attr_e('Stronicowanie wpisów', 'akademiata'); ?>">
-                    <h2 class="screen-reader-text"><?php _e('Stronicowanie wpisów', 'akademiata'); ?></h2>
-                    <div class="nav-links">
-                        <?php foreach ($pagination_links as $link) {
-                            echo $link;
-                        } ?>
-                    </div>
-                </nav>
-            <?php endif; ?>
+            akademiata_render_news_pagination($pagination_args);
+            ?>
 
         <?php else : ?>
             <p>
                 <?php
                 if ($q !== '') {
-                    esc_html_e('Brak wyników spełniających kryteria wyszukiwania.', 'akademiata');
+                    echo esc_html(akademiata_get_theme_lang_string('news_no_results_search'));
+                } elseif ($active_city_term) {
+                    echo esc_html(akademiata_get_theme_lang_string('news_no_results_city'));
+                } elseif ($filter_year > 0 || $filter_month > 0) {
+                    echo esc_html(akademiata_get_theme_lang_string('news_no_results_period'));
                 } else {
-                    esc_html_e('Nie znaleziono żadnych wyników.', 'akademiata');
+                    echo esc_html(akademiata_get_theme_lang_string('news_no_results_generic'));
                 }
                 ?>
             </p>

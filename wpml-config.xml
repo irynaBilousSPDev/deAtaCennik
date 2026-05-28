@@ -1,0 +1,5 @@
+<wpml-config>
+    <taxonomies>
+        <taxonomy translate="1">news_city</taxonomy>
+    </taxonomies>
+</wpml-config>

@@ -1,0 +1,100 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mixins;
+
+.aktualnosci-header-toolbar {
+  @include mixins.flexbox(row, flex-start, center);
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  width: 100%;
+}
+
+// Section: title, then cities + see-all inline
+.aktualnosci-header-row--section {
+  @include mixins.flexbox(column, flex-start, flex-start);
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  .small_title {
+    margin: 0;
+    font-size: vars.$font-size-xl;
+    font-weight: vars.$weight-bold;
+    line-height: 1.2;
+  }
+
+  @include mixins.max-sm-screen {
+    .small_title {
+      font-size: vars.$font-size-lg;
+    }
+  }
+}
+
+// Archive filter row
+.aktualnosci-header-actions {
+  width: 100%;
+}
+
+.aktualnosci-city-links {
+  @include mixins.flexbox(row, flex-start, center);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.see-all-link {
+  display: inline-block;
+  font-size: vars.$font-size-default;
+  color: #7b9477;
+  text-decoration: none;
+  font-weight: vars.$weight-semi-regular;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include mixins.max-sm-screen {
+    white-space: normal;
+  }
+}
+
+.aktualnosci-city-link {
+  display: inline-block;
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
+  font-size: vars.$font-size-default;
+  font-weight: vars.$weight-semi-regular;
+  line-height: 1.25;
+  text-decoration: none;
+  color: vars.$black;
+  background-color: vars.$background-gray;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    text-decoration: none;
+    background-color: #e8e8e8;
+  }
+
+  &.is-active {
+    color: vars.$black;
+    background-color: vars.$background-gray;
+    font-weight: vars.$weight-bold;
+    text-decoration: underline;
+
+    &:hover {
+      background-color: #e8e8e8;
+      color: vars.$black;
+    }
+  }
+
+  @include mixins.max-sm-screen {
+    padding: 0.4rem 0.85rem;
+    font-size: vars.$font-size-s-medium;
+  }
+}
+
+// Archive panel uses .aktualnosci-city-link--archive in _category-aktualnosci.scss
+
+.section_aktualnosci--program {
+  .aktualnosci-header-row--section {
+    margin-bottom: 2rem;
+  }
+}

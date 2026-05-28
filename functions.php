@@ -8,6 +8,9 @@ include('configure/cpt-taxonomy.php');
 
 include('configure/utilities.php');
 
+// WPML: fix language switcher links for news date archives
+include('configure/wpml-news-date-switcher.php');
+
 include('configure/offer-pricing.php');
 
 // ajax filter

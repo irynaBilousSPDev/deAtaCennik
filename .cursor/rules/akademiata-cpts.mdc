@@ -39,8 +39,19 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 | `faq` | `faq_topics` |
 | `youtube_shorts` | `program` |
 
+## News posts (`post`)
+
+| Taxonomy | On wpisy | Notes |
+|----------|----------|--------|
+| `news_city` | Miasto (Warszawa, Wrocław) | Auto-created slugs `warszawa`, `wroclaw` on `init`. **Empty = Warszawa** (display + `?miasto=warszawa` filter) |
+| `program` | Kierunki (same terms as offers) | Shown on `taxonomy-program.php` when tagged |
+| `degree` | Stopień (optional) | **Unchecked = oba** (I + II); filters related news per section |
+
+Helpers: `akademiata_query_program_related_news()`, `akademiata_get_aktualnosci_category_term_id()`, `akademiata_get_aktualnosci_page_url()`, `akademiata_get_aktualnosci_page_url_with_args()`, `akademiata_get_news_city_terms()` in `configure/utilities.php`. Grid: `partials/section-aktualnosci-grid.php`. City links: `partials/aktualnosci-header-actions.php`; archive filter `?miasto={slug}` on Aktualności page (`page-aktualnosci.php`).
+
 ## WPML
 
 - Queries often pass `'lang' => apply_filters('wpml_current_language', null)`.
+- Translate `news_city` terms per language in WPML.
 - PG/MBA permalink filters and city-in-URL rules live at bottom of `cpt-taxonomy.php`.
 - News bases: PL `aktualnosci`, EN `news`, UK `novyny`, RU `novosti` (`ata_news_base_by_lang()` in `configure.php`).

@@ -204,7 +204,7 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('degree', array('bachelor', 'master'), $args);
+    register_taxonomy('degree', array('bachelor', 'master', 'post'), $args);
 
     // Add new taxonomy, make it hierarchical (like categories) programs - kierunek studiow
     $labels = array(
@@ -233,8 +233,36 @@ function wpdocs_create_study_taxonomies()
 
     );
 
-    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts'), $args);
+    register_taxonomy('program', array('bachelor', 'master', 'youtube_shorts', 'post'), $args);
 
+    // News city (wpisy) — Warszawa, Wrocław
+    $news_city_labels = array(
+        'name'              => _x('News cities', 'taxonomy general name', 'akademiata'),
+        'singular_name'     => _x('News city', 'taxonomy singular name', 'akademiata'),
+        'search_items'      => __('Search cities', 'akademiata'),
+        'all_items'         => __('All cities', 'akademiata'),
+        'parent_item'       => __('Parent city', 'akademiata'),
+        'parent_item_colon' => __('Parent city:', 'akademiata'),
+        'edit_item'         => __('Edit city', 'akademiata'),
+        'update_item'       => __('Update city', 'akademiata'),
+        'add_new_item'      => __('Add new city', 'akademiata'),
+        'new_item_name'     => __('New city name', 'akademiata'),
+        'menu_name'         => __('Miasto', 'akademiata'),
+    );
+
+    register_taxonomy(
+        'news_city',
+        array('post'),
+        array(
+            'hierarchical'      => true,
+            'labels'            => $news_city_labels,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'query_var'         => true,
+            'rewrite'           => array('slug' => 'aktualnosci-miasto'),
+            'show_in_rest'      => true,
+        )
+    );
 
     // Add new taxonomy, make it hierarchical (like categories) Study mode - Tryb
     $labels = array(
@@ -474,6 +502,99 @@ function wpdocs_create_study_taxonomies()
 
 // hook into the init action and call create_study_taxonomies when it fires
 add_action('init', 'wpdocs_create_study_taxonomies', 0);
+
+/**
+ * Default news_city terms (Warszawa, Wrocław).
+ */
+function akademiata_ensure_default_news_city_terms() {
+    if (!taxonomy_exists('news_city')) {
+        return;
+    }
+
+    $cities = array(
+        'warszawa' => 'Warszawa',
+        'wroclaw'  => 'Wrocław',
+    );
+
+    foreach ($cities as $slug => $name) {
+        if (!term_exists($slug, 'news_city')) {
+            wp_insert_term($name, 'news_city', array('slug' => $slug));
+        }
+    }
+}
+
+add_action('init', 'akademiata_ensure_default_news_city_terms', 20);
+
+/**
+ * One-time: assign Warszawa to all aktualności posts (per WPML language).
+ */
+function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
+    if (get_option('akademiata_news_city_warsaw_bulk_v2')) {
+        return;
+    }
+
+    if (!taxonomy_exists('news_city')) {
+        return;
+    }
+
+    $category_ids = array();
+    $news_slugs   = array('aktualnosci', 'news', 'novyny', 'novosti');
+
+    foreach ($news_slugs as $slug) {
+        $cat = get_term_by('slug', $slug, 'category');
+        if ($cat && !is_wp_error($cat)) {
+            $category_ids[] = (int) $cat->term_id;
+        }
+    }
+
+    $category_ids = array_values(array_unique($category_ids));
+
+    if (empty($category_ids)) {
+        update_option('akademiata_news_city_warsaw_bulk_v2', 1, false);
+        return;
+    }
+
+    $post_ids = get_posts(
+        array(
+            'post_type'              => 'post',
+            'post_status'            => array('publish', 'draft', 'future', 'pending', 'private'),
+            'posts_per_page'         => -1,
+            'fields'                 => 'ids',
+            'suppress_filters'       => true,
+            'no_found_rows'          => true,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+            'category__in'           => $category_ids,
+        )
+    );
+
+    foreach ($post_ids as $post_id) {
+        $post_id = (int) $post_id;
+        $lang    = 'pl';
+
+        if (function_exists('apply_filters')) {
+            $lang = apply_filters(
+                'wpml_element_language_code',
+                'pl',
+                array(
+                    'element_id'   => $post_id,
+                    'element_type' => 'post_post',
+                )
+            );
+        }
+
+        $lang = $lang ? sanitize_key($lang) : 'pl';
+        $term_id = akademiata_ensure_news_city_term_id('warszawa', $lang);
+
+        if ($term_id > 0) {
+            wp_set_object_terms($post_id, array($term_id), 'news_city', false);
+        }
+    }
+
+    update_option('akademiata_news_city_warsaw_bulk_v2', 1, false);
+}
+
+add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
 
 
 // Register CPT: Studia Podyplomowe
