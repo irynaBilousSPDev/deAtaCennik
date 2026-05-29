@@ -187,7 +187,7 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                             }
                             ?>
                             <?php if ($count_num > 0) : ?>
-                                <span class="hero-sticker-count" data-count="<?php echo esc_attr($count_num); ?>" data-start="<?php echo esc_attr(get_the_date('c')); ?>"><?php echo esc_html($count_num); ?></span><?php echo $count_suffix ? ' ' . esc_html($count_suffix) : ''; ?>
+                                <span class="hero-sticker-count" data-count="<?php echo esc_attr($count_num); ?>" data-start="<?php echo esc_attr(get_the_modified_date('c')); ?>"><?php echo esc_html($count_num); ?></span><?php echo $count_suffix ? ' ' . esc_html($count_suffix) : ''; ?>
                             <?php else : ?>
                                 <?php echo esc_html($hero_sticker_count); ?>
                             <?php endif; ?>
