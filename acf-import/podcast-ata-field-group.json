@@ -124,14 +124,14 @@
                 "label": "Hero — sticker count",
                 "name": "hero_sticker_count",
                 "type": "text",
-                "default_value": ""
+                "default_value": "312 zapisanych"
             },
             {
                 "key": "field_pod_hero_sticker_subtext",
                 "label": "Hero — sticker subtext",
                 "name": "hero_sticker_subtext",
                 "type": "text",
-                "default_value": ""
+                "default_value": "dołącz do dyskusji"
             },
             {
                 "key": "field_pod_tab_topics",
