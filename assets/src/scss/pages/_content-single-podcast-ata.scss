@@ -616,6 +616,53 @@
     }
   }
 
+  /* CF7 status + validation messages — modern look (replaces default bordered boxes) */
+  .signup-form {
+    .wpcf7-response-output {
+      margin: 22px 0 0;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      background: rgba(15, 131, 255, 0.08);
+      color: vars.$blue;
+    }
+
+    .wpcf7 form.sent .wpcf7-response-output {
+      background: rgba(34, 197, 94, 0.12);
+      color: #15803d;
+    }
+
+    .wpcf7 form.invalid .wpcf7-response-output,
+    .wpcf7 form.unaccepted .wpcf7-response-output,
+    .wpcf7 form.failed .wpcf7-response-output,
+    .wpcf7 form.spam .wpcf7-response-output,
+    .wpcf7 form.aborted .wpcf7-response-output,
+    .wpcf7 form.payment-required .wpcf7-response-output {
+      background: rgba(239, 68, 68, 0.10);
+      color: #b91c1c;
+    }
+
+    .wpcf7-not-valid-tip {
+      display: block;
+      margin-top: 6px;
+      color: #b91c1c;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .form-input.wpcf7-not-valid {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.10);
+    }
+
+    .wpcf7-spinner {
+      margin: 0 0 0 12px;
+    }
+  }
+
   /* =========================================
      RESPONSIVE (match reference)
      ========================================= */
