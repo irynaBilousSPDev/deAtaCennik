@@ -97,12 +97,15 @@ function akademiata_enqueue_styles()
         null
     );
 
-    // Enqueue the main stylesheet
+    // Enqueue the main stylesheet (filemtime version busts browser cache on each deploy)
+    $main_css_path = get_template_directory() . '/assets/dist/css/main.css';
+    $main_css_ver  = file_exists($main_css_path) ? filemtime($main_css_path) : null;
+
     wp_enqueue_style(
         'name-main-css',
         $theme_dir . '/assets/dist/css/main.css',
         array(), // No dependencies
-        null, // No versioning (use null or version from filemtime for cache-busting)
+        $main_css_ver,
         'all'
     );
 
