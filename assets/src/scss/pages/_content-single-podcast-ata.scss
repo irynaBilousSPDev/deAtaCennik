@@ -3,13 +3,8 @@
 
 /* Scope all static podcast page styles to this page only */
 .podcast-ata-page {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', -apple-system, sans-serif;
   color: vars.$black;
-
-  /* Headings use the project heading font */
-  h1, h2, h3 {
-    font-family: 'Nunito Sans', sans-serif;
-  }
 
   /* Match reference container width/padding */
   .container {
@@ -106,7 +101,7 @@
     letter-spacing: -1.5px;
     margin-bottom: 24px;
     color: vars.$black;
-    font-family: 'Nunito Sans', sans-serif;
+    font-family: 'Montserrat', -apple-system, sans-serif;
   }
 
   .hero h1 .accent {
