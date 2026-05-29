@@ -27,11 +27,14 @@ function akademiata_enqueue_scripts()
     );
 
     // Optional: add vendors if using splitChunks
+    $vendors_js_path = get_template_directory() . '/assets/dist/js/vendors.js';
+    $vendors_js_ver  = file_exists($vendors_js_path) ? filemtime($vendors_js_path) : null;
+
     wp_enqueue_script(
         'vendors-js',
         $theme_dir . '/assets/dist/js/vendors.js',
         array(),
-        null,
+        $vendors_js_ver,
         true
     );
 
