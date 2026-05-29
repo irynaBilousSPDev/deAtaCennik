@@ -1,0 +1,389 @@
+[
+    {
+        "key": "group_podcast_ata_episode",
+        "title": "Podcast ATA — Episode content",
+        "fields": [
+            {
+                "key": "field_pod_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "instructions": "",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_pod_hero_live_label",
+                "label": "Hero — live label (pill)",
+                "name": "hero_live_label",
+                "type": "text",
+                "default_value": "ATA LIVE"
+            },
+            {
+                "key": "field_pod_episode_datetime",
+                "label": "Episode date & time",
+                "name": "episode_datetime",
+                "type": "text",
+                "instructions": "Written once here. Shown in the hero pill and in the sign-up form subtitle. Example: 01.06.2026 · 14:00",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_hero_title",
+                "label": "Hero — title",
+                "name": "hero_title",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_hero_title_accent",
+                "label": "Hero — highlighted words",
+                "name": "hero_title_accent",
+                "type": "text",
+                "instructions": "Word(s) from the title above to highlight in the accent color.",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_hero_lead",
+                "label": "Hero — lead paragraph",
+                "name": "hero_lead",
+                "type": "textarea",
+                "rows": 3,
+                "new_lines": "",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_hero_cta_text",
+                "label": "Hero — button text",
+                "name": "hero_cta_text",
+                "type": "text",
+                "default_value": "Zapisz się"
+            },
+            {
+                "key": "field_pod_hero_cta_anchor",
+                "label": "Hero — button link",
+                "name": "hero_cta_anchor",
+                "type": "text",
+                "instructions": "Anchor (e.g. #zapisz) or full URL.",
+                "default_value": "#zapisz"
+            },
+            {
+                "key": "field_pod_hero_image",
+                "label": "Hero — image",
+                "name": "hero_image",
+                "type": "image",
+                "instructions": "Optional. If empty, the featured image is used, then a default graphic.",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_pod_hero_meta",
+                "label": "Hero — meta items",
+                "name": "hero_meta",
+                "type": "repeater",
+                "instructions": "Small items under the button. Add a link to turn the text into a clickable link; leave the link empty for plain text.",
+                "layout": "block",
+                "button_label": "Add meta item",
+                "min": 0,
+                "max": 0,
+                "sub_fields": [
+                    {
+                        "key": "field_pod_hero_meta_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "choices": {
+                            "clock": "Clock",
+                            "youtube": "YouTube",
+                            "chat": "Chat"
+                        },
+                        "default_value": "",
+                        "return_format": "value",
+                        "allow_null": 1,
+                        "parent_repeater": "field_pod_hero_meta"
+                    },
+                    {
+                        "key": "field_pod_hero_meta_text",
+                        "label": "Text",
+                        "name": "text",
+                        "type": "text",
+                        "parent_repeater": "field_pod_hero_meta"
+                    },
+                    {
+                        "key": "field_pod_hero_meta_url",
+                        "label": "Link (optional)",
+                        "name": "url",
+                        "type": "url",
+                        "instructions": "If set, the text becomes a link. If empty, it stays plain text.",
+                        "parent_repeater": "field_pod_hero_meta"
+                    }
+                ]
+            },
+            {
+                "key": "field_pod_hero_sticker_count",
+                "label": "Hero — sticker count",
+                "name": "hero_sticker_count",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_hero_sticker_subtext",
+                "label": "Hero — sticker subtext",
+                "name": "hero_sticker_subtext",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_tab_topics",
+                "label": "Topics",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_pod_topics_eyebrow",
+                "label": "Topics — eyebrow",
+                "name": "topics_eyebrow",
+                "type": "text",
+                "default_value": "O pierwszym odcinku"
+            },
+            {
+                "key": "field_pod_topics_heading",
+                "label": "Topics — heading",
+                "name": "topics_heading",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_topics_intro",
+                "label": "Topics — intro",
+                "name": "topics_intro",
+                "type": "textarea",
+                "rows": 3,
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_topics",
+                "label": "Topics — tiles",
+                "name": "topics",
+                "type": "repeater",
+                "layout": "block",
+                "button_label": "Add topic",
+                "min": 0,
+                "max": 0,
+                "sub_fields": [
+                    {
+                        "key": "field_pod_topic_icon",
+                        "label": "Icon",
+                        "name": "icon",
+                        "type": "select",
+                        "choices": {
+                            "portfolio": "Portfolio / case",
+                            "pencil": "Pencil / drawing",
+                            "building": "Building",
+                            "layers": "Layers",
+                            "clock": "Clock",
+                            "chat": "Chat"
+                        },
+                        "default_value": "",
+                        "return_format": "value",
+                        "allow_null": 1,
+                        "parent_repeater": "field_pod_topics"
+                    },
+                    {
+                        "key": "field_pod_topic_title",
+                        "label": "Title",
+                        "name": "title",
+                        "type": "text",
+                        "parent_repeater": "field_pod_topics"
+                    },
+                    {
+                        "key": "field_pod_topic_text",
+                        "label": "Text",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "parent_repeater": "field_pod_topics"
+                    }
+                ]
+            },
+            {
+                "key": "field_pod_tab_guests",
+                "label": "Guests",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_pod_guests_eyebrow",
+                "label": "Guests — eyebrow",
+                "name": "guests_eyebrow",
+                "type": "text",
+                "default_value": "Nasi goście"
+            },
+            {
+                "key": "field_pod_guests_heading",
+                "label": "Guests — heading",
+                "name": "guests_heading",
+                "type": "textarea",
+                "instructions": "Line breaks are preserved.",
+                "rows": 2,
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_guests_intro",
+                "label": "Guests — intro",
+                "name": "guests_intro",
+                "type": "textarea",
+                "rows": 3,
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_guests",
+                "label": "Guests — cards",
+                "name": "guests",
+                "type": "repeater",
+                "layout": "block",
+                "button_label": "Add guest",
+                "min": 0,
+                "max": 0,
+                "sub_fields": [
+                    {
+                        "key": "field_pod_guest_photo",
+                        "label": "Photo (1:1)",
+                        "name": "photo",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all",
+                        "parent_repeater": "field_pod_guests"
+                    },
+                    {
+                        "key": "field_pod_guest_name",
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text",
+                        "parent_repeater": "field_pod_guests"
+                    },
+                    {
+                        "key": "field_pod_guest_role",
+                        "label": "Role",
+                        "name": "role",
+                        "type": "text",
+                        "parent_repeater": "field_pod_guests"
+                    },
+                    {
+                        "key": "field_pod_guest_bio",
+                        "label": "Bio",
+                        "name": "bio",
+                        "type": "textarea",
+                        "rows": 4,
+                        "parent_repeater": "field_pod_guests"
+                    }
+                ]
+            },
+            {
+                "key": "field_pod_tab_signup",
+                "label": "Sign-up",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_pod_signup_eyebrow",
+                "label": "Sign-up — eyebrow",
+                "name": "signup_eyebrow",
+                "type": "text",
+                "default_value": "Dobry kierunek"
+            },
+            {
+                "key": "field_pod_signup_heading",
+                "label": "Sign-up — heading",
+                "name": "signup_heading",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_signup_heading_accent",
+                "label": "Sign-up — highlighted words",
+                "name": "signup_heading_accent",
+                "type": "text",
+                "instructions": "Word(s) from the heading to highlight in the accent color.",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_signup_text",
+                "label": "Sign-up — description",
+                "name": "signup_text",
+                "type": "wysiwyg",
+                "tabs": "all",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_signup_perks",
+                "label": "Sign-up — perks list",
+                "name": "signup_perks",
+                "type": "repeater",
+                "layout": "table",
+                "button_label": "Add perk",
+                "min": 0,
+                "max": 0,
+                "sub_fields": [
+                    {
+                        "key": "field_pod_signup_perk_text",
+                        "label": "Perk",
+                        "name": "text",
+                        "type": "text",
+                        "parent_repeater": "field_pod_signup_perks"
+                    }
+                ]
+            },
+            {
+                "key": "field_pod_signup_form_heading",
+                "label": "Sign-up — form heading",
+                "name": "signup_form_heading",
+                "type": "text",
+                "default_value": "Zapisz się na ATA LIVE"
+            },
+            {
+                "key": "field_pod_signup_form_note",
+                "label": "Sign-up — form note",
+                "name": "signup_form_note",
+                "type": "text",
+                "instructions": "Shown after the date in the form subtitle. Example: YouTube ATA. Link wyślemy mailowo.",
+                "default_value": ""
+            },
+            {
+                "key": "field_pod_signup_form_shortcode",
+                "label": "Sign-up — form shortcode",
+                "name": "signup_form_shortcode",
+                "type": "text",
+                "instructions": "Contact Form 7 shortcode for the sign-up form.",
+                "default_value": "[contact-form-7 id=\"f764c85\" title=\"ATA LIVE\"]"
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "podcast-ata"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editable content for single Podcast ATA episodes.",
+        "show_in_rest": 0
+    }
+]
