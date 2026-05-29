@@ -58,3 +58,19 @@ function akademiata_cf7_fill_podcast_episode_date($tag) {
 
 add_filter('wpcf7_form_tag', 'akademiata_cf7_fill_podcast_episode_date', 10, 1);
 
+/**
+ * Capture the episode date on submission. CF7 submits via AJAX where the
+ * page-scoped filters above do not run, so the field is not re-scanned. The
+ * hidden input was still posted by the browser — read it from $_POST so the
+ * value reaches both the mail tag [podcast-episode-date] and CFDB7.
+ */
+function akademiata_cf7_capture_podcast_episode_date($posted_data) {
+    if (isset($_POST['podcast-episode-date'])) {
+        $posted_data['podcast-episode-date'] = sanitize_text_field(wp_unslash($_POST['podcast-episode-date']));
+    }
+
+    return $posted_data;
+}
+
+add_filter('wpcf7_posted_data', 'akademiata_cf7_capture_podcast_episode_date');
+
