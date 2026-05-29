@@ -114,12 +114,26 @@
                                 <a href="#goscie"><?php _e( 'Nasi goście', 'akademiata' ); ?></a>
                                 <a href="#zapisz" class="button-sing_up podcast-cta"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
                             </nav>
+                            <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
+                                <span class="menu-icon">
+                                    <span class="bar top-bar"></span>
+                                    <span class="bar middle-bar"></span>
+                                    <span class="bar bottom-bar"></span>
+                                </span>
+                            </button>
                         </div>
                     </div>
 
                     <div class="mobile_visible">
                         <div class="d-flex align-items-center">
                             <a href="#zapisz" class="button-sing_up podcast-cta mr-3"><?php _e( 'ZAPISZ SIĘ', 'akademiata' ); ?></a>
+                            <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
+                                <span class="menu-icon">
+                                    <span class="bar top-bar"></span>
+                                    <span class="bar middle-bar"></span>
+                                    <span class="bar bottom-bar"></span>
+                                </span>
+                            </button>
                         </div>
                     </div>
 

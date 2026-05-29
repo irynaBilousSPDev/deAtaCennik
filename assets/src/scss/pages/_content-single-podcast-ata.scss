@@ -761,8 +761,13 @@ body.single-podcast-ata {
     }
   }
 
+  .mega-menu-button {
+    margin-left: 28px;
+  }
+
   @media (max-width: 1024px) {
     .podcast-navigation { gap: 18px; }
+    .mega-menu-button { margin-left: 16px; }
   }
 }
 
