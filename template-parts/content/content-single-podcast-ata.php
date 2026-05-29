@@ -176,7 +176,21 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                             <span></span><span></span><span></span>
                         </div>
                         <div class="hero-sticker-text">
-                            <?php echo esc_html($hero_sticker_count); ?>
+                            <?php
+                            // Split the leading number from its label so JS can animate just the count.
+                            if (preg_match('/^\s*([\d][\d\s.,]*)(.*)$/u', (string) $hero_sticker_count, $count_parts)) {
+                                $count_num    = (int) preg_replace('/\D/', '', $count_parts[1]);
+                                $count_suffix = trim($count_parts[2]);
+                            } else {
+                                $count_num    = 0;
+                                $count_suffix = (string) $hero_sticker_count;
+                            }
+                            ?>
+                            <?php if ($count_num > 0) : ?>
+                                <span class="hero-sticker-count" data-count="<?php echo esc_attr($count_num); ?>" data-start="<?php echo esc_attr(get_the_date('c')); ?>"><?php echo esc_html($count_num); ?></span><?php echo $count_suffix ? ' ' . esc_html($count_suffix) : ''; ?>
+                            <?php else : ?>
+                                <?php echo esc_html($hero_sticker_count); ?>
+                            <?php endif; ?>
                             <?php if (!empty($hero_sticker_sub)) : ?>
                                 <small><?php echo esc_html($hero_sticker_sub); ?></small>
                             <?php endif; ?>

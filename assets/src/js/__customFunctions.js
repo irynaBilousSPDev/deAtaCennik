@@ -811,6 +811,88 @@ export function initCityTabs() {
 }
 
 
+/**
+ * Podcast hero "social proof" counter. Grows deterministically over time so all
+ * visitors see the same number: from the start date, every random 1h/2h/6h/24h
+ * interval adds a random 1-15. Animates up on load and keeps ticking while open.
+ */
+export function initPodcastSocialCounter() {
+    const el = document.querySelector('.hero-sticker-count[data-count]');
+
+    if (!el) {
+        return;
+    }
+
+    const base = parseInt(el.dataset.count, 10);
+
+    if (!Number.isFinite(base)) {
+        return;
+    }
+
+    const startTs = Date.parse(el.dataset.start || '') || Date.now();
+    const intervalsMs = [1, 2, 6, 24].map((h) => h * 3600 * 1000);
+
+    // mulberry32 — deterministic PRNG so the sequence is identical for everyone.
+    function makeRng(seed) {
+        let s = seed >>> 0;
+        return function () {
+            s = (s + 0x6D2B79F5) >>> 0;
+            let t = Math.imul(s ^ (s >>> 15), 1 | s);
+            t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
+    function countAt(now) {
+        const rng = makeRng(0x9E3779B9);
+        let t = startTs;
+        let total = base;
+        let guard = 0;
+
+        while (t <= now && guard < 200000) {
+            t += intervalsMs[Math.floor(rng() * intervalsMs.length)];
+            if (t <= now) {
+                total += 1 + Math.floor(rng() * 15);
+            }
+            guard += 1;
+        }
+
+        return total;
+    }
+
+    let displayed = base;
+
+    function animateTo(target, duration) {
+        if (target <= displayed) {
+            return;
+        }
+
+        const from = displayed;
+        const startTime = performance.now();
+
+        function frame(now) {
+            const p = Math.min(1, (now - startTime) / duration);
+            const eased = 1 - Math.pow(1 - p, 3);
+            displayed = Math.round(from + (target - from) * eased);
+            el.textContent = displayed;
+
+            if (p < 1) {
+                requestAnimationFrame(frame);
+            }
+        }
+
+        requestAnimationFrame(frame);
+    }
+
+    animateTo(countAt(Date.now()), 1400);
+
+    // Recompute periodically so it ticks up if a time interval elapses while open.
+    setInterval(() => {
+        animateTo(countAt(Date.now()), 800);
+    }, 60 * 1000);
+}
+
+
 // discountModal.js
 export function initializeDiscountModal(modalSelector = "#discountModal") {
     $(document).ready(function ($) {

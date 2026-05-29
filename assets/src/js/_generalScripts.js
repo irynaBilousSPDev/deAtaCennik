@@ -52,6 +52,7 @@ class General {
         Sliders.initializeDiscountsSlider('.discounts');
         CustomFunctions.initializeFancybox();
         CustomFunctions.initCityTabs();
+        CustomFunctions.initPodcastSocialCounter();
         CustomFunctions.initTaxonomyTabs();
         CustomFunctions.initializeDiscountModal();
         CustomFunctions.initCadreModal();
