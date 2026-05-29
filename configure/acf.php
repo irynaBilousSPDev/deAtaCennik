@@ -66,6 +66,31 @@ function akademiata_hide_button_component_on_posts($field_groups) {
 }
 
 add_filter('acf/load_field_groups', 'akademiata_hide_button_component_on_posts');
+
+/**
+ * Podcast sign-up form: populate the select with available Contact Form 7 forms.
+ */
+function akademiata_acf_load_cf7_forms($field) {
+    $field['choices'] = array();
+
+    if (post_type_exists('wpcf7_contact_form')) {
+        $forms = get_posts(array(
+            'post_type'        => 'wpcf7_contact_form',
+            'posts_per_page'   => -1,
+            'orderby'          => 'title',
+            'order'            => 'ASC',
+            'suppress_filters' => false,
+        ));
+
+        foreach ($forms as $form) {
+            $field['choices'][ $form->ID ] = sprintf('%s (#%d)', $form->post_title, $form->ID);
+        }
+    }
+
+    return $field;
+}
+
+add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_cf7_forms');
 ?>
 
 

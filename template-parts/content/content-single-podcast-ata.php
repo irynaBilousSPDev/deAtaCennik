@@ -96,8 +96,23 @@ $signup_heading_accent = $acf ? get_field('signup_heading_accent') : '';
 $signup_text           = $acf ? get_field('signup_text') : '';
 $signup_form_heading   = ($acf ? get_field('signup_form_heading') : '') ?: 'Zapisz się na ATA LIVE';
 $signup_form_note      = $acf ? get_field('signup_form_note') : '';
-$signup_form_shortcode = ($acf ? get_field('signup_form_shortcode') : '') ?: '[contact-form-7 id="f764c85" title="ATA LIVE"]';
+$signup_form_id        = $acf ? get_field('signup_form_id') : '';
 $signup_perks          = $acf ? get_field('signup_perks') : array();
+
+/* Build the CF7 shortcode from the selected form; fall back to the original ATA LIVE form. */
+$signup_form_output = '';
+if (!empty($signup_form_id) && function_exists('wpcf7_contact_form')) {
+    $cf7 = wpcf7_contact_form($signup_form_id);
+    if ($cf7) {
+        $cf7_hash    = method_exists($cf7, 'hash') ? $cf7->hash() : '';
+        $cf7_id_attr = $cf7_hash ?: $signup_form_id;
+        $cf7_title   = method_exists($cf7, 'title') ? $cf7->title() : '';
+        $signup_form_output = do_shortcode('[contact-form-7 id="' . esc_attr($cf7_id_attr) . '"' . ($cf7_title ? ' title="' . esc_attr($cf7_title) . '"' : '') . ']');
+    }
+}
+if (empty($signup_form_output)) {
+    $signup_form_output = do_shortcode('[contact-form-7 id="f764c85" title="ATA LIVE"]');
+}
 
 /* Form subtitle = single date field + optional note, joined by a dot. */
 $signup_form_sub_parts = array_filter(array($episode_datetime, $signup_form_note), 'strlen');
@@ -291,9 +306,9 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                     <p class="form-sub"><?php echo esc_html($signup_form_sub); ?></p>
                 <?php endif; ?>
 
-                <?php if (!empty($signup_form_shortcode)) : ?>
+                <?php if (!empty($signup_form_output)) : ?>
                     <div class="wysiwyg">
-                        <?php echo do_shortcode($signup_form_shortcode); ?>
+                        <?php echo $signup_form_output; ?>
                     </div>
                 <?php endif; ?>
             </div>

@@ -359,12 +359,18 @@
                 "default_value": ""
             },
             {
-                "key": "field_pod_signup_form_shortcode",
-                "label": "Sign-up — form shortcode",
-                "name": "signup_form_shortcode",
-                "type": "text",
-                "instructions": "Contact Form 7 shortcode for the sign-up form.",
-                "default_value": "[contact-form-7 id=\"f764c85\" title=\"ATA LIVE\"]"
+                "key": "field_pod_signup_form_id",
+                "label": "Sign-up — form (Contact Form 7)",
+                "name": "signup_form_id",
+                "type": "select",
+                "instructions": "Choose which Contact Form 7 form to display in the sign-up box.",
+                "choices": {},
+                "default_value": "",
+                "allow_null": 1,
+                "multiple": 0,
+                "ui": 1,
+                "ajax": 0,
+                "return_format": "value"
             }
         ],
         "location": [

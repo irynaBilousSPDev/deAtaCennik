@@ -440,7 +440,7 @@
 
   .signup-inner {
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 1.1fr 1fr;
     gap: 72px;
     align-items: start;
   }
@@ -451,6 +451,7 @@
     letter-spacing: -1px;
     line-height: 1.1;
     margin-bottom: 20px;
+    text-wrap: balance;
   }
 
   .signup-about h2 .accent { color: vars.$primary; }
