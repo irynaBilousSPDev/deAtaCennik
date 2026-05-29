@@ -31,7 +31,10 @@
                 "key": "field_pod_hero_title",
                 "label": "Hero — title",
                 "name": "hero_title",
-                "type": "text",
+                "type": "textarea",
+                "instructions": "Press Enter to break the title onto a new line.",
+                "rows": 2,
+                "new_lines": "",
                 "default_value": ""
             },
             {
@@ -152,7 +155,10 @@
                 "key": "field_pod_topics_heading",
                 "label": "Topics — heading",
                 "name": "topics_heading",
-                "type": "text",
+                "type": "textarea",
+                "instructions": "Press Enter to break the heading onto a new line.",
+                "rows": 2,
+                "new_lines": "",
                 "default_value": ""
             },
             {
@@ -303,7 +309,10 @@
                 "key": "field_pod_signup_heading",
                 "label": "Sign-up — heading",
                 "name": "signup_heading",
-                "type": "text",
+                "type": "textarea",
+                "instructions": "Press Enter to break the heading onto a new line.",
+                "rows": 2,
+                "new_lines": "",
                 "default_value": ""
             },
             {

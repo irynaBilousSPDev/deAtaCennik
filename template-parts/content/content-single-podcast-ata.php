@@ -133,7 +133,7 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                     <?php endif; ?>
                 </div>
                 <?php if (!empty($hero_title)) : ?>
-                    <h1><?php echo akademiata_podcast_accent($hero_title, $hero_title_accent); ?></h1>
+                    <h1><?php echo nl2br(akademiata_podcast_accent($hero_title, $hero_title_accent)); ?></h1>
                 <?php endif; ?>
                 <?php if (!empty($hero_lead)) : ?>
                     <p class="hero-lead"><?php echo esc_html($hero_lead); ?></p>
@@ -195,7 +195,7 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                     <span class="section-eyebrow"><?php echo esc_html($topics_eyebrow); ?></span>
                 <?php endif; ?>
                 <?php if (!empty($topics_heading)) : ?>
-                    <h2><?php echo esc_html($topics_heading); ?></h2>
+                    <h2><?php echo nl2br(esc_html($topics_heading)); ?></h2>
                 <?php endif; ?>
                 <?php if (!empty($topics_intro)) : ?>
                     <p><?php echo esc_html($topics_intro); ?></p>
@@ -281,7 +281,7 @@ $signup_form_sub       = implode(' · ', $signup_form_sub_parts);
                     <span class="section-eyebrow"><?php echo esc_html($signup_eyebrow); ?></span>
                 <?php endif; ?>
                 <?php if (!empty($signup_heading)) : ?>
-                    <h2><?php echo akademiata_podcast_accent($signup_heading, $signup_heading_accent); ?></h2>
+                    <h2><?php echo nl2br(akademiata_podcast_accent($signup_heading, $signup_heading_accent)); ?></h2>
                 <?php endif; ?>
                 <?php if (!empty($signup_text)) : ?>
                     <div class="signup-text"><?php echo wp_kses_post($signup_text); ?></div>
