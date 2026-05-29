@@ -59,14 +59,26 @@ function akademiata_cf7_fill_podcast_episode_date($tag) {
 add_filter('wpcf7_form_tag', 'akademiata_cf7_fill_podcast_episode_date', 10, 1);
 
 /**
- * Capture the episode date on submission. CF7 submits via AJAX where the
- * page-scoped filters above do not run, so the field is not re-scanned. The
- * hidden input was still posted by the browser — read it from $_POST so the
- * value reaches both the mail tag [podcast-episode-date] and CFDB7.
+ * Capture the episode date on submission so the mail tag [podcast-episode-date]
+ * and CFDB7 receive it. CF7 submits via AJAX (page-scoped filters do not run),
+ * so derive the value server-side from `_wpcf7_container_post` — the ID of the
+ * post the form was embedded in — and read it straight from the episode's ACF.
+ * Falls back to the posted hidden value if present.
  */
 function akademiata_cf7_capture_podcast_episode_date($posted_data) {
-    if (isset($_POST['podcast-episode-date'])) {
-        $posted_data['podcast-episode-date'] = sanitize_text_field(wp_unslash($_POST['podcast-episode-date']));
+    $date = '';
+
+    $container_post = isset($_POST['_wpcf7_container_post']) ? absint($_POST['_wpcf7_container_post']) : 0;
+    if ($container_post && function_exists('get_field') && get_post_type($container_post) === 'podcast-ata') {
+        $date = (string) get_field('episode_datetime', $container_post);
+    }
+
+    if ($date === '' && isset($_POST['podcast-episode-date'])) {
+        $date = sanitize_text_field(wp_unslash($_POST['podcast-episode-date']));
+    }
+
+    if ($date !== '') {
+        $posted_data['podcast-episode-date'] = $date;
     }
 
     return $posted_data;
