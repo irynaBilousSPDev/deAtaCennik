@@ -596,6 +596,32 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
 
 add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
 
+/**
+ * Keep the news_city checkbox selection on aktualności posts (Classic editor).
+ * WPML's term-language filtering can drop the assignment on save, so re-apply
+ * the submitted tax_input late (priority 99) to override it.
+ */
+function akademiata_persist_post_news_city($post_id, $post) {
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!($post instanceof WP_Post) || $post->post_type !== 'post' || wp_is_post_revision($post_id)) {
+        return;
+    }
+
+    if (!isset($_POST['tax_input']['news_city']) || !current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $submitted = (array) wp_unslash($_POST['tax_input']['news_city']);
+    $term_ids  = array_values(array_filter(array_map('intval', $submitted)));
+
+    wp_set_object_terms($post_id, $term_ids, 'news_city', false);
+}
+
+add_action('save_post', 'akademiata_persist_post_news_city', 99, 2);
+
 
 // Register CPT: Studia Podyplomowe
 function register_postgraduate_cpt()
