@@ -188,14 +188,14 @@ function akademiata_news_city_admin_translate_term_for_display($term) {
 /**
  * Resolve news_city terms for admin UI (edit screen + posts list column).
  *
- * @param int       $post_id Post ID.
- * @param WP_Term[] $terms   Terms from DB (may be empty).
+ * @param int                $post_id Post ID.
+ * @param WP_Term[]|int[]    $terms   Terms or term IDs from DB (may be empty).
  * @return WP_Term[]
  */
 function akademiata_news_city_admin_terms_for_post($post_id, $terms) {
     $post_id = (int) $post_id;
     if ($post_id <= 0) {
-        return is_array($terms) ? $terms : array();
+        return array();
     }
 
     if (is_wp_error($terms)) {
@@ -205,19 +205,79 @@ function akademiata_news_city_admin_terms_for_post($post_id, $terms) {
     $slug = sanitize_title((string) get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true));
 
     if ($slug === '' && !empty($terms)) {
-        $slug = sanitize_title($terms[0]->slug);
+        $first = $terms[0];
+        if (is_object($first) && isset($first->slug)) {
+            $slug = sanitize_title($first->slug);
+        } elseif (is_numeric($first)) {
+            $term = get_term((int) $first, 'news_city');
+            if ($term && !is_wp_error($term)) {
+                $slug = sanitize_title($term->slug);
+            }
+        }
     }
 
     if (!in_array($slug, array('warszawa', 'wroclaw'), true)) {
-        return $terms;
+        return array();
     }
 
     $display = get_term_by('slug', $slug, 'news_city');
     if (!$display || is_wp_error($display)) {
-        return $terms;
+        return array();
     }
 
     return array(akademiata_news_city_admin_translate_term_for_display($display));
+}
+
+/**
+ * Match wp_get_object_terms fields arg (checklist uses fields=ids).
+ *
+ * @param WP_Term[] $terms  Term objects.
+ * @param string    $fields fields argument from wp_get_object_terms.
+ * @return array
+ */
+function akademiata_news_city_admin_format_object_terms($terms, $fields) {
+    if (empty($terms)) {
+        return array();
+    }
+
+    switch ($fields) {
+        case 'ids':
+            return array_values(array_map(static function ($term) {
+                return (int) $term->term_id;
+            }, $terms));
+
+        case 'names':
+            return array_values(array_map(static function ($term) {
+                return $term->name;
+            }, $terms));
+
+        case 'slugs':
+            return array_values(array_map(static function ($term) {
+                return $term->slug;
+            }, $terms));
+
+        case 'id=>name':
+            $out = array();
+            foreach ($terms as $term) {
+                $out[ (int) $term->term_id ] = $term->name;
+            }
+            return $out;
+
+        case 'id=>slug':
+            $out = array();
+            foreach ($terms as $term) {
+                $out[ (int) $term->term_id ] = $term->slug;
+            }
+            return $out;
+
+        case 'tt_ids':
+            return array_values(array_map(static function ($term) {
+                return (int) $term->term_taxonomy_id;
+            }, $terms));
+
+        default:
+            return $terms;
+    }
 }
 
 function akademiata_news_city_admin_get_the_terms($terms, $post_id, $taxonomy) {
@@ -238,8 +298,6 @@ add_filter('get_the_terms', 'akademiata_news_city_admin_get_the_terms', 20, 3);
  * Keep News cities checkboxes checked after save (map stored slug → visible term ID).
  */
 function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomies, $args) {
-    unset($args);
-
     if (!is_admin() || !in_array('news_city', (array) $taxonomies, true)) {
         return $terms;
     }
@@ -257,7 +315,10 @@ function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomie
         $terms = array();
     }
 
-    return akademiata_news_city_admin_terms_for_post($post_id, $terms);
+    $fields  = is_array($args) && isset($args['fields']) ? (string) $args['fields'] : 'all';
+    $objects = akademiata_news_city_admin_terms_for_post($post_id, $terms ?: array());
+
+    return akademiata_news_city_admin_format_object_terms($objects, $fields);
 }
 
 add_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20, 4);
