@@ -108,7 +108,7 @@ function akademiata_news_city_admin_capture_save($post_id, $post) {
         return;
     }
 
-    $raw_ids = akademiata_news_city_admin_read_submitted_term_ids();
+    $raw_ids = akademiata_news_city_admin_read_submitted_term_ids((int) $post_id);
     if ($raw_ids === null) {
         return;
     }
