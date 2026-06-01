@@ -1265,6 +1265,102 @@ function akademiata_ensure_news_city_term_id($slug, $lang) {
 }
 
 /**
+ * WPML language code for a post (defaults to pl).
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function akademiata_get_post_wpml_language($post_id) {
+    $post_id = (int) $post_id;
+    $lang    = 'pl';
+
+    if ($post_id > 0 && function_exists('apply_filters')) {
+        $lang = apply_filters(
+            'wpml_element_language_code',
+            'pl',
+            array(
+                'element_id'   => $post_id,
+                'element_type' => 'post_post',
+            )
+        );
+    }
+
+    return $lang ? sanitize_key($lang) : 'pl';
+}
+
+/**
+ * Map submitted news_city term IDs to the post language (slug-based).
+ *
+ * @param int[] $term_ids Raw IDs from tax_input or REST.
+ * @param int   $post_id  Post ID.
+ * @return int[]
+ */
+function akademiata_resolve_news_city_term_ids_for_post(array $term_ids, $post_id) {
+    $lang    = akademiata_get_post_wpml_language($post_id);
+    $slugs   = array();
+    $allowed = array('warszawa', 'wroclaw');
+
+    foreach ($term_ids as $term_id) {
+        $term_id = (int) $term_id;
+        if ($term_id <= 0) {
+            continue;
+        }
+
+        $term = get_term($term_id, 'news_city');
+        if (!$term || is_wp_error($term)) {
+            continue;
+        }
+
+        $slug = sanitize_title($term->slug);
+        if (in_array($slug, $allowed, true)) {
+            $slugs[] = $slug;
+        }
+    }
+
+    $slugs = array_values(array_unique($slugs));
+    if (count($slugs) > 1) {
+        $slugs = array_slice($slugs, -1);
+    }
+
+    $resolved = array();
+    foreach ($slugs as $slug) {
+        $tid = akademiata_ensure_news_city_term_id($slug, $lang);
+        if ($tid > 0) {
+            $resolved[] = $tid;
+        }
+    }
+
+    return $resolved;
+}
+
+/**
+ * Assign news_city on a wpis (suppresses WPML term filters during write).
+ *
+ * @param int   $post_id  Post ID.
+ * @param int[] $term_ids Term IDs in the post language.
+ */
+function akademiata_set_post_news_city_terms($post_id, array $term_ids) {
+    $post_id = (int) $post_id;
+    if ($post_id <= 0 || !taxonomy_exists('news_city')) {
+        return;
+    }
+
+    $lang = akademiata_get_post_wpml_language($post_id);
+    $prev = null;
+
+    if (function_exists('apply_filters') && has_filter('wpml_current_language')) {
+        $prev = apply_filters('wpml_current_language', null);
+        do_action('wpml_switch_language', $lang);
+    }
+
+    wp_set_object_terms($post_id, $term_ids, 'news_city', false);
+
+    if ($prev !== null) {
+        do_action('wpml_switch_language', $prev);
+    }
+}
+
+/**
  * Whether a degree term slug maps to studia I stopnia (bachelor).
  */
 function akademiata_degree_slug_is_bachelor_level($slug) {

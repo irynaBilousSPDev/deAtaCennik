@@ -52,6 +52,6 @@ Helpers: `akademiata_query_program_related_news()`, `akademiata_get_aktualnosci_
 ## WPML
 
 - Queries often pass `'lang' => apply_filters('wpml_current_language', null)`.
-- Translate `news_city` terms per language in WPML.
+- `news_city` is **not translatable** (`wpml-config.xml`); UI labels use `akademiata_news_city_label_map()`.
 - PG/MBA permalink filters and city-in-URL rules live at bottom of `cpt-taxonomy.php`.
 - News bases: PL `aktualnosci`, EN `news`, UK `novyny`, RU `novosti` (`ata_news_base_by_lang()` in `configure.php`).

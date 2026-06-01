@@ -261,6 +261,12 @@ function wpdocs_create_study_taxonomies()
             'query_var'         => true,
             'rewrite'           => array('slug' => 'aktualnosci-miasto'),
             'show_in_rest'      => true,
+            'capabilities'      => array(
+                'manage_terms' => 'manage_categories',
+                'edit_terms'   => 'manage_categories',
+                'delete_terms' => 'manage_categories',
+                'assign_terms' => 'edit_posts',
+            ),
         )
     );
 
@@ -587,7 +593,7 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
         $term_id = akademiata_ensure_news_city_term_id('warszawa', $lang);
 
         if ($term_id > 0) {
-            wp_set_object_terms($post_id, array($term_id), 'news_city', false);
+            akademiata_set_post_news_city_terms($post_id, array($term_id));
         }
     }
 
@@ -597,11 +603,9 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
 add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
 
 /**
- * Keep the news_city checkbox selection on aktualności posts (Classic editor).
- * WPML's term-language filtering can drop the assignment on save, so re-apply
- * the submitted tax_input late (priority 99) to override it.
+ * Queue news_city from Classic editor save (before WPML strips tax_input).
  */
-function akademiata_persist_post_news_city($post_id, $post) {
+function akademiata_queue_post_news_city_save($post_id, $post) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
@@ -610,17 +614,71 @@ function akademiata_persist_post_news_city($post_id, $post) {
         return;
     }
 
-    if (!isset($_POST['tax_input']['news_city']) || !current_user_can('edit_post', $post_id)) {
+    if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
-    $submitted = (array) wp_unslash($_POST['tax_input']['news_city']);
-    $term_ids  = array_values(array_filter(array_map('intval', $submitted)));
+    if (!array_key_exists('news_city', $_POST['tax_input'] ?? array())) {
+        return;
+    }
 
-    wp_set_object_terms($post_id, $term_ids, 'news_city', false);
+    $submitted = wp_unslash($_POST['tax_input']['news_city']);
+    $raw_ids   = is_array($submitted) ? $submitted : array($submitted);
+    $raw_ids   = array_values(array_filter(array_map('intval', $raw_ids)));
+
+    $GLOBALS['akademiata_pending_news_city'][ (int) $post_id ] = $raw_ids;
 }
 
-add_action('save_post', 'akademiata_persist_post_news_city', 99, 2);
+add_action('save_post', 'akademiata_queue_post_news_city_save', 5, 2);
+
+/**
+ * Apply queued news_city after WPML/core term saves (shutdown).
+ */
+function akademiata_apply_pending_post_news_city() {
+    if (empty($GLOBALS['akademiata_pending_news_city']) || !is_array($GLOBALS['akademiata_pending_news_city'])) {
+        return;
+    }
+
+    foreach ($GLOBALS['akademiata_pending_news_city'] as $post_id => $raw_ids) {
+        $post_id = (int) $post_id;
+        if ($post_id <= 0) {
+            continue;
+        }
+
+        $term_ids = akademiata_resolve_news_city_term_ids_for_post((array) $raw_ids, $post_id);
+        akademiata_set_post_news_city_terms($post_id, $term_ids);
+    }
+
+    $GLOBALS['akademiata_pending_news_city'] = array();
+}
+
+add_action('shutdown', 'akademiata_apply_pending_post_news_city', 999);
+
+/**
+ * Block editor / REST: persist news_city with WPML-safe term IDs.
+ */
+function akademiata_persist_post_news_city_rest($post, $request, $creating) {
+    unset($creating);
+
+    if (!($post instanceof WP_Post) || $post->post_type !== 'post') {
+        return;
+    }
+
+    if (!$request instanceof WP_REST_Request || !$request->has_param('news_city')) {
+        return;
+    }
+
+    $raw = $request->get_param('news_city');
+    if (!is_array($raw)) {
+        $raw = array($raw);
+    }
+
+    $raw_ids  = array_values(array_filter(array_map('intval', $raw)));
+    $term_ids = akademiata_resolve_news_city_term_ids_for_post($raw_ids, (int) $post->ID);
+    akademiata_set_post_news_city_terms((int) $post->ID, $term_ids);
+}
+
+add_action('rest_after_insert_post', 'akademiata_persist_post_news_city_rest', 99, 3);
 
 
 // Register CPT: Studia Podyplomowe
