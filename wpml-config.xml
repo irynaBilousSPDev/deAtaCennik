@@ -1,4 +1,5 @@
 <wpml-config>
+    <!-- news_city: shared across languages (not translatable) -->
     <taxonomies>
         <taxonomy translate="0">news_city</taxonomy>
     </taxonomies>
