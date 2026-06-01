@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Custom Miasto metabox for wpisy — bypasses WPML/tax_input save issues.
+ * Persist news_city checkbox saves (Classic editor) + admin UI fixes.
  */
 
 /**
@@ -35,54 +35,6 @@ function akademiata_news_city_admin_can_save($post_id) {
     return (bool) wp_verify_nonce($nonce, 'update-post_' . $post_id);
 }
 
-function akademiata_news_city_admin_remove_default_metabox() {
-    remove_meta_box('news_citydiv', 'post', 'side');
-    remove_meta_box('tagsdiv-news_city', 'post', 'side');
-}
-
-add_action('add_meta_boxes', 'akademiata_news_city_admin_remove_default_metabox', 9999);
-
-function akademiata_news_city_admin_register_metabox() {
-    add_meta_box(
-        'akademiata_news_city',
-        __('Miasto', 'akademiata'),
-        'akademiata_news_city_admin_render_metabox',
-        'post',
-        'side',
-        'core'
-    );
-}
-
-add_action('add_meta_boxes', 'akademiata_news_city_admin_register_metabox', 10);
-
-function akademiata_news_city_admin_render_metabox($post) {
-    $current = akademiata_get_saved_news_city_slug((int) $post->ID);
-    $map     = akademiata_news_city_label_map();
-    $lang    = apply_filters('wpml_current_language', 'pl');
-    $choices = array(
-        ''         => __('Brak (na stronie: Warszawa)', 'akademiata'),
-        'warszawa' => $map['warszawa'][ $lang ] ?? $map['warszawa']['pl'],
-        'wroclaw'  => $map['wroclaw'][ $lang ] ?? $map['wroclaw']['pl'],
-    );
-
-    echo '<div class="akademiata-news-city-metabox">';
-    echo '<label class="screen-reader-text" for="akademiata-news-city-select">' . esc_html__('Miasto', 'akademiata') . '</label>';
-    echo '<select name="akademiata_news_city_slug" id="akademiata-news-city-select" style="width:100%;max-width:100%;">';
-
-    foreach ($choices as $slug => $label) {
-        printf(
-            '<option value="%1$s"%2$s>%3$s</option>',
-            esc_attr($slug),
-            selected($current, $slug, false),
-            esc_html($label)
-        );
-    }
-
-    echo '</select>';
-    echo '<p class="description">' . esc_html__('Wybierz miasto i kliknij Aktualizuj.', 'akademiata') . '</p>';
-    echo '</div>';
-}
-
 function akademiata_news_city_admin_capture_save($post_id, $post) {
     if (!($post instanceof WP_Post) || $post->post_type !== 'post') {
         return;
@@ -92,18 +44,12 @@ function akademiata_news_city_admin_capture_save($post_id, $post) {
         return;
     }
 
+    if (!array_key_exists('news_city', $_POST['tax_input'] ?? array())) {
+        return;
+    }
+
     if (!isset($GLOBALS['akademiata_pending_news_city_slug']) || !is_array($GLOBALS['akademiata_pending_news_city_slug'])) {
         $GLOBALS['akademiata_pending_news_city_slug'] = array();
-    }
-
-    if (array_key_exists('akademiata_news_city_slug', $_POST)) {
-        $slug = sanitize_title(wp_unslash($_POST['akademiata_news_city_slug']));
-        $GLOBALS['akademiata_pending_news_city_slug'][ (int) $post_id ] = $slug;
-        return;
-    }
-
-    if (!isset($_POST['tax_input']['news_city'])) {
-        return;
     }
 
     $submitted = wp_unslash($_POST['tax_input']['news_city']);
@@ -149,7 +95,6 @@ function akademiata_news_city_admin_enqueue_styles($hook) {
     }
 
     $css = '
-        .akademiata-news-city-metabox .description { margin-top: 8px; }
         #submitpost #major-publishing-actions {
             display: flex;
             flex-direction: column;

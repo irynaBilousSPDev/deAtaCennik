@@ -67,9 +67,8 @@ $args = [
     'lang'           => apply_filters('wpml_current_language', null),
 ];
 
-$city_tax_query = $city_slug ? akademiata_build_news_city_tax_query($city_slug) : null;
-if ($city_tax_query) {
-    $args['tax_query'] = $city_tax_query;
+if ($city_slug) {
+    akademiata_apply_news_city_filter_to_query($args, $city_slug);
 }
 
 akademiata_apply_news_archive_date_query($args, $filter_year, $filter_month);

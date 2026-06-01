@@ -261,7 +261,6 @@ function wpdocs_create_study_taxonomies()
             'query_var'         => true,
             'rewrite'           => array('slug' => 'aktualnosci-miasto'),
             'show_in_rest'      => true,
-            'meta_box_cb'       => false,
             'capabilities'      => array(
                 'manage_terms' => 'manage_categories',
                 'edit_terms'   => 'manage_categories',

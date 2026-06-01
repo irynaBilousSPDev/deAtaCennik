@@ -1218,6 +1218,118 @@ function akademiata_build_news_city_tax_query($city_slug) {
 }
 
 /**
+ * Apply city filter to a WP_Query args array (taxonomy + post meta, OR logic).
+ *
+ * @param array  $args      Query args (modified in place).
+ * @param string $city_slug news_city slug from ?miasto=
+ */
+function akademiata_apply_news_city_filter_to_query(array &$args, $city_slug) {
+    $city_slug = sanitize_title((string) $city_slug);
+    if ($city_slug === '') {
+        return;
+    }
+
+    $args['akademiata_news_city'] = $city_slug;
+
+    static $filter_added = false;
+    if (!$filter_added) {
+        add_filter('posts_where', 'akademiata_filter_posts_where_by_news_city', 10, 2);
+        $filter_added = true;
+    }
+}
+
+/**
+ * SQL WHERE for news city archive filter (matches taxonomy term OR stored meta slug).
+ *
+ * @param string    $where   WHERE clause.
+ * @param WP_Query  $query   Query object.
+ * @return string
+ */
+function akademiata_filter_posts_where_by_news_city($where, $query) {
+    if (!($query instanceof WP_Query)) {
+        return $where;
+    }
+
+    $city_slug = $query->get('akademiata_news_city');
+    if (!$city_slug) {
+        return $where;
+    }
+
+    global $wpdb;
+
+    $city_slug = sanitize_title((string) $city_slug);
+    $meta_key  = AKADEMIATA_NEWS_CITY_META_KEY;
+
+    if ($city_slug === akademiata_get_default_news_city_slug()) {
+        $wroclaw_term = akademiata_get_news_city_term_by_slug('wroclaw');
+        $exclude      = array();
+
+        if ($wroclaw_term) {
+            $exclude[] = $wpdb->prepare(
+                "EXISTS (
+                    SELECT 1 FROM {$wpdb->term_relationships} tr
+                    INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                    WHERE tr.object_id = {$wpdb->posts}.ID
+                    AND tt.taxonomy = 'news_city'
+                    AND tt.term_id = %d
+                )",
+                (int) $wroclaw_term->term_id
+            );
+        }
+
+        $exclude[] = $wpdb->prepare(
+            "EXISTS (
+                SELECT 1 FROM {$wpdb->postmeta} pm
+                WHERE pm.post_id = {$wpdb->posts}.ID
+                AND pm.meta_key = %s
+                AND pm.meta_value = %s
+            )",
+            $meta_key,
+            'wroclaw'
+        );
+
+        if (!empty($exclude)) {
+            $where .= ' AND NOT (' . implode(' OR ', $exclude) . ')';
+        }
+
+        return $where;
+    }
+
+    $term  = akademiata_get_news_city_term_by_slug($city_slug);
+    $parts = array();
+
+    if ($term) {
+        $parts[] = $wpdb->prepare(
+            "EXISTS (
+                SELECT 1 FROM {$wpdb->term_relationships} tr
+                INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tr.object_id = {$wpdb->posts}.ID
+                AND tt.taxonomy = 'news_city'
+                AND tt.term_id = %d
+            )",
+            (int) $term->term_id
+        );
+    }
+
+    $parts[] = $wpdb->prepare(
+        "EXISTS (
+            SELECT 1 FROM {$wpdb->postmeta} pm
+            WHERE pm.post_id = {$wpdb->posts}.ID
+            AND pm.meta_key = %s
+            AND pm.meta_value = %s
+        )",
+        $meta_key,
+        $city_slug
+    );
+
+    if (!empty($parts)) {
+        $where .= ' AND (' . implode(' OR ', $parts) . ')';
+    }
+
+    return $where;
+}
+
+/**
  * Ensure news_city term exists in a language; return term ID.
  *
  * @param string $slug Term slug (e.g. warszawa).
