@@ -593,7 +593,7 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
         $term_id = akademiata_ensure_news_city_term_id('warszawa', $lang);
 
         if ($term_id > 0) {
-            akademiata_set_post_news_city_terms($post_id, array($term_id));
+            akademiata_save_post_news_city_slug($post_id, 'warszawa');
         }
     }
 
@@ -603,7 +603,7 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
 add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
 
 /**
- * Queue news_city from Classic editor save (before WPML strips tax_input).
+ * Queue news_city from Classic editor save (tax_input fallback).
  */
 function akademiata_queue_post_news_city_save($post_id, $post) {
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -615,6 +615,10 @@ function akademiata_queue_post_news_city_save($post_id, $post) {
     }
 
     if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    if (array_key_exists('akademiata_news_city_slug', $_POST)) {
         return;
     }
 
@@ -646,7 +650,15 @@ function akademiata_apply_pending_post_news_city() {
         }
 
         $term_ids = akademiata_resolve_news_city_term_ids_for_post((array) $raw_ids, $post_id);
-        akademiata_set_post_news_city_terms($post_id, $term_ids);
+        $slug     = '';
+        if (!empty($term_ids)) {
+            $term = get_term((int) $term_ids[0], 'news_city');
+            if ($term && !is_wp_error($term)) {
+                $slug = sanitize_title($term->slug);
+            }
+        }
+
+        akademiata_save_post_news_city_slug($post_id, $slug);
     }
 
     $GLOBALS['akademiata_pending_news_city'] = array();
@@ -675,7 +687,15 @@ function akademiata_persist_post_news_city_rest($post, $request, $creating) {
 
     $raw_ids  = array_values(array_filter(array_map('intval', $raw)));
     $term_ids = akademiata_resolve_news_city_term_ids_for_post($raw_ids, (int) $post->ID);
-    akademiata_set_post_news_city_terms((int) $post->ID, $term_ids);
+    $slug     = '';
+    if (!empty($term_ids)) {
+        $term = get_term((int) $term_ids[0], 'news_city');
+        if ($term && !is_wp_error($term)) {
+            $slug = sanitize_title($term->slug);
+        }
+    }
+
+    akademiata_save_post_news_city_slug((int) $post->ID, $slug);
 }
 
 add_action('rest_after_insert_post', 'akademiata_persist_post_news_city_rest', 99, 3);

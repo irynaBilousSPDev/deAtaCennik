@@ -1108,11 +1108,17 @@ function akademiata_get_post_news_city_term($post_id = 0) {
     }
 
     $terms = get_the_terms($post_id, 'news_city');
-    if (empty($terms) || is_wp_error($terms)) {
-        return null;
+    if (!empty($terms) && !is_wp_error($terms)) {
+        return $terms[0];
     }
 
-    return $terms[0];
+    $slug = get_post_meta($post_id, '_akademiata_news_city_slug', true);
+    $slug = sanitize_title((string) $slug);
+    if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
+        return akademiata_get_news_city_term_by_slug($slug);
+    }
+
+    return null;
 }
 
 /**

@@ -65,5 +65,6 @@ include('configure/generate_keys_bch_mst.php');
 
 if (is_admin()) {
     include('configure/admin.php');
+    include('configure/news-city-admin.php');
 }
 
