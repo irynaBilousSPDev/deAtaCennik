@@ -99,6 +99,94 @@ function akademiata_news_city_admin_apply_pending_save() {
 add_action('shutdown', 'akademiata_news_city_admin_apply_pending_save', 99999);
 
 /**
+ * @return bool
+ */
+function akademiata_news_city_admin_is_posts_context() {
+    if (!is_admin()) {
+        return false;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'post') {
+        return false;
+    }
+
+    return in_array($screen->base, array('post', 'edit'), true);
+}
+
+/**
+ * @param WP_Term[] $terms
+ * @return WP_Term[]
+ */
+function akademiata_news_city_admin_translate_term_for_display($term) {
+    if (!$term || is_wp_error($term)) {
+        return $term;
+    }
+
+    if (function_exists('apply_filters')) {
+        $lang = apply_filters('wpml_current_language', null);
+        $tid  = (int) apply_filters('wpml_object_id', (int) $term->term_id, 'news_city', false, $lang);
+        if ($tid > 0) {
+            $translated = get_term($tid, 'news_city');
+            if ($translated && !is_wp_error($translated)) {
+                return $translated;
+            }
+        }
+    }
+
+    return $term;
+}
+
+/**
+ * Resolve news_city terms for admin UI (edit screen + posts list column).
+ *
+ * @param int       $post_id Post ID.
+ * @param WP_Term[] $terms   Terms from DB (may be empty).
+ * @return WP_Term[]
+ */
+function akademiata_news_city_admin_terms_for_post($post_id, $terms) {
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return is_array($terms) ? $terms : array();
+    }
+
+    if (is_wp_error($terms)) {
+        $terms = array();
+    }
+
+    $slug = sanitize_title((string) get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true));
+
+    if ($slug === '' && !empty($terms)) {
+        $slug = sanitize_title($terms[0]->slug);
+    }
+
+    if (!in_array($slug, array('warszawa', 'wroclaw'), true)) {
+        return $terms;
+    }
+
+    $display = get_term_by('slug', $slug, 'news_city');
+    if (!$display || is_wp_error($display)) {
+        return $terms;
+    }
+
+    return array(akademiata_news_city_admin_translate_term_for_display($display));
+}
+
+function akademiata_news_city_admin_get_the_terms($terms, $post_id, $taxonomy) {
+    if ($taxonomy !== 'news_city' || !akademiata_news_city_admin_is_posts_context()) {
+        return $terms;
+    }
+
+    if (is_wp_error($terms)) {
+        return $terms;
+    }
+
+    return akademiata_news_city_admin_terms_for_post((int) $post_id, $terms ?: array());
+}
+
+add_filter('get_the_terms', 'akademiata_news_city_admin_get_the_terms', 20, 3);
+
+/**
  * Keep News cities checkboxes checked after save (map stored slug → visible term ID).
  */
 function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomies, $args) {
@@ -108,8 +196,7 @@ function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomie
         return $terms;
     }
 
-    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
-    if (!$screen || !in_array($screen->base, array('post'), true)) {
+    if (!akademiata_news_city_admin_is_posts_context()) {
         return $terms;
     }
 
@@ -118,34 +205,11 @@ function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomie
         return $terms;
     }
 
-    $slug = get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true);
-    $slug = sanitize_title((string) $slug);
-
-    if ($slug === '' && !empty($terms) && !is_wp_error($terms)) {
-        $slug = sanitize_title($terms[0]->slug);
+    if (is_wp_error($terms)) {
+        $terms = array();
     }
 
-    if (!in_array($slug, array('warszawa', 'wroclaw'), true)) {
-        return array();
-    }
-
-    $display = get_term_by('slug', $slug, 'news_city');
-    if (!$display || is_wp_error($display)) {
-        return $terms;
-    }
-
-    if (function_exists('apply_filters')) {
-        $lang = apply_filters('wpml_current_language', null);
-        $tid  = (int) apply_filters('wpml_object_id', (int) $display->term_id, 'news_city', false, $lang);
-        if ($tid > 0) {
-            $translated = get_term($tid, 'news_city');
-            if ($translated && !is_wp_error($translated)) {
-                $display = $translated;
-            }
-        }
-    }
-
-    return array($display);
+    return akademiata_news_city_admin_terms_for_post($post_id, $terms);
 }
 
 add_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20, 4);
