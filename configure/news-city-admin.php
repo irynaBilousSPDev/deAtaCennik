@@ -231,23 +231,7 @@ function akademiata_news_city_admin_terms_for_post($post_id, $terms) {
         return array();
     }
 
-    $lang    = function_exists('akademiata_get_post_wpml_language')
-        ? akademiata_get_post_wpml_language($post_id)
-        : 'pl';
-    $term_id = function_exists('akademiata_ensure_news_city_term_id')
-        ? akademiata_ensure_news_city_term_id($slug, $lang)
-        : 0;
-
-    if ($term_id <= 0) {
-        $display = get_term_by('slug', $slug, 'news_city');
-        if (!$display || is_wp_error($display)) {
-            return array();
-        }
-        $display = akademiata_news_city_admin_translate_term_for_display($display);
-    } else {
-        $display = get_term($term_id, 'news_city');
-    }
-
+    $display = get_term_by('slug', $slug, 'news_city');
     if (!$display || is_wp_error($display)) {
         return array();
     }
@@ -351,6 +335,54 @@ function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomie
 add_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20, 4);
 
 /**
+ * Force checklist selected IDs from stored slug (bypasses WPML/DB drift).
+ *
+ * @param array $args    wp_terms_checklist args.
+ * @param int   $post_id Post ID.
+ * @return array
+ */
+function akademiata_news_city_admin_checklist_args($args, $post_id) {
+    $taxonomy = is_array($args) && isset($args['taxonomy']) ? (string) $args['taxonomy'] : '';
+    if ($taxonomy !== 'news_city') {
+        return $args;
+    }
+
+    $post_id = (int) $post_id;
+    if ($post_id <= 0) {
+        return $args;
+    }
+
+    $slug = sanitize_title((string) get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true));
+    if (!in_array($slug, array('warszawa', 'wroclaw'), true)) {
+        $args['selected_cats'] = array();
+        return $args;
+    }
+
+    $term = get_term_by('slug', $slug, 'news_city');
+    $args['selected_cats'] = ($term && !is_wp_error($term)) ? array((int) $term->term_id) : array();
+
+    return $args;
+}
+
+add_filter('wp_terms_checklist_args', 'akademiata_news_city_admin_checklist_args', 20, 2);
+
+/**
+ * @return array<string, int>
+ */
+function akademiata_news_city_admin_slug_term_id_map() {
+    $map = array();
+
+    foreach (array('warszawa', 'wroclaw') as $slug) {
+        $term = get_term_by('slug', $slug, 'news_city');
+        if ($term && !is_wp_error($term)) {
+            $map[ $slug ] = (int) $term->term_id;
+        }
+    }
+
+    return $map;
+}
+
+/**
  * Hidden slug in list table row — used by Quick Edit JS.
  */
 function akademiata_news_city_admin_column_inline_slug($column, $post_id) {
@@ -444,40 +476,92 @@ function akademiata_news_city_admin_footer_script($post) {
         return;
     }
 
-    $saved_slug = function_exists('akademiata_get_saved_news_city_slug')
-        ? akademiata_get_saved_news_city_slug($post->ID)
-        : '';
-    $term_id    = 0;
-
-    if ($saved_slug !== '' && function_exists('akademiata_ensure_news_city_term_id')) {
-        $lang    = akademiata_get_post_wpml_language($post->ID);
-        $term_id = akademiata_ensure_news_city_term_id($saved_slug, $lang);
+    $saved_slug = sanitize_title((string) get_post_meta($post->ID, AKADEMIATA_NEWS_CITY_META_KEY, true));
+    if (!in_array($saved_slug, array('warszawa', 'wroclaw'), true)) {
+        $saved_slug = '';
     }
+
+    $slug_map = akademiata_news_city_admin_slug_term_id_map();
+    $term_id  = ($saved_slug !== '' && isset($slug_map[ $saved_slug ])) ? (int) $slug_map[ $saved_slug ] : 0;
     ?>
     <input type="hidden" id="akademiata-news-city-term-ids" name="akademiata_news_city_term_ids" value="<?php echo $term_id > 0 ? esc_attr((string) $term_id) : ''; ?>" />
-    <script>
-    (function ($) {
-        var $form = $('#post');
-        if (!$form.length) {
-            return;
-        }
-        var termId = <?php echo (int) $term_id; ?>;
-        if (termId) {
-            $('#news_citydiv input[type="checkbox"][value="' + termId + '"]').prop('checked', true);
-        }
-        $form.on('submit', function () {
-            var ids = [];
-            $('#news_citydiv input[type="checkbox"]:checked').each(function () {
-                ids.push(this.value);
-            });
-            $('#akademiata-news-city-term-ids').val(ids.join(','));
-        });
-    })(jQuery);
-    </script>
     <?php
 }
 
 add_action('edit_form_after_title', 'akademiata_news_city_admin_footer_script');
+
+function akademiata_news_city_admin_edit_screen_script($hook) {
+    if (!in_array($hook, array('post.php', 'post-new.php'), true)) {
+        return;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'post') {
+        return;
+    }
+
+    global $post;
+    if (!($post instanceof WP_Post)) {
+        return;
+    }
+
+    $saved_slug = sanitize_title((string) get_post_meta($post->ID, AKADEMIATA_NEWS_CITY_META_KEY, true));
+    if (!in_array($saved_slug, array('warszawa', 'wroclaw'), true)) {
+        $saved_slug = '';
+    }
+
+    $slug_map = akademiata_news_city_admin_slug_term_id_map();
+
+    wp_enqueue_script('jquery');
+    wp_add_inline_script(
+        'jquery',
+        '(function ($) {
+            var savedSlug = ' . wp_json_encode($saved_slug) . ';
+            var slugToId = ' . wp_json_encode($slug_map) . ';
+
+            function syncNewsCityCheckboxes() {
+                var $box = $("#news_citydiv, #tagsdiv-news_city");
+                if (!$box.length) {
+                    return false;
+                }
+                $box.find("input[type=checkbox]").prop("checked", false);
+                if (savedSlug && slugToId[savedSlug]) {
+                    $box.find("input[type=checkbox][value=\"" + slugToId[savedSlug] + "\"]").prop("checked", true);
+                }
+                return true;
+            }
+
+            function bindNewsCitySubmit() {
+                var $form = $("#post");
+                if (!$form.length) {
+                    return;
+                }
+                $form.off("submit.akademiataNewsCity").on("submit.akademiataNewsCity", function () {
+                    var ids = [];
+                    $("#news_citydiv input[type=checkbox]:checked, #tagsdiv-news_city input[type=checkbox]:checked").each(function () {
+                        ids.push(this.value);
+                    });
+                    $("#akademiata-news-city-term-ids").val(ids.join(","));
+                });
+            }
+
+            $(function () {
+                bindNewsCitySubmit();
+                if (!syncNewsCityCheckboxes()) {
+                    var tries = 0;
+                    var timer = window.setInterval(function () {
+                        if (syncNewsCityCheckboxes() || ++tries >= 30) {
+                            window.clearInterval(timer);
+                        }
+                    }, 100);
+                }
+            });
+        })(jQuery);',
+        'after'
+    );
+}
+
+add_action('admin_enqueue_scripts', 'akademiata_news_city_admin_edit_screen_script');
 
 function akademiata_news_city_admin_enqueue_styles($hook) {
     if (!in_array($hook, array('post.php', 'post-new.php'), true)) {
