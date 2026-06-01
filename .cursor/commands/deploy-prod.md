@@ -9,7 +9,8 @@ flowchart TD
   A[commit on dev if dirty] --> B[git checkout main]
   B --> C[git merge dev]
   C --> D[git push origin main]
-  D --> E[npm run deploy:prod]
+  D --> D2[git push origin dev]
+  D2 --> E[npm run deploy:prod]
   E --> F[git checkout dev]
 ```
 
@@ -21,7 +22,6 @@ git checkout dev
 
 - `git status` / `git diff`
 - If dirty: commit (English message), do **not** stage `deploy.local.env`
-- Do **not** require `git push origin dev` unless the user also asked **push dev**
 
 ### 2. Merge into `main`
 
@@ -37,9 +37,12 @@ If merge conflicts: stop and report; do not force-push.
 
 ```bash
 git push origin main
+git push origin dev
 ```
 
 Remote: **`origin`** → https://github.com/irynaBilousSPDev/deAtaCennik.git
+
+After merge, **`dev` and `main` point to the same commit** — push both so GitHub stays in sync.
 
 ### 4. SFTP to production
 

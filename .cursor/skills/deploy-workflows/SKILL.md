@@ -15,7 +15,7 @@ disable-model-invocation: true
   - Dev: `npm run deploy:dev`
   - Prod: `npm run deploy:prod`
 
-## `/deploy-dev` (fast SFTP, no push by default)
+## `/deploy-dev` (SFTP dev + push dev)
 
 1. Ensure branch:
 
@@ -38,12 +38,18 @@ git checkout dev
 npm run deploy:dev
 ```
 
+5. Push:
+
+```bash
+git push origin dev
+```
+
 Notes:
 - If you want faster deploys while editing PHP only, set `SKIP_BUILD=true` in `deploy.local.env`.
 - For a safe preview, set `DRY_RUN=true` in `deploy.local.env`.
-- Do not `git push` unless the user explicitly says “push dev”.
+- **`/push-dev`** = push only, no SFTP.
 
-## `/deploy-prod` (merge dev → main, push main, then SFTP)
+## `/deploy-prod` (merge dev → main, push both, then SFTP)
 
 1. Finish work on `dev` (commit if dirty).
 2. Merge into `main`:
@@ -54,10 +60,11 @@ git pull origin main
 git merge dev -m "Merge branch 'dev' into main for production deploy."
 ```
 
-3. Push `main`:
+3. Push `main` and `dev` (same commit after merge):
 
 ```bash
 git push origin main
+git push origin dev
 ```
 
 4. Deploy:

@@ -1,15 +1,15 @@
-Deploy the Akademiata theme to **dev** (fast) — branch **`dev`**, local commit optional, **no git push**, then SFTP.
+Deploy the Akademiata theme to **dev** — branch **`dev`**, local commit optional, SFTP, then **push `dev` to GitHub**.
 
-The user invoked `/deploy-dev` — **commit** and **deploy** are allowed. **Do not push** unless the user says **push dev**. **Never commit** `deploy.local.env`.
+The user invoked `/deploy-dev` — **commit**, **deploy**, and **push** are allowed. **Never commit** `deploy.local.env`.
 
 ## Branches
 
 | Branch | Use |
 |--------|-----|
-| **`dev`** | Day-to-day work + `/deploy-dev` (SFTP to dev.akademiata.pl) |
+| **`dev`** | Day-to-day work + `/deploy-dev` (SFTP to dev.akademiata.pl + push) |
 | **`main`** | Production; updated via **`/deploy-prod`** or **`/pr`** |
 
-## Default flow (commit if needed → SFTP only)
+## Flow (commit if needed → SFTP → push)
 
 ```mermaid
 flowchart TD
@@ -17,9 +17,8 @@ flowchart TD
   B -->|yes| C[commit on dev]
   B -->|no| D[npm run deploy:dev]
   C --> D
+  D --> E[git push origin dev]
 ```
-
-**No `git push`** in the default flow — saves time. GitHub `origin/dev` is updated only when the user says **push dev** (see below).
 
 ### 1. Branch and inspect
 
@@ -41,21 +40,25 @@ npm run deploy:dev
 
 Uploads to `wp-content/themes/akademiata` on dev. `SKIP_BUILD=true` / `DRY_RUN=true` in `deploy.local.env` when needed.
 
-## Push dev to GitHub (optional)
-
-Only when the user says **push dev**, **sync github**, or **push origin dev**:
+### 4. Push `dev` to GitHub
 
 ```bash
 git push origin dev
 ```
 
+Keeps `origin/dev` in sync after every dev deploy.
+
 ## Skip git entirely
 
-**Deploy only** / **without commit**: run only `npm run deploy:dev` on branch `dev`.
+**Deploy only** / **without commit**: run only `npm run deploy:dev` on branch `dev` (no push unless user asks).
+
+## Push only (no SFTP)
+
+Use **`/push-dev`** when you only need GitHub backup without uploading to dev.
 
 ## Production
 
-Use **`/deploy-prod`**: merge `dev` → `main`, push `main`, SFTP to production — not this command.
+Use **`/deploy-prod`**: merge `dev` → `main`, push **`main` + `dev`**, SFTP to production — not this command.
 
 ## Do not
 

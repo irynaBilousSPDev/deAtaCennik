@@ -10,7 +10,7 @@ alwaysApply: false
 
 - `npm run dev` — webpack watch + gulp
 - `npm run build` — webpack + gulp production
-- `npm run deploy:dev` / `deploy:prod` — SFTP (`deploy.local.env`); `/deploy-dev` (fast, no push), `/deploy-prod` (dev→main→prod)
+- `npm run deploy:dev` / `deploy:prod` — SFTP (`deploy.local.env`); `/deploy-dev` (SFTP + push dev), `/deploy-prod` (dev→main→prod)
 - `npm start` — gulp only
 
 ## Webpack entries → `assets/dist/js/`

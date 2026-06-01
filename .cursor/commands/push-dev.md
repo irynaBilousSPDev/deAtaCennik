@@ -1,6 +1,6 @@
 Push branch **`dev`** to GitHub only (no SFTP).
 
-Use when the user wants to back up `dev` to `origin` without a full `/deploy-dev` push step.
+Use when you want to back up `dev` without deploying. For normal dev work, **`/deploy-dev`** already SFTPs and pushes.
 
 ```bash
 git checkout dev
