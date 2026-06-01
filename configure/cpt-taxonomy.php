@@ -621,17 +621,8 @@ function akademiata_persist_post_news_city_rest($post, $request, $creating) {
         $raw = array($raw);
     }
 
-    $raw_ids  = array_values(array_filter(array_map('intval', $raw)));
-    $term_ids = akademiata_resolve_news_city_term_ids_for_post($raw_ids, (int) $post->ID);
-    $slug     = '';
-    if (!empty($term_ids)) {
-        $term = get_term((int) $term_ids[0], 'news_city');
-        if ($term && !is_wp_error($term)) {
-            $slug = sanitize_title($term->slug);
-        }
-    }
-
-    akademiata_save_post_news_city_slug((int) $post->ID, $slug);
+    $raw_ids = array_values(array_filter(array_map('intval', $raw)));
+    akademiata_save_post_news_city_from_term_ids((int) $post->ID, $raw_ids);
 }
 
 add_action('rest_after_insert_post', 'akademiata_persist_post_news_city_rest', 99, 3);
