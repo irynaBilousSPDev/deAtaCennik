@@ -3,4 +3,7 @@
     <taxonomies>
         <taxonomy translate="0">news_city</taxonomy>
     </taxonomies>
+    <custom-fields>
+        <custom-field action="copy">_akademiata_news_city_slug</custom-field>
+    </custom-fields>
 </wpml-config>

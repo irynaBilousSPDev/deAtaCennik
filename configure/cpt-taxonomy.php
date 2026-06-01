@@ -261,6 +261,7 @@ function wpdocs_create_study_taxonomies()
             'query_var'         => true,
             'rewrite'           => array('slug' => 'aktualnosci-miasto'),
             'show_in_rest'      => true,
+            'meta_box_cb'       => false,
             'capabilities'      => array(
                 'manage_terms' => 'manage_categories',
                 'edit_terms'   => 'manage_categories',
@@ -601,70 +602,6 @@ function akademiata_bulk_assign_warsaw_to_aktualnosci_posts() {
 }
 
 add_action('init', 'akademiata_bulk_assign_warsaw_to_aktualnosci_posts', 25);
-
-/**
- * Queue news_city from Classic editor save (tax_input fallback).
- */
-function akademiata_queue_post_news_city_save($post_id, $post) {
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
-        return;
-    }
-
-    if (!($post instanceof WP_Post) || $post->post_type !== 'post' || wp_is_post_revision($post_id)) {
-        return;
-    }
-
-    if (!current_user_can('edit_post', $post_id)) {
-        return;
-    }
-
-    if (array_key_exists('akademiata_news_city_slug', $_POST)) {
-        return;
-    }
-
-    if (!array_key_exists('news_city', $_POST['tax_input'] ?? array())) {
-        return;
-    }
-
-    $submitted = wp_unslash($_POST['tax_input']['news_city']);
-    $raw_ids   = is_array($submitted) ? $submitted : array($submitted);
-    $raw_ids   = array_values(array_filter(array_map('intval', $raw_ids)));
-
-    $GLOBALS['akademiata_pending_news_city'][ (int) $post_id ] = $raw_ids;
-}
-
-add_action('save_post', 'akademiata_queue_post_news_city_save', 5, 2);
-
-/**
- * Apply queued news_city after WPML/core term saves (shutdown).
- */
-function akademiata_apply_pending_post_news_city() {
-    if (empty($GLOBALS['akademiata_pending_news_city']) || !is_array($GLOBALS['akademiata_pending_news_city'])) {
-        return;
-    }
-
-    foreach ($GLOBALS['akademiata_pending_news_city'] as $post_id => $raw_ids) {
-        $post_id = (int) $post_id;
-        if ($post_id <= 0) {
-            continue;
-        }
-
-        $term_ids = akademiata_resolve_news_city_term_ids_for_post((array) $raw_ids, $post_id);
-        $slug     = '';
-        if (!empty($term_ids)) {
-            $term = get_term((int) $term_ids[0], 'news_city');
-            if ($term && !is_wp_error($term)) {
-                $slug = sanitize_title($term->slug);
-            }
-        }
-
-        akademiata_save_post_news_city_slug($post_id, $slug);
-    }
-
-    $GLOBALS['akademiata_pending_news_city'] = array();
-}
-
-add_action('shutdown', 'akademiata_apply_pending_post_news_city', 999);
 
 /**
  * Block editor / REST: persist news_city with WPML-safe term IDs.
