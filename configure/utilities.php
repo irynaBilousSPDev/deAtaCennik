@@ -1545,17 +1545,16 @@ function akademiata_save_post_news_city_from_term_ids($post_id, array $raw_ids) 
     }
 
     $raw_ids  = array_values(array_filter(array_map('intval', $raw_ids)));
+    $save_ids = akademiata_resolve_news_city_term_ids_for_post($raw_ids, $post_id);
     $slug     = '';
-    $save_ids = array();
 
-    if (!empty($raw_ids)) {
-        $term_id = (int) end($raw_ids);
-        $term    = get_term($term_id, 'news_city');
-
+    if (!empty($save_ids)) {
+        $term = get_term((int) end($save_ids), 'news_city');
         if ($term && !is_wp_error($term)) {
             $slug = sanitize_title($term->slug);
-            if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
-                $save_ids = array($term_id);
+            if (!in_array($slug, array('warszawa', 'wroclaw'), true)) {
+                $slug     = '';
+                $save_ids = array();
             }
         }
     }
