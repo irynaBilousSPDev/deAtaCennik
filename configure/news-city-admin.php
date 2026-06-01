@@ -7,6 +7,21 @@
 /**
  * @return bool
  */
+function akademiata_news_city_admin_is_inline_save_request($post_id) {
+    return (
+        defined('DOING_AJAX')
+        && DOING_AJAX
+        && isset($_POST['action'], $_POST['post_ID'])
+        && $_POST['action'] === 'inline-save'
+        && (int) $_POST['post_ID'] === (int) $post_id
+        && isset($_POST['_inline_edit'])
+        && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_inline_edit'])), 'inline-post-save')
+    );
+}
+
+/**
+ * @return bool
+ */
 function akademiata_news_city_admin_can_save($post_id) {
     $post_id = (int) $post_id;
 
@@ -22,13 +37,43 @@ function akademiata_news_city_admin_can_save($post_id) {
         return false;
     }
 
-    return !empty($_POST['post_ID']) && (int) $_POST['post_ID'] === $post_id;
+    if (empty($_POST['post_ID']) || (int) $_POST['post_ID'] !== $post_id) {
+        return false;
+    }
+
+    if (akademiata_news_city_admin_is_inline_save_request($post_id)) {
+        return true;
+    }
+
+    // Full editor save — core already verified the request before save_post.
+    return true;
 }
 
 /**
- * @return int[]
+ * @return array<string, WP_Term>
  */
-function akademiata_news_city_admin_read_submitted_term_ids() {
+function akademiata_news_city_admin_checkbox_terms() {
+    $choices = array();
+
+    foreach (array('warszawa', 'wroclaw') as $slug) {
+        $term = function_exists('akademiata_get_news_city_term_by_slug')
+            ? akademiata_get_news_city_term_by_slug($slug)
+            : get_term_by('slug', $slug, 'news_city');
+
+        if ($term && !is_wp_error($term)) {
+            $choices[ $slug ] = $term;
+        }
+    }
+
+    return $choices;
+}
+
+/**
+ * @return int[]|null
+ */
+function akademiata_news_city_admin_read_submitted_term_ids($post_id = 0) {
+    $post_id = (int) $post_id;
+
     if (isset($_POST['akademiata_news_city_term_ids'])) {
         $raw = sanitize_text_field(wp_unslash($_POST['akademiata_news_city_term_ids']));
         if ($raw !== '') {
@@ -38,6 +83,9 @@ function akademiata_news_city_admin_read_submitted_term_ids() {
     }
 
     if (!array_key_exists('news_city', $_POST['tax_input'] ?? array())) {
+        if ($post_id > 0 && akademiata_news_city_admin_is_inline_save_request($post_id)) {
+            return array();
+        }
         return null;
     }
 
@@ -82,7 +130,7 @@ function akademiata_news_city_admin_apply_pending_save() {
     if (empty($GLOBALS['akademiata_pending_news_city_ids']) && !empty($_POST['post_ID']) && is_admin()) {
         $post_id = (int) $_POST['post_ID'];
         if ($post_id > 0 && akademiata_news_city_admin_can_save($post_id)) {
-            $raw_ids = akademiata_news_city_admin_read_submitted_term_ids();
+            $raw_ids = akademiata_news_city_admin_read_submitted_term_ids($post_id);
             if ($raw_ids !== null) {
                 $GLOBALS['akademiata_pending_news_city_ids'][ $post_id ] = $raw_ids;
             }
@@ -213,6 +261,95 @@ function akademiata_news_city_admin_object_terms($terms, $object_ids, $taxonomie
 }
 
 add_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20, 4);
+
+/**
+ * Hidden slug in list table row — used by Quick Edit JS.
+ */
+function akademiata_news_city_admin_column_inline_slug($column, $post_id) {
+    if ($column !== 'taxonomy-news_city') {
+        return;
+    }
+
+    $slug = sanitize_title((string) get_post_meta((int) $post_id, AKADEMIATA_NEWS_CITY_META_KEY, true));
+    printf(
+        '<span class="akademiata-news-city-slug hidden" data-slug="%s" aria-hidden="true"></span>',
+        esc_attr(in_array($slug, array('warszawa', 'wroclaw'), true) ? $slug : '')
+    );
+}
+
+add_action('manage_post_posts_custom_column', 'akademiata_news_city_admin_column_inline_slug', 20, 2);
+
+/**
+ * News cities checkboxes in Quick Edit (Szybka edycja).
+ */
+function akademiata_news_city_admin_quick_edit_box($column, $post_type) {
+    if ($column !== 'taxonomy-news_city' || $post_type !== 'post') {
+        return;
+    }
+
+    $choices = akademiata_news_city_admin_checkbox_terms();
+    if (empty($choices)) {
+        return;
+    }
+
+    echo '<fieldset class="inline-edit-col-right inline-edit-news-city">';
+    echo '<div class="inline-edit-col">';
+    echo '<span class="title">' . esc_html__('News cities', 'akademiata') . '</span>';
+    echo '<ul class="cat-checklist akademiata-news-city-checklist">';
+
+    foreach ($choices as $slug => $term) {
+        printf(
+            '<li><label class="selectit"><input type="checkbox" name="tax_input[news_city][]" value="%1$d" data-slug="%2$s"> %3$s</label></li>',
+            (int) $term->term_id,
+            esc_attr($slug),
+            esc_html($term->name)
+        );
+    }
+
+    echo '</ul></div></fieldset>';
+}
+
+add_action('quick_edit_custom_box', 'akademiata_news_city_admin_quick_edit_box', 10, 2);
+
+function akademiata_news_city_admin_posts_list_script($hook) {
+    if ($hook !== 'edit.php') {
+        return;
+    }
+
+    $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+    if (!$screen || $screen->post_type !== 'post') {
+        return;
+    }
+
+    wp_enqueue_script('jquery');
+    wp_add_inline_script(
+        'jquery',
+        "(function ($) {
+            if (typeof inlineEditPost === 'undefined') {
+                return;
+            }
+            var wpInlineEdit = inlineEditPost.edit;
+            inlineEditPost.edit = function (id) {
+                wpInlineEdit.apply(this, arguments);
+                var postId = 0;
+                if (typeof id === 'object') {
+                    postId = parseInt(inlineEditPost.getId(id), 10);
+                }
+                if (!postId) {
+                    return;
+                }
+                var slug = $('#post-' + postId).find('.akademiata-news-city-slug').data('slug') || '';
+                var \$edit = $('#edit-' + postId);
+                \$edit.find('.akademiata-news-city-checklist input[type=checkbox]').prop('checked', false);
+                if (slug) {
+                    \$edit.find('.akademiata-news-city-checklist input[data-slug=\"' + slug + '\"]').prop('checked', true);
+                }
+            };
+        })(jQuery);"
+    );
+}
+
+add_action('admin_enqueue_scripts', 'akademiata_news_city_admin_posts_list_script');
 
 function akademiata_news_city_admin_footer_script($post) {
     if (!($post instanceof WP_Post) || $post->post_type !== 'post') {
