@@ -12,14 +12,7 @@ if (empty($slides) || !is_array($slides)) {
 }
 
 $slide_count = count($slides);
-// Swiper loop + slidesPerView:'auto' needs enough DOM slides, otherwise it may disable loop.
-// We duplicate slides only when slide count is small (no dot navigation in this slider).
 $swiper_slides = $slides;
-if ($slide_count > 1 && $slide_count < 6) {
-    while (count($swiper_slides) < 6) {
-        $swiper_slides = array_merge($swiper_slides, $slides);
-    }
-}
 $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.webp';
 ?>
 

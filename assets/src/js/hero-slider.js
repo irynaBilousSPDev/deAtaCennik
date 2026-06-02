@@ -27,26 +27,17 @@ export function initHeroSlider(root) {
         spaceBetween: 0,
         centeredSlides: true,
         loop: canLoop,
-        // With slidesPerView:'auto' Swiper can "run out" of looped slides when the
-        // dataset is small. Use a generous buffer and let Swiper decide loopedSlides.
-        loopAdditionalSlides: 10,
+        // Keep configuration simple so loop works reliably with few slides.
+        watchOverflow: false,
         loopPreventsSliding: false,
         speed: SLIDE_SPEED,
         grabCursor: true,
         watchSlidesProgress: true,
         autoplay: false,
-        breakpoints: {
-            [DESKTOP_MIN]: {
-                slidesPerView: 'auto',
-                spaceBetween: 0,
-                centeredSlides: true,
-            },
-        },
         on: {
             init(swiperInstance) {
                 if (canLoop) {
                     swiperInstance.slideToLoop(0, 0, false);
-                    swiperInstance.loopFix();
                 } else {
                     swiperInstance.slideTo(0, 0, false);
                 }
