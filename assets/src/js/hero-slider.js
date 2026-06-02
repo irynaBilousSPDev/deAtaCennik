@@ -31,19 +31,14 @@ export function initHeroSlider(root) {
         spaceBetween: 0,
         centeredSlides: true,
         loop: canLoop,
-        loopAdditionalSlides: 1,
+        // Keep enough loop clones for stable dot navigation (esp. small slide counts).
+        loopAdditionalSlides: Math.max(2, slideCount),
         loopPreventsSliding: false,
         speed: SLIDE_SPEED,
         grabCursor: true,
         watchSlidesProgress: true,
         autoplay: false,
-        breakpoints: {
-            [DESKTOP_MIN]: {
-                slidesPerView: 'auto',
-                spaceBetween: 0,
-                centeredSlides: true,
-            },
-        },
+        // NOTE: Keep slidesPerView=1 on desktop too, so dots always map 1:1 to a single visible slide.
         on: {
             init(swiperInstance) {
                 if (canLoop) {

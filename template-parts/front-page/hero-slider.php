@@ -59,7 +59,7 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
                                         width="<?php echo esc_attr((string) $img_width); ?>"
                                         height="<?php echo esc_attr((string) $img_height); ?>"
                                         decoding="async"
-                                        loading="eager"
+                                        loading="<?php echo $is_first_slide ? 'eager' : 'lazy'; ?>"
                                         <?php if ($is_first_slide) : ?>
                                             fetchpriority="high"
                                         <?php endif; ?>

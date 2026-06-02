@@ -97,15 +97,48 @@ function akademiata_get_hero_slider_slides($main_slider = null) {
 
     $slides = [];
 
-    foreach ($main_slider as $slide) {
+    foreach ($main_slider as $idx => $slide) {
         if (isset($slide['show_slide']) && (int) $slide['show_slide'] !== 1) {
             continue;
         }
         if (empty(akademiata_hero_slide_image_urls($slide)['desktop'])) {
             continue;
         }
+        if (is_array($slide)) {
+            $slide['_akademiata_sort_index'] = (int) $idx;
+        }
         $slides[] = $slide;
     }
+
+    usort(
+        $slides,
+        static function ($a, $b) {
+            $a_order = isset($a['kolejnosc']) ? (int) $a['kolejnosc'] : 0;
+            $b_order = isset($b['kolejnosc']) ? (int) $b['kolejnosc'] : 0;
+
+            $a_has = $a_order > 0;
+            $b_has = $b_order > 0;
+
+            // Slides with explicit order first; the rest keep ACF row order.
+            if ($a_has && $b_has && $a_order !== $b_order) {
+                return $a_order <=> $b_order;
+            }
+            if ($a_has !== $b_has) {
+                return $a_has ? -1 : 1;
+            }
+
+            $a_idx = isset($a['_akademiata_sort_index']) ? (int) $a['_akademiata_sort_index'] : 0;
+            $b_idx = isset($b['_akademiata_sort_index']) ? (int) $b['_akademiata_sort_index'] : 0;
+            return $a_idx <=> $b_idx;
+        }
+    );
+
+    foreach ($slides as &$slide) {
+        if (is_array($slide)) {
+            unset($slide['_akademiata_sort_index']);
+        }
+    }
+    unset($slide);
 
     return $slides;
 }
@@ -138,6 +171,9 @@ function akademiata_preload_main_slider_image(array $slides) {
                 'media' => $mobile !== $desktop ? '(max-width: 767px)' : '',
             ];
         }
+
+        // Preload only the first logical slide to avoid competing downloads on initial paint.
+        break;
     }
 
     if (empty($preload_links)) {
