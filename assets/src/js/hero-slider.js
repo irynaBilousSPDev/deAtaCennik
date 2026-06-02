@@ -27,13 +27,19 @@ export function initHeroSlider(root) {
         spaceBetween: 0,
         centeredSlides: true,
         loop: canLoop,
-        // Keep configuration simple so loop works reliably with few slides.
         watchOverflow: false,
         loopPreventsSliding: false,
         speed: SLIDE_SPEED,
         grabCursor: true,
         watchSlidesProgress: true,
         autoplay: false,
+        breakpoints: {
+            [DESKTOP_MIN]: {
+                slidesPerView: 'auto',
+                spaceBetween: 0,
+                centeredSlides: true,
+            },
+        },
         on: {
             init(swiperInstance) {
                 if (canLoop) {
