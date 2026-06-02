@@ -14,7 +14,6 @@ export function initHeroSlider(root) {
         return;
     }
 
-    const dotsEl = root.querySelector('.hero-slider__dots');
     const autoplayBtn = root.querySelector('.hero-slider__autoplay');
     const slideCount = parseInt(root.dataset.slideCount || '0', 10);
     const canLoop = slideCount > 1;
@@ -22,18 +21,15 @@ export function initHeroSlider(root) {
 
     hydrateSlideImages(swiperEl);
 
-    let pendingDotIndex = null;
-    let isDotNavigation = false;
-
     const swiper = new Swiper(swiperEl, {
         modules: [Autoplay, A11y],
         slidesPerView: 1,
         spaceBetween: 0,
         centeredSlides: true,
         loop: canLoop,
-        // Keep enough loop clones for stable dot navigation (esp. small slide counts).
-        loopAdditionalSlides: Math.max(2, slideCount),
+        // Swiper needs explicit loop counts when slidesPerView is 'auto'.
         loopedSlides: slideCount || undefined,
+        loopAdditionalSlides: slideCount || 0,
         loopPreventsSliding: false,
         speed: SLIDE_SPEED,
         grabCursor: true,
@@ -49,13 +45,11 @@ export function initHeroSlider(root) {
         on: {
             init(swiperInstance) {
                 if (canLoop) {
-                    refreshHeroLoop(swiperInstance);
                     swiperInstance.slideToLoop(0, 0, false);
                 } else {
                     swiperInstance.slideTo(0, 0, false);
                 }
                 swiperInstance.update();
-                updateHeroDots(root, swiperInstance);
                 preloadAllHeroImages(swiperEl);
                 preloadAdjacentHeroImages(swiperEl);
 
@@ -70,51 +64,11 @@ export function initHeroSlider(root) {
                 }
             },
             slideChange(swiperInstance) {
-                if (!isDotNavigation) {
-                    updateHeroDots(root, swiperInstance);
-                }
-                preloadAdjacentHeroImages(swiperEl);
-            },
-            slideChangeTransitionEnd(swiperInstance) {
-                if (isDotNavigation && pendingDotIndex !== null && swiperInstance.params.loop) {
-                    const targetIndex = pendingDotIndex;
-
-                    if (swiperInstance.realIndex !== targetIndex) {
-                        swiperInstance.slideToLoop(targetIndex, 0, false);
-                    }
-
-                    swiperInstance.loopFix();
-
-                    const activeSlide = swiperInstance.slides[swiperInstance.activeIndex];
-                    const activeHeroIndex = parseInt(activeSlide?.dataset?.heroIndex ?? '-1', 10);
-
-                    if (activeHeroIndex !== targetIndex) {
-                        swiperInstance.slideToLoop(targetIndex, 0, false);
-                        swiperInstance.loopFix();
-                    }
-                }
-
-                if (swiperInstance.params.loop && !isDotNavigation) {
-                    const idx = getHeroActiveIndex(swiperInstance, slideCount);
-                    if (idx === 0 || idx === slideCount - 1) {
-                        swiperInstance.loopFix();
-                    }
-                }
-
-                isDotNavigation = false;
-                pendingDotIndex = null;
-                updateHeroDots(root, swiperInstance);
                 preloadAdjacentHeroImages(swiperEl);
             },
         },
     });
 
-    buildHeroDots(root, swiper, slideCount, (index) => {
-        isDotNavigation = true;
-        pendingDotIndex = index;
-        goToHeroSlide(swiper, index);
-        setHeroDotsActive(root, index);
-    });
     bindSlideLinkNavigation(swiperEl, swiper);
     preloadAllHeroImages(swiperEl);
     preloadAdjacentHeroImages(swiperEl);
@@ -155,92 +109,6 @@ export function initHeroSlider(root) {
             setPlayingState(true);
         }
     });
-}
-
-/**
- * Custom 10px dots (not Swiper pagination).
- *
- * @param {HTMLElement} root
- * @param {import('swiper').Swiper} swiper
- * @param {number} slideCount
- * @param {(index: number) => void} onDotClick
- */
-function buildHeroDots(root, swiper, slideCount, onDotClick) {
-    const dotsEl = root.querySelector('.hero-slider__dots');
-    if (!dotsEl || slideCount < 2) {
-        return;
-    }
-
-    dotsEl.innerHTML = '';
-
-    for (let i = 0; i < slideCount; i += 1) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'hero-slider__dot';
-        dot.setAttribute('aria-label', `Slajd ${i + 1}`);
-        dot.addEventListener('click', () => {
-            onDotClick(i);
-        });
-        dotsEl.appendChild(dot);
-    }
-
-    updateHeroDots(root, swiper);
-}
-
-/**
- * @param {import('swiper').Swiper} swiper
- * @param {number} index
- */
-function goToHeroSlide(swiper, index) {
-    if (swiper.params.loop) {
-        swiper.slideToLoop(index, SLIDE_SPEED);
-        return;
-    }
-
-    swiper.slideTo(index, SLIDE_SPEED);
-}
-
-/**
- * @param {HTMLElement} root
- * @param {number} activeIndex
- */
-function setHeroDotsActive(root, activeIndex) {
-    root.querySelectorAll('.hero-slider__dot').forEach((dot, index) => {
-        const isActive = index === activeIndex;
-        dot.classList.toggle('is-active', isActive);
-        dot.setAttribute('aria-current', isActive ? 'true' : 'false');
-    });
-}
-
-/**
- * @param {import('swiper').Swiper} swiper
- * @returns {number}
- */
-function getHeroActiveIndex(swiper, slideCount) {
-    const activeSlide = swiper.slides[swiper.activeIndex];
-
-    if (activeSlide?.dataset?.heroIndex !== undefined) {
-        const heroIndex = parseInt(activeSlide.dataset.heroIndex, 10);
-
-        if (!Number.isNaN(heroIndex) && slideCount > 0) {
-            return heroIndex % slideCount;
-        }
-    }
-
-    if (slideCount > 0) {
-        return swiper.realIndex % slideCount;
-    }
-
-    return swiper.realIndex;
-}
-
-/**
- * @param {HTMLElement} root
- * @param {import('swiper').Swiper} swiper
- */
-function updateHeroDots(root, swiper) {
-    const logicalCount = parseInt(root.dataset.slideCount || '0', 10);
-    setHeroDotsActive(root, getHeroActiveIndex(swiper, logicalCount));
 }
 
 /**

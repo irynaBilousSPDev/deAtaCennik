@@ -91,8 +91,6 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
     </div>
 
     <div class="hero-slider__controls">
-        <div class="hero-slider__dots" role="tablist"
-             aria-label="<?php esc_attr_e('Nawigacja slidera', 'akademiata'); ?>"></div>
         <button
             type="button"
             class="hero-slider__autoplay is-playing"
