@@ -186,7 +186,9 @@
   overflow: hidden;
 
   .swiper-wrapper {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
   }
 
   .swiper-slide:not(:first-child) {
@@ -195,6 +197,11 @@
 
   .swiper-slide:first-child {
     width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .swiper-slide:first-child .hero-slider__slide {
     margin-left: auto;
     margin-right: auto;
   }
