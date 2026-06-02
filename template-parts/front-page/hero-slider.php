@@ -12,11 +12,7 @@ if (empty($slides) || !is_array($slides)) {
 }
 
 $slide_count = count($slides);
-// Duplicate slides so Swiper loop can fill left/right peeks (needs enough DOM slides with slidesPerView: auto).
 $swiper_slides = $slides;
-if ($slide_count > 1 && $slide_count < 8) {
-    $swiper_slides = array_merge($slides, $slides);
-}
 $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.webp';
 ?>
 
