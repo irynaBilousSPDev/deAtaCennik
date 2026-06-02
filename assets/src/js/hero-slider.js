@@ -1,6 +1,7 @@
 import Swiper from 'swiper';
-import { Autoplay, A11y } from 'swiper/modules';
+import { Autoplay, A11y, Pagination } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/pagination';
 
 const DESKTOP_MIN = 768;
 const SLIDE_SPEED = 750;
@@ -14,7 +15,7 @@ export function initHeroSlider(root) {
         return;
     }
 
-    const dotsEl = root.querySelector('.hero-slider__dots');
+    const paginationEl = root.querySelector('.hero-slider__pagination');
     const autoplayBtn = root.querySelector('.hero-slider__autoplay');
     const slideCount = parseInt(root.dataset.slideCount || '0', 10);
     const canLoop = slideCount > 1;
@@ -23,7 +24,7 @@ export function initHeroSlider(root) {
     hydrateSlideImages(swiperEl);
 
     const swiper = new Swiper(swiperEl, {
-        modules: [Autoplay, A11y],
+        modules: [Autoplay, A11y, Pagination],
         slidesPerView: 1,
         spaceBetween: 0,
         centeredSlides: true,
@@ -34,6 +35,11 @@ export function initHeroSlider(root) {
         grabCursor: true,
         watchSlidesProgress: true,
         autoplay: false,
+        pagination: paginationEl && slideCount > 1 ? {
+            el: paginationEl,
+            clickable: true,
+            type: 'bullets',
+        } : undefined,
         breakpoints: {
             [DESKTOP_MIN]: {
                 slidesPerView: 'auto',
@@ -52,8 +58,6 @@ export function initHeroSlider(root) {
                 preloadAllHeroImages(swiperEl);
                 preloadAdjacentHeroImages(swiperEl);
 
-                buildHeroDots(root, swiperInstance, slideCount);
-
                 if (canAutoplay) {
                     swiperInstance.params.autoplay = {
                         delay: 5000,
@@ -66,7 +70,6 @@ export function initHeroSlider(root) {
             },
             slideChange(swiperInstance) {
                 preloadAdjacentHeroImages(swiperEl);
-                updateHeroDots(root, swiperInstance);
             },
         },
     });
@@ -74,10 +77,9 @@ export function initHeroSlider(root) {
     bindSlideLinkNavigation(swiperEl, swiper);
     preloadAllHeroImages(swiperEl);
     preloadAdjacentHeroImages(swiperEl);
-    if (dotsEl) {
-        dotsEl.hidden = slideCount < 2;
+    if (paginationEl) {
+        paginationEl.hidden = slideCount < 2;
     }
-    updateHeroDots(root, swiper);
 
     if (!autoplayBtn || !canAutoplay) {
         autoplayBtn?.setAttribute('hidden', '');
@@ -115,124 +117,6 @@ export function initHeroSlider(root) {
             setPlayingState(true);
         }
     });
-}
-
-/**
- * @param {HTMLElement} root
- * @param {import('swiper').Swiper} swiper
- * @param {number} slideCount
- */
-function buildHeroDots(root, swiper, slideCount) {
-    const dotsEl = root.querySelector('.hero-slider__dots');
-    if (!dotsEl || slideCount < 2) {
-        return;
-    }
-
-    // Avoid duplicate builds when Swiper re-inits.
-    if (dotsEl.childElementCount === slideCount) {
-        return;
-    }
-
-    dotsEl.innerHTML = '';
-
-    for (let i = 0; i < slideCount; i += 1) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'hero-slider__dot';
-        dot.setAttribute('aria-label', `Slajd ${i + 1}`);
-        dot.addEventListener('click', () => {
-            goToHeroIndex(swiper, i);
-            setHeroDotsActive(root, i);
-        });
-        dotsEl.appendChild(dot);
-    }
-}
-
-/**
- * @param {import('swiper').Swiper} swiper
- * @param {number} heroIndex
- */
-function goToHeroIndex(swiper, heroIndex) {
-    const target = findClosestSlideIndexByHeroIndex(swiper, heroIndex);
-    if (target === null) {
-        return;
-    }
-    swiper.slideTo(target, SLIDE_SPEED);
-}
-
-/**
- * Pick the closest DOM slide index that matches heroIndex.
- * Works even when markup contains duplicated slides for loop stability.
- *
- * @param {import('swiper').Swiper} swiper
- * @param {number} heroIndex
- * @returns {number|null}
- */
-function findClosestSlideIndexByHeroIndex(swiper, heroIndex) {
-    const active = swiper.activeIndex ?? 0;
-    let bestIndex = null;
-    let bestDistance = Infinity;
-
-    swiper.slides.forEach((slideEl, idx) => {
-        const raw = slideEl?.dataset?.heroIndex;
-        if (raw === undefined) {
-            return;
-        }
-        const val = parseInt(raw, 10);
-        if (Number.isNaN(val) || val !== heroIndex) {
-            return;
-        }
-
-        const dist = Math.abs(idx - active);
-        if (dist < bestDistance) {
-            bestDistance = dist;
-            bestIndex = idx;
-        }
-    });
-
-    return bestIndex;
-}
-
-/**
- * @param {HTMLElement} root
- * @param {number} activeIndex
- */
-function setHeroDotsActive(root, activeIndex) {
-    root.querySelectorAll('.hero-slider__dot').forEach((dot, index) => {
-        const isActive = index === activeIndex;
-        dot.classList.toggle('is-active', isActive);
-        dot.setAttribute('aria-current', isActive ? 'true' : 'false');
-    });
-}
-
-/**
- * @param {import('swiper').Swiper} swiper
- * @returns {number|null}
- */
-function getActiveHeroIndex(swiper) {
-    const activeSlide = swiper.slides?.[swiper.activeIndex];
-    const raw = activeSlide?.dataset?.heroIndex;
-    if (raw === undefined) {
-        return null;
-    }
-    const idx = parseInt(raw, 10);
-    return Number.isNaN(idx) ? null : idx;
-}
-
-/**
- * @param {HTMLElement} root
- * @param {import('swiper').Swiper} swiper
- */
-function updateHeroDots(root, swiper) {
-    const dotsEl = root.querySelector('.hero-slider__dots');
-    if (!dotsEl || dotsEl.hidden) {
-        return;
-    }
-    const idx = getActiveHeroIndex(swiper);
-    if (idx === null) {
-        return;
-    }
-    setHeroDotsActive(root, idx);
 }
 
 /**

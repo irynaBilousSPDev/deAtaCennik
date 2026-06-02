@@ -98,7 +98,7 @@ $logo_compact = get_template_directory_uri() . '/static/img/logo_ata_compact.web
     </div>
 
     <div class="hero-slider__controls">
-        <div class="hero-slider__dots" aria-hidden="true"></div>
+        <div class="hero-slider__pagination swiper-pagination" aria-hidden="true"></div>
         <button
             type="button"
             class="hero-slider__autoplay is-playing"
