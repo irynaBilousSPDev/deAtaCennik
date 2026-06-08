@@ -5,6 +5,98 @@
  * Keep CF7 markup unwrapped for pixel-perfect layouts.
  */
 
+/**
+ * Resolve CF7 form post ID from numeric ID or shortcode hash (e.g. 2dea2cf).
+ */
+function akademiata_cf7_form_id_from_ref($ref) {
+    $ref = trim((string) $ref);
+    if ($ref === '' || !function_exists('wpcf7_contact_form')) {
+        return 0;
+    }
+
+    if (ctype_digit($ref)) {
+        return (int) $ref;
+    }
+
+    if (function_exists('wpcf7_get_contact_form_by_hash')) {
+        $form = wpcf7_get_contact_form_by_hash($ref);
+        if ($form && method_exists($form, 'id')) {
+            return (int) $form->id();
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Thank-you page slug => CF7 form (for mail_2 body text).
+ */
+function akademiata_open_day_thank_you_form_map() {
+    return [
+        'dziekujemy-wroclaw'  => 26382,
+        'dziekujemy-warszawa' => 26494,
+        'dziekujemy-za-rejestracje-na-dzien-otwarty-studiow-podyplomowych-w-ata-w-warszawie' => akademiata_cf7_form_id_from_ref('2dea2cf'),
+    ];
+}
+
+/**
+ * Open Day CF7 forms: ensure redirect wrapper class (initCf7Redirect).
+ */
+function akademiata_cf7_open_day_html_classes($properties, $contact_form) {
+    if (!$contact_form || !method_exists($contact_form, 'title')) {
+        return $properties;
+    }
+
+    $class_by_title = [
+        'Open Day Form WRO'                              => 'cf7-open-day-wro',
+        'Open Day Form Warszawa'                         => 'cf7-open-day-warszawa',
+        'Open Day Form Warszawa STUDIA PODYPLOMOWE'      => 'cf7-open-day-studia-podyplomowe',
+    ];
+
+    $title = (string) $contact_form->title();
+    if (!isset($class_by_title[$title])) {
+        return $properties;
+    }
+
+    $class = $class_by_title[$title];
+    $additional = (string) ($properties['additional_settings'] ?? '');
+
+    if (preg_match('/html_class:\s*(.+)/i', $additional, $matches)) {
+        $existing = trim($matches[1]);
+        if (strpos($existing, $class) === false) {
+            $properties['additional_settings'] = preg_replace(
+                '/html_class:\s*.+/i',
+                'html_class: ' . trim($existing . ' ' . $class),
+                $additional,
+                1
+            );
+        }
+        return $properties;
+    }
+
+    $properties['additional_settings'] = trim($additional . "\nhtml_class: " . $class);
+    return $properties;
+}
+
+add_filter('wpcf7_contact_form_properties', 'akademiata_cf7_open_day_html_classes', 5, 2);
+
+add_action('wp_enqueue_scripts', function () {
+    if (!wp_script_is('name-main-js', 'registered')) {
+        return;
+    }
+
+    $pg_form_id = akademiata_cf7_form_id_from_ref('2dea2cf');
+    $by_form_id = [];
+
+    if ($pg_form_id) {
+        $by_form_id[$pg_form_id] = home_url('/dzien-otwarty-studia-podyplomowe/dziekujemy-za-rejestracje-na-dzien-otwarty-studiow-podyplomowych-w-ata-w-warszawie/');
+    }
+
+    wp_localize_script('name-main-js', 'akademiataCf7Redirects', [
+        'byFormId' => $by_form_id,
+    ]);
+}, 100);
+
 add_action('wp', function () {
     if (!is_singular('podcast-ata')) {
         return;

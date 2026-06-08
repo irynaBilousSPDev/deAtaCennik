@@ -1173,10 +1173,18 @@ export function initCf7Redirect() {
     document.addEventListener('wpcf7mailsent', function (event) {
 
         const form = event.target;
+        const detail = event.detail || {};
+        const byFormId = (window.akademiataCf7Redirects && window.akademiataCf7Redirects.byFormId) || {};
+
+        if (detail.contactFormId && byFormId[detail.contactFormId]) {
+            window.location.href = byFormId[detail.contactFormId];
+            return;
+        }
 
         const redirects = {
             'cf7-open-day-wro': '/dzien-otwarty-wroclaw/dziekujemy-wroclaw/',
             'cf7-open-day-warszawa': '/dzien-otwarty-warszawa/dziekujemy-warszawa/',
+            'cf7-open-day-studia-podyplomowe': '/dzien-otwarty-studia-podyplomowe/dziekujemy-za-rejestracje-na-dzien-otwarty-studiow-podyplomowych-w-ata-w-warszawie/',
         };
 
         for (const className in redirects) {

@@ -12,10 +12,12 @@ $thank_you_text = '';
 
 $page_slug = get_post_field('post_name', get_the_ID());
 
-$form_map = [
-        'dziekujemy-wroclaw'  => 26382, // Open Day Form WRO
-        'dziekujemy-warszawa' => 26494, // Open Day Form Warszawa
-];
+$form_map = function_exists('akademiata_open_day_thank_you_form_map')
+        ? akademiata_open_day_thank_you_form_map()
+        : [
+                'dziekujemy-wroclaw'  => 26382,
+                'dziekujemy-warszawa' => 26494,
+        ];
 
 $form_id = $form_map[$page_slug] ?? 0;
 
