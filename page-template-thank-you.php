@@ -63,7 +63,7 @@ if (empty($thank_you_text)) {
                         </h1>
 
                         <div class="thank-you-page__text">
-                            <?php echo wpautop(esc_html($thank_you_text)); ?>
+                            <?php echo wpautop(wp_kses_post($thank_you_text)); ?>
                         </div>
                     </div>
                 </div>
