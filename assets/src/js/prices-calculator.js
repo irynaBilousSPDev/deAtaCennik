@@ -608,15 +608,21 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (nl.some(matchRow)) modes.push('n');
     return modes;
   }
+  function uabyModesFromByMode(byMode) {
+    if (!byMode || typeof byMode !== 'object') return [];
+    return ['s', 'n'].filter(m => {
+      const f = byMode[m];
+      return !!(f && typeof f === 'object');
+    });
+  }
   function modesForUabyProgram(u) {
     if (!u) return [];
+    // Prefer modes that actually have UABY fee rows (avoids phantom s/n from Programy_PL or tree).
+    const fromRows = u.uabyByMode ? uabyModesFromByMode(u.uabyByMode) : [];
+    if (fromRows.length) return fromRows;
+
     const modes = new Set();
     getUabyModesForProgram(window.lang, u.k, u.s, u.deg).forEach(m => modes.add(m));
-    if (u.uabyByMode) {
-      if (u.uabyByMode.s) modes.add('s');
-      if (u.uabyByMode.n) modes.add('n');
-    }
-    // PL only: optional tryb from Programy_PL (EN UABY sheet has Stacjonarne only).
     if (window.lang === 'pl') {
       getWroPlModes(u.k, u.s, u.deg).forEach(m => modes.add(m));
     }
@@ -722,10 +728,11 @@ export default function initPricesCalculator(_$, opts = {}) {
       const res = [];
       grouped.forEach(entry => {
         const byMode = entry.uabyByMode;
-        const modes = modesForUabyProgram({ k: entry.k, s: entry.s, deg: entry.deg, uabyByMode: byMode });
+        const modes = uabyModesFromByMode(byMode);
         if (!modes.length) return;
         const activeMode = modes.includes(window.mode) ? window.mode : modes[0];
         const fees = byMode[activeMode];
+        if (!fees) return;
         const raw = findRawMetaForUaby(lng, entry.k, entry.s, entry.deg);
         const saRow = findSaRowForProgram({ k: entry.k, s: entry.s, deg: entry.deg });
         res.push({
@@ -757,10 +764,11 @@ export default function initPricesCalculator(_$, opts = {}) {
         const d = parseInt(degree, 10);
         if (!d) return;
         const byMode = buildUabyByMode(lng, courseName, specName, d);
-        const modes = modesForUabyProgram({ k: courseName, s: normSpec(specName) || null, deg: d, uabyByMode: byMode });
+        const modes = uabyModesFromByMode(byMode);
         if (!modes.length) return;
         const activeMode = modes.includes(window.mode) ? window.mode : modes[0];
         const fees = byMode[activeMode];
+        if (!fees) return;
         const raw = findRawMetaForUaby(lng, courseName, specName, d);
         const saRow = findSaRowForProgram({ k: courseName, s: specName, deg: d });
         res.push({
@@ -1171,8 +1179,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.selP = { jednorazowo: false };
     window.plan = l === 'pl' ? 'r12' : 'rok';
     if (window.uaby && window.city === 'wro') {
-      window.mode = 's';
-      if (l === 'en') window.plan = 'rok';
+      window.plan = 'rok';
     }
     document.querySelectorAll('#lang-row .seg-btn').forEach(b => b.classList.toggle('on', b.getAttribute('data-val') === l));
     const euWrap = document.getElementById('eu-wrap');
