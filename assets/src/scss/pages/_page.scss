@@ -147,6 +147,40 @@
 
 .section_studia--pg-mba-filter {
   background-color: #f5f5f5;
+  padding: 0;
+
+  > .container {
+    padding-bottom: 2rem;
+  }
+
+  .offer_wrapper--pg-mba {
+    position: relative;
+
+    @include mixins.ipad-pro-screen {
+      #sidebar {
+        width: 320px;
+      }
+    }
+
+    .filter_side {
+      @include mixins.xxl-screen {
+        left: 0;
+      }
+    }
+
+    .offer_content {
+      @include mixins.ipad-pro-screen {
+        margin-left: 320px;
+        width: calc(100% - 320px);
+      }
+
+      @include mixins.xxl-screen {
+        margin-left: 320px;
+        width: calc(100% - 320px);
+        padding-right: 2rem;
+      }
+    }
+  }
 }
 
 .city-tabs--pg-mba-filters {
