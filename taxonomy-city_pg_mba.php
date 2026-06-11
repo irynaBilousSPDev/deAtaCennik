@@ -115,11 +115,11 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
                 endwhile;
                 wp_reset_postdata();
             else :
-                echo '<p>' . __('Brak wyników dla tego miasta.', 'akademiata') . '</p>';
+                echo '<p>' . esc_html(akademiata_get_theme_lang_string('pg_mba_no_city_results')) . '</p>';
             endif;
             ?>
             <p class="pg-mba-filters__no-results" hidden>
-                <?php esc_html_e('Brak wyników dla wybranych filtrów.', 'akademiata'); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_no_filter_results')); ?>
             </p>
         </div>
         </div>

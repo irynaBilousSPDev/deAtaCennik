@@ -1207,6 +1207,24 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Наступна',
                 'ru' => 'Следующая',
             ),
+            'pg_mba_all_cities' => array(
+                'pl' => 'Wszystkie miasta',
+                'en' => 'All cities',
+                'uk' => 'Усі міста',
+                'ru' => 'Все города',
+            ),
+            'pg_mba_no_filter_results' => array(
+                'pl' => 'Brak wyników dla wybranych filtrów.',
+                'en' => 'No results for the selected filters.',
+                'uk' => 'Немає результатів для обраних фільтрів.',
+                'ru' => 'Нет результатов для выбранных фильтров.',
+            ),
+            'pg_mba_no_city_results' => array(
+                'pl' => 'Brak wyników dla tego miasta.',
+                'en' => 'No results for this city.',
+                'uk' => 'Немає результатів для цього міста.',
+                'ru' => 'Нет результатов для этого города.',
+            ),
         );
     }
 
