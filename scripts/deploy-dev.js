@@ -3,6 +3,7 @@
  * Usage: npm run deploy:dev | npm run deploy:prod
  * Target: node scripts/deploy-dev.js [dev|prod]
  */
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -177,6 +178,10 @@ async function ensureRemoteDir(sftp, remoteDir) {
 	}
 }
 
+function localFileHash(filePath) {
+	return crypto.createHash('md5').update(fs.readFileSync(filePath)).digest('hex');
+}
+
 async function remoteNeedsUpload(sftp, remoteFile, localMeta) {
 	try {
 		const stat = await sftp.stat(remoteFile);
@@ -184,7 +189,20 @@ async function remoteNeedsUpload(sftp, remoteFile, localMeta) {
 			return true;
 		}
 		const remoteMtime = (stat.modifyTime || stat.mtime || 0) * 1000;
-		return localMeta.mtime > remoteMtime + 1000;
+		if (localMeta.mtime > remoteMtime + 1000) {
+			return true;
+		}
+		const remoteData = await sftp.get(remoteFile);
+		let remoteBuffer;
+		if (Buffer.isBuffer(remoteData)) {
+			remoteBuffer = remoteData;
+		} else if (Array.isArray(remoteData)) {
+			remoteBuffer = Buffer.concat(remoteData);
+		} else {
+			remoteBuffer = Buffer.from(remoteData);
+		}
+		const remoteHash = crypto.createHash('md5').update(remoteBuffer).digest('hex');
+		return localFileHash(localMeta.local) !== remoteHash;
 	} catch (err) {
 		const msg = String(err.message || '');
 		if (err.code === 2 || /no such file/i.test(msg)) {

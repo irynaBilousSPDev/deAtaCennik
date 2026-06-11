@@ -17,6 +17,7 @@ if (!$filter_title) {
 
 $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
 ?>
+<div class="container container--pg-mba-filter">
 <div class="offer_wrapper offer_wrapper--pg-mba">
     <div class="offer_content">
         <div class="mobile-taxonomy-slider">
@@ -64,4 +65,5 @@ $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
     </div>
 
     <div class="filter-overlay"></div>
+</div>
 </div>

@@ -797,13 +797,11 @@ add_filter('redirect_canonical', 'akademiata_preserve_pg_mba_archive_filter_quer
  */
 function akademiata_get_pg_mba_filter_taxonomies() {
     return array(
-        'city_pg_mba'          => __('Miasto', 'akademiata'),
-        'offer_theme_pg_mba'   => __('Zainteresowania', 'akademiata'),
-        'language_pg_mba'      => __('Język', 'akademiata'),
-        'form_pg_mba'          => __('Forma studiów', 'akademiata'),
-        'type_of_study_pg_mba' => __('Rodzaj studiów', 'akademiata'),
-        'duration_pg_mba'      => __('Czas trwania', 'akademiata'),
-        'diploma_pg_mba'       => __('Dokument', 'akademiata'),
+        'city_pg_mba'        => __('Miasto', 'akademiata'),
+        'offer_theme_pg_mba' => __('Zainteresowania', 'akademiata'),
+        'language_pg_mba'    => __('Język', 'akademiata'),
+        'form_pg_mba'        => __('Forma studiów', 'akademiata'),
+        'duration_pg_mba'    => __('Czas trwania', 'akademiata'),
     );
 }
 
