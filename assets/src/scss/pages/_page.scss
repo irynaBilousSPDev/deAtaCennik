@@ -152,27 +152,24 @@
     padding-bottom: 2rem;
   }
 
-  .container--pg-mba-filter {
-    @include mixins.ipad-pro-screen {
-      display: flex;
-      align-items: flex-start;
-    }
-  }
-
   .offer_wrapper--pg-mba {
     position: relative;
     width: 100%;
 
     @include mixins.ipad-pro-screen {
-      display: flex;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      align-items: start;
+      overflow: visible;
     }
 
     #sidebar {
       @include mixins.ipad-pro-screen {
         position: relative;
+        left: auto;
         width: 320px;
-        flex-shrink: 0;
+        grid-column: 1;
+        grid-row: 1;
       }
     }
 
@@ -183,20 +180,22 @@
         left: auto;
         width: 100%;
         max-width: 320px;
+        height: calc(100vh - 130px);
+        padding: 4rem 2rem;
+        background-color: vars.$white;
+        overflow-y: auto;
       }
     }
 
     .offer_content {
       @include mixins.ipad-pro-screen {
-        flex: 1;
-        min-width: 0;
+        grid-column: 2;
+        grid-row: 1;
         margin-left: 0;
+        margin-right: 0;
         width: auto;
-        padding: 0 0 0 2rem;
-      }
-
-      @include mixins.xxl-screen {
-        padding-right: 0;
+        min-width: 0;
+        padding: 0 2rem 0 2.6rem;
       }
     }
 
