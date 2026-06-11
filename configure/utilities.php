@@ -639,6 +639,49 @@ function akademiata_get_city_pg_mba_terms() {
  * @param string|null $post_type Post type; defaults to current archive type.
  * @return WP_Query
  */
+function akademiata_get_request_offer_theme_pg_mba_slugs() {
+    if (empty($_GET['offer_theme_pg_mba'])) {
+        return array();
+    }
+
+    return array_values(
+        array_filter(
+            array_map('sanitize_title', (array) $_GET['offer_theme_pg_mba'])
+        )
+    );
+}
+
+/**
+ * @param int        $city_term_id city_pg_mba term ID.
+ * @param array|null $theme_slugs  offer_theme_pg_mba slugs; null = read from request.
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_build_pg_mba_tax_query($city_term_id, $theme_slugs = null) {
+    if ($theme_slugs === null) {
+        $theme_slugs = akademiata_get_request_offer_theme_pg_mba_slugs();
+    }
+
+    $tax_query = array(
+        'relation' => 'AND',
+        array(
+            'taxonomy' => 'city_pg_mba',
+            'field'    => 'term_id',
+            'terms'    => (int) $city_term_id,
+        ),
+    );
+
+    if (!empty($theme_slugs)) {
+        $tax_query[] = array(
+            'taxonomy' => 'offer_theme_pg_mba',
+            'field'    => 'slug',
+            'terms'    => $theme_slugs,
+            'operator' => 'IN',
+        );
+    }
+
+    return $tax_query;
+}
+
 function akademiata_query_posts_by_city_pg_mba($term_id, $post_type = null) {
     if (!$post_type) {
         $post_type = get_post_type();
@@ -653,13 +696,7 @@ function akademiata_query_posts_by_city_pg_mba($term_id, $post_type = null) {
         'posts_per_page' => -1,
         'orderby'        => 'title',
         'order'          => 'ASC',
-        'tax_query'      => array(
-            array(
-                'taxonomy' => 'city_pg_mba',
-                'field'    => 'term_id',
-                'terms'    => (int) $term_id,
-            ),
-        ),
+        'tax_query'      => akademiata_build_pg_mba_tax_query($term_id),
     );
 
     $lang = apply_filters('wpml_current_language', null);

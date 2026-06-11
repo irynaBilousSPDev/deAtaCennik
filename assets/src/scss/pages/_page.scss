@@ -152,6 +152,33 @@
   }
 }
 
+.pg-mba-theme-filter {
+  margin: 1.5rem 0 2rem;
+  padding: 0 0.25rem;
+
+  &__title {
+    margin: 0 0 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  &__clear {
+    margin-top: 0.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+}
+
 .section_studia {
   margin-bottom: 10rem;
 

@@ -23,8 +23,10 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 |-----|----------------------|------------|
 | `bachelor` | `oferta/studia-1-stopnia` | `program`, `degree`, `mode`, `obtained_title`, `promotions`, `department`, `city`, `recruitment_date`, `language`, `duration`, `post_tag` |
 | `master` | `oferta/studia-2-stopnia` | same as bachelor |
-| `postgraduate` | `studia-podyplomowe` | `type_of_study_pg_mba`, `duration_pg_mba`, `language_pg_mba`, `diploma_pg_mba`, `form_pg_mba`, `city_pg_mba` |
+| `postgraduate` | `studia-podyplomowe` | `type_of_study_pg_mba`, `duration_pg_mba`, `language_pg_mba`, `diploma_pg_mba`, `form_pg_mba`, `city_pg_mba`, `offer_theme_pg_mba` |
 | `mba` | `studia-mba` | same PG/MBA set |
+
+`offer_theme_pg_mba` (Tematy Podypl/MBA) — thematic filter on PG/MBA archives; rewrite `temat-pg-mba`. Bachelor/master use `post_tag` (Zainteresowania) only.
 
 `promotions` taxonomy uses rewrite slug `promocje` (bachelor/master only).
 

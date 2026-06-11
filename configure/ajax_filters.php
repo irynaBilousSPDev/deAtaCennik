@@ -71,7 +71,7 @@ function filter_posts_by_taxonomies($post_type, $taxonomies)
 function filter_posts_ajax()
 {
     $post_types = ['bachelor', 'master'];
-    $taxonomies = ['degree', 'program', 'language', 'duration', 'obtained_title', 'post_tag', 'mode', 'department', 'city','recruitment_date'];
+    $taxonomies = ['degree', 'program', 'language', 'duration', 'obtained_title', 'post_tag', 'mode', 'department', 'city', 'recruitment_date'];
     filter_posts_by_taxonomies($post_types, $taxonomies);
 }
 

@@ -109,7 +109,7 @@ function master_post_type()
         'hierarchical' => false,
         'description' => "Master's degree specializations",
         'supports' => array('title', 'editor', 'excerpt', 'author', 'thumbnail', 'post-formats', 'custom-fields', 'revisions'),
-        'taxonomies' => array('post_tag', 'degree', 'mode', 'obtained_title', 'promotions', 'department', 'city','recruitment_date'),
+        'taxonomies' => array('post_tag', 'degree', 'mode', 'obtained_title', 'promotions', 'department', 'city', 'recruitment_date'),
         'show_ui' => true,
         'show_in_menu' => true,
 //        'menu_position' => 5,
@@ -653,7 +653,7 @@ function register_postgraduate_cpt()
         ),
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'author', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-welcome-learn-more',
-        'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
+        'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba', 'offer_theme_pg_mba'),
     );
 
     akademiata_register_post_type('postgraduate', $args);
@@ -686,7 +686,7 @@ function register_mba_cpt()
         ),
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'author', 'custom-fields', 'revisions'),
         'menu_icon' => 'dashicons-businessman',
-        'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba'),
+        'taxonomies' => array('type_of_study_pg_mba', 'duration_pg_mba', 'language_pg_mba', 'diploma_pg_mba', 'form_pg_mba', 'city_pg_mba', 'offer_theme_pg_mba'),
     );
 
     akademiata_register_post_type('mba', $args);
@@ -733,6 +733,28 @@ function register_shared_pg_mba_taxonomies()
         'show_ui' => true,
         'show_admin_column' => true,
         'rewrite' => false,
+    ));
+
+    // Thematic groups for PG/MBA archives (e.g. AI) — not used on bachelor/master.
+    register_taxonomy('offer_theme_pg_mba', ['postgraduate', 'mba'], array(
+        'labels' => array(
+            'name'              => _x('Tematy', 'taxonomy general name', 'akademiata'),
+            'singular_name'     => _x('Temat', 'taxonomy singular name', 'akademiata'),
+            'search_items'      => __('Szukaj tematów', 'akademiata'),
+            'all_items'         => __('Wszystkie tematy', 'akademiata'),
+            'parent_item'       => __('Temat nadrzędny', 'akademiata'),
+            'parent_item_colon' => __('Temat nadrzędny:', 'akademiata'),
+            'edit_item'         => __('Edytuj temat', 'akademiata'),
+            'update_item'       => __('Zaktualizuj temat', 'akademiata'),
+            'add_new_item'      => __('Dodaj nowy temat', 'akademiata'),
+            'new_item_name'     => __('Nazwa nowego tematu', 'akademiata'),
+            'menu_name'         => __('Tematy (Podypl/MBA)', 'akademiata'),
+        ),
+        'hierarchical'      => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'query_var'         => true,
+        'rewrite'           => array('slug' => 'temat-pg-mba'),
     ));
 }
 

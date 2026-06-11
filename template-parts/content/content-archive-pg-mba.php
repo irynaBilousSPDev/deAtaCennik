@@ -50,6 +50,8 @@ endif;
         ?>
     </ul>
 
+    <?php get_template_part('partials/pg-mba-theme-filter'); ?>
+
     <div class="city-tabs__content">
         <?php
         $first_active = true;

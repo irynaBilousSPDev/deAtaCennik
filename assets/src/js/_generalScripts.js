@@ -5,6 +5,7 @@ import * as Sliders from './__sliders';
 import {fetchYouTubeShorts} from './__YouTubeSlider';
 import * as CustomFunctions from './__customFunctions';
 import {initCityTabs, initContactTabs, initLanguageFilters, initLanguageTabs} from "./__customFunctions";
+import initPgMbaThemeFilter from './pg-mba-theme-filter';
 
 
 class General {
@@ -52,6 +53,7 @@ class General {
         Sliders.initializeDiscountsSlider('.discounts');
         CustomFunctions.initializeFancybox();
         CustomFunctions.initCityTabs();
+        initPgMbaThemeFilter();
         CustomFunctions.initPodcastSocialCounter();
         CustomFunctions.initTaxonomyTabs();
         CustomFunctions.initializeDiscountModal();

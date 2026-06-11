@@ -70,16 +70,28 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
             <?php endif; ?>
         </div>
 
+        <?php
+        if (in_array($post_type, array('postgraduate', 'mba'), true)) {
+            get_template_part('partials/pg-mba-theme-filter');
+        }
+        ?>
+
         <div class="studia_cards">
             <?php
+            $tax_query = in_array($post_type, array('postgraduate', 'mba'), true)
+                ? akademiata_build_pg_mba_tax_query($term_id)
+                : array(
+                    array(
+                        'taxonomy' => 'city_pg_mba',
+                        'field'    => 'term_id',
+                        'terms'    => $term_id,
+                    ),
+                );
+
             $query = new WP_Query([
                 'post_type'      => $post_type,
                 'posts_per_page' => -1,
-                'tax_query'      => [[
-                    'taxonomy' => 'city_pg_mba',
-                    'field'    => 'term_id',
-                    'terms'    => $term_id,
-                ]],
+                'tax_query'      => $tax_query,
             ]);
 
             if ($query->have_posts()) :
