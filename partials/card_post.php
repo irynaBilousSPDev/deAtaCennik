@@ -71,12 +71,13 @@
                 </div>
             <?php endif; ?>
 
+            <!-- Temporarily hidden — restore when recruitment date block is needed again.
             <div class="price_from">
-                <div class="price_from__title"><?php _e('Studiuj', 'akademiata'); ?></div>
-                <div>
-                    <?php _e('od Października', 'akademiata'); ?>
+                <div class="price_from__title">--><?php //_e('Studiuj', 'akademiata'); ?><!--</div>
+                <div>--><?php //_e('od Października', 'akademiata'); ?><!--
                 </div>
             </div>
+            -->
 
             <?php
             $thumbnail_id = get_post_thumbnail_id($post->ID);
