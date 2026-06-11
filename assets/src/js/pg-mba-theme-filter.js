@@ -10,6 +10,7 @@ export default function initPgMbaArchiveFilters() {
             : [];
         const themeItems = root.querySelectorAll('[data-pg-mba-theme-filter] .taxonomy-tabs__nav li[data-term]');
         const cards = root.querySelectorAll('.pg_mba_card');
+        const archivePostType = root.dataset.archivePostType || null;
 
         let selectedCity = fixedCity;
         let selectedTheme = null;
@@ -17,12 +18,14 @@ export default function initPgMbaArchiveFilters() {
         const applyFilters = () => {
             cards.forEach((card) => {
                 const cardCity = card.dataset.city || '';
+                const cardPostType = card.dataset.postType || '';
                 const themes = (card.dataset.offerTheme || '').split(',').filter(Boolean);
 
+                const typeMatch = !archivePostType || cardPostType === archivePostType;
                 const cityMatch = !selectedCity || cardCity === selectedCity;
                 const themeMatch = !selectedTheme || themes.includes(selectedTheme);
 
-                card.style.display = cityMatch && themeMatch ? '' : 'none';
+                card.style.display = typeMatch && cityMatch && themeMatch ? '' : 'none';
             });
         };
 
@@ -73,25 +76,18 @@ export default function initPgMbaArchiveFilters() {
 
             target.addEventListener('click', (event) => {
                 event.preventDefault();
+                event.stopImmediatePropagation();
 
-                if (item.classList.contains('active')) {
-                    selectedCity = null;
-                } else {
-                    selectedCity = item.dataset.city;
-                }
-
+                selectedCity = selectedCity === item.dataset.city ? null : item.dataset.city;
                 applyState();
             });
         });
 
         themeItems.forEach((item) => {
-            item.addEventListener('click', () => {
-                if (item.classList.contains('active')) {
-                    selectedTheme = null;
-                } else {
-                    selectedTheme = item.dataset.term;
-                }
+            item.addEventListener('click', (event) => {
+                event.stopImmediatePropagation();
 
+                selectedTheme = selectedTheme === item.dataset.term ? null : item.dataset.term;
                 applyState();
             });
         });

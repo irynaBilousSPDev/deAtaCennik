@@ -1,5 +1,6 @@
 <?php
-$cities = akademiata_get_city_pg_mba_terms();
+$archive_post_type = akademiata_get_pg_mba_archive_post_type();
+$cities            = akademiata_get_city_pg_mba_terms();
 
 if (empty($cities)) :
     ?>
@@ -12,7 +13,7 @@ $nav_cities  = array();
 $content_map = array();
 
 foreach ($cities as $city) {
-    $query = akademiata_query_posts_by_city_pg_mba($city->term_id);
+    $query = akademiata_query_posts_by_city_pg_mba($city->term_id, $archive_post_type);
 
     if (!$query->have_posts()) {
         wp_reset_postdata();
@@ -33,7 +34,9 @@ if (empty($nav_cities)) :
     return;
 endif;
 ?>
-<div class="city-tabs city-tabs--pg-mba-filters" data-pg-mba-filters>
+<div class="city-tabs city-tabs--pg-mba-filters"
+     data-pg-mba-filters
+     data-archive-post-type="<?php echo esc_attr($archive_post_type); ?>">
     <ul class="city-tabs__nav">
         <?php foreach ($nav_cities as $city) : ?>
             <li id="city-<?php echo esc_attr($city->slug); ?>"

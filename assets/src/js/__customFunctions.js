@@ -512,6 +512,10 @@ export function accordionUniversal(selector) {
 
 export function initTaxonomyTabs() {
     document.querySelectorAll('.taxonomy-tabs').forEach(tabContainer => {
+        if (tabContainer.hasAttribute('data-pg-mba-theme-filter') || tabContainer.closest('[data-pg-mba-filters]')) {
+            return;
+        }
+
         const navItems = tabContainer.querySelectorAll('.taxonomy-tabs__nav li');
         const cards = tabContainer.querySelectorAll('.course-card');
         const noResultsMessage = tabContainer.querySelector('.no-taxonomy-results');

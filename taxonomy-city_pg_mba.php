@@ -73,6 +73,7 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
         <div<?php if (in_array($post_type, array('postgraduate', 'mba'), true)) : ?>
             data-pg-mba-filters
             data-fixed-city="<?php echo esc_attr($term_obj->slug); ?>"
+            data-archive-post-type="<?php echo esc_attr($post_type); ?>"
         <?php endif; ?>>
         <?php
         if (in_array($post_type, array('postgraduate', 'mba'), true)) {

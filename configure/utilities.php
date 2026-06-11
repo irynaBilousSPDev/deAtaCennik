@@ -633,6 +633,87 @@ function akademiata_get_city_pg_mba_terms() {
 }
 
 /**
+ * Current postgraduate or MBA archive post type (from query, not global $post).
+ *
+ * @return string postgraduate|mba
+ */
+function akademiata_get_pg_mba_archive_post_type() {
+    $post_type = get_query_var('post_type');
+
+    if (is_array($post_type)) {
+        $post_type = reset($post_type);
+    }
+
+    if (!$post_type && is_singular(array('postgraduate', 'mba'))) {
+        $post_type = get_post_type();
+    }
+
+    if (in_array($post_type, array('postgraduate', 'mba'), true)) {
+        return $post_type;
+    }
+
+    return 'postgraduate';
+}
+
+/**
+ * Theme terms that have at least one published post of the given PG/MBA type.
+ *
+ * @param string $post_type postgraduate|mba
+ * @return WP_Term[]
+ */
+function akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type) {
+    if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
+        return array();
+    }
+
+    $all_terms = get_terms(
+        array(
+            'taxonomy'   => 'offer_theme_pg_mba',
+            'hide_empty' => false,
+            'orderby'    => 'name',
+            'order'      => 'ASC',
+        )
+    );
+
+    if (is_wp_error($all_terms) || empty($all_terms)) {
+        return array();
+    }
+
+    $lang   = apply_filters('wpml_current_language', null);
+    $result = array();
+
+    foreach ($all_terms as $term) {
+        $args = array(
+            'post_type'      => $post_type,
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+            'tax_query'      => array(
+                array(
+                    'taxonomy' => 'offer_theme_pg_mba',
+                    'field'    => 'term_id',
+                    'terms'    => (int) $term->term_id,
+                ),
+            ),
+        );
+
+        if ($lang) {
+            $args['lang'] = $lang;
+        }
+
+        $query = new WP_Query($args);
+
+        if ($query->have_posts()) {
+            $result[] = $term;
+        }
+
+        wp_reset_postdata();
+    }
+
+    return $result;
+}
+
+/**
  * WP_Query for PG/MBA/courses archive city tab.
  *
  * @param int         $term_id   city_pg_mba term ID.
@@ -667,11 +748,7 @@ function akademiata_build_pg_mba_tax_query($city_term_id) {
 
 function akademiata_query_posts_by_city_pg_mba($term_id, $post_type = null) {
     if (!$post_type) {
-        $post_type = get_post_type();
-    }
-
-    if (!$post_type) {
-        $post_type = 'postgraduate';
+        $post_type = akademiata_get_pg_mba_archive_post_type();
     }
 
     $args = array(

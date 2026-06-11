@@ -13,6 +13,7 @@ if (!is_wp_error($city_pg_mba_terms) && !empty($city_pg_mba_terms)) {
 ?>
 <div class="card_post_item pg_mba_card"
      data-city="<?php echo esc_attr($city_slug); ?>"
+     data-post-type="<?php echo esc_attr(get_post_type($post->ID)); ?>"
      data-offer-theme="<?php echo esc_attr(implode(',', $offer_theme_slugs)); ?>">
     <div class="card_post_wrapper">
         <div class="card_post_image">

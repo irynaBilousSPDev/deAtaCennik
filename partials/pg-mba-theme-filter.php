@@ -4,25 +4,11 @@
  * Query param: offer_theme_pg_mba=slug
  */
 
-$post_type = get_query_var('post_type');
-if (is_array($post_type)) {
-    $post_type = reset($post_type);
-}
-if (!$post_type && is_singular(array('postgraduate', 'mba'))) {
-    $post_type = get_post_type();
-}
-if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
-    return;
-}
+$post_type = akademiata_get_pg_mba_archive_post_type();
 
-$theme_terms = get_terms(
-    array(
-        'taxonomy'   => 'offer_theme_pg_mba',
-        'hide_empty' => true,
-    )
-);
+$theme_terms = akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type);
 
-if (empty($theme_terms) || is_wp_error($theme_terms)) {
+if (empty($theme_terms)) {
     return;
 }
 
