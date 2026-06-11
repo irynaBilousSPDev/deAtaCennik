@@ -797,11 +797,11 @@ add_filter('redirect_canonical', 'akademiata_preserve_pg_mba_archive_filter_quer
  */
 function akademiata_get_pg_mba_filter_taxonomies() {
     return array(
-        'city_pg_mba'        => __('Miasto', 'akademiata'),
-        'offer_theme_pg_mba' => __('Zainteresowania', 'akademiata'),
-        'language_pg_mba'    => __('Język', 'akademiata'),
-        'form_pg_mba'        => __('Forma studiów', 'akademiata'),
-        'duration_pg_mba'    => __('Czas trwania', 'akademiata'),
+        'city_pg_mba'        => akademiata_get_theme_lang_string('pg_mba_filter_location'),
+        'offer_theme_pg_mba' => akademiata_get_theme_lang_string('pg_mba_filter_interests'),
+        'language_pg_mba'    => akademiata_get_theme_lang_string('pg_mba_filter_language'),
+        'form_pg_mba'        => akademiata_get_theme_lang_string('pg_mba_filter_form'),
+        'duration_pg_mba'    => akademiata_get_theme_lang_string('pg_mba_filter_duration'),
     );
 }
 
@@ -1369,10 +1369,40 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Следующая',
             ),
             'pg_mba_all_cities' => array(
-                'pl' => 'Wszystkie miasta',
-                'en' => 'All cities',
-                'uk' => 'Усі міста',
-                'ru' => 'Все города',
+                'pl' => 'Wszystkie lokalizacje',
+                'en' => 'All locations',
+                'uk' => 'Усі локації',
+                'ru' => 'Все локации',
+            ),
+            'pg_mba_filter_location' => array(
+                'pl' => 'Lokalizacja',
+                'en' => 'Location',
+                'uk' => 'Локація',
+                'ru' => 'Локация',
+            ),
+            'pg_mba_filter_interests' => array(
+                'pl' => 'Zainteresowania',
+                'en' => 'Interests',
+                'uk' => 'Інтереси',
+                'ru' => 'Интересы',
+            ),
+            'pg_mba_filter_language' => array(
+                'pl' => 'Język',
+                'en' => 'Language',
+                'uk' => 'Мова',
+                'ru' => 'Язык',
+            ),
+            'pg_mba_filter_form' => array(
+                'pl' => 'Forma studiów',
+                'en' => 'Mode of study',
+                'uk' => 'Форма навчання',
+                'ru' => 'Форма обучения',
+            ),
+            'pg_mba_filter_duration' => array(
+                'pl' => 'Czas trwania',
+                'en' => 'Duration',
+                'uk' => 'Тривалість',
+                'ru' => 'Продолжительность',
             ),
             'pg_mba_no_filter_results' => array(
                 'pl' => 'Brak wyników dla wybranych filtrów.',
@@ -1381,10 +1411,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Нет результатов для выбранных фильтров.',
             ),
             'pg_mba_no_city_results' => array(
-                'pl' => 'Brak wyników dla tego miasta.',
-                'en' => 'No results for this city.',
-                'uk' => 'Немає результатів для цього міста.',
-                'ru' => 'Нет результатов для этого города.',
+                'pl' => 'Brak wyników dla tej lokalizacji.',
+                'en' => 'No results for this location.',
+                'uk' => 'Немає результатів для цієї локації.',
+                'ru' => 'Нет результатов для этой локации.',
             ),
         );
     }
