@@ -16,10 +16,24 @@ if (!$filter_title) {
 }
 
 $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
+$page_description  = get_query_var('pg_mba_filter_content');
 ?>
-<div class="container container--pg-mba-filter">
 <div class="offer_wrapper offer_wrapper--pg-mba">
     <div class="offer_content">
+        <?php
+        if (has_action('akademiata_breadcrumbs')) {
+            do_action('akademiata_breadcrumbs');
+        } elseif (function_exists('the_breadcrumb')) {
+            the_breadcrumb();
+        }
+        ?>
+
+        <h1><?php echo esc_html($filter_title); ?></h1>
+
+        <?php if (!empty($page_description)) : ?>
+            <div class="page-description"><?php echo $page_description; ?></div>
+        <?php endif; ?>
+
         <div class="mobile-taxonomy-slider">
             <?php foreach ($mobile_taxonomies as $taxonomy => $label) : ?>
                 <button class="taxonomy-filter-toggle" data-tax="<?php echo esc_attr($taxonomy); ?>">
@@ -34,7 +48,7 @@ $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
             <div class="spinner"></div>
         </div>
 
-        <div id="filter-results" class="row studia_cards"></div>
+        <div id="filter-results" class="row"></div>
 
         <div id="no-results-message" style="display: none; text-align: center; margin: 2rem 0;">
             <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_no_filter_results')); ?>
@@ -65,5 +79,4 @@ $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
     </div>
 
     <div class="filter-overlay"></div>
-</div>
 </div>

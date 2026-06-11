@@ -145,76 +145,13 @@
   }
 }
 
-.section_studia--pg-mba-filter {
-  background-color: #f5f5f5;
+.page_offer--pg-mba {
+  .offer_wrapper--pg-mba #filter-results {
+    .card_post_item.pg_mba_card {
+      max-width: none;
 
-  > .container {
-    padding-bottom: 2rem;
-  }
-
-  .offer_wrapper--pg-mba {
-    position: relative;
-    width: 100%;
-
-    @include mixins.ipad-pro-screen {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      align-items: start;
-      overflow: visible;
-    }
-
-    #sidebar {
-      @include mixins.ipad-pro-screen {
-        position: relative;
-        left: auto;
-        width: 320px;
-        grid-column: 1;
-        grid-row: 1;
-      }
-    }
-
-    .filter_side {
-      @include mixins.ipad-pro-screen {
-        position: sticky;
-        top: 118px;
-        left: auto;
-        width: 100%;
-        max-width: 320px;
-        height: calc(100vh - 130px);
-        padding: 4rem 2rem;
-        background-color: vars.$white;
-        overflow-y: auto;
-      }
-    }
-
-    .offer_content {
-      @include mixins.ipad-pro-screen {
-        grid-column: 2;
-        grid-row: 1;
-        margin-left: 0;
-        margin-right: 0;
-        width: auto;
-        min-width: 0;
-        padding: 0 2rem 0 2.6rem;
-      }
-    }
-
-    #filter-results {
-      .card_post_item.pg_mba_card {
-        max-width: none;
-        width: 100%;
-
-        @include mixins.ipad-mini-screen {
-          width: 50%;
-        }
-
-        @include mixins.lg-screen {
-          width: 33.3333%;
-        }
-
-        @include mixins.xxl-screen {
-          width: 33.3333%;
-        }
+      @include mixins.xxl-screen {
+        width: 33.3333%;
       }
     }
   }

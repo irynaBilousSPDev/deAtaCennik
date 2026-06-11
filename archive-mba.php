@@ -25,19 +25,11 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title) {
 
 set_query_var('pg_mba_filter_post_type', 'mba');
 set_query_var('pg_mba_filter_title', $acf_title);
+set_query_var('pg_mba_filter_content', $acf_content);
 ?>
 
-<section class="section_studia section_studia--pg-mba-filter">
-    <div class="container">
-        <div class="section_header text-center">
-            <h1><?php echo esc_html($acf_title); ?></h1>
-            <?php if (!empty($acf_content)) : ?>
-                <div class="page-description"><?php echo $acf_content; ?></div>
-            <?php endif; ?>
-        </div>
-    </div>
-
+<div class="page_offer page_offer--pg-mba">
     <?php get_template_part('template-parts/content/content-archive-pg-mba-filter'); ?>
-</section>
+</div>
 
 <?php get_footer(); ?>
