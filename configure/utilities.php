@@ -652,34 +652,17 @@ function akademiata_get_request_offer_theme_pg_mba_slugs() {
 }
 
 /**
- * @param int        $city_term_id city_pg_mba term ID.
- * @param array|null $theme_slugs  offer_theme_pg_mba slugs; null = read from request.
+ * @param int $city_term_id city_pg_mba term ID.
  * @return array<int, array<string, mixed>>
  */
-function akademiata_build_pg_mba_tax_query($city_term_id, $theme_slugs = null) {
-    if ($theme_slugs === null) {
-        $theme_slugs = akademiata_get_request_offer_theme_pg_mba_slugs();
-    }
-
-    $tax_query = array(
-        'relation' => 'AND',
+function akademiata_build_pg_mba_tax_query($city_term_id) {
+    return array(
         array(
             'taxonomy' => 'city_pg_mba',
             'field'    => 'term_id',
             'terms'    => (int) $city_term_id,
         ),
     );
-
-    if (!empty($theme_slugs)) {
-        $tax_query[] = array(
-            'taxonomy' => 'offer_theme_pg_mba',
-            'field'    => 'slug',
-            'terms'    => $theme_slugs,
-            'operator' => 'IN',
-        );
-    }
-
-    return $tax_query;
 }
 
 function akademiata_query_posts_by_city_pg_mba($term_id, $post_type = null) {

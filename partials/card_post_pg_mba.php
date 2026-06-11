@@ -1,4 +1,12 @@
-<div class="card_post_item pg_mba_card">
+<?php
+$offer_theme_terms = wp_get_post_terms($post->ID, 'offer_theme_pg_mba');
+$offer_theme_slugs = array();
+
+if (!is_wp_error($offer_theme_terms) && !empty($offer_theme_terms)) {
+    $offer_theme_slugs = wp_list_pluck($offer_theme_terms, 'slug');
+}
+?>
+<div class="card_post_item pg_mba_card" data-offer-theme="<?php echo esc_attr(implode(',', $offer_theme_slugs)); ?>">
     <div class="card_post_wrapper">
         <div class="card_post_image">
 

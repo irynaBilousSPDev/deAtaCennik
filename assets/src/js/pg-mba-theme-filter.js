@@ -1,5 +1,5 @@
 /**
- * PG/MBA archive theme filter — taxonomy-tabs UI + shareable ?offer_theme_pg_mba= URL.
+ * PG/MBA theme filter — city-tabs toggle UX + shareable ?offer_theme_pg_mba= URL.
  */
 export default function initPgMbaThemeFilter() {
     const root = document.querySelector('[data-pg-mba-theme-filter]');
@@ -10,11 +10,25 @@ export default function initPgMbaThemeFilter() {
 
     const navItems = root.querySelectorAll('.taxonomy-tabs__nav li[data-term]');
 
-    const navigateWithThemes = (slugs) => {
-        const params = new URLSearchParams();
-        slugs.forEach((slug) => {
-            params.append('offer_theme_pg_mba', slug);
+    const filterCards = (selectedTerm) => {
+        document.querySelectorAll('.pg_mba_card').forEach((card) => {
+            if (!selectedTerm) {
+                card.style.display = '';
+                return;
+            }
+
+            const themes = (card.dataset.offerTheme || '').split(',').filter(Boolean);
+            card.style.display = themes.includes(selectedTerm) ? '' : 'none';
         });
+    };
+
+    const updateUrl = (selectedTerm) => {
+        const params = new URLSearchParams(window.location.search);
+        params.delete('offer_theme_pg_mba');
+
+        if (selectedTerm) {
+            params.append('offer_theme_pg_mba', selectedTerm);
+        }
 
         const query = params.toString();
         const hash = window.location.hash || '';
@@ -22,28 +36,28 @@ export default function initPgMbaThemeFilter() {
             ? `${window.location.pathname}?${query}${hash}`
             : `${window.location.pathname}${hash}`;
 
-        window.location.assign(url);
+        window.history.replaceState({}, '', url);
+    };
+
+    const applySelection = (selectedTerm) => {
+        navItems.forEach((item) => {
+            item.classList.toggle('active', item.dataset.term === selectedTerm);
+        });
+        filterCards(selectedTerm);
+        updateUrl(selectedTerm);
     };
 
     navItems.forEach((item) => {
         item.addEventListener('click', () => {
             const isActive = item.classList.contains('active');
-            const selectedSlug = item.dataset.term;
-
-            if (isActive) {
-                navigateWithThemes([]);
-                return;
-            }
-
-            navigateWithThemes([selectedSlug]);
+            applySelection(isActive ? null : item.dataset.term);
         });
     });
 
-    const clearBtn = root.querySelector('[data-pg-mba-theme-clear]');
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedFromUrl = urlParams.getAll('offer_theme_pg_mba')[0] || null;
 
-    if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            navigateWithThemes([]);
-        });
+    if (selectedFromUrl) {
+        applySelection(selectedFromUrl);
     }
 }

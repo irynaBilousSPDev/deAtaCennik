@@ -26,20 +26,13 @@ if (empty($theme_terms) || is_wp_error($theme_terms)) {
     return;
 }
 
-$selected = akademiata_get_request_offer_theme_pg_mba_slugs();
 ?>
 <div class="taxonomy-tabs pg-mba-theme-filter" data-pg-mba-theme-filter>
     <ul class="taxonomy-tabs__nav">
         <?php foreach ($theme_terms as $term) : ?>
-            <li data-term="<?php echo esc_attr($term->slug); ?>"
-                <?php echo in_array($term->slug, $selected, true) ? ' class="active"' : ''; ?>>
+            <li data-term="<?php echo esc_attr($term->slug); ?>">
                 <?php echo esc_html($term->name); ?>
             </li>
         <?php endforeach; ?>
     </ul>
-    <?php if (!empty($selected)) : ?>
-        <button type="button" class="pg-mba-theme-filter__clear" data-pg-mba-theme-clear>
-            <?php esc_html_e('wyczyść tematy', 'akademiata'); ?>
-        </button>
-    <?php endif; ?>
 </div>
