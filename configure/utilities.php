@@ -46,20 +46,53 @@ register_activation_hook(__FILE__, 'flush_safe_filter_rewrite_rules');
 // Enqueue AJAX filter scripts
 function enqueue_filter_scripts()
 {
+    $lang = apply_filters('wpml_current_language', null);
+
     wp_enqueue_script(
         'ajax-filter',
         get_template_directory_uri() . '/assets/dist/js/ajaxFilter.js',
-        ['jquery'],
+        array('jquery'),
         null,
         true
     );
 
-    // Send required data to JS in one object
-    wp_localize_script('ajax-filter', 'ajax_filter_params', [
-        'ajax_url' => admin_url('admin-ajax.php'),
-        'page_id'  => get_queried_object_id(),
-        'lang'     => apply_filters('wpml_current_language', null),
-    ]);
+    wp_localize_script(
+        'ajax-filter',
+        'ajax_filter_params',
+        array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'page_id'  => get_queried_object_id(),
+            'lang'     => $lang,
+        )
+    );
+
+    if (is_post_type_archive(array('postgraduate', 'mba'))) {
+        $post_type = get_query_var('post_type');
+        if (is_array($post_type)) {
+            $post_type = reset($post_type);
+        }
+
+        $filter_js = get_template_directory() . '/assets/dist/js/ajaxFilterPgMba.js';
+        $filter_ver = file_exists($filter_js) ? filemtime($filter_js) : null;
+
+        wp_enqueue_script(
+            'ajax-filter-pg-mba',
+            get_template_directory_uri() . '/assets/dist/js/ajaxFilterPgMba.js',
+            array('jquery'),
+            $filter_ver,
+            true
+        );
+
+        wp_localize_script(
+            'ajax-filter-pg-mba',
+            'ajax_filter_pg_mba_params',
+            array(
+                'ajax_url'      => admin_url('admin-ajax.php'),
+                'filter_action' => $post_type === 'mba' ? 'filter_mba' : 'filter_postgraduate',
+                'lang'          => $lang,
+            )
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'enqueue_filter_scripts');
 
@@ -716,16 +749,22 @@ function akademiata_redirect_pg_mba_city_tax_to_archive_filter() {
         return;
     }
 
-    $theme_slug = null;
-    if (!empty($_GET['offer_theme_pg_mba'])) {
-        $themes = akademiata_get_request_offer_theme_pg_mba_slugs();
-        $theme_slug = $themes[0] ?? null;
+    $url = akademiata_get_pg_mba_archive_filter_url($post_type, $term->slug);
+
+    foreach (array_keys(akademiata_get_pg_mba_filter_taxonomies()) as $taxonomy) {
+        if ($taxonomy === 'city_pg_mba' || empty($_GET[ $taxonomy ])) {
+            continue;
+        }
+
+        foreach ((array) $_GET[ $taxonomy ] as $slug) {
+            $slug = sanitize_title(wp_unslash($slug));
+            if ($slug) {
+                $url = add_query_arg($taxonomy, $slug, $url);
+            }
+        }
     }
 
-    wp_safe_redirect(
-        akademiata_get_pg_mba_archive_filter_url($post_type, $term->slug, $theme_slug),
-        302
-    );
+    wp_safe_redirect($url, 302);
     exit;
 }
 add_action('template_redirect', 'akademiata_redirect_pg_mba_city_tax_to_archive_filter', 1);
@@ -741,28 +780,48 @@ function akademiata_preserve_pg_mba_archive_filter_query($redirect_url) {
         return $redirect_url;
     }
 
-    if (empty($_GET['city_pg_mba']) && empty($_GET['offer_theme_pg_mba'])) {
-        return $redirect_url;
+    foreach (array_keys(akademiata_get_pg_mba_filter_taxonomies()) as $taxonomy) {
+        if (!empty($_GET[ $taxonomy ])) {
+            return false;
+        }
     }
 
-    return false;
+    return $redirect_url;
 }
 add_filter('redirect_canonical', 'akademiata_preserve_pg_mba_archive_filter_query');
 
 /**
- * Theme terms that have at least one published post of the given PG/MBA type.
+ * Sidebar filter groups for PG/MBA archives (order matches offer-style layout).
  *
+ * @return array<string, string> taxonomy => label
+ */
+function akademiata_get_pg_mba_filter_taxonomies() {
+    return array(
+        'type_of_study_pg_mba' => __('Rodzaj studiów', 'akademiata'),
+        'duration_pg_mba'      => __('Czas trwania', 'akademiata'),
+        'language_pg_mba'      => __('Język', 'akademiata'),
+        'diploma_pg_mba'       => __('Dokument', 'akademiata'),
+        'form_pg_mba'          => __('Forma studiów', 'akademiata'),
+        'city_pg_mba'          => __('Miasto', 'akademiata'),
+        'offer_theme_pg_mba'   => __('Zainteresowania', 'akademiata'),
+    );
+}
+
+/**
+ * Terms used in PG/MBA archive sidebar (at least one post of given type).
+ *
+ * @param string $taxonomy  Taxonomy slug.
  * @param string $post_type postgraduate|mba
  * @return WP_Term[]
  */
-function akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type) {
+function akademiata_get_taxonomy_terms_for_post_type($taxonomy, $post_type) {
     if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
         return array();
     }
 
     $all_terms = get_terms(
         array(
-            'taxonomy'   => 'offer_theme_pg_mba',
+            'taxonomy'   => $taxonomy,
             'hide_empty' => false,
             'orderby'    => 'name',
             'order'      => 'ASC',
@@ -784,7 +843,7 @@ function akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type) {
             'no_found_rows'  => true,
             'tax_query'      => array(
                 array(
-                    'taxonomy' => 'offer_theme_pg_mba',
+                    'taxonomy' => $taxonomy,
                     'field'    => 'term_id',
                     'terms'    => (int) $term->term_id,
                 ),
@@ -805,6 +864,16 @@ function akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type) {
     }
 
     return $result;
+}
+
+/**
+ * Theme terms that have at least one published post of the given PG/MBA type.
+ *
+ * @param string $post_type postgraduate|mba
+ * @return WP_Term[]
+ */
+function akademiata_get_offer_theme_pg_mba_terms_for_post_type($post_type) {
+    return akademiata_get_taxonomy_terms_for_post_type('offer_theme_pg_mba', $post_type);
 }
 
 /**

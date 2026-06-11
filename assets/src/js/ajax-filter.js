@@ -17,6 +17,10 @@
     const form = $('#ajax-filter-form');
     const filterResults = $('#filter-results');
 
+    if (!form.length) {
+        return;
+    }
+
     let offset = 0;
     const limit = 5;
     let loading = false;

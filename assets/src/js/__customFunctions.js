@@ -149,7 +149,9 @@ export function initMobileFilterToggle() {
     const overlay = document.querySelector('.filter-overlay');
     const header = document.querySelector('.mobile-filter-header');
     const clearButton = document.querySelector('.clear-filters');
-    const filterForm = document.querySelector('#ajax-filter-form');
+    const filterForm = document.querySelector('#ajax-filter-pg-mba-form')
+        || document.querySelector('#ajax-filter-form');
+    const isPgMbaFilter = Boolean(document.querySelector('.offer_wrapper--pg-mba'));
 
     if (!sidebar || filterButtons.length === 0) return;
 
@@ -197,6 +199,10 @@ export function initMobileFilterToggle() {
 
     clearButton?.addEventListener('click', () => {
         if (!filterForm) return;
+        if (isPgMbaFilter) {
+            filterForm.dispatchEvent(new Event('clear-filters'));
+            return;
+        }
         const checkboxes = filterForm.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => (cb.checked = false));
         filterForm.dispatchEvent(new Event('clear-filters'));

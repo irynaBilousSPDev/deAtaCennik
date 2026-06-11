@@ -6,6 +6,7 @@ module.exports = {
     entry: {
         main: './assets/src/js/main.js',
         ajaxFilter: './assets/src/js/ajax-filter.js',
+        ajaxFilterPgMba: './assets/src/js/ajax-filter-pg-mba.js',
         ajaxSlider: './assets/src/js/ajax-load-cpt.js',
     },
     output: {
