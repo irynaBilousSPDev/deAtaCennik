@@ -3,7 +3,6 @@
  */
 export default function initPgMbaArchiveFilters() {
     document.querySelectorAll('[data-pg-mba-filters]').forEach((root) => {
-        const fixedCity = root.dataset.fixedCity || null;
         const cityNav = root.querySelector('.city-tabs__nav');
         const cityItems = cityNav
             ? cityNav.querySelectorAll('li[data-city]')
@@ -12,8 +11,9 @@ export default function initPgMbaArchiveFilters() {
         const cards = root.querySelectorAll('.pg_mba_card');
         const noResults = root.querySelector('.pg-mba-filters__no-results');
         const archivePostType = root.dataset.archivePostType || null;
+        const urlParams = new URLSearchParams(window.location.search);
 
-        let selectedCity = fixedCity;
+        let selectedCity = null;
         let selectedTheme = null;
 
         const applyFilters = () => {
@@ -48,11 +48,9 @@ export default function initPgMbaArchiveFilters() {
         const updateUrl = () => {
             const params = new URLSearchParams(window.location.search);
 
-            if (!fixedCity) {
-                params.delete('city_pg_mba');
-                if (selectedCity) {
-                    params.set('city_pg_mba', selectedCity);
-                }
+            params.delete('city_pg_mba');
+            if (selectedCity) {
+                params.set('city_pg_mba', selectedCity);
             }
 
             params.delete('offer_theme_pg_mba');
@@ -121,16 +119,12 @@ export default function initPgMbaArchiveFilters() {
             });
         });
 
-        const params = new URLSearchParams(window.location.search);
-
-        if (!fixedCity) {
-            const cityFromUrl = params.get('city_pg_mba');
-            if (cityFromUrl && root.querySelector(`li[data-city="${CSS.escape(cityFromUrl)}"]`)) {
-                selectedCity = cityFromUrl;
-            }
+        const cityFromUrl = urlParams.get('city_pg_mba');
+        if (cityFromUrl && root.querySelector(`li[data-city="${CSS.escape(cityFromUrl)}"]`)) {
+            selectedCity = cityFromUrl;
         }
 
-        const themeFromUrl = params.getAll('offer_theme_pg_mba')[0] || null;
+        const themeFromUrl = urlParams.getAll('offer_theme_pg_mba')[0] || null;
         if (themeFromUrl && root.querySelector(`li[data-term="${CSS.escape(themeFromUrl)}"]`)) {
             selectedTheme = themeFromUrl;
         }

@@ -30,6 +30,7 @@ function add_filter_query_vars($vars)
 {
     $vars[] = 'taxonomy_filter';
     $vars[] = 'term_filter';
+    $vars[] = 'offer_theme_pg_mba';
     return $vars;
 }
 add_filter('query_vars', 'add_filter_query_vars');
@@ -654,6 +655,99 @@ function akademiata_get_pg_mba_archive_post_type() {
 
     return 'postgraduate';
 }
+
+/**
+ * Archive base slug for postgraduate or MBA.
+ *
+ * @param string $post_type postgraduate|mba
+ * @return string
+ */
+function akademiata_get_pg_mba_archive_base_slug($post_type) {
+    return $post_type === 'mba' ? 'studia-mba' : 'studia-podyplomowe';
+}
+
+/**
+ * Main PG/MBA archive URL with optional filter query args.
+ *
+ * @param string      $post_type postgraduate|mba
+ * @param string|null $city_slug city_pg_mba slug.
+ * @param string|null $theme_slug offer_theme_pg_mba slug.
+ * @return string
+ */
+function akademiata_get_pg_mba_archive_filter_url($post_type, $city_slug = null, $theme_slug = null) {
+    $base_slug = akademiata_get_pg_mba_archive_base_slug($post_type);
+    $url       = home_url('/' . $base_slug . '/');
+    $lang      = apply_filters('wpml_current_language', null);
+
+    if ($lang) {
+        $url = apply_filters('wpml_permalink', $url, $lang);
+    }
+
+    if ($city_slug) {
+        $url = add_query_arg('city_pg_mba', sanitize_title($city_slug), $url);
+    }
+
+    if ($theme_slug) {
+        $url = add_query_arg('offer_theme_pg_mba', sanitize_title($theme_slug), $url);
+    }
+
+    return $url;
+}
+
+/**
+ * City taxonomy archives for PG/MBA → main archive with shareable filter params.
+ */
+function akademiata_redirect_pg_mba_city_tax_to_archive_filter() {
+    if (!is_tax('city_pg_mba')) {
+        return;
+    }
+
+    $post_type = get_query_var('post_type');
+    if (is_array($post_type)) {
+        $post_type = reset($post_type);
+    }
+
+    if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
+        return;
+    }
+
+    $term = get_queried_object();
+    if (!$term || is_wp_error($term)) {
+        return;
+    }
+
+    $theme_slug = null;
+    if (!empty($_GET['offer_theme_pg_mba'])) {
+        $themes = akademiata_get_request_offer_theme_pg_mba_slugs();
+        $theme_slug = $themes[0] ?? null;
+    }
+
+    wp_safe_redirect(
+        akademiata_get_pg_mba_archive_filter_url($post_type, $term->slug, $theme_slug),
+        302
+    );
+    exit;
+}
+add_action('template_redirect', 'akademiata_redirect_pg_mba_city_tax_to_archive_filter', 1);
+
+/**
+ * Keep ?city_pg_mba= and ?offer_theme_pg_mba= on PG/MBA archives (no canonical strip).
+ *
+ * @param string|false $redirect_url Canonical URL.
+ * @return string|false
+ */
+function akademiata_preserve_pg_mba_archive_filter_query($redirect_url) {
+    if (!is_post_type_archive(array('postgraduate', 'mba'))) {
+        return $redirect_url;
+    }
+
+    if (empty($_GET['city_pg_mba']) && empty($_GET['offer_theme_pg_mba'])) {
+        return $redirect_url;
+    }
+
+    return false;
+}
+add_filter('redirect_canonical', 'akademiata_preserve_pg_mba_archive_filter_query');
 
 /**
  * Theme terms that have at least one published post of the given PG/MBA type.
