@@ -118,6 +118,9 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
                 echo '<p>' . __('Brak wyników dla tego miasta.', 'akademiata') . '</p>';
             endif;
             ?>
+            <p class="pg-mba-filters__no-results" hidden>
+                <?php esc_html_e('Brak wyników dla wybranych filtrów.', 'akademiata'); ?>
+            </p>
         </div>
         </div>
     </div>

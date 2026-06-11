@@ -10,12 +10,15 @@ export default function initPgMbaArchiveFilters() {
             : [];
         const themeItems = root.querySelectorAll('[data-pg-mba-theme-filter] .taxonomy-tabs__nav li[data-term]');
         const cards = root.querySelectorAll('.pg_mba_card');
+        const noResults = root.querySelector('.pg-mba-filters__no-results');
         const archivePostType = root.dataset.archivePostType || null;
 
         let selectedCity = fixedCity;
         let selectedTheme = null;
 
         const applyFilters = () => {
+            let visibleCount = 0;
+
             cards.forEach((card) => {
                 const cardCity = card.dataset.city || '';
                 const cardPostType = card.dataset.postType || '';
@@ -24,9 +27,22 @@ export default function initPgMbaArchiveFilters() {
                 const typeMatch = !archivePostType || cardPostType === archivePostType;
                 const cityMatch = !selectedCity || cardCity === selectedCity;
                 const themeMatch = !selectedTheme || themes.includes(selectedTheme);
+                const show = typeMatch && cityMatch && themeMatch;
 
-                card.style.display = typeMatch && cityMatch && themeMatch ? '' : 'none';
+                card.style.display = show ? '' : 'none';
+
+                if (show) {
+                    visibleCount += 1;
+                }
             });
+
+            if (noResults) {
+                if (visibleCount === 0) {
+                    noResults.removeAttribute('hidden');
+                } else {
+                    noResults.setAttribute('hidden', '');
+                }
+            }
         };
 
         const updateUrl = () => {
@@ -54,7 +70,14 @@ export default function initPgMbaArchiveFilters() {
 
         const setCityActive = (slug) => {
             cityItems.forEach((item) => {
-                item.classList.toggle('active', Boolean(slug) && item.dataset.city === slug);
+                const itemCity = item.dataset.city || '';
+
+                if (!slug) {
+                    item.classList.toggle('active', itemCity === '');
+                    return;
+                }
+
+                item.classList.toggle('active', itemCity === slug);
             });
         };
 
@@ -73,12 +96,18 @@ export default function initPgMbaArchiveFilters() {
 
         cityItems.forEach((item) => {
             const target = item.querySelector('a') || item;
+            const slug = item.dataset.city || '';
 
             target.addEventListener('click', (event) => {
                 event.preventDefault();
                 event.stopImmediatePropagation();
 
-                selectedCity = selectedCity === item.dataset.city ? null : item.dataset.city;
+                if (!slug) {
+                    selectedCity = null;
+                } else {
+                    selectedCity = selectedCity === slug ? null : slug;
+                }
+
                 applyState();
             });
         });

@@ -38,6 +38,9 @@ endif;
      data-pg-mba-filters
      data-archive-post-type="<?php echo esc_attr($archive_post_type); ?>">
     <ul class="city-tabs__nav">
+        <li id="tab-all" data-city="" class="active">
+            <a href="#tab-all"><?php esc_html_e('Wszystkie miasta', 'akademiata'); ?></a>
+        </li>
         <?php foreach ($nav_cities as $city) : ?>
             <li id="city-<?php echo esc_attr($city->slug); ?>"
                 data-city="<?php echo esc_attr($city->slug); ?>">
@@ -72,4 +75,8 @@ endif;
             </div>
         <?php endforeach; ?>
     </div>
+
+    <p class="pg-mba-filters__no-results" hidden>
+        <?php esc_html_e('Brak wyników dla wybranych filtrów.', 'akademiata'); ?>
+    </p>
 </div>
