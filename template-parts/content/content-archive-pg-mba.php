@@ -33,33 +33,28 @@ if (empty($nav_cities)) :
     return;
 endif;
 ?>
-<div class="city-tabs">
+<div class="city-tabs city-tabs--pg-mba-filters" data-pg-mba-filters>
     <ul class="city-tabs__nav">
-        <?php
-        $first_active = true;
-        foreach ($nav_cities as $city) :
-            ?>
-            <li id="city-<?php echo esc_attr($city->slug); ?>" class="<?php echo $first_active ? 'active' : ''; ?>">
+        <?php foreach ($nav_cities as $city) : ?>
+            <li id="city-<?php echo esc_attr($city->slug); ?>"
+                data-city="<?php echo esc_attr($city->slug); ?>">
                 <a href="#city-<?php echo esc_attr($city->slug); ?>">
                     <?php echo esc_html($city->name); ?>
                 </a>
             </li>
-            <?php
-            $first_active = false;
-        endforeach;
-        ?>
+        <?php endforeach; ?>
     </ul>
 
     <?php get_template_part('partials/pg-mba-theme-filter'); ?>
 
     <div class="city-tabs__content">
-        <?php
-        $first_active = true;
-        foreach ($nav_cities as $city) :
+        <?php foreach ($nav_cities as $city) :
             $pane = $content_map[ $city->slug ];
             $query = $pane['query'];
             ?>
-            <div class="city-tabs__pane<?php echo $first_active ? ' active' : ''; ?>" data-city-pane="city-<?php echo esc_attr($city->slug); ?>">
+            <div class="city-tabs__pane"
+                 data-city-pane="city-<?php echo esc_attr($city->slug); ?>"
+                 data-city-slug="<?php echo esc_attr($city->slug); ?>">
                 <div class="city-tabs__body">
                     <div class="studia_cards">
                         <?php
@@ -72,9 +67,6 @@ endif;
                     </div>
                 </div>
             </div>
-            <?php
-            $first_active = false;
-        endforeach;
-        ?>
+        <?php endforeach; ?>
     </div>
 </div>

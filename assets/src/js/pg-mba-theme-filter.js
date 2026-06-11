@@ -1,63 +1,115 @@
 /**
- * PG/MBA theme filter — city-tabs toggle UX + shareable ?offer_theme_pg_mba= URL.
+ * PG/MBA archive filters — toggle city + theme (AND), shareable URL params.
  */
-export default function initPgMbaThemeFilter() {
-    const root = document.querySelector('[data-pg-mba-theme-filter]');
+export default function initPgMbaArchiveFilters() {
+    document.querySelectorAll('[data-pg-mba-filters]').forEach((root) => {
+        const fixedCity = root.dataset.fixedCity || null;
+        const cityNav = root.querySelector('.city-tabs__nav');
+        const cityItems = cityNav
+            ? cityNav.querySelectorAll('li[data-city]')
+            : [];
+        const themeItems = root.querySelectorAll('[data-pg-mba-theme-filter] .taxonomy-tabs__nav li[data-term]');
+        const cards = root.querySelectorAll('.pg_mba_card');
 
-    if (!root) {
-        return;
-    }
+        let selectedCity = fixedCity;
+        let selectedTheme = null;
 
-    const navItems = root.querySelectorAll('.taxonomy-tabs__nav li[data-term]');
+        const applyFilters = () => {
+            cards.forEach((card) => {
+                const cardCity = card.dataset.city || '';
+                const themes = (card.dataset.offerTheme || '').split(',').filter(Boolean);
 
-    const filterCards = (selectedTerm) => {
-        document.querySelectorAll('.pg_mba_card').forEach((card) => {
-            if (!selectedTerm) {
-                card.style.display = '';
-                return;
+                const cityMatch = !selectedCity || cardCity === selectedCity;
+                const themeMatch = !selectedTheme || themes.includes(selectedTheme);
+
+                card.style.display = cityMatch && themeMatch ? '' : 'none';
+            });
+        };
+
+        const updateUrl = () => {
+            const params = new URLSearchParams(window.location.search);
+
+            if (!fixedCity) {
+                params.delete('city_pg_mba');
+                if (selectedCity) {
+                    params.set('city_pg_mba', selectedCity);
+                }
             }
 
-            const themes = (card.dataset.offerTheme || '').split(',').filter(Boolean);
-            card.style.display = themes.includes(selectedTerm) ? '' : 'none';
+            params.delete('offer_theme_pg_mba');
+            if (selectedTheme) {
+                params.append('offer_theme_pg_mba', selectedTheme);
+            }
+
+            const query = params.toString();
+            const url = query
+                ? `${window.location.pathname}?${query}`
+                : window.location.pathname;
+
+            window.history.replaceState({}, '', url);
+        };
+
+        const setCityActive = (slug) => {
+            cityItems.forEach((item) => {
+                item.classList.toggle('active', Boolean(slug) && item.dataset.city === slug);
+            });
+        };
+
+        const setThemeActive = (slug) => {
+            themeItems.forEach((item) => {
+                item.classList.toggle('active', Boolean(slug) && item.dataset.term === slug);
+            });
+        };
+
+        const applyState = () => {
+            setCityActive(selectedCity);
+            setThemeActive(selectedTheme);
+            applyFilters();
+            updateUrl();
+        };
+
+        cityItems.forEach((item) => {
+            const target = item.querySelector('a') || item;
+
+            target.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                if (item.classList.contains('active')) {
+                    selectedCity = null;
+                } else {
+                    selectedCity = item.dataset.city;
+                }
+
+                applyState();
+            });
         });
-    };
 
-    const updateUrl = (selectedTerm) => {
+        themeItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                if (item.classList.contains('active')) {
+                    selectedTheme = null;
+                } else {
+                    selectedTheme = item.dataset.term;
+                }
+
+                applyState();
+            });
+        });
+
         const params = new URLSearchParams(window.location.search);
-        params.delete('offer_theme_pg_mba');
 
-        if (selectedTerm) {
-            params.append('offer_theme_pg_mba', selectedTerm);
+        if (!fixedCity) {
+            const cityFromUrl = params.get('city_pg_mba');
+            if (cityFromUrl && root.querySelector(`li[data-city="${CSS.escape(cityFromUrl)}"]`)) {
+                selectedCity = cityFromUrl;
+            }
         }
 
-        const query = params.toString();
-        const hash = window.location.hash || '';
-        const url = query
-            ? `${window.location.pathname}?${query}${hash}`
-            : `${window.location.pathname}${hash}`;
+        const themeFromUrl = params.getAll('offer_theme_pg_mba')[0] || null;
+        if (themeFromUrl && root.querySelector(`li[data-term="${CSS.escape(themeFromUrl)}"]`)) {
+            selectedTheme = themeFromUrl;
+        }
 
-        window.history.replaceState({}, '', url);
-    };
-
-    const applySelection = (selectedTerm) => {
-        navItems.forEach((item) => {
-            item.classList.toggle('active', item.dataset.term === selectedTerm);
-        });
-        filterCards(selectedTerm);
-        updateUrl(selectedTerm);
-    };
-
-    navItems.forEach((item) => {
-        item.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
-            applySelection(isActive ? null : item.dataset.term);
-        });
+        applyState();
     });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const selectedFromUrl = urlParams.getAll('offer_theme_pg_mba')[0] || null;
-
-    if (selectedFromUrl) {
-        applySelection(selectedFromUrl);
-    }
 }

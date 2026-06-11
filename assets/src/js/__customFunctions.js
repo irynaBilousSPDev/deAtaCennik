@@ -625,6 +625,10 @@ function activateCityTabsFromHash({ scroll = false } = {}) {
     const tabId = getCityTabIdFromHash(window.location.hash);
 
     document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        if (tabContainer.hasAttribute('data-pg-mba-filters')) {
+            return;
+        }
+
         if (!tabId) {
             resetCityTabsToFirst(tabContainer);
             return;
@@ -783,6 +787,10 @@ export function initCityTabs() {
     }
 
     document.querySelectorAll('.city-tabs').forEach((tabContainer) => {
+        if (tabContainer.hasAttribute('data-pg-mba-filters')) {
+            return;
+        }
+
         const tabNav = tabContainer.querySelector('.city-tabs__nav');
         const tabLinks = tabNav?.querySelectorAll('a') || [];
 

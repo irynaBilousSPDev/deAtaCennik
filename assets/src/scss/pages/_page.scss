@@ -145,7 +145,25 @@
   }
 }
 
-.city-tabs .pg-mba-theme-filter {
+.city-tabs--pg-mba-filters {
+  .city-tabs__pane {
+    display: block;
+
+    .city-tabs__body {
+      padding: 0;
+    }
+  }
+
+  .city-tabs__content {
+    .studia_cards {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.city-tabs .pg-mba-theme-filter,
+.city-tabs--pg-mba-filters .pg-mba-theme-filter {
   margin: 0 0 2rem;
 
   .taxonomy-tabs__nav {
@@ -169,6 +187,11 @@
       }
     }
   }
+}
+
+.city-tabs--pg-mba-filters .city-tabs__nav li.active a {
+  background: #000;
+  color: #fff;
 }
 
 .section_studia .pg-mba-theme-filter {

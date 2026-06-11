@@ -70,6 +70,10 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
             <?php endif; ?>
         </div>
 
+        <div<?php if (in_array($post_type, array('postgraduate', 'mba'), true)) : ?>
+            data-pg-mba-filters
+            data-fixed-city="<?php echo esc_attr($term_obj->slug); ?>"
+        <?php endif; ?>>
         <?php
         if (in_array($post_type, array('postgraduate', 'mba'), true)) {
             get_template_part('partials/pg-mba-theme-filter');
@@ -113,6 +117,7 @@ add_action('akademiata_breadcrumbs', function () use ($acf_title, $term_name, $a
                 echo '<p>' . __('Brak wyników dla tego miasta.', 'akademiata') . '</p>';
             endif;
             ?>
+        </div>
         </div>
     </div>
 </section>

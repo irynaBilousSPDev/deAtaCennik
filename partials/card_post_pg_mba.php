@@ -1,12 +1,19 @@
 <?php
 $offer_theme_terms = wp_get_post_terms($post->ID, 'offer_theme_pg_mba');
 $offer_theme_slugs = array();
+$city_pg_mba_terms = wp_get_post_terms($post->ID, 'city_pg_mba');
+$city_slug         = '';
 
 if (!is_wp_error($offer_theme_terms) && !empty($offer_theme_terms)) {
     $offer_theme_slugs = wp_list_pluck($offer_theme_terms, 'slug');
 }
+if (!is_wp_error($city_pg_mba_terms) && !empty($city_pg_mba_terms)) {
+    $city_slug = $city_pg_mba_terms[0]->slug;
+}
 ?>
-<div class="card_post_item pg_mba_card" data-offer-theme="<?php echo esc_attr(implode(',', $offer_theme_slugs)); ?>">
+<div class="card_post_item pg_mba_card"
+     data-city="<?php echo esc_attr($city_slug); ?>"
+     data-offer-theme="<?php echo esc_attr(implode(',', $offer_theme_slugs)); ?>">
     <div class="card_post_wrapper">
         <div class="card_post_image">
 
