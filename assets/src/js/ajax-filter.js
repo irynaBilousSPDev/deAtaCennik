@@ -16,7 +16,6 @@
 
     const form = $('#ajax-filter-form');
     const filterResults = $('#filter-results');
-    let updateURL = false;
 
     let offset = 0;
     const limit = 5;
@@ -186,6 +185,19 @@
         }
     }
 
+    function updateBrowserUrl() {
+        const params = new URLSearchParams();
+        form.find('input[type="checkbox"]:checked').each(function () {
+            const name = $(this).attr('name').replace('[]', '');
+            params.append(name, $(this).val());
+        });
+        const query = params.toString();
+        const newUrl = query
+            ? `${window.location.pathname}?${query}`
+            : window.location.pathname;
+        window.history.replaceState({}, '', newUrl);
+    }
+
     function initializeFiltersFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
         const data = {};
@@ -203,7 +215,6 @@
 
         if (Object.keys(data).length > 0) {
             triggerFilterUpdate();
-            updateURL = true;
         } else {
             loadMorePosts(true);
         }
@@ -249,17 +260,8 @@
             removeTag(tagValue);
         }
 
-        triggerFilterUpdate(); //  replace debounce
-
-        if (updateURL) {
-            const params = new URLSearchParams();
-            form.find('input[type="checkbox"]:checked').each(function () {
-                const name = $(this).attr('name').replace('[]', '');
-                const value = $(this).val();
-                params.append(name, value);
-            });
-            window.history.pushState({}, '', '?' + params.toString());
-        }
+        triggerFilterUpdate();
+        updateBrowserUrl();
     });
 
 
@@ -272,16 +274,7 @@
         removeTag(tagValue);
 
         debouncedFilterUpdate();
-
-        if (updateURL) {
-            const params = new URLSearchParams();
-            form.find('input[type="checkbox"]:checked').each(function () {
-                const name = $(this).attr('name').replace('[]', '');
-                const value = $(this).val();
-                params.append(name, value);
-            });
-            window.history.pushState({}, '', '?' + params.toString());
-        }
+        updateBrowserUrl();
     });
 
     $('#clear-filters').on('click', () => {
@@ -289,10 +282,7 @@
         $('.selected_tags_container').empty();
         $('#tags-container').hide();
         debouncedFilterUpdate();
-
-        if (updateURL) {
-            window.history.pushState({}, '', window.location.pathname);
-        }
+        updateBrowserUrl();
     });
 
     form.on('clear-filters', function () {
@@ -300,10 +290,7 @@
         $('.selected_tags_container').empty();
         $('#tags-container').hide();
         debouncedFilterUpdate();
-
-        if (updateURL) {
-            window.history.pushState({}, '', window.location.pathname);
-        }
+        updateBrowserUrl();
     });
 
     $(window).on('scroll', handleScrollLoad);
