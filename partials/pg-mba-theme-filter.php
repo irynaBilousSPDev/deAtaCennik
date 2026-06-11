@@ -1,7 +1,7 @@
 <?php
 /**
  * Theme filter for postgraduate / MBA archives (not courses).
- * Query param: offer_theme_pg_mba[]=slug
+ * Query param: offer_theme_pg_mba=slug
  */
 
 $post_type = get_query_var('post_type');
@@ -28,26 +28,18 @@ if (empty($theme_terms) || is_wp_error($theme_terms)) {
 
 $selected = akademiata_get_request_offer_theme_pg_mba_slugs();
 ?>
-<div class="pg-mba-theme-filter" data-pg-mba-theme-filter>
-    <h2 class="pg-mba-theme-filter__title"><?php esc_html_e('Tematy', 'akademiata'); ?></h2>
-    <form class="pg-mba-theme-filter__form" method="get" action="">
-        <div class="pg-mba-theme-filter__list labels_list">
-            <?php foreach ($theme_terms as $term) :
-                $checked = in_array($term->slug, $selected, true) ? 'checked' : '';
-                ?>
-                <label>
-                    <input type="checkbox"
-                           name="offer_theme_pg_mba[]"
-                           value="<?php echo esc_attr($term->slug); ?>"
-                        <?php echo $checked; ?>>
-                    <?php echo esc_html($term->name); ?>
-                </label>
-            <?php endforeach; ?>
-        </div>
-        <?php if (!empty($selected)) : ?>
-            <button type="button" class="pg-mba-theme-filter__clear" data-pg-mba-theme-clear>
-                <?php esc_html_e('wyczyść tematy', 'akademiata'); ?>
-            </button>
-        <?php endif; ?>
-    </form>
+<div class="taxonomy-tabs pg-mba-theme-filter" data-pg-mba-theme-filter>
+    <ul class="taxonomy-tabs__nav">
+        <?php foreach ($theme_terms as $term) : ?>
+            <li data-term="<?php echo esc_attr($term->slug); ?>"
+                <?php echo in_array($term->slug, $selected, true) ? ' class="active"' : ''; ?>>
+                <?php echo esc_html($term->name); ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+    <?php if (!empty($selected)) : ?>
+        <button type="button" class="pg-mba-theme-filter__clear" data-pg-mba-theme-clear>
+            <?php esc_html_e('wyczyść tematy', 'akademiata'); ?>
+        </button>
+    <?php endif; ?>
 </div>

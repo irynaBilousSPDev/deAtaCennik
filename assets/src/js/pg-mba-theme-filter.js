@@ -1,5 +1,5 @@
 /**
- * PG/MBA archive theme filter — sync ?offer_theme_pg_mba= slugs in URL (shareable links).
+ * PG/MBA archive theme filter — taxonomy-tabs UI + shareable ?offer_theme_pg_mba= URL.
  */
 export default function initPgMbaThemeFilter() {
     const root = document.querySelector('[data-pg-mba-theme-filter]');
@@ -8,16 +8,12 @@ export default function initPgMbaThemeFilter() {
         return;
     }
 
-    const form = root.querySelector('.pg-mba-theme-filter__form');
+    const navItems = root.querySelectorAll('.taxonomy-tabs__nav li[data-term]');
 
-    if (!form) {
-        return;
-    }
-
-    const navigateWithThemes = () => {
+    const navigateWithThemes = (slugs) => {
         const params = new URLSearchParams();
-        form.querySelectorAll('input[type="checkbox"]:checked').forEach((input) => {
-            params.append('offer_theme_pg_mba', input.value);
+        slugs.forEach((slug) => {
+            params.append('offer_theme_pg_mba', slug);
         });
 
         const query = params.toString();
@@ -29,20 +25,25 @@ export default function initPgMbaThemeFilter() {
         window.location.assign(url);
     };
 
-    form.addEventListener('change', (event) => {
-        if (event.target.matches('input[type="checkbox"]')) {
-            navigateWithThemes();
-        }
+    navItems.forEach((item) => {
+        item.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            const selectedSlug = item.dataset.term;
+
+            if (isActive) {
+                navigateWithThemes([]);
+                return;
+            }
+
+            navigateWithThemes([selectedSlug]);
+        });
     });
 
     const clearBtn = root.querySelector('[data-pg-mba-theme-clear]');
 
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
-            form.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-                input.checked = false;
-            });
-            navigateWithThemes();
+            navigateWithThemes([]);
         });
     }
 }

@@ -57,32 +57,6 @@
   }
 
 
-  .taxonomy-tabs {
-    margin-bottom: 2rem;
-
-    &__nav {
-      display: flex;
-      gap: 1rem;
-      list-style: none;
-      padding: 0;
-      margin-bottom: 1.5rem;
-
-      li {
-        cursor: pointer;
-        padding: .4rem 1rem;
-        line-height: 1;
-        background: #eee;
-        border-radius: 20px;
-        border: 1px solid transparent;
-
-        &.active {
-          border: 1px solid #000;
-          background: #FFF;
-        }
-      }
-    }
-  }
-
   @media (max-width: 768px) {
     .city-tabs__nav {
       display: flex;
@@ -144,38 +118,52 @@
   }
 }
 
-.post-type-archive {
-  .card_post_item {
-    @include mixins.xxl-screen {
-      width: 25%;
+.taxonomy-tabs {
+  margin-bottom: 2rem;
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+
+    li {
+      cursor: pointer;
+      padding: .4rem 1rem;
+      line-height: 1;
+      background: #eee;
+      border-radius: 20px;
+      border: 1px solid transparent;
+
+      &.active {
+        border: 1px solid #000;
+        background: #FFF;
+      }
     }
   }
 }
 
 .pg-mba-theme-filter {
-  margin: 1.5rem 0 2rem;
-  padding: 0 0.25rem;
-
-  &__title {
-    margin: 0 0 0.75rem;
-    font-size: 1.125rem;
-    font-weight: 700;
-  }
-
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-  }
+  margin: 0 0 2rem;
 
   &__clear {
-    margin-top: 0.75rem;
+    margin: -0.5rem 0 0;
     padding: 0;
     border: 0;
     background: none;
     text-decoration: underline;
     cursor: pointer;
     font-size: 0.875rem;
+  }
+}
+
+.post-type-archive {
+  .card_post_item {
+    @include mixins.xxl-screen {
+      width: 25%;
+    }
   }
 }
 
