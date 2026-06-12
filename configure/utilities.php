@@ -96,6 +96,17 @@ function enqueue_filter_scripts()
 }
 add_action('wp_enqueue_scripts', 'enqueue_filter_scripts');
 
+/**
+ * PG/MBA archives use the same offer-filter layout as bachelor/master pages.
+ */
+function akademiata_pg_mba_archive_body_classes($classes) {
+    if (is_post_type_archive(array('postgraduate', 'mba'))) {
+        $classes[] = 'page_offer';
+    }
+
+    return $classes;
+}
+add_filter('body_class', 'akademiata_pg_mba_archive_body_classes');
 
 function enqueue_slider_front_scripts() {
     wp_enqueue_script(

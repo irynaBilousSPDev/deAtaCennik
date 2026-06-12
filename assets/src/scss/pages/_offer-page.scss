@@ -36,7 +36,8 @@
 }
 
 // ===== WRAPPERS =====
-.offer_wrapper {
+.offer_wrapper,
+.offer_wrapper--pg-mba {
   overflow: hidden;
 
   #sidebar {
@@ -369,7 +370,8 @@
 
 // ===== MOBILE FILTER UI =====
 @include mixins.max-ipad-pro-screen {
-  .offer_wrapper {
+  .offer_wrapper,
+  .offer_wrapper--pg-mba {
     #sidebar {
       display: none;
       position: fixed;
