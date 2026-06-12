@@ -288,9 +288,14 @@ function listDirtyTrackedFiles() {
 			continue;
 		}
 		const file = line.slice(3).trim().replace(/\\/g, '/');
-		if (!DEPLOY_IGNORE_DIRTY.has(file)) {
-			files.push(file);
+		if (DEPLOY_IGNORE_DIRTY.has(file)) {
+			continue;
 		}
+		// Local build may rewrite source maps without a real code change.
+		if (file.startsWith('assets/dist/') && file.endsWith('.map')) {
+			continue;
+		}
+		files.push(file);
 	}
 	return files;
 }
