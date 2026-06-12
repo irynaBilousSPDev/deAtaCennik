@@ -74,6 +74,20 @@ function loadEnv(filePath) {
 		}
 		env[key] = value;
 	}
+	// One-off: DEPLOY_GIT_REF=55b8af8 npm run deploy:prod (cmd) or $env:DEPLOY_GIT_REF='55b8af8' (PowerShell)
+	[
+		'DEPLOY_GIT_REF',
+		'DEPLOY_FULL',
+		'DEPLOY_GIT_ONLY',
+		'DEPLOY_ALLOW_DIRTY',
+		'DEPLOY_ALLOW_UNPUSHED',
+		'SKIP_BUILD',
+		'DRY_RUN',
+	].forEach((key) => {
+		if (process.env[key] !== undefined) {
+			env[key] = process.env[key];
+		}
+	});
 	return env;
 }
 
