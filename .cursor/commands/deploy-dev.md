@@ -1,23 +1,27 @@
-Deploy the Akademiata theme to **dev** — branch **`dev`**, local commit optional, SFTP, then **push `dev` to GitHub**.
+Deploy the Akademiata theme to **dev** — branch **`dev`**: commit → **push GitHub** → SFTP dev.
 
-The user invoked `/deploy-dev` — **commit**, **deploy**, and **push** are allowed. **Never commit** `deploy.local.env`.
+The user invoked `/deploy-dev` — **commit**, **push**, and **deploy** are allowed. **Never commit** `deploy.local.env`.
+
+**GitHub is the source of truth** between PCs. Push **before** SFTP so the other laptop can `/sync-git` and get the same code.
+
+For **download only** (no server upload): use **`/sync-git`** / `npm run sync:git` — not this command.
 
 ## Branches
 
 | Branch | Use |
 |--------|-----|
-| **`dev`** | Day-to-day work + `/deploy-dev` (SFTP to dev.akademiata.pl + push) |
+| **`dev`** | Day-to-day work + `/deploy-dev` (push + SFTP to dev.akademiata.pl) |
 | **`main`** | Production; updated via **`/deploy-prod`** or **`/pr`** |
 
-## Flow (commit if needed → SFTP → push)
+## Flow (commit → push → SFTP)
 
 ```mermaid
 flowchart TD
   A[git checkout dev] --> B{Uncommitted changes?}
   B -->|yes| C[commit on dev]
-  B -->|no| D[npm run deploy:dev]
+  B -->|no| D[git push origin dev]
   C --> D
-  D --> E[git push origin dev]
+  D --> E[npm run deploy:dev]
 ```
 
 ### 1. Branch and inspect
@@ -32,21 +36,23 @@ Parallel: `git status`, `git diff`, `git log -3 --oneline`
 
 Skip when clean. Do not stage `deploy.local.env`. Commit messages: **English only**.
 
-### 3. Deploy (SFTP)
-
-```bash
-npm run deploy:dev
-```
-
-Uploads to `wp-content/themes/akademiata` on dev. `SKIP_BUILD=true` / `DRY_RUN=true` in `deploy.local.env` when needed.
-
-### 4. Push `dev` to GitHub
+### 3. Push `dev` to GitHub (before SFTP)
 
 ```bash
 git push origin dev
 ```
 
-Keeps `origin/dev` in sync after every dev deploy.
+So home/work PC can `npm run sync:git` and get identical files.
+
+### 4. Deploy (SFTP)
+
+```bash
+npm run deploy:dev
+```
+
+Uploads **only git-changed files** (last commit / `origin/dev..HEAD`) to `wp-content/themes/akademiata` on dev.
+
+`DEPLOY_FULL=true` — compare entire theme with server (rare; server drift). `SKIP_BUILD=true` / `DRY_RUN=true` in `deploy.local.env` when needed.
 
 ## Skip git entirely
 

@@ -69,6 +69,9 @@ Test-Path .\deploy.local.env
 
 - **dev**: day-to-day work + `/deploy-dev`
 - **main**: production + `/deploy-prod`
+- **Sync from GitHub (other PC worked yesterday):** `/sync-git` or `npm run sync:git` — no SFTP
+
+**Rule:** GitHub = source of truth. End session: `/deploy-dev` (commit + push + dev server). Start on other PC: `/sync-git`.
 
 ## 5) Sanity check (if something fails)
 

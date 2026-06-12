@@ -50,6 +50,6 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 
 - Architecture docs: `.cursor/rules/*.mdc` — update when code changes (`akademiata-maintain-rules.mdc`).
 - Full audit: run **`/sync-rules`** after large refactors.
-- Git: **`dev`** = daily work. **`main`** = production. **`/deploy-dev`** = commit on `dev` (if dirty) + SFTP dev + **push `dev`**. **`/push-dev`** = push `dev` only (no SFTP). **`/deploy-prod`** = merge `dev` → `main`, push **`main` + `dev`**, `npm run deploy:prod`. **`/pr`** = `main` only when not using deploy-prod.
+- Git: **`dev`** = daily work. **`main`** = production. **GitHub = source of truth** between PCs. **`/sync-git`** / **`npm run sync:git`** = pull `dev` + `main` (no SFTP). **`/deploy-dev`** = commit → **push `dev`** → SFTP (git-changed files only). Deploy blocks if uncommitted or unpushed. **`/push-dev`** = push only. **`/deploy-prod`** = merge `dev` → `main`, push both, SFTP prod. **`DEPLOY_FULL=true`** = rare full server sync.
 - **GTM / gtag:** `akademiata_is_production()` — prod hosts only. **Cookiebot:** WP plugin only.
 - **New CPT:** `akademiata_register_post_type()` — auto `author` + `revisions` + native admin boxes.

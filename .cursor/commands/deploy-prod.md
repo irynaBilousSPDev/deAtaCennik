@@ -53,7 +53,8 @@ npm run deploy:prod
 ```
 
 - Builds assets unless `SKIP_BUILD=true`
-- Uploads theme to production `wp-content/themes/akademiata`
+- Uploads git-changed files to production by default (`DEPLOY_FULL=true` for full sync)
+- Remote path: `wp-content/themes/akademiata`
 - **GTM / gtag** load on prod (`akademiata_is_production()`). Cookiebot = plugin only.
 
 ### 5. Return to `dev`

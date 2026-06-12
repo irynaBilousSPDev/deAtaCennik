@@ -45,6 +45,9 @@ const EXCLUDE_FILE_BASENAMES = new Set([
 	'requirements.txt',
 ]);
 
+/** Build noise — not a source-of-truth change between PCs. */
+const DEPLOY_IGNORE_DIRTY = new Set(['assets/dist/js/report.html']);
+
 function loadEnv(filePath) {
 	if (!fs.existsSync(filePath)) {
 		throw new Error(
@@ -76,6 +79,71 @@ function loadEnv(filePath) {
 
 function envFlag(env, key) {
 	return String(env[key] || '').toLowerCase() === 'true';
+}
+
+/** Default: upload only git-changed files (not every local≠remote diff). Set DEPLOY_FULL=true for full theme sync. */
+function deployGitOnlyEnabled(env) {
+	if (envFlag(env, 'DEPLOY_FULL')) {
+		return false;
+	}
+	if (env.DEPLOY_GIT_ONLY !== undefined) {
+		return envFlag(env, 'DEPLOY_GIT_ONLY');
+	}
+	return true;
+}
+
+function resolveGitOnlyBaseRef(env, target) {
+	if (env.DEPLOY_GIT_REF) {
+		return env.DEPLOY_GIT_REF.trim();
+	}
+	return target === 'prod' ? 'origin/main' : 'origin/dev';
+}
+
+function gitRefExists(ref) {
+	try {
+		execSync(`git rev-parse --verify ${ref}`, { cwd: ROOT, stdio: 'pipe' });
+		return true;
+	} catch (err) {
+		return false;
+	}
+}
+
+/**
+ * Files to upload in git-only mode: commits ahead of base ref, or last commit if already pushed.
+ */
+function getGitDeployRelativePaths(env, target) {
+	let files = [];
+
+	if (gitRefExists(resolveGitOnlyBaseRef(env, target))) {
+		const baseRef = resolveGitOnlyBaseRef(env, target);
+		try {
+			const ahead = execSync(`git rev-list --count ${baseRef}..HEAD`, {
+				cwd: ROOT,
+				encoding: 'utf8',
+			}).trim();
+			if (parseInt(ahead, 10) > 0) {
+				files = execSync(`git diff --name-only ${baseRef}..HEAD`, {
+					cwd: ROOT,
+					encoding: 'utf8',
+				})
+					.split(/\r?\n/)
+					.filter(Boolean);
+			}
+		} catch (err) {
+			// fall through to last commit
+		}
+	}
+
+	if (!files.length) {
+		files = execSync('git diff-tree --no-commit-id --name-only -r HEAD', {
+			cwd: ROOT,
+			encoding: 'utf8',
+		})
+			.split(/\r?\n/)
+			.filter(Boolean);
+	}
+
+	return [...new Set(files.filter((f) => !shouldSkip(f)))];
 }
 
 function cfg(env, target, key) {
@@ -212,6 +280,71 @@ async function remoteNeedsUpload(sftp, remoteFile, localMeta) {
 	}
 }
 
+function listDirtyTrackedFiles() {
+	const out = execSync('git status --porcelain', { cwd: ROOT, encoding: 'utf8' });
+	const files = [];
+	for (const line of out.split(/\r?\n/)) {
+		if (!line.trim()) {
+			continue;
+		}
+		const file = line.slice(3).trim().replace(/\\/g, '/');
+		if (!DEPLOY_IGNORE_DIRTY.has(file)) {
+			files.push(file);
+		}
+	}
+	return files;
+}
+
+/** Git must be committed and pushed before SFTP (source of truth for home ↔ work). */
+function assertGitReadyForDeploy(env, target) {
+	if (envFlag(env, 'DEPLOY_ALLOW_DIRTY')) {
+		return;
+	}
+
+	const dirty = listDirtyTrackedFiles();
+	if (dirty.length) {
+		throw new Error(
+			`Deploy blocked: uncommitted changes (${dirty.join(', ')}). Commit first — git must match what you deploy.`
+		);
+	}
+
+	try {
+		execSync('git fetch origin', { cwd: ROOT, stdio: 'pipe' });
+	} catch (err) {
+		// offline deploy still possible
+	}
+
+	const branch = target === 'prod' ? 'main' : 'dev';
+	const remote = `origin/${branch}`;
+	if (!gitRefExists(remote)) {
+		return;
+	}
+
+	const behind = execSync(`git rev-list --count HEAD..${remote}`, {
+		cwd: ROOT,
+		encoding: 'utf8',
+	}).trim();
+	if (parseInt(behind, 10) > 0) {
+		throw new Error(
+			`Deploy blocked: local ${branch} is behind ${remote}. Run: npm run sync:git`
+		);
+	}
+
+	if (envFlag(env, 'DEPLOY_ALLOW_UNPUSHED')) {
+		return;
+	}
+
+	const ahead = execSync(`git rev-list --count ${remote}..HEAD`, {
+		cwd: ROOT,
+		encoding: 'utf8',
+	}).trim();
+	if (parseInt(ahead, 10) > 0) {
+		throw new Error(
+			`Deploy blocked: push first (git push origin ${branch}) — ${ahead} commit(s) not on GitHub yet.`
+		);
+	}
+}
+
 async function main() {
 	const env = loadEnv(ENV_FILE);
 	const dryRun = envFlag(env, 'DRY_RUN');
@@ -219,6 +352,8 @@ async function main() {
 	const { config, remotePath } = buildSftpConfig(env, TARGET);
 
 	console.log(`Deploy target: ${TARGET} → ${config.host}`);
+	assertGitReadyForDeploy(env, TARGET);
+	console.log('Git check OK (committed, pushed, up to date with origin).');
 
 	if (!skipBuild) {
 		console.log('Running npm run build...');
@@ -227,9 +362,23 @@ async function main() {
 		console.log('SKIP_BUILD=true — skipping assets build.');
 	}
 
-	const files = [];
+	const gitOnly = deployGitOnlyEnabled(env);
+	let files = [];
 	walkFiles(ROOT, ROOT, files);
-	console.log(`Theme files to consider: ${files.length}`);
+
+	if (gitOnly) {
+		const gitPaths = new Set(getGitDeployRelativePaths(env, TARGET));
+		const before = files.length;
+		files = files.filter((file) => gitPaths.has(file.relative));
+		console.log(
+			`DEPLOY_GIT_ONLY: ${files.length} file(s) from git (${before} in theme; set DEPLOY_FULL=true to compare all files with server)`
+		);
+		if (!files.length) {
+			console.log('No deployable files in git diff — nothing to upload.');
+		}
+	} else {
+		console.log(`DEPLOY_FULL: comparing all ${files.length} theme file(s) with server`);
+	}
 	if (dryRun) {
 		console.log('DRY_RUN=true — no upload.');
 	}
