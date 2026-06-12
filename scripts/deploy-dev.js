@@ -135,6 +135,30 @@ function getGitDeployRelativePaths(env, target) {
 	}
 
 	if (!files.length) {
+		const remote = target === 'prod' ? 'origin/main' : 'origin/dev';
+		try {
+			const reflogRef = `${remote}@{1}`;
+			if (gitRefExists(reflogRef)) {
+				const prev = execSync(`git rev-parse ${reflogRef}`, {
+					cwd: ROOT,
+					encoding: 'utf8',
+				}).trim();
+				const head = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+				if (prev && prev !== head) {
+					files = execSync(`git diff --name-only ${prev}..HEAD`, {
+						cwd: ROOT,
+						encoding: 'utf8',
+					})
+						.split(/\r?\n/)
+						.filter(Boolean);
+				}
+			}
+		} catch (err) {
+			// fall through to last commit
+		}
+	}
+
+	if (!files.length) {
 		files = execSync('git diff-tree --no-commit-id --name-only -r HEAD', {
 			cwd: ROOT,
 			encoding: 'utf8',
