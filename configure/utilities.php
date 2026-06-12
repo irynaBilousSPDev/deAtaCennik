@@ -1381,10 +1381,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Локация',
             ),
             'pg_mba_filter_interests' => array(
-                'pl' => 'Zainteresowania',
-                'en' => 'Interests',
-                'uk' => 'Інтереси',
-                'ru' => 'Интересы',
+                'pl' => 'Obszar tematyczny',
+                'en' => 'Thematic area',
+                'uk' => 'Тематична область',
+                'ru' => 'Тематическая область',
             ),
             'pg_mba_filter_language' => array(
                 'pl' => 'Język',
