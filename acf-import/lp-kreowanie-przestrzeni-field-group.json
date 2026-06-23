@@ -1,0 +1,658 @@
+[
+    {
+        "key": "group_kreo_lp_kreowanie_przestrzeni",
+        "title": "LP — Kreowanie przestrzeni",
+        "fields": [
+            {
+                "key": "field_kreo_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_hero_section",
+                "label": "Sekcja hero",
+                "name": "kreo_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "kreowanie przestrzeni"
+                    },
+                    {
+                        "key": "field_kreo_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Kreowanie przestrzeni / studia po maturze"
+                    },
+                    {
+                        "key": "field_kreo_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Projektuj przestrzeń, w której ludzie żyją, pracują i odpoczywają."
+                    },
+                    {
+                        "key": "field_kreo_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Wybierz obszar, w którym ATA jest wyjątkowo mocna. Architektura, architektura wnętrz lub krajobrazu, budownictwo i ochrona środowiska to kierunki dla osób, które chcą mieć realny wpływ na wygląd miast, budynków, mieszkań, parków i przestrzeni publicznych."
+                    },
+                    {
+                        "key": "field_kreo_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki"
+                    },
+                    {
+                        "key": "field_kreo_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Dopasuj studia do siebie"
+                    },
+                    {
+                        "key": "field_kreo_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_hero_chips",
+                        "label": "Chipy (tagi)",
+                        "name": "chips",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj chip",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_hero_chip_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_hero_chips"
+                            },
+                            {
+                                "key": "field_kreo_hero_chip_orange",
+                                "label": "Wariant pomarańczowy",
+                                "name": "is_orange",
+                                "type": "true_false",
+                                "ui": 1,
+                                "default_value": 0,
+                                "parent_repeater": "field_kreo_hero_chips"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_kreo_hero_floating_title",
+                        "label": "Ramka — tytuł",
+                        "name": "floating_title",
+                        "type": "text",
+                        "default_value": "Przestrzeń ma znaczenie"
+                    },
+                    {
+                        "key": "field_kreo_hero_floating_text",
+                        "label": "Ramka — tekst",
+                        "name": "floating_text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Tu uczysz się projektować nie tylko ładnie, ale też funkcjonalnie, odpowiedzialnie i z myślą o użytkowniku."
+                    },
+                    {
+                        "key": "field_kreo_hero_city_tag",
+                        "label": "Tag miasta (wizual)",
+                        "name": "city_tag",
+                        "type": "text",
+                        "default_value": "Wrocław"
+                    },
+                    {
+                        "key": "field_kreo_hero_city_window_image",
+                        "label": "Wizual — zdjęcie tła (city window)",
+                        "name": "city_window_image",
+                        "type": "image",
+                        "instructions": "Opcjonalne. Gdy puste — dekoracyjna siatka z projektu HTML. Budynek i plan piętra pozostają na wierzchu.",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_cards",
+                "label": "Kierunki",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_cards_section",
+                "label": "Sekcja kierunków",
+                "name": "kreo_cards_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_cards_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "kierunki"
+                    },
+                    {
+                        "key": "field_kreo_cards_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Oferta w obszarze kreowania przestrzeni"
+                    },
+                    {
+                        "key": "field_kreo_cards_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Kreowanie przestrzeni - wybierz kierunek odpowiedni dla siebie!"
+                    },
+                    {
+                        "key": "field_kreo_cards_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Ten obszar łączy projektowanie, technikę, estetykę, środowisko i myślenie o człowieku. Możesz wybrać kierunki związane z architekturą, architekturą wnętrz lub krajobrazu, budownictwem lub ochroną środowiska."
+                    },
+                    {
+                        "key": "field_kreo_cards_items",
+                        "label": "Kafelki kierunków",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kierunek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_cards_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_cards_items"
+                            },
+                            {
+                                "key": "field_kreo_cards_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_kreo_cards_items"
+                            },
+                            {
+                                "key": "field_kreo_cards_item_meta",
+                                "label": "Meta tagi",
+                                "name": "meta",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj tag",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_kreo_cards_items",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_kreo_cards_item_meta_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_kreo_cards_item_meta"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_split",
+                "label": "Wrocław",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_split_section",
+                "label": "Sekcja Wrocław (split)",
+                "name": "kreo_split_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_split_watermark",
+                        "label": "Watermark sekcji",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Wrocław"
+                    },
+                    {
+                        "key": "field_kreo_split_dark_watermark",
+                        "label": "Watermark w ciemnym boxie",
+                        "name": "dark_watermark",
+                        "type": "text",
+                        "default_value": "Wrocław"
+                    },
+                    {
+                        "key": "field_kreo_split_dark_title",
+                        "label": "Ciemny box — tytuł",
+                        "name": "dark_title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Wrocław to najlepsze miejsce, aby wybrać studia związane z kreowaniem przestrzeni."
+                    },
+                    {
+                        "key": "field_kreo_split_dark_text",
+                        "label": "Ciemny box — tekst",
+                        "name": "dark_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "To miasto architektury, nowych inwestycji, designu, uczelni, kultury i intensywnego życia studenckiego. Dla kandydatów na studia związane z kreowaniem przestrzeni Wrocław jest nie tylko świetną lokalizacją, ale też codziennym źródłem inspiracji."
+                    },
+                    {
+                        "key": "field_kreo_split_dark_cta_text",
+                        "label": "Ciemny box — przycisk tekst",
+                        "name": "dark_cta_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki we Wrocławiu"
+                    },
+                    {
+                        "key": "field_kreo_split_dark_cta_url",
+                        "label": "Ciemny box — przycisk link",
+                        "name": "dark_cta_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_split_list_title",
+                        "label": "Lista — tytuł",
+                        "name": "list_title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Dlaczego warto studiować na kierunkach związanych z kreowaniem przestrzeni we Wrocławiu?"
+                    },
+                    {
+                        "key": "field_kreo_split_list_items",
+                        "label": "Lista — punkty",
+                        "name": "list_items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_split_list_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_kreo_split_list_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_proof",
+                "label": "ELA / liczby",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_proof_section",
+                "label": "Sekcja statystyk",
+                "name": "kreo_proof_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_proof_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "lider"
+                    },
+                    {
+                        "key": "field_kreo_proof_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Dlaczego warto studiować na kierunkach związanych z kreowaniem przestrzeni na ATA?"
+                    },
+                    {
+                        "key": "field_kreo_proof_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Studiuj tam, gdzie kierunki projektowe naprawdę wyróżniają się wynikami."
+                    },
+                    {
+                        "key": "field_kreo_proof_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "ATA ma bardzo mocne argumenty dla kandydatów zainteresowanych architekturą, wnętrzami, krajobrazem, budownictwem i środowiskiem. To kierunki z wysokimi wynikami ELA, praktycznym podejściem do nauki, nowoczesnymi pracowniami i projektami realizowanymi w kontakcie z prawdziwą przestrzenią."
+                    },
+                    {
+                        "key": "field_kreo_proof_items",
+                        "label": "Kafelki statystyk",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj statystykę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_proof_item_number",
+                                "label": "Liczba",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_proof_items"
+                            },
+                            {
+                                "key": "field_kreo_proof_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_proof_items"
+                            },
+                            {
+                                "key": "field_kreo_proof_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_kreo_proof_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_events",
+                "label": "Wydarzenia",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_events_section",
+                "label": "Sekcja wydarzeń",
+                "name": "kreo_events_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_events_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "wydarzenia"
+                    },
+                    {
+                        "key": "field_kreo_events_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Co naprawdę dzieje się na uczelni?"
+                    },
+                    {
+                        "key": "field_kreo_events_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Studenci projektują, wystawiają prace i spotykają praktyków."
+                    },
+                    {
+                        "key": "field_kreo_events_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Na ATA nauka nie kończy się na planie zajęć. Studenci uczestniczą w wykładach praktyków, przygotowują projekty dla konkretnych miejsc, pokazują swoje prace na wystawach i poznają realne wyzwania projektowe."
+                    },
+                    {
+                        "key": "field_kreo_events_items",
+                        "label": "Wydarzenia",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj wydarzenie",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_events_item_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_events_items"
+                            },
+                            {
+                                "key": "field_kreo_events_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_events_items"
+                            },
+                            {
+                                "key": "field_kreo_events_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_kreo_events_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_quiz",
+                "label": "Quiz",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_quiz_section",
+                "label": "Sekcja quizu",
+                "name": "kreo_quiz_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_quiz_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Nie wiesz, który kierunek wybrać?"
+                    },
+                    {
+                        "key": "field_kreo_quiz_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Dopasuj studia do siebie."
+                    },
+                    {
+                        "key": "field_kreo_quiz_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "default_value": "Na stronie ATA możesz rozwiązać quiz, który pomaga dobrać kierunek do osobowości i zainteresowań. To dobry krok dla kandydatów, którzy wiedzą, że chcą projektować przestrzeń, ale nie są pewni, czy bliżej im do architektury, architektury wnętrz, krajobrazu, budownictwa, czy ochrony środowiska."
+                    },
+                    {
+                        "key": "field_kreo_quiz_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Rozwiąż quiz"
+                    },
+                    {
+                        "key": "field_kreo_quiz_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_quiz_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki"
+                    },
+                    {
+                        "key": "field_kreo_quiz_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_quiz_card_title",
+                        "label": "Karta — tytuł",
+                        "name": "card_title",
+                        "type": "text",
+                        "default_value": "Quiz pomoże Ci sprawdzić:"
+                    },
+                    {
+                        "key": "field_kreo_quiz_card_points",
+                        "label": "Karta — punkty listy",
+                        "name": "card_points",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kreo_quiz_card_point_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_kreo_quiz_card_points"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kreo_tab_final",
+                "label": "CTA końcowe",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kreo_final_section",
+                "label": "Sekcja końcowa",
+                "name": "kreo_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kreo_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Wrocław, Warszawa - dwa miasta, w których naprawdę możesz \"wykreować\" swoją przyszłość."
+                    },
+                    {
+                        "key": "field_kreo_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Sprawdź kierunki, porównaj możliwości i zobacz, na jakich studiach możesz rozpocząć nową przygodę życia tuż po maturze."
+                    },
+                    {
+                        "key": "field_kreo_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki"
+                    },
+                    {
+                        "key": "field_kreo_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_kreo_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zapisz się"
+                    },
+                    {
+                        "key": "field_kreo_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-kreowanie-przestrzeni.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "Pola dla landing page Kreowanie przestrzeni (LP 03.1). Import: ACF → Tools → Import. Po imporcie uzupełnij repeatery (kierunki, statystyki, wydarzenia, chipy, lista).",
+        "show_in_rest": 0
+    }
+]
