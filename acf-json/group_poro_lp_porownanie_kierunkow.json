@@ -1,0 +1,608 @@
+[
+    {
+        "key": "group_poro_lp_porownanie_kierunkow",
+        "title": "LP — Porównanie kierunków",
+        "fields": [
+            {
+                "key": "field_poro_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_hero_section",
+                "label": "Sekcja hero",
+                "name": "poro_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "porównanie"
+                    },
+                    {
+                        "key": "field_poro_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Kreowanie przestrzeni / porównanie kierunków"
+                    },
+                    {
+                        "key": "field_poro_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Architektura, architektura wnętrz czy może architektura krajobrazu?"
+                    },
+                    {
+                        "key": "field_poro_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Te kierunki są podobne, bo wszystkie dotyczą projektowania przestrzeni. Różnią się jednak skalą pracy, typem projektów, tytułem po studiach i tym, jaką przestrzeń będziesz tworzyć na co dzień."
+                    },
+                    {
+                        "key": "field_poro_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_poro_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_poro_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Dopasuj studia do siebie"
+                    },
+                    {
+                        "key": "field_poro_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_poro_hero_panel_title",
+                        "label": "Panel — tytuł",
+                        "name": "panel_title",
+                        "type": "text",
+                        "default_value": "Najprostszy podział"
+                    },
+                    {
+                        "key": "field_poro_hero_panel_rows",
+                        "label": "Panel — wiersze",
+                        "name": "panel_rows",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj wiersz",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_poro_hero_panel_row_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_poro_hero_panel_rows"
+                            },
+                            {
+                                "key": "field_poro_hero_panel_row_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "parent_repeater": "field_poro_hero_panel_rows"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_poro_tab_cards",
+                "label": "Kierunki",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_cards_section",
+                "label": "Sekcja kierunków",
+                "name": "poro_cards_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_cards_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "kierunki"
+                    },
+                    {
+                        "key": "field_poro_cards_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Trzy ścieżki w kreowaniu przestrzeni"
+                    },
+                    {
+                        "key": "field_poro_cards_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Podobne zainteresowania, różne drogi zawodowe."
+                    },
+                    {
+                        "key": "field_poro_cards_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Jeśli lubisz projektowanie, estetykę i pracę z przestrzenią, każdy z tych kierunków może być dla Ciebie ciekawy. Zobacz, czym różnią się w praktyce."
+                    },
+                    {
+                        "key": "field_poro_cards_items",
+                        "label": "Kafelki kierunków",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kierunek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_poro_cards_item_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_poro_cards_items"
+                            },
+                            {
+                                "key": "field_poro_cards_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_poro_cards_items"
+                            },
+                            {
+                                "key": "field_poro_cards_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_poro_cards_items"
+                            },
+                            {
+                                "key": "field_poro_cards_item_meta",
+                                "label": "Meta tagi",
+                                "name": "meta",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj tag",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_poro_cards_items",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_poro_cards_item_meta_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_poro_cards_item_meta"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_poro_tab_table",
+                "label": "Tabela",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_table_section",
+                "label": "Sekcja tabeli",
+                "name": "poro_table_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_table_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "tabela"
+                    },
+                    {
+                        "key": "field_poro_table_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Porównaj kierunki"
+                    },
+                    {
+                        "key": "field_poro_table_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Szybkie porównanie: co będziesz projektować i co zyskasz po studiach?"
+                    },
+                    {
+                        "key": "field_poro_table_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Ta tabela pomaga szybko zobaczyć różnice między kierunkami, zanim wejdziesz w pełny opis programu."
+                    },
+                    {
+                        "key": "field_poro_table_header_col_1",
+                        "label": "Nagłówek kolumny 1",
+                        "name": "header_col_1",
+                        "type": "text",
+                        "default_value": "Co porównujesz?"
+                    },
+                    {
+                        "key": "field_poro_table_header_col_2",
+                        "label": "Nagłówek kolumny 2",
+                        "name": "header_col_2",
+                        "type": "text",
+                        "default_value": "Architektura"
+                    },
+                    {
+                        "key": "field_poro_table_header_col_3",
+                        "label": "Nagłówek kolumny 3",
+                        "name": "header_col_3",
+                        "type": "text",
+                        "default_value": "Architektura wnętrz"
+                    },
+                    {
+                        "key": "field_poro_table_header_col_4",
+                        "label": "Nagłówek kolumny 4",
+                        "name": "header_col_4",
+                        "type": "text",
+                        "default_value": "Architektura krajobrazu"
+                    },
+                    {
+                        "key": "field_poro_table_rows",
+                        "label": "Wiersze tabeli",
+                        "name": "rows",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj wiersz",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_poro_table_row_label",
+                                "label": "Etykieta wiersza",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_poro_table_rows"
+                            },
+                            {
+                                "key": "field_poro_table_row_col_2",
+                                "label": "Kolumna 2",
+                                "name": "col_2",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_poro_table_rows"
+                            },
+                            {
+                                "key": "field_poro_table_row_col_3",
+                                "label": "Kolumna 3",
+                                "name": "col_3",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_poro_table_rows"
+                            },
+                            {
+                                "key": "field_poro_table_row_col_4",
+                                "label": "Kolumna 4",
+                                "name": "col_4",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_poro_table_rows"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_poro_table_cta_text",
+                        "label": "Przycisk — tekst",
+                        "name": "cta_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_poro_table_cta_url",
+                        "label": "Przycisk — link",
+                        "name": "cta_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_poro_tab_decision",
+                "label": "Wybór",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_decision_section",
+                "label": "Sekcja wyboru",
+                "name": "poro_decision_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_decision_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "wybór"
+                    },
+                    {
+                        "key": "field_poro_decision_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Pomoc w wyborze podobnych kierunków"
+                    },
+                    {
+                        "key": "field_poro_decision_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Który kierunek wybrać? Zacznij od tego, co naprawdę Cię interesuje."
+                    },
+                    {
+                        "key": "field_poro_decision_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Wybór między architekturą, architekturą wnętrz oraz architekturą krajobrazu często nie jest oczywisty. Wszystkie kierunki są projektowe, ale prowadzą do innego typu pracy."
+                    },
+                    {
+                        "key": "field_poro_decision_items",
+                        "label": "Karty wyboru",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_poro_decision_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_poro_decision_items"
+                            },
+                            {
+                                "key": "field_poro_decision_item_points",
+                                "label": "Punkty",
+                                "name": "points",
+                                "type": "repeater",
+                                "layout": "block",
+                                "button_label": "Dodaj punkt",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_poro_decision_items",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_poro_decision_item_point_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_poro_decision_item_points"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_poro_tab_split",
+                "label": "Krajobraz",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_split_section",
+                "label": "Sekcja krajobraz (split)",
+                "name": "poro_split_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_split_watermark",
+                        "label": "Watermark sekcji",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "krajobraz"
+                    },
+                    {
+                        "key": "field_poro_split_dark_watermark",
+                        "label": "Watermark w ciemnym boxie",
+                        "name": "dark_watermark",
+                        "type": "text",
+                        "default_value": "LP03"
+                    },
+                    {
+                        "key": "field_poro_split_dark_title",
+                        "label": "Ciemny box — tytuł",
+                        "name": "dark_title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Architektura krajobrazu ma więcej niż jedną ścieżkę."
+                    },
+                    {
+                        "key": "field_poro_split_dark_text",
+                        "label": "Ciemny box — tekst",
+                        "name": "dark_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Jeśli interesuje Cię krajobraz, możesz porównać nie tylko kierunek główny, ale też ścieżki związane z projektowaniem krajobrazu o funkcji rekreacyjnej oraz projektowaniem krajobrazu wielofunkcyjnego."
+                    },
+                    {
+                        "key": "field_poro_split_dark_cta_text",
+                        "label": "Ciemny box — przycisk tekst",
+                        "name": "dark_cta_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_poro_split_dark_cta_url",
+                        "label": "Ciemny box — przycisk link",
+                        "name": "dark_cta_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_poro_split_tips_title",
+                        "label": "Lista — tytuł",
+                        "name": "tips_title",
+                        "type": "text",
+                        "default_value": "Różnica w praktyce"
+                    },
+                    {
+                        "key": "field_poro_split_tips_items",
+                        "label": "Lista — punkty",
+                        "name": "tips_items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_poro_split_tips_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_poro_split_tips_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_poro_tab_final",
+                "label": "CTA końcowe",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_poro_final_section",
+                "label": "Sekcja końcowa",
+                "name": "poro_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_poro_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Nie musisz wybierać w ciemno. Porównaj kierunki i wybierz swoją ścieżkę."
+                    },
+                    {
+                        "key": "field_poro_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Architektura, architektura wnętrz i architektura krajobrazu prowadzą do różnych sposobów pracy z przestrzenią. Sprawdź różnice, zobacz miasta, tytuły i programy, a potem wybierz kierunek odpowiedni dla siebie."
+                    },
+                    {
+                        "key": "field_poro_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_poro_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_poro_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zapisz się"
+                    },
+                    {
+                        "key": "field_poro_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-porownanie-kierunkow.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

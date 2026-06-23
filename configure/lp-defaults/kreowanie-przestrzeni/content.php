@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Default LP content (LP 03.1) — used when ACF fields / repeaters are empty.
- *
  * @return array<string, array<string, mixed>>
  */
 return [

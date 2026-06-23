@@ -133,7 +133,7 @@
                         "label": "Wizual — zdjęcie tła (city window)",
                         "name": "city_window_image",
                         "type": "image",
-                        "instructions": "Opcjonalne. Gdy puste — dekoracyjna siatka z projektu HTML. Budynek i plan piętra pozostają na wierzchu.",
+                        "instructions": "",
                         "return_format": "array",
                         "preview_size": "medium",
                         "library": "all"
@@ -640,6 +640,11 @@
         "location": [
             [
                 {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
                     "param": "page_template",
                     "operator": "==",
                     "value": "page-kreowanie-przestrzeni.php"
@@ -652,7 +657,7 @@
         "label_placement": "top",
         "instruction_placement": "label",
         "active": true,
-        "description": "Pola dla landing page Kreowanie przestrzeni (LP 03.1). Import: ACF → Tools → Import. Po imporcie uzupełnij repeatery (kierunki, statystyki, wydarzenia, chipy, lista).",
+        "description": "",
         "show_in_rest": 0
     }
 ]
