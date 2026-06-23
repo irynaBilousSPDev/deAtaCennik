@@ -1,7 +1,14 @@
 @use "../abstracts/variables" as vars;
 
+body.page-template-page-kreowanie-przestrzeni {
+  #primary {
+    margin-top: 0;
+  }
+}
+
 .lp-page.lp-kreowanie-przestrzeni {
-  color: vars.$color-nav-gray;
+  color: #20253d;
+  font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
   line-height: 1.55;
 
   a {
@@ -16,7 +23,12 @@
     background: vars.$white;
 
     &--gray {
-      background: vars.$background-gray;
+      background: #f5f5f8;
+    }
+
+    > .container {
+      position: relative;
+      z-index: 1;
     }
   }
 
@@ -25,7 +37,8 @@
     left: -18px;
     top: 38px;
     font-size: 105px;
-    font-weight: vars.$weight-extra-bold;
+    font-weight: 900;
+    font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
     color: #f0f0f4;
     letter-spacing: -0.06em;
     z-index: 0;
@@ -59,7 +72,8 @@
       left: -18px;
       top: 38px;
       font-size: 108px;
-      font-weight: vars.$weight-extra-bold;
+      font-weight: 900;
+      font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
       color: #f0f0f4;
       letter-spacing: -0.06em;
       z-index: 0;
@@ -91,7 +105,7 @@
       line-height: 1.02;
       letter-spacing: -0.05em;
       max-width: 790px;
-      font-weight: vars.$weight-extra-bold;
+      font-weight: 900;
       color: #101422;
     }
 
@@ -115,6 +129,7 @@
       flex-wrap: wrap;
       gap: 10px;
       max-width: 720px;
+      margin-top: 1rem;
     }
 
     .chip {
@@ -345,9 +360,17 @@
   }
 
   h1,
-  h2,
   h3 {
-    color: vars.$black;
+    font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
+    font-weight: 900;
+    color: #101422;
+    margin-top: 0;
+  }
+
+  h2 {
+    font-family: "Nunito Sans", serif;
+    font-weight: 900;
+    color: #101422;
     margin-top: 0;
   }
 
@@ -355,6 +378,7 @@
     font-size: 4.8rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
+    font-weight: 900;
     margin: 0 0 18px;
     max-width: 860px;
   }
