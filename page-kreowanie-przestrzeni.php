@@ -5,7 +5,9 @@
 
 get_header();
 
-$acf_fields = get_fields() ?: [];
+require_once get_template_directory() . '/configure/kreowanie-przestrzeni-defaults.php';
+
+$acf_fields = akademiata_kreowanie_przestrzeni_fields(get_fields());
 
 /**
  * @param string $text
@@ -30,9 +32,8 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
 <div class="lp-page lp-kreowanie-przestrzeni">
 
     <?php
-    $hero = $acf_fields['kreo_hero_section'] ?? [];
-    if (!empty($hero)) :
-        ?>
+    $hero = $acf_fields['kreo_hero_section'];
+    ?>
         <section class="hero">
             <?php if (!empty($hero['watermark'])) : ?>
                 <div class="watermark" aria-hidden="true"><?php echo esc_html($hero['watermark']); ?></div>
@@ -120,12 +121,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 </div>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $cards = $acf_fields['kreo_cards_section'] ?? [];
-    if (!empty($cards)) :
-        ?>
+    $cards = $acf_fields['kreo_cards_section'];
+    ?>
         <section class="lp-section lp-section--gray">
             <?php if (!empty($cards['watermark'])) : ?>
                 <div class="lp-watermark" aria-hidden="true"><?php echo esc_html($cards['watermark']); ?></div>
@@ -169,12 +168,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 <?php endif; ?>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $split = $acf_fields['kreo_split_section'] ?? [];
-    if (!empty($split)) :
-        ?>
+    $split = $acf_fields['kreo_split_section'];
+    ?>
         <section class="lp-section">
             <?php if (!empty($split['watermark'])) : ?>
                 <div class="lp-watermark" aria-hidden="true"><?php echo esc_html($split['watermark']); ?></div>
@@ -213,12 +210,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 </div>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $proof = $acf_fields['kreo_proof_section'] ?? [];
-    if (!empty($proof)) :
-        ?>
+    $proof = $acf_fields['kreo_proof_section'];
+    ?>
         <section class="lp-section lp-section--gray">
             <?php if (!empty($proof['watermark'])) : ?>
                 <div class="lp-watermark" aria-hidden="true"><?php echo esc_html($proof['watermark']); ?></div>
@@ -253,12 +248,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 <?php endif; ?>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $events = $acf_fields['kreo_events_section'] ?? [];
-    if (!empty($events)) :
-        ?>
+    $events = $acf_fields['kreo_events_section'];
+    ?>
         <section class="lp-section">
             <?php if (!empty($events['watermark'])) : ?>
                 <div class="lp-watermark" aria-hidden="true"><?php echo esc_html($events['watermark']); ?></div>
@@ -293,12 +286,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 <?php endif; ?>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $quiz = $acf_fields['kreo_quiz_section'] ?? [];
-    if (!empty($quiz)) :
-        ?>
+    $quiz = $acf_fields['kreo_quiz_section'];
+    ?>
         <section class="lp-section lp-section--gray">
             <div class="container">
                 <div class="lp-quiz">
@@ -341,12 +332,10 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 </div>
             </div>
         </section>
-    <?php endif; ?>
 
     <?php
-    $final = $acf_fields['kreo_final_section'] ?? [];
-    if (!empty($final)) :
-        ?>
+    $final = $acf_fields['kreo_final_section'];
+    ?>
         <section class="lp-final">
             <div class="container">
                 <?php if (!empty($final['title'])) : ?>
@@ -365,7 +354,6 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                 <?php endif; ?>
             </div>
         </section>
-    <?php endif; ?>
 
 </div>
 
