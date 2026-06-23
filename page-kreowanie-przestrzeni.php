@@ -5,7 +5,7 @@
 
 get_header();
 
-require_once get_template_directory() . '/configure/kreowanie-przestrzeni-defaults.php';
+require_once get_template_directory() . '/configure/lp-defaults/kreowanie-przestrzeni/fields.php';
 
 $acf_fields = akademiata_kreowanie_przestrzeni_fields(get_fields());
 
