@@ -1,0 +1,518 @@
+[
+    {
+        "key": "group_kato_lp_katalog_kierunkow",
+        "title": "LP — Katalog kierunków",
+        "fields": [
+            {
+                "key": "field_kato_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kato_hero_section",
+                "label": "Sekcja hero",
+                "name": "kato_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kato_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "katalog"
+                    },
+                    {
+                        "key": "field_kato_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Kreowanie przestrzeni / katalog kierunków"
+                    },
+                    {
+                        "key": "field_kato_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "",
+                        "default_value": "Wybierz kierunek związany z projektowaniem przestrzeni."
+                    },
+                    {
+                        "key": "field_kato_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "instructions": "",
+                        "default_value": "Architektura, architektura wnętrz, architektura krajobrazu, budownictwo i ochrona środowiska w jednym miejscu. Skorzystaj z filtrów, porównaj miasta, sprawdź czas trwania studiów i przejdź od razu do szczegółów lub zapisu."
+                    },
+                    {
+                        "key": "field_kato_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź szczegóły"
+                    },
+                    {
+                        "key": "field_kato_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": "#katalog"
+                    },
+                    {
+                        "key": "field_kato_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Zapisz się"
+                    },
+                    {
+                        "key": "field_kato_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": "#katalog"
+                    },
+                    {
+                        "key": "field_kato_hero_panel_title",
+                        "label": "Panel — tytuł",
+                        "name": "panel_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Znajdź kierunek związany z projektowaniem przestrzeni, który jest odpowiedni dla Ciebie"
+                    },
+                    {
+                        "key": "field_kato_hero_stats",
+                        "label": "Statystyki (panel)",
+                        "name": "stats",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj statystykę",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kato_hero_stat_number",
+                                "label": "Liczba",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_kato_hero_stats"
+                            },
+                            {
+                                "key": "field_kato_hero_stat_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_kato_hero_stats"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kato_tab_catalog",
+                "label": "Katalog",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kato_catalog_section",
+                "label": "Sekcja katalogu",
+                "name": "kato_catalog_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kato_catalog_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "kierunki"
+                    },
+                    {
+                        "key": "field_kato_catalog_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Katalog kierunków"
+                    },
+                    {
+                        "key": "field_kato_catalog_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź kierunki i wybierz swoją ścieżkę."
+                    },
+                    {
+                        "key": "field_kato_catalog_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Nie musisz przeglądać całej oferty uczelni. Wybierz miasto i obszar, który Cię interesuje, a potem przejdź od razu do szczegółów kierunku albo zapisu."
+                    },
+                    {
+                        "key": "field_kato_catalog_filter_title",
+                        "label": "Filtry — tytuł",
+                        "name": "filter_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Filtruj kierunki"
+                    },
+                    {
+                        "key": "field_kato_catalog_filter_text",
+                        "label": "Filtry — tekst",
+                        "name": "filter_text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "instructions": "",
+                        "default_value": "Wybierz miasto i obszar, aby zawęzić listę kierunków związanych z kreowaniem przestrzeni."
+                    },
+                    {
+                        "key": "field_kato_catalog_result_count_suffix",
+                        "label": "Licznik wyników — sufiks",
+                        "name": "result_count_suffix",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "kierunków do sprawdzenia"
+                    },
+                    {
+                        "key": "field_kato_catalog_city_filters",
+                        "label": "Filtry miast",
+                        "name": "city_filters",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj filtr miasta",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kato_catalog_city_filter_slug",
+                                "label": "Slug",
+                                "name": "slug",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_city_filters"
+                            },
+                            {
+                                "key": "field_kato_catalog_city_filter_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_city_filters"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_kato_catalog_area_filters",
+                        "label": "Filtry obszarów",
+                        "name": "area_filters",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj filtr obszaru",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kato_catalog_area_filter_slug",
+                                "label": "Slug",
+                                "name": "slug",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_area_filters"
+                            },
+                            {
+                                "key": "field_kato_catalog_area_filter_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_area_filters"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_kato_catalog_no_results_title",
+                        "label": "Brak wyników — tytuł",
+                        "name": "no_results_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Brak wyników dla wybranych filtrów"
+                    },
+                    {
+                        "key": "field_kato_catalog_no_results_text",
+                        "label": "Brak wyników — tekst",
+                        "name": "no_results_text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "instructions": "",
+                        "default_value": "Zmień miasto albo obszar, aby zobaczyć inne kierunki związane z kreowaniem przestrzeni."
+                    },
+                    {
+                        "key": "field_kato_catalog_courses",
+                        "label": "Kierunki",
+                        "name": "courses",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kierunek",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_kato_catalog_course_city",
+                                "label": "Miasto (filtr)",
+                                "name": "city",
+                                "type": "select",
+                                "choices": {
+                                    "warszawa": "Warszawa",
+                                    "wroclaw": "Wrocław"
+                                },
+                                "default_value": "warszawa",
+                                "return_format": "value",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_area",
+                                "label": "Obszar (filtr)",
+                                "name": "area",
+                                "type": "select",
+                                "choices": {
+                                    "architektura": "Architektura",
+                                    "wnetrza": "Wnętrza",
+                                    "krajobraz": "Krajobraz",
+                                    "budownictwo": "Budownictwo",
+                                    "srodowisko": "Środowisko"
+                                },
+                                "default_value": "architektura",
+                                "return_format": "value",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_visual_variant",
+                                "label": "Wariant wizualny",
+                                "name": "visual_variant",
+                                "type": "select",
+                                "choices": {
+                                    "arch": "Architektura",
+                                    "interior": "Wnętrza",
+                                    "landscape": "Krajobraz",
+                                    "build": "Budownictwo",
+                                    "env": "Środowisko"
+                                },
+                                "default_value": "arch",
+                                "return_format": "value",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_visual_svg",
+                                "label": "Wariant SVG",
+                                "name": "visual_svg",
+                                "type": "select",
+                                "choices": {
+                                    "arch_1": "arch_1",
+                                    "arch_2": "arch_2",
+                                    "interior_1": "interior_1",
+                                    "interior_2": "interior_2",
+                                    "landscape_1": "landscape_1",
+                                    "landscape_2": "landscape_2",
+                                    "landscape_3": "landscape_3",
+                                    "build_1": "build_1",
+                                    "build_2": "build_2",
+                                    "build_3": "build_3",
+                                    "env_1": "env_1",
+                                    "env_2": "env_2"
+                                },
+                                "default_value": "arch_1",
+                                "return_format": "value",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_image",
+                                "label": "Zdjęcie (zamiast SVG)",
+                                "name": "image",
+                                "type": "image",
+                                "instructions": "",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_location",
+                                "label": "Lokalizacja (etykieta)",
+                                "name": "location",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_type",
+                                "label": "Typ kierunku",
+                                "name": "course_type",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_meta",
+                                "label": "Meta tagi",
+                                "name": "meta",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj tag",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_kato_catalog_courses",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_kato_catalog_course_meta_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_kato_catalog_course_meta"
+                                    }
+                                ]
+                            },
+                            {
+                                "key": "field_kato_catalog_course_details_url",
+                                "label": "Link — szczegóły",
+                                "name": "details_url",
+                                "type": "url",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            },
+                            {
+                                "key": "field_kato_catalog_course_register_url",
+                                "label": "Link — zapis",
+                                "name": "register_url",
+                                "type": "url",
+                                "parent_repeater": "field_kato_catalog_courses"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_kato_tab_final",
+                "label": "Final",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_kato_final_section",
+                "label": "Sekcja końcowa",
+                "name": "kato_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_kato_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "instructions": "",
+                        "default_value": "Wybierz kierunek i przejdź od razu do szczegółów albo zapisu."
+                    },
+                    {
+                        "key": "field_kato_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Katalog kierunków pomaga szybko znaleźć studia związane z architekturą, wnętrzami, krajobrazem, budownictwem i środowiskiem. To ostatni krok przed wejściem w pełny opis kierunku."
+                    },
+                    {
+                        "key": "field_kato_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź szczegóły"
+                    },
+                    {
+                        "key": "field_kato_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": "#katalog"
+                    },
+                    {
+                        "key": "field_kato_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Zapisz się"
+                    },
+                    {
+                        "key": "field_kato_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": "#katalog"
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-katalog-kierunkow.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
