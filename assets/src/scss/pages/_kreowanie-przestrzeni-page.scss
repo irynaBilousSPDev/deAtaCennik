@@ -7,8 +7,7 @@ body.page-template-page-kreowanie-przestrzeni {
 }
 
 .lp-page.lp-kreowanie-przestrzeni {
-  color: #20253d;
-  font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
+  color: vars.$color-nav-gray;
   line-height: 1.55;
 
   a {
@@ -37,8 +36,8 @@ body.page-template-page-kreowanie-przestrzeni {
     left: -18px;
     top: 38px;
     font-size: 105px;
-    font-weight: 900;
-    font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
+    font-weight: vars.$weight-extra-bold;
+    font-family: "Nunito Sans", serif;
     color: #f0f0f4;
     letter-spacing: -0.06em;
     z-index: 0;
@@ -72,8 +71,8 @@ body.page-template-page-kreowanie-przestrzeni {
       left: -18px;
       top: 38px;
       font-size: 108px;
-      font-weight: 900;
-      font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
+      font-weight: vars.$weight-extra-bold;
+      font-family: "Nunito Sans", serif;
       color: #f0f0f4;
       letter-spacing: -0.06em;
       z-index: 0;
@@ -105,8 +104,8 @@ body.page-template-page-kreowanie-przestrzeni {
       line-height: 1.02;
       letter-spacing: -0.05em;
       max-width: 790px;
-      font-weight: 900;
-      color: #101422;
+      font-weight: vars.$weight-bold;
+      color: vars.$black;
     }
 
     .lead {
@@ -254,7 +253,6 @@ body.page-template-page-kreowanie-przestrzeni {
         font-size: 2.7rem;
         line-height: 1.1;
         letter-spacing: -0.035em;
-        color: #101422;
       }
 
       p {
@@ -360,25 +358,30 @@ body.page-template-page-kreowanie-przestrzeni {
   }
 
   h1,
+  h2,
   h3 {
-    font-family: "Poppins", "Montserrat", "Segoe UI", Arial, sans-serif;
-    font-weight: 900;
-    color: #101422;
+    font-family: "Nunito Sans", serif;
+    color: vars.$black;
     margin-top: 0;
   }
 
+  h1 {
+    font-weight: vars.$weight-bold;
+  }
+
   h2 {
-    font-family: "Nunito Sans", serif;
-    font-weight: 900;
-    color: #101422;
-    margin-top: 0;
+    font-weight: vars.$weight-regular;
+  }
+
+  h3 {
+    font-weight: vars.$weight-bold;
   }
 
   .lp-section-title {
     font-size: 4.8rem;
     line-height: 1.05;
     letter-spacing: -0.045em;
-    font-weight: 900;
+    font-weight: vars.$weight-bold;
     margin: 0 0 18px;
     max-width: 860px;
   }
