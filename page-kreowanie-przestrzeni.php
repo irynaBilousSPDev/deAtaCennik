@@ -16,7 +16,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
     if ($text === '' || $text === null) {
         return;
     }
-    $class = ($style === 'outline') ? 'lp-cta-outline' : 'lp-cta';
+    $class = ($style === 'outline') ? 'cta-outline' : 'cta';
     $href = $url !== '' && $url !== null ? $url : '#';
     printf(
         '<a href="%s" class="%s">%s</a>',
@@ -33,26 +33,26 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
     $hero = $acf_fields['kreo_hero_section'] ?? [];
     if (!empty($hero)) :
         ?>
-        <section class="lp-hero lp-section">
+        <section class="hero">
             <?php if (!empty($hero['watermark'])) : ?>
-                <div class="lp-watermark" aria-hidden="true"><?php echo esc_html($hero['watermark']); ?></div>
+                <div class="watermark" aria-hidden="true"><?php echo esc_html($hero['watermark']); ?></div>
             <?php endif; ?>
-            <div class="container lp-grid">
+            <div class="container grid">
                 <div>
                     <?php if (!empty($hero['eyebrow'])) : ?>
-                        <div class="lp-eyebrow"><?php echo esc_html($hero['eyebrow']); ?></div>
+                        <div class="eyebrow"><?php echo esc_html($hero['eyebrow']); ?></div>
                     <?php endif; ?>
 
                     <?php if (!empty($hero['title'])) : ?>
-                        <h1 class="lp-hero__title"><?php echo esc_html($hero['title']); ?></h1>
+                        <h1><?php echo esc_html($hero['title']); ?></h1>
                     <?php endif; ?>
 
                     <?php if (!empty($hero['lead'])) : ?>
-                        <p class="lp-lead"><?php echo esc_html($hero['lead']); ?></p>
+                        <p class="lead"><?php echo esc_html($hero['lead']); ?></p>
                     <?php endif; ?>
 
                     <?php if (!empty($hero['cta_primary_text']) || !empty($hero['cta_secondary_text'])) : ?>
-                        <div class="lp-cta-row">
+                        <div class="cta-row">
                             <?php
                             $lp_render_cta($hero['cta_primary_text'] ?? '', $hero['cta_primary_url'] ?? '', 'primary');
                             $lp_render_cta($hero['cta_secondary_text'] ?? '', $hero['cta_secondary_url'] ?? '', 'outline');
@@ -61,9 +61,9 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                     <?php endif; ?>
 
                     <?php if (!empty($hero['chips']) && is_array($hero['chips'])) : ?>
-                        <div class="lp-chips">
+                        <div class="chips">
                             <?php foreach ($hero['chips'] as $chip) :
-                                $chip_class = !empty($chip['is_orange']) ? 'lp-chip lp-chip--orange' : 'lp-chip';
+                                $chip_class = !empty($chip['is_orange']) ? 'chip orange' : 'chip';
                                 ?>
                                 <span class="<?php echo esc_attr($chip_class); ?>"><?php echo esc_html($chip['text'] ?? ''); ?></span>
                             <?php endforeach; ?>
@@ -71,13 +71,13 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                     <?php endif; ?>
                 </div>
 
-                <div class="lp-hero__visual">
+                <div class="visual">
                     <?php
                     $city_window_image = $hero['city_window_image'] ?? null;
                     $has_city_window_image = is_array($city_window_image) && !empty($city_window_image['ID']);
                     ?>
-                    <div class="lp-hero__visual-card">
-                        <div class="<?php echo esc_attr('lp-hero__city-window' . ($has_city_window_image ? ' lp-hero__city-window--has-image' : '')); ?>"<?php echo $has_city_window_image ? '' : ' aria-hidden="true"'; ?>>
+                    <div class="visual-card">
+                        <div class="<?php echo esc_attr('city-window' . ($has_city_window_image ? ' city-window--has-image' : '')); ?>"<?php echo $has_city_window_image ? '' : ' aria-hidden="true"'; ?>>
                             <?php if ($has_city_window_image) : ?>
                                 <?php
                                 echo wp_get_attachment_image(
@@ -85,15 +85,15 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                                     'large',
                                     false,
                                     [
-                                        'class' => 'lp-hero__city-window-img',
+                                        'class' => 'city-window__img',
                                         'alt'   => esc_attr($city_window_image['alt'] ?: __('Kreowanie przestrzeni', 'akademiata')),
                                     ]
                                 );
                                 ?>
                             <?php endif; ?>
                         </div>
-                        <div class="lp-hero__building" aria-hidden="true"></div>
-                        <div class="lp-hero__floorplan" aria-hidden="true">
+                        <div class="building" aria-hidden="true"></div>
+                        <div class="floorplan" aria-hidden="true">
                             <svg viewBox="0 0 340 224">
                                 <rect x="18" y="18" width="304" height="188" rx="10" fill="#f7f8fb" stroke="#20253d" stroke-width="2"></rect>
                                 <path d="M52 52h92v58H52zM164 52h124v58H164zM52 130h70v46H52zM142 130h146v46H142z" fill="#fff" stroke="#20253d" stroke-width="2"></path>
@@ -103,9 +103,9 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                             </svg>
                         </div>
                     </div>
-                    <div class="lp-hero__dots" aria-hidden="true"></div>
+                    <div class="dots" aria-hidden="true"></div>
                     <?php if (!empty($hero['floating_title']) || !empty($hero['floating_text'])) : ?>
-                        <div class="lp-hero__floating">
+                        <div class="floating">
                             <?php if (!empty($hero['floating_title'])) : ?>
                                 <h2><?php echo esc_html($hero['floating_title']); ?></h2>
                             <?php endif; ?>
@@ -115,7 +115,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                         </div>
                     <?php endif; ?>
                     <?php if (!empty($hero['city_tag'])) : ?>
-                        <div class="lp-hero__city-tag"><?php echo esc_html($hero['city_tag']); ?></div>
+                        <div class="city-tag"><?php echo esc_html($hero['city_tag']); ?></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -188,7 +188,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                         <p><?php echo esc_html($split['dark_text']); ?></p>
                     <?php endif; ?>
                     <?php if (!empty($split['dark_cta_text'])) : ?>
-                        <div class="lp-cta-row">
+                        <div class="cta-row">
                             <?php $lp_render_cta($split['dark_cta_text'], $split['dark_cta_url'] ?? '', 'primary'); ?>
                         </div>
                     <?php endif; ?>
@@ -313,7 +313,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                             <p><?php echo esc_html($quiz['text']); ?></p>
                         <?php endif; ?>
                         <?php if (!empty($quiz['cta_primary_text']) || !empty($quiz['cta_secondary_text'])) : ?>
-                            <div class="lp-cta-row">
+                            <div class="cta-row">
                                 <?php
                                 $lp_render_cta($quiz['cta_primary_text'] ?? '', $quiz['cta_primary_url'] ?? '', 'primary');
                                 $lp_render_cta($quiz['cta_secondary_text'] ?? '', $quiz['cta_secondary_url'] ?? '', 'outline');
@@ -356,7 +356,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
                     <p><?php echo esc_html($final['text']); ?></p>
                 <?php endif; ?>
                 <?php if (!empty($final['cta_primary_text']) || !empty($final['cta_secondary_text'])) : ?>
-                    <div class="lp-cta-row lp-cta-row--center">
+                    <div class="cta-row cta-row--center">
                         <?php
                         $lp_render_cta($final['cta_primary_text'] ?? '', $final['cta_primary_url'] ?? '', 'primary');
                         $lp_render_cta($final['cta_secondary_text'] ?? '', $final['cta_secondary_url'] ?? '', 'outline');
