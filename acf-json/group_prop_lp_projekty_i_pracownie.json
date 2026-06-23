@@ -103,6 +103,15 @@
                         "name": "city_tag",
                         "type": "text",
                         "default_value": "Warszawa / Wrocław"
+                    },
+                    {
+                        "key": "field_prop_hero_panel_image",
+                        "label": "Zdjęcie panelu hero",
+                        "name": "panel_image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
                     }
                 ]
             },
@@ -368,6 +377,16 @@
                                 "name": "text",
                                 "type": "textarea",
                                 "rows": 3,
+                                "parent_repeater": "field_prop_gallery_items"
+                            },
+                            {
+                                "key": "field_prop_gallery_item_image",
+                                "label": "Zdjęcie",
+                                "name": "image",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
                                 "parent_repeater": "field_prop_gallery_items"
                             },
                             {

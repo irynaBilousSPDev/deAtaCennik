@@ -21,6 +21,7 @@ return [
             ['text' => 'plansza'],
         ],
         'city_tag' => 'Warszawa / Wrocław',
+        'panel_image' => null,
     ],
     'prop_cards_section' => [
         'watermark' => 'praktyka',

@@ -29,15 +29,31 @@ $lp_render_cta = static function ($text, $url, $style = 'primary') {
 };
 
 /**
- * @param string $variant orange|green|dark
+ * @param array<string, mixed> $project
  */
-$lp_render_gallery_thumb = static function ($variant) {
+$lp_render_gallery_thumb = static function ($project) {
+    $variant = $project['thumb_variant'] ?? 'orange';
+    $image = $project['image'] ?? null;
+    $has_image = is_array($image) && !empty($image['ID']);
     $class = 'lp-thumb';
     if (in_array($variant, ['orange', 'green', 'dark'], true)) {
         $class .= ' lp-thumb--' . $variant;
     }
-    echo '<div class="' . esc_attr($class) . '" aria-hidden="true">';
-    if ($variant === 'green') {
+    if ($has_image) {
+        $class .= ' lp-thumb--has-image';
+    }
+    echo '<div class="' . esc_attr($class) . '"' . ($has_image ? '' : ' aria-hidden="true"') . '>';
+    if ($has_image) {
+        echo wp_get_attachment_image(
+            (int) $image['ID'],
+            'large',
+            false,
+            [
+                'class' => 'lp-thumb__img',
+                'alt'   => esc_attr($image['alt'] ?: ($project['title'] ?? __('Projekt', 'akademiata'))),
+            ]
+        );
+    } elseif ($variant === 'green') {
         ?>
         <svg viewBox="0 0 400 170">
             <circle cx="94" cy="82" r="42" fill="#74b983" opacity=".45"></circle>
@@ -100,7 +116,24 @@ $lp_render_gallery_thumb = static function ($variant) {
             </div>
 
             <div class="hero-panel">
-                <div class="studio-mock" aria-hidden="true">
+                <?php
+                $panel_image = $hero['panel_image'] ?? null;
+                $has_panel_image = is_array($panel_image) && !empty($panel_image['ID']);
+                ?>
+                <div class="<?php echo esc_attr('studio-mock' . ($has_panel_image ? ' studio-mock--has-image' : '')); ?>"<?php echo $has_panel_image ? '' : ' aria-hidden="true"'; ?>>
+                    <?php if ($has_panel_image) : ?>
+                        <?php
+                        echo wp_get_attachment_image(
+                            (int) $panel_image['ID'],
+                            'large',
+                            false,
+                            [
+                                'class' => 'studio-mock__img',
+                                'alt'   => esc_attr($panel_image['alt'] ?: __('Projekty i pracownie', 'akademiata')),
+                            ]
+                        );
+                        ?>
+                    <?php else : ?>
                     <?php if (!empty($hero['tool_tags']) && is_array($hero['tool_tags'])) : ?>
                         <div class="tool-tags">
                             <?php foreach ($hero['tool_tags'] as $tag) :
@@ -124,6 +157,7 @@ $lp_render_gallery_thumb = static function ($variant) {
                     </div>
                     <?php if (!empty($hero['city_tag'])) : ?>
                         <div class="city-tag"><?php echo esc_html($hero['city_tag']); ?></div>
+                    <?php endif; ?>
                     <?php endif; ?>
                 </div>
             </div>
@@ -244,7 +278,7 @@ $lp_render_gallery_thumb = static function ($variant) {
                 <div class="lp-gallery">
                     <?php foreach ($gallery['items'] as $project) : ?>
                         <article class="lp-project">
-                            <?php $lp_render_gallery_thumb($project['thumb_variant'] ?? 'orange'); ?>
+                            <?php $lp_render_gallery_thumb($project); ?>
                             <div class="lp-project__body">
                                 <?php if (!empty($project['tag'])) : ?>
                                     <span class="lp-tag"><?php echo esc_html($project['tag']); ?></span>
