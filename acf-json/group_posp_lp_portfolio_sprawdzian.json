@@ -1,0 +1,678 @@
+[
+    {
+        "key": "group_posp_lp_portfolio_sprawdzian",
+        "title": "LP — Portfolio i sprawdzian",
+        "fields": [
+            {
+                "key": "field_posp_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_hero_section",
+                "label": "Sekcja hero",
+                "name": "posp_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "portfolio"
+                    },
+                    {
+                        "key": "field_posp_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "LP03 / Kreowanie przestrzeni / portfolio i sprawdzian"
+                    },
+                    {
+                        "key": "field_posp_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Portfolio albo egzamin z rysunku? Na spokojnie!"
+                    },
+                    {
+                        "key": "field_posp_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Na kierunkach projektowych rekrutacja może wyglądać trochę inaczej niż na standardowych studiach. Zobacz, gdzie potrzebne jest portfolio, gdzie sprawdzian z rysunku, a gdzie wystarczą dokumenty."
+                    },
+                    {
+                        "key": "field_posp_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź zasady rekrutacji"
+                    },
+                    {
+                        "key": "field_posp_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_hero_panel_title",
+                        "label": "Panel — tytuł",
+                        "name": "panel_title",
+                        "type": "text",
+                        "default_value": "Najważniejsze informacje w 15 sekund"
+                    },
+                    {
+                        "key": "field_posp_hero_panel_items",
+                        "label": "Panel — punkty",
+                        "name": "panel_items",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_hero_panel_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_posp_hero_panel_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_cards",
+                "label": "Zasady",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_cards_section",
+                "label": "Sekcja kierunków",
+                "name": "posp_cards_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_cards_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "zasady"
+                    },
+                    {
+                        "key": "field_posp_cards_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Jak wygląda rekrutacja na kierunki projektowe?"
+                    },
+                    {
+                        "key": "field_posp_cards_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Zobacz, czego potrzebujesz na starcie."
+                    },
+                    {
+                        "key": "field_posp_cards_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Nie każdy kierunek z obszaru kreowania przestrzeni ma takie same wymagania. Portfolio dotyczy architektury, sprawdzian z rysunku dotyczy architektury wnętrz, a na architekturze krajobrazu przechodzisz standardową ścieżkę z dokumentami."
+                    },
+                    {
+                        "key": "field_posp_cards_items",
+                        "label": "Kafelki kierunków",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kierunek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_cards_item_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_posp_cards_items"
+                            },
+                            {
+                                "key": "field_posp_cards_item_label_is_green",
+                                "label": "Etykieta zielona",
+                                "name": "label_is_green",
+                                "type": "true_false",
+                                "ui": 1,
+                                "default_value": 0,
+                                "parent_repeater": "field_posp_cards_items"
+                            },
+                            {
+                                "key": "field_posp_cards_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_posp_cards_items"
+                            },
+                            {
+                                "key": "field_posp_cards_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_posp_cards_items"
+                            },
+                            {
+                                "key": "field_posp_cards_item_meta",
+                                "label": "Meta tagi",
+                                "name": "meta",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj tag",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_posp_cards_items",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_posp_cards_item_meta_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_posp_cards_item_meta"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_table",
+                "label": "Tabela",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_table_section",
+                "label": "Sekcja tabeli",
+                "name": "posp_table_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_table_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "porównanie"
+                    },
+                    {
+                        "key": "field_posp_table_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Portfolio vs sprawdzian vs dokumenty"
+                    },
+                    {
+                        "key": "field_posp_table_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Szybkie porównanie wymagań rekrutacyjnych."
+                    },
+                    {
+                        "key": "field_posp_table_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_table_header_col_1",
+                        "label": "Nagłówek kolumny 1",
+                        "name": "header_col_1",
+                        "type": "text",
+                        "default_value": "Co sprawdzasz?"
+                    },
+                    {
+                        "key": "field_posp_table_header_col_2",
+                        "label": "Nagłówek kolumny 2",
+                        "name": "header_col_2",
+                        "type": "text",
+                        "default_value": "Architektura"
+                    },
+                    {
+                        "key": "field_posp_table_header_col_3",
+                        "label": "Nagłówek kolumny 3",
+                        "name": "header_col_3",
+                        "type": "text",
+                        "default_value": "Architektura wnętrz"
+                    },
+                    {
+                        "key": "field_posp_table_header_col_4",
+                        "label": "Nagłówek kolumny 4",
+                        "name": "header_col_4",
+                        "type": "text",
+                        "default_value": "Architektura krajobrazu"
+                    },
+                    {
+                        "key": "field_posp_table_rows",
+                        "label": "Wiersze tabeli",
+                        "name": "rows",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj wiersz",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_table_row_label",
+                                "label": "Etykieta wiersza",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_posp_table_rows"
+                            },
+                            {
+                                "key": "field_posp_table_row_col_2",
+                                "label": "Kolumna 2",
+                                "name": "col_2",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_posp_table_rows"
+                            },
+                            {
+                                "key": "field_posp_table_row_col_3",
+                                "label": "Kolumna 3",
+                                "name": "col_3",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_posp_table_rows"
+                            },
+                            {
+                                "key": "field_posp_table_row_col_4",
+                                "label": "Kolumna 4",
+                                "name": "col_4",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_posp_table_rows"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_posp_table_cta_text",
+                        "label": "Przycisk — tekst",
+                        "name": "cta_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_posp_table_cta_url",
+                        "label": "Przycisk — link",
+                        "name": "cta_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_prep",
+                "label": "Przygotowanie",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_prep_section",
+                "label": "Sekcja przygotowania",
+                "name": "posp_prep_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_prep_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "przygotuj się"
+                    },
+                    {
+                        "key": "field_posp_prep_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "W jaki sposób przygotować się bez stresu?"
+                    },
+                    {
+                        "key": "field_posp_prep_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Chodzi o to, abyś zaprezentował(a) swoje predyspozycje."
+                    },
+                    {
+                        "key": "field_posp_prep_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Portfolio i sprawdzian mają pokazać, czy kandydat widzi proporcje, przestrzeń, światło i detal. To umiejętności, które można ćwiczyć."
+                    },
+                    {
+                        "key": "field_posp_prep_items",
+                        "label": "Kroki",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_prep_item_number",
+                                "label": "Numer",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_posp_prep_items"
+                            },
+                            {
+                                "key": "field_posp_prep_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_posp_prep_items"
+                            },
+                            {
+                                "key": "field_posp_prep_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_posp_prep_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_split",
+                "label": "Warszawa",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_split_section",
+                "label": "Sekcja split",
+                "name": "posp_split_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_split_watermark",
+                        "label": "Watermark sekcji",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Warszawa"
+                    },
+                    {
+                        "key": "field_posp_split_dark_watermark",
+                        "label": "Watermark w ciemnym boxie",
+                        "name": "dark_watermark",
+                        "type": "text",
+                        "default_value": "portfolio"
+                    },
+                    {
+                        "key": "field_posp_split_dark_title",
+                        "label": "Ciemny box — tytuł",
+                        "name": "dark_title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Warszawa i Wrocław mają swoje ścieżki rekrutacji."
+                    },
+                    {
+                        "key": "field_posp_split_dark_text",
+                        "label": "Ciemny box — tekst",
+                        "name": "dark_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Architektura i Architektura wnętrz dostępne są w Warszawie i we Wrocławiu, ale szczegóły składania prac, dokumentów i organizacji sprawdzianu warto zawsze sprawdzić na stronie wybranego miasta i kierunku."
+                    },
+                    {
+                        "key": "field_posp_split_dark_cta_text",
+                        "label": "Ciemny box — przycisk tekst",
+                        "name": "dark_cta_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_posp_split_dark_cta_url",
+                        "label": "Ciemny box — przycisk link",
+                        "name": "dark_cta_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_split_tips_title",
+                        "label": "Lista — tytuł",
+                        "name": "tips_title",
+                        "type": "text",
+                        "default_value": "Co kandydat powinien zapamiętać?"
+                    },
+                    {
+                        "key": "field_posp_split_tips_items",
+                        "label": "Lista — punkty",
+                        "name": "tips_items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_split_tips_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_posp_split_tips_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_faq",
+                "label": "FAQ",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_faq_section",
+                "label": "Sekcja FAQ",
+                "name": "posp_faq_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_faq_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "FAQ"
+                    },
+                    {
+                        "key": "field_posp_faq_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Najczęstsze pytania"
+                    },
+                    {
+                        "key": "field_posp_faq_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Portfolio nie musi być straszne."
+                    },
+                    {
+                        "key": "field_posp_faq_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Proste odpowiedzi dla kandydatów, którzy dopiero zaczynają myśleć o kierunkach projektowych."
+                    },
+                    {
+                        "key": "field_posp_faq_items",
+                        "label": "Pytania i odpowiedzi",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj pytanie",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_posp_faq_item_title",
+                                "label": "Pytanie",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_posp_faq_items"
+                            },
+                            {
+                                "key": "field_posp_faq_item_text",
+                                "label": "Odpowiedź",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_posp_faq_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_posp_tab_final",
+                "label": "CTA końcowe",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_posp_final_section",
+                "label": "Sekcja końcowa",
+                "name": "posp_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_posp_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Masz wątpliwości? Zapytaj o portfolio, zanim wyślesz zgłoszenie."
+                    },
+                    {
+                        "key": "field_posp_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Rekrutacja na kierunki projektowe może brzmieć poważnie, ale wszystko da się spokojnie zaplanować. Sprawdź wymagania, przygotuj prace lub dokumenty i wybierz kierunek dla siebie."
+                    },
+                    {
+                        "key": "field_posp_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_posp_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_posp_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zapisz się"
+                    },
+                    {
+                        "key": "field_posp_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-portfolio-sprawdzian.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
