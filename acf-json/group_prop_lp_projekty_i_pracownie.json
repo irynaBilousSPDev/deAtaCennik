@@ -1,0 +1,620 @@
+[
+    {
+        "key": "group_prop_lp_projekty_i_pracownie",
+        "title": "LP — Projekty i pracownie",
+        "fields": [
+            {
+                "key": "field_prop_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_hero_section",
+                "label": "Sekcja hero",
+                "name": "prop_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "projekty"
+                    },
+                    {
+                        "key": "field_prop_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Kreowanie przestrzeni / projekty i pracownie"
+                    },
+                    {
+                        "key": "field_prop_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "ATA w Warszawie i we Wrocławiu - to tu projektowanie widać w praktyce!"
+                    },
+                    {
+                        "key": "field_prop_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Na kierunkach związanych z kreowaniem przestrzeni nie kończysz na teorii. Pracujesz nad koncepcjami, rysunkami, modelami 3D, planszami, makietami i projektami, które odnoszą się do prawdziwych miejsc i potrzeb użytkowników."
+                    },
+                    {
+                        "key": "field_prop_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Zobacz projekty"
+                    },
+                    {
+                        "key": "field_prop_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": "https://akademiata.pl/aktualnosci/gmina-wyszkow-x-ata-podsumowanie-wspolpracy/"
+                    },
+                    {
+                        "key": "field_prop_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_prop_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_prop_hero_tool_tags",
+                        "label": "Tagi narzędzi (panel)",
+                        "name": "tool_tags",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj tag",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_hero_tool_tag_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_prop_hero_tool_tags"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_prop_hero_city_tag",
+                        "label": "Tag miasta (panel)",
+                        "name": "city_tag",
+                        "type": "text",
+                        "default_value": "Warszawa / Wrocław"
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_cards",
+                "label": "Praktyka",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_cards_section",
+                "label": "Sekcja kafelków",
+                "name": "prop_cards_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_cards_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "praktyka"
+                    },
+                    {
+                        "key": "field_prop_cards_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Studia projektowe w praktyce"
+                    },
+                    {
+                        "key": "field_prop_cards_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Zobacz, co możesz tworzyć na studiach."
+                    },
+                    {
+                        "key": "field_prop_cards_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Na kierunkach związanych z kreowaniem przestrzeni uczysz się przez działanie. Tworzysz szkice, plansze, makiety, wizualizacje, projekty urbanistyczne, koncepcje wnętrz, modele 3D i rozwiązania dla konkretnych miejsc."
+                    },
+                    {
+                        "key": "field_prop_cards_items",
+                        "label": "Kafelki",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kafelek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_cards_item_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_prop_cards_items"
+                            },
+                            {
+                                "key": "field_prop_cards_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_prop_cards_items"
+                            },
+                            {
+                                "key": "field_prop_cards_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_prop_cards_items"
+                            },
+                            {
+                                "key": "field_prop_cards_item_meta",
+                                "label": "Meta tagi",
+                                "name": "meta",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj tag",
+                                "min": 0,
+                                "max": 0,
+                                "parent_repeater": "field_prop_cards_items",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_prop_cards_item_meta_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_prop_cards_item_meta"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_split",
+                "label": "Pracownie",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_split_section",
+                "label": "Sekcja split",
+                "name": "prop_split_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_split_watermark",
+                        "label": "Watermark sekcji",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "pracownie"
+                    },
+                    {
+                        "key": "field_prop_split_dark_watermark",
+                        "label": "Watermark w ciemnym boxie",
+                        "name": "dark_watermark",
+                        "type": "text",
+                        "default_value": "pracownie"
+                    },
+                    {
+                        "key": "field_prop_split_dark_title",
+                        "label": "Ciemny box — tytuł",
+                        "name": "dark_title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Pracownie, narzędzia i laboratorium, które robią różnicę."
+                    },
+                    {
+                        "key": "field_prop_split_dark_text",
+                        "label": "Ciemny box — tekst",
+                        "name": "dark_text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "default_value": "Na kierunkach związanych z architekturą i wnętrzami ATA pokazuje nowoczesne pracownie, między innymi Projektowania Architektonicznego oraz Projektowania Wirtualnego Obiektu Budowlanego i Krajobrazu. To zaplecze, które pozwala łączyć szkic, technologię i projektowanie przestrzeni."
+                    },
+                    {
+                        "key": "field_prop_split_dark_cta_text",
+                        "label": "Ciemny box — przycisk tekst",
+                        "name": "dark_cta_text",
+                        "type": "text",
+                        "default_value": "Zobacz projekty"
+                    },
+                    {
+                        "key": "field_prop_split_dark_cta_url",
+                        "label": "Ciemny box — przycisk link",
+                        "name": "dark_cta_url",
+                        "type": "url",
+                        "default_value": "https://akademiata.pl/aktualnosci/gmina-wyszkow-x-ata-podsumowanie-wspolpracy/"
+                    },
+                    {
+                        "key": "field_prop_split_tips_title",
+                        "label": "Jasny box — tytuł",
+                        "name": "tips_title",
+                        "type": "text",
+                        "default_value": "Z jakich narzędzi możesz korzystać?"
+                    },
+                    {
+                        "key": "field_prop_split_tips_items",
+                        "label": "Jasny box — lista",
+                        "name": "tips_items",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj punkt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_split_tips_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_prop_split_tips_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_gallery",
+                "label": "Galeria",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_gallery_section",
+                "label": "Sekcja galerii",
+                "name": "prop_gallery_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_gallery_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "prace"
+                    },
+                    {
+                        "key": "field_prop_gallery_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Przykłady projektów i prac"
+                    },
+                    {
+                        "key": "field_prop_gallery_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Zobacz projekty, które powstają na styku nauki, miasta i praktyki."
+                    },
+                    {
+                        "key": "field_prop_gallery_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Na ATA możesz zobaczyć, jak praca studenta staje się częścią wystawy, współpracy z miastem albo odpowiedzią na konkretny problem przestrzenny. To projekty, które mają kontekst, odbiorców i realne miejsce na mapie."
+                    },
+                    {
+                        "key": "field_prop_gallery_items",
+                        "label": "Projekty",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj projekt",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_gallery_item_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "parent_repeater": "field_prop_gallery_items"
+                            },
+                            {
+                                "key": "field_prop_gallery_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_prop_gallery_items"
+                            },
+                            {
+                                "key": "field_prop_gallery_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_prop_gallery_items"
+                            },
+                            {
+                                "key": "field_prop_gallery_item_thumb_variant",
+                                "label": "Wariant miniatury",
+                                "name": "thumb_variant",
+                                "type": "select",
+                                "choices": {
+                                    "orange": "Pomarańczowy",
+                                    "green": "Zielony",
+                                    "dark": "Ciemny"
+                                },
+                                "default_value": "orange",
+                                "return_format": "value",
+                                "parent_repeater": "field_prop_gallery_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_process",
+                "label": "Proces",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_process_section",
+                "label": "Sekcja procesu",
+                "name": "prop_process_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_process_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "proces"
+                    },
+                    {
+                        "key": "field_prop_process_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Od pomysłu do prezentacji"
+                    },
+                    {
+                        "key": "field_prop_process_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Od pomysłu do prezentacji: tak może wyglądać Twoja praca projektowa."
+                    },
+                    {
+                        "key": "field_prop_process_items",
+                        "label": "Kroki",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_process_item_number",
+                                "label": "Numer",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_prop_process_items"
+                            },
+                            {
+                                "key": "field_prop_process_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_prop_process_items"
+                            },
+                            {
+                                "key": "field_prop_process_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_prop_process_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_events",
+                "label": "Wydarzenia",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_events_section",
+                "label": "Sekcja wydarzeń",
+                "name": "prop_events_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_events_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "wydarzenia"
+                    },
+                    {
+                        "key": "field_prop_events_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "PRAKTYKA TAKŻE POZA SALĄ LEKCYJNĄ"
+                    },
+                    {
+                        "key": "field_prop_events_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Wydarzenia, wystawy i kontakt z branżą."
+                    },
+                    {
+                        "key": "field_prop_events_items",
+                        "label": "Wydarzenia",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj wydarzenie",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_prop_events_item_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "parent_repeater": "field_prop_events_items"
+                            },
+                            {
+                                "key": "field_prop_events_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_prop_events_items"
+                            },
+                            {
+                                "key": "field_prop_events_item_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_prop_events_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_prop_tab_final",
+                "label": "Final",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_prop_final_section",
+                "label": "Sekcja końcowa",
+                "name": "prop_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_prop_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "default_value": "Twórz projekty, które można zobaczyć, omówić i pokazać światu."
+                    },
+                    {
+                        "key": "field_prop_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "default_value": "Na ATA uczysz się projektować krok po kroku: od szkicu i analizy miejsca, przez model 3D i makietę, aż po planszę, prezentację i udział w projektach inspirowanych prawdziwą przestrzenią."
+                    },
+                    {
+                        "key": "field_prop_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Zobacz projekty"
+                    },
+                    {
+                        "key": "field_prop_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": "https://akademiata.pl/aktualnosci/gmina-wyszkow-x-ata-podsumowanie-wspolpracy/"
+                    },
+                    {
+                        "key": "field_prop_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_prop_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-projekty-i-pracownie.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

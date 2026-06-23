@@ -156,7 +156,7 @@ return [
     ],
     'poro_split_section' => [
         'watermark' => 'krajobraz',
-        'dark_watermark' => 'LP03',
+        'dark_watermark' => '',
         'dark_title' => 'Architektura krajobrazu ma więcej niż jedną ścieżkę.',
         'dark_text' => 'Jeśli interesuje Cię krajobraz, możesz porównać nie tylko kierunek główny, ale też ścieżki związane z projektowaniem krajobrazu o funkcji rekreacyjnej oraz projektowaniem krajobrazu wielofunkcyjnego.',
         'dark_cta_text' => 'Sprawdź kierunki',

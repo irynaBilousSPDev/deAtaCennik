@@ -30,7 +30,7 @@
                         "label": "Eyebrow",
                         "name": "eyebrow",
                         "type": "text",
-                        "default_value": "LP03 / Kreowanie przestrzeni / portfolio i sprawdzian"
+                        "default_value": "Kreowanie przestrzeni / portfolio i sprawdzian"
                     },
                     {
                         "key": "field_posp_hero_title",

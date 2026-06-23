@@ -459,7 +459,7 @@
                         "label": "Watermark w ciemnym boxie",
                         "name": "dark_watermark",
                         "type": "text",
-                        "default_value": "LP03"
+                        "default_value": ""
                     },
                     {
                         "key": "field_poro_split_dark_title",

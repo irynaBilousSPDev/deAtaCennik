@@ -6,7 +6,7 @@
 return [
     'posp_hero_section' => [
         'watermark' => 'portfolio',
-        'eyebrow' => 'LP03 / Kreowanie przestrzeni / portfolio i sprawdzian',
+        'eyebrow' => 'Kreowanie przestrzeni / portfolio i sprawdzian',
         'title' => 'Portfolio albo egzamin z rysunku? Na spokojnie!',
         'lead' => 'Na kierunkach projektowych rekrutacja może wyglądać trochę inaczej niż na standardowych studiach. Zobacz, gdzie potrzebne jest portfolio, gdzie sprawdzian z rysunku, a gdzie wystarczą dokumenty.',
         'cta_primary_text' => '',
