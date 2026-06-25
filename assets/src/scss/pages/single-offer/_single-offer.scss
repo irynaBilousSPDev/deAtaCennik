@@ -172,7 +172,69 @@
     display: block;
 
     &.partners_logo__achievement {
-      height: 72px;
+      height: 80px;
+    }
+  }
+
+  .ranking-badge-tooltip {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    cursor: help;
+    outline: none;
+
+    &:hover .ranking-badge-tooltip__popup,
+    &:focus-visible .ranking-badge-tooltip__popup {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    &__popup {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 0;
+      z-index: 20;
+      min-width: 220px;
+      max-width: min(320px, 80vw);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      background: #3f3f3f;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.45;
+      text-align: left;
+      white-space: normal;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 24px;
+        border: 6px solid transparent;
+        border-top-color: #3f3f3f;
+      }
+
+      &--full {
+        display: none;
+      }
+
+      &--short {
+        display: block;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    .ranking-badge-tooltip__popup--full {
+      display: block;
+    }
+
+    .ranking-badge-tooltip__popup--short {
+      display: none;
     }
   }
 

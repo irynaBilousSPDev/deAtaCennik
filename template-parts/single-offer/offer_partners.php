@@ -13,6 +13,9 @@ if ($is_bachelor_master) {
         'url' => get_template_directory_uri() . '/assets/dist/img/ranking-perspektywy-2026-1-miejsce.png',
         'alt' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_alt'),
         'class' => 'partners_logo__achievement',
+        'has_tooltip' => true,
+        'tooltip_full' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_full'),
+        'tooltip_short' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_short'),
     );
 }
 
@@ -28,6 +31,7 @@ foreach ($partners_logo as $logo) {
         'url' => $image_url,
         'alt' => !empty($image['alt']) ? $image['alt'] : __('Partner Logo', 'akademiata'),
         'class' => '',
+        'has_tooltip' => false,
     );
 }
 
@@ -48,10 +52,24 @@ $section_title = $is_bachelor_master
     <h2><?php echo esc_html($section_title); ?></h2>
 
     <div class="partners_logo">
-        <?php foreach ($display_logos as $logo) : ?>
-            <img src="<?php echo esc_url($logo['url']); ?>"
-                 alt="<?php echo esc_attr($logo['alt']); ?>"
-                 <?php echo !empty($logo['class']) ? 'class="' . esc_attr($logo['class']) . '"' : ''; ?>>
-        <?php endforeach; ?>
+        <?php foreach ($display_logos as $logo) :
+            if (!empty($logo['has_tooltip'])) : ?>
+                <span class="ranking-badge-tooltip" tabindex="0">
+                    <img src="<?php echo esc_url($logo['url']); ?>"
+                         alt="<?php echo esc_attr($logo['alt']); ?>"
+                         class="<?php echo esc_attr($logo['class']); ?>">
+                    <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--full" role="tooltip">
+                        <?php echo nl2br(esc_html($logo['tooltip_full'])); ?>
+                    </span>
+                    <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--short" role="tooltip">
+                        <?php echo nl2br(esc_html($logo['tooltip_short'])); ?>
+                    </span>
+                </span>
+            <?php else : ?>
+                <img src="<?php echo esc_url($logo['url']); ?>"
+                     alt="<?php echo esc_attr($logo['alt']); ?>"
+                     <?php echo !empty($logo['class']) ? 'class="' . esc_attr($logo['class']) . '"' : ''; ?>>
+            <?php endif;
+        endforeach; ?>
     </div>
 </div>
