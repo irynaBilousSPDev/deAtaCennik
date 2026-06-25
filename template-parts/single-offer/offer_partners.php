@@ -42,6 +42,7 @@ $section_title = $is_bachelor_master
     <div class="partners_logo">
         <?php if ($is_bachelor_master) :
             set_query_var('ranking_badge_context', 'partners');
+            set_query_var('ranking_badge_variant', akademiata_get_ranking_perspektywy_badge_variant(get_the_ID()));
             get_template_part('template-parts/single-offer/ranking-perspektywy-badge');
         endif; ?>
 

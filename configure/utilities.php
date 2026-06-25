@@ -196,12 +196,100 @@ function akademiata_should_show_ranking_perspektywy_badge($page_id = null) {
 }
 
 /**
- * Ranking badge image URL when the asset exists in the theme.
+ * City slug for bachelor/master offers (`warszawa` or `wroclaw`).
  *
+ * @param int $post_id Post ID.
  * @return string
  */
-function akademiata_get_ranking_perspektywy_badge_image_url() {
-    $relative = 'assets/dist/img/ranking-perspektywy-2026-1-miejsce.png';
+function akademiata_get_offer_city_slug($post_id = 0) {
+    if (!$post_id) {
+        $post_id = get_the_ID();
+    }
+
+    if (!$post_id) {
+        return 'warszawa';
+    }
+
+    $terms = get_the_terms($post_id, 'city');
+
+    if (!empty($terms) && !is_wp_error($terms) && $terms[0]->slug === 'wroclaw') {
+        return 'wroclaw';
+    }
+
+    return 'warszawa';
+}
+
+/**
+ * Badge variant: warszawa, wroclaw (singles) or both (offer listing pages).
+ *
+ * @param int|null $post_id Optional post ID.
+ * @return string
+ */
+function akademiata_get_ranking_perspektywy_badge_variant($post_id = null) {
+    $passed = get_query_var('ranking_badge_variant', '');
+
+    if (in_array($passed, array('warszawa', 'wroclaw', 'both'), true)) {
+        return $passed;
+    }
+
+    if ($post_id === null) {
+        $post_id = get_the_ID();
+    }
+
+    if (is_page() && akademiata_should_show_ranking_perspektywy_badge($post_id)) {
+        return 'both';
+    }
+
+    $post_type = $post_id ? get_post_type($post_id) : get_post_type();
+
+    if (in_array($post_type, array('bachelor', 'master'), true)) {
+        return akademiata_get_offer_city_slug($post_id) === 'wroclaw' ? 'wroclaw' : 'warszawa';
+    }
+
+    return 'both';
+}
+
+/**
+ * Localized ranking badge string for the current variant.
+ *
+ * @param string      $field   alt|tooltip_short|subline
+ * @param string|null $variant warszawa|wroclaw|both
+ * @return string
+ */
+function akademiata_get_ranking_perspektywy_lang_string($field, $variant = null) {
+    if ($variant === null) {
+        $variant = akademiata_get_ranking_perspektywy_badge_variant();
+    }
+
+    $suffix = '';
+
+    if ($variant === 'warszawa') {
+        $suffix = '_warszawa';
+    } elseif ($variant === 'wroclaw') {
+        $suffix = '_wroclaw';
+    }
+
+    return akademiata_get_theme_lang_string('offer_ranking_perspektywy_' . $field . $suffix);
+}
+
+/**
+ * Ranking badge image URL when the asset exists in the theme.
+ *
+ * @param string|null $variant warszawa|wroclaw|both
+ * @return string
+ */
+function akademiata_get_ranking_perspektywy_badge_image_url($variant = null) {
+    if ($variant === null) {
+        $variant = akademiata_get_ranking_perspektywy_badge_variant();
+    }
+
+    $files = array(
+        'warszawa' => 'assets/dist/img/ranking-perspektywy-2026-warszawa.png',
+        'wroclaw'  => 'assets/dist/img/ranking-perspektywy-2026-wroclaw.png',
+        'both'     => 'assets/dist/img/ranking-perspektywy-2026-1-miejsce.png',
+    );
+
+    $relative = $files[ $variant ] ?? $files['both'];
     $path     = get_template_directory() . '/' . $relative;
 
     if (!file_exists($path)) {
@@ -1563,16 +1651,16 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'ДОСТИЖЕНИЯ И ПАРТНЕРЫ',
             ),
             'offer_ranking_perspektywy_alt' => array(
-                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie wśród niepublicznych uczelni zawodowych',
-                'en' => 'Perspektywy 2026 ranking – 1st place in Warsaw among private vocational universities',
-                'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві серед приватних професійних вузів',
-                'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве среди частных профессиональных вузов',
+                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie i Wrocławiu wśród niepublicznych uczelni zawodowych',
+                'en' => 'Perspektywy 2026 ranking – 1st place in Warsaw and Wrocław among private vocational universities',
+                'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві та Вроцлаві серед приватних професійних вузів',
+                'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве и Вроцлаве среди частных профессиональных вузов',
             ),
             'offer_ranking_perspektywy_tooltip_short' => array(
-                'pl' => "1. miejsce w Warszawie\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
-                'en' => "1st place in Warsaw\n6th place in Poland\n11th place in the overall ranking",
-                'uk' => "1 місце у Варшаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
-                'ru' => "1 место в Варшаве\n6 место в Польше\n11 место в общем рейтинге",
+                'pl' => "1. miejsce w Warszawie i Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
+                'en' => "1st place in Warsaw and Wrocław\n6th place in Poland\n11th place in the overall ranking",
+                'uk' => "1 місце у Варшаві та Вроцлаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
+                'ru' => "1 место в Варшаве и Вроцлаве\n6 место в Польше\n11 место в общем рейтинге",
             ),
             'offer_ranking_perspektywy_tooltip_hint' => array(
                 'pl' => 'Szczegóły rankingu',
@@ -1587,10 +1675,46 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => '1 МЕСТО',
             ),
             'offer_ranking_perspektywy_subline' => array(
+                'pl' => 'w Warszawie i Wrocławiu wśród niepublicznych uczelni zawodowych!',
+                'en' => 'in Warsaw and Wrocław among private vocational universities!',
+                'uk' => 'у Варшаві та Вроцлаві серед приватних професійних вузів!',
+                'ru' => 'в Варшаве и Вроцлаве среди частных профессиональных вузов!',
+            ),
+            'offer_ranking_perspektywy_alt_warszawa' => array(
+                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie wśród niepublicznych uczelni zawodowych',
+                'en' => 'Perspektywy 2026 ranking – 1st place in Warsaw among private vocational universities',
+                'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві серед приватних професійних вузів',
+                'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве среди частных профессиональных вузов',
+            ),
+            'offer_ranking_perspektywy_tooltip_short_warszawa' => array(
+                'pl' => "1. miejsce w Warszawie\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
+                'en' => "1st place in Warsaw\n6th place in Poland\n11th place in the overall ranking",
+                'uk' => "1 місце у Варшаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
+                'ru' => "1 место в Варшаве\n6 место в Польше\n11 место в общем рейтинге",
+            ),
+            'offer_ranking_perspektywy_subline_warszawa' => array(
                 'pl' => 'w Warszawie wśród niepublicznych uczelni zawodowych!',
                 'en' => 'in Warsaw among private vocational universities!',
                 'uk' => 'у Варшаві серед приватних професійних вузів!',
                 'ru' => 'в Варшаве среди частных профессиональных вузов!',
+            ),
+            'offer_ranking_perspektywy_alt_wroclaw' => array(
+                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce we Wrocławiu wśród niepublicznych uczelni zawodowych',
+                'en' => 'Perspektywy 2026 ranking – 1st place in Wrocław among private vocational universities',
+                'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Вроцлаві серед приватних професійних вузів',
+                'ru' => 'Рейтинг Perspektywy 2026 – 1 место во Вроцлаве среди частных профессиональных вузов',
+            ),
+            'offer_ranking_perspektywy_tooltip_short_wroclaw' => array(
+                'pl' => "1. miejsce w Warszawie i Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
+                'en' => "1st place in Warsaw and Wrocław\n6th place in Poland\n11th place in the overall ranking",
+                'uk' => "1 місце у Варшаві та Вроцлаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
+                'ru' => "1 место в Варшаве и Вроцлаве\n6 место в Польше\n11 место в общем рейтинге",
+            ),
+            'offer_ranking_perspektywy_subline_wroclaw' => array(
+                'pl' => 'we Wrocławiu wśród niepublicznych uczelni zawodowych!',
+                'en' => 'in Wrocław among private vocational universities!',
+                'uk' => 'у Вроцлаві серед приватних професійних вузів!',
+                'ru' => 'во Вроцлаве среди частных профессиональных вузов!',
             ),
         );
     }
