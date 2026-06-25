@@ -56,6 +56,10 @@
 .offer_wrapper--pg-mba {
   overflow: hidden;
 
+  .offer_content {
+    overflow: visible;
+  }
+
   #sidebar {
     width: 25%;
     position: fixed;

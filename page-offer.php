@@ -11,7 +11,7 @@ get_header();
         <!-- Page Title -->
         <div class="offer_page_header">
             <h1><?php echo get_the_title(); ?></h1>
-            <?php if (akademiata_is_bachelor_master_offer_listing_page()) :
+            <?php if (akademiata_should_show_ranking_perspektywy_badge()) :
                 set_query_var('ranking_badge_context', 'offer-header');
                 get_template_part('template-parts/single-offer/ranking-perspektywy-badge');
             endif; ?>

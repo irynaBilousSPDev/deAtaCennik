@@ -144,6 +144,74 @@ function akademiata_get_offer_listing_page_id_for_level($level) {
 }
 
 /**
+ * WPML-aware ID of the main Oferta page.
+ *
+ * @return int
+ */
+function akademiata_get_oferta_page_id() {
+    static $page_id = null;
+
+    if ($page_id !== null) {
+        return $page_id;
+    }
+
+    $page = get_page_by_path('oferta');
+    if (!$page) {
+        $page_id = 0;
+        return 0;
+    }
+
+    $lang    = apply_filters('wpml_current_language', 'pl');
+    $translated_id = (int) apply_filters('wpml_object_id', $page->ID, 'page', true, $lang);
+    $page_id = $translated_id > 0 ? $translated_id : (int) $page->ID;
+
+    return $page_id;
+}
+
+/**
+ * Whether the current page uses the Offer page template.
+ *
+ * @param int|null $page_id Optional page ID.
+ * @return bool
+ */
+function akademiata_is_offer_template_page($page_id = null) {
+    if ($page_id === null) {
+        if (!is_page()) {
+            return false;
+        }
+        $page_id = get_queried_object_id();
+    }
+
+    return get_page_template_slug((int) $page_id) === 'page-offer.php';
+}
+
+/**
+ * Whether the Perspektywy ranking badge should show in the offer page header.
+ *
+ * @param int|null $page_id Optional page ID.
+ * @return bool
+ */
+function akademiata_should_show_ranking_perspektywy_badge($page_id = null) {
+    return akademiata_is_offer_template_page($page_id);
+}
+
+/**
+ * Ranking badge image URL when the asset exists in the theme.
+ *
+ * @return string
+ */
+function akademiata_get_ranking_perspektywy_badge_image_url() {
+    $relative = 'assets/dist/img/ranking-perspektywy-2026-1-miejsce.png';
+    $path     = get_template_directory() . '/' . $relative;
+
+    if (!file_exists($path)) {
+        return '';
+    }
+
+    return get_template_directory_uri() . '/' . $relative;
+}
+
+/**
  * Whether the current page is a bachelor or master offer listing.
  *
  * @param int|null $page_id Optional page ID.
@@ -1511,6 +1579,18 @@ function akademiata_get_theme_lang_string($key) {
                 'en' => 'Ranking details',
                 'uk' => 'Деталі рейтингу',
                 'ru' => 'Подробности рейтинга',
+            ),
+            'offer_ranking_perspektywy_headline' => array(
+                'pl' => '1 MIEJSCE',
+                'en' => '1ST PLACE',
+                'uk' => '1 МІСЦЕ',
+                'ru' => '1 МЕСТО',
+            ),
+            'offer_ranking_perspektywy_subline' => array(
+                'pl' => 'w Warszawie wśród niepublicznych uczelni zawodowych!',
+                'en' => 'in Warsaw among private vocational universities!',
+                'uk' => 'у Варшаві серед приватних професійних вузів!',
+                'ru' => 'в Варшаве среди частных профессиональных вузов!',
             ),
         );
     }
