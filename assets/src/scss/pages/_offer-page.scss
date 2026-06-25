@@ -24,8 +24,24 @@
   min-height: 100vh;
 
   h1 {
-    padding-top: 24px;
-    margin-bottom: 2rem;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+.offer_page_header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  padding-top: 24px;
+  margin-bottom: 2rem;
+  overflow: visible;
+
+  h1 {
+    flex: 1 1 220px;
+    margin: 0;
   }
 }
 

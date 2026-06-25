@@ -108,6 +108,67 @@ function akademiata_pg_mba_archive_body_classes($classes) {
 }
 add_filter('body_class', 'akademiata_pg_mba_archive_body_classes');
 
+/**
+ * WPML-aware page ID for bachelor/master offer listing pages.
+ *
+ * @param string $level bachelor|master
+ * @return int
+ */
+function akademiata_get_offer_listing_page_id_for_level($level) {
+    static $cache = array();
+
+    if (!in_array($level, array('bachelor', 'master'), true)) {
+        return 0;
+    }
+
+    if (isset($cache[ $level ])) {
+        return $cache[ $level ];
+    }
+
+    $paths = array(
+        'bachelor' => 'oferta/studia-1-stopnia',
+        'master'   => 'oferta/studia-2-stopnia',
+    );
+
+    $page = get_page_by_path($paths[ $level ]);
+    if (!$page) {
+        $cache[ $level ] = 0;
+        return 0;
+    }
+
+    $lang = apply_filters('wpml_current_language', 'pl');
+    $page_id = (int) apply_filters('wpml_object_id', $page->ID, 'page', true, $lang);
+    $cache[ $level ] = $page_id > 0 ? $page_id : (int) $page->ID;
+
+    return $cache[ $level ];
+}
+
+/**
+ * Whether the current page is a bachelor or master offer listing.
+ *
+ * @param int|null $page_id Optional page ID.
+ * @return bool
+ */
+function akademiata_is_bachelor_master_offer_listing_page($page_id = null) {
+    if ($page_id === null) {
+        if (!is_page()) {
+            return false;
+        }
+        $page_id = get_queried_object_id();
+    }
+
+    $page_id = (int) $page_id;
+
+    return $page_id > 0 && in_array(
+        $page_id,
+        array(
+            akademiata_get_offer_listing_page_id_for_level('bachelor'),
+            akademiata_get_offer_listing_page_id_for_level('master'),
+        ),
+        true
+    );
+}
+
 function enqueue_slider_front_scripts() {
     wp_enqueue_script(
         'slider-ajax',

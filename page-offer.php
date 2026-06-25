@@ -9,7 +9,13 @@ get_header();
         <?php the_breadcrumb(); ?>
 
         <!-- Page Title -->
-        <h1><?php echo get_the_title(); ?></h1>
+        <div class="offer_page_header">
+            <h1><?php echo get_the_title(); ?></h1>
+            <?php if (akademiata_is_bachelor_master_offer_listing_page()) :
+                set_query_var('ranking_badge_context', 'offer-header');
+                get_template_part('template-parts/single-offer/ranking-perspektywy-badge');
+            endif; ?>
+        </div>
 
         <!-- Mobile Taxonomy Buttons (Slider) -->
         <?php
