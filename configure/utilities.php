@@ -1651,13 +1651,13 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'ДОСТИЖЕНИЯ И ПАРТНЕРЫ',
             ),
             'offer_ranking_perspektywy_alt' => array(
-                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie i Wrocławiu wśród niepublicznych uczelni zawodowych',
+                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie i we Wrocławiu wśród niepublicznych uczelni zawodowych',
                 'en' => 'Perspektywy 2026 ranking – 1st place in Warsaw and Wrocław among private vocational universities',
                 'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві та Вроцлаві серед приватних професійних вузів',
                 'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве и Вроцлаве среди частных профессиональных вузов',
             ),
             'offer_ranking_perspektywy_tooltip_short' => array(
-                'pl' => "1. miejsce w Warszawie i Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
+                'pl' => "1. miejsce w Warszawie i we Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
                 'en' => "1st place in Warsaw and Wrocław\n6th place in Poland\n11th place in the overall ranking",
                 'uk' => "1 місце у Варшаві та Вроцлаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
                 'ru' => "1 место в Варшаве и Вроцлаве\n6 место в Польше\n11 место в общем рейтинге",
@@ -1675,7 +1675,7 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => '1 МЕСТО',
             ),
             'offer_ranking_perspektywy_subline' => array(
-                'pl' => 'w Warszawie i Wrocławiu wśród niepublicznych uczelni zawodowych!',
+                'pl' => 'w Warszawie i we Wrocławiu wśród niepublicznych uczelni zawodowych!',
                 'en' => 'in Warsaw and Wrocław among private vocational universities!',
                 'uk' => 'у Варшаві та Вроцлаві серед приватних професійних вузів!',
                 'ru' => 'в Варшаве и Вроцлаве среди частных профессиональных вузов!',
