@@ -140,26 +140,13 @@
 
   &__image,
   .partners_logo__achievement {
-    height: 96px;
-    max-width: none;
-    width: auto;
-    object-fit: contain;
     display: block;
     flex-shrink: 0;
-  }
-
-  @media (min-width: 768px) {
-    &__image,
-    .partners_logo__achievement {
-      height: 108px;
-    }
-  }
-
-  @media (min-width: 1200px) {
-    &__image,
-    .partners_logo__achievement {
-      height: 114px;
-    }
+    width: auto;
+    height: auto;
+    max-width: 375px;
+    max-height: 96px;
+    object-fit: contain;
   }
 
   &--offer-header {

@@ -1705,10 +1705,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Рейтинг Perspektywy 2026 – 1 место во Вроцлаве среди частных профессиональных вузов',
             ),
             'offer_ranking_perspektywy_tooltip_short_wroclaw' => array(
-                'pl' => "1. miejsce w Warszawie i Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
-                'en' => "1st place in Warsaw and Wrocław\n6th place in Poland\n11th place in the overall ranking",
-                'uk' => "1 місце у Варшаві та Вроцлаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
-                'ru' => "1 место в Варшаве и Вроцлаве\n6 место в Польше\n11 место в общем рейтинге",
+                'pl' => "1. miejsce we Wrocławiu\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
+                'en' => "1st place in Wrocław\n6th place in Poland\n11th place in the overall ranking",
+                'uk' => "1 місце у Вроцлаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
+                'ru' => "1 место во Вроцлаве\n6 место в Польше\n11 место в общем рейтинге",
             ),
             'offer_ranking_perspektywy_subline_wroclaw' => array(
                 'pl' => 'we Wrocławiu wśród niepublicznych uczelni zawodowych!',
