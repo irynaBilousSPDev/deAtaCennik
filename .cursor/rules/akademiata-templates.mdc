@@ -18,9 +18,11 @@ alwaysApply: false
 
 ## Page templates (root)
 
-`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page.php`.
+`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page.php`.
 
-## LP landing pages (seria „Dopasuj studia do siebie”, ~10 stron)
+## LP landing pages
+
+### Seria „Dopasuj studia do siebie” (~10 stron)
 
 Każda LP = **osobny szablon** (nie flexible builder), własny SCSS w `assets/src/scss/pages/_{slug}-page.scss`, ACF JSON w `acf-json/group_{key}.json` z location `page_template` = `page-{slug}.php`.
 
@@ -31,7 +33,11 @@ Każda LP = **osobny szablon** (nie flexible builder), własny SCSS w `assets/sr
 | `configure/lp-defaults/{slug}/content.php` | Domyślna treść z HTML mockupu (`return [...]`) |
 | `configure/lp-defaults/{slug}/fields.php` | `{slug}_defaults()` + `{slug}_fields()` |
 
-Pierwsza: **Kreowanie przestrzeni** — `page-kreowanie-przestrzeni.php`. Druga: **Porównanie kierunków** — `page-porownanie-kierunkow.php`. Trzecia: **Portfolio i sprawdzian** — `page-portfolio-sprawdzian.php`. Czwarta: **Projekty i pracownie** — `page-projekty-i-pracownie.php`. Piąta: **Katalog kierunków** — `page-katalog-kierunkow.php`.
+**Dopasuj studia:** Kreowanie przestrzeni, Porównanie kierunków, Portfolio i sprawdzian, Projekty i pracownie, Katalog kierunków.
+
+### Seria „Studiuj to, co Cię kręci”
+
+Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-studiuj-to-co-cie-kreci.php` (LP 02.1, studia I stopnia).
 
 ## `partials/` vs `template-parts/`
 

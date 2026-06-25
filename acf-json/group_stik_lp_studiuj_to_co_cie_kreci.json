@@ -1,0 +1,694 @@
+[
+    {
+        "key": "group_stik_lp_studiuj_to_co_cie_kreci",
+        "title": "LP — Studiuj to, co Cię kręci",
+        "fields": [
+            {
+                "key": "field_stik_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_hero_section",
+                "label": "Sekcja hero",
+                "name": "stik_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Studia po maturze"
+                    },
+                    {
+                        "key": "field_stik_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Studia po maturze / kampania główna"
+                    },
+                    {
+                        "key": "field_stik_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "",
+                        "default_value": "Studiuj to, co Cię kręci. Wybierz to, co się opłaca."
+                    },
+                    {
+                        "key": "field_stik_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "instructions": "",
+                        "default_value": "Masz maturę albo właśnie ją zdajesz i zastanawiasz się, co dalej? Studia I stopnia to pierwszy krok po szkole średniej. Na ATA wybierasz kierunek, który pasuje do Twoich zainteresowań i daje konkretne możliwości na rynku pracy."
+                    },
+                    {
+                        "key": "field_stik_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_stik_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_stik_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Nie wiesz, co wybrać? Sprawdź →"
+                    },
+                    {
+                        "key": "field_stik_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_stik_hero_facts",
+                        "label": "Fakty (panel)",
+                        "name": "facts",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj fakt",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_hero_fact_number",
+                                "label": "Liczba",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_stik_hero_facts"
+                            },
+                            {
+                                "key": "field_stik_hero_fact_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_stik_hero_facts"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_stik_hero_photo",
+                        "label": "Zdjęcie hero",
+                        "name": "hero_photo",
+                        "type": "image",
+                        "instructions": "",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_stik_hero_panel_title",
+                        "label": "Panel — tytuł",
+                        "name": "panel_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Nie musisz mieć gotowego planu."
+                    },
+                    {
+                        "key": "field_stik_hero_panel_text",
+                        "label": "Panel — tekst",
+                        "name": "panel_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Wybierz obszar, który Cię interesuje: nowe technologie, design, architektura, biznes, logistyka, turystyka, środowisko albo zarządzanie."
+                    },
+                    {
+                        "key": "field_stik_hero_panel_link_text",
+                        "label": "Panel — link tekst",
+                        "name": "panel_link_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Nie wiesz, co wybrać? Sprawdź →"
+                    },
+                    {
+                        "key": "field_stik_hero_panel_link_url",
+                        "label": "Panel — link URL",
+                        "name": "panel_link_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_explain",
+                "label": "Studia I stopnia",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_explain_section",
+                "label": "Sekcja wyjaśnienia",
+                "name": "stik_explain_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_explain_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "czym są?"
+                    },
+                    {
+                        "key": "field_stik_explain_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Czym są studia I stopnia?"
+                    },
+                    {
+                        "key": "field_stik_explain_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "To pierwsze studia, na które możesz pójść po maturze. Bez specjalistycznego doświadczenia, bez gotowego planu na całe życie. Studia mają Cię wprowadzić w wybraną dziedzinę krok po kroku."
+                    },
+                    {
+                        "key": "field_stik_explain_cta_text",
+                        "label": "Przycisk — tekst",
+                        "name": "cta_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź kierunki"
+                    },
+                    {
+                        "key": "field_stik_explain_cta_url",
+                        "label": "Przycisk — link",
+                        "name": "cta_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_stik_explain_box_title",
+                        "label": "Ramka — tytuł",
+                        "name": "box_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Najpierw podstawy, potem praktyka."
+                    },
+                    {
+                        "key": "field_stik_explain_box_text",
+                        "label": "Ramka — tekst",
+                        "name": "box_text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "instructions": "",
+                        "default_value": "Na początku poznajesz najważniejsze pojęcia i narzędzia. Później uczysz się coraz bardziej praktycznych rzeczy: projektujesz, analizujesz, programujesz, rozwiązujesz problemy, tworzysz koncepcje albo pracujesz z dokumentacją. Po ukończeniu studiów zdobywasz dyplom oraz tytuł: licencjata, inżyniera albo inżyniera architekta."
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_titles",
+                "label": "Tytuły",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_titles_section",
+                "label": "Sekcja tytułów",
+                "name": "stik_titles_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_titles_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Jaki tytuł możesz zdobyć?"
+                    },
+                    {
+                        "key": "field_stik_titles_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Wszystko zależy od wybranego kierunku. Prosty podział pomaga szybko zrozumieć, czym różnią się studia licencjackie, inżynierskie i architektoniczne."
+                    },
+                    {
+                        "key": "field_stik_titles_items",
+                        "label": "Pozycje",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj pozycję",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_titles_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_stik_titles_items"
+                            },
+                            {
+                                "key": "field_stik_titles_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_stik_titles_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_for",
+                "label": "Dla kogo",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_for_section",
+                "label": "Sekcja „Dla kogo”",
+                "name": "stik_for_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_for_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Dla kogo są te studia?"
+                    },
+                    {
+                        "key": "field_stik_for_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Dla osób po liceum lub technikum, które chcą się dalej kształcić. Nie musisz mieć wszystkiego zaplanowanego — wystarczy, że wybierzesz kierunek dopasowany do swoich zainteresowań."
+                    },
+                    {
+                        "key": "field_stik_for_items",
+                        "label": "Punkty",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj punkt",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_for_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_stik_for_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_interests",
+                "label": "Zainteresowania",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_interests_section",
+                "label": "Sekcja zainteresowań",
+                "name": "stik_interests_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_interests_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Wybierz kierunek zgodny z tym, co Cię interesuje"
+                    },
+                    {
+                        "key": "field_stik_interests_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Oferta ATA obejmuje różne obszary: od nowych technologii i projektowania, przez biznes i logistykę, po inżynierię, turystykę i ochronę środowiska."
+                    },
+                    {
+                        "key": "field_stik_interests_items",
+                        "label": "Obszary",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj obszar",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_interests_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_stik_interests_items"
+                            },
+                            {
+                                "key": "field_stik_interests_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_stik_interests_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_study",
+                "label": "Nauka",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_study_section",
+                "label": "Sekcja nauki",
+                "name": "stik_study_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_study_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Jak wygląda nauka na ATA?"
+                    },
+                    {
+                        "key": "field_stik_study_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Studia to nie tylko wykłady i notatki. Uczysz się przez ćwiczenia, projekty, zadania praktyczne i kontakt z wykładowcami, którzy znają swoją branżę."
+                    },
+                    {
+                        "key": "field_stik_study_text_secondary",
+                        "label": "Tekst dodatkowy",
+                        "name": "text_secondary",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "W zależności od kierunku możesz projektować, analizować, programować, tworzyć koncepcje, pracować z narzędziami branżowymi albo przygotowywać projekty biznesowe."
+                    },
+                    {
+                        "key": "field_stik_study_box_title",
+                        "label": "Ramka — tytuł",
+                        "name": "box_title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Po co mi te studia?"
+                    },
+                    {
+                        "key": "field_stik_study_box_text",
+                        "label": "Ramka — tekst",
+                        "name": "box_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Żeby zdobyć pierwszy dyplom uczelni wyższej, lepiej zrozumieć wybraną branżę i mieć konkretniejszy start na rynku pracy. Po studiach I stopnia możesz też kontynuować naukę na studiach II stopnia."
+                    },
+                    {
+                        "key": "field_stik_study_box_link_text",
+                        "label": "Ramka — link tekst",
+                        "name": "box_link_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Zobacz wszystkie kierunki →"
+                    },
+                    {
+                        "key": "field_stik_study_box_link_url",
+                        "label": "Ramka — link URL",
+                        "name": "box_link_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_process",
+                "label": "Proces",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_process_section",
+                "label": "Sekcja procesu",
+                "name": "stik_process_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_process_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Jak zacząć studiowanie?"
+                    },
+                    {
+                        "key": "field_stik_process_items",
+                        "label": "Kroki",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_process_item_number",
+                                "label": "Numer",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_stik_process_items"
+                            },
+                            {
+                                "key": "field_stik_process_item_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_stik_process_items"
+                            },
+                            {
+                                "key": "field_stik_process_item_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "parent_repeater": "field_stik_process_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_faq",
+                "label": "FAQ",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_faq_section",
+                "label": "Sekcja FAQ",
+                "name": "stik_faq_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_faq_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Najczęstsze pytania"
+                    },
+                    {
+                        "key": "field_stik_faq_items",
+                        "label": "Pytania",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj pytanie",
+                        "instructions": "",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_stik_faq_item_title",
+                                "label": "Pytanie",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_stik_faq_items"
+                            },
+                            {
+                                "key": "field_stik_faq_item_text",
+                                "label": "Odpowiedź",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "parent_repeater": "field_stik_faq_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_stik_tab_final",
+                "label": "Final",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_stik_final_section",
+                "label": "Sekcja końcowa",
+                "name": "stik_final_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_stik_final_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "instructions": "",
+                        "default_value": "Twoja przyszłość zaczyna się od dobrego wyboru."
+                    },
+                    {
+                        "key": "field_stik_final_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "instructions": "",
+                        "default_value": "Sprawdź ofertę ATA, porównaj kierunki i wybierz ten, który naprawdę pasuje do Ciebie."
+                    },
+                    {
+                        "key": "field_stik_final_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Sprawdź kierunki studiów I stopnia"
+                    },
+                    {
+                        "key": "field_stik_final_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_stik_final_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "instructions": "",
+                        "default_value": "Skontaktuj się z rekrutacją"
+                    },
+                    {
+                        "key": "field_stik_final_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "instructions": "",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-studiuj-to-co-cie-kreci.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
