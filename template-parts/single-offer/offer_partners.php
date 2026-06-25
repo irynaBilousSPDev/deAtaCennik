@@ -59,10 +59,18 @@ $section_title = $is_bachelor_master
                          alt="<?php echo esc_attr($logo['alt']); ?>"
                          class="<?php echo esc_attr($logo['class']); ?>">
                     <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--full" role="tooltip">
-                        <?php echo nl2br(esc_html($logo['tooltip_full'])); ?>
+                        <ul class="ranking-badge-tooltip__list">
+                            <?php foreach (array_filter(array_map('trim', explode("\n", $logo['tooltip_full']))) as $line) : ?>
+                                <li><?php echo esc_html($line); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
                     </span>
                     <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--short" role="tooltip">
-                        <?php echo nl2br(esc_html($logo['tooltip_short'])); ?>
+                        <ul class="ranking-badge-tooltip__list ranking-badge-tooltip__list--compact">
+                            <?php foreach (array_filter(array_map('trim', explode("\n", $logo['tooltip_short']))) as $line) : ?>
+                                <li><?php echo esc_html($line); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
                     </span>
                 </span>
             <?php else : ?>

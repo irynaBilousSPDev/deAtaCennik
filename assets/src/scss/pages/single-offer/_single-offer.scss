@@ -155,8 +155,12 @@
 .offer_partners {
   max-width: 800px;
   width: 100%;
-  overflow: hidden;
-  position: relative;   
+  overflow: visible;
+  position: relative;
+
+  &.has-scroll {
+    overflow: hidden;
+  }
 
   .partners_logo {
     display: flex;
@@ -167,12 +171,12 @@
   .partners_logo img {
     height: 90px;
     flex-shrink: 0;
-    width: auto;  
+    width: auto;
     object-fit: contain;
     display: block;
 
     &.partners_logo__achievement {
-      height: 80px;
+      height: 108px;
     }
   }
 
@@ -180,42 +184,50 @@
     position: relative;
     display: inline-flex;
     flex-shrink: 0;
-    cursor: help;
+    cursor: pointer;
     outline: none;
 
-    &:hover .ranking-badge-tooltip__popup,
-    &:focus-visible .ranking-badge-tooltip__popup {
-      opacity: 1;
-      visibility: visible;
+    &:hover,
+    &:focus-visible {
+      .ranking-badge-tooltip__popup {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
     }
 
     &__popup {
       position: absolute;
-      bottom: calc(100% + 10px);
+      top: calc(100% + 14px);
       left: 0;
-      z-index: 20;
-      min-width: 220px;
-      max-width: min(320px, 80vw);
-      padding: 1rem 1.25rem;
-      border-radius: 8px;
-      background: #3f3f3f;
-      color: #fff;
-      font-size: 14px;
-      line-height: 1.45;
+      z-index: 50;
+      min-width: 280px;
+      max-width: min(400px, calc(100vw - 32px));
+      padding: 1.1rem 1.25rem;
+      border-radius: 14px;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 15px;
+      line-height: 1.55;
       text-align: left;
       white-space: normal;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.2s ease;
+      transform: translateY(6px);
+      transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.14),
+        0 0 0 1px rgba(0, 0, 0, 0.06);
       pointer-events: none;
 
-      &::after {
+      &::before {
         content: '';
         position: absolute;
-        top: 100%;
-        left: 24px;
-        border: 6px solid transparent;
-        border-top-color: #3f3f3f;
+        bottom: 100%;
+        left: 28px;
+        border: 8px solid transparent;
+        border-bottom-color: #fff;
+        filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.04));
       }
 
       &--full {
@@ -224,6 +236,28 @@
 
       &--short {
         display: block;
+      }
+    }
+
+    &__list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      li {
+        position: relative;
+        padding: 0.55rem 0 0.55rem 1rem;
+        border-left: 3px solid vars.$primary;
+
+        & + li {
+          margin-top: 0.35rem;
+        }
+      }
+
+      &--compact li {
+        padding-top: 0.35rem;
+        padding-bottom: 0.35rem;
+        font-weight: 600;
       }
     }
   }
