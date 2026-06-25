@@ -14,8 +14,8 @@ if ($is_bachelor_master) {
         'alt' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_alt'),
         'class' => 'partners_logo__achievement',
         'has_tooltip' => true,
-        'tooltip_full' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_full'),
-        'tooltip_short' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_short'),
+        'tooltip' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_short'),
+        'tooltip_hint' => akademiata_get_theme_lang_string('offer_ranking_perspektywy_tooltip_hint'),
     );
 }
 
@@ -54,20 +54,19 @@ $section_title = $is_bachelor_master
     <div class="partners_logo">
         <?php foreach ($display_logos as $logo) :
             if (!empty($logo['has_tooltip'])) : ?>
-                <span class="ranking-badge-tooltip" tabindex="0">
+                <span class="ranking-badge-tooltip"
+                      tabindex="0"
+                      aria-label="<?php echo esc_attr($logo['tooltip_hint']); ?>">
                     <img src="<?php echo esc_url($logo['url']); ?>"
                          alt="<?php echo esc_attr($logo['alt']); ?>"
                          class="<?php echo esc_attr($logo['class']); ?>">
-                    <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--full" role="tooltip">
-                        <ul class="ranking-badge-tooltip__list">
-                            <?php foreach (array_filter(array_map('trim', explode("\n", $logo['tooltip_full']))) as $line) : ?>
-                                <li><?php echo esc_html($line); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
+                    <span class="ranking-badge-tooltip__trigger" aria-hidden="true">
+                        <span class="ranking-badge-tooltip__icon">i</span>
+                        <span class="ranking-badge-tooltip__hint"><?php echo esc_html($logo['tooltip_hint']); ?></span>
                     </span>
-                    <span class="ranking-badge-tooltip__popup ranking-badge-tooltip__popup--short" role="tooltip">
-                        <ul class="ranking-badge-tooltip__list ranking-badge-tooltip__list--compact">
-                            <?php foreach (array_filter(array_map('trim', explode("\n", $logo['tooltip_short']))) as $line) : ?>
+                    <span class="ranking-badge-tooltip__popup" role="tooltip">
+                        <ul class="ranking-badge-tooltip__list">
+                            <?php foreach (array_filter(array_map('trim', explode("\n", $logo['tooltip']))) as $line) : ?>
                                 <li><?php echo esc_html($line); ?></li>
                             <?php endforeach; ?>
                         </ul>

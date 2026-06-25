@@ -186,7 +186,7 @@
     display: block;
 
     &.partners_logo__achievement {
-      height: 124px;
+      height: 96px;
       max-width: none;
       width: auto;
     }
@@ -194,22 +194,25 @@
 
   @media (min-width: 768px) {
     .partners_logo img.partners_logo__achievement {
-      height: 140px;
+      height: 108px;
     }
   }
 
   @media (min-width: 1200px) {
     .partners_logo img.partners_logo__achievement {
-      height: 152px;
+      height: 114px;
     }
   }
 
   .ranking-badge-tooltip {
     position: relative;
     display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
     flex-shrink: 0;
     cursor: pointer;
     outline: none;
+    gap: 6px;
 
     &:hover,
     &:focus-visible {
@@ -218,22 +221,56 @@
         visibility: visible;
         transform: translateY(0);
       }
+
+      .ranking-badge-tooltip__trigger {
+        color: vars.$primary;
+      }
+    }
+
+    &__trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #5a5a5a;
+      font-size: 13px;
+      line-height: 1.2;
+      transition: color 0.2s ease;
+    }
+
+    &__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: vars.$primary;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      font-style: italic;
+      flex-shrink: 0;
+    }
+
+    &__hint {
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
 
     &__popup {
       position: absolute;
-      bottom: calc(100% + 14px);
+      bottom: calc(100% - 4px);
       top: auto;
       left: 0;
       z-index: 50;
-      min-width: 300px;
-      max-width: min(420px, calc(100vw - 32px));
-      padding: 1.15rem 1.35rem;
-      border-radius: 14px;
+      min-width: 240px;
+      max-width: min(300px, calc(100vw - 32px));
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
       background: #fff;
       color: #1a1a1a;
-      font-size: 15px;
-      line-height: 1.55;
+      font-size: 14px;
+      line-height: 1.45;
       text-align: left;
       white-space: normal;
       opacity: 0;
@@ -241,7 +278,7 @@
       transform: translateY(6px);
       transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
       box-shadow:
-        0 18px 45px rgba(0, 0, 0, 0.14),
+        0 14px 36px rgba(0, 0, 0, 0.12),
         0 0 0 1px rgba(0, 0, 0, 0.06);
       pointer-events: none;
 
@@ -250,18 +287,10 @@
         position: absolute;
         top: 100%;
         bottom: auto;
-        left: 32px;
-        border: 8px solid transparent;
+        left: 20px;
+        border: 7px solid transparent;
         border-top-color: #fff;
         filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.04));
-      }
-
-      &--full {
-        display: none;
-      }
-
-      &--short {
-        display: block;
       }
     }
 
@@ -272,29 +301,14 @@
 
       li {
         position: relative;
-        padding: 0.55rem 0 0.55rem 1rem;
+        padding: 0.35rem 0 0.35rem 0.85rem;
         border-left: 3px solid vars.$primary;
+        font-weight: 600;
 
         & + li {
-          margin-top: 0.35rem;
+          margin-top: 0.25rem;
         }
       }
-
-      &--compact li {
-        padding-top: 0.35rem;
-        padding-bottom: 0.35rem;
-        font-weight: 600;
-      }
-    }
-  }
-
-  @media (min-width: 768px) {
-    .ranking-badge-tooltip__popup--full {
-      display: block;
-    }
-
-    .ranking-badge-tooltip__popup--short {
-      display: none;
     }
   }
 

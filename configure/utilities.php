@@ -1439,17 +1439,17 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві серед приватних професійних вузів',
                 'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве среди частных профессиональных вузов',
             ),
-            'offer_ranking_perspektywy_tooltip_full' => array(
-                'pl' => "1. miejsce w Warszawie – jesteśmy bezkonkurencyjnym liderem w stolicy wśród niepublicznych uczelni zawodowych!\n6. miejsce w Polsce – w zestawieniu wszystkich zawodowych uczelni niepublicznych w kraju.\n11. miejsce w rankingu ogólnym – w ścisłej elicie wszystkich (zarówno państwowych, jak i prywatnych) uczelni zawodowych w Polsce.",
-                'en' => "1st place in Warsaw – we are the unrivalled leader in the capital among private vocational universities!\n6th place in Poland – among all private vocational universities in the country.\n11th place in the overall ranking – in the elite of all (both public and private) vocational universities in Poland.",
-                'uk' => "1 місце у Варшаві – ми беззаперечний лідер у столиці серед приватних професійних вузів!\n6 місце в Польщі – серед усіх приватних професійних вузів у країні.\n11 місце в загальному рейтингу – в еліті всіх (як державних, так і приватних) професійних вузів Польщі.",
-                'ru' => "1 место в Варшаве – мы безоговорочный лидер в столице среди частных профессиональных вузов!\n6 место в Польше – среди всех частных профессиональных вузов в стране.\n11 место в общем рейтинге – в элите всех (как государственных, так и частных) профессиональных вузов Польши.",
-            ),
             'offer_ranking_perspektywy_tooltip_short' => array(
                 'pl' => "1. miejsce w Warszawie\n6. miejsce w Polsce\n11. miejsce w rankingu ogólnym",
                 'en' => "1st place in Warsaw\n6th place in Poland\n11th place in the overall ranking",
                 'uk' => "1 місце у Варшаві\n6 місце в Польщі\n11 місце в загальному рейтингу",
                 'ru' => "1 место в Варшаве\n6 место в Польше\n11 место в общем рейтинге",
+            ),
+            'offer_ranking_perspektywy_tooltip_hint' => array(
+                'pl' => 'Szczegóły rankingu',
+                'en' => 'Ranking details',
+                'uk' => 'Деталі рейтингу',
+                'ru' => 'Подробности рейтинга',
             ),
         );
     }
