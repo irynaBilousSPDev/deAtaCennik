@@ -170,6 +170,10 @@
     width: auto;  
     object-fit: contain;
     display: block;
+
+    &.partners_logo__achievement {
+      height: 72px;
+    }
   }
 
   &.has-scroll .partners_logo {

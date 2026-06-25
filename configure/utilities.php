@@ -1427,6 +1427,18 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Немає результатів для цієї локації.',
                 'ru' => 'Нет результатов для этой локации.',
             ),
+            'offer_achievements_partners_title' => array(
+                'pl' => 'OSIĄGNIĘCIA I PARTNERZY',
+                'en' => 'ACHIEVEMENTS AND PARTNERS',
+                'uk' => 'ДОСЯГНЕННЯ ТА ПАРТНЕРИ',
+                'ru' => 'ДОСТИЖЕНИЯ И ПАРТНЕРЫ',
+            ),
+            'offer_ranking_perspektywy_alt' => array(
+                'pl' => 'Ranking Perspektywy 2026 – 1. miejsce w Warszawie wśród niepublicznych uczelni zawodowych',
+                'en' => 'Perspektywy 2026 ranking – 1st place in Warsaw among private vocational universities',
+                'uk' => 'Рейтинг Perspektywy 2026 – 1 місце у Варшаві серед приватних професійних вузів',
+                'ru' => 'Рейтинг Perspektywy 2026 – 1 место в Варшаве среди частных профессиональных вузов',
+            ),
         );
     }
 
