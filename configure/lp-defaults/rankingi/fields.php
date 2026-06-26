@@ -38,12 +38,23 @@ function akademiata_rankingi_title_allowed_tags(): array {
 /**
  * @param string|null $text
  */
+function akademiata_rankingi_title_normalize($text): string {
+    if ($text === '' || $text === null) {
+        return '';
+    }
+
+    return preg_replace('/\r\n|\r|\n/', '<br>', (string) $text);
+}
+
+/**
+ * @param string|null $text
+ */
 function akademiata_rankingi_title_html($text): string {
     if ($text === '' || $text === null) {
         return '';
     }
 
-    return wp_kses((string) $text, akademiata_rankingi_title_allowed_tags());
+    return wp_kses(akademiata_rankingi_title_normalize($text), akademiata_rankingi_title_allowed_tags());
 }
 
 /**
@@ -59,13 +70,13 @@ function akademiata_rankingi_echo_title_mark($title, $highlight = ''): void {
 
     if ($highlight !== '' && $highlight !== null && strpos($title, $highlight) !== false) {
         $parts = explode($highlight, $title, 2);
-        echo wp_kses($parts[0], $allowed);
+        echo wp_kses(akademiata_rankingi_title_normalize($parts[0]), $allowed);
         echo '<mark>' . esc_html($highlight) . '</mark>';
-        echo wp_kses($parts[1] ?? '', $allowed);
+        echo wp_kses(akademiata_rankingi_title_normalize($parts[1] ?? ''), $allowed);
         return;
     }
 
-    echo wp_kses($title, $allowed);
+    echo wp_kses(akademiata_rankingi_title_normalize($title), $allowed);
 }
 
 /**
@@ -77,10 +88,10 @@ function akademiata_rankingi_echo_title_em($title, $emphasis = ''): void {
         return;
     }
 
-    echo wp_kses($title, akademiata_rankingi_title_allowed_tags());
+    echo wp_kses(akademiata_rankingi_title_normalize($title), akademiata_rankingi_title_allowed_tags());
 
     if ($emphasis !== '' && $emphasis !== null) {
-        echo ' <em>' . wp_kses($emphasis, akademiata_rankingi_title_allowed_tags()) . '</em>';
+        echo ' <em>' . wp_kses(akademiata_rankingi_title_normalize($emphasis), akademiata_rankingi_title_allowed_tags()) . '</em>';
     }
 }
 
