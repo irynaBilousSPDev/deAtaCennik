@@ -27,3 +27,37 @@ function akademiata_rankingi_fields($acf_fields): array {
 
     return $merged;
 }
+
+/**
+ * Default theme-bundled video for the rankingi LP (bypasses WP 2 MB upload limit).
+ */
+function akademiata_rankingi_theme_video_filename(): string {
+    return 'ATAMISTRZEMSWIATA1.mp4';
+}
+
+function akademiata_rankingi_theme_video_path(): string {
+    return get_template_directory() . '/assets/dist/video/' . akademiata_rankingi_theme_video_filename();
+}
+
+function akademiata_rankingi_theme_video_url(): string {
+    if (!is_readable(akademiata_rankingi_theme_video_path())) {
+        return '';
+    }
+
+    return get_template_directory_uri() . '/assets/dist/video/' . akademiata_rankingi_theme_video_filename();
+}
+
+/**
+ * @param array<string, mixed> $film
+ */
+function akademiata_rankingi_resolve_video_url(array $film): string {
+    if (!empty($film['video_url'])) {
+        return (string) $film['video_url'];
+    }
+
+    if (is_array($film['video'] ?? null) && !empty($film['video']['url'])) {
+        return (string) $film['video']['url'];
+    }
+
+    return akademiata_rankingi_theme_video_url();
+}

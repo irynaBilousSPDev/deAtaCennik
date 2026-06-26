@@ -10,5 +10,9 @@ deploy.local.env
 #assets/src
 node_modules/
 
+# Large LP videos — deploy via SFTP (assets/dist/video/), not WP media library
+assets/dist/video/*.mp4
+assets/dist/video/*.webm
+
 
 #_RESSOURCES/

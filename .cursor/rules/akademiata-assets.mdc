@@ -20,6 +20,7 @@ alwaysApply: false
 | `main` | `assets/src/js/main.js` |
 | `ajaxFilter` | `assets/src/js/ajax-filter.js` |
 | `ajaxSlider` | `assets/src/js/ajax-load-cpt.js` |
+| `lpRankingi` | `assets/src/js/lp-rankingi.js` |
 
 `main.js` imports `_generalScripts.js` (sliders, tabs, YouTube) and `prices-calculator.js`.
 
@@ -31,7 +32,7 @@ Output: `assets/dist/css/main.css` (+ some page-specific CSS if built separately
 
 ## Enqueued (`configure/js-css.php`)
 
-Bootstrap 4 CDN, Typekit, `main.css`, jQuery, Popper, Bootstrap JS, `vendors.js`, `main.js`. Conditional: `ajaxFilter.js`, `ajaxSlider.js`. Fancybox from `configure.php`.
+Bootstrap 4 CDN, Typekit, `main.css`, jQuery, Popper, Bootstrap JS, `vendors.js`, `main.js`. Conditional: `ajaxFilter.js`, `ajaxSlider.js`, `lpRankingi.js` (page-rankingi). Fancybox from `configure.php`.
 
 ## Hero slider (homepage)
 

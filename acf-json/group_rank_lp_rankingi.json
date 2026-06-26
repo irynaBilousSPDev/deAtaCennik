@@ -571,13 +571,12 @@
                         "default_value": "Liczby robią wrażenie — ale to ludzie je tworzą. Zobacz, co potrafią studenci i absolwenci ATA, gdy zejdą z sali wykładowej."
                     },
                     {
-                        "key": "field_rank_film_video",
-                        "label": "Plik wideo",
-                        "name": "video",
-                        "type": "file",
-                        "return_format": "array",
-                        "library": "all",
-                        "mime_types": "mp4,webm"
+                        "key": "field_rank_film_video_url",
+                        "label": "URL wideo (opcjonalnie)",
+                        "name": "video_url",
+                        "type": "url",
+                        "instructions": "Puste = plik z motywu: assets/dist/video/ATAMISTRZEMSWIATA1.mp4 (wgrany przez SFTP, omija limit 2 MB w mediach).",
+                        "default_value": ""
                     },
                     {
                         "key": "field_rank_film_poster",

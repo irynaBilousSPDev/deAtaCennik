@@ -130,7 +130,7 @@ return [
         'eyebrow' => 'Nasi studenci',
         'title' => 'ATA Mistrzem Świata',
         'text' => 'Liczby robią wrażenie — ale to ludzie je tworzą. Zobacz, co potrafią studenci i absolwenci ATA, gdy zejdą z sali wykładowej.',
-        'video' => null,
+        'video_url' => '',
         'poster' => null,
     ],
     'rank_cta_section' => [

@@ -8,6 +8,7 @@ module.exports = {
         ajaxFilter: './assets/src/js/ajax-filter.js',
         ajaxFilterPgMba: './assets/src/js/ajax-filter-pg-mba.js',
         ajaxSlider: './assets/src/js/ajax-load-cpt.js',
+        lpRankingi: './assets/src/js/lp-rankingi.js',
     },
     output: {
         filename: '[name].js',

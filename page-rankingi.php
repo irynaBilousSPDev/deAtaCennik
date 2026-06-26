@@ -358,13 +358,13 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
 
     <?php
     $film = $acf_fields['rank_film_section'];
-    $video = is_array($film['video'] ?? null) ? $film['video'] : null;
+    $video_url = akademiata_rankingi_resolve_video_url($film);
     $poster = is_array($film['poster'] ?? null) ? $film['poster'] : null;
     ?>
     <section class="rank-film">
         <div class="container rank-wrap">
             <div class="rank-film__media rank-reveal">
-                <?php if ($video && !empty($video['url'])) : ?>
+                <?php if ($video_url !== '') : ?>
                     <video
                         class="rank-video"
                         controls
@@ -376,7 +376,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                             poster="<?php echo esc_url($poster['url']); ?>"
                         <?php endif; ?>
                     >
-                        <source src="<?php echo esc_url($video['url']); ?>" type="<?php echo esc_attr($video['mime_type'] ?? 'video/mp4'); ?>">
+                        <source src="<?php echo esc_url($video_url); ?>" type="video/mp4">
                     </video>
                 <?php elseif ($poster && !empty($poster['url'])) : ?>
                     <img
@@ -435,64 +435,5 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
     <?php endif; ?>
 
 </div>
-
-<script>
-(function () {
-    var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var revs = document.querySelectorAll('.lp-rankingi .rank-reveal');
-    if (rm) {
-        revs.forEach(function (e) { e.classList.add('in'); });
-    } else if ('IntersectionObserver' in window) {
-        var io = new IntersectionObserver(function (es) {
-            es.forEach(function (en) {
-                if (en.isIntersecting) {
-                    en.target.classList.add('in');
-                    io.unobserve(en.target);
-                }
-            });
-        }, { threshold: 0.16 });
-        revs.forEach(function (e) { io.observe(e); });
-    } else {
-        revs.forEach(function (e) { e.classList.add('in'); });
-    }
-
-    function fmt(n) {
-        return n.toLocaleString('pl-PL');
-    }
-
-    function run(el) {
-        var target = parseFloat(el.getAttribute('data-count'));
-        var dur = 900;
-        var t0 = null;
-        function step(ts) {
-            if (!t0) { t0 = ts; }
-            var p = Math.min((ts - t0) / dur, 1);
-            var eased = 1 - Math.pow(1 - p, 3);
-            el.firstChild.nodeValue = fmt(Math.round(target * eased));
-            if (p < 1) { requestAnimationFrame(step); }
-        }
-        requestAnimationFrame(step);
-    }
-
-    var nums = document.querySelectorAll('.lp-rankingi [data-count]');
-    if (rm) {
-        nums.forEach(function (el) {
-            el.firstChild.nodeValue = fmt(parseFloat(el.getAttribute('data-count')));
-        });
-    } else if ('IntersectionObserver' in window) {
-        var io2 = new IntersectionObserver(function (es) {
-            es.forEach(function (en) {
-                if (en.isIntersecting) {
-                    run(en.target);
-                    io2.unobserve(en.target);
-                }
-            });
-        }, { threshold: 0.5 });
-        nums.forEach(function (el) { io2.observe(el); });
-    } else {
-        nums.forEach(function (el) { run(el); });
-    }
-})();
-</script>
 
 <?php get_footer(); ?>

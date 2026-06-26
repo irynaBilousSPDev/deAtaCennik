@@ -57,6 +57,19 @@ function akademiata_enqueue_scripts()
         ]);
     }
 
+    if (is_page_template('page-rankingi.php')) {
+        $lp_rankingi_js_path = get_template_directory() . '/assets/dist/js/lpRankingi.js';
+        $lp_rankingi_js_ver  = file_exists($lp_rankingi_js_path) ? filemtime($lp_rankingi_js_path) : null;
+
+        wp_enqueue_script(
+            'akademiata-lp-rankingi',
+            $theme_dir . '/assets/dist/js/lpRankingi.js',
+            array(),
+            $lp_rankingi_js_ver,
+            true
+        );
+    }
+
     // Smooth anchor scrolling for Podcast ATA (some browsers/themes ignore CSS scroll-behavior).
     if (is_singular('podcast-ata')) {
         wp_add_inline_script(
