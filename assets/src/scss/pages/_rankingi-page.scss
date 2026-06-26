@@ -25,16 +25,6 @@ body.page-template-page-rankingi {
       font-family: $rank-font-display;
       margin-top: 0;
     }
-
-    @include mixins.lg-screen {
-      h1,
-      h2,
-      h3 {
-        font-size: unset;
-        line-height: unset;
-        font-weight: unset;
-      }
-    }
   }
 }
 
@@ -212,6 +202,7 @@ body.page-template-page-rankingi {
       line-height: 0.98;
       letter-spacing: -0.025em;
       margin: 0 0 14px;
+      color: inherit;
     }
 
     .rank-kick {
@@ -283,10 +274,12 @@ body.page-template-page-rankingi {
       letter-spacing: -0.025em;
       margin: 0 0 24px;
       max-width: 15ch;
+      color: inherit;
 
       mark {
         background: none;
         color: $rank-gold;
+        text-decoration: none;
       }
     }
 
