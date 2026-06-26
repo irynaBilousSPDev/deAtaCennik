@@ -35,17 +35,7 @@ $lp_render_btn = static function ($text, $url, $style = 'coral', $icon = '→') 
  * @param string|null $highlight
  */
 $lp_render_title_mark = static function ($title, $highlight = '') {
-    if ($title === '' || $title === null) {
-        return;
-    }
-    if ($highlight !== '' && $highlight !== null && strpos($title, $highlight) !== false) {
-        $parts = explode($highlight, $title, 2);
-        echo esc_html($parts[0]);
-        echo '<mark>' . esc_html($highlight) . '</mark>';
-        echo esc_html($parts[1] ?? '');
-        return;
-    }
-    echo esc_html($title);
+    akademiata_rankingi_echo_title_mark($title, $highlight);
 };
 
 /**
@@ -53,13 +43,7 @@ $lp_render_title_mark = static function ($title, $highlight = '') {
  * @param string|null $emphasis
  */
 $lp_render_title_em = static function ($title, $emphasis = '') {
-    if ($title === '' || $title === null) {
-        return;
-    }
-    echo esc_html($title);
-    if ($emphasis !== '' && $emphasis !== null) {
-        echo ' <em>' . esc_html($emphasis) . '</em>';
-    }
+    akademiata_rankingi_echo_title_em($title, $emphasis);
 };
 
 /**
@@ -113,7 +97,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <p class="rank-kick"><?php echo esc_html($ann['eyebrow']); ?></p>
                 <?php endif; ?>
                 <?php if (!empty($ann['title'])) : ?>
-                    <h2 class="rank-ann__h"><?php echo esc_html($ann['title']); ?></h2>
+                    <h2 class="rank-ann__h"><?php echo akademiata_rankingi_title_html($ann['title']); ?></h2>
                 <?php endif; ?>
                 <?php if (!empty($ann['cities']) && is_array($ann['cities'])) : ?>
                     <div class="rank-ann__cities">
@@ -202,7 +186,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                                 <div class="rank-step__n"><?php echo esc_html($step['step_label']); ?></div>
                             <?php endif; ?>
                             <?php if (!empty($step['title'])) : ?>
-                                <h3><?php echo esc_html($step['title']); ?></h3>
+                                <h3><?php echo akademiata_rankingi_title_html($step['title']); ?></h3>
                             <?php endif; ?>
                             <?php if (!empty($step['text'])) : ?>
                                 <p><?php echo esc_html($step['text']); ?></p>
@@ -231,9 +215,9 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <?php endif; ?>
                     <?php if (!empty($persp['title']) || !empty($persp['title_emphasis'])) : ?>
                         <h2 class="rank-sec__h">
-                            <?php echo esc_html($persp['title'] ?? ''); ?>
+                            <?php echo akademiata_rankingi_title_html($persp['title'] ?? ''); ?>
                             <?php if (!empty($persp['title_emphasis'])) : ?>
-                                <em><?php echo esc_html($persp['title_emphasis']); ?></em>
+                                <em><?php echo akademiata_rankingi_title_html($persp['title_emphasis']); ?></em>
                             <?php endif; ?>
                         </h2>
                     <?php endif; ?>
@@ -281,9 +265,9 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <?php endif; ?>
                     <?php if (!empty($ela['title']) || !empty($ela['title_emphasis'])) : ?>
                         <h2 class="rank-sec__h">
-                            <?php echo esc_html($ela['title'] ?? ''); ?>
+                            <?php echo akademiata_rankingi_title_html($ela['title'] ?? ''); ?>
                             <?php if (!empty($ela['title_emphasis'])) : ?>
-                                <em><?php echo esc_html($ela['title_emphasis']); ?></em>
+                                <em><?php echo akademiata_rankingi_title_html($ela['title_emphasis']); ?></em>
                             <?php endif; ?>
                         </h2>
                     <?php endif; ?>
@@ -315,7 +299,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                 </div>
             <?php endif; ?>
             <?php if (!empty($ela['cards_title'])) : ?>
-                <p class="rank-kick rank-reveal rank-kick--cards"><?php echo esc_html($ela['cards_title']); ?></p>
+                <p class="rank-kick rank-reveal rank-kick--cards"><?php echo akademiata_rankingi_title_html($ela['cards_title']); ?></p>
             <?php endif; ?>
             <?php if (!empty($ela['cards']) && is_array($ela['cards'])) : ?>
                 <div class="rank-cards rank-reveal">
@@ -330,7 +314,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                                 </div>
                             <?php endif; ?>
                             <?php if (!empty($card['name'])) : ?>
-                                <h3 class="rank-card__name"><?php echo esc_html($card['name']); ?></h3>
+                                <h3 class="rank-card__name"><?php echo akademiata_rankingi_title_html($card['name']); ?></h3>
                             <?php endif; ?>
                             <?php if (!empty($card['level'])) : ?>
                                 <p class="rank-card__lvl"><?php echo esc_html($card['level']); ?></p>
@@ -391,7 +375,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <p class="rank-kick"><?php echo esc_html($film['eyebrow']); ?></p>
                 <?php endif; ?>
                 <?php if (!empty($film['title'])) : ?>
-                    <h2><?php echo esc_html($film['title']); ?></h2>
+                    <h2><?php echo akademiata_rankingi_title_html($film['title']); ?></h2>
                 <?php endif; ?>
                 <?php if (!empty($film['text'])) : ?>
                     <p><?php echo esc_html($film['text']); ?></p>
@@ -407,7 +391,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
     <section class="rank-cta" id="<?php echo esc_attr($cta_id); ?>">
         <div class="container rank-wrap">
             <?php if (!empty($cta['title'])) : ?>
-                <h2><?php echo esc_html($cta['title']); ?></h2>
+                <h2><?php echo akademiata_rankingi_title_html($cta['title']); ?></h2>
             <?php endif; ?>
             <?php if (!empty($cta['text'])) : ?>
                 <p><?php echo esc_html($cta['text']); ?></p>

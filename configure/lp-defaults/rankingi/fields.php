@@ -29,6 +29,64 @@ function akademiata_rankingi_fields($acf_fields): array {
 }
 
 /**
+ * Allowed tags in LP section titles (manual line breaks).
+ *
+ * @return array<string, array<string, bool>>
+ */
+function akademiata_rankingi_title_allowed_tags(): array {
+    return ['br' => []];
+}
+
+/**
+ * @param string|null $text
+ */
+function akademiata_rankingi_title_html($text): string {
+    if ($text === '' || $text === null) {
+        return '';
+    }
+
+    return wp_kses((string) $text, akademiata_rankingi_title_allowed_tags());
+}
+
+/**
+ * @param string|null $title
+ * @param string|null $highlight
+ */
+function akademiata_rankingi_echo_title_mark($title, $highlight = ''): void {
+    if ($title === '' || $title === null) {
+        return;
+    }
+
+    $allowed = akademiata_rankingi_title_allowed_tags();
+
+    if ($highlight !== '' && $highlight !== null && strpos($title, $highlight) !== false) {
+        $parts = explode($highlight, $title, 2);
+        echo wp_kses($parts[0], $allowed);
+        echo '<mark>' . esc_html($highlight) . '</mark>';
+        echo wp_kses($parts[1] ?? '', $allowed);
+        return;
+    }
+
+    echo wp_kses($title, $allowed);
+}
+
+/**
+ * @param string|null $title
+ * @param string|null $emphasis
+ */
+function akademiata_rankingi_echo_title_em($title, $emphasis = ''): void {
+    if ($title === '' || $title === null) {
+        return;
+    }
+
+    echo wp_kses($title, akademiata_rankingi_title_allowed_tags());
+
+    if ($emphasis !== '' && $emphasis !== null) {
+        echo ' <em>' . wp_kses($emphasis, akademiata_rankingi_title_allowed_tags()) . '</em>';
+    }
+}
+
+/**
  * Default theme-bundled video for the rankingi LP (bypasses WP 2 MB upload limit).
  */
 function akademiata_rankingi_theme_video_filename(): string {

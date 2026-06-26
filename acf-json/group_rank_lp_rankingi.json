@@ -43,7 +43,10 @@
                         "key": "field_rank_ann_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Najlepsi w Warszawie i we Wrocławiu"
                     },
                     {
@@ -119,6 +122,7 @@
                         "type": "textarea",
                         "rows": 2,
                         "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu. Fragment w polu „podświetlenie” musi występować w tekście tytułu.",
                         "default_value": "Kierunki z najwyższą pensją wśród absolwentów w Polsce."
                     },
                     {
@@ -212,14 +216,20 @@
                         "key": "field_rank_beats_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Studiujesz. Masz pracę."
                     },
                     {
                         "key": "field_rank_beats_title_emphasis",
                         "label": "Fragment tytułu (akcent)",
                         "name": "title_emphasis",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Zarabiasz."
                     },
                     {
@@ -252,7 +262,10 @@
                                 "key": "field_rank_beats_step_title",
                                 "label": "Tytuł",
                                 "name": "title",
-                                "type": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                                 "parent_repeater": "field_rank_beats_steps"
                             },
                             {
@@ -308,14 +321,20 @@
                         "key": "field_rank_perspektywy_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Perspektywy 2026:"
                     },
                     {
                         "key": "field_rank_perspektywy_title_emphasis",
                         "label": "Fragment tytułu (akcent)",
                         "name": "title_emphasis",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "w czołówce kraju"
                     },
                     {
@@ -398,14 +417,20 @@
                         "key": "field_rank_ela_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "ELA:"
                     },
                     {
                         "key": "field_rank_ela_title_emphasis",
                         "label": "Fragment tytułu (akcent)",
                         "name": "title_emphasis",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "twarde dane z ZUS"
                     },
                     {
@@ -457,7 +482,10 @@
                         "key": "field_rank_ela_cards_title",
                         "label": "Nagłówek kart",
                         "name": "cards_title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Kierunki nr 1 w Polsce"
                     },
                     {
@@ -488,7 +516,10 @@
                                 "key": "field_rank_ela_card_name",
                                 "label": "Nazwa kierunku",
                                 "name": "name",
-                                "type": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                                 "parent_repeater": "field_rank_ela_cards"
                             },
                             {
@@ -558,7 +589,10 @@
                         "key": "field_rank_film_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "ATA Mistrzem Świata"
                     },
                     {
@@ -608,7 +642,10 @@
                         "key": "field_rank_cta_title",
                         "label": "Tytuł",
                         "name": "title",
-                        "type": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "instructions": "Użyj <br>, aby ręcznie przełamać linię tytułu.",
                         "default_value": "Twoja pensja zaczyna się tutaj."
                     },
                     {
