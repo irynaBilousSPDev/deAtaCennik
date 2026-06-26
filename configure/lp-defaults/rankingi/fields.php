@@ -29,8 +29,6 @@ function akademiata_rankingi_fields($acf_fields): array {
 }
 
 /**
- * Allowed tags in LP section titles (manual line breaks).
- *
  * @return array<string, array<string, bool>>
  */
 function akademiata_rankingi_title_allowed_tags(): array {
