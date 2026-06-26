@@ -1,0 +1,70 @@
+// Loaded after base — cancel global h1/h2/h3 sizes from _base.scss on this template.
+@use "../abstracts/variables" as vars;
+
+body.page-template-page-rankingi .lp-page.lp-rankingi {
+  h1.rank-hero__h {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(42px, 7.4vw, 92px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: inherit;
+  }
+
+  h2.rank-ann__h {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(30px, 5vw, 62px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: inherit;
+  }
+
+  h2.rank-beats__h {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: normal;
+    letter-spacing: -0.02em;
+    color: inherit;
+  }
+
+  h2.rank-sec__h {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: inherit;
+  }
+
+  h3 {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    line-height: normal;
+    color: inherit;
+  }
+
+  .rank-step h3 {
+    font-size: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .rank-film h2 {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: normal;
+    letter-spacing: -0.02em;
+    color: inherit;
+  }
+
+  .rank-cta h2 {
+    font-family: "Nunito Sans", serif;
+    font-weight: vars.$weight-bold;
+    font-size: clamp(32px, 5vw, 62px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: inherit;
+  }
+}

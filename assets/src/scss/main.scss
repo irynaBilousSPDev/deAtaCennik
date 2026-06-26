@@ -12,4 +12,6 @@
 
 @use "base" as base;// base
 
+@use "pages/rankingi-page-overrides";// after base — LP heading reset
+
 @use 'vendors';//vendors
