@@ -1,0 +1,711 @@
+[
+    {
+        "key": "group_rank_lp_rankingi",
+        "title": "LP — Rankingi",
+        "fields": [
+            {
+                "key": "field_rank_tab_ann",
+                "label": "Ogłoszenie",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_ann_section",
+                "label": "Sekcja ogłoszenia",
+                "name": "rank_ann_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_ann_number",
+                        "label": "Liczba (dekoracja)",
+                        "name": "number",
+                        "type": "text",
+                        "default_value": "1"
+                    },
+                    {
+                        "key": "field_rank_ann_number_suffix",
+                        "label": "Sufiks liczby",
+                        "name": "number_suffix",
+                        "type": "text",
+                        "default_value": "miejsce"
+                    },
+                    {
+                        "key": "field_rank_ann_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Mamy to! · Ranking Perspektywy 2026"
+                    },
+                    {
+                        "key": "field_rank_ann_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Najlepsi w Warszawie i we Wrocławiu"
+                    },
+                    {
+                        "key": "field_rank_ann_cities",
+                        "label": "Miasta",
+                        "name": "cities",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj miasto",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_ann_city_name",
+                                "label": "Nazwa",
+                                "name": "name",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ann_cities"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rank_ann_text",
+                        "label": "Tekst (pogrubiony)",
+                        "name": "text",
+                        "type": "text",
+                        "default_value": "1. miejsce wśród niepublicznych uczelni zawodowych"
+                    },
+                    {
+                        "key": "field_rank_ann_text_suffix",
+                        "label": "Tekst (ciąg dalszy)",
+                        "name": "text_suffix",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "w obu miastach — i najwyżej notowana niepubliczna uczelnia zawodowa na całym Dolnym Śląsku."
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_hero_section",
+                "label": "Sekcja hero",
+                "name": "rank_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "1"
+                    },
+                    {
+                        "key": "field_rank_hero_pill",
+                        "label": "Pill",
+                        "name": "pill",
+                        "type": "text",
+                        "default_value": "Rekrutacja 2026/2027 trwa"
+                    },
+                    {
+                        "key": "field_rank_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Kierunki z najwyższą pensją wśród absolwentów w Polsce."
+                    },
+                    {
+                        "key": "field_rank_hero_title_highlight",
+                        "label": "Fragment tytułu (podświetlenie)",
+                        "name": "title_highlight",
+                        "type": "text",
+                        "default_value": "najwyższą pensją"
+                    },
+                    {
+                        "key": "field_rank_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Na kierunku ochrona środowiska absolwenci ATA zarabiają najwięcej w Polsce, a na zarządzaniu i inżynierii produkcji — do 11 035 zł miesięcznie. Pracę znajdują średnio w kilka dni. Nie wierz nam na słowo — to dane ZUS."
+                    },
+                    {
+                        "key": "field_rank_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Zacznij rekrutację"
+                    },
+                    {
+                        "key": "field_rank_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": "#rekrutacja"
+                    },
+                    {
+                        "key": "field_rank_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zobacz dane"
+                    },
+                    {
+                        "key": "field_rank_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": "#perspektywy"
+                    },
+                    {
+                        "key": "field_rank_hero_chips",
+                        "label": "Chipy statystyk",
+                        "name": "chips",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj chip",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_hero_chip_value",
+                                "label": "Wartość",
+                                "name": "value",
+                                "type": "text",
+                                "parent_repeater": "field_rank_hero_chips"
+                            },
+                            {
+                                "key": "field_rank_hero_chip_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rank_hero_chips"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_beats",
+                "label": "Kroki",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_beats_section",
+                "label": "Sekcja kroków",
+                "name": "rank_beats_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_beats_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Studiujesz. Masz pracę."
+                    },
+                    {
+                        "key": "field_rank_beats_title_emphasis",
+                        "label": "Fragment tytułu (akcent)",
+                        "name": "title_emphasis",
+                        "type": "text",
+                        "default_value": "Zarabiasz."
+                    },
+                    {
+                        "key": "field_rank_beats_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Tak wygląda droga absolwenta ATA — nie w folderze, tylko w danych ZUS."
+                    },
+                    {
+                        "key": "field_rank_beats_steps",
+                        "label": "Kroki",
+                        "name": "steps",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_beats_step_label",
+                                "label": "Etykieta kroku",
+                                "name": "step_label",
+                                "type": "text",
+                                "parent_repeater": "field_rank_beats_steps"
+                            },
+                            {
+                                "key": "field_rank_beats_step_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rank_beats_steps"
+                            },
+                            {
+                                "key": "field_rank_beats_step_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rank_beats_steps"
+                            },
+                            {
+                                "key": "field_rank_beats_step_big_stat",
+                                "label": "Duża statystyka (opcjonalnie)",
+                                "name": "big_stat",
+                                "type": "text",
+                                "parent_repeater": "field_rank_beats_steps"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_perspektywy",
+                "label": "Perspektywy",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_perspektywy_section",
+                "label": "Sekcja Perspektywy",
+                "name": "rank_perspektywy_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_perspektywy_section_id",
+                        "label": "ID sekcji (kotwica)",
+                        "name": "section_id",
+                        "type": "text",
+                        "default_value": "perspektywy"
+                    },
+                    {
+                        "key": "field_rank_perspektywy_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Ranking nr 1 · Jakość kształcenia"
+                    },
+                    {
+                        "key": "field_rank_perspektywy_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Perspektywy 2026:"
+                    },
+                    {
+                        "key": "field_rank_perspektywy_title_emphasis",
+                        "label": "Fragment tytułu (akcent)",
+                        "name": "title_emphasis",
+                        "type": "text",
+                        "default_value": "w czołówce kraju"
+                    },
+                    {
+                        "key": "field_rank_perspektywy_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Najszerzej cytowane zestawienie szkół wyższych w Polsce. Od 2025 roku łączy w jednej tabeli uczelnie publiczne i niepubliczne, oceniane tą samą miarą: losy absolwentów, jakość kształcenia, kadrę i umiędzynarodowienie."
+                    },
+                    {
+                        "key": "field_rank_perspektywy_badge_image",
+                        "label": "Logo rankingu (opcjonalnie)",
+                        "name": "badge_image",
+                        "type": "image",
+                        "instructions": "Puste = grafika z motywu (Perspektywy 2026).",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_rank_perspektywy_stats",
+                        "label": "Statystyki",
+                        "name": "stats",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj statystykę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_perspektywy_stat_value",
+                                "label": "Wartość (liczba)",
+                                "name": "value",
+                                "type": "text",
+                                "parent_repeater": "field_rank_perspektywy_stats"
+                            },
+                            {
+                                "key": "field_rank_perspektywy_stat_label",
+                                "label": "Opis",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rank_perspektywy_stats"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_ela",
+                "label": "ELA",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_ela_section",
+                "label": "Sekcja ELA",
+                "name": "rank_ela_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_ela_section_id",
+                        "label": "ID sekcji (kotwica)",
+                        "name": "section_id",
+                        "type": "text",
+                        "default_value": "ela"
+                    },
+                    {
+                        "key": "field_rank_ela_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Ranking nr 2 · Losy absolwentów"
+                    },
+                    {
+                        "key": "field_rank_ela_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "ELA:"
+                    },
+                    {
+                        "key": "field_rank_ela_title_emphasis",
+                        "label": "Fragment tytułu (akcent)",
+                        "name": "title_emphasis",
+                        "type": "text",
+                        "default_value": "twarde dane z ZUS"
+                    },
+                    {
+                        "key": "field_rank_ela_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Ekonomiczne Losy Absolwentów to system Ministerstwa Nauki oparty nie na ankietach, lecz na realnych zarobkach i zatrudnieniu absolwentów rok po dyplomie. Na czterech kierunkach absolwenci ATA wypadają najlepiej w całym kraju."
+                    },
+                    {
+                        "key": "field_rank_ela_logo",
+                        "label": "Logo ELA (opcjonalnie)",
+                        "name": "logo",
+                        "type": "image",
+                        "instructions": "Puste = domyślne logo z motywu.",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_rank_ela_stats",
+                        "label": "Statystyki",
+                        "name": "stats",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj statystykę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_ela_stat_value",
+                                "label": "Wartość (liczba)",
+                                "name": "value",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_stats"
+                            },
+                            {
+                                "key": "field_rank_ela_stat_label",
+                                "label": "Opis",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_stats"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rank_ela_cards_title",
+                        "label": "Nagłówek kart",
+                        "name": "cards_title",
+                        "type": "text",
+                        "default_value": "Kierunki nr 1 w Polsce"
+                    },
+                    {
+                        "key": "field_rank_ela_cards",
+                        "label": "Karty kierunków",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rank_ela_card_badge_main",
+                                "label": "Badge",
+                                "name": "badge_main",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_badge_sub",
+                                "label": "Badge — dopisek",
+                                "name": "badge_sub",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_name",
+                                "label": "Nazwa kierunku",
+                                "name": "name",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_level",
+                                "label": "Stopień",
+                                "name": "level",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_description",
+                                "label": "Opis",
+                                "name": "description",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_salary",
+                                "label": "Zarobki/mies.",
+                                "name": "salary",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_time_to_job",
+                                "label": "Czas do pracy",
+                                "name": "time_to_job",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            },
+                            {
+                                "key": "field_rank_ela_card_unemployment",
+                                "label": "Bezrobocie",
+                                "name": "unemployment",
+                                "type": "text",
+                                "parent_repeater": "field_rank_ela_cards"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_film",
+                "label": "Film",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_film_section",
+                "label": "Sekcja filmu",
+                "name": "rank_film_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_film_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Nasi studenci"
+                    },
+                    {
+                        "key": "field_rank_film_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "ATA Mistrzem Świata"
+                    },
+                    {
+                        "key": "field_rank_film_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Liczby robią wrażenie — ale to ludzie je tworzą. Zobacz, co potrafią studenci i absolwenci ATA, gdy zejdą z sali wykładowej."
+                    },
+                    {
+                        "key": "field_rank_film_video",
+                        "label": "Plik wideo",
+                        "name": "video",
+                        "type": "file",
+                        "return_format": "array",
+                        "library": "all",
+                        "mime_types": "mp4,webm"
+                    },
+                    {
+                        "key": "field_rank_film_poster",
+                        "label": "Poster (miniatura)",
+                        "name": "poster",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_cta",
+                "label": "CTA końcowe",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_cta_section",
+                "label": "Sekcja CTA",
+                "name": "rank_cta_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_cta_section_id",
+                        "label": "ID sekcji (kotwica)",
+                        "name": "section_id",
+                        "type": "text",
+                        "default_value": "rekrutacja"
+                    },
+                    {
+                        "key": "field_rank_cta_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Twoja pensja zaczyna się tutaj."
+                    },
+                    {
+                        "key": "field_rank_cta_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Rekrutacja 2026/2027 trwa. Dołącz do uczelni, po której widać wynik."
+                    },
+                    {
+                        "key": "field_rank_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Rozpocznij rekrutację"
+                    },
+                    {
+                        "key": "field_rank_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_rank_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki"
+                    },
+                    {
+                        "key": "field_rank_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_rank_tab_sources",
+                "label": "Źródła",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rank_sources_section",
+                "label": "Stopka źródeł",
+                "name": "rank_sources_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rank_sources_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 5,
+                        "new_lines": "",
+                        "default_value": "Źródła: Ranking Uczelni Zawodowych Perspektywy 2026 (wspólne zestawienie uczelni publicznych i niepublicznych) oraz Ekonomiczne Losy Absolwentów, edycja 2024 — dane ZUS o wynagrodzeniach i zatrudnieniu absolwentów rok po ukończeniu studiów. „Ryzyko bezrobocia\" to względny wskaźnik bezrobocia wg ELA. Pozycje dla Warszawy, Wrocławia i Dolnego Śląska liczone wśród uczelni zawodowych kształcących w danym mieście/regionie. Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie — do 2024 r. Wyższa Szkoła Ekologii i Zarządzania (WSEiZ)."
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-rankingi.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

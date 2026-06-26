@@ -1,0 +1,148 @@
+<?php
+
+/**
+ * @return array<string, array<string, mixed>>
+ */
+return [
+    'rank_ann_section' => [
+        'number' => '1',
+        'number_suffix' => 'miejsce',
+        'eyebrow' => 'Mamy to! · Ranking Perspektywy 2026',
+        'title' => 'Najlepsi w Warszawie i we Wrocławiu',
+        'cities' => [
+            ['name' => 'Warszawa'],
+            ['name' => 'Wrocław'],
+        ],
+        'text' => '1. miejsce wśród niepublicznych uczelni zawodowych',
+        'text_suffix' => 'w obu miastach — i najwyżej notowana niepubliczna uczelnia zawodowa na całym Dolnym Śląsku.',
+    ],
+    'rank_hero_section' => [
+        'watermark' => '1',
+        'pill' => 'Rekrutacja 2026/2027 trwa',
+        'title' => 'Kierunki z najwyższą pensją wśród absolwentów w Polsce.',
+        'title_highlight' => 'najwyższą pensją',
+        'lead' => 'Na kierunku ochrona środowiska absolwenci ATA zarabiają najwięcej w Polsce, a na zarządzaniu i inżynierii produkcji — do 11 035 zł miesięcznie. Pracę znajdują średnio w kilka dni. Nie wierz nam na słowo — to dane ZUS.',
+        'cta_primary_text' => 'Zacznij rekrutację',
+        'cta_primary_url' => '#rekrutacja',
+        'cta_secondary_text' => 'Zobacz dane',
+        'cta_secondary_url' => '#perspektywy',
+        'chips' => [
+            ['value' => '4', 'label' => 'kierunki nr 1 w Polsce'],
+            ['value' => '11•', 'label' => 'uczelnia zawodowa w PL'],
+            ['value' => '11 035 zł', 'label' => 'najwyższe zarobki absolwentów'],
+        ],
+    ],
+    'rank_beats_section' => [
+        'title' => 'Studiujesz. Masz pracę.',
+        'title_emphasis' => 'Zarabiasz.',
+        'intro' => 'Tak wygląda droga absolwenta ATA — nie w folderze, tylko w danych ZUS.',
+        'steps' => [
+            [
+                'step_label' => 'KROK 01',
+                'title' => 'Studiujesz',
+                'text' => 'Praktyczny profil, kadra z branży, kampusy w Warszawie i we Wrocławiu. Uczysz się tego, czego naprawdę chce rynek.',
+                'big_stat' => '',
+            ],
+            [
+                'step_label' => 'KROK 02',
+                'title' => 'Masz pracę',
+                'text' => 'Na kierunkach nr 1 absolwenci znajdują pracę średnio w kilka dni. Etat często jeszcze przed obroną.',
+                'big_stat' => '~kilka dni',
+            ],
+            [
+                'step_label' => 'KROK 03',
+                'title' => 'Zarabiasz',
+                'text' => 'Rok po dyplomie absolwenci najlepszych kierunków zarabiają w czołówce kraju.',
+                'big_stat' => 'do 11 035 zł',
+            ],
+        ],
+    ],
+    'rank_perspektywy_section' => [
+        'section_id' => 'perspektywy',
+        'eyebrow' => 'Ranking nr 1 · Jakość kształcenia',
+        'title' => 'Perspektywy 2026:',
+        'title_emphasis' => 'w czołówce kraju',
+        'intro' => 'Najszerzej cytowane zestawienie szkół wyższych w Polsce. Od 2025 roku łączy w jednej tabeli uczelnie publiczne i niepubliczne, oceniane tą samą miarą: losy absolwentów, jakość kształcenia, kadrę i umiędzynarodowienie.',
+        'badge_image' => null,
+        'stats' => [
+            ['value' => '11', 'label' => 'miejsce w Polsce — wszystkie uczelnie zawodowe, publiczne i niepubliczne'],
+            ['value' => '6', 'label' => 'miejsce wśród uczelni niepublicznych w kraju'],
+            ['value' => '1', 'label' => 'w Warszawie i we Wrocławiu — niepubliczne uczelnie zawodowe'],
+        ],
+    ],
+    'rank_ela_section' => [
+        'section_id' => 'ela',
+        'eyebrow' => 'Ranking nr 2 · Losy absolwentów',
+        'title' => 'ELA:',
+        'title_emphasis' => 'twarde dane z ZUS',
+        'intro' => 'Ekonomiczne Losy Absolwentów to system Ministerstwa Nauki oparty nie na ankietach, lecz na realnych zarobkach i zatrudnieniu absolwentów rok po dyplomie. Na czterech kierunkach absolwenci ATA wypadają najlepiej w całym kraju.',
+        'logo' => null,
+        'stats' => [
+            ['value' => '4', 'label' => 'kierunki nr 1 w Polsce'],
+            ['value' => '11035', 'label' => 'najwyższe zarobki absolwentów (zł/mies.)'],
+            ['value' => '0', 'label' => '% ryzyka bezrobocia na kilku kierunkach'],
+        ],
+        'cards_title' => 'Kierunki nr 1 w Polsce',
+        'cards' => [
+            [
+                'badge_main' => '#1',
+                'badge_sub' => 'na 13 uczelni',
+                'name' => 'Architektura krajobrazu',
+                'level' => 'I stopień',
+                'description' => 'Najlepsze zarobki i najszybsze zatrudnienie w kraju na tym kierunku.',
+                'salary' => '7 249 zł',
+                'time_to_job' => '~0,6 mies.',
+                'unemployment' => '0%',
+            ],
+            [
+                'badge_main' => '#1',
+                'badge_sub' => 'na 12 uczelni',
+                'name' => 'Ochrona środowiska',
+                'level' => 'I stopień',
+                'description' => 'Najwyższe wynagrodzenie absolwentów w Polsce na tym kierunku.',
+                'salary' => '8 735 zł',
+                'time_to_job' => '~0,2 mies.',
+                'unemployment' => '0%',
+            ],
+            [
+                'badge_main' => '#1',
+                'badge_sub' => 'na 11 uczelni',
+                'name' => 'Ochrona środowiska',
+                'level' => 'II stopień',
+                'description' => 'Najszybciej zatrudniający się magistrowie w kraju — średnio kilka dni.',
+                'salary' => '7 916 zł',
+                'time_to_job' => '~0,1 mies.',
+                'unemployment' => '2,3%',
+            ],
+            [
+                'badge_main' => '#1',
+                'badge_sub' => 'na 48 uczelni',
+                'name' => 'Zarządzanie i inżynieria produkcji',
+                'level' => 'II stopień',
+                'description' => 'Najwyższa pensja w całym zestawieniu. Etat często jeszcze przed obroną.',
+                'salary' => '11 035 zł',
+                'time_to_job' => '0 mies.',
+                'unemployment' => '4,2%',
+            ],
+        ],
+    ],
+    'rank_film_section' => [
+        'eyebrow' => 'Nasi studenci',
+        'title' => 'ATA Mistrzem Świata',
+        'text' => 'Liczby robią wrażenie — ale to ludzie je tworzą. Zobacz, co potrafią studenci i absolwenci ATA, gdy zejdą z sali wykładowej.',
+        'video' => null,
+        'poster' => null,
+    ],
+    'rank_cta_section' => [
+        'section_id' => 'rekrutacja',
+        'title' => 'Twoja pensja zaczyna się tutaj.',
+        'text' => 'Rekrutacja 2026/2027 trwa. Dołącz do uczelni, po której widać wynik.',
+        'cta_primary_text' => 'Rozpocznij rekrutację',
+        'cta_primary_url' => '',
+        'cta_secondary_text' => 'Zobacz kierunki',
+        'cta_secondary_url' => '',
+    ],
+    'rank_sources_section' => [
+        'text' => 'Źródła: Ranking Uczelni Zawodowych Perspektywy 2026 (wspólne zestawienie uczelni publicznych i niepublicznych) oraz Ekonomiczne Losy Absolwentów, edycja 2024 — dane ZUS o wynagrodzeniach i zatrudnieniu absolwentów rok po ukończeniu studiów. „Ryzyko bezrobocia" to względny wskaźnik bezrobocia wg ELA. Pozycje dla Warszawy, Wrocławia i Dolnego Śląska liczone wśród uczelni zawodowych kształcących w danym mieście/regionie. Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie — do 2024 r. Wyższa Szkoła Ekologii i Zarządzania (WSEiZ).',
+    ],
+];
