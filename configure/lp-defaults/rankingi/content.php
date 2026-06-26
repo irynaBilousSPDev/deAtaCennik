@@ -28,7 +28,7 @@ return [
         'cta_secondary_url' => '#perspektywy',
         'chips' => [
             ['value' => '4', 'label' => 'kierunki nr 1 w Polsce'],
-            ['value' => '11•', 'label' => 'uczelnia zawodowa w PL'],
+            ['value' => '11<sup>•</sup>', 'label' => 'uczelnia zawodowa w PL'],
             ['value' => '11 035 zł', 'label' => 'najwyższe zarobki absolwentów'],
         ],
     ],
@@ -53,7 +53,7 @@ return [
                 'step_label' => 'KROK 03',
                 'title' => 'Zarabiasz',
                 'text' => 'Rok po dyplomie absolwenci najlepszych kierunków zarabiają w czołówce kraju.',
-                'big_stat' => 'do 11 035 zł',
+                'big_stat' => 'do 11 035<sup> zł</sup>',
             ],
         ],
     ],
@@ -130,7 +130,6 @@ return [
         'eyebrow' => 'Nasi studenci',
         'title' => 'ATA Mistrzem Świata',
         'text' => 'Liczby robią wrażenie — ale to ludzie je tworzą. Zobacz, co potrafią studenci i absolwenci ATA, gdy zejdą z sali wykładowej.',
-        'video_url' => '',
         'poster' => null,
     ],
     'rank_cta_section' => [

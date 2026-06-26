@@ -169,7 +169,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <?php foreach ($hero['chips'] as $chip) : ?>
                         <div class="rank-chip">
                             <?php if (!empty($chip['value'])) : ?>
-                                <b><?php echo esc_html($chip['value']); ?></b>
+                                <b><?php echo wp_kses($chip['value'], ['sup' => []]); ?></b>
                             <?php endif; ?>
                             <?php if (!empty($chip['label'])) : ?>
                                 <span><?php echo esc_html($chip['label']); ?></span>
@@ -208,7 +208,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                                 <p><?php echo esc_html($step['text']); ?></p>
                             <?php endif; ?>
                             <?php if (!empty($step['big_stat'])) : ?>
-                                <div class="rank-step__big"><?php echo esc_html($step['big_stat']); ?></div>
+                                <div class="rank-step__big"><?php echo wp_kses($step['big_stat'], ['sup' => []]); ?></div>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
@@ -358,7 +358,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
 
     <?php
     $film = $acf_fields['rank_film_section'];
-    $video_url = akademiata_rankingi_resolve_video_url($film);
+    $video_url = akademiata_rankingi_theme_video_url();
     $poster = is_array($film['poster'] ?? null) ? $film['poster'] : null;
     ?>
     <section class="rank-film">

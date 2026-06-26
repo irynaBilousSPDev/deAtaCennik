@@ -25,7 +25,7 @@ function akademiata_lp_merge_defaults(array $defaults, ?array $acf): array {
             continue;
         }
 
-        if (is_array($acf_val) && in_array($key, ['city_window_image', 'panel_image', 'hero_photo', 'image', 'badge_image', 'logo', 'poster', 'video'], true)) {
+        if (is_array($acf_val) && in_array($key, ['city_window_image', 'panel_image', 'hero_photo', 'image', 'badge_image', 'logo', 'poster'], true)) {
             $out[$key] = !empty($acf_val['ID']) ? $acf_val : $default_val;
             continue;
         }

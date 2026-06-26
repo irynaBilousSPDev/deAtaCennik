@@ -46,18 +46,3 @@ function akademiata_rankingi_theme_video_url(): string {
 
     return get_template_directory_uri() . '/assets/dist/video/' . akademiata_rankingi_theme_video_filename();
 }
-
-/**
- * @param array<string, mixed> $film
- */
-function akademiata_rankingi_resolve_video_url(array $film): string {
-    if (!empty($film['video_url'])) {
-        return (string) $film['video_url'];
-    }
-
-    if (is_array($film['video'] ?? null) && !empty($film['video']['url'])) {
-        return (string) $film['video']['url'];
-    }
-
-    return akademiata_rankingi_theme_video_url();
-}
