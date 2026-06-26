@@ -198,6 +198,10 @@ function shouldSkip(relativePosix) {
 			return true;
 		}
 	}
+	// Large theme videos — upload once via SFTP, skip on routine deploy
+	if (parts[0] === 'static' && parts[1] === 'video') {
+		return true;
+	}
 	const base = parts[parts.length - 1];
 	if (EXCLUDE_FILE_NAMES.has(base) || EXCLUDE_FILE_BASENAMES.has(base)) {
 		return true;

@@ -597,7 +597,6 @@
                         "label": "Poster (miniatura wideo)",
                         "name": "poster",
                         "type": "image",
-                        "instructions": "Opcjonalna miniatura przed odtworzeniem. Sam film jest w motywie (assets/dist/video/).",
                         "return_format": "array",
                         "preview_size": "medium",
                         "library": "all"
