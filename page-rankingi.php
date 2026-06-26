@@ -215,10 +215,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <?php endif; ?>
                     <?php if (!empty($persp['title']) || !empty($persp['title_emphasis'])) : ?>
                         <h2 class="rank-sec__h">
-                            <?php echo akademiata_rankingi_title_html($persp['title'] ?? ''); ?>
-                            <?php if (!empty($persp['title_emphasis'])) : ?>
-                                <em><?php echo akademiata_rankingi_title_html($persp['title_emphasis']); ?></em>
-                            <?php endif; ?>
+                            <?php akademiata_rankingi_echo_title_em($persp['title'] ?? '', $persp['title_emphasis'] ?? ''); ?>
                         </h2>
                     <?php endif; ?>
                     <?php if (!empty($persp['intro'])) : ?>
@@ -265,10 +262,7 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                     <?php endif; ?>
                     <?php if (!empty($ela['title']) || !empty($ela['title_emphasis'])) : ?>
                         <h2 class="rank-sec__h">
-                            <?php echo akademiata_rankingi_title_html($ela['title'] ?? ''); ?>
-                            <?php if (!empty($ela['title_emphasis'])) : ?>
-                                <em><?php echo akademiata_rankingi_title_html($ela['title_emphasis']); ?></em>
-                            <?php endif; ?>
+                            <?php akademiata_rankingi_echo_title_em($ela['title'] ?? '', $ela['title_emphasis'] ?? ''); ?>
                         </h2>
                     <?php endif; ?>
                     <?php if (!empty($ela['intro'])) : ?>

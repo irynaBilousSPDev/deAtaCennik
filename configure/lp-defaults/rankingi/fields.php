@@ -32,18 +32,11 @@ function akademiata_rankingi_fields($acf_fields): array {
  * @return array<string, array<string, bool>>
  */
 function akademiata_rankingi_title_allowed_tags(): array {
-    return ['br' => []];
-}
-
-/**
- * @param string|null $text
- */
-function akademiata_rankingi_title_normalize($text): string {
-    if ($text === '' || $text === null) {
-        return '';
-    }
-
-    return preg_replace('/\r\n|\r|\n/', '<br>', (string) $text);
+    return [
+        'br' => [],
+        'mark' => [],
+        'em' => [],
+    ];
 }
 
 /**
@@ -54,7 +47,7 @@ function akademiata_rankingi_title_html($text): string {
         return '';
     }
 
-    return wp_kses(akademiata_rankingi_title_normalize($text), akademiata_rankingi_title_allowed_tags());
+    return wp_kses((string) $text, akademiata_rankingi_title_allowed_tags());
 }
 
 /**
@@ -66,17 +59,17 @@ function akademiata_rankingi_echo_title_mark($title, $highlight = ''): void {
         return;
     }
 
-    $allowed = akademiata_rankingi_title_allowed_tags();
+    $title = (string) $title;
 
     if ($highlight !== '' && $highlight !== null && strpos($title, $highlight) !== false) {
         $parts = explode($highlight, $title, 2);
-        echo wp_kses(akademiata_rankingi_title_normalize($parts[0]), $allowed);
+        echo esc_html($parts[0]);
         echo '<mark>' . esc_html($highlight) . '</mark>';
-        echo wp_kses(akademiata_rankingi_title_normalize($parts[1] ?? ''), $allowed);
+        echo esc_html($parts[1] ?? '');
         return;
     }
 
-    echo wp_kses(akademiata_rankingi_title_normalize($title), $allowed);
+    echo wp_kses($title, akademiata_rankingi_title_allowed_tags());
 }
 
 /**
@@ -84,14 +77,12 @@ function akademiata_rankingi_echo_title_mark($title, $highlight = ''): void {
  * @param string|null $emphasis
  */
 function akademiata_rankingi_echo_title_em($title, $emphasis = ''): void {
-    if ($title === '' || $title === null) {
-        return;
+    if ($title !== '' && $title !== null) {
+        echo esc_html((string) $title);
     }
 
-    echo wp_kses(akademiata_rankingi_title_normalize($title), akademiata_rankingi_title_allowed_tags());
-
     if ($emphasis !== '' && $emphasis !== null) {
-        echo ' <em>' . wp_kses(akademiata_rankingi_title_normalize($emphasis), akademiata_rankingi_title_allowed_tags()) . '</em>';
+        echo ' <em>' . esc_html((string) $emphasis) . '</em>';
     }
 }
 

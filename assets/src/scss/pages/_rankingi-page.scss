@@ -65,11 +65,16 @@ body.page-template-page-rankingi {
     margin-top: 0;
   }
 
-  h1,
-  h2,
-  h3 {
-    font-family: $rank-font-display;
-    margin-top: 0;
+  .rank-ann__h,
+  .rank-hero__h,
+  .rank-beats__h,
+  .rank-sec__h,
+  .rank-step h3,
+  .rank-card__name,
+  .rank-film h2,
+  .rank-cta h2,
+  .rank-kick--cards {
+    white-space: pre-line;
   }
 
   .rank-kick {
