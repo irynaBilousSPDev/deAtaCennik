@@ -542,6 +542,7 @@ body.page-template-page-zasady-rekrutacji {
 
   .qn-links {
     flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -1571,10 +1572,41 @@ body.page-template-page-zasady-rekrutacji {
     }
   }
 
+  @media (max-width: 1024px) {
+    .qn-links {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x proximity;
+      gap: 8px;
+      padding-bottom: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(16, 20, 34, 0.22) transparent;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(16, 20, 34, 0.2);
+        border-radius: 999px;
+      }
+
+      a {
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        white-space: nowrap;
+      }
+    }
+  }
+
   @media (max-width: 720px) {
     .quick-nav .container {
       flex-direction: column;
       gap: 12px;
+      align-items: stretch;
     }
 
     .qn-label {
@@ -1582,6 +1614,16 @@ body.page-template-page-zasady-rekrutacji {
       border-left: 0;
       border-top: 3px solid #ff5a28;
       padding: 10px 0 0;
+    }
+
+    .qn-links {
+      flex: 1 1 auto;
+      width: calc(100% + 40px);
+      max-width: none;
+      margin-left: -20px;
+      margin-right: -20px;
+      padding-left: 20px;
+      padding-right: 20px;
     }
   }
 
