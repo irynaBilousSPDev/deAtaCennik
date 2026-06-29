@@ -182,7 +182,7 @@ $home-rank-body: vars.$font-family-sans-serif;
       left: 20px;
       right: 20px;
       height: 7px;
-      border: 1px solid vars.$primary;
+      border: 1px solid $home-rank-accent;
       border-bottom: 0;
       opacity: 0.55;
     }
@@ -195,14 +195,16 @@ $home-rank-body: vars.$font-family-sans-serif;
     line-height: 0.95;
     letter-spacing: -0.02em;
     display: block;
-    color: $home-rank-accent;
+    color: $home-rank-ink;
 
     sup {
       font-size: 0.4em;
       font-family: $home-rank-body;
       font-weight: vars.$weight-regular;
       vertical-align: super;
-      color: vars.$primary;
+      position: relative;
+      top: 0.12em;
+      color: $home-rank-accent;
       margin-left: 2px;
     }
   }
