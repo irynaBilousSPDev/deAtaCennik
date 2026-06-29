@@ -90,7 +90,7 @@ function akademiata_rankingi_echo_title_em($title, $emphasis = ''): void {
  * Default theme-bundled video for the rankingi LP (bypasses WP 2 MB upload limit).
  */
 function akademiata_rankingi_theme_video_filename(): string {
-    return 'ATAMISTRZEMSWIATA1.mp4';
+    return 'ATAMISTRZEMSWIATA.mp4';
 }
 
 function akademiata_rankingi_theme_video_path(): string {
