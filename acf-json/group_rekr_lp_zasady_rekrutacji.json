@@ -1,0 +1,1722 @@
+[
+    {
+        "key": "group_rekr_lp_zasady_rekrutacji",
+        "title": "LP — Zasady rekrutacji",
+        "fields": [
+            {
+                "key": "field_rekr_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_hero_section",
+                "label": "Sekcja hero",
+                "name": "rekr_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_hero_watermark",
+                        "label": "Watermark (dekoracja)",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Rekrutacja"
+                    },
+                    {
+                        "key": "field_rekr_hero_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Rekrutacja na ATA"
+                    },
+                    {
+                        "key": "field_rekr_hero_title",
+                        "label": "Tytuł (H1)",
+                        "name": "title",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "Rekrutacja na ATA - wszystkie informacje w jednym miejscu."
+                    },
+                    {
+                        "key": "field_rekr_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Wszystko, czego potrzebujesz, żeby zacząć studia w ATA — zasady przyjęć, terminy, dokumenty i opłaty dla kandydatów z Polski i z zagranicy. Wybierz swoją ścieżkę i przejdź przez proces krok po kroku, w dużej części online."
+                    },
+                    {
+                        "key": "field_rekr_hero_cta_primary_text",
+                        "label": "Przycisk główny — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": "Wybierz swoją ofertę"
+                    },
+                    {
+                        "key": "field_rekr_hero_cta_primary_url",
+                        "label": "Przycisk główny — link",
+                        "name": "cta_primary_url",
+                        "type": "url",
+                        "default_value": "https://akademiata.pl/oferta/"
+                    },
+                    {
+                        "key": "field_rekr_hero_cta_secondary_text",
+                        "label": "Przycisk drugi — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": "Sprawdź terminy"
+                    },
+                    {
+                        "key": "field_rekr_hero_cta_secondary_url",
+                        "label": "Przycisk drugi — link",
+                        "name": "cta_secondary_url",
+                        "type": "url",
+                        "default_value": "#terminy"
+                    },
+                    {
+                        "key": "field_rekr_hero_reassure",
+                        "label": "Tekst uspokajający",
+                        "name": "hero_reassure",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Na większości kierunków decyduje kolejność zgłoszeń — bez egzaminów wstępnych. Rekrutację w dużej części przejdziesz online."
+                    },
+                    {
+                        "key": "field_rekr_hero_photo",
+                        "label": "Zdjęcie hero",
+                        "name": "hero_photo",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_rekr_hero_tag",
+                        "label": "Tag na zdjęciu",
+                        "name": "hero_tag",
+                        "type": "text",
+                        "default_value": "Rekrutacja 2026/2027"
+                    },
+                    {
+                        "key": "field_rekr_hero_bar",
+                        "label": "Pasek statystyk",
+                        "name": "hero_bar",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj element",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_hero_bar_value",
+                                "label": "Wartość",
+                                "name": "value",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_hero_bar"
+                            },
+                            {
+                                "key": "field_rekr_hero_bar_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_hero_bar"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_trust",
+                "label": "Trust strip",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_trust_section",
+                "label": "Pasek zaufania",
+                "name": "rekr_trust_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_trust_items",
+                        "label": "Elementy",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj element",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_trust_number",
+                                "label": "Liczba",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_trust_items"
+                            },
+                            {
+                                "key": "field_rekr_trust_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_trust_items"
+                            },
+                            {
+                                "key": "field_rekr_trust_note",
+                                "label": "Notatka",
+                                "name": "note",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_trust_items"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_quick_nav",
+                "label": "Quick nav",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_quick_nav",
+                "label": "Szybka nawigacja",
+                "name": "rekr_quick_nav",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_qn_label_title",
+                        "label": "Tytuł etykiety",
+                        "name": "label_title",
+                        "type": "text",
+                        "default_value": "Szukasz konkretnej informacji?"
+                    },
+                    {
+                        "key": "field_rekr_qn_label_text",
+                        "label": "Tekst etykiety",
+                        "name": "label_text",
+                        "type": "text",
+                        "default_value": "Kliknij temat i przejdź prosto do niego."
+                    },
+                    {
+                        "key": "field_rekr_qn_links",
+                        "label": "Linki",
+                        "name": "links",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj link",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_qn_link_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_qn_links"
+                            },
+                            {
+                                "key": "field_rekr_qn_link_anchor",
+                                "label": "Kotwica (anchor)",
+                                "name": "anchor",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_qn_links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_route",
+                "label": "Route",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_route_section",
+                "label": "Sekcja ścieżek",
+                "name": "rekr_route_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_route_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Wybierz"
+                    },
+                    {
+                        "key": "field_rekr_route_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Wybierz swoją ścieżkę"
+                    },
+                    {
+                        "key": "field_rekr_route_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Najpierw sprawdź, które informacje dotyczą Ciebie."
+                    },
+                    {
+                        "key": "field_rekr_route_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Proces różni się w zależności od obywatelstwa, poziomu studiów oraz kierunku. Zacznij od odpowiedniej ścieżki, a następnie sprawdź terminy i dokumenty."
+                    },
+                    {
+                        "key": "field_rekr_route_cards",
+                        "label": "Karty ścieżek",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_route_card_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_route_cards"
+                            },
+                            {
+                                "key": "field_rekr_route_card_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_route_cards"
+                            },
+                            {
+                                "key": "field_rekr_route_card_items",
+                                "label": "Punkty listy",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj pozycję",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_route_card_items_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_route_card_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_route_cards"
+                            },
+                            {
+                                "key": "field_rekr_route_card_cta_text",
+                                "label": "Przycisk — tekst",
+                                "name": "cta_text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_route_cards"
+                            },
+                            {
+                                "key": "field_rekr_route_card_cta_url",
+                                "label": "Przycisk — link",
+                                "name": "cta_url",
+                                "type": "url",
+                                "parent_repeater": "field_rekr_route_cards"
+                            },
+                            {
+                                "key": "field_rekr_route_card_is_dark",
+                                "label": "Ciemna karta",
+                                "name": "is_dark",
+                                "type": "true_false",
+                                "ui": 1,
+                                "default_value": 0,
+                                "parent_repeater": "field_rekr_route_cards"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_paths",
+                "label": "Paths",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_paths_section",
+                "label": "Sekcja kierunków",
+                "name": "rekr_paths_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_paths_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Kierunki"
+                    },
+                    {
+                        "key": "field_rekr_paths_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Wymagania zależne od kierunku"
+                    },
+                    {
+                        "key": "field_rekr_paths_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Sprawdź, jak wygląda rekrutacja na Twój kierunek."
+                    },
+                    {
+                        "key": "field_rekr_paths_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Na większości kierunków o przyjęciu decyduje kolejność zgłoszeń. Dodatkowe wymagania dotyczą kierunków projektowych."
+                    },
+                    {
+                        "key": "field_rekr_paths_cards",
+                        "label": "Karty kierunków",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_paths_card_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            },
+                            {
+                                "key": "field_rekr_paths_card_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            },
+                            {
+                                "key": "field_rekr_paths_card_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            },
+                            {
+                                "key": "field_rekr_paths_card_cta_text",
+                                "label": "Przycisk — tekst",
+                                "name": "cta_text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            },
+                            {
+                                "key": "field_rekr_paths_card_cta_url",
+                                "label": "Przycisk — link",
+                                "name": "cta_url",
+                                "type": "url",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            },
+                            {
+                                "key": "field_rekr_paths_card_cta_style",
+                                "label": "Styl przycisku",
+                                "name": "cta_style",
+                                "type": "select",
+                                "choices": {
+                                    "default": "Domyślny",
+                                    "blue": "Niebieski"
+                                },
+                                "default_value": "default",
+                                "return_format": "value",
+                                "parent_repeater": "field_rekr_paths_cards"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_portfolio",
+                "label": "Portfolio",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_portfolio_section",
+                "label": "Sekcja portfolio",
+                "name": "rekr_portfolio_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_portfolio_col1_eyebrow",
+                        "label": "Kolumna 1 — eyebrow",
+                        "name": "col1_eyebrow",
+                        "type": "text",
+                        "default_value": "Portfolio - Architektura I stopnia"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_col1_title",
+                        "label": "Kolumna 1 — tytuł",
+                        "name": "col1_title",
+                        "type": "text",
+                        "default_value": "Co powinno zawierać portfolio?"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_col1_text",
+                        "label": "Kolumna 1 — tekst",
+                        "name": "col1_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Portfolio powinno składać się z od 5 do 10 prac wykonanych ołówkiem, w formacie co najmniej A3."
+                    },
+                    {
+                        "key": "field_rekr_portfolio_checklist",
+                        "label": "Lista kontrolna",
+                        "name": "checklist",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj pozycję",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_portfolio_checklist_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_portfolio_checklist"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_portfolio_col2_eyebrow",
+                        "label": "Kolumna 2 — eyebrow",
+                        "name": "col2_eyebrow",
+                        "type": "text",
+                        "default_value": "Jak przekazać prace?"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_col2_title",
+                        "label": "Kolumna 2 — tytuł",
+                        "name": "col2_title",
+                        "type": "text",
+                        "default_value": "Prześlij je online albo złóż w uczelni."
+                    },
+                    {
+                        "key": "field_rekr_portfolio_col2_text",
+                        "label": "Kolumna 2 — tekst",
+                        "name": "col2_text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Portfolio możesz złożyć w dowolnym momencie — online na swoim koncie w systemie rekrutacyjnym albo osobiście, przynosząc teczkę z oryginalnymi pracami do Działu Rekrutacji. Oceniamy je w kolejnych, wyznaczonych turach — sprawdź, kiedy wypada najbliższa."
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_toggle_text",
+                        "label": "Galeria — tekst przełącznika",
+                        "name": "gallery_toggle_text",
+                        "type": "text",
+                        "default_value": "Zobacz przykładowe portfolio"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_toggle_url",
+                        "label": "Galeria — link przełącznika",
+                        "name": "gallery_toggle_url",
+                        "type": "url",
+                        "default_value": "https://uczelnia.akademiata.pl/przyklady-prawidlowo-wykonanego-portfolio/"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_link_text",
+                        "label": "Galeria — tekst linku",
+                        "name": "gallery_link_text",
+                        "type": "text",
+                        "default_value": "Sprawdź terminy oceny"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_bar",
+                        "label": "Galeria — pasek (HTML)",
+                        "name": "gallery_bar",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                        "default_value": "<strong>Przykładowe prace z wcześniejszych naborów</strong> — bryły geometryczne, martwa natura i architektura. To poziom i charakter prac, jakiego oczekujemy. Kliknij dowolną pracę, aby ją powiększyć."
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_images",
+                        "label": "Galeria — zdjęcia",
+                        "name": "gallery_images",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj zdjęcie",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_portfolio_gallery_image",
+                                "label": "Zdjęcie",
+                                "name": "image",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
+                                "parent_repeater": "field_rekr_portfolio_gallery_images"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_terms",
+                "label": "Terminy",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_terms_section",
+                "label": "Sekcja terminów",
+                "name": "rekr_terms_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_terms_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Terminy"
+                    },
+                    {
+                        "key": "field_rekr_terms_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Harmonogram 2026/2027"
+                    },
+                    {
+                        "key": "field_rekr_terms_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Sprawdź terminy portfolio, sprawdzianów i rozmów kwalifikacyjnych."
+                    },
+                    {
+                        "key": "field_rekr_terms_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Przy sprawdzianach i rozmowach pamiętaj także o terminie rejestracji w systemie rekrutacyjnym."
+                    },
+                    {
+                        "key": "field_rekr_terms_cards",
+                        "label": "Karty terminów",
+                        "name": "term_cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_terms_card_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_terms_cards"
+                            },
+                            {
+                                "key": "field_rekr_terms_card_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_terms_cards"
+                            },
+                            {
+                                "key": "field_rekr_terms_card_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_terms_cards"
+                            },
+                            {
+                                "key": "field_rekr_terms_card_is_dark",
+                                "label": "Ciemna karta",
+                                "name": "is_dark",
+                                "type": "true_false",
+                                "ui": 1,
+                                "default_value": 0,
+                                "parent_repeater": "field_rekr_terms_cards"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_terms_schedule_toggle_label",
+                        "label": "Etykieta harmonogramu",
+                        "name": "schedule_toggle_label",
+                        "type": "text",
+                        "default_value": "Pełny harmonogram 2026"
+                    },
+                    {
+                        "key": "field_rekr_terms_schedule_blocks",
+                        "label": "Bloki harmonogramu",
+                        "name": "schedule_blocks",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj blok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_terms_block_title",
+                                "label": "Tytuł bloku",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_terms_schedule_blocks"
+                            },
+                            {
+                                "key": "field_rekr_terms_schedule_items",
+                                "label": "Pozycje harmonogramu",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj pozycję",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_terms_schedule_items_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_terms_schedule_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_terms_schedule_blocks"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_terms_warning_html",
+                        "label": "Ostrzeżenie (HTML)",
+                        "name": "warning_html",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                        "default_value": "<strong>Pozostałe kierunki:</strong> Zarządzanie, Zarządzanie i Inżynieria Produkcji, Ochrona Środowiska, Mechanika i Budowa Maszyn, Architektura Krajobrazu, Informatyka, Budownictwo, Finanse i Rachunkowość, Logistyka, Komunikacja Cyfrowa i Media oraz Turystyka i Rekreacja - zapisy trwają do wyczerpania miejsc."
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_poland",
+                "label": "Poland",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_poland_section",
+                "label": "Sekcja — kandydaci z Polski",
+                "name": "rekr_poland_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_poland_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Polska"
+                    },
+                    {
+                        "key": "field_rekr_poland_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Rekrutacja - krok po kroku"
+                    },
+                    {
+                        "key": "field_rekr_poland_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Kandydaci z Polski"
+                    },
+                    {
+                        "key": "field_rekr_poland_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Przejdź przez sześć etapów. Dokumenty złożysz i podpiszesz umowę podczas jednej, wcześniej umówionej wizyty."
+                    },
+                    {
+                        "key": "field_rekr_poland_steps",
+                        "label": "Kroki",
+                        "name": "steps",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_poland_steps_number",
+                                "label": "Numer",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_poland_steps"
+                            },
+                            {
+                                "key": "field_rekr_poland_steps_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_poland_steps"
+                            },
+                            {
+                                "key": "field_rekr_poland_steps_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_poland_steps"
+                            },
+                            {
+                                "key": "field_rekr_poland_steps_micro",
+                                "label": "Mikrotekst",
+                                "name": "micro",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_poland_steps"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_poland_note_html",
+                        "label": "Notatka (HTML)",
+                        "name": "note_html",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                        "default_value": "<strong>Nie masz jeszcze świadectwa dojrzałości?</strong> Na kierunkach bez portfolio i sprawdzianu możesz wcześniej zarejestrować się i dokonać opłaty rekrutacyjnej, aby zarezerwować miejsce. Ostateczne przyjęcie następuje po dostarczeniu kompletnego świadectwa dojrzałości i pozostałych dokumentów."
+                    },
+                    {
+                        "key": "field_rekr_poland_reassure_tag",
+                        "label": "Ramka uspokajająca — tag",
+                        "name": "reassure_tag",
+                        "type": "text",
+                        "default_value": "Zdarza się rzadko"
+                    },
+                    {
+                        "key": "field_rekr_poland_reassure_title",
+                        "label": "Ramka uspokajająca — tytuł",
+                        "name": "reassure_title",
+                        "type": "text",
+                        "default_value": "A jeśli kierunek nie ruszy?"
+                    },
+                    {
+                        "key": "field_rekr_poland_reassure_text",
+                        "label": "Ramka uspokajająca — tekst",
+                        "name": "reassure_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "To rzadka sytuacja. Gdyby jednak zaszła, uczelnia zwróci wpłacone środki — wystarczy kontakt z Działem Rekrutacji. Możesz też wybrać inny, pokrewny kierunek; pomożemy Ci dobrać najlepszy."
+                    },
+                    {
+                        "key": "field_rekr_poland_reassure_photo",
+                        "label": "Ramka uspokajająca — zdjęcie",
+                        "name": "reassure_photo",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_title",
+                        "label": "Przeniesienie — tytuł",
+                        "name": "transfer_title",
+                        "type": "text",
+                        "default_value": "Studiujesz już na innej uczelni?"
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_text",
+                        "label": "Przeniesienie — tekst",
+                        "name": "transfer_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Jeśli ukończyłeś studia na innym kierunku, chcesz zmienić kierunek, wznowić naukę po latach albo rozpocząć drugi kierunek, możesz ubiegać się o przyjęcie z różnicami programowymi i kontynuować studia na wyższym semestrze."
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_items",
+                        "label": "Przeniesienie — punkty",
+                        "name": "transfer_items",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj pozycję",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_poland_transfer_items_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_poland_transfer_items"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_note_html",
+                        "label": "Przeniesienie — notatka (HTML)",
+                        "name": "transfer_note_html",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                        "default_value": "<strong>Co zyskujesz?</strong> Nie płacisz za rozpatrzenie podania, płacisz jedynie za ewentualne różnice programowe oraz bieżące czesne. Nie musisz też powtarzać przedmiotów zgodnych z programem studiów w ATA, więc oszczędzasz czas."
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_cta_text",
+                        "label": "Przeniesienie — przycisk tekst",
+                        "name": "transfer_cta_text",
+                        "type": "text",
+                        "default_value": "Pobierz podanie do Dziekana"
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_cta_url",
+                        "label": "Przeniesienie — przycisk link",
+                        "name": "transfer_cta_url",
+                        "type": "url",
+                        "default_value": "https://chmurka.wseiz.pl/index.php/s/RYatRf3iedzXgoX"
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_docs_pl",
+                "label": "Docs PL",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_docs_pl_section",
+                "label": "Sekcja dokumentów (PL)",
+                "name": "rekr_docs_pl_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_docs_pl_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Dokumenty"
+                    },
+                    {
+                        "key": "field_rekr_docs_pl_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Przygotuj listę odpowiednią do poziomu studiów"
+                    },
+                    {
+                        "key": "field_rekr_docs_pl_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Wymagane dokumenty - kandydaci z Polski"
+                    },
+                    {
+                        "key": "field_rekr_docs_pl_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Wybierz zakładkę i sprawdź, co należy dostarczyć podczas wizyty."
+                    },
+                    {
+                        "key": "field_rekr_docs_pl_tabs",
+                        "label": "Zakładki dokumentów",
+                        "name": "tabs",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj zakładkę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_docs_pl_tabs_label",
+                                "label": "Etykieta zakładki",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            },
+                            {
+                                "key": "field_rekr_docs_pl_tabs_items",
+                                "label": "Lista dokumentów",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj pozycję",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_docs_pl_tabs_items_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_docs_pl_tabs_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            },
+                            {
+                                "key": "field_rekr_docs_pl_tabs_note_html",
+                                "label": "Notatka (HTML)",
+                                "name": "note_html",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            },
+                            {
+                                "key": "field_rekr_docs_pl_tabs_warning_html",
+                                "label": "Ostrzeżenie (HTML)",
+                                "name": "warning_html",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_foreign",
+                "label": "Foreign",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_foreign_section",
+                "label": "Sekcja — kandydaci zagraniczni",
+                "name": "rekr_foreign_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_foreign_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "International"
+                    },
+                    {
+                        "key": "field_rekr_foreign_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Kandydaci zagraniczni"
+                    },
+                    {
+                        "key": "field_rekr_foreign_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Rekrutacja kandydatów zagranicznych - od zgłoszenia do przyjazdu."
+                    },
+                    {
+                        "key": "field_rekr_foreign_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Możesz aplikować na studia w języku polskim albo angielskim. Sprawdź wymagania dokumentowe, opłaty, wizę, legalizację pobytu i informacje po przyjeździe."
+                    },
+                    {
+                        "key": "field_rekr_foreign_app_title",
+                        "label": "Aplikacja — tytuł",
+                        "name": "app_title",
+                        "type": "text",
+                        "default_value": "Rozpocznij rekrutację online"
+                    },
+                    {
+                        "key": "field_rekr_foreign_app_text",
+                        "label": "Aplikacja — tekst",
+                        "name": "app_text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "System Smart Apply jest dostępny w języku polskim, angielskim, rosyjskim i ukraińskim. Po przejściu do systemu wybierz język interfejsu, kierunek oraz język studiów. Na studia prowadzone po polsku lub angielsku przygotuj dokument potwierdzający znajomość właściwego języka na poziomie B2."
+                    },
+                    {
+                        "key": "field_rekr_foreign_app_cta_text",
+                        "label": "Aplikacja — przycisk tekst",
+                        "name": "app_cta_text",
+                        "type": "text",
+                        "default_value": "Wybierz kierunek"
+                    },
+                    {
+                        "key": "field_rekr_foreign_app_cta_url",
+                        "label": "Aplikacja — przycisk link",
+                        "name": "app_cta_url",
+                        "type": "url",
+                        "default_value": "https://akademiata.pl/oferta/"
+                    },
+                    {
+                        "key": "field_rekr_foreign_steps",
+                        "label": "Kroki",
+                        "name": "steps",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_foreign_steps_number",
+                                "label": "Numer",
+                                "name": "number",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_foreign_steps"
+                            },
+                            {
+                                "key": "field_rekr_foreign_steps_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_foreign_steps"
+                            },
+                            {
+                                "key": "field_rekr_foreign_steps_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_foreign_steps"
+                            },
+                            {
+                                "key": "field_rekr_foreign_steps_micro",
+                                "label": "Mikrotekst",
+                                "name": "micro",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_foreign_steps"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_foreign_docs",
+                "label": "Foreign docs",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_foreign_docs_section",
+                "label": "Sekcja dokumentów (zagraniczni)",
+                "name": "rekr_foreign_docs_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_foreign_docs_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Documents"
+                    },
+                    {
+                        "key": "field_rekr_foreign_docs_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Dokumenty - kandydaci zagraniczni"
+                    },
+                    {
+                        "key": "field_rekr_foreign_docs_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Sprawdź wymagania dla studiów I stopnia, II stopnia i osób niepełnoletnich."
+                    },
+                    {
+                        "key": "field_rekr_foreign_docs_tabs",
+                        "label": "Zakładki dokumentów",
+                        "name": "tabs",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj zakładkę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_label",
+                                "label": "Etykieta zakładki",
+                                "name": "label",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            },
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_items",
+                                "label": "Lista dokumentów",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj pozycję",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_foreign_docs_tabs_items_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_foreign_docs_tabs_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            },
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_note_html",
+                                "label": "Notatka (HTML)",
+                                "name": "note_html",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            },
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_warning_html",
+                                "label": "Ostrzeżenie (HTML)",
+                                "name": "warning_html",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_residence",
+                "label": "Residence",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_residence_section",
+                "label": "Sekcja pobytu i wizy",
+                "name": "rekr_residence_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_residence_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Polska"
+                    },
+                    {
+                        "key": "field_rekr_residence_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Przed przyjazdem i po przyjeździe"
+                    },
+                    {
+                        "key": "field_rekr_residence_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Wiza, karta pobytu, język i ubezpieczenie."
+                    },
+                    {
+                        "key": "field_rekr_residence_panels_two",
+                        "label": "Panele (2 kolumny)",
+                        "name": "panels_two",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj panel",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_residence_panel2_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_residence_panels_two"
+                            },
+                            {
+                                "key": "field_rekr_residence_panel2_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_residence_panels_two"
+                            },
+                            {
+                                "key": "field_rekr_residence_panel2_note_html",
+                                "label": "Notatka (HTML)",
+                                "name": "note_html",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_residence_panels_two"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_residence_panels_three",
+                        "label": "Panele (3 kolumny)",
+                        "name": "panels_three",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj panel",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_residence_panel3_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_residence_panels_three"
+                            },
+                            {
+                                "key": "field_rekr_residence_panel3_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_residence_panels_three"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_residence_nawa_title",
+                        "label": "NAWA — tytuł",
+                        "name": "nawa_title",
+                        "type": "text",
+                        "default_value": "Uznanie świadectwa uzyskanego za granicą"
+                    },
+                    {
+                        "key": "field_rekr_residence_nawa_text",
+                        "label": "NAWA — tekst",
+                        "name": "nawa_text",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Sprawdź, czy Twoje świadectwo wymaga uznania przez NAWA lub odpowiednią instytucję. Jeżeli procedura uznania jest konieczna, przygotuj dokumenty i tłumaczenia zgodnie z obowiązującymi zasadami. Pozytywną decyzję należy dostarczyć w terminie wymaganym przez uczelnię."
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_downloads",
+                "label": "Downloads",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_downloads_section",
+                "label": "Sekcja plików do pobrania",
+                "name": "rekr_downloads_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_downloads_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "Dokumenty"
+                    },
+                    {
+                        "key": "field_rekr_downloads_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Dokumenty i regulaminy"
+                    },
+                    {
+                        "key": "field_rekr_downloads_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Dokumenty potrzebne podczas rekrutacji."
+                    },
+                    {
+                        "key": "field_rekr_downloads_intro",
+                        "label": "Intro",
+                        "name": "intro",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "W tej sekcji znajdziesz harmonogramy, regulaminy, wzory umów, zgody i formularze potrzebne podczas rekrutacji. Kliknij wybrany przycisk, aby otworzyć odpowiedni plik lub dokument."
+                    },
+                    {
+                        "key": "field_rekr_downloads_cards",
+                        "label": "Karty plików",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_downloads_card_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            },
+                            {
+                                "key": "field_rekr_downloads_card_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            },
+                            {
+                                "key": "field_rekr_downloads_card_cta_text",
+                                "label": "Przycisk — tekst",
+                                "name": "cta_text",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            },
+                            {
+                                "key": "field_rekr_downloads_card_cta_url",
+                                "label": "Przycisk — link",
+                                "name": "cta_url",
+                                "type": "url",
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            },
+                            {
+                                "key": "field_rekr_downloads_card_buttons",
+                                "label": "Przyciski (wiele linków)",
+                                "name": "buttons",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj przycisk",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_downloads_btn_text",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_downloads_card_buttons"
+                                    },
+                                    {
+                                        "key": "field_rekr_downloads_btn_url",
+                                        "label": "Link",
+                                        "name": "url",
+                                        "type": "url",
+                                        "parent_repeater": "field_rekr_downloads_card_buttons"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            },
+                            {
+                                "key": "field_rekr_downloads_card_file_note",
+                                "label": "Notatka o pliku",
+                                "name": "file_note",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_downloads_cards"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_contact",
+                "label": "Contact",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_contact_section",
+                "label": "Sekcja kontaktu",
+                "name": "rekr_contact_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_contact_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Kontakt i pomoc"
+                    },
+                    {
+                        "key": "field_rekr_contact_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Skontaktuj się z właściwym działem."
+                    },
+                    {
+                        "key": "field_rekr_contact_cards",
+                        "label": "Karty kontaktu",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kartę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_contact_card_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_contact_cards"
+                            },
+                            {
+                                "key": "field_rekr_contact_rows",
+                                "label": "Wiersze danych",
+                                "name": "rows",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj wiersz",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_rekr_contact_row_label",
+                                        "label": "Etykieta",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_rekr_contact_rows"
+                                    },
+                                    {
+                                        "key": "field_rekr_contact_row_value",
+                                        "label": "Wartość (HTML)",
+                                        "name": "value",
+                                        "type": "textarea",
+                                        "rows": 2,
+                                        "new_lines": "",
+                                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                        "parent_repeater": "field_rekr_contact_rows"
+                                    }
+                                ],
+                                "parent_repeater": "field_rekr_contact_cards"
+                            },
+                            {
+                                "key": "field_rekr_contact_card_hours",
+                                "label": "Godziny otwarcia (HTML)",
+                                "name": "hours",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_contact_cards"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_rekr_contact_final_title",
+                        "label": "Pasek końcowy — tytuł",
+                        "name": "final_title",
+                        "type": "text",
+                        "default_value": "Masz już komplet informacji?"
+                    },
+                    {
+                        "key": "field_rekr_contact_final_text",
+                        "label": "Pasek końcowy — tekst",
+                        "name": "final_text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Załóż konto, wybierz kierunek i rozpocznij rekrutację online."
+                    },
+                    {
+                        "key": "field_rekr_contact_final_cta_text",
+                        "label": "Pasek końcowy — przycisk tekst",
+                        "name": "final_cta_text",
+                        "type": "text",
+                        "default_value": "Rozpocznij rekrutację"
+                    },
+                    {
+                        "key": "field_rekr_contact_final_cta_url",
+                        "label": "Pasek końcowy — przycisk link",
+                        "name": "final_cta_url",
+                        "type": "url",
+                        "default_value": "https://smartapply.akademiata.pl/"
+                    }
+                ]
+            },
+            {
+                "key": "field_rekr_tab_faq",
+                "label": "FAQ",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_rekr_faq_section",
+                "label": "Sekcja FAQ",
+                "name": "rekr_faq_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_rekr_faq_watermark",
+                        "label": "Watermark",
+                        "name": "watermark",
+                        "type": "text",
+                        "default_value": "FAQ"
+                    },
+                    {
+                        "key": "field_rekr_faq_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Pytania i odpowiedzi"
+                    },
+                    {
+                        "key": "field_rekr_faq_title",
+                        "label": "Tytuł (H2)",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Najczęstsze pytania kandydatów."
+                    },
+                    {
+                        "key": "field_rekr_faq_items",
+                        "label": "Pytania",
+                        "name": "items",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj pytanie",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_rekr_faq_question",
+                                "label": "Pytanie",
+                                "name": "question",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_faq_items"
+                            },
+                            {
+                                "key": "field_rekr_faq_answer",
+                                "label": "Odpowiedź",
+                                "name": "answer",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
+                                "parent_repeater": "field_rekr_faq_items"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-zasady-rekrutacji.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "modified": 1782725526
+    }
+]

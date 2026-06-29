@@ -18,7 +18,7 @@ alwaysApply: false
 
 ## Page templates (root)
 
-`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-rankingi.php`, `page.php`.
+`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page.php`.
 
 ## LP landing pages
 
@@ -38,6 +38,10 @@ Każda LP = **osobny szablon** (nie flexible builder), własny SCSS w `assets/sr
 ### Seria „Studiuj to, co Cię kręci”
 
 Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-studiuj-to-co-cie-kreci.php` (LP 02.1, studia I stopnia).
+
+### Seria rekrutacji
+
+**Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ). Prefix ACF: `rekr_`.
 
 ## `partials/` vs `template-parts/`
 
