@@ -11,6 +11,21 @@ function akademiata_home_rankings_defaults(): array {
 }
 
 /**
+ * @param array<int, mixed> $stats
+ * @return array<int, mixed>
+ */
+function akademiata_home_rankings_swap_first_third_stats(array $stats): array {
+    $stats = array_values($stats);
+    if (count($stats) < 3) {
+        return $stats;
+    }
+
+    [$stats[0], $stats[2]] = [$stats[2], $stats[0]];
+
+    return $stats;
+}
+
+/**
  * @param array<string, mixed>|false|null $acf_group
  * @return array<string, mixed>
  */
@@ -27,6 +42,11 @@ function akademiata_home_rankings_fields($acf_group): array {
                 $merged[$block_key]['stats'][$i] = akademiata_lp_merge_defaults(
                     $default_stats[$i] ?? [],
                     is_array($stat) ? $stat : null
+                );
+            }
+            if ($block_key === 'perspektywy') {
+                $merged[$block_key]['stats'] = akademiata_home_rankings_swap_first_third_stats(
+                    $merged[$block_key]['stats']
                 );
             }
         }
