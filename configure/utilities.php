@@ -221,7 +221,7 @@ function akademiata_get_offer_city_slug($post_id = 0) {
 
 /**
  * Ranking icon URL for bachelor/master cards and sliders.
- * Post-level field overrides program taxonomy fallback.
+ * Specialization field overrides program taxonomy fallback.
  *
  * @param int $post_id Post ID.
  * @return string
@@ -235,19 +235,19 @@ function akademiata_get_offer_ranking_icon_url($post_id = 0) {
         return '';
     }
 
-    $field_key = (akademiata_get_offer_city_slug($post_id) === 'wroclaw')
-        ? 'ranking_icon_wro'
-        : 'ranking_icon';
-
-    $icon = get_field($field_key, $post_id) ?: array();
+    $icon = get_field('ranking_icon', $post_id) ?: array();
     if (!empty($icon['url'])) {
         return esc_url($icon['url']);
     }
 
+    $program_field_key = (akademiata_get_offer_city_slug($post_id) === 'wroclaw')
+        ? 'ranking_icon_wro'
+        : 'ranking_icon';
+
     $terms = wp_get_post_terms($post_id, 'program');
     if (!is_wp_error($terms) && !empty($terms)) {
         foreach ($terms as $term) {
-            $icon = get_field($field_key, 'program_' . $term->term_id) ?: array();
+            $icon = get_field($program_field_key, 'program_' . $term->term_id) ?: array();
             if (!empty($icon['url'])) {
                 return esc_url($icon['url']);
             }

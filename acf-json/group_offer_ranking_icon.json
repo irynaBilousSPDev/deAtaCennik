@@ -5,21 +5,10 @@
         "fields": [
             {
                 "key": "field_offer_ranking_icon",
-                "label": "Ranking icon Warsaw",
+                "label": "Ranking icon",
                 "name": "ranking_icon",
                 "type": "image",
-                "instructions": "Ikona na karcie specjalności w Warszawie. Puste = ikona z kierunku studiów (program).",
-                "return_format": "array",
-                "preview_size": "medium",
-                "library": "all",
-                "mime_types": ""
-            },
-            {
-                "key": "field_offer_ranking_icon_wro",
-                "label": "Ranking icon Wroclaw",
-                "name": "ranking_icon_wro",
-                "type": "image",
-                "instructions": "Ikona na karcie specjalności we Wrocławiu. Puste = ikona z kierunku studiów (program).",
+                "instructions": "Ikona na karcie specjalności. Puste = ikona z kierunku studiów (program).",
                 "return_format": "array",
                 "preview_size": "medium",
                 "library": "all",
