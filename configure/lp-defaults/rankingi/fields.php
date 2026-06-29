@@ -97,10 +97,10 @@ function akademiata_rankingi_theme_video_path(): string {
     return get_template_directory() . '/static/video/' . akademiata_rankingi_theme_video_filename();
 }
 
-function akademiata_rankingi_theme_video_url(): string {
-    if (!is_readable(akademiata_rankingi_theme_video_path())) {
-        return '';
-    }
+function akademiata_rankingi_theme_video_exists(): bool {
+    return is_readable(akademiata_rankingi_theme_video_path());
+}
 
+function akademiata_rankingi_theme_video_url(): string {
     return get_template_directory_uri() . '/static/video/' . akademiata_rankingi_theme_video_filename();
 }

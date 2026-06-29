@@ -10,6 +10,8 @@
     "sync:git": "node scripts/sync-git.js",
     "deploy:dev": "node scripts/deploy-dev.js dev",
     "deploy:prod": "node scripts/deploy-dev.js prod",
+    "upload:static-video:dev": "node scripts/upload-static-video.js dev",
+    "upload:static-video:prod": "node scripts/upload-static-video.js prod",
     "remove": "rimraf node_modules package-lock.json"
   },
   "author": "Avista consulting & management",
