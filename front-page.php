@@ -77,48 +77,9 @@ if (!empty($post_types)) : ?>
 
 
 <?php
-$about_us = $acf_fields['about_us'] ?? null;
-
-if (!empty($about_us)) :
-    $title = $about_us['title'] ?? '';
-    $sub_title = $about_us['sub_title'] ?? '';
-    $details = $about_us['details'] ?? '';
-    $image = $about_us['image'] ?? '';
-
-    $image_url = !empty($image['url']) ? esc_url($image['url']) : '';
-    $image_alt = !empty($image['alt']) ? esc_attr($image['alt']) : __('About Us Image', 'akademiata');
-    ?>
-
-    <section id="aboutUs" class="section_about_us mb-5">
-        <div class="container">
-            <?php if (!empty($title)) : ?>
-                <h2 class="sub_title primary_color"><?php echo esc_html($title); ?></h2>
-            <?php endif; ?>
-            <?php if (!empty($sub_title)) : ?>
-                <h3 class="title_section  mb-5"><?php echo esc_html($sub_title); ?></h3>
-            <?php endif; ?>
-
-            <div class="row">
-                <?php if (!empty($image_url)) : ?>
-                    <div class="col-lg-6 col-xl-5 mb-5">
-                        <div class="item image_bg" role="img"
-                             aria-label="<?php echo $image_alt; ?>"
-                             style="background-image: url('<?php echo $image_url; ?>');">
-                        </div>
-                    </div>
-                <?php endif; ?>
-
-                <?php if (!empty($details)) : ?>
-                    <div class="col-lg-6 col-xl-7 d-flex align-items-center">
-                        <div class="details">
-                            <?php echo wp_kses_post($details); ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </section>
-<?php endif; ?>
+set_query_var('home_rankings', $acf_fields['home_rankings'] ?? null);
+get_template_part('template-parts/front-page/home-rankings');
+?>
 
 
 <?php $our_students = $acf_fields['our_students'];

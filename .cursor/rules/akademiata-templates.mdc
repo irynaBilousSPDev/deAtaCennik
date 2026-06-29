@@ -48,7 +48,7 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 | Folder | Use for |
 |--------|---------|
 | `partials/` | Site chrome, cards, filters, offer nav — `header.php`, `footer.php`, `card_post*.php`, `nav_single_offer.php`, `filter_side.php` |
-| `template-parts/` | Content shells and sections — `content/*`, `single-offer/section_*.php`, `prices/calculator.php`, `front-page/hero-slider.php` |
+| `template-parts/` | Content shells and sections — `content/*`, `single-offer/section_*.php`, `prices/calculator.php`, `front-page/hero-slider.php`, `front-page/home-rankings.php` |
 | `template-parts/.../partials/` | Feature-scoped fragments (e.g. `pg-mba/partials/`) |
 
 Load via `get_template_part()` or `locate_template('partials/header.php', true, true)`.
@@ -60,6 +60,7 @@ From `content-single-offer.php`: `section_why_study`, `section_student_testimoni
 ## ACF in templates
 
 - Top of templates: `get_fields()` → `set_query_var('acf_fields', $acf_fields)`.
+- **Front page:** `acf-json/group_front_page.json` (`Front: Page`) — tab **Rankingi** → group `home_rankings` (zamiast `about_us`). Defaults: `configure/front-page-defaults/home-rankings/`.
 - Options pages: Theme Settings (Header, Footer, contacts) registered in `configure/configure.php`.
 - Components: `render_acf_component($type, $data)` → `acf-components/acf-{type}.php`.
 

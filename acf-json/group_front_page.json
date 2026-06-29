@@ -1,0 +1,1028 @@
+[
+    {
+        "key": "group_67b861cb708f2",
+        "title": "Front: Page",
+        "fields": [
+            {
+                "key": "field_67b861cbe712b",
+                "label": "Main Slider",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67b861ffe712c",
+                "label": "Main Slider",
+                "name": "main_slider",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "table",
+                "pagination": 0,
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "button_label": "Dodaj wiersz",
+                "rows_per_page": 20,
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_6904c8cf9c65e",
+                        "label": "Show slide",
+                        "name": "show_slide",
+                        "aria-label": "",
+                        "type": "true_false",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "10",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 3,
+                        "message": "show/hide",
+                        "default_value": 1,
+                        "allow_in_bindings": 0,
+                        "ui": 0,
+                        "ui_on_text": "",
+                        "ui_off_text": "",
+                        "parent_repeater": "field_67b861ffe712c"
+                    },
+                    {
+                        "key": "field_67b8664c62f51",
+                        "label": "image",
+                        "name": "image",
+                        "aria-label": "",
+                        "type": "image",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "return_format": "array",
+                        "library": "all",
+                        "min_width": "",
+                        "min_height": "",
+                        "min_size": "",
+                        "max_width": "",
+                        "max_height": "",
+                        "max_size": "",
+                        "mime_types": "",
+                        "allow_in_bindings": 0,
+                        "preview_size": "medium_large",
+                        "parent_repeater": "field_67b861ffe712c",
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_67b8665562f52",
+                        "label": "title",
+                        "name": "title",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_67b861ffe712c",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_67b86236e712d",
+                        "label": "Button",
+                        "name": "button",
+                        "aria-label": "",
+                        "type": "clone",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "40",
+                            "class": "",
+                            "id": ""
+                        },
+                        "clone": [
+                            "group_67b8454d72cef"
+                        ],
+                        "display": "group",
+                        "layout": "block",
+                        "prefix_label": 0,
+                        "prefix_name": 0,
+                        "parent_repeater": "field_67b861ffe712c",
+                        "wpml_cf_preferences": 3
+                    }
+                ]
+            },
+            {
+                "key": "field_67fd0b7da9b55",
+                "label": "Counter",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67fd0b87a9b56",
+                "label": "counter",
+                "name": "counter",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "table",
+                "pagination": 0,
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "button_label": "Add Count Number",
+                "rows_per_page": 20,
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_67fd0b92a9b57",
+                        "label": "counter",
+                        "name": "counter",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_67fd0b87a9b56",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_67fd0b99a9b58",
+                        "label": "counter title",
+                        "name": "counter_title",
+                        "aria-label": "",
+                        "type": "textarea",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "rows": "",
+                        "placeholder": "",
+                        "new_lines": "br",
+                        "parent_repeater": "field_67fd0b87a9b56",
+                        "wpml_cf_preferences": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_67e6a123d2abc",
+                "label": "Main Title H1",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67e6a132d2abd",
+                "label": "main title",
+                "name": "main_title",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "allow_in_bindings": 0,
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "wpml_cf_preferences": 2
+            },
+            {
+                "key": "field_67bc41a61223b",
+                "label": "Offers",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67bc41b71223c",
+                "label": "Offers",
+                "name": "offers",
+                "aria-label": "",
+                "type": "checkbox",
+                "instructions": "Show or Hide on Front page",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "wpml_cf_preferences": 3,
+                "choices": {
+                    "bachelor": "Bachelor",
+                    "master": "Master",
+                    "courses": "Courses",
+                    "postgraduate": "Postgraduate studies",
+                    "mba": "MBA"
+                },
+                "default_value": [
+                    "bachelor",
+                    "master"
+                ],
+                "return_format": "value",
+                "allow_custom": 0,
+                "allow_in_bindings": 0,
+                "layout": "vertical",
+                "toggle": 0,
+                "save_custom": 0,
+                "custom_choice_button_text": "Dodaj nowy wybór"
+            },
+            {
+                "key": "field_home_rank_tab",
+                "label": "Rankingi",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_home_rankings",
+                "label": "Pozycja w rankingach",
+                "name": "home_rankings",
+                "type": "group",
+                "layout": "block",
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_home_rank_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "Pozycja ATA · Rankingi 2024–2026",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_rank_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "W czołówce polskich uczelni",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_rank_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "br",
+                        "default_value": "Twarde dane, nie hasła — dwa niezależne źródła: ranking jakości kształcenia i realne losy absolwentów na rynku pracy.",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_rank_film",
+                        "label": "Film",
+                        "name": "film",
+                        "type": "group",
+                        "layout": "block",
+                        "sub_fields": [
+                            {
+                                "key": "field_home_rank_film_eyebrow",
+                                "label": "Eyebrow",
+                                "name": "eyebrow",
+                                "type": "text",
+                                "default_value": "Nasi studenci",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_film_title",
+                                "label": "Tytuł pod filmem",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "ATA Mistrzem Świata",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_film_subtitle",
+                                "label": "Podpis",
+                                "name": "subtitle",
+                                "type": "text",
+                                "default_value": "Sukces, który mówi sam za siebie.",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_film_poster",
+                                "label": "Poster (opcjonalnie)",
+                                "name": "poster",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "wpml_cf_preferences": 3
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_home_rank_perspektywy",
+                        "label": "Perspektywy",
+                        "name": "perspektywy",
+                        "type": "group",
+                        "layout": "block",
+                        "sub_fields": [
+                            {
+                                "key": "field_home_rank_persp_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "default_value": "Perspektywy 2026",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_persp_label_sub",
+                                "label": "Etykieta — dopisek",
+                                "name": "label_sub",
+                                "type": "text",
+                                "default_value": "uczelnie zawodowe",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_persp_badge",
+                                "label": "Badge (opcjonalnie)",
+                                "name": "badge",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_rank_persp_stats",
+                                "label": "Statystyki",
+                                "name": "stats",
+                                "type": "repeater",
+                                "layout": "block",
+                                "min": 0,
+                                "max": 3,
+                                "button_label": "Dodaj statystykę",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_home_rank_persp_stat_value",
+                                        "label": "Wartość",
+                                        "name": "value",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_persp_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_persp_stat_suffix",
+                                        "label": "Sufiks (•, zł, %)",
+                                        "name": "value_suffix",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_persp_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_persp_stat_label_bold",
+                                        "label": "Etykieta — pogrubienie",
+                                        "name": "label_bold",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_persp_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_persp_stat_label",
+                                        "label": "Etykieta — opis",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_persp_stats",
+                                        "wpml_cf_preferences": 2
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_home_rank_ela",
+                        "label": "ELA",
+                        "name": "ela",
+                        "type": "group",
+                        "layout": "block",
+                        "sub_fields": [
+                            {
+                                "key": "field_home_rank_ela_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "default_value": "ELA 2024",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_ela_label_sub",
+                                "label": "Etykieta — dopisek",
+                                "name": "label_sub",
+                                "type": "text",
+                                "default_value": "dane ZUS · rok po studiach",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_rank_ela_logo",
+                                "label": "Logo (opcjonalnie)",
+                                "name": "logo",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_rank_ela_stats",
+                                "label": "Statystyki",
+                                "name": "stats",
+                                "type": "repeater",
+                                "layout": "block",
+                                "min": 0,
+                                "max": 3,
+                                "button_label": "Dodaj statystykę",
+                                "sub_fields": [
+                                    {
+                                        "key": "field_home_rank_ela_stat_value",
+                                        "label": "Wartość",
+                                        "name": "value",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_ela_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_ela_stat_suffix",
+                                        "label": "Sufiks (•, zł, %)",
+                                        "name": "value_suffix",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_ela_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_ela_stat_label_bold",
+                                        "label": "Etykieta — pogrubienie",
+                                        "name": "label_bold",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_ela_stats",
+                                        "wpml_cf_preferences": 2
+                                    },
+                                    {
+                                        "key": "field_home_rank_ela_stat_label",
+                                        "label": "Etykieta — opis",
+                                        "name": "label",
+                                        "type": "text",
+                                        "parent_repeater": "field_home_rank_ela_stats",
+                                        "wpml_cf_preferences": 2
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_home_rank_sources",
+                        "label": "Źródła",
+                        "name": "sources",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "br",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_rank_cta_text",
+                        "label": "CTA — tekst",
+                        "name": "cta_text",
+                        "type": "text",
+                        "default_value": "Zobacz kierunki",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_rank_cta_url",
+                        "label": "CTA — URL",
+                        "name": "cta_url",
+                        "type": "url",
+                        "wpml_cf_preferences": 3
+                    }
+                ]
+            },
+            {
+                "key": "field_67bc47646a8e9",
+                "label": "Our Students",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67bc47846a8ea",
+                "label": "our students",
+                "name": "our_students",
+                "aria-label": "",
+                "type": "group",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "block",
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_67bc47916a8eb",
+                        "label": "title",
+                        "name": "title",
+                        "aria-label": "",
+                        "type": "textarea",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "rows": "",
+                        "placeholder": "",
+                        "new_lines": "br",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_67bc47ad6a8ec",
+                        "label": "youtube playlist code",
+                        "name": "data_youtube_playlist",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "wpml_cf_preferences": 2
+                    }
+                ]
+            },
+            {
+                "key": "field_67bef468e9a7f",
+                "label": "Zainteresowania",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_67bef479e9a80",
+                "label": "your nterests",
+                "name": "your_interests",
+                "aria-label": "",
+                "type": "group",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "block",
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_67bef483e9a81",
+                        "label": "title",
+                        "name": "title",
+                        "aria-label": "",
+                        "type": "textarea",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "rows": "",
+                        "placeholder": "",
+                        "new_lines": "br",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_67bef48fe9a82",
+                        "label": "interests",
+                        "name": "interests",
+                        "aria-label": "",
+                        "type": "repeater",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "layout": "table",
+                        "pagination": 0,
+                        "min": 0,
+                        "max": 0,
+                        "collapsed": "",
+                        "button_label": "Dodaj wiersz",
+                        "rows_per_page": 20,
+                        "wpml_cf_preferences": 3,
+                        "sub_fields": [
+                            {
+                                "key": "field_67bef4a6e9a83",
+                                "label": "image",
+                                "name": "image",
+                                "aria-label": "",
+                                "type": "image",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": 0,
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "return_format": "array",
+                                "library": "all",
+                                "min_width": "",
+                                "min_height": "",
+                                "min_size": "",
+                                "max_width": "",
+                                "max_height": "",
+                                "max_size": "",
+                                "mime_types": "",
+                                "allow_in_bindings": 0,
+                                "preview_size": "medium",
+                                "parent_repeater": "field_67bef48fe9a82",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_67bef4c1e9a84",
+                                "label": "title",
+                                "name": "title",
+                                "aria-label": "",
+                                "type": "textarea",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": 0,
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "default_value": "",
+                                "maxlength": "",
+                                "allow_in_bindings": 1,
+                                "rows": "",
+                                "placeholder": "",
+                                "new_lines": "br",
+                                "parent_repeater": "field_67bef48fe9a82",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_67bef4d8e9a85",
+                                "label": "link",
+                                "name": "link",
+                                "aria-label": "",
+                                "type": "link",
+                                "instructions": "",
+                                "required": 0,
+                                "conditional_logic": 0,
+                                "wrapper": {
+                                    "width": "",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "return_format": "array",
+                                "allow_in_bindings": 0,
+                                "parent_repeater": "field_67bef48fe9a82",
+                                "wpml_cf_preferences": 3
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_685e70d9386ba",
+                "label": "Promo Section",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "wpml_cf_preferences": 3,
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0
+            },
+            {
+                "key": "field_685e70f4386bb",
+                "label": "two_column_banner",
+                "name": "two_column_banner",
+                "aria-label": "",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "wpml_cf_preferences": 3,
+                "layout": "table",
+                "pagination": 0,
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "button_label": "Dodaj wiersz",
+                "rows_per_page": 20,
+                "sub_fields": [
+                    {
+                        "key": "field_685e7103386bc",
+                        "label": "image",
+                        "name": "image",
+                        "aria-label": "",
+                        "type": "image",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 3,
+                        "return_format": "url",
+                        "library": "all",
+                        "min_width": "",
+                        "min_height": "",
+                        "min_size": "",
+                        "max_width": "",
+                        "max_height": "",
+                        "max_size": "",
+                        "mime_types": "",
+                        "allow_in_bindings": 0,
+                        "preview_size": "medium",
+                        "parent_repeater": "field_685e70f4386bb"
+                    },
+                    {
+                        "key": "field_685e7116386bd",
+                        "label": "title_line_1",
+                        "name": "title_line_1",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 2,
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_685e70f4386bb"
+                    },
+                    {
+                        "key": "field_685e711c386be",
+                        "label": "title_line_2",
+                        "name": "title_line_2",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 2,
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_685e70f4386bb"
+                    },
+                    {
+                        "key": "field_685e712a386bf",
+                        "label": "button_link",
+                        "name": "button_link",
+                        "aria-label": "",
+                        "type": "url",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 3,
+                        "default_value": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "parent_repeater": "field_685e70f4386bb"
+                    },
+                    {
+                        "key": "field_685e7142386c0",
+                        "label": "button_text",
+                        "name": "button_text",
+                        "aria-label": "",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        },
+                        "wpml_cf_preferences": 2,
+                        "default_value": "",
+                        "maxlength": "",
+                        "allow_in_bindings": 0,
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "parent_repeater": "field_685e70f4386bb"
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "page_type",
+                    "operator": "==",
+                    "value": "front_page"
+                }
+            ],
+            [
+                {
+                    "param": "page",
+                    "operator": "==",
+                    "value": "124"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "acf_after_title",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0,
+        "display_title": "",
+        "allow_ai_access": false,
+        "ai_description": "",
+        "acfml_field_group_mode": "localization"
+    }
+]
