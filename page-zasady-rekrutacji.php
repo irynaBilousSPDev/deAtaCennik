@@ -1027,6 +1027,7 @@ $lp_has_photo = static function ($image, $static_key) {
     var siteHeader = document.querySelector('.site-header');
     var scrollSpyLocked = false;
     var scrollSpyTimer = null;
+    var forcedNavLink = null;
     var quickNavLinks = nav ? [].slice.call(nav.querySelectorAll('a')) : [];
     var quickNavMap = quickNavLinks.map(function (a) {
         var h = a.getAttribute('href');
@@ -1034,14 +1035,14 @@ $lp_has_photo = static function ($image, $static_key) {
         return el ? { a: a, el: el } : null;
     }).filter(Boolean);
 
-    function getElTop(el) {
-        return el.getBoundingClientRect().top + window.scrollY;
-    }
-
-    function getScrollOffset() {
-        var headerH = siteHeader ? siteHeader.offsetHeight : 0;
-        var navH = nav ? nav.offsetHeight : 0;
-        return headerH + navH + 16;
+    function getAnchorMarker() {
+        if (nav) {
+            return nav.getBoundingClientRect().bottom + 12;
+        }
+        if (siteHeader) {
+            return siteHeader.getBoundingClientRect().bottom + 12;
+        }
+        return 12;
     }
 
     function updateStickyMetrics() {
@@ -1049,7 +1050,8 @@ $lp_has_photo = static function ($image, $static_key) {
         if (nav) {
             nav.style.setProperty('--rekr-quick-nav-top', headerH + 'px');
         }
-        root.style.setProperty('--rekr-scroll-offset', getScrollOffset() + 'px');
+        var offset = headerH + (nav ? nav.offsetHeight : 0) + 16;
+        root.style.setProperty('--rekr-scroll-offset', offset + 'px');
     }
 
     function scrollActiveLinkIntoView(activeA) {
@@ -1057,14 +1059,12 @@ $lp_has_photo = static function ($image, $static_key) {
         if (!container) {
             return;
         }
-        var linkLeft = activeA.offsetLeft;
-        var linkRight = linkLeft + activeA.offsetWidth;
-        var viewLeft = container.scrollLeft;
-        var viewRight = viewLeft + container.clientWidth;
-        if (linkLeft < viewLeft) {
-            container.scrollTo({ left: linkLeft - 8, behavior: reduce ? 'auto' : 'smooth' });
-        } else if (linkRight > viewRight) {
-            container.scrollTo({ left: linkRight - container.clientWidth + 8, behavior: reduce ? 'auto' : 'smooth' });
+        var containerRect = container.getBoundingClientRect();
+        var linkRect = activeA.getBoundingClientRect();
+        if (linkRect.left < containerRect.left + 4) {
+            container.scrollLeft -= (containerRect.left - linkRect.left) + 8;
+        } else if (linkRect.right > containerRect.right - 4) {
+            container.scrollLeft += (linkRect.right - containerRect.right) + 8;
         }
     }
 
@@ -1082,26 +1082,64 @@ $lp_has_photo = static function ($image, $static_key) {
         scrollActiveLinkIntoView(activeA);
     }
 
-    function lockScrollSpy(ms) {
+    function releaseScrollSpy(activeLink) {
+        scrollSpyLocked = false;
+        forcedNavLink = null;
+        if (activeLink) {
+            var h = activeLink.getAttribute('href');
+            var el = h && h.charAt(0) === '#' ? document.querySelector(h) : null;
+            if (el) {
+                var rect = el.getBoundingClientRect();
+                var marker = getAnchorMarker();
+                if (Math.abs(rect.top - marker) <= 80) {
+                    setActiveLink(activeLink);
+                    return;
+                }
+            }
+        }
+        onQuickNavScroll();
+    }
+
+    function lockScrollSpy(activeLink) {
         scrollSpyLocked = true;
+        forcedNavLink = activeLink || null;
         clearTimeout(scrollSpyTimer);
-        scrollSpyTimer = setTimeout(function () {
-            scrollSpyLocked = false;
-            onQuickNavScroll();
-        }, ms);
+        var finished = false;
+        var behavior = reduce ? 'auto' : 'smooth';
+        var waitMs = behavior === 'smooth' ? 1600 : 120;
+
+        function finish() {
+            if (finished) {
+                return;
+            }
+            finished = true;
+            clearTimeout(scrollSpyTimer);
+            releaseScrollSpy(activeLink);
+        }
+
+        scrollSpyTimer = setTimeout(finish, waitMs);
+
+        if (behavior === 'smooth' && 'onscrollend' in window) {
+            window.addEventListener('scrollend', finish, { once: true });
+        }
     }
 
     function onQuickNavScroll() {
         if (!nav || scrollSpyLocked) {
             return;
         }
-        var pos = window.scrollY + getScrollOffset();
+        if (forcedNavLink) {
+            setActiveLink(forcedNavLink);
+            return;
+        }
+        var marker = getAnchorMarker();
         var cur = null;
         var bestTop = -Infinity;
         quickNavMap.forEach(function (m) {
-            var top = getElTop(m.el);
-            if (top <= pos && top > bestTop) {
-                bestTop = top;
+            var rect = m.el.getBoundingClientRect();
+            var docTop = rect.top + window.scrollY;
+            if (rect.top <= marker + 2 && docTop > bestTop) {
+                bestTop = docTop;
                 cur = m;
             }
         });
@@ -1114,9 +1152,10 @@ $lp_has_photo = static function ($image, $static_key) {
         if (activeLink) {
             setActiveLink(activeLink);
         }
-        var y = Math.max(0, getElTop(el) - getScrollOffset());
+        var rect = el.getBoundingClientRect();
+        var y = Math.max(0, window.scrollY + rect.top - getAnchorMarker());
         var behavior = reduce ? 'auto' : 'smooth';
-        lockScrollSpy(behavior === 'smooth' ? 900 : 80);
+        lockScrollSpy(activeLink);
         window.scrollTo({ top: y, behavior: behavior });
     }
 
