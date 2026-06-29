@@ -3,33 +3,8 @@
     <div class="card_post_wrapper">
         <div class="card_post_image">
             <?php
-            $termsRanking = wp_get_post_terms($post->ID, ['program']);
             $city_terms = wp_get_post_terms($post->ID, 'city');
-            $ranking_icon_url = '';
-
-            if (!is_wp_error($termsRanking) && !empty($termsRanking)) {
-                // Get city slug
-                $city_slug = '';
-                if (!is_wp_error($city_terms) && !empty($city_terms)) {
-                    $city_slug = $city_terms[0]->slug;
-                }
-
-                foreach ($termsRanking as $term) {
-                    $term_id = $term->term_id;
-
-                    // If city is wroclaw, use alternate field
-                    if ($city_slug === 'wroclaw') {
-                        $ranking_icon = get_field('ranking_icon_wro', 'program_' . $term_id);
-                    } else {
-                        $ranking_icon = get_field('ranking_icon', 'program_' . $term_id);
-                    }
-
-                    if (!empty($ranking_icon) && isset($ranking_icon['url'])) {
-                        $ranking_icon_url = esc_url($ranking_icon['url']);
-                        break; // Use the first valid icon
-                    }
-                }
-            }
+            $ranking_icon_url = akademiata_get_offer_ranking_icon_url($post->ID);
 
             //            etykieta_studia
             $etykieta_studia = get_field('etykieta_studia', get_the_ID());

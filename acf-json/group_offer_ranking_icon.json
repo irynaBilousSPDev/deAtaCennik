@@ -1,0 +1,54 @@
+[
+    {
+        "key": "group_offer_ranking_icon",
+        "title": "Oferta — ikona rankingu",
+        "fields": [
+            {
+                "key": "field_offer_ranking_icon",
+                "label": "Ranking icon Warsaw",
+                "name": "ranking_icon",
+                "type": "image",
+                "instructions": "Ikona na karcie specjalności w Warszawie. Puste = ikona z kierunku studiów (program).",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all",
+                "mime_types": ""
+            },
+            {
+                "key": "field_offer_ranking_icon_wro",
+                "label": "Ranking icon Wroclaw",
+                "name": "ranking_icon_wro",
+                "type": "image",
+                "instructions": "Ikona na karcie specjalności we Wrocławiu. Puste = ikona z kierunku studiów (program).",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all",
+                "mime_types": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "bachelor"
+                }
+            ],
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "master"
+                }
+            ]
+        ],
+        "menu_order": 20,
+        "position": "side",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]

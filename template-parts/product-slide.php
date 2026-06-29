@@ -28,25 +28,12 @@ $category_name = (!empty($categories) && !is_wp_error($categories))
     : '';
 
 /**
- * City term (for choosing ranking icon field)
+ * City term
  */
 $city_terms = wp_get_post_terms($slide_id, 'city');
-$city_slug  = (!empty($city_terms) && !is_wp_error($city_terms)) ? $city_terms[0]->slug : '';
 $city_name  = (!empty($city_terms) && !is_wp_error($city_terms)) ? esc_html($city_terms[0]->name) : '';
 
-/**
- * Ranking icon field depends on city slug
- */
-$ranking_icon_url = '';
-if (!empty($categories) && !is_wp_error($categories)) {
-    $category = $categories[0];
-    $field_key = ($city_slug === 'wroclaw') ? 'ranking_icon_wro' : 'ranking_icon';
-    $ranking_icon = get_field($field_key, 'program_' . $category->term_id) ?: [];
-
-    if (!empty($ranking_icon['url'])) {
-        $ranking_icon_url = esc_url($ranking_icon['url']);
-    }
-}
+$ranking_icon_url = akademiata_get_offer_ranking_icon_url($slide_id);
 
 /**
  * Label switches (ACF: etykieta_studia on this slide)
