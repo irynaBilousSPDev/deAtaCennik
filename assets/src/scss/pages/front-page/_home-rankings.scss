@@ -1,6 +1,5 @@
 @use "../../abstracts/variables" as vars;
 
-$home-rank-paper: #faf8f3;
 $home-rank-ink: #16191d;
 $home-rank-ink-soft: #5c616a;
 $home-rank-line: #dad3c6;
@@ -9,7 +8,7 @@ $home-rank-display: "Nunito Sans", serif;
 $home-rank-body: vars.$font-family-sans-serif;
 
 .home-rank {
-  background: $home-rank-paper;
+  background: vars.$white;
   color: $home-rank-ink;
   font-family: $home-rank-body;
   font-size: 16px;
@@ -259,7 +258,7 @@ $home-rank-body: vars.$font-family-sans-serif;
     font-size: 13px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: $home-rank-paper;
+    color: vars.$white;
     background: $home-rank-ink;
     text-decoration: none;
     padding: 14px 24px;
@@ -268,7 +267,7 @@ $home-rank-body: vars.$font-family-sans-serif;
 
     &:hover {
       background: $home-rank-accent;
-      color: $home-rank-paper;
+      color: vars.$white;
     }
 
     &:focus-visible {
