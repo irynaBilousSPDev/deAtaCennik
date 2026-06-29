@@ -1,5 +1,19 @@
 @use "../abstracts/variables" as vars;
 
+@mixin rekr-kbd-focus($radius: inherit) {
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 3px #ff5a28;
+    border-radius: $radius;
+  }
+}
+
 body.page-template-page-zasady-rekrutacji {
   #primary {
     margin-top: 0;
@@ -488,6 +502,15 @@ body.page-template-page-zasady-rekrutacji {
         color: #fff;
         box-shadow: 0 4px 14px rgba(255, 90, 40, 0.28);
       }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 90, 40, 0.45);
+      }
+
+      &.active:focus-visible {
+        box-shadow: 0 0 0 3px rgba(255, 90, 40, 0.45), 0 4px 14px rgba(255, 90, 40, 0.28);
+      }
     }
   }
 
@@ -873,6 +896,8 @@ body.page-template-page-zasady-rekrutacji {
     &:hover img {
       transform: scale(1.06);
     }
+
+    @include rekr-kbd-focus(16px);
   }
 
   .pf-zoom {
@@ -911,6 +936,8 @@ body.page-template-page-zasady-rekrutacji {
     font-size: 2.6rem;
     line-height: 1;
     cursor: pointer;
+
+    @include rekr-kbd-focus(50%);
   }
 
   .terms-grid {
@@ -987,6 +1014,8 @@ body.page-template-page-zasady-rekrutacji {
       color: #ff5a28;
       font-size: 2.4rem;
     }
+
+    @include rekr-kbd-focus(22px);
   }
 
   .schedule-panel,
@@ -1201,6 +1230,8 @@ body.page-template-page-zasady-rekrutacji {
       border-color: #101422;
       color: #fff;
     }
+
+    @include rekr-kbd-focus(999px);
   }
 
   .tab-panel {
@@ -1368,6 +1399,14 @@ body.page-template-page-zasady-rekrutacji {
     overflow: hidden;
     box-shadow: 0 8px 20px rgba(16, 20, 34, 0.05);
 
+    &.open .faq-q {
+      border-radius: 22px 22px 0 0;
+    }
+
+    &:not(.open) .faq-q {
+      border-radius: 22px;
+    }
+
     &.open .faq-a {
       display: block;
     }
@@ -1386,6 +1425,9 @@ body.page-template-page-zasady-rekrutacji {
     font-size: 1.6rem;
     font-weight: vars.$weight-extra-bold;
     cursor: pointer;
+    border-radius: 22px;
+
+    @include rekr-kbd-focus(22px);
 
     span:last-child {
       color: #ff5a28;
