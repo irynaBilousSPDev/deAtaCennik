@@ -44,6 +44,80 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
         esc_html($text)
     );
 };
+
+/**
+ * @param string|null $title
+ * @param string|null $text
+ * @param string      $class
+ */
+$lp_render_callout = static function ($title, $text, $class = 'note') {
+    $title = is_string($title) ? trim($title) : '';
+    $text = is_string($text) ? trim($text) : '';
+    if ($title === '' && $text === '') {
+        return;
+    }
+    echo '<div class="' . esc_attr($class) . '">';
+    if ($title !== '') {
+        echo '<strong>' . esc_html($title) . '</strong>';
+        if ($text !== '') {
+            echo ' ';
+        }
+    }
+    if ($text !== '') {
+        echo esc_html($text);
+    }
+    echo '</div>';
+};
+
+/**
+ * @param string|null $text
+ */
+$lp_render_multiline = static function ($text) {
+    if ($text === '' || $text === null) {
+        return;
+    }
+    echo nl2br(esc_html($text));
+};
+
+/**
+ * @param array<string, mixed>|null $image
+ * @param string                    $static_key hero|reassure
+ * @param string                    $alt
+ * @param string                    $size
+ */
+$lp_render_photo = static function ($image, $static_key, $alt, $size = 'large') {
+    if (is_array($image) && !empty($image['ID'])) {
+        echo wp_get_attachment_image(
+            (int) $image['ID'],
+            $size,
+            false,
+            [
+                'alt' => esc_attr($image['alt'] ?: $alt),
+            ]
+        );
+        return;
+    }
+    $url = akademiata_zasady_rekrutacji_static_image_url($static_key);
+    if ($url === '') {
+        return;
+    }
+    printf(
+        '<img src="%s" alt="%s">',
+        esc_url($url),
+        esc_attr($alt)
+    );
+};
+
+/**
+ * @param array<string, mixed>|null $image
+ * @param string                    $static_key
+ */
+$lp_has_photo = static function ($image, $static_key) {
+    if (is_array($image) && !empty($image['ID'])) {
+        return true;
+    }
+    return akademiata_zasady_rekrutacji_static_image_url($static_key) !== '';
+};
 ?>
 
 <div class="lp-page lp-zasady-rekrutacji">
@@ -51,7 +125,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
     <?php
     $hero = $acf_fields['rekr_hero_section'];
     $hero_photo = $hero['hero_photo'] ?? null;
-    $has_hero_photo = is_array($hero_photo) && !empty($hero_photo['ID']);
+    $has_hero_photo = $lp_has_photo($hero_photo, 'hero');
     ?>
     <section class="section hero">
         <?php if (!empty($hero['watermark'])) : ?>
@@ -81,19 +155,9 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                 <?php endif; ?>
             </div>
 
-            <aside class="<?php echo esc_attr('hero-media' . ($has_hero_photo ? '' : ' hero-media--placeholder')); ?>">
+            <aside class="<?php echo esc_attr('hero-media' . ($has_hero_photo ? ' hero-media--has-image' : '')); ?>">
                 <?php if ($has_hero_photo) : ?>
-                    <?php
-                    echo wp_get_attachment_image(
-                        (int) $hero_photo['ID'],
-                        'large',
-                        false,
-                        [
-                            'class' => 'hero-media__img',
-                            'alt'   => esc_attr($hero_photo['alt'] ?: __('Rekrutacja ATA', 'akademiata')),
-                        ]
-                    );
-                    ?>
+                    <?php $lp_render_photo($hero_photo, 'hero', __('Rekrutacja ATA', 'akademiata'), 'large'); ?>
                 <?php endif; ?>
                 <?php if (!empty($hero['hero_tag'])) : ?>
                     <span class="hero-media__tag"><?php echo esc_html($hero['hero_tag']); ?></span>
@@ -323,8 +387,15 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                 <?php if ($has_gallery) : ?>
                     <div class="pf-gallery" id="pfGallery" aria-hidden="true">
                         <div class="pf-gallery__inner">
-                            <?php if (!empty($portfolio['gallery_bar'])) : ?>
-                                <div class="pf-gallery__bar"><?php echo wp_kses_post($portfolio['gallery_bar']); ?></div>
+                            <?php if (!empty($portfolio['gallery_bar_title']) || !empty($portfolio['gallery_bar_text'])) : ?>
+                                <div class="pf-gallery__bar">
+                                    <?php if (!empty($portfolio['gallery_bar_title'])) : ?>
+                                        <strong><?php echo esc_html($portfolio['gallery_bar_title']); ?></strong><?php echo !empty($portfolio['gallery_bar_text']) ? ' — ' : ''; ?>
+                                    <?php endif; ?>
+                                    <?php if (!empty($portfolio['gallery_bar_text'])) : ?>
+                                        <?php echo esc_html($portfolio['gallery_bar_text']); ?>
+                                    <?php endif; ?>
+                                </div>
                             <?php endif; ?>
                             <div class="pf-grid">
                                 <?php foreach ($gallery_images as $image) :
@@ -437,16 +508,14 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($terms['warning_html'])) : ?>
-                <div class="warning"><?php echo wp_kses_post($terms['warning_html']); ?></div>
-            <?php endif; ?>
+            <?php $lp_render_callout($terms['warning_title'] ?? '', $terms['warning_text'] ?? '', 'warning'); ?>
         </div>
     </section>
 
     <?php
     $poland = $acf_fields['rekr_poland_section'];
     $reassure_photo = $poland['reassure_photo'] ?? null;
-    $has_reassure_photo = is_array($reassure_photo) && !empty($reassure_photo['ID']);
+    $has_reassure_photo = $lp_has_photo($reassure_photo, 'reassure');
     ?>
     <section class="section" id="polska">
         <?php if (!empty($poland['watermark'])) : ?>
@@ -483,24 +552,13 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($poland['note_html'])) : ?>
-                <div class="note"><?php echo wp_kses_post($poland['note_html']); ?></div>
-            <?php endif; ?>
+            <?php $lp_render_callout($poland['note_title'] ?? '', $poland['note_text'] ?? '', 'note'); ?>
 
             <div class="two-col" style="margin-top:22px">
                 <div class="reassure-col">
-                    <div class="<?php echo esc_attr('reassure-photo' . ($has_reassure_photo ? '' : ' reassure-photo--placeholder')); ?>">
+                    <div class="<?php echo esc_attr('reassure-photo' . ($has_reassure_photo ? ' reassure-photo--has-image' : '')); ?>">
                         <?php if ($has_reassure_photo) : ?>
-                            <?php
-                            echo wp_get_attachment_image(
-                                (int) $reassure_photo['ID'],
-                                'medium_large',
-                                false,
-                                [
-                                    'alt' => esc_attr($reassure_photo['alt'] ?: __('Studenci ATA', 'akademiata')),
-                                ]
-                            );
-                            ?>
+                            <?php $lp_render_photo($reassure_photo, 'reassure', __('Studenci ATA', 'akademiata'), 'medium_large'); ?>
                         <?php endif; ?>
                     </div>
                     <div class="panel reassure-box">
@@ -535,9 +593,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; ?>
-                    <?php if (!empty($poland['transfer_note_html'])) : ?>
-                        <div class="note"><?php echo wp_kses_post($poland['transfer_note_html']); ?></div>
-                    <?php endif; ?>
+                    <?php $lp_render_callout($poland['transfer_note_title'] ?? '', $poland['transfer_note_text'] ?? '', 'note'); ?>
                     <div class="cta-row">
                         <?php $lp_render_cta($poland['transfer_cta_text'] ?? '', $poland['transfer_cta_url'] ?? '', 'small'); ?>
                     </div>
@@ -590,12 +646,8 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                                     <?php endforeach; ?>
                                 </ul>
                             <?php endif; ?>
-                            <?php if (!empty($tab['note_html'])) : ?>
-                                <div class="note"><?php echo wp_kses_post($tab['note_html']); ?></div>
-                            <?php endif; ?>
-                            <?php if (!empty($tab['warning_html'])) : ?>
-                                <div class="warning"><?php echo wp_kses_post($tab['warning_html']); ?></div>
-                            <?php endif; ?>
+                            <?php $lp_render_callout($tab['note_title'] ?? '', $tab['note_text'] ?? '', 'note'); ?>
+                            <?php $lp_render_callout($tab['warning_title'] ?? '', $tab['warning_text'] ?? '', 'warning'); ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -695,12 +747,8 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                                     <?php endforeach; ?>
                                 </ul>
                             <?php endif; ?>
-                            <?php if (!empty($tab['note_html'])) : ?>
-                                <div class="note"><?php echo wp_kses_post($tab['note_html']); ?></div>
-                            <?php endif; ?>
-                            <?php if (!empty($tab['warning_html'])) : ?>
-                                <div class="warning"><?php echo wp_kses_post($tab['warning_html']); ?></div>
-                            <?php endif; ?>
+                            <?php $lp_render_callout($tab['note_title'] ?? '', $tab['note_text'] ?? '', 'note'); ?>
+                            <?php $lp_render_callout($tab['warning_title'] ?? '', $tab['warning_text'] ?? '', 'warning'); ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -731,8 +779,8 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                             <?php if (!empty($panel['text'])) : ?>
                                 <p><?php echo esc_html($panel['text']); ?></p>
                             <?php endif; ?>
-                            <?php if (!empty($panel['note_html'])) : ?>
-                                <div class="note"><?php echo wp_kses_post($panel['note_html']); ?></div>
+                            <?php if (!empty($panel['note_text'])) : ?>
+                                <div class="note"><?php $lp_render_multiline($panel['note_text']); ?></div>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
@@ -816,7 +864,7 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                                 ?>
                             <?php endif; ?>
                             <?php if (!empty($card['file_note'])) : ?>
-                                <div class="file-note"><?php echo wp_kses_post($card['file_note']); ?></div>
+                                <div class="file-note"><?php echo esc_html($card['file_note']); ?></div>
                             <?php endif; ?>
                         </article>
                     <?php endforeach; ?>
@@ -848,13 +896,13 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
                                             <strong><?php echo esc_html($row['label']); ?></strong>
                                         <?php endif; ?>
                                         <?php if (!empty($row['value'])) : ?>
-                                            <span><?php echo wp_kses_post($row['value']); ?></span>
+                                            <span><?php $lp_render_multiline($row['value'] ?? ''); ?></span>
                                         <?php endif; ?>
                                     </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                             <?php if (!empty($card['hours'])) : ?>
-                                <div class="hours"><?php echo wp_kses_post($card['hours']); ?></div>
+                                <div class="hours"><?php $lp_render_multiline($card['hours'] ?? ''); ?></div>
                             <?php endif; ?>
                         </article>
                     <?php endforeach; ?>
@@ -976,6 +1024,17 @@ $lp_render_cta = static function ($text, $url, $style = 'primary', $attrs = []) 
 
     var nav = root.querySelector('.quick-nav');
     if (nav) {
+        var siteHeader = document.querySelector('.site-header');
+        function setQuickNavTop() {
+            if (!siteHeader) {
+                return;
+            }
+            var top = siteHeader.offsetHeight;
+            nav.style.setProperty('--rekr-quick-nav-top', top + 'px');
+        }
+        setQuickNavTop();
+        window.addEventListener('resize', setQuickNavTop);
+
         var links = [].slice.call(nav.querySelectorAll('a'));
         var map = links.map(function (a) {
             var h = a.getAttribute('href');

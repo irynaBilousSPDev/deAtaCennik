@@ -92,6 +92,7 @@
                         "label": "Zdjęcie hero",
                         "name": "hero_photo",
                         "type": "image",
+                        "instructions": "Puste = domyślne z motywu (static/img/rekrutacja-hero.png).",
                         "return_format": "array",
                         "preview_size": "medium",
                         "library": "all"
@@ -567,14 +568,20 @@
                         "default_value": "Sprawdź terminy oceny"
                     },
                     {
-                        "key": "field_rekr_portfolio_gallery_bar",
-                        "label": "Galeria — pasek (HTML)",
-                        "name": "gallery_bar",
+                        "key": "field_rekr_portfolio_gallery_bar_title",
+                        "label": "Galeria — nagłówek",
+                        "name": "gallery_bar_title",
+                        "type": "text",
+                        "default_value": "Przykładowe prace z wcześniejszych naborów"
+                    },
+                    {
+                        "key": "field_rekr_portfolio_gallery_bar_text",
+                        "label": "Galeria — tekst",
+                        "name": "gallery_bar_text",
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
-                        "default_value": "<strong>Przykładowe prace z wcześniejszych naborów</strong> — bryły geometryczne, martwa natura i architektura. To poziom i charakter prac, jakiego oczekujemy. Kliknij dowolną pracę, aby ją powiększyć."
+                        "default_value": "Bryły geometryczne, martwa natura i architektura. To poziom i charakter prac, jakiego oczekujemy. Kliknij dowolną pracę, aby ją powiększyć."
                     },
                     {
                         "key": "field_rekr_portfolio_gallery_images",
@@ -736,14 +743,20 @@
                         ]
                     },
                     {
-                        "key": "field_rekr_terms_warning_html",
-                        "label": "Ostrzeżenie (HTML)",
-                        "name": "warning_html",
+                        "key": "field_rekr_terms_warning_title",
+                        "label": "Ostrzeżenie — nagłówek",
+                        "name": "warning_title",
+                        "type": "text",
+                        "default_value": "Pozostałe kierunki:"
+                    },
+                    {
+                        "key": "field_rekr_terms_warning_text",
+                        "label": "Ostrzeżenie — tekst",
+                        "name": "warning_text",
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
-                        "default_value": "<strong>Pozostałe kierunki:</strong> Zarządzanie, Zarządzanie i Inżynieria Produkcji, Ochrona Środowiska, Mechanika i Budowa Maszyn, Architektura Krajobrazu, Informatyka, Budownictwo, Finanse i Rachunkowość, Logistyka, Komunikacja Cyfrowa i Media oraz Turystyka i Rekreacja - zapisy trwają do wyczerpania miejsc."
+                        "default_value": "Zarządzanie, Zarządzanie i Inżynieria Produkcji, Ochrona Środowiska, Mechanika i Budowa Maszyn, Architektura Krajobrazu, Informatyka, Budownictwo, Finanse i Rachunkowość, Logistyka, Komunikacja Cyfrowa i Media oraz Turystyka i Rekreacja - zapisy trwają do wyczerpania miejsc."
                     }
                 ]
             },
@@ -837,14 +850,20 @@
                         ]
                     },
                     {
-                        "key": "field_rekr_poland_note_html",
-                        "label": "Notatka (HTML)",
-                        "name": "note_html",
+                        "key": "field_rekr_poland_note_title",
+                        "label": "Notatka — nagłówek",
+                        "name": "note_title",
+                        "type": "text",
+                        "default_value": "Nie masz jeszcze świadectwa dojrzałości?"
+                    },
+                    {
+                        "key": "field_rekr_poland_note_text",
+                        "label": "Notatka — tekst",
+                        "name": "note_text",
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
-                        "default_value": "<strong>Nie masz jeszcze świadectwa dojrzałości?</strong> Na kierunkach bez portfolio i sprawdzianu możesz wcześniej zarejestrować się i dokonać opłaty rekrutacyjnej, aby zarezerwować miejsce. Ostateczne przyjęcie następuje po dostarczeniu kompletnego świadectwa dojrzałości i pozostałych dokumentów."
+                        "default_value": "Na kierunkach bez portfolio i sprawdzianu możesz wcześniej zarejestrować się i dokonać opłaty rekrutacyjnej, aby zarezerwować miejsce. Ostateczne przyjęcie następuje po dostarczeniu kompletnego świadectwa dojrzałości i pozostałych dokumentów."
                     },
                     {
                         "key": "field_rekr_poland_reassure_tag",
@@ -874,6 +893,7 @@
                         "label": "Ramka uspokajająca — zdjęcie",
                         "name": "reassure_photo",
                         "type": "image",
+                        "instructions": "Puste = domyślne z motywu (static/img/rekrutacja-reassure.png).",
                         "return_format": "array",
                         "preview_size": "medium",
                         "library": "all"
@@ -914,14 +934,20 @@
                         ]
                     },
                     {
-                        "key": "field_rekr_poland_transfer_note_html",
-                        "label": "Przeniesienie — notatka (HTML)",
-                        "name": "transfer_note_html",
+                        "key": "field_rekr_poland_transfer_note_title",
+                        "label": "Przeniesienie — notatka, nagłówek",
+                        "name": "transfer_note_title",
+                        "type": "text",
+                        "default_value": "Co zyskujesz?"
+                    },
+                    {
+                        "key": "field_rekr_poland_transfer_note_text",
+                        "label": "Przeniesienie — notatka, tekst",
+                        "name": "transfer_note_text",
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
-                        "default_value": "<strong>Co zyskujesz?</strong> Nie płacisz za rozpatrzenie podania, płacisz jedynie za ewentualne różnice programowe oraz bieżące czesne. Nie musisz też powtarzać przedmiotów zgodnych z programem studiów w ATA, więc oszczędzasz czas."
+                        "default_value": "Nie płacisz za rozpatrzenie podania, płacisz jedynie za ewentualne różnice programowe oraz bieżące czesne. Nie musisz też powtarzać przedmiotów zgodnych z programem studiów w ATA, więc oszczędzasz czas."
                     },
                     {
                         "key": "field_rekr_poland_transfer_cta_text",
@@ -1022,23 +1048,35 @@
                                 "parent_repeater": "field_rekr_docs_pl_tabs"
                             },
                             {
-                                "key": "field_rekr_docs_pl_tabs_note_html",
-                                "label": "Notatka (HTML)",
-                                "name": "note_html",
-                                "type": "textarea",
-                                "rows": 3,
-                                "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "key": "field_rekr_docs_pl_tabs_note_title",
+                                "label": "Notatka — nagłówek",
+                                "name": "note_title",
+                                "type": "text",
                                 "parent_repeater": "field_rekr_docs_pl_tabs"
                             },
                             {
-                                "key": "field_rekr_docs_pl_tabs_warning_html",
-                                "label": "Ostrzeżenie (HTML)",
-                                "name": "warning_html",
+                                "key": "field_rekr_docs_pl_tabs_note_text",
+                                "label": "Notatka — tekst",
+                                "name": "note_text",
                                 "type": "textarea",
                                 "rows": 3,
                                 "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            },
+                            {
+                                "key": "field_rekr_docs_pl_tabs_warning_title",
+                                "label": "Ostrzeżenie — nagłówek",
+                                "name": "warning_title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_docs_pl_tabs"
+                            },
+                            {
+                                "key": "field_rekr_docs_pl_tabs_warning_text",
+                                "label": "Ostrzeżenie — tekst",
+                                "name": "warning_text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
                                 "parent_repeater": "field_rekr_docs_pl_tabs"
                             }
                         ]
@@ -1240,23 +1278,35 @@
                                 "parent_repeater": "field_rekr_foreign_docs_tabs"
                             },
                             {
-                                "key": "field_rekr_foreign_docs_tabs_note_html",
-                                "label": "Notatka (HTML)",
-                                "name": "note_html",
-                                "type": "textarea",
-                                "rows": 3,
-                                "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "key": "field_rekr_foreign_docs_tabs_note_title",
+                                "label": "Notatka — nagłówek",
+                                "name": "note_title",
+                                "type": "text",
                                 "parent_repeater": "field_rekr_foreign_docs_tabs"
                             },
                             {
-                                "key": "field_rekr_foreign_docs_tabs_warning_html",
-                                "label": "Ostrzeżenie (HTML)",
-                                "name": "warning_html",
+                                "key": "field_rekr_foreign_docs_tabs_note_text",
+                                "label": "Notatka — tekst",
+                                "name": "note_text",
                                 "type": "textarea",
                                 "rows": 3,
                                 "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            },
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_warning_title",
+                                "label": "Ostrzeżenie — nagłówek",
+                                "name": "warning_title",
+                                "type": "text",
+                                "parent_repeater": "field_rekr_foreign_docs_tabs"
+                            },
+                            {
+                                "key": "field_rekr_foreign_docs_tabs_warning_text",
+                                "label": "Ostrzeżenie — tekst",
+                                "name": "warning_text",
+                                "type": "textarea",
+                                "rows": 3,
+                                "new_lines": "",
                                 "parent_repeater": "field_rekr_foreign_docs_tabs"
                             }
                         ]
@@ -1326,13 +1376,12 @@
                                 "parent_repeater": "field_rekr_residence_panels_two"
                             },
                             {
-                                "key": "field_rekr_residence_panel2_note_html",
-                                "label": "Notatka (HTML)",
-                                "name": "note_html",
+                                "key": "field_rekr_residence_panel2_note_text",
+                                "label": "Notatka",
+                                "name": "note_text",
                                 "type": "textarea",
                                 "rows": 3,
                                 "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
                                 "parent_repeater": "field_rekr_residence_panels_two"
                             }
                         ]
@@ -1573,12 +1622,12 @@
                                     },
                                     {
                                         "key": "field_rekr_contact_row_value",
-                                        "label": "Wartość (HTML)",
+                                        "label": "Wartość",
                                         "name": "value",
                                         "type": "textarea",
-                                        "rows": 2,
+                                        "rows": 3,
                                         "new_lines": "",
-                                        "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                        "instructions": "Każda linia = osobny wiersz (np. dwa numery telefonu).",
                                         "parent_repeater": "field_rekr_contact_rows"
                                     }
                                 ],
@@ -1586,12 +1635,12 @@
                             },
                             {
                                 "key": "field_rekr_contact_card_hours",
-                                "label": "Godziny otwarcia (HTML)",
+                                "label": "Godziny otwarcia",
                                 "name": "hours",
                                 "type": "textarea",
-                                "rows": 3,
+                                "rows": 4,
                                 "new_lines": "",
-                                "instructions": "Dozwolony ograniczony HTML (np. <strong>, <br>).",
+                                "instructions": "Każda linia = osobny wiersz.",
                                 "parent_repeater": "field_rekr_contact_cards"
                             }
                         ]
@@ -1717,6 +1766,6 @@
         "active": true,
         "description": "",
         "show_in_rest": 0,
-        "modified": 1782725526
+        "modified": 1751191200
     }
 ]

@@ -27,3 +27,28 @@ function akademiata_zasady_rekrutacji_fields($acf_fields): array {
 
     return $merged;
 }
+
+/**
+ * @return array<string, string>
+ */
+function akademiata_zasady_rekrutacji_static_images(): array {
+    return [
+        'hero'      => 'rekrutacja-hero.png',
+        'reassure'  => 'rekrutacja-reassure.png',
+    ];
+}
+
+/**
+ * @param string $key hero|reassure
+ */
+function akademiata_zasady_rekrutacji_static_image_url(string $key): string {
+    $files = akademiata_zasady_rekrutacji_static_images();
+    if (!isset($files[$key])) {
+        return '';
+    }
+    $path = get_template_directory() . '/static/img/' . $files[$key];
+    if (!is_readable($path)) {
+        return '';
+    }
+    return get_template_directory_uri() . '/static/img/' . $files[$key];
+}
