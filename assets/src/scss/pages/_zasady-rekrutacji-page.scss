@@ -58,8 +58,9 @@ body.page-template-page-zasady-rekrutacji {
     font-weight: vars.$weight-bold;
   }
 
-  section[id] {
-    scroll-margin-top: 150px;
+  section[id],
+  .panel[id] {
+    scroll-margin-top: var(--rekr-scroll-offset, 150px);
   }
 
   .section {
@@ -684,7 +685,6 @@ body.page-template-page-zasady-rekrutacji {
 
   .portfolio-panel {
     margin-top: 26px;
-    scroll-margin-top: 150px;
     padding: 44px 46px;
 
     .two-col {

@@ -1022,47 +1022,112 @@ $lp_has_photo = static function ($image, $static_key) {
         });
     });
 
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var nav = root.querySelector('.quick-nav');
-    if (nav) {
-        var siteHeader = document.querySelector('.site-header');
-        function setQuickNavTop() {
-            if (!siteHeader) {
-                return;
-            }
-            var top = siteHeader.offsetHeight;
-            nav.style.setProperty('--rekr-quick-nav-top', top + 'px');
-        }
-        setQuickNavTop();
-        window.addEventListener('resize', setQuickNavTop);
+    var siteHeader = document.querySelector('.site-header');
+    var scrollSpyLocked = false;
+    var scrollSpyTimer = null;
+    var quickNavLinks = nav ? [].slice.call(nav.querySelectorAll('a')) : [];
+    var quickNavMap = quickNavLinks.map(function (a) {
+        var h = a.getAttribute('href');
+        var el = h && h.charAt(0) === '#' ? document.querySelector(h) : null;
+        return el ? { a: a, el: el } : null;
+    }).filter(Boolean);
 
-        var links = [].slice.call(nav.querySelectorAll('a'));
-        var map = links.map(function (a) {
-            var h = a.getAttribute('href');
-            var el = h && h.charAt(0) === '#' ? document.querySelector(h) : null;
-            return el ? { a: a, el: el } : null;
-        }).filter(Boolean);
-
-        function onScroll() {
-            var pos = window.scrollY + 170;
-            var cur = null;
-            map.forEach(function (m) {
-                if (m.el.offsetTop <= pos) {
-                    cur = m;
-                }
-            });
-            links.forEach(function (a) {
-                a.classList.remove('active');
-            });
-            if (cur) {
-                cur.a.classList.add('active');
-            }
-        }
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+    function getElTop(el) {
+        return el.getBoundingClientRect().top + window.scrollY;
     }
 
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function getScrollOffset() {
+        var headerH = siteHeader ? siteHeader.offsetHeight : 0;
+        var navH = nav ? nav.offsetHeight : 0;
+        return headerH + navH + 16;
+    }
+
+    function updateStickyMetrics() {
+        var headerH = siteHeader ? siteHeader.offsetHeight : 0;
+        if (nav) {
+            nav.style.setProperty('--rekr-quick-nav-top', headerH + 'px');
+        }
+        root.style.setProperty('--rekr-scroll-offset', getScrollOffset() + 'px');
+    }
+
+    function scrollActiveLinkIntoView(activeA) {
+        var container = activeA.closest('.qn-links');
+        if (!container) {
+            return;
+        }
+        var linkLeft = activeA.offsetLeft;
+        var linkRight = linkLeft + activeA.offsetWidth;
+        var viewLeft = container.scrollLeft;
+        var viewRight = viewLeft + container.clientWidth;
+        if (linkLeft < viewLeft) {
+            container.scrollTo({ left: linkLeft - 8, behavior: reduce ? 'auto' : 'smooth' });
+        } else if (linkRight > viewRight) {
+            container.scrollTo({ left: linkRight - container.clientWidth + 8, behavior: reduce ? 'auto' : 'smooth' });
+        }
+    }
+
+    function setActiveLink(activeA) {
+        if (!nav) {
+            return;
+        }
+        quickNavLinks.forEach(function (a) {
+            a.classList.remove('active');
+        });
+        if (!activeA) {
+            return;
+        }
+        activeA.classList.add('active');
+        scrollActiveLinkIntoView(activeA);
+    }
+
+    function lockScrollSpy(ms) {
+        scrollSpyLocked = true;
+        clearTimeout(scrollSpyTimer);
+        scrollSpyTimer = setTimeout(function () {
+            scrollSpyLocked = false;
+            onQuickNavScroll();
+        }, ms);
+    }
+
+    function onQuickNavScroll() {
+        if (!nav || scrollSpyLocked) {
+            return;
+        }
+        var pos = window.scrollY + getScrollOffset();
+        var cur = null;
+        var bestTop = -Infinity;
+        quickNavMap.forEach(function (m) {
+            var top = getElTop(m.el);
+            if (top <= pos && top > bestTop) {
+                bestTop = top;
+                cur = m;
+            }
+        });
+        if (cur) {
+            setActiveLink(cur.a);
+        }
+    }
+
+    function scrollToAnchor(el, activeLink) {
+        if (activeLink) {
+            setActiveLink(activeLink);
+        }
+        var y = Math.max(0, getElTop(el) - getScrollOffset());
+        var behavior = reduce ? 'auto' : 'smooth';
+        lockScrollSpy(behavior === 'smooth' ? 900 : 80);
+        window.scrollTo({ top: y, behavior: behavior });
+    }
+
+    updateStickyMetrics();
+    window.addEventListener('resize', updateStickyMetrics);
+
+    if (nav) {
+        window.addEventListener('scroll', onQuickNavScroll, { passive: true });
+        onQuickNavScroll();
+    }
+
     function flash(el) {
         if (!el || reduce) {
             return;
@@ -1085,9 +1150,17 @@ $lp_has_photo = static function ($image, $static_key) {
         if (!el) {
             return;
         }
+        e.preventDefault();
+        var activeLink = nav && nav.contains(a) ? a : null;
+        scrollToAnchor(el, activeLink);
+        if (window.history && window.history.pushState) {
+            window.history.pushState(null, '', h);
+        } else {
+            window.location.hash = h;
+        }
         setTimeout(function () {
             flash(el);
-        }, 380);
+        }, reduce ? 0 : 380);
     });
 
     window.addEventListener('hashchange', function () {
@@ -1095,11 +1168,23 @@ $lp_has_photo = static function ($image, $static_key) {
             return;
         }
         var el = document.querySelector(location.hash);
-        if (el) {
-            setTimeout(function () {
-                flash(el);
-            }, 380);
+        if (!el || !root.contains(el)) {
+            return;
         }
+        var activeLink = null;
+        if (nav) {
+            quickNavLinks.some(function (a) {
+                if (a.getAttribute('href') === location.hash) {
+                    activeLink = a;
+                    return true;
+                }
+                return false;
+            });
+        }
+        scrollToAnchor(el, activeLink);
+        setTimeout(function () {
+            flash(el);
+        }, reduce ? 0 : 380);
     });
 
     var pfToggle = root.querySelector('[data-pf-toggle]');
