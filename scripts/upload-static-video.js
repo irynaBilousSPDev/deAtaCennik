@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, '..');
 const ENV_FILE = path.join(ROOT, 'deploy.local.env');
 const TARGET = (process.argv[2] || 'dev').toLowerCase();
 const VIDEO_DIR = path.join(ROOT, 'static', 'video');
+const LEGACY_REMOTE_VIDEOS = ['ATAMISTRZEMSWIATA1.mp4'];
 
 function loadEnv(filePath) {
 	if (!fs.existsSync(filePath)) {
@@ -105,7 +106,7 @@ async function main() {
 
 	const videos = fs.readdirSync(VIDEO_DIR).filter((name) => /\.(mp4|webm)$/i.test(name));
 	if (!videos.length) {
-		throw new Error('No .mp4/.webm files in static/video/ — add ATAMISTRZEMSWIATA1.mp4 locally.');
+		throw new Error('No .mp4/.webm files in static/video/ — add ATAMISTRZEMSWIATA.mp4 locally.');
 	}
 
 	const env = loadEnv(ENV_FILE);
@@ -125,6 +126,14 @@ async function main() {
 			const sizeMb = (fs.statSync(local).size / (1024 * 1024)).toFixed(1);
 			process.stdout.write(`↑ static/video/${name} (${sizeMb} MB)\n`);
 			await sftp.fastPut(local, remote);
+		}
+
+		for (const legacy of LEGACY_REMOTE_VIDEOS) {
+			const remote = `${remoteVideoDir}/${legacy}`;
+			if (await sftp.exists(remote)) {
+				await sftp.delete(remote);
+				process.stdout.write(`✕ removed static/video/${legacy}\n`);
+			}
 		}
 	} finally {
 		await sftp.end();
