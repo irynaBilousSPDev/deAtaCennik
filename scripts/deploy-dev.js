@@ -12,6 +12,7 @@ const SftpClient = require('ssh2-sftp-client');
 const ROOT = path.resolve(__dirname, '..');
 const ENV_FILE = path.join(ROOT, 'deploy.local.env');
 const TARGET = (process.argv[2] || 'dev').toLowerCase();
+const PLUGINS_DIR = 'plugins';
 
 if (TARGET !== 'dev' && TARGET !== 'prod') {
 	console.error('Usage: node scripts/deploy-dev.js [dev|prod]');
@@ -189,6 +190,22 @@ function cfg(env, target, key) {
 		return env[`SFTP_PROD_${key}`];
 	}
 	return env[`SFTP_${key}`];
+}
+
+function resolvePluginsRemotePath(env, target, themeRemotePath) {
+	const explicit = target === 'prod' ? env.SFTP_PROD_PLUGINS_REMOTE_PATH : env.SFTP_PLUGINS_REMOTE_PATH;
+	if (explicit) {
+		return explicit.replace(/\\/g, '/').replace(/\/+$/, '');
+	}
+	return themeRemotePath.replace(/\/themes\/[^/]+$/, '/plugins');
+}
+
+function remotePathForFile(relative, themeRemotePath, pluginsRemotePath) {
+	if (relative.startsWith(`${PLUGINS_DIR}/`)) {
+		const pluginRelative = relative.slice(PLUGINS_DIR.length + 1);
+		return `${pluginsRemotePath}/${pluginRelative}`.replace(/\/+/g, '/');
+	}
+	return `${themeRemotePath}/${relative}`.replace(/\/+/g, '/');
 }
 
 function shouldSkip(relativePosix) {
@@ -397,6 +414,7 @@ async function main() {
 	const dryRun = envFlag(env, 'DRY_RUN');
 	const skipBuild = envFlag(env, 'SKIP_BUILD');
 	const { config, remotePath } = buildSftpConfig(env, TARGET);
+	const pluginsRemotePath = resolvePluginsRemotePath(env, TARGET, remotePath);
 
 	console.log(`Deploy target: ${TARGET} → ${config.host}`);
 	assertGitReadyForDeploy(env, TARGET);
@@ -439,10 +457,11 @@ async function main() {
 		if (!dryRun) {
 			await sftp.connect(config);
 			await ensureRemoteDir(sftp, remotePath);
+			await ensureRemoteDir(sftp, pluginsRemotePath);
 		}
 
 		for (const file of files) {
-			const remoteFile = `${remotePath}/${file.relative}`.replace(/\/+/g, '/');
+			const remoteFile = remotePathForFile(file.relative, remotePath, pluginsRemotePath);
 			if (dryRun) {
 				console.log(`[dry-run] ${file.relative}`);
 				continue;
@@ -466,7 +485,10 @@ async function main() {
 	}
 
 	console.log(`Done. Uploaded: ${uploaded}, unchanged: ${skipped}${dryRun ? ' (dry run)' : ''}`);
-	console.log(`Remote: ${remotePath}`);
+	console.log(`Remote theme: ${remotePath}`);
+	if (files.some((file) => file.relative.startsWith(`${PLUGINS_DIR}/`))) {
+		console.log(`Remote plugins: ${pluginsRemotePath}`);
+	}
 }
 
 main().catch((err) => {
