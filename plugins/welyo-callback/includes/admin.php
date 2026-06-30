@@ -440,7 +440,9 @@ function welyo_admin_render_page() {
 						);
 						loadStatus.textContent = items.length
 							? (<?php echo wp_json_encode( __( 'Załadowano kampanii:', 'akademiata' ) ); ?> + ' ' + items.length)
-							: <?php echo wp_json_encode( __( 'Brak kampanii w odpowiedzi API.', 'akademiata' ) ); ?>;
+							: (data.debug
+								? (<?php echo wp_json_encode( __( 'Brak kampanii. Odpowiedź API:', 'akademiata' ) ); ?> + ' ' + data.debug)
+								: <?php echo wp_json_encode( __( 'Brak kampanii w odpowiedzi API.', 'akademiata' ) ); ?>);
 						var cid = campaignSelect && campaignSelect.value ? campaignSelect.value : (items[0] ? items[0].id : '');
 						return loadClassifiers(cid);
 					})

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.3.1
+ * Version: 1.3.2
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -152,19 +152,30 @@ function welyo_get_jwt() {
 	return new WP_Error( 'welyo_jwt_parse', 'Nie udało się odczytać tokenu z odpowiedzi: ' . $body );
 }
 
+/** Ostatnia surowa odpowiedź API (diagnostyka). */
+function welyo_last_raw( $set = null ) {
+	static $raw = '';
+	if ( $set !== null ) {
+		$raw = (string) $set;
+	}
+	return $raw;
+}
+
 /** POST JSON do endpointu Welyo z autoryzacją JWT. Zwraca tablicę (json) lub WP_Error. */
 function welyo_api_post( $jwt, $endpoint, $payload ) {
+	$body_json = wp_json_encode( empty( $payload ) ? (object) array() : $payload );
 	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . $endpoint, array(
 		'timeout' => 15,
 		'headers' => array(
 			'Content-Type'  => 'application/json',
 			'Authorization' => 'Bearer ' . $jwt, // jeśli Welyo wymaga innego nagłówka — zmień też w welyo_add_record
 		),
-		'body'    => wp_json_encode( $payload ),
+		'body'    => $body_json,
 	) );
 	if ( is_wp_error( $resp ) ) { return $resp; }
 	$code = wp_remote_retrieve_response_code( $resp );
 	$body = wp_remote_retrieve_body( $resp );
+	welyo_last_raw( $body );
 	if ( $code < 200 || $code >= 300 ) {
 		return new WP_Error( 'welyo_http', 'Welyo ' . $endpoint . ' HTTP ' . $code . ': ' . $body );
 	}
@@ -288,12 +299,15 @@ function welyo_log_items( $label, $items ) {
 
 /** Podpowiedź diagnostyczna gdy lista z API jest pusta. */
 function welyo_api_list_debug_hint( $endpoint, $data ) {
-	if ( ! is_array( $data ) ) {
-		return '';
+	$hint = '';
+	if ( is_array( $data ) && ! empty( $data ) ) {
+		$hint = ' Klucze w odpowiedzi: ' . implode( ', ', array_slice( array_keys( $data ), 0, 12 ) );
 	}
-	$keys = array_keys( $data );
-	$hint = ' Klucze w odpowiedzi: ' . implode( ', ', array_slice( $keys, 0, 12 ) );
-	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+	$raw = welyo_last_raw();
+	if ( $raw !== '' ) {
+		$hint .= ' Fragment odpowiedzi API: ' . substr( $raw, 0, 400 );
+	}
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG && is_array( $data ) ) {
 		error_log( '[Welyo] ' . $endpoint . ' raw: ' . substr( wp_json_encode( $data ), 0, 1200 ) );
 	}
 	return $hint;
@@ -540,7 +554,7 @@ function welyo_run_diagnostics() {
 				count( $campaign_items ),
 				implode( ' | ', $api_names )
 			)
-			: __( 'API nie zwróciło kampanii — sprawdź uprawnienia konta API w Welyo.', 'akademiata' ),
+			: __( 'API nie zwróciło kampanii — sprawdź uprawnienia konta API w Welyo.', 'akademiata' ) . welyo_api_list_debug_hint( '/fcc-campaigns-list', array() ),
 	);
 
 	$campaign_id = welyo_resolve_campaign_id( $jwt );
@@ -660,7 +674,13 @@ add_action( 'rest_api_init', function () {
 			if ( is_wp_error( $items ) ) {
 				return $items;
 			}
-			return new WP_REST_Response( array( 'items' => $items ), 200 );
+			return new WP_REST_Response(
+				array(
+					'items' => $items,
+					'debug' => empty( $items ) ? substr( welyo_last_raw(), 0, 400 ) : '',
+				),
+				200
+			);
 		},
 		'permission_callback' => function () {
 			return current_user_can( 'manage_options' );
