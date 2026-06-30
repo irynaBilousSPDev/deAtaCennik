@@ -60,6 +60,7 @@ function welyo_admin_save_settings( $input ) {
 
 	delete_transient( 'welyo_campaign_id' );
 	delete_transient( 'welyo_classifier_id' );
+	delete_transient( 'welyo_auth_mode' );
 	welyo_flush_settings_cache();
 
 	return $settings;

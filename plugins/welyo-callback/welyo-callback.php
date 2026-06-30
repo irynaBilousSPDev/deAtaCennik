@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.3.2
+ * Version: 1.3.3
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -129,27 +129,134 @@ function welyo_get_jwt() {
 	}
 
 	$data = json_decode( $body, true );
-	// Welyo może zwrócić token pod różnymi kluczami — sprawdzamy najczęstsze.
-	// UWAGA: jeśli token nie zostanie znaleziony, zajrzyj do $body i dopasuj klucz.
-	$candidates = array();
+	$jwt  = welyo_extract_jwt_from_response( $body, $data );
+	if ( is_wp_error( $jwt ) ) {
+		return $jwt;
+	}
+	return $jwt;
+}
+
+/** Czy string wygląda jak token JWT. */
+function welyo_is_jwt_shape( $token ) {
+	$token = trim( (string) $token );
+	return (bool) preg_match( '/^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/', $token );
+}
+
+/** Wyciąga JWT z odpowiedzi /fcc-create-jwt-token. */
+function welyo_extract_jwt_from_response( $body, $data = null ) {
+	if ( ! is_array( $data ) ) {
+		$data = json_decode( $body, true );
+	}
+	if ( is_array( $data ) && isset( $data['success'] ) && ! $data['success'] ) {
+		$msg = isset( $data['message'] ) ? (string) $data['message'] : substr( (string) $body, 0, 300 );
+		return new WP_Error( 'welyo_jwt_api', 'Welyo JWT: ' . $msg );
+	}
+
+	$keys = array( 'token', 'jwt', 'access_token', 'accessToken', 'jwt_token' );
 	if ( is_array( $data ) ) {
-		foreach ( array( 'token', 'jwt', 'access_token', 'data' ) as $k ) {
-			if ( isset( $data[ $k ] ) ) {
-				$candidates[] = is_array( $data[ $k ] ) && isset( $data[ $k ]['token'] ) ? $data[ $k ]['token'] : $data[ $k ];
+		foreach ( $keys as $key ) {
+			if ( ! empty( $data[ $key ] ) && is_string( $data[ $key ] ) && welyo_is_jwt_shape( $data[ $key ] ) ) {
+				return $data[ $key ];
+			}
+		}
+		if ( ! empty( $data['data'] ) ) {
+			if ( is_string( $data['data'] ) && welyo_is_jwt_shape( $data['data'] ) ) {
+				return $data['data'];
+			}
+			if ( is_array( $data['data'] ) ) {
+				foreach ( $keys as $key ) {
+					if ( ! empty( $data['data'][ $key ] ) && is_string( $data['data'][ $key ] ) && welyo_is_jwt_shape( $data['data'][ $key ] ) ) {
+						return $data['data'][ $key ];
+					}
+				}
 			}
 		}
 	}
-	if ( ! empty( $candidates ) && is_string( $candidates[0] ) ) {
-		return $candidates[0];
+
+	$trim = trim( (string) $body );
+	if ( welyo_is_jwt_shape( $trim ) ) {
+		return $trim;
 	}
-	// czasem API zwraca surowy token jako tekst
-	if ( is_string( $data ) && $data !== '' ) {
-		return $data;
+
+	return new WP_Error( 'welyo_jwt_parse', 'Nie udało się odczytać tokenu JWT z odpowiedzi: ' . substr( (string) $body, 0, 300 ) );
+}
+
+/** Czy odpowiedź Welyo zawiera success:false (HTTP 200). */
+function welyo_api_response_is_fail( $data ) {
+	return is_array( $data ) && array_key_exists( 'success', $data ) && ! $data['success'];
+}
+
+/** Tryby autoryzacji JWT — auto wykrywa działający i cache'uje na dobę. */
+function welyo_auth_modes_list() {
+	$cached = get_transient( 'welyo_auth_mode' );
+	$all    = array( 'body_jwt', 'bearer', 'jwt_header', 'raw', 'body_token' );
+	if ( $cached && in_array( $cached, $all, true ) ) {
+		return array_merge( array( $cached ), array_values( array_diff( $all, array( $cached ) ) ) );
 	}
-	if ( preg_match( '/^[A-Za-z0-9\-_\.]+$/', trim( $body ) ) ) {
-		return trim( $body );
+	return $all;
+}
+
+/** Nagłówki i body dla wybranego trybu autoryzacji. */
+function welyo_build_auth_request( $jwt, $mode, $payload ) {
+	$payload = is_array( $payload ) ? $payload : array();
+	$headers = array( 'Content-Type' => 'application/json' );
+
+	switch ( $mode ) {
+		case 'body_jwt':
+			$payload['jwt'] = $jwt;
+			return array(
+				'headers' => $headers,
+				'body'    => wp_json_encode( $payload ),
+			);
+		case 'body_token':
+			$payload['token'] = $jwt;
+			return array(
+				'headers' => $headers,
+				'body'    => wp_json_encode( $payload ),
+			);
+		case 'jwt_header':
+			$headers['Authorization'] = 'JWT ' . $jwt;
+			break;
+		case 'raw':
+			$headers['Authorization'] = $jwt;
+			break;
+		default:
+			$headers['Authorization'] = 'Bearer ' . $jwt;
+			break;
 	}
-	return new WP_Error( 'welyo_jwt_parse', 'Nie udało się odczytać tokenu z odpowiedzi: ' . $body );
+
+	return array(
+		'headers' => $headers,
+		'body'    => wp_json_encode( empty( $payload ) ? (object) array() : $payload ),
+	);
+}
+
+/** Jedno żądanie POST z danym trybem autoryzacji. */
+function welyo_api_post_once( $jwt, $endpoint, $payload, $mode ) {
+	$req  = welyo_build_auth_request( $jwt, $mode, $payload );
+	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . $endpoint, array(
+		'timeout' => 15,
+		'headers' => $req['headers'],
+		'body'    => $req['body'],
+	) );
+	if ( is_wp_error( $resp ) ) {
+		return $resp;
+	}
+	$code = wp_remote_retrieve_response_code( $resp );
+	$body = wp_remote_retrieve_body( $resp );
+	welyo_last_raw( $body );
+	if ( $code < 200 || $code >= 300 ) {
+		return new WP_Error( 'welyo_http', 'Welyo ' . $endpoint . ' HTTP ' . $code . ' (' . $mode . '): ' . $body );
+	}
+	$data = json_decode( $body, true );
+	if ( ! is_array( $data ) ) {
+		return new WP_Error( 'welyo_json', 'Nieprawidłowa odpowiedź JSON z ' . $endpoint . ': ' . substr( (string) $body, 0, 300 ) );
+	}
+	if ( welyo_api_response_is_fail( $data ) ) {
+		$msg = isset( $data['message'] ) ? (string) $data['message'] : 'Welyo API error';
+		return new WP_Error( 'welyo_api', $msg . ' [' . $mode . ']' );
+	}
+	return $data;
 }
 
 /** Ostatnia surowa odpowiedź API (diagnostyka). */
@@ -163,27 +270,20 @@ function welyo_last_raw( $set = null ) {
 
 /** POST JSON do endpointu Welyo z autoryzacją JWT. Zwraca tablicę (json) lub WP_Error. */
 function welyo_api_post( $jwt, $endpoint, $payload ) {
-	$body_json = wp_json_encode( empty( $payload ) ? (object) array() : $payload );
-	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . $endpoint, array(
-		'timeout' => 15,
-		'headers' => array(
-			'Content-Type'  => 'application/json',
-			'Authorization' => 'Bearer ' . $jwt, // jeśli Welyo wymaga innego nagłówka — zmień też w welyo_add_record
-		),
-		'body'    => $body_json,
-	) );
-	if ( is_wp_error( $resp ) ) { return $resp; }
-	$code = wp_remote_retrieve_response_code( $resp );
-	$body = wp_remote_retrieve_body( $resp );
-	welyo_last_raw( $body );
-	if ( $code < 200 || $code >= 300 ) {
-		return new WP_Error( 'welyo_http', 'Welyo ' . $endpoint . ' HTTP ' . $code . ': ' . $body );
+	$modes      = welyo_auth_modes_list();
+	$last_error = null;
+
+	foreach ( $modes as $mode ) {
+		$result = welyo_api_post_once( $jwt, $endpoint, $payload, $mode );
+		if ( is_wp_error( $result ) ) {
+			$last_error = $result;
+			continue;
+		}
+		set_transient( 'welyo_auth_mode', $mode, DAY_IN_SECONDS );
+		return $result;
 	}
-	$data = json_decode( $body, true );
-	if ( ! is_array( $data ) ) {
-		return new WP_Error( 'welyo_json', 'Nieprawidłowa odpowiedź JSON z ' . $endpoint . ': ' . substr( (string) $body, 0, 300 ) );
-	}
-	return $data;
+
+	return $last_error ? $last_error : new WP_Error( 'welyo_api', 'Welyo API request failed.' );
 }
 
 /** Rekurencyjnie zbiera z odpowiedzi pary {id,name}, niezależnie od opakowania i nazw pól. */
@@ -470,23 +570,43 @@ function welyo_add_record( $jwt, $campaign_id, $classifier_id, $name, $phone_e16
 		'records'      => array( $record ),
 	);
 
-	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . '/fcc-add-records', array(
-		'timeout' => 15,
-		'headers' => array(
-			'Content-Type'  => 'application/json',
-			'Authorization' => 'Bearer ' . $jwt, // jeśli Welyo wymaga innego nagłówka — tu go zmień
-		),
-		'body'    => wp_json_encode( $payload ),
-	) );
+	$modes      = welyo_auth_modes_list();
+	$last_error = null;
 
-	if ( is_wp_error( $resp ) ) {
-		return $resp;
+	foreach ( $modes as $mode ) {
+		$req  = welyo_build_auth_request( $jwt, $mode, $payload );
+		$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . '/fcc-add-records', array(
+			'timeout' => 15,
+			'headers' => $req['headers'],
+			'body'    => $req['body'],
+		) );
+
+		if ( is_wp_error( $resp ) ) {
+			$last_error = $resp;
+			continue;
+		}
+
+		$code = wp_remote_retrieve_response_code( $resp );
+		$body = wp_remote_retrieve_body( $resp );
+		welyo_last_raw( $body );
+
+		if ( $code < 200 || $code >= 300 ) {
+			$last_error = new WP_Error( 'welyo_add_http', 'Welyo add-records HTTP ' . $code . ' (' . $mode . '): ' . $body );
+			continue;
+		}
+
+		$data = json_decode( $body, true );
+		if ( is_array( $data ) && welyo_api_response_is_fail( $data ) ) {
+			$msg        = isset( $data['message'] ) ? (string) $data['message'] : 'Welyo add-records error';
+			$last_error = new WP_Error( 'welyo_add_api', $msg . ' [' . $mode . ']' );
+			continue;
+		}
+
+		set_transient( 'welyo_auth_mode', $mode, DAY_IN_SECONDS );
+		return true;
 	}
-	$code = wp_remote_retrieve_response_code( $resp );
-	if ( $code < 200 || $code >= 300 ) {
-		return new WP_Error( 'welyo_add_http', 'Welyo add-records HTTP ' . $code . ': ' . wp_remote_retrieve_body( $resp ) );
-	}
-	return true;
+
+	return $last_error ? $last_error : new WP_Error( 'welyo_add_http', 'Welyo add-records failed.' );
 }
 
 
@@ -527,8 +647,21 @@ function welyo_run_diagnostics() {
 	$steps[] = array(
 		'id'      => 'jwt',
 		'ok'      => true,
-		'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ),
+		'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ) . ( welyo_is_jwt_shape( $jwt ) ? ' (' . substr( $jwt, 0, 12 ) . '…)' : '' ),
 	);
+
+	$auth_mode = get_transient( 'welyo_auth_mode' );
+	if ( $auth_mode ) {
+		$steps[] = array(
+			'id'      => 'auth_mode',
+			'ok'      => true,
+			'message' => sprintf(
+				/* translators: %s: auth mode slug */
+				__( 'Tryb autoryzacji API (cache): %s', 'akademiata' ),
+				$auth_mode
+			),
+		);
+	}
 
 	$campaign_items = welyo_fetch_campaign_items( $jwt );
 	if ( is_wp_error( $campaign_items ) ) {
