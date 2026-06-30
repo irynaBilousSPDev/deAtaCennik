@@ -180,9 +180,9 @@ function welyo_admin_render_page() {
 				welyo_admin_field_text( 'login', 'Login', $settings, array( 'desc' => 'np. login@ataedu' ) );
 				welyo_admin_field_secret( 'api_key', 'Klucz API', $settings );
 				welyo_admin_field_text( 'campaign_id', 'ID kampanii', $settings, array( 'desc' => 'Puste = szukaj po nazwie kampanii' ) );
-				welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii', $settings, array( 'wide' => true, 'desc' => 'Dopasowanie tolerancyjne (dokładna nazwa, bez spacji/znaków, częściowa).' ) );
 				welyo_admin_field_text( 'classifier_id', 'ID klasyfikatora (recall)', $settings );
-				welyo_admin_field_text( 'classifier_name', 'Nazwa klasyfikatora', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'classifier_name', 'Nazwa klasyfikatora', $settings, array( 'wide' => true, 'desc' => 'np. Lead WWW – oddzwonić (wymagany przy recall po godzinach, jeśli brak ID).' ) );
 				welyo_admin_field_text( 'hash_method', 'Metoda hash', $settings, array( 'desc' => 'md5 lub sha1' ) );
 				?>
 			</table>
