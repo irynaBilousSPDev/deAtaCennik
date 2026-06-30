@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -33,22 +33,23 @@ function welyo_is_open_now() {
 	$now  = new DateTime( 'now', $tz );
 	$dow  = (int) $now->format( 'N' );          // 1..7
 	$hour = (int) $now->format( 'G' );          // 0..23
-	$days = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', WELYO_WORKDAYS ) ), 'strlen' ) );
+	$days = welyo_workdays_array();
 	$is_workday = in_array( $dow, $days, true );
-	return $is_workday && $hour >= (int) WELYO_OPEN_HOUR && $hour < (int) WELYO_CLOSE_HOUR;
+	return $is_workday && $hour >= welyo_cfg_int( 'open_hour' ) && $hour < welyo_cfg_int( 'close_hour' );
 }
 
 /** Najbliższy roboczy poranek (format YYYY-MM-DD hh:mm) — dla recall po godzinach. */
 function welyo_next_working_morning() {
 	$tz   = wp_timezone();
 	$dt   = new DateTime( 'now', $tz );
-	$days = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', WELYO_WORKDAYS ) ), 'strlen' ) );
+	$days = welyo_workdays_array();
 
 	// jeśli dziś jeszcze przed otwarciem i dziś jest dniem roboczym → dzisiejszy poranek
 	$today_dow  = (int) $dt->format( 'N' );
 	$today_hour = (int) $dt->format( 'G' );
-	if ( in_array( $today_dow, $days, true ) && $today_hour < (int) WELYO_OPEN_HOUR ) {
-		$dt->setTime( (int) WELYO_OPEN_HOUR, 5 );
+	$open_hour  = welyo_cfg_int( 'open_hour' );
+	if ( in_array( $today_dow, $days, true ) && $today_hour < $open_hour ) {
+		$dt->setTime( $open_hour, 5 );
 		return $dt->format( 'Y-m-d H:i' );
 	}
 
@@ -56,7 +57,7 @@ function welyo_next_working_morning() {
 	for ( $i = 1; $i <= 8; $i++ ) {
 		$dt->modify( '+1 day' );
 		if ( in_array( (int) $dt->format( 'N' ), $days, true ) ) {
-			$dt->setTime( (int) WELYO_OPEN_HOUR, 5 );
+			$dt->setTime( $open_hour, 5 );
 			return $dt->format( 'Y-m-d H:i' );
 		}
 	}
@@ -74,19 +75,19 @@ function welyo_normalize_phone( $raw ) {
 	}
 	$only = preg_replace( '/\D/', '', $digits );
 	if ( strlen( $only ) === 9 ) {                          // 9 cyfr → domyślny prefiks
-		return WELYO_DEFAULT_PREFIX . $only;
+		return welyo_cfg( 'default_prefix' ) . $only;
 	}
 	if ( strlen( $only ) === 11 && strpos( $only, '48' ) === 0 ) {
 		return '+' . $only;
 	}
-	return WELYO_DEFAULT_PREFIX . $only;                     // fallback
+	return welyo_cfg( 'default_prefix' ) . $only;                     // fallback
 }
 
 /** Generuje token JWT przez /fcc-create-jwt-token. Zwraca string token lub WP_Error. */
 function welyo_get_jwt() {
-	$login   = (string) WELYO_LOGIN;
-	$apikey  = (string) WELYO_API_KEY;
-	$method  = ( strtolower( WELYO_HASH_METHOD ) === 'sha1' ) ? 'sha1' : 'md5';
+	$login   = (string) welyo_cfg( 'login' );
+	$apikey  = (string) welyo_cfg( 'api_key' );
+	$method  = ( strtolower( welyo_cfg( 'hash_method' ) ) === 'sha1' ) ? 'sha1' : 'md5';
 
 	if ( $login === '' || $apikey === '' ) {
 		return new WP_Error( 'welyo_config', 'Brak WELYO_LOGIN lub WELYO_API_KEY w konfiguracji.' );
@@ -103,7 +104,7 @@ function welyo_get_jwt() {
 		? sha1( $login_local . $change . $apikey )
 		: md5( $login_local . $change . $apikey );
 
-	$resp = wp_remote_post( rtrim( WELYO_BASE_URL, '/' ) . '/fcc-create-jwt-token', array(
+	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . '/fcc-create-jwt-token', array(
 		'timeout' => 15,
 		'headers' => array( 'Content-Type' => 'application/json' ),
 		'body'    => wp_json_encode( array(
@@ -149,7 +150,7 @@ function welyo_get_jwt() {
 
 /** POST JSON do endpointu Welyo z autoryzacją JWT. Zwraca tablicę (json) lub WP_Error. */
 function welyo_api_post( $jwt, $endpoint, $payload ) {
-	$resp = wp_remote_post( rtrim( WELYO_BASE_URL, '/' ) . $endpoint, array(
+	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . $endpoint, array(
 		'timeout' => 15,
 		'headers' => array(
 			'Content-Type'  => 'application/json',
@@ -189,24 +190,24 @@ function welyo_extract_list( $data ) {
 
 /** Zwraca id kampanii: z konfiguracji lub odnalezione po nazwie (cache 1 dzień). */
 function welyo_resolve_campaign_id( $jwt ) {
-	if ( WELYO_CAMPAIGN_ID !== '' ) { return (string) WELYO_CAMPAIGN_ID; }
+	if ( welyo_cfg( 'campaign_id' ) !== '' ) { return (string) welyo_cfg( 'campaign_id' ); }
 	$cached = get_transient( 'welyo_campaign_id' );
 	if ( $cached ) { return $cached; }
 	$data = welyo_api_post( $jwt, '/fcc-campaigns-list', array() );
 	if ( is_wp_error( $data ) ) { return $data; }
 	foreach ( welyo_extract_list( $data ) as $c ) {
-		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( WELYO_CAMPAIGN_NAME ) ) ) {
+		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( welyo_cfg( 'campaign_name' ) ) ) ) {
 			set_transient( 'welyo_campaign_id', $c['id'], DAY_IN_SECONDS );
 			return $c['id'];
 		}
 	}
-	return new WP_Error( 'welyo_no_campaign', 'Nie znaleziono kampanii o nazwie: ' . WELYO_CAMPAIGN_NAME );
+	return new WP_Error( 'welyo_no_campaign', 'Nie znaleziono kampanii o nazwie: ' . welyo_cfg( 'campaign_name' ) );
 }
 
 /** Zwraca id klasyfikatora recall: z konfiguracji lub po nazwie w danej kampanii (cache 1 dzień). */
 function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
-	if ( WELYO_CLASSIFIER_ID !== '' ) { return (string) WELYO_CLASSIFIER_ID; }
-	if ( WELYO_CLASSIFIER_NAME === '' ) {
+	if ( welyo_cfg( 'classifier_id' ) !== '' ) { return (string) welyo_cfg( 'classifier_id' ); }
+	if ( welyo_cfg( 'classifier_name' ) === '' ) {
 		return new WP_Error( 'welyo_no_classifier_cfg', 'Brak WELYO_CLASSIFIER_ID i WELYO_CLASSIFIER_NAME.' );
 	}
 	$cached = get_transient( 'welyo_classifier_id' );
@@ -214,12 +215,12 @@ function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
 	$data = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
 	if ( is_wp_error( $data ) ) { return $data; }
 	foreach ( welyo_extract_list( $data ) as $c ) {
-		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( WELYO_CLASSIFIER_NAME ) ) ) {
+		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( welyo_cfg( 'classifier_name' ) ) ) {
 			set_transient( 'welyo_classifier_id', $c['id'], DAY_IN_SECONDS );
 			return $c['id'];
 		}
 	}
-	return new WP_Error( 'welyo_no_classifier', 'Nie znaleziono klasyfikatora: ' . WELYO_CLASSIFIER_NAME );
+	return new WP_Error( 'welyo_no_classifier', 'Nie znaleziono klasyfikatora: ' . welyo_cfg( 'classifier_name' ) );
 }
 
 /** Dodaje rekord do kampanii przez /fcc-add-records. */
@@ -245,7 +246,7 @@ function welyo_add_record( $jwt, $campaign_id, $classifier_id, $name, $phone_e16
 		'records'      => array( $record ),
 	);
 
-	$resp = wp_remote_post( rtrim( WELYO_BASE_URL, '/' ) . '/fcc-add-records', array(
+	$resp = wp_remote_post( rtrim( welyo_cfg( 'base_url' ), '/' ) . '/fcc-add-records', array(
 		'timeout' => 15,
 		'headers' => array(
 			'Content-Type'  => 'application/json',

@@ -82,22 +82,41 @@ function welyo_get_saved_settings() {
 }
 
 function welyo_get_settings() {
-	static $cache = null;
-	if ( $cache !== null ) {
-		return $cache;
+	$cache = &welyo_settings_cache();
+	if ( $cache === null ) {
+		$cache = array_merge( welyo_default_settings(), welyo_get_saved_settings() );
 	}
-	$cache = array_merge( welyo_default_settings(), welyo_get_saved_settings() );
 	return $cache;
 }
 
-/** Wartość z wp-config / welyo-config.php, potem z panelu, potem domyślna. */
+function &welyo_settings_cache() {
+	static $cache = null;
+	return $cache;
+}
+
+function welyo_flush_settings_cache() {
+	$cache       = &welyo_settings_cache();
+	$cache       = null;
+}
+
+/** Wartość: wp-config / welyo-config.php (jeśli niepuste) → panel WP → domyślna. */
 function welyo_cfg( $key ) {
-	$map = welyo_constant_map();
-	if ( isset( $map[ $key ] ) && defined( $map[ $key ] ) ) {
-		return constant( $map[ $key ] );
-	}
+	$defaults = welyo_default_settings();
 	$settings = welyo_get_settings();
-	return isset( $settings[ $key ] ) ? $settings[ $key ] : '';
+	$map      = welyo_constant_map();
+
+	if ( isset( $map[ $key ] ) && defined( $map[ $key ] ) ) {
+		$from_const = constant( $map[ $key ] );
+		if ( is_int( $from_const ) || ( is_string( $from_const ) && $from_const !== '' ) ) {
+			return $from_const;
+		}
+	}
+
+	if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' ) {
+		return $settings[ $key ];
+	}
+
+	return isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
 }
 
 function welyo_cfg_int( $key ) {
@@ -131,46 +150,6 @@ function welyo_load_config_files() {
 	$path = WP_CONTENT_DIR . '/welyo-config.php';
 	if ( is_readable( $path ) ) {
 		require_once $path;
-	}
-}
-
-/** Stałe z panelu WP (tylko gdy nie ustawione w pliku / wp-config). */
-function welyo_apply_admin_constants() {
-	$settings = welyo_get_settings();
-	foreach ( welyo_constant_map() as $key => $const ) {
-		if ( defined( $const ) ) {
-			continue;
-		}
-		if ( ! isset( $settings[ $key ] ) || $settings[ $key ] === '' ) {
-			continue;
-		}
-		$val = $settings[ $key ];
-		define( $const, is_int( $val ) ? $val : (string) $val );
-	}
-}
-
-function welyo_define_fallback_constants() {
-	$fallbacks = array(
-		'WELYO_BASE_URL'        => 'https://ataedu.welyo.pl/external-api',
-		'WELYO_LOGIN'           => '',
-		'WELYO_API_KEY'         => '',
-		'WELYO_CAMPAIGN_ID'     => '',
-		'WELYO_CLASSIFIER_ID'   => '',
-		'WELYO_CAMPAIGN_NAME'   => 'Rekrutacja - formularz WWW (callback)',
-		'WELYO_CLASSIFIER_NAME' => '',
-		'WELYO_HASH_METHOD'     => 'md5',
-		'WELYO_DEFAULT_PREFIX'  => '+48',
-		'WELYO_OPEN_HOUR'       => 8,
-		'WELYO_CLOSE_HOUR'      => 18,
-		'WELYO_WORKDAYS'        => '1,2,3,4,5',
-		'WELYO_PHONE_DIAL'      => '+48220000000',
-		'WELYO_PHONE_PRETTY'    => '+48 22 000 00 00',
-		'WELYO_PRIVACY_URL'     => '/polityka-prywatnosci/',
-	);
-	foreach ( $fallbacks as $const => $value ) {
-		if ( ! defined( $const ) ) {
-			define( $const, $value );
-		}
 	}
 }
 
@@ -271,6 +250,4 @@ function welyo_sanitize_settings( $input ) {
 
 function welyo_bootstrap_config() {
 	welyo_load_config_files();
-	welyo_apply_admin_constants();
-	welyo_define_fallback_constants();
 }

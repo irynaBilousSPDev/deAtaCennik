@@ -11,13 +11,22 @@ add_action( 'admin_menu', 'welyo_admin_register_menu' );
 add_action( 'admin_init', 'welyo_admin_register_settings' );
 
 function welyo_admin_register_menu() {
-	add_options_page(
-		'Welyo Callback',
-		'Welyo Callback',
+	add_menu_page(
+		__( 'Welyo Callback', 'akademiata' ),
+		__( 'Welyo Callback', 'akademiata' ),
 		'manage_options',
 		'welyo-callback',
-		'welyo_admin_render_page'
+		'welyo_admin_render_page',
+		'dashicons-phone',
+		58
 	);
+}
+
+add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__ ) . '/welyo-callback.php' ), 'welyo_admin_plugin_links' );
+
+function welyo_admin_plugin_links( $links ) {
+	$links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=welyo-callback' ) ) . '">' . esc_html__( 'Ustawienia', 'akademiata' ) . '</a>';
+	return $links;
 }
 
 function welyo_admin_register_settings() {
@@ -48,6 +57,7 @@ function welyo_admin_save_settings( $input ) {
 
 	delete_transient( 'welyo_campaign_id' );
 	delete_transient( 'welyo_classifier_id' );
+	welyo_flush_settings_cache();
 
 	return $settings;
 }
@@ -87,7 +97,7 @@ function welyo_admin_render_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Welyo Callback', 'akademiata' ); ?></h1>
-		<p><?php esc_html_e( 'Widget „Zadzwoń / Oddzwonimy” — integracja z Welyo i treści widoczne na stronie.', 'akademiata' ); ?></p>
+		<p><?php esc_html_e( 'Tutaj edytujesz API Welyo, numer telefonu, godziny pracy i wszystkie teksty widgetu na stronie.', 'akademiata' ); ?></p>
 
 		<?php settings_errors( 'welyo_callback' ); ?>
 
@@ -198,7 +208,7 @@ function welyo_admin_render_page() {
 			}
 			?>
 		</p>
-		<p class="description"><?php esc_html_e( 'Priorytet: wp-config.php → welyo-config.php → ustawienia z tego panelu.', 'akademiata' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Wartości z tego panelu działają od razu po zapisaniu. Opcjonalnie: plik welyo-config.php lub wp-config.php mogą nadpisać wybrane pola (gdy są niepuste).', 'akademiata' ); ?></p>
 	</div>
 	<?php
 }
