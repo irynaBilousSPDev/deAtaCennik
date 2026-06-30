@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -280,6 +280,133 @@ function welyo_add_record( $jwt, $campaign_id, $classifier_id, $name, $phone_e16
 
 
 /* =====================================================================
+   DIAGNOSTYKA API (panel WP)
+   ===================================================================== */
+
+/** Kroki testu połączenia z Welyo (bez ujawniania sekretów). */
+function welyo_run_diagnostics() {
+	$steps = array();
+
+	$login   = (string) welyo_cfg( 'login' );
+	$api_key = (string) welyo_cfg( 'api_key' );
+	$config_ok = ( $login !== '' && $api_key !== '' );
+
+	$steps[] = array(
+		'id'      => 'config',
+		'ok'      => $config_ok,
+		'message' => $config_ok
+			? __( 'Login i klucz API są ustawione.', 'akademiata' )
+			: __( 'Brak loginu lub klucza API — uzupełnij w sekcji API Welyo i zapisz.', 'akademiata' ),
+	);
+
+	if ( ! $config_ok ) {
+		return $steps;
+	}
+
+	$jwt = welyo_get_jwt();
+	if ( is_wp_error( $jwt ) ) {
+		$steps[] = array(
+			'id'      => 'jwt',
+			'ok'      => false,
+			'message' => $jwt->get_error_message(),
+		);
+		return $steps;
+	}
+
+	$steps[] = array(
+		'id'      => 'jwt',
+		'ok'      => true,
+		'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ),
+	);
+
+	$campaign_id = welyo_resolve_campaign_id( $jwt );
+	if ( is_wp_error( $campaign_id ) ) {
+		$steps[] = array(
+			'id'      => 'campaign',
+			'ok'      => false,
+			'message' => $campaign_id->get_error_message(),
+		);
+		return $steps;
+	}
+
+	$campaign_label = welyo_cfg( 'campaign_id' ) !== ''
+		? sprintf( __( 'Kampania ID %s (z ustawień).', 'akademiata' ), $campaign_id )
+		: sprintf(
+			/* translators: 1: campaign id, 2: campaign name */
+			__( 'Kampania ID %1$s (nazwa: „%2$s”).', 'akademiata' ),
+			$campaign_id,
+			welyo_cfg( 'campaign_name' )
+		);
+
+	$steps[] = array(
+		'id'      => 'campaign',
+		'ok'      => true,
+		'message' => $campaign_label,
+	);
+
+	$classifier_cfg = welyo_cfg( 'classifier_id' ) !== '' || welyo_cfg( 'classifier_name' ) !== '';
+	if ( $classifier_cfg ) {
+		$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id );
+		if ( is_wp_error( $classifier_id ) ) {
+			$steps[] = array(
+				'id'      => 'classifier',
+				'ok'      => false,
+				'message' => $classifier_id->get_error_message(),
+			);
+		} else {
+			$steps[] = array(
+				'id'      => 'classifier',
+				'ok'      => true,
+				'message' => sprintf( __( 'Klasyfikator recall ID %s.', 'akademiata' ), $classifier_id ),
+			);
+		}
+	} else {
+		$steps[] = array(
+			'id'      => 'classifier',
+			'ok'      => true,
+			'message' => __( 'Brak klasyfikatora recall — po godzinach lead trafi do kampanii bez zaplanowanego recall.', 'akademiata' ),
+		);
+	}
+
+	$all_ok = true;
+	foreach ( $steps as $step ) {
+		if ( empty( $step['ok'] ) ) {
+			$all_ok = false;
+			break;
+		}
+	}
+
+	$steps[] = array(
+		'id'      => 'summary',
+		'ok'      => $all_ok,
+		'message' => $all_ok
+			? __( 'Konfiguracja wygląda poprawnie. Jeśli formularz nadal nie działa, sprawdź log serwera (wp-content/debug.log, wpisy [Welyo]).', 'akademiata' )
+			: __( 'Napraw kroki oznaczone na czerwono, zapisz ustawienia i uruchom test ponownie.', 'akademiata' ),
+	);
+
+	return $steps;
+}
+
+/** Limit zgłoszeń z formularza (nie dotyczy administratorów). */
+function welyo_check_rate_limit() {
+	if ( current_user_can( 'manage_options' ) ) {
+		return true;
+	}
+
+	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'x';
+	$key = 'welyo_rl_' . md5( $ip );
+	$cnt = (int) get_transient( $key );
+
+	if ( $cnt >= 8 ) {
+		return new WP_Error( 'welyo_rate', __( 'Zbyt wiele prób. Spróbuj później.', 'akademiata' ), array( 'status' => 429 ) );
+	}
+
+	set_transient( $key, $cnt + 1, 10 * MINUTE_IN_SECONDS );
+	return true;
+}
+
+
+/* =====================================================================
    ENDPOINT REST: POST /wp-json/welyo/v1/callback
    ===================================================================== */
 
@@ -289,23 +416,24 @@ add_action( 'rest_api_init', function () {
 		'callback'            => 'welyo_handle_callback',
 		'permission_callback' => 'welyo_permission_check',
 	) );
+
+	register_rest_route( 'welyo/v1', '/diagnostics', array(
+		'methods'             => 'GET',
+		'callback'            => function () {
+			return new WP_REST_Response( array( 'steps' => welyo_run_diagnostics() ), 200 );
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
 } );
 
-/** Lekka ochrona: nonce + honeypot + limit zapytań na IP. */
+/** Lekka ochrona: nonce + limit zapytań na IP (po walidacji formularza). */
 function welyo_permission_check( WP_REST_Request $request ) {
-	// nonce z widgetu (X-WP-Nonce)
 	$nonce = $request->get_header( 'x_wp_nonce' );
 	if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-		return new WP_Error( 'welyo_nonce', 'Nieprawidłowy token żądania.', array( 'status' => 403 ) );
+		return new WP_Error( 'welyo_nonce', __( 'Nieprawidłowy token żądania.', 'akademiata' ), array( 'status' => 403 ) );
 	}
-	// limit: max 5 zgłoszeń / 10 min / IP
-	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'x';
-	$key = 'welyo_rl_' . md5( $ip );
-	$cnt = (int) get_transient( $key );
-	if ( $cnt >= 5 ) {
-		return new WP_Error( 'welyo_rate', 'Zbyt wiele prób. Spróbuj później.', array( 'status' => 429 ) );
-	}
-	set_transient( $key, $cnt + 1, 10 * MINUTE_IN_SECONDS );
 	return true;
 }
 
@@ -328,6 +456,11 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 	}
 	if ( ! $consent ) {
 		return new WP_REST_Response( array( 'ok' => false, 'error' => 'consent' ), 200 );
+	}
+
+	$rate = welyo_check_rate_limit();
+	if ( is_wp_error( $rate ) ) {
+		return new WP_REST_Response( array( 'ok' => false, 'error' => 'rate' ), 200 );
 	}
 
 	$jwt = welyo_get_jwt();
@@ -408,6 +541,11 @@ function welyo_render_widget() {
 			'hoursPrefix'     => $texts['text_hours_prefix'],
 			'errorPhone'      => $texts['text_error_phone'],
 			'errorConsent'    => $texts['text_error_consent'],
+			'errorAuth'       => $texts['text_error_auth'],
+			'errorCampaign'   => $texts['text_error_campaign'],
+			'errorWelyo'      => $texts['text_error_welyo'],
+			'errorRate'       => $texts['text_error_rate'],
+			'errorNonce'      => $texts['text_error_nonce'],
 			'errorGeneric'    => $texts['text_error_generic'],
 			'sending'         => $texts['text_sending'],
 			'submit'          => $texts['text_submit'],
@@ -561,13 +699,24 @@ function welyo_render_widget() {
     submit.disabled=true;submit.textContent=T.sending||"…";
     fetch(CFG.rest,{method:"POST",headers:{"Content-Type":"application/json","X-WP-Nonce":CFG.nonce},
       body:JSON.stringify({name:name,phone:phone,consent:true,company:company})})
-      .then(function(r){return r.json();})
-      .then(function(d){
+      .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,data:d};});})
+      .then(function(res){
+        var d=res.data;
+        if(!res.ok){
+          var code=d&&d.code;
+          if(code==="welyo_nonce"){err.textContent=T.errorNonce||T.errorGeneric||"";}
+          else if(code==="welyo_rate"){err.textContent=T.errorRate||T.errorGeneric||"";}
+          else{err.textContent=T.errorGeneric||"";}
+          submit.disabled=false;submit.textContent=T.submit||"";
+          return;
+        }
         if(d&&d.ok){modeCb.classList.add("wcb-hidden");done.classList.remove("wcb-hidden");
           document.getElementById("wcbDoneMsg").textContent=d.scheduled===false?(T.doneImmediate||""):(T.doneScheduled||"");
         }else{
-          var m=d&&d.error==="phone"?(T.errorPhone||""):d&&d.error==="consent"?(T.errorConsent||""):(T.errorGeneric||"");
-          err.textContent=m;submit.disabled=false;submit.textContent=T.submit||"";
+          var code=d&&d.error;
+          var map={phone:T.errorPhone,consent:T.errorConsent,auth:T.errorAuth,campaign:T.errorCampaign,welyo:T.errorWelyo,rate:T.errorRate};
+          err.textContent=(code&&map[code])?map[code]:(T.errorGeneric||"");
+          submit.disabled=false;submit.textContent=T.submit||"";
         }
       })
       .catch(function(){err.textContent=T.errorGeneric||"";submit.disabled=false;submit.textContent=T.submit||"";});

@@ -52,6 +52,11 @@ function welyo_default_settings() {
 		'text_hours_prefix'      => 'Pon–Pt, ',
 		'text_error_phone'       => 'Podaj poprawny numer telefonu.',
 		'text_error_consent'     => 'Potrzebujemy zgody na kontakt telefoniczny.',
+		'text_error_auth'        => 'Błąd logowania do Welyo. Administrator: sprawdź login i klucz API.',
+		'text_error_campaign'    => 'Nie znaleziono kampanii Welyo. Administrator: sprawdź nazwę lub ID kampanii.',
+		'text_error_welyo'       => 'Welyo odrzuciło zgłoszenie. Spróbuj później lub zadzwoń do nas.',
+		'text_error_rate'        => 'Zbyt wiele prób. Odczekaj kilka minut i spróbuj ponownie.',
+		'text_error_nonce'       => 'Sesja wygasła. Odśwież stronę i spróbuj ponownie.',
 		'text_error_generic'     => 'Coś poszło nie tak. Spróbuj ponownie lub zadzwoń do nas.',
 		'text_sending'           => 'Wysyłanie…',
 		'color_brand'            => '#2a3a86',
@@ -439,7 +444,8 @@ function welyo_sanitize_settings( $input ) {
 		'text_call_btn', 'text_name_label', 'text_name_placeholder', 'text_phone_label',
 		'text_phone_placeholder', 'text_submit', 'text_done_title', 'text_done_scheduled',
 		'text_done_immediate', 'text_footer', 'text_hours_prefix', 'text_error_phone',
-		'text_error_consent', 'text_error_generic', 'text_sending',
+		'text_error_consent', 'text_error_auth', 'text_error_campaign', 'text_error_welyo',
+		'text_error_rate', 'text_error_nonce', 'text_error_generic', 'text_sending',
 	);
 
 	foreach ( $string_keys as $key ) {

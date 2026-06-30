@@ -187,6 +187,16 @@ function welyo_admin_render_page() {
 				?>
 			</table>
 
+			<div class="welyo-diagnostics-box">
+				<h3><?php esc_html_e( 'Test połączenia', 'akademiata' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API, JWT, kampanię i klasyfikator — bez wysyłania testowego leada.', 'akademiata' ); ?></p>
+				<p>
+					<button type="button" class="button button-secondary" id="welyo-run-diagnostics"><?php esc_html_e( 'Sprawdź połączenie z Welyo', 'akademiata' ); ?></button>
+					<span class="spinner" id="welyo-diagnostics-spinner" style="float:none;"></span>
+				</p>
+				<ul id="welyo-diagnostics-results" class="welyo-diagnostics-results" hidden></ul>
+			</div>
+
 			<h2 class="title"><?php esc_html_e( 'Telefon i godziny', 'akademiata' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<?php
@@ -237,6 +247,11 @@ function welyo_admin_render_page() {
 				welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'desc' => 'Przed „08:00–18:00”, np. Pon–Pt, ' ) );
 				welyo_admin_field_text( 'text_error_phone', 'Błąd: telefon', $settings, array( 'wide' => true ) );
 				welyo_admin_field_text( 'text_error_consent', 'Błąd: zgoda', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'text_error_auth', 'Błąd: logowanie Welyo', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'text_error_campaign', 'Błąd: kampania', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'text_error_welyo', 'Błąd: odrzucenie przez Welyo', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'text_error_rate', 'Błąd: limit prób', $settings, array( 'wide' => true ) );
+				welyo_admin_field_text( 'text_error_nonce', 'Błąd: wygasła sesja', $settings, array( 'wide' => true ) );
 				welyo_admin_field_text( 'text_error_generic', 'Błąd: ogólny', $settings, array( 'type' => 'textarea' ) );
 				welyo_admin_field_text( 'text_sending', 'Trwa wysyłanie', $settings );
 				?>
@@ -298,12 +313,55 @@ function welyo_admin_render_page() {
 	<style>
 		.welyo-secret-input { max-width:36rem; font-family:Consolas, Monaco, monospace; }
 		.welyo-secret-status--saved { display:inline-block; margin-right:6px; padding:2px 8px; border-radius:999px; background:#edfaef; color:#1f6b3a; font-weight:600; }
+		.welyo-diagnostics-box { margin:0 0 24px; padding:16px 18px; max-width:48rem; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
+		.welyo-diagnostics-box h3 { margin:0 0 8px; }
+		.welyo-diagnostics-results { margin:12px 0 0; padding-left:0; list-style:none; }
+		.welyo-diagnostics-results li { margin:0 0 8px; padding:8px 12px; border-radius:4px; }
+		.welyo-diagnostics-results li.is-ok { background:#edfaef; color:#1f6b3a; }
+		.welyo-diagnostics-results li.is-fail { background:#fcf0f1; color:#8a2424; }
 		.welyo-color-wrap { display:flex; align-items:center; gap:10px; max-width:20rem; }
 		.welyo-color-wrap input[type="color"] { width:48px; height:36px; padding:2px; border:1px solid #8c8f94; border-radius:4px; cursor:pointer; background:#fff; }
 		.welyo-color-text { font-family:Consolas, Monaco, monospace; width:7.5em; }
 	</style>
 	<script>
 	(function () {
+		var diagBtn = document.getElementById('welyo-run-diagnostics');
+		var diagList = document.getElementById('welyo-diagnostics-results');
+		var diagSpinner = document.getElementById('welyo-diagnostics-spinner');
+		if (diagBtn && diagList) {
+			diagBtn.addEventListener('click', function () {
+				diagList.hidden = true;
+				diagList.innerHTML = '';
+				diagSpinner.classList.add('is-active');
+				diagBtn.disabled = true;
+				fetch(<?php echo wp_json_encode( esc_url_raw( rest_url( 'welyo/v1/diagnostics' ) ) ); ?>, {
+					headers: { 'X-WP-Nonce': <?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?> }
+				})
+					.then(function (r) { return r.json(); })
+					.then(function (data) {
+						var steps = data && data.steps ? data.steps : [];
+						steps.forEach(function (step) {
+							var li = document.createElement('li');
+							li.className = step.ok ? 'is-ok' : 'is-fail';
+							li.textContent = step.message || '';
+							diagList.appendChild(li);
+						});
+						diagList.hidden = steps.length === 0;
+					})
+					.catch(function () {
+						var li = document.createElement('li');
+						li.className = 'is-fail';
+						li.textContent = <?php echo wp_json_encode( __( 'Nie udało się uruchomić testu. Odśwież stronę i spróbuj ponownie.', 'akademiata' ) ); ?>;
+						diagList.appendChild(li);
+						diagList.hidden = false;
+					})
+					.finally(function () {
+						diagSpinner.classList.remove('is-active');
+						diagBtn.disabled = false;
+					});
+			});
+		}
+
 		function normalizeHex(val) {
 			if (!val) { return ''; }
 			val = val.trim();
