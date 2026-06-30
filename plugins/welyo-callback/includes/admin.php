@@ -74,23 +74,18 @@ function welyo_admin_field_secret( $key, $label, $settings, $args = array() ) {
 	<tr>
 		<th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $label ); ?></label></th>
 		<td>
-			<div class="welyo-secret-wrap">
-				<input
-					type="password"
-					class="<?php echo $wide ? 'large-text' : 'regular-text'; ?>"
-					id="<?php echo esc_attr( $field_id ); ?>"
-					name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]"
-					value=""
-					autocomplete="new-password"
-					spellcheck="false"
-					<?php if ( $has_value ) : ?>
-						placeholder="<?php echo esc_attr( str_repeat( '•', 16 ) ); ?>"
-					<?php endif; ?>
-				>
-				<button type="button" class="button button-secondary welyo-toggle-secret" data-target="<?php echo esc_attr( $field_id ); ?>" aria-pressed="false">
-					<?php esc_html_e( 'Pokaż', 'akademiata' ); ?>
-				</button>
-			</div>
+			<input
+				type="password"
+				class="<?php echo $wide ? 'large-text' : 'regular-text'; ?> welyo-secret-input"
+				id="<?php echo esc_attr( $field_id ); ?>"
+				name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]"
+				value=""
+				autocomplete="new-password"
+				spellcheck="false"
+				<?php if ( $has_value ) : ?>
+					placeholder="<?php echo esc_attr( str_repeat( '•', 16 ) ); ?>"
+				<?php endif; ?>
+			>
 			<p class="description" id="<?php echo esc_attr( $field_id ); ?>_desc">
 				<?php if ( $has_value ) : ?>
 					<span class="welyo-secret-status welyo-secret-status--saved"><?php esc_html_e( 'Zapisano — wartość jest ukryta.', 'akademiata' ); ?></span>
@@ -301,8 +296,7 @@ function welyo_admin_render_page() {
 		<p class="description"><?php esc_html_e( 'Wartości z tego panelu działają od razu po zapisaniu. Klucz API w bazie jest szyfrowany (nie w plain text). Opcjonalnie: plik welyo-config.php lub wp-config.php mogą nadpisać wybrane pola — wtedy klucz trafia do pliku jako zwykły tekst (tylko na serwerze).', 'akademiata' ); ?></p>
 	</div>
 	<style>
-		.welyo-secret-wrap { display:flex; align-items:center; gap:8px; max-width:36rem; }
-		.welyo-secret-wrap input { flex:1 1 auto; font-family:Consolas, Monaco, monospace; }
+		.welyo-secret-input { max-width:36rem; font-family:Consolas, Monaco, monospace; }
 		.welyo-secret-status--saved { display:inline-block; margin-right:6px; padding:2px 8px; border-radius:999px; background:#edfaef; color:#1f6b3a; font-weight:600; }
 		.welyo-color-wrap { display:flex; align-items:center; gap:10px; max-width:20rem; }
 		.welyo-color-wrap input[type="color"] { width:48px; height:36px; padding:2px; border:1px solid #8c8f94; border-radius:4px; cursor:pointer; background:#fff; }
@@ -310,19 +304,6 @@ function welyo_admin_render_page() {
 	</style>
 	<script>
 	(function () {
-		var showLabel = <?php echo wp_json_encode( __( 'Pokaż', 'akademiata' ) ); ?>;
-		var hideLabel = <?php echo wp_json_encode( __( 'Ukryj', 'akademiata' ) ); ?>;
-		document.querySelectorAll('.welyo-toggle-secret').forEach(function (btn) {
-			btn.addEventListener('click', function () {
-				var input = document.getElementById(btn.getAttribute('data-target'));
-				if (!input) { return; }
-				var show = input.type === 'password';
-				input.type = show ? 'text' : 'password';
-				btn.textContent = show ? hideLabel : showLabel;
-				btn.setAttribute('aria-pressed', show ? 'true' : 'false');
-			});
-		});
-
 		function normalizeHex(val) {
 			if (!val) { return ''; }
 			val = val.trim();
