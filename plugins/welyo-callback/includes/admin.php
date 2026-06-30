@@ -134,6 +134,29 @@ function welyo_admin_field_color( $key, $label, $settings, $args = array() ) {
 	<?php
 }
 
+function welyo_admin_field_api_select( $key, $label, $settings, $args = array() ) {
+	$desc     = isset( $args['desc'] ) ? $args['desc'] : '';
+	$empty    = isset( $args['empty_label'] ) ? $args['empty_label'] : __( '— auto z API —', 'akademiata' );
+	$value    = isset( $settings[ $key ] ) ? (string) $settings[ $key ] : '';
+	$field_id = 'welyo_' . $key;
+	?>
+	<tr>
+		<th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $label ); ?></label></th>
+		<td>
+			<select class="regular-text welyo-api-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]" data-welyo-api="<?php echo esc_attr( $key ); ?>">
+				<option value=""><?php echo esc_html( $empty ); ?></option>
+				<?php if ( $value !== '' ) : ?>
+					<option value="<?php echo esc_attr( $value ); ?>" selected><?php echo esc_html( '#' . $value . ' (zapisane)' ); ?></option>
+				<?php endif; ?>
+			</select>
+			<?php if ( $desc ) : ?>
+				<p class="description"><?php echo esc_html( $desc ); ?></p>
+			<?php endif; ?>
+		</td>
+	</tr>
+	<?php
+}
+
 function welyo_admin_field_text( $key, $label, $settings, $args = array() ) {
 	$type  = isset( $args['type'] ) ? $args['type'] : 'text';
 	$desc  = isset( $args['desc'] ) ? $args['desc'] : '';
@@ -179,10 +202,35 @@ function welyo_admin_render_page() {
 				welyo_admin_field_text( 'base_url', 'URL API', $settings, array( 'wide' => true ) );
 				welyo_admin_field_text( 'login', 'Login', $settings, array( 'desc' => 'np. login@ataedu' ) );
 				welyo_admin_field_secret( 'api_key', 'Klucz API', $settings );
-				welyo_admin_field_text( 'campaign_id', 'ID kampanii', $settings, array( 'desc' => 'Puste = szukaj po nazwie kampanii' ) );
-				welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii', $settings, array( 'wide' => true, 'desc' => 'Dopasowanie tolerancyjne (dokładna nazwa, bez spacji/znaków, częściowa).' ) );
-				welyo_admin_field_text( 'classifier_id', 'ID klasyfikatora (recall)', $settings );
-				welyo_admin_field_text( 'classifier_name', 'Nazwa klasyfikatora', $settings, array( 'wide' => true, 'desc' => 'np. Lead WWW – oddzwonić (wymagany przy recall po godzinach, jeśli brak ID).' ) );
+				?>
+			</table>
+
+			<div class="welyo-api-lists-box">
+				<h3><?php esc_html_e( 'Kampania i klasyfikator z API', 'akademiata' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo i wybierz z rozwijanej listy — nie musisz znać ID ani dokładnej nazwy. Puste pola = automatyczny wybór (jedyna kampania, dopasowanie słów „callback” / „rekrut” itd.).', 'akademiata' ); ?></p>
+				<p>
+					<button type="button" class="button button-secondary" id="welyo-load-api-lists"><?php esc_html_e( 'Pobierz listę z API', 'akademiata' ); ?></button>
+					<span class="spinner" id="welyo-api-lists-spinner" style="float:none;"></span>
+					<span id="welyo-api-lists-status" class="description" style="margin-left:8px;"></span>
+				</p>
+			</div>
+
+			<table class="form-table" role="presentation">
+				<?php
+				welyo_admin_field_api_select( 'campaign_id', 'Kampania (z API)', $settings, array(
+					'desc' => 'Zalecane: wybierz z listy po „Pobierz listę z API”.',
+				) );
+				welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii (opcjonalnie)', $settings, array(
+					'wide' => true,
+					'desc' => 'Tylko gdy nie wybierasz ID — dopasowanie tolerancyjne do nazwy w Welyo.',
+				) );
+				welyo_admin_field_api_select( 'classifier_id', 'Klasyfikator recall (z API)', $settings, array(
+					'desc' => 'Po godzinach — recall. Puste = auto z API lub lead bez recall.',
+				) );
+				welyo_admin_field_text( 'classifier_name', 'Nazwa klasyfikatora (opcjonalnie)', $settings, array(
+					'wide' => true,
+					'desc' => 'Tylko gdy nie wybierasz ID — np. Lead WWW – oddzwonić.',
+				) );
 				welyo_admin_field_text( 'hash_method', 'Metoda hash', $settings, array( 'desc' => 'md5 lub sha1' ) );
 				?>
 			</table>
@@ -314,6 +362,8 @@ function welyo_admin_render_page() {
 		.welyo-secret-input { max-width:36rem; font-family:Consolas, Monaco, monospace; }
 		.welyo-secret-status--saved { display:inline-block; margin-right:6px; padding:2px 8px; border-radius:999px; background:#edfaef; color:#1f6b3a; font-weight:600; }
 		.welyo-diagnostics-box { margin:0 0 24px; padding:16px 18px; max-width:48rem; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
+		.welyo-api-lists-box { margin:0 0 16px; padding:16px 18px; max-width:48rem; background:#f0f6fc; border:1px solid #c3d9ed; border-radius:4px; }
+		.welyo-api-lists-box h3 { margin:0 0 8px; }
 		.welyo-diagnostics-box h3 { margin:0 0 8px; }
 		.welyo-diagnostics-results { margin:12px 0 0; padding-left:0; list-style:none; }
 		.welyo-diagnostics-results li { margin:0 0 8px; padding:8px 12px; border-radius:4px; }
@@ -325,6 +375,93 @@ function welyo_admin_render_page() {
 	</style>
 	<script>
 	(function () {
+		var restBase = <?php echo wp_json_encode( esc_url_raw( rest_url( 'welyo/v1/' ) ) ); ?>;
+		var restNonce = <?php echo wp_json_encode( wp_create_nonce( 'wp_rest' ) ); ?>;
+		var campaignSelect = document.getElementById('welyo_campaign_id');
+		var classifierSelect = document.getElementById('welyo_classifier_id');
+		var loadBtn = document.getElementById('welyo-load-api-lists');
+		var loadSpinner = document.getElementById('welyo-api-lists-spinner');
+		var loadStatus = document.getElementById('welyo-api-lists-status');
+
+		function fillSelect(select, items, savedValue, emptyLabel) {
+			if (!select) { return; }
+			select.innerHTML = '';
+			var empty = document.createElement('option');
+			empty.value = '';
+			empty.textContent = emptyLabel;
+			select.appendChild(empty);
+			items.forEach(function (it) {
+				var opt = document.createElement('option');
+				opt.value = it.id;
+				opt.textContent = it.name + ' (#' + it.id + ')';
+				if (savedValue && String(savedValue) === String(it.id)) {
+					opt.selected = true;
+				}
+				select.appendChild(opt);
+			});
+		}
+
+		function loadClassifiers(campaignId) {
+			if (!classifierSelect || !campaignId) { return Promise.resolve(); }
+			return fetch(restBase + 'classifiers?campaign_id=' + encodeURIComponent(campaignId), {
+				headers: { 'X-WP-Nonce': restNonce }
+			})
+				.then(function (r) { return r.json(); })
+				.then(function (data) {
+					if (data && data.code) {
+						throw new Error(data.message || 'classifiers');
+					}
+					fillSelect(
+						classifierSelect,
+						data.items || [],
+						classifierSelect.value,
+						<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
+					);
+				});
+		}
+
+		if (loadBtn) {
+			loadBtn.addEventListener('click', function () {
+				loadStatus.textContent = '';
+				loadSpinner.classList.add('is-active');
+				loadBtn.disabled = true;
+				fetch(restBase + 'campaigns', { headers: { 'X-WP-Nonce': restNonce } })
+					.then(function (r) { return r.json(); })
+					.then(function (data) {
+						if (data && data.code) {
+							throw new Error(data.message || 'campaigns');
+						}
+						var items = data.items || [];
+						fillSelect(
+							campaignSelect,
+							items,
+							campaignSelect ? campaignSelect.value : '',
+							<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
+						);
+						loadStatus.textContent = items.length
+							? (<?php echo wp_json_encode( __( 'Załadowano kampanii:', 'akademiata' ) ); ?> + ' ' + items.length)
+							: <?php echo wp_json_encode( __( 'Brak kampanii w odpowiedzi API.', 'akademiata' ) ); ?>;
+						var cid = campaignSelect && campaignSelect.value ? campaignSelect.value : (items[0] ? items[0].id : '');
+						return loadClassifiers(cid);
+					})
+					.catch(function (err) {
+						loadStatus.textContent = err && err.message ? err.message : <?php echo wp_json_encode( __( 'Nie udało się pobrać listy.', 'akademiata' ) ); ?>;
+					})
+					.finally(function () {
+						loadSpinner.classList.remove('is-active');
+						loadBtn.disabled = false;
+					});
+			});
+		}
+
+		if (campaignSelect) {
+			campaignSelect.addEventListener('change', function () {
+				if (campaignSelect.value) {
+					loadClassifiers(campaignSelect.value);
+				}
+			});
+		}
+
 		var diagBtn = document.getElementById('welyo-run-diagnostics');
 		var diagList = document.getElementById('welyo-diagnostics-results');
 		var diagSpinner = document.getElementById('welyo-diagnostics-spinner');

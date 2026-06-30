@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -169,7 +169,10 @@ function welyo_api_post( $jwt, $endpoint, $payload ) {
 		return new WP_Error( 'welyo_http', 'Welyo ' . $endpoint . ' HTTP ' . $code . ': ' . $body );
 	}
 	$data = json_decode( $body, true );
-	return is_array( $data ) ? $data : array();
+	if ( ! is_array( $data ) ) {
+		return new WP_Error( 'welyo_json', 'Nieprawidłowa odpowiedź JSON z ' . $endpoint . ': ' . substr( (string) $body, 0, 300 ) );
+	}
+	return $data;
 }
 
 /** Rekurencyjnie zbiera z odpowiedzi pary {id,name}, niezależnie od opakowania i nazw pól. */
@@ -177,8 +180,8 @@ function welyo_collect_items( $node, &$out, $depth = 0 ) {
 	if ( ! is_array( $node ) || $depth > 6 ) {
 		return;
 	}
-	$id_keys   = array( 'id', 'campaign_id', 'campaignId', 'id_campaign', 'classifier_id', 'classifierId', 'value' );
-	$name_keys = array( 'name', 'campaign_name', 'campaignName', 'classifier_name', 'label', 'text', 'title', 'nazwa', 'description' );
+	$id_keys   = array( 'id', 'campaign_id', 'campaignId', 'campaigns_id', 'id_campaign', 'classifier_id', 'classifierId', 'classifiers_id', 'value' );
+	$name_keys = array( 'name', 'campaign_name', 'campaignName', 'campaigns_name', 'classifier_name', 'classifiers_name', 'label', 'text', 'title', 'nazwa', 'description' );
 	$is_assoc  = array_keys( $node ) !== range( 0, count( $node ) - 1 );
 
 	if ( $is_assoc ) {
@@ -196,8 +199,11 @@ function welyo_collect_items( $node, &$out, $depth = 0 ) {
 				break;
 			}
 		}
-		if ( $id !== null && $name !== null ) {
-			$out[] = array( 'id' => $id, 'name' => $name );
+		if ( $id !== null ) {
+			if ( $name === null || $name === '' ) {
+				$name = '#' . $id;
+			}
+			$out[] = array( 'id' => $id, 'name' => (string) $name );
 		}
 		foreach ( $node as $v ) {
 			if ( is_array( $v ) ) {
@@ -280,6 +286,78 @@ function welyo_log_items( $label, $items ) {
 	error_log( '[Welyo] ' . $label . ': ' . ( $names ? implode( ' | ', $names ) : '(pusta lista)' ) );
 }
 
+/** Podpowiedź diagnostyczna gdy lista z API jest pusta. */
+function welyo_api_list_debug_hint( $endpoint, $data ) {
+	if ( ! is_array( $data ) ) {
+		return '';
+	}
+	$keys = array_keys( $data );
+	$hint = ' Klucze w odpowiedzi: ' . implode( ', ', array_slice( $keys, 0, 12 ) );
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( '[Welyo] ' . $endpoint . ' raw: ' . substr( wp_json_encode( $data ), 0, 1200 ) );
+	}
+	return $hint;
+}
+
+/** Pobiera listę kampanii z API. */
+function welyo_fetch_campaign_items( $jwt ) {
+	$data = welyo_api_post( $jwt, '/fcc-campaigns-list', array() );
+	if ( is_wp_error( $data ) ) {
+		return $data;
+	}
+	return welyo_extract_list( $data );
+}
+
+/** Pobiera listę klasyfikatorów kampanii z API. */
+function welyo_fetch_classifier_items( $jwt, $campaign_id ) {
+	$data = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
+	if ( is_wp_error( $data ) ) {
+		return $data;
+	}
+	return welyo_extract_list( $data );
+}
+
+/**
+ * Wybiera pozycję z listy API: ID z ustawień → nazwa → jedyna pozycja → słowa kluczowe → pierwsza.
+ *
+ * @param array  $items      Lista {id,name}.
+ * @param string $id_cfg     campaign_id / classifier_id z panelu.
+ * @param string $name_cfg   campaign_name / classifier_name (opcjonalnie).
+ * @param array  $keywords   Np. array( 'callback', 'rekrut', 'www' ).
+ * @return string|null
+ */
+function welyo_pick_item( $items, $id_cfg, $name_cfg, $keywords = array() ) {
+	if ( $id_cfg !== '' ) {
+		$id_cfg = (string) $id_cfg;
+		foreach ( $items as $it ) {
+			if ( (string) $it['id'] === $id_cfg ) {
+				return $it['id'];
+			}
+		}
+	}
+	if ( $name_cfg !== '' ) {
+		$matched = welyo_match_id( $items, $name_cfg );
+		if ( $matched !== null ) {
+			return $matched;
+		}
+	}
+	if ( count( $items ) === 1 ) {
+		return $items[0]['id'];
+	}
+	foreach ( $keywords as $kw ) {
+		$kw = welyo_lower( $kw );
+		foreach ( $items as $it ) {
+			if ( strpos( welyo_lower( $it['name'] ), $kw ) !== false ) {
+				return $it['id'];
+			}
+		}
+	}
+	if ( $id_cfg === '' && $name_cfg === '' && ! empty( $items ) ) {
+		return $items[0]['id'];
+	}
+	return null;
+}
+
 /** Zwraca id kampanii: z konfiguracji lub odnalezione po nazwie (cache 1 dzień). */
 function welyo_resolve_campaign_id( $jwt ) {
 	if ( welyo_cfg( 'campaign_id' ) !== '' ) {
@@ -289,12 +367,17 @@ function welyo_resolve_campaign_id( $jwt ) {
 	if ( $cached ) {
 		return $cached;
 	}
-	$data  = welyo_api_post( $jwt, '/fcc-campaigns-list', array() );
-	if ( is_wp_error( $data ) ) {
-		return $data;
+	$raw   = welyo_api_post( $jwt, '/fcc-campaigns-list', array() );
+	if ( is_wp_error( $raw ) ) {
+		return $raw;
 	}
-	$items = welyo_extract_list( $data );
-	$id    = welyo_match_id( $items, welyo_cfg( 'campaign_name' ) );
+	$items = welyo_extract_list( $raw );
+	$id    = welyo_pick_item(
+		$items,
+		welyo_cfg( 'campaign_id' ),
+		welyo_cfg( 'campaign_name' ),
+		array( 'callback', 'rekrut', 'formularz', 'www' )
+	);
 	if ( $id !== null ) {
 		set_transient( 'welyo_campaign_id', $id, DAY_IN_SECONDS );
 		return $id;
@@ -302,12 +385,13 @@ function welyo_resolve_campaign_id( $jwt ) {
 	welyo_log_items( 'kampanie z API', $items );
 	$preview = array();
 	foreach ( array_slice( $items, 0, 12 ) as $c ) {
-		$preview[] = $c['name'];
+		$preview[] = $c['name'] . ' #' . $c['id'];
 	}
 	$hint = $preview
-		? ' Dostępne nazwy z API: ' . implode( ' | ', $preview )
-		: ' API nie zwróciło żadnej kampanii (możliwy problem z uprawnieniami konta API albo inny format odpowiedzi).';
-	return new WP_Error( 'welyo_no_campaign', 'Nie znaleziono kampanii o nazwie: ' . welyo_cfg( 'campaign_name' ) . '.' . $hint );
+		? ' Dostępne z API: ' . implode( ' | ', $preview ) . '. Wybierz kampanię z listy w panelu (przycisk „Pobierz z API”).'
+		: ' API nie zwróciło kampanii.' . welyo_api_list_debug_hint( '/fcc-campaigns-list', $raw );
+	$name_hint = welyo_cfg( 'campaign_name' ) !== '' ? ' Szukano: „' . welyo_cfg( 'campaign_name' ) . '”.' : ' Ustaw ID kampanii lub wybierz z listy API.';
+	return new WP_Error( 'welyo_no_campaign', 'Nie udało się wybrać kampanii.' . $name_hint . $hint );
 }
 
 /** Zwraca id klasyfikatora recall: z konfiguracji lub po nazwie w danej kampanii (cache 1 dzień). */
@@ -315,30 +399,38 @@ function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
 	if ( welyo_cfg( 'classifier_id' ) !== '' ) {
 		return (string) welyo_cfg( 'classifier_id' );
 	}
-	if ( welyo_cfg( 'classifier_name' ) === '' ) {
-		return new WP_Error( 'welyo_no_classifier_cfg', 'Brak WELYO_CLASSIFIER_ID i WELYO_CLASSIFIER_NAME.' );
-	}
 	$cached = get_transient( 'welyo_classifier_id' );
 	if ( $cached ) {
 		return $cached;
 	}
-	$data  = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
-	if ( is_wp_error( $data ) ) {
-		return $data;
+	$raw = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
+	if ( is_wp_error( $raw ) ) {
+		return $raw;
 	}
-	$items = welyo_extract_list( $data );
-	$id    = welyo_match_id( $items, welyo_cfg( 'classifier_name' ) );
+	$items = welyo_extract_list( $raw );
+	$name_cfg = welyo_cfg( 'classifier_name' );
+	$id       = welyo_pick_item(
+		$items,
+		welyo_cfg( 'classifier_id' ),
+		$name_cfg,
+		array( 'recall', 'oddzwon', 'callback', 'otwart', 'lead' )
+	);
 	if ( $id !== null ) {
 		set_transient( 'welyo_classifier_id', $id, DAY_IN_SECONDS );
 		return $id;
 	}
+	if ( $name_cfg === '' && empty( $items ) ) {
+		return new WP_Error( 'welyo_no_classifier_cfg', 'Brak klasyfikatorów recall w tej kampanii — lead trafi bez recall.' );
+	}
 	welyo_log_items( 'klasyfikatory z API', $items );
 	$preview = array();
 	foreach ( array_slice( $items, 0, 12 ) as $c ) {
-		$preview[] = $c['name'];
+		$preview[] = $c['name'] . ' #' . $c['id'];
 	}
-	$hint = $preview ? ' Dostępne nazwy z API: ' . implode( ' | ', $preview ) : '';
-	return new WP_Error( 'welyo_no_classifier', 'Nie znaleziono klasyfikatora: ' . welyo_cfg( 'classifier_name' ) . '.' . $hint . ' (sprawdź error_log)' );
+	$hint = $preview
+		? ' Dostępne z API: ' . implode( ' | ', $preview ) . '. Wybierz klasyfikator z listy w panelu.'
+		: welyo_api_list_debug_hint( '/fcc-classifiers-list', $raw );
+	return new WP_Error( 'welyo_no_classifier', 'Nie udało się wybrać klasyfikatora recall.' . $hint );
 }
 
 /** Dodaje rekord do kampanii przez /fcc-add-records. */
@@ -424,6 +516,33 @@ function welyo_run_diagnostics() {
 		'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ),
 	);
 
+	$campaign_items = welyo_fetch_campaign_items( $jwt );
+	if ( is_wp_error( $campaign_items ) ) {
+		$steps[] = array(
+			'id'      => 'campaigns_api',
+			'ok'      => false,
+			'message' => $campaign_items->get_error_message(),
+		);
+		return $steps;
+	}
+
+	$api_names = array();
+	foreach ( array_slice( $campaign_items, 0, 8 ) as $c ) {
+		$api_names[] = $c['name'] . ' #' . $c['id'];
+	}
+	$steps[] = array(
+		'id'      => 'campaigns_api',
+		'ok'      => ! empty( $campaign_items ),
+		'message' => ! empty( $campaign_items )
+			? sprintf(
+				/* translators: 1: count, 2: sample list */
+				__( 'API zwróciło %1$d kampanii: %2$s', 'akademiata' ),
+				count( $campaign_items ),
+				implode( ' | ', $api_names )
+			)
+			: __( 'API nie zwróciło kampanii — sprawdź uprawnienia konta API w Welyo.', 'akademiata' ),
+	);
+
 	$campaign_id = welyo_resolve_campaign_id( $jwt );
 	if ( is_wp_error( $campaign_id ) ) {
 		$steps[] = array(
@@ -434,14 +553,18 @@ function welyo_run_diagnostics() {
 		return $steps;
 	}
 
-	$campaign_label = welyo_cfg( 'campaign_id' ) !== ''
-		? sprintf( __( 'Kampania ID %s (z ustawień).', 'akademiata' ), $campaign_id )
-		: sprintf(
-			/* translators: 1: campaign id, 2: campaign name */
-			__( 'Kampania ID %1$s (nazwa: „%2$s”).', 'akademiata' ),
+	$campaign_label = sprintf( __( 'Używana kampania: ID %s.', 'akademiata' ), $campaign_id );
+	if ( welyo_cfg( 'campaign_id' ) !== '' ) {
+		$campaign_label = sprintf( __( 'Kampania ID %s (wybrana w panelu).', 'akademiata' ), $campaign_id );
+	} elseif ( welyo_cfg( 'campaign_name' ) !== '' ) {
+		$campaign_label = sprintf(
+			__( 'Kampania ID %1$s (dopasowano: „%2$s”).', 'akademiata' ),
 			$campaign_id,
 			welyo_cfg( 'campaign_name' )
 		);
+	} elseif ( count( $campaign_items ) === 1 ) {
+		$campaign_label = sprintf( __( 'Kampania ID %s (jedyna dostępna w API).', 'akademiata' ), $campaign_id );
+	}
 
 	$steps[] = array(
 		'id'      => 'campaign',
@@ -449,27 +572,21 @@ function welyo_run_diagnostics() {
 		'message' => $campaign_label,
 	);
 
-	$classifier_cfg = welyo_cfg( 'classifier_id' ) !== '' || welyo_cfg( 'classifier_name' ) !== '';
-	if ( $classifier_cfg ) {
-		$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id );
-		if ( is_wp_error( $classifier_id ) ) {
-			$steps[] = array(
-				'id'      => 'classifier',
-				'ok'      => false,
-				'message' => $classifier_id->get_error_message(),
-			);
-		} else {
-			$steps[] = array(
-				'id'      => 'classifier',
-				'ok'      => true,
-				'message' => sprintf( __( 'Klasyfikator recall ID %s.', 'akademiata' ), $classifier_id ),
-			);
-		}
+	$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id );
+	if ( is_wp_error( $classifier_id ) ) {
+		$is_optional = ( $classifier_id->get_error_code() === 'welyo_no_classifier_cfg' );
+		$steps[] = array(
+			'id'      => 'classifier',
+			'ok'      => $is_optional,
+			'message' => $is_optional
+				? __( 'Brak klasyfikatora recall w API — po godzinach lead trafi bez zaplanowanego recall.', 'akademiata' )
+				: $classifier_id->get_error_message(),
+		);
 	} else {
 		$steps[] = array(
 			'id'      => 'classifier',
 			'ok'      => true,
-			'message' => __( 'Brak klasyfikatora recall — po godzinach lead trafi do kampanii bez zaplanowanego recall.', 'akademiata' ),
+			'message' => sprintf( __( 'Klasyfikator recall ID %s.', 'akademiata' ), $classifier_id ),
 		);
 	}
 
@@ -526,6 +643,46 @@ add_action( 'rest_api_init', function () {
 		'methods'             => 'GET',
 		'callback'            => function () {
 			return new WP_REST_Response( array( 'steps' => welyo_run_diagnostics() ), 200 );
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
+
+	register_rest_route( 'welyo/v1', '/campaigns', array(
+		'methods'             => 'GET',
+		'callback'            => function () {
+			$jwt = welyo_get_jwt();
+			if ( is_wp_error( $jwt ) ) {
+				return $jwt;
+			}
+			$items = welyo_fetch_campaign_items( $jwt );
+			if ( is_wp_error( $items ) ) {
+				return $items;
+			}
+			return new WP_REST_Response( array( 'items' => $items ), 200 );
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
+
+	register_rest_route( 'welyo/v1', '/classifiers', array(
+		'methods'             => 'GET',
+		'callback'            => function ( WP_REST_Request $request ) {
+			$campaign_id = sanitize_text_field( (string) $request->get_param( 'campaign_id' ) );
+			if ( $campaign_id === '' ) {
+				return new WP_Error( 'welyo_param', __( 'Brak parametru campaign_id.', 'akademiata' ), array( 'status' => 400 ) );
+			}
+			$jwt = welyo_get_jwt();
+			if ( is_wp_error( $jwt ) ) {
+				return $jwt;
+			}
+			$items = welyo_fetch_classifier_items( $jwt, $campaign_id );
+			if ( is_wp_error( $items ) ) {
+				return $items;
+			}
+			return new WP_REST_Response( array( 'items' => $items ), 200 );
 		},
 		'permission_callback' => function () {
 			return current_user_can( 'manage_options' );
