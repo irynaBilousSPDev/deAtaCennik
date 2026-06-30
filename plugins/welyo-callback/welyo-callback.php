@@ -2,41 +2,25 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: —
  * License: GPL-2.0-or-later
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-/**
- * Konfiguracja: wp-content/welyo-config.php (wgrywany z deploy.local.env przy deploy).
- * Nadpisanie: stałe w wp-config.php przed require wp-settings.php.
- */
-function welyo_load_config_files() {
-	$path = WP_CONTENT_DIR . '/welyo-config.php';
-	if ( is_readable( $path ) ) {
-		require_once $path;
-	}
-}
-welyo_load_config_files();
+define( 'WELYO_CALLBACK_PATH', plugin_dir_path( __FILE__ ) );
 
-// Fallbacki (gdy brak configure/welyo.php)
-if ( ! defined( 'WELYO_BASE_URL' ) )      define( 'WELYO_BASE_URL',      'https://ataedu.welyo.pl/external-api' );
-if ( ! defined( 'WELYO_LOGIN' ) )         define( 'WELYO_LOGIN',         '' );
-if ( ! defined( 'WELYO_API_KEY' ) )       define( 'WELYO_API_KEY',       '' );
-if ( ! defined( 'WELYO_CAMPAIGN_ID' ) )   define( 'WELYO_CAMPAIGN_ID',   '' );
-if ( ! defined( 'WELYO_CLASSIFIER_ID' ) ) define( 'WELYO_CLASSIFIER_ID', '' );
-if ( ! defined( 'WELYO_CAMPAIGN_NAME' ) )   define( 'WELYO_CAMPAIGN_NAME',   'Rekrutacja - formularz WWW (callback)' );
-if ( ! defined( 'WELYO_CLASSIFIER_NAME' ) ) define( 'WELYO_CLASSIFIER_NAME', '' );
-if ( ! defined( 'WELYO_HASH_METHOD' ) )   define( 'WELYO_HASH_METHOD',   'md5' );
-if ( ! defined( 'WELYO_DEFAULT_PREFIX' ) )define( 'WELYO_DEFAULT_PREFIX', '+48' );
-if ( ! defined( 'WELYO_OPEN_HOUR' ) )     define( 'WELYO_OPEN_HOUR',  8 );
-if ( ! defined( 'WELYO_CLOSE_HOUR' ) )    define( 'WELYO_CLOSE_HOUR', 18 );
-if ( ! defined( 'WELYO_WORKDAYS' ) )      define( 'WELYO_WORKDAYS',  '1,2,3,4,5' );
-if ( ! defined( 'WELYO_PHONE_DIAL' ) )    define( 'WELYO_PHONE_DIAL',   '+48220000000' );
-if ( ! defined( 'WELYO_PHONE_PRETTY' ) )  define( 'WELYO_PHONE_PRETTY', '+48 22 000 00 00' );
-if ( ! defined( 'WELYO_PRIVACY_URL' ) )   define( 'WELYO_PRIVACY_URL',  '/polityka-prywatnosci/' );
+require_once WELYO_CALLBACK_PATH . 'includes/settings.php';
+require_once WELYO_CALLBACK_PATH . 'includes/admin.php';
+
+welyo_bootstrap_config();
+
+register_activation_hook( __FILE__, function () {
+	if ( get_option( WELYO_OPTION_KEY ) === false ) {
+		update_option( WELYO_OPTION_KEY, welyo_default_settings() );
+	}
+} );
 
 
 /* =====================================================================
@@ -378,15 +362,38 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 add_shortcode( 'welyo_callback', 'welyo_render_widget' );
 
 function welyo_render_widget() {
+	$texts = welyo_widget_texts();
+	$privacy_url = esc_url( welyo_cfg( 'privacy_url' ) );
+	$consent_html = str_replace( '{privacy_url}', $privacy_url, $texts['text_consent'] );
+
 	$cfg = array(
 		'rest'        => esc_url_raw( rest_url( 'welyo/v1/callback' ) ),
 		'nonce'       => wp_create_nonce( 'wp_rest' ),
-		'phoneDial'   => WELYO_PHONE_DIAL,
-		'phonePretty' => WELYO_PHONE_PRETTY,
-		'openHour'    => (int) WELYO_OPEN_HOUR,
-		'closeHour'   => (int) WELYO_CLOSE_HOUR,
-		'workdays'    => array_map( 'intval', array_filter( array_map( 'trim', explode( ',', WELYO_WORKDAYS ) ), 'strlen' ) ),
-		'privacyUrl'  => esc_url( WELYO_PRIVACY_URL ),
+		'phoneDial'   => welyo_cfg( 'phone_dial' ),
+		'phonePretty' => welyo_cfg( 'phone_pretty' ),
+		'openHour'    => welyo_cfg_int( 'open_hour' ),
+		'closeHour'   => welyo_cfg_int( 'close_hour' ),
+		'workdays'    => welyo_workdays_array(),
+		'privacyUrl'  => $privacy_url,
+		'texts'       => array(
+			'statusOpen'      => $texts['text_status_open'],
+			'statusClosed'    => $texts['text_status_closed'],
+			'titleOpen'       => $texts['text_title_open'],
+			'titleClosed'     => $texts['text_title_closed'],
+			'subOpen'         => $texts['text_sub_open'],
+			'subClosed'       => $texts['text_sub_closed'],
+			'launchOpen'      => $texts['text_launch_open'],
+			'launchClosed'    => $texts['text_launch_closed'],
+			'callBtn'         => $texts['text_call_btn'],
+			'doneScheduled'   => $texts['text_done_scheduled'],
+			'doneImmediate'   => $texts['text_done_immediate'],
+			'hoursPrefix'     => $texts['text_hours_prefix'],
+			'errorPhone'      => $texts['text_error_phone'],
+			'errorConsent'    => $texts['text_error_consent'],
+			'errorGeneric'    => $texts['text_error_generic'],
+			'sending'         => $texts['text_sending'],
+			'submit'          => $texts['text_submit'],
+		),
 	);
 	$json = wp_json_encode( $cfg );
 
@@ -395,44 +402,44 @@ function welyo_render_widget() {
 <div class="wcb-root" id="wcbRoot" data-mode="call">
   <div class="wcb-panel" role="dialog" aria-modal="false" aria-labelledby="wcbTitle">
     <div class="wcb-head">
-      <span class="wcb-status"><span class="wcb-dot"></span><span id="wcbStatus">Jesteśmy teraz dostępni</span></span>
-      <h2 class="wcb-title" id="wcbTitle">Masz pytanie?</h2>
-      <p class="wcb-sub" id="wcbSub">Zadzwoń do działu rekrutacji — pomożemy dokończyć zgłoszenie.</p>
+      <span class="wcb-status"><span class="wcb-dot"></span><span id="wcbStatus"><?php echo esc_html( $texts['text_status_open'] ); ?></span></span>
+      <h2 class="wcb-title" id="wcbTitle"><?php echo esc_html( $texts['text_title_open'] ); ?></h2>
+      <p class="wcb-sub" id="wcbSub"><?php echo esc_html( $texts['text_sub_open'] ); ?></p>
       <button class="wcb-close" id="wcbClose" aria-label="Zamknij">&times;</button>
     </div>
     <div class="wcb-body">
       <div id="wcbModeCall">
         <a class="wcb-callbtn" id="wcbCallLink" href="tel:">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Zadzwoń teraz
+          <?php echo esc_html( $texts['text_call_btn'] ); ?>
         </a>
         <p class="wcb-number" id="wcbNumber"></p>
         <p class="wcb-hours" id="wcbHours"></p>
       </div>
       <div id="wcbModeCb" class="wcb-hidden">
-        <div class="wcb-field"><label for="wcbName">Imię</label>
-          <input type="text" id="wcbName" autocomplete="given-name" placeholder="Jak się do Ciebie zwracać?"></div>
-        <div class="wcb-field"><label for="wcbPhone">Numer telefonu</label>
-          <input type="tel" id="wcbPhone" autocomplete="tel" inputmode="tel" placeholder="np. 600 100 200"></div>
+        <div class="wcb-field"><label for="wcbName"><?php echo esc_html( $texts['text_name_label'] ); ?></label>
+          <input type="text" id="wcbName" autocomplete="given-name" placeholder="<?php echo esc_attr( $texts['text_name_placeholder'] ); ?>"></div>
+        <div class="wcb-field"><label for="wcbPhone"><?php echo esc_html( $texts['text_phone_label'] ); ?></label>
+          <input type="tel" id="wcbPhone" autocomplete="tel" inputmode="tel" placeholder="<?php echo esc_attr( $texts['text_phone_placeholder'] ); ?>"></div>
         <input type="text" id="wcbCompany" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
         <p class="wcb-err" id="wcbErr"></p>
         <div class="wcb-consent">
           <input type="checkbox" id="wcbConsent">
-          <label for="wcbConsent">Wyrażam zgodę na kontakt telefoniczny w sprawie mojej rekrutacji. Rozmowa może być nagrywana w celach jakościowych. <a id="wcbPrivacy" href="#" target="_blank" rel="noopener">Informacja o przetwarzaniu danych</a>.</label>
+          <label for="wcbConsent"><?php echo wp_kses_post( $consent_html ); ?></label>
         </div>
-        <button class="wcb-submit" id="wcbSubmit">Oddzwońcie do mnie</button>
+        <button class="wcb-submit" id="wcbSubmit"><?php echo esc_html( $texts['text_submit'] ); ?></button>
       </div>
       <div id="wcbDone" class="wcb-done wcb-hidden">
         <div class="wcb-check"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <h3>Dziękujemy!</h3>
-        <p id="wcbDoneMsg">Mamy Twój numer. Oddzwonimy najszybciej, jak to możliwe.</p>
+        <h3><?php echo esc_html( $texts['text_done_title'] ); ?></h3>
+        <p id="wcbDoneMsg"><?php echo esc_html( $texts['text_done_scheduled'] ); ?></p>
       </div>
     </div>
-    <div class="wcb-foot">Dział Rekrutacji</div>
+    <div class="wcb-foot"><?php echo esc_html( $texts['text_footer'] ); ?></div>
   </div>
   <button class="wcb-launcher" id="wcbLauncher" aria-haspopup="dialog" aria-expanded="false">
     <span class="wcb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-    <span id="wcbLaunchLabel">Masz pytanie? Zadzwoń</span>
+    <span id="wcbLaunchLabel"><?php echo esc_html( $texts['text_launch_open'] ); ?></span>
   </button>
 </div>
 
@@ -489,6 +496,7 @@ position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple
 (function(){
   "use strict";
   var CFG = <?php echo $json; // już zakodowane przez wp_json_encode ?>;
+  var T = CFG.texts || {};
   var root=document.getElementById("wcbRoot"),launcher=document.getElementById("wcbLauncher"),
       closeBtn=document.getElementById("wcbClose"),modeCall=document.getElementById("wcbModeCall"),
       modeCb=document.getElementById("wcbModeCb"),done=document.getElementById("wcbDone"),
@@ -496,9 +504,8 @@ position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple
 
   document.getElementById("wcbNumber").textContent=CFG.phonePretty;
   document.getElementById("wcbCallLink").href="tel:"+CFG.phoneDial;
-  document.getElementById("wcbPrivacy").href=CFG.privacyUrl;
   var hh=(""+CFG.openHour).padStart(2,"0")+":00–"+(""+CFG.closeHour).padStart(2,"0")+":00";
-  document.getElementById("wcbHours").textContent="Pon–Pt, "+hh;
+  document.getElementById("wcbHours").textContent=(T.hoursPrefix||"")+hh;
 
   function openNow(){var n=new Date(),d=n.getDay()===0?7:n.getDay(),h=n.getHours();
     return CFG.workdays.indexOf(d)!==-1 && h>=CFG.openHour && h<CFG.closeHour;}
@@ -507,16 +514,16 @@ position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple
     root.setAttribute("data-mode",call?"call":"callback");
     done.classList.add("wcb-hidden");
     if(call){
-      document.getElementById("wcbLaunchLabel").textContent="Masz pytanie? Zadzwoń";
-      document.getElementById("wcbStatus").textContent="Jesteśmy teraz dostępni";
-      document.getElementById("wcbTitle").textContent="Masz pytanie?";
-      document.getElementById("wcbSub").textContent="Zadzwoń do działu rekrutacji — pomożemy dokończyć zgłoszenie.";
+      document.getElementById("wcbLaunchLabel").textContent=T.launchOpen||"";
+      document.getElementById("wcbStatus").textContent=T.statusOpen||"";
+      document.getElementById("wcbTitle").textContent=T.titleOpen||"";
+      document.getElementById("wcbSub").textContent=T.subOpen||"";
       modeCall.classList.remove("wcb-hidden");modeCb.classList.add("wcb-hidden");
     }else{
-      document.getElementById("wcbLaunchLabel").textContent="Masz pytanie? Oddzwonimy";
-      document.getElementById("wcbStatus").textContent="Jesteśmy już po godzinach";
-      document.getElementById("wcbTitle").textContent="Zostaw numer";
-      document.getElementById("wcbSub").textContent="Jesteśmy już po godzinach. Zostaw numer — oddzwonimy najszybciej, jak to możliwe.";
+      document.getElementById("wcbLaunchLabel").textContent=T.launchClosed||"";
+      document.getElementById("wcbStatus").textContent=T.statusClosed||"";
+      document.getElementById("wcbTitle").textContent=T.titleClosed||"";
+      document.getElementById("wcbSub").textContent=T.subClosed||"";
       modeCall.classList.add("wcb-hidden");modeCb.classList.remove("wcb-hidden");
     }
   }
@@ -532,21 +539,21 @@ position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple
     var consent=document.getElementById("wcbConsent").checked;
     var company=document.getElementById("wcbCompany").value;
     err.textContent="";
-    if(phone.replace(/\D/g,"").length<9){err.textContent="Podaj poprawny numer telefonu.";phEl.focus();return;}
-    if(!consent){err.textContent="Potrzebujemy zgody na kontakt telefoniczny.";return;}
-    submit.disabled=true;submit.textContent="Wysyłanie…";
+    if(phone.replace(/\D/g,"").length<9){err.textContent=T.errorPhone||"";phEl.focus();return;}
+    if(!consent){err.textContent=T.errorConsent||"";return;}
+    submit.disabled=true;submit.textContent=T.sending||"…";
     fetch(CFG.rest,{method:"POST",headers:{"Content-Type":"application/json","X-WP-Nonce":CFG.nonce},
       body:JSON.stringify({name:name,phone:phone,consent:true,company:company})})
       .then(function(r){return r.json();})
       .then(function(d){
         if(d&&d.ok){modeCb.classList.add("wcb-hidden");done.classList.remove("wcb-hidden");
-          if(d.scheduled===false){document.getElementById("wcbDoneMsg").textContent="Mamy Twój numer. Oddzwaniamy teraz — odbierz proszę połączenie.";}
+          document.getElementById("wcbDoneMsg").textContent=d.scheduled===false?(T.doneImmediate||""):(T.doneScheduled||"");
         }else{
-          var m=d&&d.error==="phone"?"Podaj poprawny numer telefonu.":d&&d.error==="consent"?"Potrzebujemy zgody na kontakt.":"Coś poszło nie tak. Spróbuj ponownie lub zadzwoń do nas.";
-          err.textContent=m;submit.disabled=false;submit.textContent="Oddzwońcie do mnie";
+          var m=d&&d.error==="phone"?(T.errorPhone||""):d&&d.error==="consent"?(T.errorConsent||""):(T.errorGeneric||"");
+          err.textContent=m;submit.disabled=false;submit.textContent=T.submit||"";
         }
       })
-      .catch(function(){err.textContent="Coś poszło nie tak. Spróbuj ponownie lub zadzwoń do nas.";submit.disabled=false;submit.textContent="Oddzwońcie do mnie";});
+      .catch(function(){err.textContent=T.errorGeneric||"";submit.disabled=false;submit.textContent=T.submit||"";});
   });
 
   render();
@@ -557,9 +564,12 @@ position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple
 	return ob_get_clean();
 }
 
-/** Globalny widget w stopce (wyłącz: add_filter( 'welyo_callback_auto_footer', '__return_false' ); ). */
+/** Globalny widget w stopce. */
 add_action( 'wp_footer', function () {
-	if ( is_admin() || ! apply_filters( 'welyo_callback_auto_footer', true ) ) {
+	if ( is_admin() || ! welyo_cfg_int( 'auto_footer' ) ) {
+		return;
+	}
+	if ( ! apply_filters( 'welyo_callback_auto_footer', true ) ) {
 		return;
 	}
 	static $rendered = false;
