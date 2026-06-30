@@ -7,44 +7,35 @@
  * License: GPL-2.0-or-later
  */
 
-if ( ! defined( 'ABSPATH' ) ) { exit; } // brak bezpośredniego dostępu
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-/* =====================================================================
-   KONFIGURACJA
-   Najlepiej NIE wpisywać sekretów tutaj, tylko w wp-config.php, np.:
+/**
+ * Konfiguracja: wp-content/welyo-config.php (wgrywany z deploy.local.env przy deploy).
+ * Nadpisanie: stałe w wp-config.php przed require wp-settings.php.
+ */
+function welyo_load_config_files() {
+	$path = WP_CONTENT_DIR . '/welyo-config.php';
+	if ( is_readable( $path ) ) {
+		require_once $path;
+	}
+}
+welyo_load_config_files();
 
-     define( 'WELYO_BASE_URL',     'https://ataedu.welyo.pl/external-api' );
-     define( 'WELYO_LOGIN',        'login@ataedu' );   // login@domena
-     define( 'WELYO_API_KEY',      'TWOJ_KLUCZ_API' ); // z panelu: Administracja → Integracje → Klucz API
-     define( 'WELYO_CAMPAIGN_ID',  '123' );            // id kampanii docelowej (z /fcc-campaigns-list)
-     define( 'WELYO_CLASSIFIER_ID','1' );              // id klasyfikatora (wymagany przy recall) (z /fcc-classifiers-list)
-
-   Poniższe wartości to tylko fallbacki / ustawienia jawne (nie-sekretne).
-   ===================================================================== */
+// Fallbacki (gdy brak configure/welyo.php)
 if ( ! defined( 'WELYO_BASE_URL' ) )      define( 'WELYO_BASE_URL',      'https://ataedu.welyo.pl/external-api' );
 if ( ! defined( 'WELYO_LOGIN' ) )         define( 'WELYO_LOGIN',         '' );
 if ( ! defined( 'WELYO_API_KEY' ) )       define( 'WELYO_API_KEY',       '' );
-// ID możesz podać wprost (wtedy są używane bez pytania API). Jeśli zostawisz puste,
-// wtyczka SAMA odnajdzie je po nazwie przez /fcc-campaigns-list i /fcc-classifiers-list
-// i zacache'uje na dobę. Najwygodniej: zostaw ID puste, a podaj nazwy poniżej.
 if ( ! defined( 'WELYO_CAMPAIGN_ID' ) )   define( 'WELYO_CAMPAIGN_ID',   '' );
 if ( ! defined( 'WELYO_CLASSIFIER_ID' ) ) define( 'WELYO_CLASSIFIER_ID', '' );
-// Nazwy używane do automatycznego odnalezienia ID (dokładnie jak w panelu Welyo):
 if ( ! defined( 'WELYO_CAMPAIGN_NAME' ) )   define( 'WELYO_CAMPAIGN_NAME',   'Rekrutacja - formularz WWW (callback)' );
-if ( ! defined( 'WELYO_CLASSIFIER_NAME' ) ) define( 'WELYO_CLASSIFIER_NAME', '' ); // np. 'Lead WWW – oddzwonić' (klasyfikator otwarty/recall)
-if ( ! defined( 'WELYO_HASH_METHOD' ) )   define( 'WELYO_HASH_METHOD',   'md5' );   // md5 lub sha1
-if ( ! defined( 'WELYO_DEFAULT_PREFIX' ) )define( 'WELYO_DEFAULT_PREFIX', '+48' );   // doklejany do numerów 9-cyfrowych
-
-// Godziny i dni pracy (czas wg strefy WordPressa)
-if ( ! defined( 'WELYO_OPEN_HOUR' ) )     define( 'WELYO_OPEN_HOUR',  8 );   // od 08:00
-if ( ! defined( 'WELYO_CLOSE_HOUR' ) )    define( 'WELYO_CLOSE_HOUR', 18 );  // do 18:00
-if ( ! defined( 'WELYO_WORKDAYS' ) )      define( 'WELYO_WORKDAYS',  '1,2,3,4,5' ); // 1=pon ... 7=niedz
-
-// Numer telefonu pokazywany/wybierany w trybie "Zadzwoń"
+if ( ! defined( 'WELYO_CLASSIFIER_NAME' ) ) define( 'WELYO_CLASSIFIER_NAME', '' );
+if ( ! defined( 'WELYO_HASH_METHOD' ) )   define( 'WELYO_HASH_METHOD',   'md5' );
+if ( ! defined( 'WELYO_DEFAULT_PREFIX' ) )define( 'WELYO_DEFAULT_PREFIX', '+48' );
+if ( ! defined( 'WELYO_OPEN_HOUR' ) )     define( 'WELYO_OPEN_HOUR',  8 );
+if ( ! defined( 'WELYO_CLOSE_HOUR' ) )    define( 'WELYO_CLOSE_HOUR', 18 );
+if ( ! defined( 'WELYO_WORKDAYS' ) )      define( 'WELYO_WORKDAYS',  '1,2,3,4,5' );
 if ( ! defined( 'WELYO_PHONE_DIAL' ) )    define( 'WELYO_PHONE_DIAL',   '+48220000000' );
 if ( ! defined( 'WELYO_PHONE_PRETTY' ) )  define( 'WELYO_PHONE_PRETTY', '+48 22 000 00 00' );
-
-// Link do informacji o przetwarzaniu danych (RODO)
 if ( ! defined( 'WELYO_PRIVACY_URL' ) )   define( 'WELYO_PRIVACY_URL',  '/polityka-prywatnosci/' );
 
 
