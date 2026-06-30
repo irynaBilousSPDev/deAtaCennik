@@ -9,6 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'admin_menu', 'welyo_admin_register_menu' );
 add_action( 'admin_init', 'welyo_admin_register_settings' );
+add_action( 'admin_init', 'welyo_admin_register_plugin_links' );
+
+function welyo_admin_register_plugin_links() {
+	add_filter( 'plugin_action_links_' . WELYO_CALLBACK_BASENAME, 'welyo_admin_plugin_links' );
+}
 
 function welyo_admin_register_menu() {
 	add_menu_page(
@@ -21,8 +26,6 @@ function welyo_admin_register_menu() {
 		58
 	);
 }
-
-add_filter( 'plugin_action_links_' . plugin_basename( dirname( __DIR__ ) . '/welyo-callback.php' ), 'welyo_admin_plugin_links' );
 
 function welyo_admin_plugin_links( $links ) {
 	$links[] = '<a href="' . esc_url( admin_url( 'admin.php?page=welyo-callback' ) ) . '">' . esc_html__( 'Ustawienia', 'akademiata' ) . '</a>';
@@ -62,6 +65,80 @@ function welyo_admin_save_settings( $input ) {
 	return $settings;
 }
 
+function welyo_admin_field_secret( $key, $label, $settings, $args = array() ) {
+	$desc      = isset( $args['desc'] ) ? $args['desc'] : '';
+	$wide      = ! empty( $args['wide'] );
+	$has_value = welyo_has_stored_secret( $key );
+	$field_id  = 'welyo_' . $key;
+	?>
+	<tr>
+		<th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $label ); ?></label></th>
+		<td>
+			<div class="welyo-secret-wrap">
+				<input
+					type="password"
+					class="<?php echo $wide ? 'large-text' : 'regular-text'; ?>"
+					id="<?php echo esc_attr( $field_id ); ?>"
+					name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]"
+					value=""
+					autocomplete="new-password"
+					spellcheck="false"
+					<?php if ( $has_value ) : ?>
+						placeholder="<?php echo esc_attr( str_repeat( '•', 16 ) ); ?>"
+					<?php endif; ?>
+				>
+				<button type="button" class="button button-secondary welyo-toggle-secret" data-target="<?php echo esc_attr( $field_id ); ?>" aria-pressed="false">
+					<?php esc_html_e( 'Pokaż', 'akademiata' ); ?>
+				</button>
+			</div>
+			<p class="description" id="<?php echo esc_attr( $field_id ); ?>_desc">
+				<?php if ( $has_value ) : ?>
+					<span class="welyo-secret-status welyo-secret-status--saved"><?php esc_html_e( 'Zapisano — wartość jest ukryta.', 'akademiata' ); ?></span>
+					<?php esc_html_e( 'Wpisz nową tylko przy zmianie klucza.', 'akademiata' ); ?>
+				<?php else : ?>
+					<?php esc_html_e( 'Wpisz klucz z panelu Welyo (Administracja → Integracje).', 'akademiata' ); ?>
+				<?php endif; ?>
+			</p>
+			<?php if ( $has_value ) : ?>
+				<p class="description">
+					<label>
+						<input type="checkbox" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>_clear]" value="1">
+						<?php esc_html_e( 'Usuń zapisany klucz', 'akademiata' ); ?>
+					</label>
+				</p>
+			<?php endif; ?>
+			<?php if ( $desc ) : ?>
+				<p class="description"><?php echo esc_html( $desc ); ?></p>
+			<?php endif; ?>
+		</td>
+	</tr>
+	<?php
+}
+
+function welyo_admin_field_color( $key, $label, $settings, $args = array() ) {
+	$desc     = isset( $args['desc'] ) ? $args['desc'] : '';
+	$defaults = welyo_default_settings();
+	$value    = welyo_sanitize_color(
+		isset( $settings[ $key ] ) ? $settings[ $key ] : '',
+		$defaults[ $key ]
+	);
+	$field_id = 'welyo_' . $key;
+	?>
+	<tr>
+		<th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $label ); ?></label></th>
+		<td>
+			<div class="welyo-color-wrap">
+				<input type="color" class="welyo-color-picker" id="<?php echo esc_attr( $field_id ); ?>_picker" value="<?php echo esc_attr( welyo_normalize_hex( $value ) ); ?>" aria-hidden="true" tabindex="-1">
+				<input type="text" class="regular-text welyo-color-text" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" maxlength="7" spellcheck="false">
+			</div>
+			<?php if ( $desc ) : ?>
+				<p class="description"><?php echo esc_html( $desc ); ?></p>
+			<?php endif; ?>
+		</td>
+	</tr>
+	<?php
+}
+
 function welyo_admin_field_text( $key, $label, $settings, $args = array() ) {
 	$type  = isset( $args['type'] ) ? $args['type'] : 'text';
 	$desc  = isset( $args['desc'] ) ? $args['desc'] : '';
@@ -74,10 +151,7 @@ function welyo_admin_field_text( $key, $label, $settings, $args = array() ) {
 			<?php if ( $type === 'textarea' ) : ?>
 				<textarea class="large-text" rows="3" id="welyo_<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]"><?php echo esc_textarea( $value ); ?></textarea>
 			<?php else : ?>
-				<input type="<?php echo esc_attr( $type ); ?>" class="<?php echo $wide ? 'large-text' : 'regular-text'; ?>" id="welyo_<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $type === 'password' ? '' : $value ); ?>" <?php echo $type === 'password' ? 'autocomplete="new-password"' : ''; ?>>
-			<?php endif; ?>
-			<?php if ( $type === 'password' && $value !== '' ) : ?>
-				<p class="description"><?php esc_html_e( 'Klucz jest zapisany. Zostaw puste, aby go nie zmieniać.', 'akademiata' ); ?></p>
+				<input type="<?php echo esc_attr( $type ); ?>" class="<?php echo $wide ? 'large-text' : 'regular-text'; ?>" id="welyo_<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>">
 			<?php endif; ?>
 			<?php if ( $desc ) : ?>
 				<p class="description"><?php echo esc_html( $desc ); ?></p>
@@ -109,7 +183,7 @@ function welyo_admin_render_page() {
 				<?php
 				welyo_admin_field_text( 'base_url', 'URL API', $settings, array( 'wide' => true ) );
 				welyo_admin_field_text( 'login', 'Login', $settings, array( 'desc' => 'np. login@ataedu' ) );
-				welyo_admin_field_text( 'api_key', 'Klucz API', $settings, array( 'type' => 'password' ) );
+				welyo_admin_field_secret( 'api_key', 'Klucz API', $settings );
 				welyo_admin_field_text( 'campaign_id', 'ID kampanii', $settings, array( 'desc' => 'Puste = szukaj po nazwie kampanii' ) );
 				welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii', $settings, array( 'wide' => true ) );
 				welyo_admin_field_text( 'classifier_id', 'ID klasyfikatora (recall)', $settings );
@@ -173,6 +247,21 @@ function welyo_admin_render_page() {
 				?>
 			</table>
 
+			<h2 class="title"><?php esc_html_e( 'Kolory widgetu', 'akademiata' ); ?></h2>
+			<p class="description" style="margin-bottom:12px;"><?php esc_html_e( 'Domyślnie kolory marki Akademiata. Zmiany widać od razu po zapisaniu.', 'akademiata' ); ?></p>
+			<table class="form-table" role="presentation">
+				<?php
+				foreach ( welyo_color_fields() as $color_key => $color_meta ) {
+					welyo_admin_field_color(
+						$color_key,
+						$color_meta['label'],
+						$settings,
+						array( 'desc' => isset( $color_meta['desc'] ) ? $color_meta['desc'] : '' )
+					);
+				}
+				?>
+			</table>
+
 			<h2 class="title"><?php esc_html_e( 'Wyświetlanie', 'akademiata' ); ?></h2>
 			<table class="form-table" role="presentation">
 				<tr>
@@ -183,6 +272,7 @@ function welyo_admin_render_page() {
 							<?php esc_html_e( 'Pokazuj automatycznie we wszystkich stopkach (wp_footer)', 'akademiata' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Shortcode: [welyo_callback]', 'akademiata' ); ?></p>
+						<p class="description"><?php esc_html_e( 'WPML: widget pokazuje się tylko w wersji polskiej (pl). Na EN i innych językach jest ukryty.', 'akademiata' ); ?></p>
 					</td>
 				</tr>
 			</table>
@@ -208,7 +298,60 @@ function welyo_admin_render_page() {
 			}
 			?>
 		</p>
-		<p class="description"><?php esc_html_e( 'Wartości z tego panelu działają od razu po zapisaniu. Opcjonalnie: plik welyo-config.php lub wp-config.php mogą nadpisać wybrane pola (gdy są niepuste).', 'akademiata' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Wartości z tego panelu działają od razu po zapisaniu. Klucz API w bazie jest szyfrowany (nie w plain text). Opcjonalnie: plik welyo-config.php lub wp-config.php mogą nadpisać wybrane pola — wtedy klucz trafia do pliku jako zwykły tekst (tylko na serwerze).', 'akademiata' ); ?></p>
 	</div>
+	<style>
+		.welyo-secret-wrap { display:flex; align-items:center; gap:8px; max-width:36rem; }
+		.welyo-secret-wrap input { flex:1 1 auto; font-family:Consolas, Monaco, monospace; }
+		.welyo-secret-status--saved { display:inline-block; margin-right:6px; padding:2px 8px; border-radius:999px; background:#edfaef; color:#1f6b3a; font-weight:600; }
+		.welyo-color-wrap { display:flex; align-items:center; gap:10px; max-width:20rem; }
+		.welyo-color-wrap input[type="color"] { width:48px; height:36px; padding:2px; border:1px solid #8c8f94; border-radius:4px; cursor:pointer; background:#fff; }
+		.welyo-color-text { font-family:Consolas, Monaco, monospace; width:7.5em; }
+	</style>
+	<script>
+	(function () {
+		var showLabel = <?php echo wp_json_encode( __( 'Pokaż', 'akademiata' ) ); ?>;
+		var hideLabel = <?php echo wp_json_encode( __( 'Ukryj', 'akademiata' ) ); ?>;
+		document.querySelectorAll('.welyo-toggle-secret').forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var input = document.getElementById(btn.getAttribute('data-target'));
+				if (!input) { return; }
+				var show = input.type === 'password';
+				input.type = show ? 'text' : 'password';
+				btn.textContent = show ? hideLabel : showLabel;
+				btn.setAttribute('aria-pressed', show ? 'true' : 'false');
+			});
+		});
+
+		function normalizeHex(val) {
+			if (!val) { return ''; }
+			val = val.trim();
+			if (val.charAt(0) !== '#') { val = '#' + val; }
+			if (/^#[0-9a-fA-F]{3}$/.test(val)) {
+				return ('#' + val.charAt(1) + val.charAt(1) + val.charAt(2) + val.charAt(2) + val.charAt(3) + val.charAt(3)).toLowerCase();
+			}
+			if (/^#[0-9a-fA-F]{6}$/.test(val)) { return val.toLowerCase(); }
+			return '';
+		}
+
+		document.querySelectorAll('.welyo-color-wrap').forEach(function (wrap) {
+			var picker = wrap.querySelector('.welyo-color-picker');
+			var text = wrap.querySelector('.welyo-color-text');
+			if (!picker || !text) { return; }
+			picker.addEventListener('input', function () {
+				text.value = picker.value.toLowerCase();
+			});
+			text.addEventListener('input', function () {
+				var hex = normalizeHex(text.value);
+				if (hex) { picker.value = hex; }
+			});
+			text.addEventListener('change', function () {
+				var hex = normalizeHex(text.value);
+				text.value = hex || text.value;
+				if (hex) { picker.value = hex; }
+			});
+		});
+	})();
+	</script>
 	<?php
 }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.1.1
+ * Version: 1.2.1
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -10,9 +10,13 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'WELYO_CALLBACK_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WELYO_CALLBACK_BASENAME', plugin_basename( __FILE__ ) );
 
 require_once WELYO_CALLBACK_PATH . 'includes/settings.php';
-require_once WELYO_CALLBACK_PATH . 'includes/admin.php';
+
+if ( is_admin() ) {
+	require_once WELYO_CALLBACK_PATH . 'includes/admin.php';
+}
 
 welyo_bootstrap_config();
 
@@ -188,6 +192,15 @@ function welyo_extract_list( $data ) {
 	return $out;
 }
 
+/** Porównanie nazw bez zależności od rozszerzenia mbstring. */
+function welyo_strtolower( $value ) {
+	$value = (string) $value;
+	if ( function_exists( 'mb_strtolower' ) ) {
+		return mb_strtolower( $value );
+	}
+	return strtolower( $value );
+}
+
 /** Zwraca id kampanii: z konfiguracji lub odnalezione po nazwie (cache 1 dzień). */
 function welyo_resolve_campaign_id( $jwt ) {
 	if ( welyo_cfg( 'campaign_id' ) !== '' ) { return (string) welyo_cfg( 'campaign_id' ); }
@@ -196,7 +209,7 @@ function welyo_resolve_campaign_id( $jwt ) {
 	$data = welyo_api_post( $jwt, '/fcc-campaigns-list', array() );
 	if ( is_wp_error( $data ) ) { return $data; }
 	foreach ( welyo_extract_list( $data ) as $c ) {
-		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( welyo_cfg( 'campaign_name' ) ) ) ) {
+		if ( welyo_strtolower( trim( $c['name'] ) ) === welyo_strtolower( trim( welyo_cfg( 'campaign_name' ) ) ) ) {
 			set_transient( 'welyo_campaign_id', $c['id'], DAY_IN_SECONDS );
 			return $c['id'];
 		}
@@ -215,7 +228,7 @@ function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
 	$data = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
 	if ( is_wp_error( $data ) ) { return $data; }
 	foreach ( welyo_extract_list( $data ) as $c ) {
-		if ( mb_strtolower( trim( $c['name'] ) ) === mb_strtolower( trim( welyo_cfg( 'classifier_name' ) ) ) {
+		if ( welyo_strtolower( trim( $c['name'] ) ) === welyo_strtolower( trim( welyo_cfg( 'classifier_name' ) ) ) ) {
 			set_transient( 'welyo_classifier_id', $c['id'], DAY_IN_SECONDS );
 			return $c['id'];
 		}
@@ -363,6 +376,10 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 add_shortcode( 'welyo_callback', 'welyo_render_widget' );
 
 function welyo_render_widget() {
+	if ( ! welyo_should_show_widget() ) {
+		return '';
+	}
+
 	$texts = welyo_widget_texts();
 	$privacy_url = esc_url( welyo_cfg( 'privacy_url' ) );
 	$consent_html = str_replace( '{privacy_url}', $privacy_url, $texts['text_consent'] );
@@ -400,7 +417,7 @@ function welyo_render_widget() {
 
 	ob_start();
 	?>
-<div class="wcb-root" id="wcbRoot" data-mode="call">
+<div class="wcb-root" id="wcbRoot" data-mode="call" style="<?php echo welyo_widget_color_style_attr(); ?>">
   <div class="wcb-panel" role="dialog" aria-modal="false" aria-labelledby="wcbTitle">
     <div class="wcb-head">
       <span class="wcb-status"><span class="wcb-dot"></span><span id="wcbStatus"><?php echo esc_html( $texts['text_status_open'] ); ?></span></span>
@@ -431,7 +448,7 @@ function welyo_render_widget() {
         <button class="wcb-submit" id="wcbSubmit"><?php echo esc_html( $texts['text_submit'] ); ?></button>
       </div>
       <div id="wcbDone" class="wcb-done wcb-hidden">
-        <div class="wcb-check"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="wcb-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
         <h3><?php echo esc_html( $texts['text_done_title'] ); ?></h3>
         <p id="wcbDoneMsg"><?php echo esc_html( $texts['text_done_scheduled'] ); ?></p>
       </div>
@@ -445,50 +462,49 @@ function welyo_render_widget() {
 </div>
 
 <style>
-.wcb-root{--b:#2a3a86;--b2:#3650c8;--a:#ff5a3c;--ad:#e8421f;--ink:#1b2347;--soft:#5b6385;--line:#e6e9f2;
-position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-.wcb-launcher{display:inline-flex;align-items:center;gap:12px;border:0;cursor:pointer;background:var(--b);color:#fff;padding:14px 20px 14px 16px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 18px 50px -12px rgba(20,28,64,.34);transition:transform .18s,background .18s}
+.wcb-root{position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.wcb-launcher{display:inline-flex;align-items:center;gap:12px;border:0;cursor:pointer;background:var(--b);color:var(--launcher-text);padding:14px 20px 14px 16px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 18px 50px -12px var(--shadow);transition:transform .18s,background .18s}
 .wcb-launcher:hover{transform:translateY(-2px);background:var(--b2)}
-.wcb-launcher:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.wcb-launcher:focus-visible{outline:3px solid var(--panel-bg);outline-offset:3px}
 .wcb-ic{position:relative;width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.16)}
 .wcb-ic svg{width:19px;height:19px}
 .wcb-root[data-mode="call"] .wcb-ic::after{content:"";position:absolute;width:38px;height:38px;border-radius:50%;border:2px solid var(--a);animation:wcbp 2.2s ease-out infinite}
 @keyframes wcbp{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.55);opacity:0}}
-.wcb-panel{position:absolute;right:0;bottom:calc(100% + 14px);width:340px;max-width:calc(100vw - 32px);background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 50px -12px rgba(20,28,64,.34);overflow:hidden;transform-origin:bottom right;opacity:0;transform:translateY(8px) scale(.98);pointer-events:none;transition:opacity .2s,transform .2s}
+.wcb-panel{position:absolute;right:0;bottom:calc(100% + 14px);width:340px;max-width:calc(100vw - 32px);background:var(--panel-bg);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 50px -12px var(--shadow);overflow:hidden;transform-origin:bottom right;opacity:0;transform:translateY(8px) scale(.98);pointer-events:none;transition:opacity .2s,transform .2s}
 .wcb-root.is-open .wcb-panel{opacity:1;transform:none;pointer-events:auto}
-.wcb-head{background:linear-gradient(135deg,var(--b),#1a2766);color:#fff;padding:20px 20px 18px;position:relative}
+.wcb-head{background:linear-gradient(135deg,var(--b),var(--bd));color:var(--launcher-text);padding:20px 20px 18px;position:relative}
 .wcb-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;opacity:.92}
 .wcb-dot{width:8px;height:8px;border-radius:50%;flex:none}
-.wcb-root[data-mode="call"] .wcb-dot{background:#46e08a;box-shadow:0 0 0 4px rgba(70,224,138,.25)}
-.wcb-root[data-mode="callback"] .wcb-dot{background:#ffc24b;box-shadow:0 0 0 4px rgba(255,194,75,.22)}
+.wcb-root[data-mode="call"] .wcb-dot{background:var(--dot-open);box-shadow:0 0 0 4px var(--dot-open-glow)}
+.wcb-root[data-mode="callback"] .wcb-dot{background:var(--dot-closed);box-shadow:0 0 0 4px var(--dot-closed-glow)}
 .wcb-title{font-size:19px;font-weight:800;line-height:1.2;margin:12px 0 4px}
 .wcb-sub{font-size:13.5px;line-height:1.55;opacity:.88;margin:0}
-.wcb-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
+.wcb-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:var(--launcher-text);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
 .wcb-close:hover{background:rgba(255,255,255,.26)}
 .wcb-body{padding:18px 20px 20px}
-.wcb-callbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;background:var(--a);color:#fff;padding:15px;border-radius:13px;font-weight:800;font-size:16px;transition:background .18s,transform .18s}
+.wcb-callbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;background:var(--a);color:var(--launcher-text);padding:15px;border-radius:13px;font-weight:800;font-size:16px;transition:background .18s,transform .18s}
 .wcb-callbtn:hover{background:var(--ad);transform:translateY(-1px)}
 .wcb-callbtn svg{width:20px;height:20px}
 .wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)}
 .wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)}
 .wcb-field{margin-bottom:12px}
 .wcb-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
-.wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:#fbfcfe;box-sizing:border-box}
-.wcb-field input:focus{outline:0;border-color:var(--b2);box-shadow:0 0 0 3px rgba(54,80,200,.14);background:#fff}
+.wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:var(--input-bg);box-sizing:border-box}
+.wcb-field input:focus{outline:0;border-color:var(--b2);box-shadow:0 0 0 3px var(--focus-ring);background:var(--panel-bg)}
 .wcb-consent{display:flex;gap:9px;align-items:flex-start;margin:4px 0 14px}
 .wcb-consent input{margin-top:2px;width:16px;height:16px;accent-color:var(--b);flex:none;cursor:pointer}
 .wcb-consent label{font-size:11.5px;line-height:1.5;color:var(--soft);cursor:pointer}
 .wcb-consent a{color:var(--b2)}
-.wcb-submit{width:100%;border:0;cursor:pointer;background:var(--a);color:#fff;padding:14px;border-radius:13px;font-weight:800;font-size:15.5px;transition:background .18s,transform .18s}
+.wcb-submit{width:100%;border:0;cursor:pointer;background:var(--a);color:var(--launcher-text);padding:14px;border-radius:13px;font-weight:800;font-size:15.5px;transition:background .18s,transform .18s}
 .wcb-submit:hover:not(:disabled){background:var(--ad);transform:translateY(-1px)}
-.wcb-submit:disabled{background:#c7ccdd;cursor:not-allowed}
+.wcb-submit:disabled{background:var(--disabled);cursor:not-allowed}
 .wcb-err{color:var(--ad);font-size:12px;margin:-6px 0 10px;min-height:0}
 .wcb-done{text-align:center;padding:8px 4px 6px}
-.wcb-check{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;background:rgba(31,157,99,.12);display:grid;place-items:center}
+.wcb-check{width:56px;height:56px;margin:0 auto 14px;border-radius:50%;background:var(--success-bg);display:grid;place-items:center;color:var(--success)}
 .wcb-check svg{width:28px;height:28px}
 .wcb-done h3{margin:0 0 6px;font-size:18px;font-weight:800;color:var(--ink)}
 .wcb-done p{margin:0;font-size:13.5px;line-height:1.55;color:var(--soft)}
-.wcb-foot{text-align:center;padding:11px;font-size:11px;color:#9aa1ba;border-top:1px solid var(--line)}
+.wcb-foot{text-align:center;padding:11px;font-size:11px;color:var(--foot-text);border-top:1px solid var(--line)}
 .wcb-hidden{display:none !important}
 @media (prefers-reduced-motion:reduce){.wcb-launcher,.wcb-panel,.wcb-callbtn,.wcb-submit{transition:none}.wcb-root[data-mode="call"] .wcb-ic::after{animation:none}}
 </style>

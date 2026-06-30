@@ -7,7 +7,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WELYO_OPTION_KEY', 'welyo_callback_settings' );
+if ( ! defined( 'WELYO_OPTION_KEY' ) ) {
+	define( 'WELYO_OPTION_KEY', 'welyo_callback_settings' );
+}
 
 /** Domyślne wartości (API + widget). */
 function welyo_default_settings() {
@@ -52,7 +54,185 @@ function welyo_default_settings() {
 		'text_error_consent'     => 'Potrzebujemy zgody na kontakt telefoniczny.',
 		'text_error_generic'     => 'Coś poszło nie tak. Spróbuj ponownie lub zadzwoń do nas.',
 		'text_sending'           => 'Wysyłanie…',
+		'color_brand'            => '#2a3a86',
+		'color_brand_hover'      => '#3650c8',
+		'color_brand_dark'       => '#1a2766',
+		'color_accent'           => '#ff5a3c',
+		'color_accent_hover'     => '#e8421f',
+		'color_text'             => '#1b2347',
+		'color_text_muted'       => '#5b6385',
+		'color_border'           => '#e6e9f2',
+		'color_panel_bg'         => '#ffffff',
+		'color_launcher_text'    => '#ffffff',
+		'color_status_open'      => '#46e08a',
+		'color_status_closed'    => '#ffc24b',
+		'color_success'          => '#1f9d63',
+		'color_footer_text'      => '#9aa1ba',
+		'color_input_bg'         => '#fbfcfe',
+		'color_disabled'         => '#c7ccdd',
 	);
+}
+
+/** Pola kolorów widgetu (klucz opcji → etykieta). */
+function welyo_color_fields() {
+	return array(
+		'color_brand'         => array(
+			'label' => __( 'Kolor główny (marka)', 'akademiata' ),
+			'desc'  => __( 'Przycisk pływający, nagłówek panelu', 'akademiata' ),
+		),
+		'color_brand_hover'   => array(
+			'label' => __( 'Marka — hover / linki', 'akademiata' ),
+			'desc'  => __( 'Najazd na przycisk, linki w zgodzie', 'akademiata' ),
+		),
+		'color_brand_dark'    => array(
+			'label' => __( 'Marka — ciemny (gradient)', 'akademiata' ),
+			'desc'  => __( 'Drugi kolor tła nagłówka panelu', 'akademiata' ),
+		),
+		'color_accent'        => array(
+			'label' => __( 'Kolor akcentu (CTA)', 'akademiata' ),
+			'desc'  => __( '„Zadzwoń”, „Oddzwońcie do mnie”', 'akademiata' ),
+		),
+		'color_accent_hover'  => array(
+			'label' => __( 'Akcent — hover / błędy', 'akademiata' ),
+			'desc'  => __( 'Najazd na CTA, komunikaty błędów', 'akademiata' ),
+		),
+		'color_text'          => array(
+			'label' => __( 'Tekst główny', 'akademiata' ),
+		),
+		'color_text_muted'    => array(
+			'label' => __( 'Tekst drugorzędny', 'akademiata' ),
+			'desc'  => __( 'Podtytuły, zgoda, godziny', 'akademiata' ),
+		),
+		'color_border'        => array(
+			'label' => __( 'Obramowania', 'akademiata' ),
+		),
+		'color_panel_bg'      => array(
+			'label' => __( 'Tło panelu', 'akademiata' ),
+		),
+		'color_launcher_text' => array(
+			'label' => __( 'Tekst na przycisku pływającym', 'akademiata' ),
+		),
+		'color_status_open'   => array(
+			'label' => __( 'Status: otwarte', 'akademiata' ),
+			'desc'  => __( 'Kropka „jesteśmy dostępni”', 'akademiata' ),
+		),
+		'color_status_closed' => array(
+			'label' => __( 'Status: zamknięte', 'akademiata' ),
+			'desc'  => __( 'Kropka po godzinach', 'akademiata' ),
+		),
+		'color_success'       => array(
+			'label' => __( 'Sukces (ptaszek)', 'akademiata' ),
+		),
+		'color_footer_text'   => array(
+			'label' => __( 'Stopka panelu', 'akademiata' ),
+		),
+		'color_input_bg'      => array(
+			'label' => __( 'Tło pól formularza', 'akademiata' ),
+		),
+		'color_disabled'      => array(
+			'label' => __( 'Przycisk wyłączony', 'akademiata' ),
+		),
+	);
+}
+
+function welyo_sanitize_color( $value, $fallback ) {
+	$color = sanitize_hex_color( is_string( $value ) ? $value : '' );
+	return $color ? strtolower( $color ) : $fallback;
+}
+
+function welyo_normalize_hex( $hex ) {
+	$hex = welyo_sanitize_color( $hex, '' );
+	if ( $hex === '' ) {
+		return '';
+	}
+	if ( strlen( $hex ) === 4 ) {
+		$hex = '#' . $hex[1] . $hex[1] . $hex[2] . $hex[2] . $hex[3] . $hex[3];
+	}
+	return $hex;
+}
+
+function welyo_hex_rgb( $hex ) {
+	$hex = welyo_normalize_hex( $hex );
+	if ( $hex === '' ) {
+		return '0,0,0';
+	}
+	return hexdec( substr( $hex, 1, 2 ) ) . ',' . hexdec( substr( $hex, 3, 2 ) ) . ',' . hexdec( substr( $hex, 5, 2 ) );
+}
+
+/** Kolory widgetu z ustawień (z fallbackami). */
+function welyo_widget_colors() {
+	$defaults = welyo_default_settings();
+	$out      = array();
+	foreach ( array_keys( welyo_color_fields() ) as $key ) {
+		$out[ $key ] = welyo_sanitize_color( welyo_cfg( $key ), $defaults[ $key ] );
+	}
+	return $out;
+}
+
+/** Atrybut style z CSS variables dla .wcb-root. */
+function welyo_widget_color_style_attr() {
+	$c          = welyo_widget_colors();
+	$open_rgb   = welyo_hex_rgb( $c['color_status_open'] );
+	$closed_rgb = welyo_hex_rgb( $c['color_status_closed'] );
+	$success_rgb = welyo_hex_rgb( $c['color_success'] );
+	$brand_rgb  = welyo_hex_rgb( $c['color_brand'] );
+	$hover_rgb  = welyo_hex_rgb( $c['color_brand_hover'] );
+
+	$vars = array(
+		'--b'              => $c['color_brand'],
+		'--b2'             => $c['color_brand_hover'],
+		'--bd'             => $c['color_brand_dark'],
+		'--a'              => $c['color_accent'],
+		'--ad'             => $c['color_accent_hover'],
+		'--ink'            => $c['color_text'],
+		'--soft'           => $c['color_text_muted'],
+		'--line'           => $c['color_border'],
+		'--panel-bg'       => $c['color_panel_bg'],
+		'--launcher-text'  => $c['color_launcher_text'],
+		'--dot-open'       => $c['color_status_open'],
+		'--dot-closed'     => $c['color_status_closed'],
+		'--success'        => $c['color_success'],
+		'--foot-text'      => $c['color_footer_text'],
+		'--input-bg'       => $c['color_input_bg'],
+		'--disabled'       => $c['color_disabled'],
+		'--shadow'         => 'rgba(' . $brand_rgb . ',0.34)',
+		'--dot-open-glow'  => 'rgba(' . $open_rgb . ',0.25)',
+		'--dot-closed-glow' => 'rgba(' . $closed_rgb . ',0.22)',
+		'--success-bg'     => 'rgba(' . $success_rgb . ',0.12)',
+		'--focus-ring'     => 'rgba(' . $hover_rgb . ',0.14)',
+	);
+
+	$parts = array();
+	foreach ( $vars as $var => $val ) {
+		$parts[] = $var . ':' . $val;
+	}
+
+	return esc_attr( implode( ';', $parts ) );
+}
+
+/** Aktualny kod języka WPML (np. pl, en). Bez WPML → pl. */
+function welyo_get_current_language() {
+	if ( function_exists( 'apply_filters' ) ) {
+		$lang = apply_filters( 'wpml_current_language', null );
+		if ( is_string( $lang ) && $lang !== '' ) {
+			return strtolower( $lang );
+		}
+	}
+	if ( defined( 'ICL_LANGUAGE_CODE' ) && ICL_LANGUAGE_CODE ) {
+		return strtolower( ICL_LANGUAGE_CODE );
+	}
+	return 'pl';
+}
+
+/** Czy widget ma się pokazać w bieżącym języku (na razie tylko PL). */
+function welyo_should_show_widget() {
+	$allowed = apply_filters( 'welyo_callback_allowed_languages', array( 'pl' ) );
+	if ( empty( $allowed ) ) {
+		return true;
+	}
+	$lang = welyo_get_current_language();
+	$show = in_array( $lang, $allowed, true );
+	return (bool) apply_filters( 'welyo_callback_show_for_language', $show, $lang, $allowed );
 }
 
 /** Mapowanie klucza opcji → stała WELYO_*. */
@@ -82,21 +262,16 @@ function welyo_get_saved_settings() {
 }
 
 function welyo_get_settings() {
-	$cache = &welyo_settings_cache();
-	if ( $cache === null ) {
-		$cache = array_merge( welyo_default_settings(), welyo_get_saved_settings() );
+	global $welyo_settings_cache;
+	if ( ! isset( $welyo_settings_cache ) ) {
+		$welyo_settings_cache = array_merge( welyo_default_settings(), welyo_get_saved_settings() );
 	}
-	return $cache;
-}
-
-function &welyo_settings_cache() {
-	static $cache = null;
-	return $cache;
+	return $welyo_settings_cache;
 }
 
 function welyo_flush_settings_cache() {
-	$cache       = &welyo_settings_cache();
-	$cache       = null;
+	global $welyo_settings_cache;
+	unset( $welyo_settings_cache );
 }
 
 /** Wartość: wp-config / welyo-config.php (jeśli niepuste) → panel WP → domyślna. */
@@ -113,10 +288,57 @@ function welyo_cfg( $key ) {
 	}
 
 	if ( isset( $settings[ $key ] ) && $settings[ $key ] !== '' ) {
-		return $settings[ $key ];
+		$value = $settings[ $key ];
+		if ( $key === 'api_key' ) {
+			$value = welyo_decrypt_secret( $value );
+		}
+		return $value;
 	}
 
 	return isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';
+}
+
+/** Czy w bazie jest zapisany sekret (bez ujawniania wartości). */
+function welyo_has_stored_secret( $key ) {
+	$settings = welyo_get_settings();
+	return isset( $settings[ $key ] ) && (string) $settings[ $key ] !== '';
+}
+
+function welyo_is_encrypted_secret( $value ) {
+	return is_string( $value ) && strpos( $value, 'enc:' ) === 0;
+}
+
+function welyo_encrypt_secret( $plaintext ) {
+	$plaintext = (string) $plaintext;
+	if ( $plaintext === '' || ! function_exists( 'openssl_encrypt' ) ) {
+		return $plaintext;
+	}
+
+	$key    = hash( 'sha256', wp_salt( 'auth' ), true );
+	$iv     = function_exists( 'random_bytes' ) ? random_bytes( 16 ) : openssl_random_pseudo_bytes( 16 );
+	$cipher = openssl_encrypt( $plaintext, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv );
+	if ( $cipher === false ) {
+		return $plaintext;
+	}
+
+	return 'enc:' . base64_encode( $iv . $cipher );
+}
+
+function welyo_decrypt_secret( $stored ) {
+	$stored = (string) $stored;
+	if ( $stored === '' || ! welyo_is_encrypted_secret( $stored ) || ! function_exists( 'openssl_decrypt' ) ) {
+		return $stored;
+	}
+
+	$raw = base64_decode( substr( $stored, 4 ), true );
+	if ( $raw === false || strlen( $raw ) < 17 ) {
+		return '';
+	}
+
+	$key    = hash( 'sha256', wp_salt( 'auth' ), true );
+	$plain  = openssl_decrypt( substr( $raw, 16 ), 'AES-256-CBC', $key, OPENSSL_RAW_DATA, substr( $raw, 0, 16 ) );
+
+	return $plain !== false ? $plain : '';
 }
 
 function welyo_cfg_int( $key ) {
@@ -171,6 +393,9 @@ function welyo_build_config_php( $settings = null ) {
 			continue;
 		}
 		$val = $settings[ $key ];
+		if ( $key === 'api_key' ) {
+			$val = welyo_decrypt_secret( $val );
+		}
 		if ( in_array( $key, array( 'open_hour', 'close_hour' ), true ) ) {
 			$php_val = (int) $val;
 		} elseif ( is_numeric( $val ) && $key !== 'phone_dial' && $key !== 'phone_pretty' && $key !== 'default_prefix' ) {
@@ -228,12 +453,17 @@ function welyo_sanitize_settings( $input ) {
 		$out['text_consent'] = wp_kses_post( wp_unslash( $input['text_consent'] ) );
 	}
 
-	if ( isset( $input['api_key'] ) ) {
+	if ( ! empty( $input['api_key_clear'] ) ) {
+		$out['api_key'] = '';
+	} elseif ( isset( $input['api_key'] ) ) {
 		$api_key = sanitize_text_field( wp_unslash( $input['api_key'] ) );
 		if ( $api_key !== '' ) {
-			$out['api_key'] = $api_key;
+			$out['api_key'] = welyo_encrypt_secret( $api_key );
 		} else {
 			$out['api_key'] = $current['api_key'];
+			if ( $out['api_key'] !== '' && ! welyo_is_encrypted_secret( $out['api_key'] ) ) {
+				$out['api_key'] = welyo_encrypt_secret( welyo_decrypt_secret( $out['api_key'] ) );
+			}
 		}
 	}
 
@@ -243,6 +473,13 @@ function welyo_sanitize_settings( $input ) {
 
 	if ( isset( $input['hash_method'] ) && in_array( $input['hash_method'], array( 'md5', 'sha1' ), true ) ) {
 		$out['hash_method'] = $input['hash_method'];
+	}
+
+	foreach ( array_keys( welyo_color_fields() ) as $color_key ) {
+		if ( ! isset( $input[ $color_key ] ) ) {
+			continue;
+		}
+		$out[ $color_key ] = welyo_sanitize_color( wp_unslash( $input[ $color_key ] ), $defaults[ $color_key ] );
 	}
 
 	return array_merge( $defaults, $current, $out );
