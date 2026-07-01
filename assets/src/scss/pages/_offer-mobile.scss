@@ -691,6 +691,26 @@ $om-filter-card-pad: 16px;
         }
       }
 
+      // Tablet — card property typography matches desktop (_offer-page.scss)
+      @include mixins.ipad-air-screen {
+        #filter-results .card_properties_wrapper {
+          margin: 1rem 0 !important;
+
+          .card_property {
+            margin-bottom: 1rem !important;
+
+            .sub_title {
+              font-size: vars.$font-size-default;
+              line-height: 24px;
+            }
+
+            h3 {
+              @include mixins.font-style(vars.$font-size-default, 19px, vars.$weight-bold);
+            }
+          }
+        }
+      }
+
       // —— Screen 3: full filter panel (Więcej filtrów) ——
       .filter-overlay.active {
         z-index: $om-z-overlay;
