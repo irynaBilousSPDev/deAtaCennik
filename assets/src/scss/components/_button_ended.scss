@@ -10,44 +10,13 @@
   min-width: 146px;
 }
 
-@media (max-width: 422px) {
-  .btn_ended_container,
-  .button-sing_up_wrapper {
-    margin: 0 auto !important;
+.single_btn_ended .btn_ended_container {
+  @media (max-width: 422px),
+  (min-width: 541px) and (max-width: 822px),
+  (min-width: 991px) and (max-width: 1149px),
+  (min-width: 1281px) and (max-width: 1549px) {
+    margin: 0 auto;
   }
-}
-
-@media (min-width: 541px) and (max-width: 822px) {
-  .btn_ended_container,
-  .button-sing_up_wrapper {
-    margin: 0 auto !important;
-  }
-}
-
-@media (min-width: 991px) and (max-width: 1149px) {
-
-  .btn_ended_container,
-  .button-sing_up_wrapper{
-    margin: 0 auto !important;
-  }
-
-}
-
-@media (min-width: 1281px) and (max-width: 1549px) {
-
-  .btn_ended_container,
-  .button-sing_up_wrapper {
-    margin: 0 auto !important;
-  }
-
-}
-
-@media (min-width: 2560px) {
-
-  .buttons_wrapper {
-    flex-wrap: nowrap;
-  }
-
 }
 
 // Button wrapper

@@ -376,10 +376,14 @@
 }
 
 .buttons_wrapper {
-  @include mixins.flexbox(row, space-between, center);
+  @include mixins.flexbox(row, center, center);
+  flex-wrap: wrap;
+  gap: 0.75rem;
 
-  a {
-    margin-right: 1rem;
+  > a,
+  > .button-sing_up_wrapper,
+  > .btn_ended_container {
+    margin: 0;
   }
 }
 

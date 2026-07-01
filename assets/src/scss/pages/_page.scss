@@ -427,15 +427,6 @@
 .course-card {
 
   .buttons_wrapper {
-    gap: 6px;
-
-    @media (min-width: 701px) {
-      flex-wrap: nowrap !important;
-    }
-
-    @include mixins.max-sm-screen {
-      gap: 2px;
-    }
-
+    gap: 0.5rem;
   }
 }
