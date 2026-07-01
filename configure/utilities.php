@@ -169,6 +169,33 @@ function akademiata_get_oferta_page_id() {
 }
 
 /**
+ * localStorage scope for offer favorites (bachelor / master / general offer list).
+ *
+ * @param int|null $page_id Optional page ID.
+ * @return string bachelor|master|offer
+ */
+function akademiata_get_offer_favorites_scope($page_id = null) {
+    if ($page_id === null) {
+        if (!is_page()) {
+            return 'offer';
+        }
+        $page_id = (int) get_queried_object_id();
+    } else {
+        $page_id = (int) $page_id;
+    }
+
+    if ($page_id === akademiata_get_offer_listing_page_id_for_level('bachelor')) {
+        return 'bachelor';
+    }
+
+    if ($page_id === akademiata_get_offer_listing_page_id_for_level('master')) {
+        return 'master';
+    }
+
+    return 'offer';
+}
+
+/**
  * Whether the current page uses the Offer page template.
  *
  * @param int|null $page_id Optional page ID.

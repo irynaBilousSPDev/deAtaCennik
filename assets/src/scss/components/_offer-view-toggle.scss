@@ -34,6 +34,8 @@
     background: vars.$white;
     color: #b0b0b0;
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     transition: color 0.15s ease;
 
     &:last-child {
@@ -51,6 +53,7 @@
     display: block;
     width: 18px;
     height: 18px;
+    pointer-events: none;
   }
 
   // PG/MBA filter pages
@@ -77,6 +80,8 @@
     background: vars.$white;
     color: #888;
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     transition: border-color 0.2s ease, color 0.2s ease;
 
     &.is-active {
@@ -90,5 +95,6 @@
     display: block;
     width: 18px;
     height: 18px;
+    pointer-events: none;
   }
 }

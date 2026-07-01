@@ -18,6 +18,8 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
   color: #8a8a8a;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: color 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
 
   &:hover,
@@ -29,6 +31,7 @@
 
   &.is-active {
     color: #e53935;
+    background: rgba(255, 255, 255, 0.98);
   }
 
   &__icon {
@@ -36,33 +39,40 @@
     width: 20px;
     height: 20px;
     pointer-events: none;
+  }
 
-    path {
-      fill: transparent;
-      stroke: currentColor;
-      stroke-width: 2;
-      transition: fill 0.15s ease;
-    }
+  &__icon path {
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 2;
+    transition: fill 0.15s ease, stroke 0.15s ease;
   }
 
   &.is-active &__icon path {
-    fill: currentColor;
-    stroke: currentColor;
+    fill: #e53935;
+    stroke: #e53935;
   }
 }
 
 .offer-favorites-chip {
+  &[hidden] {
+    display: none !important;
+  }
+
   &__icon {
     flex-shrink: 0;
     opacity: 0.85;
+    pointer-events: none;
   }
 
   &.is-active {
     border-color: #e53935;
     color: #c62828;
+    background: #fff5f5;
 
     .offer-favorites-chip__icon {
       opacity: 1;
+      color: #e53935;
     }
   }
 }

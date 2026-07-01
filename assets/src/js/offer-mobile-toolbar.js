@@ -233,6 +233,9 @@ export function initOfferMobileToolbar() {
     });
 
     toolbar.addEventListener('click', (event) => {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip')) {
+            return;
+        }
         if (Date.now() - lastChipTouchAt < 400) {
             return;
         }
@@ -240,6 +243,9 @@ export function initOfferMobileToolbar() {
     });
 
     toolbar.addEventListener('touchend', (event) => {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip')) {
+            return;
+        }
         const chip = event.target.closest('.offer-mobile-chip--dropdown, .offer-mobile-chip--more');
         if (!chip || !toolbar.contains(chip)) {
             return;

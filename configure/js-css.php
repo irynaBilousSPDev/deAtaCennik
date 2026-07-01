@@ -63,6 +63,7 @@ function akademiata_enqueue_scripts()
             'favoriteAdd'     => akademiata_get_theme_lang_string('offer_favorite_add'),
             'favoriteRemove'  => akademiata_get_theme_lang_string('offer_favorite_remove'),
             'chipFavorites'   => akademiata_get_theme_lang_string('offer_chip_favorites'),
+            'favoritesScope'    => akademiata_get_offer_favorites_scope(),
         ]);
     }
 

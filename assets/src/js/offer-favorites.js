@@ -1,5 +1,9 @@
-const STORAGE_KEY = 'akademiata_offer_favorites';
+const STORAGE_KEY = 'akademiata_offer_favorites_v2';
+const LEGACY_STORAGE_KEY = 'akademiata_offer_favorites';
+const SCOPES = ['bachelor', 'master', 'offer'];
+
 let favoritesFilterActive = false;
+let lastFavoriteTouchAt = 0;
 
 function getOfferRoot() {
     return document.querySelector('.offer_wrapper--offer-page');
@@ -9,19 +13,106 @@ function getFilterResults() {
     return document.querySelector('#filter-results');
 }
 
-function getFavorites() {
+function getFavoritesScope() {
+    const scope = window.akademiataOffer?.favoritesScope;
+    return SCOPES.includes(scope) ? scope : 'offer';
+}
+
+function emptyStorageData() {
+    return {
+        bachelor: [],
+        master: [],
+        offer: [],
+    };
+}
+
+function readStorageData() {
     try {
         const raw = window.localStorage.getItem(STORAGE_KEY);
-        const parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed.map(String) : [];
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                return {
+                    ...emptyStorageData(),
+                    ...parsed,
+                    _legacy: Array.isArray(parsed._legacy) ? parsed._legacy.map(String) : [],
+                };
+            }
+        }
     } catch (error) {
-        return [];
+        // ignore
+    }
+
+    const data = emptyStorageData();
+
+    try {
+        const legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+        const legacy = legacyRaw ? JSON.parse(legacyRaw) : [];
+        if (Array.isArray(legacy) && legacy.length) {
+            data._legacy = legacy.map(String);
+        }
+    } catch (error) {
+        // ignore
+    }
+
+    writeStorageData(data);
+    return data;
+}
+
+function writeStorageData(data) {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    if (data._legacy && data._legacy.length === 0) {
+        window.localStorage.removeItem(LEGACY_STORAGE_KEY);
     }
 }
 
+function getVisiblePostIds() {
+    const filterResults = getFilterResults();
+    if (!filterResults) {
+        return new Set();
+    }
+
+    const ids = new Set();
+    filterResults.querySelectorAll('.card_post_item').forEach((card) => {
+        const postId = card.dataset.postId || card.querySelector('.offer-favorite-btn')?.dataset.postId;
+        if (postId) {
+            ids.add(String(postId));
+        }
+    });
+
+    return ids;
+}
+
+function migrateLegacyForScope(data, scope) {
+    if (!data._legacy?.length) {
+        return data;
+    }
+
+    const visible = getVisiblePostIds();
+    const toMove = data._legacy.filter((id) => visible.has(id));
+
+    if (!toMove.length) {
+        return data;
+    }
+
+    data[scope] = [...new Set([...(data[scope] || []), ...toMove])];
+    data._legacy = data._legacy.filter((id) => !visible.has(id));
+    writeStorageData(data);
+
+    return data;
+}
+
+function getFavorites() {
+    const scope = getFavoritesScope();
+    const data = migrateLegacyForScope(readStorageData(), scope);
+    return Array.isArray(data[scope]) ? data[scope].map(String) : [];
+}
+
 function setFavorites(ids) {
-    const unique = [...new Set(ids.map(String))];
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(unique));
+    const scope = getFavoritesScope();
+    const data = readStorageData();
+    data[scope] = [...new Set(ids.map(String))];
+    writeStorageData(data);
     updateFavoritesChipCounts();
 }
 
@@ -36,6 +127,12 @@ export function isFavoritesFilterActive() {
 export function deactivateFavoritesFilter() {
     favoritesFilterActive = false;
     syncFavoritesFilterUI();
+
+    const noResults = document.getElementById('no-results-message');
+    if (noResults) {
+        noResults.style.display = 'none';
+    }
+
     applyOfferCardFilters();
 }
 
@@ -57,7 +154,7 @@ function toggleFavorite(postId) {
         : [...favorites, id];
 
     setFavorites(next);
-    updateHeartButton(document.querySelector(`.offer-favorite-btn[data-post-id="${id}"]`));
+    document.querySelectorAll(`.offer-favorite-btn[data-post-id="${id}"]`).forEach(updateHeartButton);
     applyOfferCardFilters();
 }
 
@@ -85,6 +182,7 @@ function updateHeartButton(button) {
 }
 
 function updateAllHeartButtons() {
+    migrateLegacyForScope(readStorageData(), getFavoritesScope());
     document.querySelectorAll('.offer-favorite-btn').forEach(updateHeartButton);
 }
 
@@ -98,6 +196,11 @@ function updateFavoritesChipCounts() {
 
     document.querySelectorAll('.offer-favorites-filter__count').forEach((element) => {
         element.textContent = suffix;
+    });
+
+    document.querySelectorAll('.offer-favorites-chip').forEach((chip) => {
+        chip.hidden = count === 0;
+        chip.disabled = count === 0;
     });
 
     const desktopFilter = document.getElementById('offer-favorites-filter-desktop');
@@ -120,6 +223,7 @@ export function applyOfferCardFilters() {
     const searchInput = document.querySelector('.offer-mobile-search__input');
     const query = searchInput?.value.trim().toLowerCase() || '';
     const favorites = new Set(getFavorites());
+    let visibleFavoriteCount = 0;
 
     filterResults.querySelectorAll('.card_post_item').forEach((card) => {
         const postId = card.dataset.postId || card.querySelector('.offer-favorite-btn')?.dataset.postId;
@@ -129,27 +233,110 @@ export function applyOfferCardFilters() {
 
         card.classList.toggle('is-search-hidden', searchHidden);
         card.classList.toggle('is-favorites-hidden', favoritesHidden);
+
+        if (!searchHidden && !favoritesHidden) {
+            visibleFavoriteCount += 1;
+        }
     });
+
+    const noResults = document.getElementById('no-results-message');
+    if (noResults && favoritesFilterActive) {
+        const showEmpty = visibleFavoriteCount === 0;
+        noResults.style.display = showEmpty ? 'block' : 'none';
+    }
 }
 
 function toggleFavoritesFilter() {
+    if (getFavorites().length === 0) {
+        return;
+    }
+
     favoritesFilterActive = !favoritesFilterActive;
     syncFavoritesFilterUI();
+    updateAllHeartButtons();
     applyOfferCardFilters();
 }
 
+function bindFavoriteHeartEvents() {
+    const root = getOfferRoot();
+    if (!root) {
+        return;
+    }
+
+    root.addEventListener('touchend', (event) => {
+        const button = event.target.closest('.offer-favorite-btn');
+        if (!button || !root.contains(button)) {
+            return;
+        }
+
+        lastFavoriteTouchAt = Date.now();
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(button.dataset.postId);
+    }, { passive: false });
+
+    root.addEventListener('click', (event) => {
+        const button = event.target.closest('.offer-favorite-btn');
+        if (!button || !root.contains(button)) {
+            return;
+        }
+
+        if (Date.now() - lastFavoriteTouchAt < 400) {
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+        toggleFavorite(button.dataset.postId);
+    });
+}
+
 function bindFavoritesChips() {
+    let lastChipTouchAt = 0;
+
+    function handleChipTap(event) {
+        if (getFavorites().length === 0) {
+            return;
+        }
+
+        event.preventDefault();
+        toggleFavoritesFilter();
+    }
+
     document.querySelectorAll('.offer-favorites-chip').forEach((chip) => {
-        chip.addEventListener('click', (event) => {
+        chip.addEventListener('touchend', (event) => {
+            if (chip.hidden || chip.disabled) {
+                return;
+            }
+
+            lastChipTouchAt = Date.now();
             event.preventDefault();
-            toggleFavoritesFilter();
+            handleChipTap(event);
+        }, { passive: false });
+
+        chip.addEventListener('click', (event) => {
+            if (chip.hidden || chip.disabled) {
+                return;
+            }
+
+            if (Date.now() - lastChipTouchAt < 400) {
+                return;
+            }
+
+            handleChipTap(event);
         });
     });
 
     document.querySelectorAll('.offer-favorites-filter__toggle').forEach((input) => {
         input.addEventListener('change', () => {
+            if (input.checked && getFavorites().length === 0) {
+                input.checked = false;
+                return;
+            }
+
             favoritesFilterActive = input.checked;
             syncFavoritesFilterUI();
+            updateAllHeartButtons();
             applyOfferCardFilters();
         });
     });
@@ -160,26 +347,18 @@ export function initOfferFavorites() {
         return;
     }
 
-    document.addEventListener('click', (event) => {
-        const button = event.target.closest('.offer-favorite-btn');
-        if (!button || !getOfferRoot().contains(button)) {
-            return;
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-        toggleFavorite(button.dataset.postId);
-    });
+    bindFavoriteHeartEvents();
+    bindFavoritesChips();
 
     document.querySelector('.offer-mobile-search__input')
         ?.addEventListener('input', applyOfferCardFilters);
 
     document.addEventListener('akademiata:filter-results-updated', () => {
         updateAllHeartButtons();
+        updateFavoritesChipCounts();
         applyOfferCardFilters();
     });
 
-    bindFavoritesChips();
     updateAllHeartButtons();
     updateFavoritesChipCounts();
     applyOfferCardFilters();

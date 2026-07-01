@@ -660,6 +660,7 @@ $om-filter-card-pad: 16px;
         }
 
         .card_post_wrapper {
+          display: flex;
           flex-direction: row;
           align-items: stretch;
           padding: $om-card-pad !important;
@@ -1165,9 +1166,16 @@ $om-filter-card-pad: 16px;
       border-radius: 50%;
       background: vars.$white;
       color: vars.$black;
-      font-size: 1.8rem;
-      line-height: 1;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &__close-icon {
+      display: block;
+      width: 14px;
+      height: 14px;
+      pointer-events: none;
     }
 
     &__list {

@@ -7,6 +7,7 @@ import * as CustomFunctions from './__customFunctions';
 import {initCityTabs, initContactTabs, initLanguageFilters, initLanguageTabs} from "./__customFunctions";
 import initPgMbaThemeFilter from './pg-mba-theme-filter';
 import { initOfferMobileToolbar } from './offer-mobile-toolbar';
+import { initOfferViewToggle } from './offer-view-toggle';
 import { initOfferFavorites, deactivateFavoritesFilter, isFavoritesFilterActive, applyOfferCardFilters } from './offer-favorites';
 
 
@@ -75,6 +76,7 @@ class General {
         CustomFunctions.filterAccordion('.filter_accordion_header');
         CustomFunctions.initMobileFilterToggle();
         initOfferMobileToolbar();
+        initOfferViewToggle();
         initOfferFavorites();
 
         // Initialize for all instances of .image_content_slider
