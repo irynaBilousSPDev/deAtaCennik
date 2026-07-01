@@ -150,7 +150,10 @@ export function filterAccordion(accordionHeaderSelector) {
 
 export function initMobileFilterToggle() {
     const sidebar = document.querySelector('#sidebar');
-    const filterButtons = document.querySelectorAll('.taxonomy-filter-toggle');
+    const isOfferPage = document.body.classList.contains('page-template-page-offer');
+    const filterButtons = isOfferPage
+        ? document.querySelectorAll('.offer-mobile-chip--more')
+        : document.querySelectorAll('.taxonomy-filter-toggle');
     const closeButton = document.querySelector('.go-back');
     const resultsButton = document.querySelector('.filter_results');
     const overlay = document.querySelector('.filter-overlay');
@@ -163,6 +166,9 @@ export function initMobileFilterToggle() {
     if (!sidebar || filterButtons.length === 0) return;
 
     const openSidebar = (taxonomy) => {
+        document.getElementById('offer-mobile-dropdown')?.classList.remove('is-open');
+        document.body.classList.remove('offer-dropdown-open');
+
         sidebar.classList.add('open');
         overlay?.classList.add('active');
         document.body.classList.add('filter-open');

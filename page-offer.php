@@ -3,7 +3,7 @@
 get_header();
 ?>
 
-<div class="offer_wrapper">
+<div class="offer_wrapper offer_wrapper--offer-page">
     <div class="offer_content">
         <!-- Breadcrumbs -->
         <?php the_breadcrumb(); ?>
@@ -18,6 +18,7 @@ get_header();
         </div>
 
         <?php get_template_part('partials/offer-mobile-toolbar'); ?>
+        <?php get_template_part('partials/offer-mobile-dropdown'); ?>
 
         <?php get_template_part('partials/tags_container'); ?>
 
@@ -40,11 +41,11 @@ get_header();
             </button>
             <h2 class="mobile-filter-header__title"><?php esc_html_e('Filtruj ofertę', 'akademiata'); ?></h2>
             <button type="button" class="clear-filters"><?php esc_html_e('Wyczyść filtry', 'akademiata'); ?></button>
-            <div class="filter_results_wrapper">
-                <button class="filter_results" type="button">
-                    <?php esc_html_e('Pokaż wyniki', 'akademiata'); ?>
-                </button>
-            </div>
+        </div>
+        <div class="filter_results_wrapper">
+            <button class="filter_results" type="button">
+                <?php esc_html_e('Pokaż wyniki', 'akademiata'); ?>
+            </button>
         </div>
 
         <!-- Tags Container -->

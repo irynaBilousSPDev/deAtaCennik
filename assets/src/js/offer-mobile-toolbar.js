@@ -9,6 +9,19 @@ function getFilterResults() {
     return document.querySelector('#filter-results');
 }
 
+function getFilterForm() {
+    return document.querySelector('#ajax-filter-form');
+}
+
+function triggerFilterChange(input) {
+    if (window.jQuery) {
+        window.jQuery(input).trigger('change');
+        return;
+    }
+
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+
 function applyOfferSearchQuery() {
     const input = document.querySelector('.offer-mobile-search__input');
     const filterResults = getFilterResults();
@@ -25,17 +38,94 @@ function applyOfferSearchQuery() {
     });
 }
 
-function setActiveChip(tax) {
-    document.querySelectorAll('.offer-mobile-chip').forEach((chip) => {
-        chip.classList.toggle('is-active', chip.dataset.tax === tax);
+function syncChipStates() {
+    const form = getFilterForm();
+    const allChip = document.querySelector('.offer-mobile-chip[data-tax="all"]');
+
+    if (!form || !allChip) {
+        return;
+    }
+
+    let hasAnyFilter = false;
+
+    document.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
+        const tax = chip.dataset.tax;
+        const checkedCount = form.querySelectorAll(`input[name="${tax}[]"]:checked`).length;
+        const hasFilter = checkedCount > 0;
+
+        chip.classList.toggle('has-filter', hasFilter);
+        if (hasFilter) {
+            hasAnyFilter = true;
+        }
     });
+
+    allChip.classList.toggle('is-active', !hasAnyFilter);
 }
 
-function syncChipWithFilters() {
-    const tags = document.querySelectorAll('.selected_tags_container .filter-tag');
-    if (tags.length === 0) {
-        setActiveChip('all');
+function getDropdownElements() {
+    return {
+        root: document.getElementById('offer-mobile-dropdown'),
+        title: document.querySelector('.offer-mobile-dropdown__title'),
+        list: document.querySelector('.offer-mobile-dropdown__list'),
+        backdrop: document.querySelector('.offer-mobile-dropdown__backdrop'),
+        close: document.querySelector('.offer-mobile-dropdown__close'),
+    };
+}
+
+function closeOfferDropdown() {
+    const { root } = getDropdownElements();
+
+    if (!root) {
+        return;
     }
+
+    root.classList.remove('is-open');
+    root.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('offer-dropdown-open');
+}
+
+function openOfferDropdown(taxonomy, label) {
+    const form = getFilterForm();
+    const { root, title, list } = getDropdownElements();
+
+    if (!form || !root || !title || !list || !isOfferMobileToolbarActive()) {
+        return;
+    }
+
+    title.textContent = label;
+    list.innerHTML = '';
+
+    const inputs = form.querySelectorAll(`input[name="${taxonomy}[]"]`);
+
+    if (!inputs.length) {
+        return;
+    }
+
+    inputs.forEach((input) => {
+        const sourceLabel = input.closest('label');
+        const option = document.createElement('button');
+
+        option.type = 'button';
+        option.className = 'offer-mobile-dropdown__option';
+        option.dataset.value = input.value;
+        option.textContent = sourceLabel?.textContent.trim() || input.value;
+        option.classList.toggle('is-selected', input.checked);
+        option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
+
+        option.addEventListener('click', () => {
+            input.checked = !input.checked;
+            option.classList.toggle('is-selected', input.checked);
+            option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
+            triggerFilterChange(input);
+            syncChipStates();
+        });
+
+        list.appendChild(option);
+    });
+
+    root.classList.add('is-open');
+    root.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('offer-dropdown-open');
 }
 
 export function initOfferMobileToolbar() {
@@ -47,49 +137,77 @@ export function initOfferMobileToolbar() {
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
     const clearBtn = document.getElementById('offer-mobile-clear-filters');
-    const filterForm = document.querySelector('#ajax-filter-form');
+    const filterForm = getFilterForm();
+    const { backdrop, close } = getDropdownElements();
 
     searchInput?.addEventListener('input', applyOfferSearchQuery);
 
     allChip?.addEventListener('click', () => {
-        setActiveChip('all');
+        closeOfferDropdown();
         document.getElementById('clear-filters')?.click();
+        syncChipStates();
     });
 
     clearBtn?.addEventListener('click', () => {
+        closeOfferDropdown();
+
         if (searchInput) {
             searchInput.value = '';
         }
+
         applyOfferSearchQuery();
-        setActiveChip('all');
         document.getElementById('clear-filters')?.click();
+        syncChipStates();
     });
 
-    toolbar.querySelectorAll('.offer-mobile-chip[data-tax]:not([data-tax="all"])').forEach((chip) => {
+    toolbar.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
         chip.addEventListener('click', () => {
             if (!isOfferMobileToolbarActive()) {
                 return;
             }
-            setActiveChip(chip.dataset.tax);
+
+            const { root } = getDropdownElements();
+            const isSameChipOpen = root?.classList.contains('is-open')
+                && root.dataset.activeTax === chip.dataset.tax;
+
+            if (isSameChipOpen) {
+                closeOfferDropdown();
+                return;
+            }
+
+            if (root) {
+                root.dataset.activeTax = chip.dataset.tax;
+            }
+
+            openOfferDropdown(chip.dataset.tax, chip.dataset.label || chip.textContent.trim());
         });
+    });
+
+    backdrop?.addEventListener('click', closeOfferDropdown);
+    close?.addEventListener('click', closeOfferDropdown);
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeOfferDropdown();
+        }
     });
 
     if (filterForm) {
         filterForm.addEventListener('change', () => {
-            window.setTimeout(syncChipWithFilters, 0);
+            window.setTimeout(syncChipStates, 0);
         });
     }
 
     document.addEventListener('click', (event) => {
         if (event.target.closest('.filter-tag')) {
-            window.setTimeout(syncChipWithFilters, 0);
+            window.setTimeout(syncChipStates, 0);
         }
     });
 
     document.addEventListener('akademiata:filter-results-updated', () => {
         applyOfferSearchQuery();
-        syncChipWithFilters();
+        syncChipStates();
     });
 
-    syncChipWithFilters();
+    syncChipStates();
 }
