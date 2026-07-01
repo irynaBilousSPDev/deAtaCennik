@@ -1438,6 +1438,38 @@ function akademiata_get_section_aktualnosci_title() {
 }
 
 /**
+ * Map WPML language codes to theme string keys (pl, en, uk, ru).
+ *
+ * @param string|null $lang WPML language code.
+ * @return string
+ */
+function akademiata_normalize_theme_lang_code($lang) {
+    $lang = strtolower((string) $lang);
+
+    if ($lang === '' || $lang === 'all') {
+        return 'pl';
+    }
+
+    if (strpos($lang, 'en') === 0) {
+        return 'en';
+    }
+
+    if (strpos($lang, 'uk') === 0 || $lang === 'ua' || strpos($lang, 'ua-') === 0) {
+        return 'uk';
+    }
+
+    if (strpos($lang, 'ru') === 0) {
+        return 'ru';
+    }
+
+    if (strpos($lang, 'pl') === 0) {
+        return 'pl';
+    }
+
+    return $lang;
+}
+
+/**
  * Theme UI strings by WPML language (when .mo / WPML String Translation is unavailable).
  *
  * @param string $key String identifier.
@@ -1973,7 +2005,7 @@ function akademiata_get_theme_lang_string($key) {
         );
     }
 
-    $lang = apply_filters('wpml_current_language', 'pl');
+    $lang = akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'));
 
     if (isset($strings[ $key ][ $lang ])) {
         return $strings[ $key ][ $lang ];

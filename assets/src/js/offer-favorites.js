@@ -35,10 +35,18 @@ export function isFavoritesFilterActive() {
 
 export function deactivateFavoritesFilter() {
     favoritesFilterActive = false;
-    document.querySelectorAll('.offer-favorites-chip').forEach((chip) => {
-        chip.classList.remove('is-active');
-    });
+    syncFavoritesFilterUI();
     applyOfferCardFilters();
+}
+
+function syncFavoritesFilterUI() {
+    document.querySelectorAll('.offer-favorites-chip').forEach((chip) => {
+        chip.classList.toggle('is-active', favoritesFilterActive);
+    });
+
+    document.querySelectorAll('.offer-favorites-filter__toggle').forEach((input) => {
+        input.checked = favoritesFilterActive;
+    });
 }
 
 function toggleFavorite(postId) {
@@ -87,6 +95,20 @@ function updateFavoritesChipCounts() {
     document.querySelectorAll('.offer-favorites-chip__count').forEach((element) => {
         element.textContent = suffix;
     });
+
+    document.querySelectorAll('.offer-favorites-filter__count').forEach((element) => {
+        element.textContent = suffix;
+    });
+
+    const desktopFilter = document.getElementById('offer-favorites-filter-desktop');
+    if (desktopFilter) {
+        desktopFilter.hidden = count === 0;
+        desktopFilter.classList.toggle('has-favorites', count > 0);
+
+        if (count === 0 && favoritesFilterActive) {
+            deactivateFavoritesFilter();
+        }
+    }
 }
 
 export function applyOfferCardFilters() {
@@ -112,11 +134,7 @@ export function applyOfferCardFilters() {
 
 function toggleFavoritesFilter() {
     favoritesFilterActive = !favoritesFilterActive;
-
-    document.querySelectorAll('.offer-favorites-chip').forEach((chip) => {
-        chip.classList.toggle('is-active', favoritesFilterActive);
-    });
-
+    syncFavoritesFilterUI();
     applyOfferCardFilters();
 }
 
@@ -125,6 +143,14 @@ function bindFavoritesChips() {
         chip.addEventListener('click', (event) => {
             event.preventDefault();
             toggleFavoritesFilter();
+        });
+    });
+
+    document.querySelectorAll('.offer-favorites-filter__toggle').forEach((input) => {
+        input.addEventListener('change', () => {
+            favoritesFilterActive = input.checked;
+            syncFavoritesFilterUI();
+            applyOfferCardFilters();
         });
     });
 }
