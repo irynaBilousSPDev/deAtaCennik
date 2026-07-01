@@ -9,7 +9,7 @@
   .offer-mobile-actions .offer-view-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     margin: 0;
     padding: 0;
     border: none;
@@ -21,24 +21,26 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    border: 1px solid #cfcfcf;
+    border: 1px solid #d0d0d0;
     border-radius: 8px;
     background: vars.$white;
-    color: #666;
+    color: #888;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease;
 
     &.is-active {
-      background: vars.$primary;
-      border-color: vars.$primary;
-      color: vars.$white;
+      background: vars.$white;
+      border: 2px solid vars.$primary;
+      color: vars.$primary;
     }
   }
 
   .offer-view-toggle__icon {
     display: block;
+    width: 18px;
+    height: 18px;
   }
 }

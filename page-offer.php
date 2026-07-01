@@ -35,15 +35,16 @@ get_header();
     <div id="sidebar" class="filter_col">
         <!-- Mobile Filter Header now inside sidebar -->
         <div class="mobile-filter-header">
-            <button class="go-back" type="button">
+            <button class="go-back" type="button" aria-label="<?php esc_attr_e('Wróć', 'akademiata'); ?>">
                 <span class="go-back__icon"></span>
-                <?php esc_html_e('Filtruj ofertę', 'akademiata'); ?>
             </button>
-            <div class="filter_results_wrapper">
-                <button class="filter_results">
-                    <?php _e('Pokaż wyniki', 'akademiata'); ?></button>
-            </div>
+            <h2 class="mobile-filter-header__title"><?php esc_html_e('Filtruj ofertę', 'akademiata'); ?></h2>
             <button type="button" class="clear-filters"><?php esc_html_e('Wyczyść filtry', 'akademiata'); ?></button>
+            <div class="filter_results_wrapper">
+                <button class="filter_results" type="button">
+                    <?php esc_html_e('Pokaż wyniki', 'akademiata'); ?>
+                </button>
+            </div>
         </div>
 
         <!-- Tags Container -->
