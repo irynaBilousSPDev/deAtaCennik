@@ -170,6 +170,11 @@
       overflow: visible;
       background: transparent;
       z-index: auto;
+
+      @include mixins.xxl-screen {
+        left: 130px;
+        width: 320px;
+      }
     }
 
     .filter_side {
@@ -181,6 +186,10 @@
       height: calc(100vh - 130px);
       padding: 4rem 2rem;
       overflow-y: scroll;
+
+      @include mixins.xxl-screen {
+        left: 130px;
+      }
     }
 
     // Results grid — gray container + legacy white cards (desktop only)

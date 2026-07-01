@@ -1128,6 +1128,29 @@ $om-filter-card-pad: 16px;
       .offer_page_header {
         padding-top: 20px;
         padding-bottom: 20px;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        align-items: start;
+        row-gap: 12px;
+
+        h1 {
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        .ranking-badge-tooltip--offer-header {
+          grid-column: 1;
+          grid-row: 2;
+          justify-self: end;
+          align-self: start;
+          max-width: min(340px, 100%) !important;
+          width: auto !important;
+
+          .ranking-badge-tooltip__image {
+            max-width: min(340px, 100%);
+            width: 100%;
+          }
+        }
       }
 
       .offer-mobile-toolbar {
