@@ -126,6 +126,13 @@ export function filterAccordion(accordionHeaderSelector) {
     window.closeAllAccordions = closeAllAccordions;
     window.openAccordionByTaxonomy = openAccordionByTaxonomy;
 
+    if (window.matchMedia('(min-width: 991px)').matches) {
+        $headers.addClass('active');
+        $headers.next('.accordion-content').show();
+    } else {
+        closeAllAccordions();
+    }
+
     // Toggle logic (independent toggling)
     $headers.on('click', function () {
         const $header = jQuery(this);
@@ -155,35 +162,42 @@ export function initMobileFilterToggle() {
 
     if (!sidebar || filterButtons.length === 0) return;
 
+    const openSidebar = (taxonomy) => {
+        sidebar.classList.add('open');
+        overlay?.classList.add('active');
+        document.body.classList.add('filter-open');
+        header?.classList.add('visible');
+
+        setTimeout(() => {
+            if (taxonomy === 'more') {
+                if (window.closeAllAccordions) window.closeAllAccordions();
+                return;
+            }
+
+            if (window.closeAllAccordions) window.closeAllAccordions();
+            if (window.openAccordionByTaxonomy) window.openAccordionByTaxonomy(taxonomy);
+
+            const target = document.querySelector(`.filter_accordion_header[data-tax="${taxonomy}"]`);
+            const scroller = document.querySelector('#scroller');
+
+            if (target && scroller) {
+                setTimeout(() => {
+                    const scrollerRect = scroller.getBoundingClientRect();
+                    const targetRect = target.getBoundingClientRect();
+                    const top = scroller.scrollTop + (targetRect.top - scrollerRect.top) - 12;
+
+                    scroller.scrollTo({
+                        top,
+                        behavior: 'smooth'
+                    });
+                }, 350);
+            }
+        }, 10);
+    };
+
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const taxonomy = button.dataset.tax;
-
-            sidebar.classList.add('open');
-            overlay?.classList.add('active');
-            document.body.classList.add('filter-open');
-            header?.classList.add('visible');
-
-            setTimeout(() => {
-                if (window.closeAllAccordions) window.closeAllAccordions();
-                if (window.openAccordionByTaxonomy) window.openAccordionByTaxonomy(taxonomy);
-
-                const target = document.querySelector(`.filter_accordion_header[data-tax="${taxonomy}"]`);
-                const scroller = document.querySelector('#scroller');
-
-                if (target && scroller) {
-                    setTimeout(() => {
-                        const scrollerRect = scroller.getBoundingClientRect();
-                        const targetRect = target.getBoundingClientRect();
-                        const top = scroller.scrollTop + (targetRect.top - scrollerRect.top) - 12;
-
-                        scroller.scrollTo({
-                            top,
-                            behavior: 'smooth'
-                        });
-                    }, 350);
-                }
-            }, 10);
+            openSidebar(button.dataset.tax);
         });
     });
 

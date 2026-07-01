@@ -42,7 +42,7 @@
                     <?php echo esc_html(ucwords(str_replace('_', ' ', $taxonomy_name))); ?>
                     <div class="arrow-open-close">
                 </h2>
-                <div class="accordion-content" style="display: block">
+                <div class="accordion-content">
                     <div class="labels_list">
                         <?php
                         $selected_terms = isset($_GET[$taxonomy]) ? (array)$_GET[$taxonomy] : [];

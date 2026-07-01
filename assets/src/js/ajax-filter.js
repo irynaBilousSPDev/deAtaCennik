@@ -72,6 +72,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
                         $('#no-results-message').hide();
                         offset = currentLimit;
                     }
+                    document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
                 } else {
                     noMorePosts = true;
                 }
@@ -150,6 +151,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
                         $('#no-results-message').hide();
                         offset += currentLimit;
                     }
+                    document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
                 } else {
                     noMorePosts = true;
                 }
