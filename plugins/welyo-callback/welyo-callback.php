@@ -1190,9 +1190,14 @@ function welyo_render_widget() {
     root.style.removeProperty("--wcb-side-left");
     root.style.setProperty("--wcb-bottom",base);
     if(!bar){return;}
-    var r=bar.getBoundingClientRect();
-    if(r.width<1||r.height<1){return;}
-    var onRight=r.left+r.width/2>window.innerWidth/2;
+    var bRect=bar.getBoundingClientRect();
+    if(bRect.width<1||bRect.height<1){return;}
+    function overlaps(){
+      var l=launcher.getBoundingClientRect(),b=bar.getBoundingClientRect(),pad=6;
+      return!(l.right+pad<b.left||l.left-pad>b.right||l.bottom+pad<b.top||l.top-pad>b.bottom);
+    }
+    if(!overlaps()){return;}
+    var onRight=bRect.left+bRect.width/2>window.innerWidth/2;
     if(bar.id==="pojo-a11y-toolbar"){
       if(bar.classList.contains("pojo-a11y-toolbar-right")){onRight=true;}
       if(bar.classList.contains("pojo-a11y-toolbar-left")){onRight=false;}
@@ -1202,10 +1207,14 @@ function welyo_render_widget() {
       root.style.setProperty("--wcb-side-left",margin+"px");
       root.style.removeProperty("--wcb-side-right");
     }else{
-      var lift=Math.ceil(window.innerHeight-r.top+gap);
+      var lift=Math.ceil(window.innerHeight-bRect.top+gap);
       if(lift>margin){
         root.style.setProperty("--wcb-bottom","calc("+lift+"px + env(safe-area-inset-bottom,0px))");
       }
+    }
+    if(overlaps()){
+      var lift2=Math.ceil(window.innerHeight-bar.getBoundingClientRect().top+gap);
+      root.style.setProperty("--wcb-bottom","calc("+lift2+"px + env(safe-area-inset-bottom,0px))");
     }
   }
   wcbAdjustForOverlap();
