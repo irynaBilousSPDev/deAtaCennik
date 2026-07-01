@@ -1,3 +1,5 @@
+import { closeOfferFilterPanel, openOfferFilterPanel } from './__customFunctions';
+
 const TABLET_MAX_WIDTH = 990;
 
 function isOfferMobileToolbarActive() {
@@ -158,6 +160,15 @@ export function initOfferMobileToolbar() {
         applyOfferSearchQuery();
         document.getElementById('clear-filters')?.click();
         syncChipStates();
+    });
+
+    toolbar.querySelector('.offer-mobile-chip--more')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (!isOfferMobileToolbarActive()) {
+            return;
+        }
+        closeOfferDropdown();
+        openOfferFilterPanel();
     });
 
     toolbar.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {

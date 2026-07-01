@@ -7,7 +7,7 @@
 $om-pad-x: 16px;
 $om-border: #e0e0e0;
 $om-chip-border: #e0e0e0;
-$om-surface: #f5f5f5;
+$om-surface: #ffffff;
 $om-navy: #3a4a63;
 $om-link: #0f83ff;
 $om-search-h: 40px;
@@ -40,6 +40,10 @@ $om-z-sidebar: 10050;
   }
 
   .page-template-page-offer {
+    .offer_wrapper--offer-page {
+      overflow: visible;
+    }
+
     .offer_content > .breadcrumbs {
       display: none;
     }
@@ -371,14 +375,52 @@ $om-z-sidebar: 10050;
       }
     }
 
-    // —— Results + cards (mobile-only reset, no legacy _offer-page rules) ——
+    // —— Legacy reset (offer cards — no _offer-page mobile rules) ——
+    .offer_wrapper--offer-page {
+      .card_post_item {
+        width: auto;
+        margin-bottom: 0;
+        padding: 0;
+      }
+
+      .card_post_wrapper {
+        padding: 0;
+        min-height: 0;
+        box-shadow: none;
+      }
+
+      .card_post_image {
+        min-height: 0 !important;
+        border-bottom: none !important;
+
+        .image_bg {
+          height: auto !important;
+          min-height: 0 !important;
+        }
+      }
+
+      .card_post_body {
+        padding: 0;
+        height: auto !important;
+      }
+
+      .card_properties_wrapper {
+        margin: 0;
+      }
+
+      .card_property {
+        margin-bottom: 0;
+      }
+    }
+
+    // —— Results + cards ——
     .offer_wrapper--offer-page {
       #filter-results.row {
         display: flex;
         flex-wrap: wrap;
         margin: 0 (-$om-pad-x);
         padding: 8px 8px calc(100px + env(safe-area-inset-bottom, 0));
-        background: $om-surface;
+        background: vars.$white !important;
         gap: 0;
 
         .card_post_item.is-search-hidden {
@@ -396,7 +438,7 @@ $om-z-sidebar: 10050;
           padding: 0 !important;
           background: vars.$white;
           border-radius: $om-card-radius;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
           overflow: hidden;
           border: 1px solid $om-card-border;
         }
@@ -705,6 +747,8 @@ $om-z-sidebar: 10050;
       }
 
       #sidebar {
+        width: auto;
+        position: static;
         padding-top: 0 !important;
         z-index: $om-z-sidebar;
 
@@ -714,10 +758,28 @@ $om-z-sidebar: 10050;
 
         &.open {
           display: block !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100dvh;
           padding-top: 0 !important;
-          padding-bottom: 96px;
+          padding-bottom: 100px;
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
+          background: vars.$white;
+
+          .filter_side {
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            padding: 0 !important;
+          }
 
           .tags_container,
           #tags-container {

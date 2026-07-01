@@ -52,7 +52,7 @@
 }
 
 // ===== WRAPPERS =====
-.offer_wrapper,
+.offer_wrapper:not(.offer_wrapper--offer-page),
 .offer_wrapper--pg-mba {
   overflow: hidden;
 
@@ -585,42 +585,24 @@
 }
 
 @include mixins.max-ipad-pro-screen {
-  .taxonomy_group {
+  .offer_wrapper:not(.offer_wrapper--offer-page),
+  .offer_wrapper--pg-mba {
+    .taxonomy_group {
 
-    .filter_accordion_header {
-      border: 1px solid vars.$black;
-      margin-bottom: 0;
-      padding: 1.5rem 1rem;
-    }
+      .filter_accordion_header {
+        border: 1px solid vars.$black;
+        margin-bottom: 0;
+        padding: 1.5rem 1rem;
+      }
 
-    .labels_list {
-      padding: 1rem;
-    }
-  }
-
-
-  .page-template-page-offer, .page_offer {
-    background-color: #fff;
-  }
-  .page-template-page-offer #filter-results:not(.filter-results--grid):not(.filter-results--list) {
-    padding: 2rem 0;
-    background-color: #F5F5F5;
-  }
-
-  .tags_container {
-    margin-bottom: 0;
-
-    .filter_tags_wrapper {
-      h3,
-      .button_clear_filters {
-        display: none;
+      .labels_list {
+        padding: 1rem;
       }
     }
+  }
 
-    .filter-tag {
-      cursor: pointer;
-      padding: 2px 5px;
-    }
+  .page_offer:not(.page-template-page-offer) {
+    background-color: #fff;
   }
 }
 

@@ -198,6 +198,15 @@
       max-width: 100%;
       gap: 8px;
 
+      .page-template-page-offer .offer_page_header & {
+        width: auto;
+        max-width: none;
+        flex-wrap: nowrap;
+        align-items: center;
+        align-self: center;
+        gap: 8px;
+      }
+
       .ranking-badge-tooltip__image {
         max-width: 108px;
         max-height: 50px;

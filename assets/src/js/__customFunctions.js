@@ -148,9 +148,44 @@ export function filterAccordion(accordionHeaderSelector) {
     });
 }
 
+export function openOfferFilterPanel() {
+    const sidebar = document.querySelector('#sidebar');
+    const overlay = document.querySelector('.filter-overlay');
+    const header = document.querySelector('.mobile-filter-header');
+
+    document.getElementById('offer-mobile-dropdown')?.classList.remove('is-open');
+    document.body.classList.remove('offer-dropdown-open');
+
+    if (!sidebar) {
+        return;
+    }
+
+    sidebar.classList.add('open');
+    overlay?.classList.add('active');
+    document.body.classList.add('filter-open');
+    header?.classList.add('visible');
+
+    window.setTimeout(() => {
+        if (window.closeAllAccordions) {
+            window.closeAllAccordions();
+        }
+    }, 10);
+}
+
+export function closeOfferFilterPanel() {
+    const sidebar = document.querySelector('#sidebar');
+    const overlay = document.querySelector('.filter-overlay');
+    const header = document.querySelector('.mobile-filter-header');
+
+    sidebar?.classList.remove('open');
+    overlay?.classList.remove('active');
+    document.body.classList.remove('filter-open');
+    header?.classList.remove('visible');
+}
+
 export function initMobileFilterToggle() {
     const sidebar = document.querySelector('#sidebar');
-    const isOfferPage = document.body.classList.contains('page-template-page-offer');
+    const isOfferPage = Boolean(document.querySelector('.offer_wrapper--offer-page'));
     const filterButtons = isOfferPage
         ? document.querySelectorAll('.offer-mobile-chip--more')
         : document.querySelectorAll('.taxonomy-filter-toggle');
@@ -163,9 +198,14 @@ export function initMobileFilterToggle() {
         || document.querySelector('#ajax-filter-form');
     const isPgMbaFilter = Boolean(document.querySelector('.offer_wrapper--pg-mba'));
 
-    if (!sidebar || filterButtons.length === 0) return;
+    if (!sidebar) return;
 
     const openSidebar = (taxonomy) => {
+        if (isOfferPage) {
+            openOfferFilterPanel();
+            return;
+        }
+
         document.getElementById('offer-mobile-dropdown')?.classList.remove('is-open');
         document.body.classList.remove('offer-dropdown-open');
 
@@ -201,6 +241,8 @@ export function initMobileFilterToggle() {
         }, 10);
     };
 
+    if (filterButtons.length === 0 && !isOfferPage) return;
+
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             openSidebar(button.dataset.tax);
@@ -208,6 +250,11 @@ export function initMobileFilterToggle() {
     });
 
     const closeSidebar = () => {
+        if (isOfferPage) {
+            closeOfferFilterPanel();
+            return;
+        }
+
         sidebar.classList.remove('open');
         overlay?.classList.remove('active');
         document.body.classList.remove('filter-open');
