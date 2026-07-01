@@ -1,4 +1,4 @@
-<div class="card_post_item" data-post-id="<?php echo esc_attr((string) $post->ID); ?>">
+<div class="card_post_item" data-post-id="<?php echo esc_attr((string) $post->ID); ?>" data-post-type="<?php echo esc_attr(get_post_type($post)); ?>">
 
     <div class="card_post_wrapper">
         <div class="card_post_image">
@@ -70,6 +70,7 @@
             <button type="button"
                     class="offer-favorite-btn"
                     data-post-id="<?php echo esc_attr((string) $post->ID); ?>"
+                    data-post-type="<?php echo esc_attr(get_post_type($post)); ?>"
                     aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_favorite_add')); ?>"
                     aria-pressed="false">
                 <svg class="offer-favorite-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">

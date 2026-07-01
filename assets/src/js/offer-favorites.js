@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'akademiata_offer_favorites_v2';
 const LEGACY_STORAGE_KEY = 'akademiata_offer_favorites';
 const SCOPES = ['bachelor', 'master', 'offer'];
+const DEGREE_SCOPES = ['bachelor', 'master'];
 
 let favoritesFilterActive = false;
 let lastFavoriteTouchAt = 0;
@@ -16,6 +17,10 @@ function getFilterResults() {
 function getFavoritesScope() {
     const scope = window.akademiataOffer?.favoritesScope;
     return SCOPES.includes(scope) ? scope : 'offer';
+}
+
+function isCombinedOfferScope() {
+    return getFavoritesScope() === 'offer';
 }
 
 function emptyStorageData() {
@@ -66,6 +71,32 @@ function writeStorageData(data) {
     }
 }
 
+function getPostTypeForId(postId) {
+    const id = String(postId);
+    const card = document.querySelector(`.card_post_item[data-post-id="${id}"]`);
+    const fromCard = card?.dataset.postType;
+    if (DEGREE_SCOPES.includes(fromCard)) {
+        return fromCard;
+    }
+
+    const button = document.querySelector(`.offer-favorite-btn[data-post-id="${id}"]`);
+    const fromButton = button?.dataset.postType;
+    if (DEGREE_SCOPES.includes(fromButton)) {
+        return fromButton;
+    }
+
+    return null;
+}
+
+function resolveStorageScopeForPost(postId) {
+    const pageScope = getFavoritesScope();
+    if (pageScope === 'bachelor' || pageScope === 'master') {
+        return pageScope;
+    }
+
+    return getPostTypeForId(postId);
+}
+
 function getVisiblePostIds() {
     const filterResults = getFilterResults();
     if (!filterResults) {
@@ -83,41 +114,77 @@ function getVisiblePostIds() {
     return ids;
 }
 
-function migrateLegacyForScope(data, scope) {
-    if (!data._legacy?.length) {
+function migrateIdsToDegreeBuckets(data, ids) {
+    ids.forEach((id) => {
+        const postType = getPostTypeForId(id);
+        if (!DEGREE_SCOPES.includes(postType)) {
+            return;
+        }
+
+        data[postType] = [...new Set([...(data[postType] || []), String(id)])];
+    });
+}
+
+function migratePendingFavorites(data, scope) {
+    if (!data._legacy?.length && !data.offer?.length) {
         return data;
     }
 
     const visible = getVisiblePostIds();
-    const toMove = data._legacy.filter((id) => visible.has(id));
+    const pending = [...new Set([...(data._legacy || []), ...(data.offer || [])].map(String))];
+    const toMigrate = pending.filter((id) => visible.has(id));
 
-    if (!toMove.length) {
+    if (!toMigrate.length) {
         return data;
     }
 
-    data[scope] = [...new Set([...(data[scope] || []), ...toMove])];
-    data._legacy = data._legacy.filter((id) => !visible.has(id));
+    if (scope === 'offer') {
+        migrateIdsToDegreeBuckets(data, toMigrate);
+    } else {
+        data[scope] = [...new Set([...(data[scope] || []), ...toMigrate])];
+    }
+
+    const migrated = new Set(toMigrate);
+    data._legacy = (data._legacy || []).filter((id) => !migrated.has(String(id)));
+    data.offer = (data.offer || []).filter((id) => !migrated.has(String(id)));
     writeStorageData(data);
 
     return data;
 }
 
+function getCombinedFavorites(data) {
+    return [...new Set([
+        ...(data.bachelor || []),
+        ...(data.master || []),
+        ...(data.offer || []),
+    ].map(String))];
+}
+
 function getFavorites() {
     const scope = getFavoritesScope();
-    const data = migrateLegacyForScope(readStorageData(), scope);
+    const data = migratePendingFavorites(readStorageData(), scope);
+
+    if (isCombinedOfferScope()) {
+        return getCombinedFavorites(data);
+    }
+
     return Array.isArray(data[scope]) ? data[scope].map(String) : [];
 }
 
-function setFavorites(ids) {
-    const scope = getFavoritesScope();
-    const data = readStorageData();
-    data[scope] = [...new Set(ids.map(String))];
-    writeStorageData(data);
-    updateFavoritesChipCounts();
-}
-
 function isFavorite(postId) {
-    return getFavorites().includes(String(postId));
+    const id = String(postId);
+    const data = readStorageData();
+
+    if (isCombinedOfferScope()) {
+        return getCombinedFavorites(data).includes(id);
+    }
+
+    const storageScope = resolveStorageScopeForPost(id);
+    if (!storageScope) {
+        return false;
+    }
+
+    return (data[storageScope] || []).map(String).includes(id);
 }
 
 export function isFavoritesFilterActive() {
@@ -148,12 +215,26 @@ function syncFavoritesFilterUI() {
 
 function toggleFavorite(postId) {
     const id = String(postId);
-    const favorites = getFavorites();
-    const next = favorites.includes(id)
-        ? favorites.filter((item) => item !== id)
-        : [...favorites, id];
+    const storageScope = resolveStorageScopeForPost(id);
 
-    setFavorites(next);
+    if (!DEGREE_SCOPES.includes(storageScope)) {
+        return;
+    }
+
+    const data = readStorageData();
+    const list = (data[storageScope] || []).map(String);
+    const next = list.includes(id)
+        ? list.filter((item) => item !== id)
+        : [...list, id];
+
+    data[storageScope] = next;
+
+    if (data.offer?.includes(id)) {
+        data.offer = data.offer.filter((item) => String(item) !== id);
+    }
+
+    writeStorageData(data);
+    updateFavoritesChipCounts();
     document.querySelectorAll(`.offer-favorite-btn[data-post-id="${id}"]`).forEach(updateHeartButton);
     applyOfferCardFilters();
 }
@@ -182,7 +263,7 @@ function updateHeartButton(button) {
 }
 
 function updateAllHeartButtons() {
-    migrateLegacyForScope(readStorageData(), getFavoritesScope());
+    migratePendingFavorites(readStorageData(), getFavoritesScope());
     document.querySelectorAll('.offer-favorite-btn').forEach(updateHeartButton);
 }
 
