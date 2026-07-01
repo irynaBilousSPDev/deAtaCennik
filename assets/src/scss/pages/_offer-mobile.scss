@@ -478,9 +478,9 @@ $om-filter-card-pad: 16px;
         display: flex;
         flex-wrap: wrap;
         margin: 0 (-$om-pad-x);
-        padding: 8px 8px calc(100px + env(safe-area-inset-bottom, 0));
+        padding: 8px $om-pad-x calc(100px + env(safe-area-inset-bottom, 0));
         background: vars.$white !important;
-        gap: 0;
+        gap: 1rem;
 
         .card_post_item.is-search-hidden {
           display: none !important;
@@ -687,9 +687,9 @@ $om-filter-card-pad: 16px;
       // Grid — 2 columns
       #filter-results.filter-results--grid {
         .card_post_item {
-          width: 50% !important;
-          max-width: 50% !important;
-          padding: 0 4px 8px !important;
+          width: calc(50% - 0.5rem) !important;
+          max-width: calc(50% - 0.5rem) !important;
+          padding: 0 !important;
         }
 
         .card_post_wrapper {
@@ -740,13 +740,13 @@ $om-filter-card-pad: 16px;
 
       // List — horizontal card
       #filter-results.filter-results--list {
-        padding-left: 8px;
-        padding-right: 8px;
+        padding-left: $om-pad-x;
+        padding-right: $om-pad-x;
 
         .card_post_item {
           width: 100% !important;
           max-width: 100% !important;
-          padding: 0 0 8px !important;
+          padding: 0 !important;
         }
 
         .card_post_wrapper {
@@ -1109,6 +1109,64 @@ $om-filter-card-pad: 16px;
         width: 10px;
         height: 10px;
         font-size: 6px;
+      }
+    }
+  }
+}
+
+// Tablet (768–990px) — more breathing room, single-row chips when width allows
+@include mixins.max-ipad-pro-screen {
+  @include mixins.ipad-air-screen {
+    .page-template-page-offer {
+      $om-pad-tablet: 24px;
+
+      .offer_content {
+        padding-left: $om-pad-tablet;
+        padding-right: $om-pad-tablet;
+      }
+
+      .offer_page_header {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .offer-mobile-toolbar {
+        padding-bottom: 16px;
+      }
+
+      .offer-mobile-chips {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: $om-chip-gap;
+        row-gap: $om-chip-gap;
+
+        &__row {
+          display: contents;
+        }
+      }
+
+      .offer_wrapper--offer-page {
+        #filter-results.row {
+          margin-left: -$om-pad-tablet;
+          margin-right: -$om-pad-tablet;
+          padding-left: $om-pad-tablet;
+          padding-right: $om-pad-tablet;
+          padding-top: 12px;
+          gap: 1.5rem;
+        }
+
+        #filter-results.filter-results--grid {
+          .card_post_item {
+            width: calc(50% - 0.75rem) !important;
+            max-width: calc(50% - 0.75rem) !important;
+          }
+        }
+
+        #filter-results.filter-results--list {
+          padding-left: $om-pad-tablet;
+          padding-right: $om-pad-tablet;
+        }
       }
     }
   }

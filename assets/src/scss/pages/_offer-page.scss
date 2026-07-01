@@ -182,6 +182,35 @@
       padding: 4rem 2rem;
       overflow-y: scroll;
     }
+
+    // Results grid — gray container + legacy white cards (desktop only)
+    #filter-results {
+      padding: 2rem 0;
+      background-color: vars.$background-gray;
+
+      .card_post_wrapper {
+        padding: 18px;
+        background-color: vars.$white;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 0;
+      }
+
+      .card_post_image {
+        min-height: 256px;
+        border-bottom: 2px solid vars.$primary;
+
+        .image_bg {
+          height: 256px;
+          min-height: 256px;
+        }
+      }
+
+      .card_post_body {
+        padding: 18px;
+        height: auto;
+      }
+    }
   }
 }
 
