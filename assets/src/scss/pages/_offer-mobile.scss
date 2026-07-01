@@ -27,6 +27,13 @@ $om-filter-card-gap: 12px;
 $om-filter-card-radius: 8px;
 $om-filter-card-pad: 16px;
 
+// Offer page tablet only (768–990px) — not phone, not desktop
+@mixin offer-tablet-screen {
+  @media (min-width: 768px) and (max-width: 990px) {
+    @content;
+  }
+}
+
 .offer-mobile-toolbar,
 .offer-mobile-dropdown {
   @include mixins.ipad-pro-screen {
@@ -686,25 +693,28 @@ $om-filter-card-pad: 16px;
           }
         }
 
-        @include mixins.ipad-air-screen {
-          .card_post_image {
-            flex: 0 0 33.333%;
-            width: 33.333%;
-            max-width: 33.333%;
-
-            .image_bg {
-              min-height: 100% !important;
-            }
-          }
-        }
-
         .buttons_wrapper {
           margin-top: 8px;
         }
       }
 
-      // Tablet — card property typography matches desktop (_offer-page.scss)
-      @include mixins.ipad-air-screen {
+      // Tablet only (768–990px) — larger card title, properties, list image
+      @include offer-tablet-screen {
+        #filter-results.filter-results--list .card_post_image {
+          flex: 0 0 33.333%;
+          width: 33.333%;
+          max-width: 33.333%;
+
+          .image_bg {
+            min-height: 100% !important;
+          }
+        }
+
+        #filter-results .card_post_body h2 {
+          font-size: min(vars.$font-size-m, vars.$font-size-xl) !important;
+          line-height: 1.2 !important;
+        }
+
         #filter-results .card_properties_wrapper {
           margin: 1rem 0 !important;
 
@@ -730,6 +740,65 @@ $om-filter-card-pad: 16px;
               line-height: 19px !important;
               font-weight: vars.$weight-bold;
             }
+          }
+        }
+      }
+
+      // Phone only (≤767px) — keep compact card typography and list image
+      @include mixins.max-ipad-air-screen {
+        #filter-results.filter-results--grid .card_post_body h2 {
+          font-size: 1.2rem !important;
+          line-height: 1.15 !important;
+        }
+
+        #filter-results.filter-results--list {
+          .card_post_body h2 {
+            font-size: 1.6rem !important;
+            line-height: 1.1 !important;
+          }
+
+          .card_post_image {
+            flex: 0 0 120px !important;
+            width: 120px !important;
+            max-width: 120px !important;
+
+            .image_bg {
+              min-height: 120px !important;
+            }
+          }
+
+          .card_properties_wrapper .card_property {
+            margin-bottom: 4px !important;
+
+            .sub_title,
+            h3 {
+              font-size: 1.05rem !important;
+              line-height: 1.2 !important;
+            }
+          }
+        }
+
+        #filter-results .card_properties_wrapper {
+          margin: 0 !important;
+
+          .card_property {
+            margin-bottom: 6px !important;
+
+            .sub_title,
+            h3 {
+              font-size: 1.1rem !important;
+              line-height: 1.25 !important;
+            }
+          }
+        }
+
+        #filter-results.filter-results--grid .card_properties_wrapper .card_property {
+          margin-bottom: 4px !important;
+
+          .sub_title,
+          h3 {
+            font-size: 1rem !important;
+            line-height: 1.2 !important;
           }
         }
       }
