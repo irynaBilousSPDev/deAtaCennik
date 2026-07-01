@@ -272,68 +272,6 @@
           margin-top: 0.25rem;
         }
       }
-
-      // Offer listing header — after generic rules so cascade wins
-      .page-template-page-offer .offer_page_header & {
-        width: auto;
-        max-width: min(52%, 210px);
-        flex-wrap: nowrap;
-        align-items: center;
-        align-self: center;
-        gap: 6px;
-
-        .ranking-badge-tooltip__image {
-          max-width: 112px;
-          max-height: 54px;
-        }
-
-        .ranking-badge-tooltip__fallback {
-          flex: 0 0 auto;
-          max-width: 72px;
-
-          span {
-            display: none;
-          }
-        }
-
-        .ranking-badge-tooltip__trigger {
-          flex: 0 0 auto;
-          margin-top: 0;
-          margin-left: 0;
-          font-size: 1.15rem;
-          gap: 4px;
-          white-space: normal;
-        }
-
-        .ranking-badge-tooltip__hint {
-          max-width: 6.8rem;
-          overflow: visible;
-          text-overflow: unset;
-        }
-
-        .ranking-badge-tooltip__popup {
-          left: auto;
-          right: 0;
-          transform: translateY(-8px);
-
-          &::before {
-            left: auto;
-            right: 28px;
-            transform: none;
-          }
-
-          &::after {
-            left: auto;
-            right: 27px;
-            transform: none;
-          }
-        }
-
-        &:hover .ranking-badge-tooltip__popup,
-        &:focus-visible .ranking-badge-tooltip__popup {
-          transform: translateY(0);
-        }
-      }
     }
 
     @include mixins.max-sm-screen {
@@ -369,26 +307,6 @@
         max-width: calc(100vw - 20px);
         padding: 0.6rem 0.7rem;
         font-size: 11px;
-      }
-
-      .page-template-page-offer .offer_page_header & {
-        gap: 6px;
-        max-width: min(55%, 200px);
-
-        .ranking-badge-tooltip__image {
-          max-width: 100px;
-          max-height: 48px;
-        }
-
-        .ranking-badge-tooltip__trigger {
-          font-size: 1.1rem;
-        }
-
-        .ranking-badge-tooltip__hint {
-          max-width: 6.4rem;
-          overflow: visible;
-          text-overflow: unset;
-        }
       }
     }
   }

@@ -54,18 +54,14 @@ $om-z-sidebar: 10050;
       max-width: 100%;
     }
 
-    // —— Header: title | [badge][i Szczegóły rankingu] — grid prevents overlap ——
+    // —— Header: title (max 2 lines) | [badge][i Szczegóły rankingu] — mobile only ——
     .offer_page_header {
-      container-type: inline-size;
-      container-name: offer-header;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      column-gap: 10px;
-      row-gap: 8px;
-      padding: 0 0 14px;
+      column-gap: 12px;
+      padding: 16px 0 16px;
       margin-bottom: 0 !important;
-      padding-top: 0 !important;
       overflow: visible;
 
       h1 {
@@ -75,11 +71,14 @@ $om-z-sidebar: 10050;
         margin: 0;
         padding: 0;
         font-family: "Nunito Sans", "Lato", sans-serif;
-        font-size: clamp(2.6rem, 7.5vw, 3.6rem);
+        font-size: 3.6rem;
         font-weight: vars.$weight-bold;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        overflow-wrap: break-word;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
       }
 
       .ranking-badge-tooltip--offer-header {
@@ -91,20 +90,19 @@ $om-z-sidebar: 10050;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
+        align-self: center !important;
         justify-content: flex-end;
         width: auto !important;
-        max-width: min(52%, 210px) !important;
-        min-width: 0;
-        gap: 6px;
+        max-width: none !important;
+        gap: 8px;
         margin: 0 !important;
         cursor: pointer;
-        z-index: 1;
 
         .ranking-badge-tooltip__image {
           flex: 0 0 auto;
           display: block;
-          max-width: 112px;
-          max-height: 54px;
+          max-width: 136px;
+          max-height: 66px;
           width: auto;
           height: auto;
           object-fit: contain;
@@ -114,11 +112,11 @@ $om-z-sidebar: 10050;
           flex: 0 0 auto !important;
           align-items: flex-end;
           text-align: right;
-          max-width: 72px !important;
+          max-width: 80px !important;
           min-width: 0;
 
           strong {
-            font-size: 1rem;
+            font-size: 1.05rem;
             line-height: 1.1;
           }
 
@@ -144,7 +142,7 @@ $om-z-sidebar: 10050;
 
         .ranking-badge-tooltip__hint {
           display: inline-block;
-          max-width: 6.8rem !important;
+          max-width: 7.2rem !important;
           overflow: visible !important;
           text-overflow: unset !important;
           line-height: 1.2;
@@ -172,22 +170,6 @@ $om-z-sidebar: 10050;
         &:hover .ranking-badge-tooltip__popup,
         &:focus-visible .ranking-badge-tooltip__popup {
           transform: translateY(0);
-        }
-      }
-
-      @container offer-header (max-width: 300px) {
-        grid-template-columns: 1fr;
-
-        h1 {
-          grid-column: 1;
-          grid-row: 1;
-        }
-
-        .ranking-badge-tooltip--offer-header {
-          grid-column: 1;
-          grid-row: 2;
-          justify-self: end;
-          max-width: 100% !important;
         }
       }
     }
@@ -1018,8 +1000,8 @@ $om-z-sidebar: 10050;
       gap: 6px;
 
       .ranking-badge-tooltip__image {
-        max-width: 100px;
-        max-height: 48px;
+        max-width: 120px;
+        max-height: 58px;
       }
 
       .ranking-badge-tooltip__trigger {
@@ -1027,7 +1009,7 @@ $om-z-sidebar: 10050;
       }
 
       .ranking-badge-tooltip__hint {
-        max-width: 6.4rem !important;
+        max-width: 6.8rem !important;
         overflow: visible !important;
         text-overflow: unset !important;
       }

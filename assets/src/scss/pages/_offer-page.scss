@@ -45,6 +45,87 @@
   }
 }
 
+// Desktop offer page — lock header/badge; mobile overrides live in _offer-mobile.scss only
+@include mixins.ipad-pro-screen {
+  .offer_wrapper--offer-page .offer_page_header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    padding-top: 24px;
+    margin-bottom: 2rem;
+
+    h1 {
+      flex: 1 1 220px;
+      display: block;
+      overflow: visible;
+      margin: 0;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: normal;
+    }
+
+    .ranking-badge-tooltip--offer-header {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      align-self: center;
+      width: auto;
+      max-width: none;
+      gap: 6px;
+      margin-top: 0.15rem;
+
+      .ranking-badge-tooltip__image {
+        max-width: 375px;
+        max-height: 96px;
+      }
+
+      .ranking-badge-tooltip__fallback {
+        max-width: 300px;
+
+        span {
+          display: block;
+        }
+      }
+
+      .ranking-badge-tooltip__trigger {
+        margin-top: 2px;
+        margin-left: 0;
+        font-size: 13px;
+        color: #5a5a5a;
+        white-space: normal;
+      }
+
+      .ranking-badge-tooltip__hint {
+        max-width: none;
+        overflow: visible;
+        text-overflow: unset;
+        color: inherit;
+      }
+
+      .ranking-badge-tooltip__icon {
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        margin-top: 0;
+      }
+
+      .ranking-badge-tooltip__popup {
+        left: auto;
+        right: 0;
+        transform: translateY(-8px);
+      }
+
+      &:hover .ranking-badge-tooltip__popup,
+      &:focus-visible .ranking-badge-tooltip__popup {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
 .site-content {
   @include mixins.max-ipad-pro-screen {
     margin-top: 80px;
