@@ -1010,7 +1010,7 @@ function welyo_render_widget() {
   </div>
   <button class="wcb-launcher" id="wcbLauncher" aria-haspopup="dialog" aria-expanded="false">
     <span class="wcb-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
-    <span id="wcbLaunchLabel"><?php echo esc_html( $texts['text_launch_open'] ); ?></span>
+    <span class="wcb-launch-label" id="wcbLaunchLabel"><?php echo esc_html( $texts['text_launch_open'] ); ?></span>
   </button>
 </div>
 
@@ -1059,6 +1059,14 @@ function welyo_render_widget() {
 .wcb-done p{margin:0;font-size:13.5px;line-height:1.55;color:var(--soft)}
 .wcb-foot{text-align:center;padding:11px;font-size:11px;color:var(--foot-text);border-top:1px solid var(--line)}
 .wcb-hidden{display:none !important}
+@media (max-width:767px){
+  .wcb-root{right:14px;bottom:14px}
+  .wcb-launcher{gap:0;padding:0;width:56px;height:56px;justify-content:center;border-radius:50%}
+  .wcb-launch-label{display:none}
+  .wcb-ic{width:56px;height:56px}
+  .wcb-ic svg{width:22px;height:22px}
+  .wcb-root[data-mode="call"] .wcb-ic::after{width:56px;height:56px}
+}
 @media (prefers-reduced-motion:reduce){.wcb-launcher,.wcb-panel,.wcb-callbtn,.wcb-submit{transition:none}.wcb-root[data-mode="call"] .wcb-ic::after{animation:none}}
 </style>
 
@@ -1085,12 +1093,14 @@ function welyo_render_widget() {
     done.classList.add("wcb-hidden");
     if(call){
       document.getElementById("wcbLaunchLabel").textContent=T.launchOpen||"";
+      launcher.setAttribute("aria-label",T.launchOpen||"");
       document.getElementById("wcbStatus").textContent=T.statusOpen||"";
       document.getElementById("wcbTitle").textContent=T.titleOpen||"";
       document.getElementById("wcbSub").textContent=T.subOpen||"";
       modeCall.classList.remove("wcb-hidden");modeCb.classList.add("wcb-hidden");
     }else{
       document.getElementById("wcbLaunchLabel").textContent=T.launchClosed||"";
+      launcher.setAttribute("aria-label",T.launchClosed||"");
       document.getElementById("wcbStatus").textContent=T.statusClosed||"";
       document.getElementById("wcbTitle").textContent=T.titleClosed||"";
       document.getElementById("wcbSub").textContent=T.subClosed||"";
