@@ -47,7 +47,7 @@ function welyo_admin_register_settings() {
 function welyo_admin_save_settings( $input ) {
 	$settings = welyo_sanitize_settings( is_array( $input ) ? $input : array() );
 
-	if ( ! empty( $_POST['welyo_write_config_file'] ) ) {
+	if ( ! empty( $_POST['welyo_write_config_file'] ) || ! empty( $input['welyo_write_config_file'] ) ) {
 		$written = welyo_write_config_file( $settings );
 		if ( $written ) {
 			add_settings_error( 'welyo_callback', 'welyo_config_written', __( 'Zapisano ustawienia i wygenerowano wp-content/welyo-config.php.', 'akademiata' ), 'success' );
@@ -315,7 +315,14 @@ function welyo_admin_render_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'welyo_callback' ); ?>
 
-			<h2 class="title"><?php esc_html_e( 'API Welyo', 'akademiata' ); ?></h2>
+			<nav class="nav-tab-wrapper welyo-main-tabs" aria-label="<?php esc_attr_e( 'Sekcje ustawień', 'akademiata' ); ?>">
+				<a href="#welyo-main-api" class="nav-tab nav-tab-active" data-welyo-main="api"><?php esc_html_e( 'API Welyo', 'akademiata' ); ?></a>
+				<a href="#welyo-main-languages" class="nav-tab" data-welyo-main="languages"><?php esc_html_e( 'Języki', 'akademiata' ); ?></a>
+				<a href="#welyo-main-colors" class="nav-tab" data-welyo-main="colors"><?php esc_html_e( 'Kolory', 'akademiata' ); ?></a>
+				<a href="#welyo-main-display" class="nav-tab" data-welyo-main="display"><?php esc_html_e( 'Wyświetlanie', 'akademiata' ); ?></a>
+			</nav>
+
+			<div id="welyo-main-api" class="welyo-main-panel">
 			<table class="form-table" role="presentation">
 				<?php
 				welyo_admin_field_text( 'base_url', 'URL API', $settings, array( 'wide' => true ) );
@@ -325,8 +332,8 @@ function welyo_admin_render_page() {
 			</table>
 
 			<div class="welyo-api-lists-box">
-				<h3><?php esc_html_e( 'Kampania i klasyfikator z API', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo i wybierz z rozwijanej listy — nie musisz znać ID ani dokładnej nazwy. Puste pola = automatyczny wybór (jedyna kampania, dopasowanie słów „callback” / „rekrut” itd.).', 'akademiata' ); ?></p>
+				<h3><?php esc_html_e( 'Kampanie z API', 'akademiata' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo — wybór kampanii per język jest w zakładce Języki.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-load-api-lists"><?php esc_html_e( 'Pobierz listę z API', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-api-lists-spinner" style="float:none;"></span>
@@ -340,15 +347,17 @@ function welyo_admin_render_page() {
 
 			<div class="welyo-diagnostics-box">
 				<h3><?php esc_html_e( 'Test połączenia (API)', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API i JWT. Test kampanii per język — w zakładce danego języka.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API i JWT. Test kampanii — w zakładce Języki.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-run-diagnostics"><?php esc_html_e( 'Sprawdź połączenie z Welyo', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-diagnostics-spinner" style="float:none;"></span>
 				</p>
 				<ul id="welyo-diagnostics-results" class="welyo-diagnostics-results" hidden></ul>
 			</div>
+			</div>
 
-			<h2 class="title"><?php esc_html_e( 'Ustawienia per język', 'akademiata' ); ?></h2>
+			<div id="welyo-main-languages" class="welyo-main-panel" hidden>
+			<p class="description"><?php esc_html_e( 'Kampania, telefon, godziny i teksty — osobno dla każdego języka.', 'akademiata' ); ?></p>
 			<nav class="nav-tab-wrapper welyo-lang-tabs">
 				<?php
 				$first = true;
@@ -368,9 +377,10 @@ function welyo_admin_render_page() {
 				welyo_admin_render_lang_panel( $code, $lang_label, $settings );
 			}
 			?>
+			</div>
 
-			<h2 class="title"><?php esc_html_e( 'Kolory widgetu', 'akademiata' ); ?></h2>
-			<p class="description" style="margin-bottom:12px;"><?php esc_html_e( 'Domyślnie kolory marki Akademiata. Zmiany widać od razu po zapisaniu.', 'akademiata' ); ?></p>
+			<div id="welyo-main-colors" class="welyo-main-panel" hidden>
+			<p class="description"><?php esc_html_e( 'Wspólne kolory marki dla wszystkich języków.', 'akademiata' ); ?></p>
 			<table class="form-table" role="presentation">
 				<?php
 				foreach ( welyo_color_fields() as $color_key => $color_meta ) {
@@ -383,8 +393,9 @@ function welyo_admin_render_page() {
 				}
 				?>
 			</table>
+			</div>
 
-			<h2 class="title"><?php esc_html_e( 'Wyświetlanie', 'akademiata' ); ?></h2>
+			<div id="welyo-main-display" class="welyo-main-panel" hidden>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Widget na stronie', 'akademiata' ); ?></th>
@@ -397,44 +408,50 @@ function welyo_admin_render_page() {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php esc_html_e( 'Języki WPML', 'akademiata' ); ?></th>
+					<th scope="row"><?php esc_html_e( 'Pokaż widget w językach', 'akademiata' ); ?></th>
 					<td>
 						<?php
 						$enabled = welyo_get_enabled_languages();
 						foreach ( welyo_supported_languages() as $code => $lang_label ) :
 							?>
-							<label style="display:inline-block;margin-right:16px;margin-bottom:6px;">
+							<label style="display:block;margin-bottom:8px;">
 								<input type="checkbox" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[enabled_languages][]" value="<?php echo esc_attr( $code ); ?>" <?php checked( in_array( $code, $enabled, true ) ); ?>>
 								<?php echo esc_html( $lang_label ); ?> (<?php echo esc_html( $code ); ?>)
 							</label>
 						<?php endforeach; ?>
-						<p class="description"><?php esc_html_e( 'Widget pokazuje się tylko na zaznaczonych wersjach językowych strony.', 'akademiata' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Odznacz język, aby ukryć widget na tej wersji strony (w tym polski). Żaden zaznaczony = widget nigdzie się nie pokazuje.', 'akademiata' ); ?></p>
 					</td>
 				</tr>
 			</table>
 
+			<div class="welyo-config-box">
+				<h3><?php esc_html_e( 'Plik welyo-config.php (opcjonalnie)', 'akademiata' ); ?></h3>
+				<p>
+					<?php
+					if ( is_readable( $config_path ) ) {
+						printf(
+							esc_html__( 'Na serwerze istnieje: %s', 'akademiata' ),
+							'<code>wp-content/welyo-config.php</code>'
+						);
+					} else {
+						esc_html_e( 'Brak wp-content/welyo-config.php na serwerze.', 'akademiata' );
+					}
+					?>
+				</p>
+				<p class="description"><?php esc_html_e( 'Ustawienia działają od razu z bazy WP. Plik config jest opcjonalny (np. starsze deploye) — zaznacz poniżej przy zapisie, jeśli chcesz go odświeżyć.', 'akademiata' ); ?></p>
+				<p>
+					<label>
+						<input type="checkbox" name="welyo_write_config_file" value="1">
+						<?php esc_html_e( 'Przy tym zapisie wygeneruj / nadpisz welyo-config.php', 'akademiata' ); ?>
+					</label>
+				</p>
+			</div>
+			</div>
+
 			<p class="submit">
 				<?php submit_button( __( 'Zapisz ustawienia', 'akademiata' ), 'primary', 'submit', false ); ?>
-				<button type="submit" class="button button-secondary" name="welyo_write_config_file" value="1"><?php esc_html_e( 'Zapisz i wygeneruj welyo-config.php', 'akademiata' ); ?></button>
 			</p>
 		</form>
-
-		<hr>
-		<h2><?php esc_html_e( 'Plik welyo-config.php', 'akademiata' ); ?></h2>
-		<p>
-			<?php
-			if ( is_readable( $config_path ) ) {
-				printf(
-					/* translators: %s: file path */
-					esc_html__( 'Na serwerze istnieje: %s', 'akademiata' ),
-					'<code>wp-content/welyo-config.php</code>'
-				);
-			} else {
-				esc_html_e( 'Brak wp-content/welyo-config.php — możesz wygenerować przyciskiem powyżej lub wgrać przez deploy (deploy.local.env).', 'akademiata' );
-			}
-			?>
-		</p>
-		<p class="description"><?php esc_html_e( 'Wartości z tego panelu działają od razu po zapisaniu. Klucz API w bazie jest szyfrowany (nie w plain text). Opcjonalnie: plik welyo-config.php lub wp-config.php mogą nadpisać wybrane pola — wtedy klucz trafia do pliku jako zwykły tekst (tylko na serwerze).', 'akademiata' ); ?></p>
 	</div>
 	<style>
 		.welyo-secret-input { max-width:36rem; font-family:Consolas, Monaco, monospace; }
@@ -452,6 +469,10 @@ function welyo_admin_render_page() {
 		.welyo-color-text { font-family:Consolas, Monaco, monospace; width:7.5em; }
 		.welyo-lang-panel { margin-top:12px; }
 		.welyo-lang-tabs { margin-bottom:0; }
+		.welyo-main-tabs { margin-top:16px; }
+		.welyo-main-panel { margin-top:16px; max-width:52rem; }
+		.welyo-config-box { margin-top:20px; padding:16px 18px; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
+		.welyo-config-box h3 { margin:0 0 8px; }
 	</style>
 	<script>
 	(function () {
@@ -575,8 +596,21 @@ function welyo_admin_render_page() {
 				});
 			});
 		});
-		var firstTab = document.querySelector('.welyo-lang-tabs .nav-tab');
-		if (firstTab) { firstTab.click(); }
+		var firstLangTab = document.querySelector('.welyo-lang-tabs .nav-tab');
+		if (firstLangTab) { firstLangTab.click(); }
+
+		document.querySelectorAll('.welyo-main-tabs .nav-tab').forEach(function (tab) {
+			tab.addEventListener('click', function (e) {
+				e.preventDefault();
+				var id = tab.getAttribute('data-welyo-main');
+				document.querySelectorAll('.welyo-main-tabs .nav-tab').forEach(function (t) {
+					t.classList.toggle('nav-tab-active', t === tab);
+				});
+				document.querySelectorAll('.welyo-main-panel').forEach(function (panel) {
+					panel.hidden = panel.id !== 'welyo-main-' + id;
+				});
+			});
+		});
 
 		function runDiagnostics(url, listEl, spinnerEl, btnEl) {
 			listEl.hidden = true;

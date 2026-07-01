@@ -775,7 +775,7 @@ function welyo_sanitize_settings( $input ) {
 			}
 		}
 	}
-	$out['enabled_languages'] = ! empty( $enabled ) ? $enabled : array( 'pl' );
+	$out['enabled_languages'] = $enabled;
 
 	foreach ( array_keys( welyo_color_fields() ) as $color_key ) {
 		if ( ! isset( $input[ $color_key ] ) ) {
