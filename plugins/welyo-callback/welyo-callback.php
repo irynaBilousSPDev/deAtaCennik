@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.3.3
+ * Version: 1.4.0
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -22,7 +22,14 @@ welyo_bootstrap_config();
 
 register_activation_hook( __FILE__, function () {
 	if ( get_option( WELYO_OPTION_KEY ) === false ) {
-		update_option( WELYO_OPTION_KEY, welyo_default_settings() );
+		$settings = array_merge( welyo_default_global_settings(), array(
+			'settings_version' => 2,
+			'languages'        => array(),
+		) );
+		foreach ( welyo_supported_languages() as $code => $label ) {
+			$settings['languages'][ $code ] = welyo_default_lang_settings( $code );
+		}
+		update_option( WELYO_OPTION_KEY, $settings );
 	}
 } );
 
@@ -32,26 +39,26 @@ register_activation_hook( __FILE__, function () {
    ===================================================================== */
 
 /** Czy teraz jest w godzinach pracy (strefa czasowa WP). */
-function welyo_is_open_now() {
+function welyo_is_open_now( $lang = null ) {
 	$tz   = wp_timezone();
 	$now  = new DateTime( 'now', $tz );
-	$dow  = (int) $now->format( 'N' );          // 1..7
-	$hour = (int) $now->format( 'G' );          // 0..23
-	$days = welyo_workdays_array();
+	$dow  = (int) $now->format( 'N' );
+	$hour = (int) $now->format( 'G' );
+	$days = welyo_workdays_array( $lang );
 	$is_workday = in_array( $dow, $days, true );
-	return $is_workday && $hour >= welyo_cfg_int( 'open_hour' ) && $hour < welyo_cfg_int( 'close_hour' );
+	return $is_workday && $hour >= welyo_cfg_int( 'open_hour', $lang ) && $hour < welyo_cfg_int( 'close_hour', $lang );
 }
 
 /** Najbliższy roboczy poranek (format YYYY-MM-DD hh:mm) — dla recall po godzinach. */
-function welyo_next_working_morning() {
+function welyo_next_working_morning( $lang = null ) {
 	$tz   = wp_timezone();
 	$dt   = new DateTime( 'now', $tz );
-	$days = welyo_workdays_array();
+	$days = welyo_workdays_array( $lang );
 
 	// jeśli dziś jeszcze przed otwarciem i dziś jest dniem roboczym → dzisiejszy poranek
 	$today_dow  = (int) $dt->format( 'N' );
 	$today_hour = (int) $dt->format( 'G' );
-	$open_hour  = welyo_cfg_int( 'open_hour' );
+	$open_hour  = welyo_cfg_int( 'open_hour', $lang );
 	if ( in_array( $today_dow, $days, true ) && $today_hour < $open_hour ) {
 		$dt->setTime( $open_hour, 5 );
 		return $dt->format( 'Y-m-d H:i' );
@@ -69,7 +76,7 @@ function welyo_next_working_morning() {
 }
 
 /** Normalizacja numeru do E.164 (proste reguły PL). */
-function welyo_normalize_phone( $raw ) {
+function welyo_normalize_phone( $raw, $lang = null ) {
 	$digits = preg_replace( '/[^\d+]/', '', (string) $raw );
 	if ( strpos( $digits, '00' ) === 0 ) {                 // 0048... → +48...
 		$digits = '+' . substr( $digits, 2 );
@@ -79,12 +86,12 @@ function welyo_normalize_phone( $raw ) {
 	}
 	$only = preg_replace( '/\D/', '', $digits );
 	if ( strlen( $only ) === 9 ) {                          // 9 cyfr → domyślny prefiks
-		return welyo_cfg( 'default_prefix' ) . $only;
+		return welyo_cfg( 'default_prefix', $lang ) . $only;
 	}
 	if ( strlen( $only ) === 11 && strpos( $only, '48' ) === 0 ) {
 		return '+' . $only;
 	}
-	return welyo_cfg( 'default_prefix' ) . $only;                     // fallback
+	return welyo_cfg( 'default_prefix', $lang ) . $only;                     // fallback
 }
 
 /** Generuje token JWT przez /fcc-create-jwt-token. Zwraca string token lub WP_Error. */
@@ -473,11 +480,15 @@ function welyo_pick_item( $items, $id_cfg, $name_cfg, $keywords = array() ) {
 }
 
 /** Zwraca id kampanii: z konfiguracji lub odnalezione po nazwie (cache 1 dzień). */
-function welyo_resolve_campaign_id( $jwt ) {
-	if ( welyo_cfg( 'campaign_id' ) !== '' ) {
-		return (string) welyo_cfg( 'campaign_id' );
+function welyo_resolve_campaign_id( $jwt, $lang = null ) {
+	if ( $lang === null ) {
+		$lang = welyo_lang_context();
 	}
-	$cached = get_transient( 'welyo_campaign_id' );
+	$cache_key = 'welyo_campaign_id_' . $lang;
+	if ( welyo_cfg( 'campaign_id', $lang ) !== '' ) {
+		return (string) welyo_cfg( 'campaign_id', $lang );
+	}
+	$cached = get_transient( $cache_key );
 	if ( $cached ) {
 		return $cached;
 	}
@@ -488,12 +499,12 @@ function welyo_resolve_campaign_id( $jwt ) {
 	$items = welyo_extract_list( $raw );
 	$id    = welyo_pick_item(
 		$items,
-		welyo_cfg( 'campaign_id' ),
-		welyo_cfg( 'campaign_name' ),
+		welyo_cfg( 'campaign_id', $lang ),
+		welyo_cfg( 'campaign_name', $lang ),
 		array( 'callback', 'rekrut', 'formularz', 'www' )
 	);
 	if ( $id !== null ) {
-		set_transient( 'welyo_campaign_id', $id, DAY_IN_SECONDS );
+		set_transient( $cache_key, $id, DAY_IN_SECONDS );
 		return $id;
 	}
 	welyo_log_items( 'kampanie z API', $items );
@@ -504,16 +515,20 @@ function welyo_resolve_campaign_id( $jwt ) {
 	$hint = $preview
 		? ' Dostępne z API: ' . implode( ' | ', $preview ) . '. Wybierz kampanię z listy w panelu (przycisk „Pobierz z API”).'
 		: ' API nie zwróciło kampanii.' . welyo_api_list_debug_hint( '/fcc-campaigns-list', $raw );
-	$name_hint = welyo_cfg( 'campaign_name' ) !== '' ? ' Szukano: „' . welyo_cfg( 'campaign_name' ) . '”.' : ' Ustaw ID kampanii lub wybierz z listy API.';
-	return new WP_Error( 'welyo_no_campaign', 'Nie udało się wybrać kampanii.' . $name_hint . $hint );
+	$name_hint = welyo_cfg( 'campaign_name', $lang ) !== '' ? ' Szukano: „' . welyo_cfg( 'campaign_name', $lang ) . '”.' : ' Ustaw ID kampanii lub wybierz z listy API.';
+	return new WP_Error( 'welyo_no_campaign', 'Nie udało się wybrać kampanii (' . $lang . ').' . $name_hint . $hint );
 }
 
 /** Zwraca id klasyfikatora recall: z konfiguracji lub po nazwie w danej kampanii (cache 1 dzień). */
-function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
-	if ( welyo_cfg( 'classifier_id' ) !== '' ) {
-		return (string) welyo_cfg( 'classifier_id' );
+function welyo_resolve_classifier_id( $jwt, $campaign_id, $lang = null ) {
+	if ( $lang === null ) {
+		$lang = welyo_lang_context();
 	}
-	$cached = get_transient( 'welyo_classifier_id' );
+	$cache_key = 'welyo_classifier_id_' . $lang;
+	if ( welyo_cfg( 'classifier_id', $lang ) !== '' ) {
+		return (string) welyo_cfg( 'classifier_id', $lang );
+	}
+	$cached = get_transient( $cache_key );
 	if ( $cached ) {
 		return $cached;
 	}
@@ -522,15 +537,15 @@ function welyo_resolve_classifier_id( $jwt, $campaign_id ) {
 		return $raw;
 	}
 	$items = welyo_extract_list( $raw );
-	$name_cfg = welyo_cfg( 'classifier_name' );
+	$name_cfg = welyo_cfg( 'classifier_name', $lang );
 	$id       = welyo_pick_item(
 		$items,
-		welyo_cfg( 'classifier_id' ),
+		welyo_cfg( 'classifier_id', $lang ),
 		$name_cfg,
 		array( 'recall', 'oddzwon', 'callback', 'otwart', 'lead' )
 	);
 	if ( $id !== null ) {
-		set_transient( 'welyo_classifier_id', $id, DAY_IN_SECONDS );
+		set_transient( $cache_key, $id, DAY_IN_SECONDS );
 		return $id;
 	}
 	if ( $name_cfg === '' && empty( $items ) ) {
@@ -615,20 +630,45 @@ function welyo_add_record( $jwt, $campaign_id, $classifier_id, $name, $phone_e16
    ===================================================================== */
 
 /** Kroki testu połączenia z Welyo (bez ujawniania sekretów). */
-function welyo_run_diagnostics() {
+function welyo_run_diagnostics( $lang = null ) {
 	$steps = array();
+	$lang_only = ( $lang !== null && $lang !== '' );
+
+	if ( $lang_only ) {
+		$lang = strtolower( sanitize_key( $lang ) );
+		if ( ! isset( welyo_supported_languages()[ $lang ] ) ) {
+			$steps[] = array(
+				'id'      => 'lang',
+				'ok'      => false,
+				'message' => __( 'Nieobsługiwany kod języka.', 'akademiata' ),
+			);
+			return $steps;
+		}
+		welyo_lang_context( $lang );
+		$steps[] = array(
+			'id'      => 'lang',
+			'ok'      => true,
+			'message' => sprintf(
+				/* translators: %s: language code */
+				__( 'Test konfiguracji języka: %s', 'akademiata' ),
+				$lang
+			),
+		);
+	}
 
 	$login   = (string) welyo_cfg( 'login' );
 	$api_key = (string) welyo_cfg( 'api_key' );
 	$config_ok = ( $login !== '' && $api_key !== '' );
 
-	$steps[] = array(
-		'id'      => 'config',
-		'ok'      => $config_ok,
-		'message' => $config_ok
-			? __( 'Login i klucz API są ustawione.', 'akademiata' )
-			: __( 'Brak loginu lub klucza API — uzupełnij w sekcji API Welyo i zapisz.', 'akademiata' ),
-	);
+	if ( ! $lang_only ) {
+		$steps[] = array(
+			'id'      => 'config',
+			'ok'      => $config_ok,
+			'message' => $config_ok
+				? __( 'Login i klucz API są ustawione.', 'akademiata' )
+				: __( 'Brak loginu lub klucza API — uzupełnij w sekcji API Welyo i zapisz.', 'akademiata' ),
+		);
+	}
 
 	if ( ! $config_ok ) {
 		return $steps;
@@ -644,53 +684,57 @@ function welyo_run_diagnostics() {
 		return $steps;
 	}
 
-	$steps[] = array(
-		'id'      => 'jwt',
-		'ok'      => true,
-		'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ) . ( welyo_is_jwt_shape( $jwt ) ? ' (' . substr( $jwt, 0, 12 ) . '…)' : '' ),
-	);
-
-	$auth_mode = get_transient( 'welyo_auth_mode' );
-	if ( $auth_mode ) {
+	if ( ! $lang_only ) {
 		$steps[] = array(
-			'id'      => 'auth_mode',
+			'id'      => 'jwt',
 			'ok'      => true,
-			'message' => sprintf(
-				/* translators: %s: auth mode slug */
-				__( 'Tryb autoryzacji API (cache): %s', 'akademiata' ),
-				$auth_mode
-			),
+			'message' => __( 'Połączenie z API — token JWT uzyskany.', 'akademiata' ) . ( welyo_is_jwt_shape( $jwt ) ? ' (' . substr( $jwt, 0, 12 ) . '…)' : '' ),
 		);
-	}
 
-	$campaign_items = welyo_fetch_campaign_items( $jwt );
-	if ( is_wp_error( $campaign_items ) ) {
+		$auth_mode = get_transient( 'welyo_auth_mode' );
+		if ( $auth_mode ) {
+			$steps[] = array(
+				'id'      => 'auth_mode',
+				'ok'      => true,
+				'message' => sprintf(
+					/* translators: %s: auth mode slug */
+					__( 'Tryb autoryzacji API (cache): %s', 'akademiata' ),
+					$auth_mode
+				),
+			);
+		}
+
+		$campaign_items = welyo_fetch_campaign_items( $jwt );
+		if ( is_wp_error( $campaign_items ) ) {
+			$steps[] = array(
+				'id'      => 'campaigns_api',
+				'ok'      => false,
+				'message' => $campaign_items->get_error_message(),
+			);
+			return $steps;
+		}
+
+		$api_names = array();
+		foreach ( array_slice( $campaign_items, 0, 8 ) as $c ) {
+			$api_names[] = $c['name'] . ' #' . $c['id'];
+		}
 		$steps[] = array(
 			'id'      => 'campaigns_api',
-			'ok'      => false,
-			'message' => $campaign_items->get_error_message(),
+			'ok'      => ! empty( $campaign_items ),
+			'message' => ! empty( $campaign_items )
+				? sprintf(
+					/* translators: 1: count, 2: sample list */
+					__( 'API zwróciło %1$d kampanii: %2$s', 'akademiata' ),
+					count( $campaign_items ),
+					implode( ' | ', $api_names )
+				)
+				: __( 'API nie zwróciło kampanii — sprawdź uprawnienia konta API w Welyo.', 'akademiata' ) . welyo_api_list_debug_hint( '/fcc-campaigns-list', array() ),
 		);
+
 		return $steps;
 	}
 
-	$api_names = array();
-	foreach ( array_slice( $campaign_items, 0, 8 ) as $c ) {
-		$api_names[] = $c['name'] . ' #' . $c['id'];
-	}
-	$steps[] = array(
-		'id'      => 'campaigns_api',
-		'ok'      => ! empty( $campaign_items ),
-		'message' => ! empty( $campaign_items )
-			? sprintf(
-				/* translators: 1: count, 2: sample list */
-				__( 'API zwróciło %1$d kampanii: %2$s', 'akademiata' ),
-				count( $campaign_items ),
-				implode( ' | ', $api_names )
-			)
-			: __( 'API nie zwróciło kampanii — sprawdź uprawnienia konta API w Welyo.', 'akademiata' ) . welyo_api_list_debug_hint( '/fcc-campaigns-list', array() ),
-	);
-
-	$campaign_id = welyo_resolve_campaign_id( $jwt );
+	$campaign_id = welyo_resolve_campaign_id( $jwt, $lang );
 	if ( is_wp_error( $campaign_id ) ) {
 		$steps[] = array(
 			'id'      => 'campaign',
@@ -701,16 +745,19 @@ function welyo_run_diagnostics() {
 	}
 
 	$campaign_label = sprintf( __( 'Używana kampania: ID %s.', 'akademiata' ), $campaign_id );
-	if ( welyo_cfg( 'campaign_id' ) !== '' ) {
+	if ( welyo_cfg( 'campaign_id', $lang ) !== '' ) {
 		$campaign_label = sprintf( __( 'Kampania ID %s (wybrana w panelu).', 'akademiata' ), $campaign_id );
-	} elseif ( welyo_cfg( 'campaign_name' ) !== '' ) {
+	} elseif ( welyo_cfg( 'campaign_name', $lang ) !== '' ) {
 		$campaign_label = sprintf(
 			__( 'Kampania ID %1$s (dopasowano: „%2$s”).', 'akademiata' ),
 			$campaign_id,
-			welyo_cfg( 'campaign_name' )
+			welyo_cfg( 'campaign_name', $lang )
 		);
-	} elseif ( count( $campaign_items ) === 1 ) {
-		$campaign_label = sprintf( __( 'Kampania ID %s (jedyna dostępna w API).', 'akademiata' ), $campaign_id );
+	} elseif ( ! $lang_only ) {
+		$campaign_items = welyo_fetch_campaign_items( $jwt );
+		if ( ! is_wp_error( $campaign_items ) && count( $campaign_items ) === 1 ) {
+			$campaign_label = sprintf( __( 'Kampania ID %s (jedyna dostępna w API).', 'akademiata' ), $campaign_id );
+		}
 	}
 
 	$steps[] = array(
@@ -719,7 +766,7 @@ function welyo_run_diagnostics() {
 		'message' => $campaign_label,
 	);
 
-	$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id );
+	$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id, $lang );
 	if ( is_wp_error( $classifier_id ) ) {
 		$is_optional = ( $classifier_id->get_error_code() === 'welyo_no_classifier_cfg' );
 		$steps[] = array(
@@ -788,8 +835,12 @@ add_action( 'rest_api_init', function () {
 
 	register_rest_route( 'welyo/v1', '/diagnostics', array(
 		'methods'             => 'GET',
-		'callback'            => function () {
-			return new WP_REST_Response( array( 'steps' => welyo_run_diagnostics() ), 200 );
+		'callback'            => function ( WP_REST_Request $request ) {
+			$lang = sanitize_key( (string) $request->get_param( 'lang' ) );
+			return new WP_REST_Response(
+				array( 'steps' => welyo_run_diagnostics( $lang !== '' ? $lang : null ) ),
+				200
+			);
 		},
 		'permission_callback' => function () {
 			return current_user_can( 'manage_options' );
@@ -859,7 +910,13 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 	$name    = isset( $params['name'] ) ? sanitize_text_field( $params['name'] ) : '';
 	$phone   = isset( $params['phone'] ) ? sanitize_text_field( $params['phone'] ) : '';
 	$consent = ! empty( $params['consent'] );
-	$hp      = isset( $params['company'] ) ? trim( (string) $params['company'] ) : ''; // honeypot
+	$hp      = isset( $params['company'] ) ? trim( (string) $params['company'] ) : '';
+	$lang    = isset( $params['lang'] ) ? strtolower( sanitize_key( $params['lang'] ) ) : welyo_get_current_language();
+
+	if ( ! welyo_is_language_enabled( $lang ) ) {
+		return new WP_REST_Response( array( 'ok' => false, 'error' => 'generic' ), 200 );
+	}
+	welyo_lang_context( $lang );
 
 	// honeypot wypełniony → bot
 	if ( $hp !== '' ) {
@@ -884,12 +941,11 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 		return new WP_REST_Response( array( 'ok' => false, 'error' => 'auth' ), 200 );
 	}
 
-	$recall = welyo_is_open_now() ? null : welyo_next_working_morning();
-	$phone_e164 = welyo_normalize_phone( $phone );
-	$ext_id = 'web-' . gmdate( 'Ymd-His' ) . '-' . substr( md5( $phone_e164 . microtime() ), 0, 6 );
+	$recall = welyo_is_open_now( $lang ) ? null : welyo_next_working_morning( $lang );
+	$phone_e164 = welyo_normalize_phone( $phone, $lang );
+	$ext_id = 'web-' . $lang . '-' . gmdate( 'Ymd-His' ) . '-' . substr( md5( $phone_e164 . microtime() ), 0, 6 );
 
-	// id kampanii (z konfiguracji albo po nazwie)
-	$campaign_id = welyo_resolve_campaign_id( $jwt );
+	$campaign_id = welyo_resolve_campaign_id( $jwt, $lang );
 	if ( is_wp_error( $campaign_id ) ) {
 		error_log( '[Welyo] campaign: ' . $campaign_id->get_error_message() );
 		return new WP_REST_Response( array( 'ok' => false, 'error' => 'campaign' ), 200 );
@@ -898,7 +954,7 @@ function welyo_handle_callback( WP_REST_Request $request ) {
 	// id klasyfikatora potrzebny tylko przy recall (po godzinach)
 	$classifier_id = '';
 	if ( $recall ) {
-		$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id );
+		$classifier_id = welyo_resolve_classifier_id( $jwt, $campaign_id, $lang );
 		if ( is_wp_error( $classifier_id ) ) {
 			error_log( '[Welyo] classifier: ' . $classifier_id->get_error_message() );
 			// awaryjnie: dodaj bez recall (lead trafi do kampanii i będzie wydzwaniany w godzinach)
@@ -928,18 +984,22 @@ function welyo_render_widget() {
 		return '';
 	}
 
-	$texts = welyo_widget_texts();
-	$privacy_url = esc_url( welyo_cfg( 'privacy_url' ) );
+	$lang = welyo_get_current_language();
+	welyo_lang_context( $lang );
+
+	$texts = welyo_widget_texts( $lang );
+	$privacy_url = esc_url( welyo_cfg( 'privacy_url', $lang ) );
 	$consent_html = str_replace( '{privacy_url}', $privacy_url, $texts['text_consent'] );
 
 	$cfg = array(
+		'lang'        => $lang,
 		'rest'        => esc_url_raw( rest_url( 'welyo/v1/callback' ) ),
 		'nonce'       => wp_create_nonce( 'wp_rest' ),
-		'phoneDial'   => welyo_cfg( 'phone_dial' ),
-		'phonePretty' => welyo_cfg( 'phone_pretty' ),
-		'openHour'    => welyo_cfg_int( 'open_hour' ),
-		'closeHour'   => welyo_cfg_int( 'close_hour' ),
-		'workdays'    => welyo_workdays_array(),
+		'phoneDial'   => welyo_cfg( 'phone_dial', $lang ),
+		'phonePretty' => welyo_cfg( 'phone_pretty', $lang ),
+		'openHour'    => welyo_cfg_int( 'open_hour', $lang ),
+		'closeHour'   => welyo_cfg_int( 'close_hour', $lang ),
+		'workdays'    => welyo_workdays_array( $lang ),
 		'privacyUrl'  => $privacy_url,
 		'texts'       => array(
 			'statusOpen'      => $texts['text_status_open'],
@@ -1125,7 +1185,7 @@ function welyo_render_widget() {
     if(!consent){err.textContent=T.errorConsent||"";return;}
     submit.disabled=true;submit.textContent=T.sending||"…";
     fetch(CFG.rest,{method:"POST",headers:{"Content-Type":"application/json","X-WP-Nonce":CFG.nonce},
-      body:JSON.stringify({name:name,phone:phone,consent:true,company:company})})
+      body:JSON.stringify({name:name,phone:phone,consent:true,company:company,lang:CFG.lang||"pl"})})
       .then(function(r){return r.json().then(function(d){return {ok:r.ok,status:r.status,data:d};});})
       .then(function(res){
         var d=res.data;
