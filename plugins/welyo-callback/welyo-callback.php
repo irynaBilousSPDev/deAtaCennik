@@ -1015,7 +1015,9 @@ function welyo_render_widget() {
 </div>
 
 <style>
-.wcb-root{position:fixed;right:22px;bottom:22px;z-index:99999;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.wcb-root{position:fixed;right:var(--wcb-side-right,22px);left:auto;bottom:var(--wcb-bottom,22px);z-index:99999;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.wcb-root.wcb-side-left{right:auto;left:var(--wcb-side-left,14px)}
+.wcb-root.wcb-side-left .wcb-panel{right:auto;left:0;transform-origin:bottom left}
 .wcb-launcher{display:inline-flex;align-items:center;gap:12px;border:0;cursor:pointer;background:var(--b);color:var(--launcher-text);padding:14px 20px 14px 16px;border-radius:999px;font-weight:700;font-size:15px;box-shadow:0 18px 50px -12px var(--shadow);transition:transform .18s,background .18s}
 .wcb-launcher:hover{transform:translateY(-2px);background:var(--b2)}
 .wcb-launcher:focus-visible{outline:3px solid var(--panel-bg);outline-offset:3px}
@@ -1060,7 +1062,7 @@ function welyo_render_widget() {
 .wcb-foot{text-align:center;padding:11px;font-size:11px;color:var(--foot-text);border-top:1px solid var(--line)}
 .wcb-hidden{display:none !important}
 @media (max-width:767px){
-  .wcb-root{right:14px;bottom:14px}
+  .wcb-root{--wcb-side-right:14px;--wcb-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
   .wcb-launcher{gap:0;padding:0;width:56px;height:56px;justify-content:center;border-radius:50%}
   .wcb-launch-label{display:none}
   .wcb-ic{width:56px;height:56px}
@@ -1149,6 +1151,78 @@ function welyo_render_widget() {
 
   render();
   setInterval(render,60000);
+
+  function wcbFindFixedEl(el){
+    while(el&&el!==document.documentElement){
+      var p=window.getComputedStyle(el).position;
+      if(p==="fixed"||p==="sticky"){return el;}
+      el=el.parentElement;
+    }
+    return null;
+  }
+  function wcbFindA11yBar(){
+    var selectors=[
+      "#pojo-a11y-toolbar",
+      "[aria-label='Toggle Accessibility Toolbar']",
+      "[aria-label*='Accessibility Toolbar']",
+      ".pojo-a11y-toolbar-toggle",
+      "#accessibility-toolbar",
+      ".accessibility-toolbar-toggle"
+    ];
+    for(var i=0;i<selectors.length;i++){
+      var hit=document.querySelector(selectors[i]);
+      if(hit){return wcbFindFixedEl(hit)||hit;}
+    }
+    return null;
+  }
+  function wcbAdjustForOverlap(){
+    if(!window.matchMedia("(max-width:767px)").matches){
+      root.classList.remove("wcb-side-left");
+      root.style.removeProperty("--wcb-bottom");
+      root.style.removeProperty("--wcb-side-left");
+      root.style.removeProperty("--wcb-side-right");
+      return;
+    }
+    var margin=14,gap=12,base="calc("+margin+"px + env(safe-area-inset-bottom,0px))";
+    var bar=wcbFindA11yBar();
+    root.classList.remove("wcb-side-left");
+    root.style.setProperty("--wcb-side-right",margin+"px");
+    root.style.removeProperty("--wcb-side-left");
+    root.style.setProperty("--wcb-bottom",base);
+    if(!bar){return;}
+    var r=bar.getBoundingClientRect();
+    if(r.width<1||r.height<1){return;}
+    var onRight=r.left+r.width/2>window.innerWidth/2;
+    if(bar.id==="pojo-a11y-toolbar"){
+      if(bar.classList.contains("pojo-a11y-toolbar-right")){onRight=true;}
+      if(bar.classList.contains("pojo-a11y-toolbar-left")){onRight=false;}
+    }
+    if(onRight){
+      root.classList.add("wcb-side-left");
+      root.style.setProperty("--wcb-side-left",margin+"px");
+      root.style.removeProperty("--wcb-side-right");
+    }else{
+      var lift=Math.ceil(window.innerHeight-r.top+gap);
+      if(lift>margin){
+        root.style.setProperty("--wcb-bottom","calc("+lift+"px + env(safe-area-inset-bottom,0px))");
+      }
+    }
+  }
+  wcbAdjustForOverlap();
+  window.addEventListener("resize",wcbAdjustForOverlap);
+  [0,400,1500].forEach(function(ms){setTimeout(wcbAdjustForOverlap,ms);});
+  if(window.ResizeObserver){
+    var wcbRo=new ResizeObserver(wcbAdjustForOverlap);
+    wcbRo.observe(document.documentElement);
+  }
+  if(window.MutationObserver){
+    var wcbMoTimer;
+    var wcbMo=new MutationObserver(function(){
+      clearTimeout(wcbMoTimer);
+      wcbMoTimer=setTimeout(wcbAdjustForOverlap,120);
+    });
+    wcbMo.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["class","style"]});
+  }
 })();
 </script>
 	<?php
