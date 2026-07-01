@@ -18,7 +18,6 @@ get_header();
         </div>
 
         <?php get_template_part('partials/offer-mobile-toolbar'); ?>
-        <?php get_template_part('partials/offer-mobile-dropdown'); ?>
 
         <?php get_template_part('partials/tags_container'); ?>
 
@@ -31,6 +30,8 @@ get_header();
             <?php echo __('Nie znaleziono żadnych wyników', 'akademiata'); ?>
         </div>
     </div>
+
+    <?php get_template_part('partials/offer-mobile-dropdown'); ?>
 
     <!-- Filter Sidebar (now includes the header!) -->
     <div id="sidebar" class="filter_col">

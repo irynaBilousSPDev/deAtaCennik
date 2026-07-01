@@ -74,6 +74,16 @@ function getDropdownElements() {
     };
 }
 
+function mountOfferDropdownPortal() {
+    const { root } = getDropdownElements();
+
+    if (!root || root.parentElement === document.body) {
+        return;
+    }
+
+    document.body.appendChild(root);
+}
+
 function closeOfferDropdown() {
     const { root } = getDropdownElements();
 
@@ -135,6 +145,8 @@ export function initOfferMobileToolbar() {
     if (!toolbar) {
         return;
     }
+
+    mountOfferDropdownPortal();
 
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
