@@ -610,26 +610,34 @@ $om-z-sidebar: 10050;
 
           .city_block {
             position: absolute;
-            top: 6px !important;
-            right: 6px !important;
+            top: 0 !important;
+            right: 0 !important;
             left: auto !important;
             bottom: auto;
             z-index: 4;
-            max-width: calc(100% - 12px);
-            padding: 3px 7px !important;
-            border-radius: 6px;
-            background: vars.$white;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            max-width: 110px;
+            padding: 5px 10px !important;
+            margin: 0;
+            border: none;
+            border-radius: 0;
+            background-color: #fff;
+            box-shadow: none;
 
             span {
-              font-size: 1.1rem;
+              font-size: 1.4rem;
               font-weight: vars.$weight-bold;
-              color: vars.$black;
+              color: #000;
+              line-height: 1.2;
             }
 
             .location_icon {
-              width: 10px;
+              width: 11px;
               height: auto;
+              flex-shrink: 0;
+              display: block;
             }
           }
 
@@ -679,6 +687,22 @@ $om-z-sidebar: 10050;
           .image_bg {
             height: 100% !important;
             min-height: 0 !important;
+          }
+
+          .city_block {
+            max-width: calc(100% - 8px);
+            padding: 4px 8px !important;
+            border-radius: 0 0 0 6px;
+            background-color: #f3f3f3;
+            border: 1px solid #c8c8c8;
+
+            span {
+              font-size: 1.1rem;
+            }
+
+            .location_icon {
+              width: 10px;
+            }
           }
 
           .ranking_icon {
@@ -749,6 +773,11 @@ $om-z-sidebar: 10050;
           .city_block {
             top: 6px !important;
             right: 6px !important;
+            max-width: calc(100% - 12px);
+            padding: 3px 8px !important;
+            border-radius: 4px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
           }
         }
 
