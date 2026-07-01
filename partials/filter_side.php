@@ -1,16 +1,16 @@
 <div id="scroller" class="filter_side">
     <?php
     $taxonomies = array(
-//        'recruitment_date' => __('Rekrutacja', 'akademiata'),
-        'degree'         => __('Studia', 'akademiata'),
-        'city'         => __('Miasto', 'akademiata'),
-        'program'        => __('Kierunek studiów', 'akademiata'),
+//        'recruitment_date' => akademiata_get_theme_lang_string('...'),
+        'degree'         => akademiata_get_theme_lang_string('offer_filter_degree'),
+        'city'         => akademiata_get_theme_lang_string('offer_chip_city'),
+        'program'        => akademiata_get_theme_lang_string('offer_chip_program'),
 //        'department'     => __('Wydział', 'akademiata'),
-        'language'       => __('Język studiów', 'akademiata'),
-        'duration'       => __('Czas trwania', 'akademiata'),
-        'obtained_title' => __('Uzyskany tytuł', 'akademiata'),
-        'post_tag'       => __('Zainteresowania', 'akademiata'),
-        'mode'           => __('Forma studiów', 'akademiata'),
+        'language'       => akademiata_get_theme_lang_string('offer_filter_language'),
+        'duration'       => akademiata_get_theme_lang_string('offer_filter_duration'),
+        'obtained_title' => akademiata_get_theme_lang_string('offer_filter_obtained_title'),
+        'post_tag'       => akademiata_get_theme_lang_string('offer_filter_interests'),
+        'mode'           => akademiata_get_theme_lang_string('offer_filter_mode'),
     );
     // Get the current page slug
     $current_page_slug = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');

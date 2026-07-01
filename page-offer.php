@@ -27,7 +27,7 @@ get_header();
         <!-- Filtered Results -->
         <div id="filter-results" class="row filter-results--grid"></div>
         <div id="no-results-message" style="display: none; text-align: center; margin: 2rem 0;">
-            <?php echo __('Nie znaleziono żadnych wyników', 'akademiata'); ?>
+            <?php echo esc_html(akademiata_get_theme_lang_string('offer_no_results')); ?>
         </div>
     </div>
 
@@ -37,15 +37,15 @@ get_header();
     <div id="sidebar" class="filter_col">
         <!-- Mobile Filter Header now inside sidebar -->
         <div class="mobile-filter-header">
-            <button class="go-back" type="button" aria-label="<?php esc_attr_e('Wróć', 'akademiata'); ?>">
+            <button class="go-back" type="button" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_filter_back')); ?>">
                 <span class="go-back__icon"></span>
             </button>
-            <h2 class="mobile-filter-header__title"><?php esc_html_e('Filtruj ofertę', 'akademiata'); ?></h2>
-            <button type="button" class="clear-filters"><?php esc_html_e('Wyczyść filtry', 'akademiata'); ?></button>
+            <h2 class="mobile-filter-header__title"><?php echo esc_html(akademiata_get_theme_lang_string('offer_filter_panel_title')); ?></h2>
+            <button type="button" class="clear-filters"><?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?></button>
         </div>
         <div class="filter_results_wrapper">
             <button class="filter_results" type="button">
-                <?php esc_html_e('Pokaż wyniki', 'akademiata'); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_show_results')); ?>
             </button>
         </div>
 

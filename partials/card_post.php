@@ -11,12 +11,12 @@
 
             // Show "wkrótce" label
             if (!empty($etykieta_studia) && in_array('coming_soon_icon', (array)$etykieta_studia)) {
-                echo '<span class="label-coming-soon">' . esc_html__('wkrótce', 'akademiata') . '</span>';
+                echo '<span class="label-coming-soon">' . esc_html(akademiata_get_theme_lang_string('offer_label_coming_soon')) . '</span>';
             }
 
             // Show "nowość" label
             if (!empty($etykieta_studia) && in_array('new_icon', (array)$etykieta_studia)) {
-                echo '<span class="label-new">' . esc_html__('nowość', 'akademiata') . '</span>';
+                echo '<span class="label-new">' . esc_html(akademiata_get_theme_lang_string('offer_label_new')) . '</span>';
             }
 
             // Show ranking icon only if neither label is selected
@@ -25,7 +25,7 @@
                 (!in_array('coming_soon_icon', (array)$etykieta_studia) && !in_array('new_icon', (array)$etykieta_studia))
             ) {
                 if (!empty($ranking_icon_url)) {
-                    echo '<img class="ranking_icon" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr__('Ranking Icon', 'akademiata') . '">';
+                    echo '<img class="ranking_icon" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')) . '">';
                 }
             }
 
@@ -41,7 +41,7 @@
                 <div class="city_block">
                     <img class="location_icon"
                          src="<?php echo esc_url(get_template_directory_uri() . '/static/img/icon_location.png'); ?>"
-                         alt="<?php _e('Location Icon', 'akademiata'); ?>">
+                         alt="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_location_icon_alt')); ?>">
                     <span><?php echo $city_name; ?></span>
                 </div>
             <?php endif; ?>
@@ -79,11 +79,11 @@
                         <?php if (!empty($terms) && !is_wp_error($terms)) : ?>
                             <?php
                             $taxonomy_titles = [
-                                'degree' => __('Rodzaj studiów', 'akademiata'),
-//                            'city' => __('Miasto', 'akademiata'),
-                                'language' => __('Język studiów', 'akademiata'),
-                                'obtained_title' => __('Uzyskany tytuł', 'akademiata'),
-                                'duration' => __('Czas trwania', 'akademiata'),
+                                'degree' => akademiata_get_theme_lang_string('offer_card_degree'),
+//                            'city' => akademiata_get_theme_lang_string('offer_chip_city'),
+                                'language' => akademiata_get_theme_lang_string('offer_filter_language'),
+                                'obtained_title' => akademiata_get_theme_lang_string('offer_filter_obtained_title'),
+                                'duration' => akademiata_get_theme_lang_string('offer_filter_duration'),
                             ];
 
                             $grouped_terms = [];
@@ -115,14 +115,14 @@
                 </div>
             </div>
             <div class="buttons_wrapper">
-                <a class="button-primary mb-3" style="min-width: 140px" href="<?php the_permalink(); ?>"><?php _e('SZCZEGÓŁY', 'akademiata'); ?></a>
+                <a class="button-primary mb-3" style="min-width: 140px" href="<?php the_permalink(); ?>"><?php echo esc_html(akademiata_get_theme_lang_string('offer_card_details')); ?></a>
                 <?php
                 $register_url = get_field('register_url') ?: home_url();
                 ?>
                 <div class="button-sing_up_wrapper">
                     <a class="button-sing_up mb-3" style="width: 100%"
                        href="<?php echo esc_url($register_url); ?>">
-                        <?php _e('ZAPISZ SIĘ', 'akademiata'); ?>
+                        <?php echo esc_html(akademiata_get_theme_lang_string('offer_card_register')); ?>
                     </a>
                 </div>
             </div>
