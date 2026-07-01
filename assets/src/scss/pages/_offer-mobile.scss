@@ -54,97 +54,140 @@ $om-z-sidebar: 10050;
       max-width: 100%;
     }
 
-    // —— Header: Oferta + badge + link (single row, vertically centered) ——
+    // —— Header: title | [badge][i Szczegóły rankingu] — grid prevents overlap ——
     .offer_page_header {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
+      container-type: inline-size;
+      container-name: offer-header;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 0 0 12px;
+      column-gap: 10px;
+      row-gap: 8px;
+      padding: 0 0 14px;
       margin-bottom: 0 !important;
+      padding-top: 0 !important;
       overflow: visible;
 
       h1 {
-        flex: 0 0 auto;
+        grid-column: 1;
+        grid-row: 1;
+        min-width: 0;
         margin: 0;
         padding: 0;
         font-family: "Nunito Sans", "Lato", sans-serif;
-        font-size: 3.6rem;
+        font-size: clamp(2.6rem, 7.5vw, 3.6rem);
         font-weight: vars.$weight-bold;
-        line-height: 1;
+        line-height: 1.1;
         letter-spacing: -0.02em;
+        overflow-wrap: break-word;
       }
 
       .ranking-badge-tooltip--offer-header {
-        flex: 0 1 auto;
-        min-width: 0;
-        max-width: none;
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        align-self: center;
+        display: inline-flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
-        align-self: center;
         justify-content: flex-end;
         width: auto !important;
-        gap: 8px;
+        max-width: min(52%, 210px) !important;
+        min-width: 0;
+        gap: 6px;
         margin: 0 !important;
+        cursor: pointer;
+        z-index: 1;
 
         .ranking-badge-tooltip__image {
-          flex-shrink: 0;
-          max-width: 118px;
-          max-height: 52px;
+          flex: 0 0 auto;
+          display: block;
+          max-width: 112px;
+          max-height: 54px;
           width: auto;
           height: auto;
+          object-fit: contain;
         }
 
         .ranking-badge-tooltip__fallback {
-          flex-shrink: 0;
+          flex: 0 0 auto !important;
           align-items: flex-end;
           text-align: right;
-          max-width: 100px;
+          max-width: 72px !important;
+          min-width: 0;
 
           strong {
-            font-size: 1.1rem;
+            font-size: 1rem;
             line-height: 1.1;
           }
 
           span {
-            font-size: 0.8rem;
-            line-height: 1.2;
+            display: none;
           }
         }
 
         .ranking-badge-tooltip__trigger {
-          flex: 0 1 auto;
+          flex: 0 0 auto !important;
+          display: inline-flex !important;
           flex-direction: row !important;
           align-items: flex-start !important;
+          justify-content: flex-start !important;
           margin: 0 !important;
           margin-left: 0 !important;
           gap: 4px;
-          font-size: 1.2rem;
+          font-size: 1.15rem !important;
+          line-height: 1.2;
           color: $om-link;
-          justify-content: flex-start;
-          white-space: normal;
+          white-space: normal !important;
         }
 
         .ranking-badge-tooltip__hint {
-          max-width: 5.6rem !important;
+          display: inline-block;
+          max-width: 6.8rem !important;
           overflow: visible !important;
           text-overflow: unset !important;
-          line-height: 1.15;
+          line-height: 1.2;
           text-align: left;
           text-decoration: underline;
           text-underline-offset: 2px;
           color: $om-link;
+          font-weight: vars.$weight-regular;
         }
 
         .ranking-badge-tooltip__icon {
           flex-shrink: 0;
           width: 14px;
           height: 14px;
-          margin-top: 1px;
+          margin-top: 2px;
           font-size: 9px;
+        }
+
+        .ranking-badge-tooltip__popup {
+          left: auto;
+          right: 0;
+          transform: translateY(-8px);
+        }
+
+        &:hover .ranking-badge-tooltip__popup,
+        &:focus-visible .ranking-badge-tooltip__popup {
+          transform: translateY(0);
+        }
+      }
+
+      @container offer-header (max-width: 300px) {
+        grid-template-columns: 1fr;
+
+        h1 {
+          grid-column: 1;
+          grid-row: 1;
+        }
+
+        .ranking-badge-tooltip--offer-header {
+          grid-column: 1;
+          grid-row: 2;
+          justify-self: end;
+          max-width: 100% !important;
         }
       }
     }
@@ -196,10 +239,25 @@ $om-z-sidebar: 10050;
 
     .offer-mobile-chips {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: $om-chip-gap;
       margin: 0;
       padding: 0 0 10px;
+
+      &__row {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: $om-chip-gap;
+        min-width: 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
     }
 
     .offer-mobile-chip {
@@ -957,17 +1015,21 @@ $om-z-sidebar: 10050;
     }
 
     .offer_page_header .ranking-badge-tooltip--offer-header {
+      gap: 6px;
+
       .ranking-badge-tooltip__image {
         max-width: 100px;
-        max-height: 44px;
+        max-height: 48px;
       }
 
       .ranking-badge-tooltip__trigger {
-        font-size: 1.1rem;
+        font-size: 1.1rem !important;
       }
 
       .ranking-badge-tooltip__hint {
-        max-width: 5rem !important;
+        max-width: 6.4rem !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
       }
     }
   }
