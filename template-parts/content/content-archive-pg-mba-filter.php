@@ -48,7 +48,8 @@ $page_description  = get_query_var('pg_mba_filter_content');
             <div class="spinner"></div>
         </div>
 
-        <div id="filter-results" class="row"></div>
+        <?php get_template_part('partials/offer-view-toggle'); ?>
+        <div id="filter-results" class="row filter-results--grid"></div>
 
         <div id="no-results-message" style="display: none; text-align: center; margin: 2rem 0;">
             <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_no_filter_results')); ?>

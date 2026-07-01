@@ -56,7 +56,8 @@ get_header();
             <div class="spinner"></div>
         </div>
         <!-- Filtered Results -->
-        <div id="filter-results" class="row"></div>
+        <?php get_template_part('partials/offer-view-toggle'); ?>
+        <div id="filter-results" class="row filter-results--grid"></div>
         <div id="no-results-message" style="display: none; text-align: center; margin: 2rem 0;">
             <?php echo __('Nie znaleziono żadnych wyników', 'akademiata'); ?>
         </div>

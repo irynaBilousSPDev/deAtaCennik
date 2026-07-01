@@ -1,3 +1,5 @@
+import { initOfferViewToggle } from './offer-view-toggle';
+
 (function ($) {
     if (typeof ajax_filter_pg_mba_params === 'undefined') {
         return;
@@ -173,4 +175,5 @@
     form.on('clear-filters', clearAllFilters);
 
     initializeFiltersFromURL();
+    initOfferViewToggle();
 })(jQuery);

@@ -1,4 +1,5 @@
 @use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mixins;
 
 .ranking-badge-tooltip {
   position: relative;
@@ -186,6 +187,87 @@
     &:hover .ranking-badge-tooltip__popup,
     &:focus-visible .ranking-badge-tooltip__popup {
       transform: translateY(0);
+    }
+
+    @include mixins.max-ipad-air-screen {
+      align-self: center;
+      width: 100%;
+      max-width: 100%;
+      align-items: center;
+      gap: 4px;
+
+      .ranking-badge-tooltip__image {
+        max-width: min(100%, 260px);
+        max-height: 68px;
+      }
+
+      .ranking-badge-tooltip__trigger {
+        margin-top: 0;
+        font-size: 12px;
+        gap: 4px;
+      }
+
+      .ranking-badge-tooltip__icon {
+        width: 16px;
+        height: 16px;
+        font-size: 11px;
+      }
+
+      .ranking-badge-tooltip__popup {
+        left: 50%;
+        right: auto;
+        min-width: 0;
+        width: min(260px, calc(100vw - 24px));
+        max-width: calc(100vw - 24px);
+        padding: 0.7rem 0.8rem;
+        font-size: 12px;
+        line-height: 1.4;
+        transform: translateX(-50%) translateY(-8px);
+
+        &::before {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+        }
+
+        &::after {
+          left: 50%;
+          right: auto;
+          transform: translateX(-50%);
+        }
+      }
+
+      &:hover .ranking-badge-tooltip__popup,
+      &:focus-visible .ranking-badge-tooltip__popup {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .ranking-badge-tooltip__list li {
+        padding: 0.3rem 0 0.3rem 0.75rem;
+        font-weight: 600;
+
+        & + li {
+          margin-top: 0.25rem;
+        }
+      }
+    }
+
+    @include mixins.max-sm-screen {
+      .ranking-badge-tooltip__image {
+        max-width: min(100%, 220px);
+        max-height: 56px;
+      }
+
+      .ranking-badge-tooltip__trigger {
+        font-size: 11px;
+      }
+
+      .ranking-badge-tooltip__popup {
+        width: min(240px, calc(100vw - 20px));
+        max-width: calc(100vw - 20px);
+        padding: 0.6rem 0.7rem;
+        font-size: 11px;
+      }
     }
   }
 }

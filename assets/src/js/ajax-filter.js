@@ -1,3 +1,5 @@
+import { initOfferViewToggle } from './offer-view-toggle';
+
 (function ($) {
     const ajaxUrl = ajax_filter_params.ajax_url;
     const pageId = ajax_filter_params.page_id;
@@ -299,5 +301,6 @@
 
     $(window).on('scroll', handleScrollLoad);
     initializeFiltersFromURL();
+    initOfferViewToggle();
 
 })(jQuery);

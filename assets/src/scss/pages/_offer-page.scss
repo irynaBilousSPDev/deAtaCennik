@@ -43,6 +43,18 @@
     flex: 1 1 220px;
     margin: 0;
   }
+
+  @include mixins.max-ipad-air-screen {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding-top: 16px;
+    margin-bottom: 1.5rem;
+
+    h1 {
+      flex: 1 1 auto;
+    }
+  }
 }
 
 .site-content {
