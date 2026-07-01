@@ -62,7 +62,7 @@ $om-filter-card-pad: 16px;
     .offer_page_header {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
+      align-items: start;
       column-gap: 12px;
       padding: 16px 0 16px;
       margin-bottom: 0 !important;
@@ -79,10 +79,8 @@ $om-filter-card-pad: 16px;
         font-weight: vars.$weight-bold;
         line-height: 1.1;
         letter-spacing: -0.02em;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
+        display: block;
+        overflow: visible;
       }
 
       .ranking-badge-tooltip--offer-header {

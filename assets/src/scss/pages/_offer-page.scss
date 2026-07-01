@@ -122,12 +122,6 @@
   }
 }
 
-.site-content {
-  @include mixins.max-ipad-pro-screen {
-    margin-top: 80px;
-  }
-}
-
 // ===== WRAPPERS =====
 .offer_wrapper,
 .offer_wrapper--offer-page,
@@ -231,13 +225,16 @@
   margin-right: 0;
 
   @include mixins.ipad-pro-screen {
-    width: calc(100% - 320px);
+    width: calc(100% - 320px - 2.6rem);
     padding-left: 2.6rem;
+    padding-right: 2.6rem;
+    margin-right: 2.6rem;
   }
 
   @include mixins.xxl-screen {
-    width: calc(100% - 450px);
-    padding-right: 130px;
+    width: calc(100% - 580px);
+    margin-right: 130px;
+    padding-right: 2.6rem;
   }
 }
 

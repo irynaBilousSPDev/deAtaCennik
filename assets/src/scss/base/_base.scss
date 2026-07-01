@@ -152,6 +152,10 @@ section {
 
   @include mixins.max-ipad-pro-screen {
     margin-top: 80px;
+
+    @include mixins.ipad-air-screen {
+      margin-top: 118px;
+    }
   }
 }
 
