@@ -1,0 +1,87 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mixins;
+
+.offer-favorite-btn {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+  color: #8a8a8a;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease, background-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: #e53935;
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  &.is-active {
+    color: #e53935;
+  }
+
+  &__icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+
+    path {
+      fill: transparent;
+      stroke: currentColor;
+      stroke-width: 2;
+      transition: fill 0.15s ease;
+    }
+  }
+
+  &.is-active &__icon path {
+    fill: currentColor;
+    stroke: currentColor;
+  }
+}
+
+.offer-favorites-chip {
+  &__icon {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  &.is-active {
+    border-color: #e53935;
+    color: #c62828;
+
+    .offer-favorites-chip__icon {
+      opacity: 1;
+    }
+  }
+
+  &--desktop {
+    display: none;
+    margin-bottom: 1.25rem;
+
+    @include mixins.ipad-pro-screen {
+      display: inline-flex;
+    }
+  }
+}
+
+.offer_wrapper--offer-page {
+  .card_post_image {
+    position: relative;
+  }
+
+  .card_post_item.is-favorites-hidden {
+    display: none !important;
+  }
+}

@@ -1,5 +1,9 @@
 <div id="scroller" class="filter_side">
     <?php
+    $chip_class = 'offer-favorites-chip--desktop';
+    get_template_part('partials/offer-favorites-chip', null, compact('chip_class'));
+    ?>
+    <?php
     $taxonomies = array(
 //        'recruitment_date' => akademiata_get_theme_lang_string('...'),
         'degree'         => akademiata_get_theme_lang_string('offer_filter_degree'),

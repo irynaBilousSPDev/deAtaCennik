@@ -31,6 +31,7 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
             <button type="button" class="offer-mobile-chip is-active" data-tax="all">
                 <?php echo esc_html(akademiata_get_theme_lang_string('offer_chip_all')); ?>
             </button>
+            <?php get_template_part('partials/offer-favorites-chip'); ?>
             <?php foreach (['degree' => $quick_chips['degree'], 'city' => $quick_chips['city'], 'program' => $quick_chips['program']] as $taxonomy => $label) : ?>
                 <?php
                 if ($taxonomy === 'degree' && !in_array($current_page_slug, ['offer', 'oferta'], true)) {

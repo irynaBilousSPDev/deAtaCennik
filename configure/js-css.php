@@ -60,6 +60,8 @@ function akademiata_enqueue_scripts()
     if (is_page_template('page-offer.php')) {
         wp_localize_script('name-main-js', 'akademiataOffer', [
             'filterNoOptions' => akademiata_get_theme_lang_string('offer_filter_no_options'),
+            'favoriteAdd'     => akademiata_get_theme_lang_string('offer_favorite_add'),
+            'favoriteRemove'  => akademiata_get_theme_lang_string('offer_favorite_remove'),
         ]);
     }
 

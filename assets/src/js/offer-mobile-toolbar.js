@@ -1,4 +1,5 @@
 import { openOfferFilterPanel } from './__customFunctions';
+import { applyOfferCardFilters, deactivateFavoritesFilter, isFavoritesFilterActive } from './offer-favorites';
 
 const TABLET_MAX_WIDTH = 990;
 let lastChipTouchAt = 0;
@@ -26,19 +27,7 @@ function triggerFilterChange(input) {
 }
 
 function applyOfferSearchQuery() {
-    const input = document.querySelector('.offer-mobile-search__input');
-    const filterResults = getFilterResults();
-
-    if (!input || !filterResults) {
-        return;
-    }
-
-    const query = input.value.trim().toLowerCase();
-
-    filterResults.querySelectorAll('.card_post_item').forEach((card) => {
-        const title = card.querySelector('h2')?.textContent.toLowerCase() || '';
-        card.classList.toggle('is-search-hidden', Boolean(query) && !title.includes(query));
-    });
+    applyOfferCardFilters();
 }
 
 function getTaxonomyInputs(taxonomy) {
@@ -86,7 +75,7 @@ function syncChipStates() {
         }
     });
 
-    allChip.classList.toggle('is-active', !hasAnyFilter);
+    allChip.classList.toggle('is-active', !hasAnyFilter && !isFavoritesFilterActive());
 }
 
 function getDropdownElements() {
@@ -225,12 +214,14 @@ export function initOfferMobileToolbar() {
 
     allChip?.addEventListener('click', () => {
         closeOfferDropdown();
+        deactivateFavoritesFilter();
         document.getElementById('clear-filters')?.click();
         syncChipStates();
     });
 
     clearBtn?.addEventListener('click', () => {
         closeOfferDropdown();
+        deactivateFavoritesFilter();
 
         if (searchInput) {
             searchInput.value = '';

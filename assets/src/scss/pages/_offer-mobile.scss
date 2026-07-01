@@ -384,7 +384,8 @@ $om-filter-card-pad: 16px;
         background: vars.$white !important;
         gap: 1rem;
 
-        .card_post_item.is-search-hidden {
+        .card_post_item.is-search-hidden,
+        .card_post_item.is-favorites-hidden {
           display: none !important;
         }
       }

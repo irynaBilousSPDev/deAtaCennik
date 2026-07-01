@@ -1880,6 +1880,24 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'ЗАПИСАТИСЯ',
                 'ru' => 'ЗАПИСАТЬСЯ',
             ),
+            'offer_chip_favorites' => array(
+                'pl' => 'Polubione',
+                'en' => 'Favorites',
+                'uk' => 'Обране',
+                'ru' => 'Избранное',
+            ),
+            'offer_favorite_add' => array(
+                'pl' => 'Dodaj do polubionych',
+                'en' => 'Add to favorites',
+                'uk' => 'Додати до обраного',
+                'ru' => 'Добавить в избранное',
+            ),
+            'offer_favorite_remove' => array(
+                'pl' => 'Usuń z polubionych',
+                'en' => 'Remove from favorites',
+                'uk' => 'Видалити з обраного',
+                'ru' => 'Удалить из избранного',
+            ),
             'offer_achievements_partners_title' => array(
                 'pl' => 'OSIĄGNIĘCIA I PARTNERZY',
                 'en' => 'ACHIEVEMENTS AND PARTNERS',
