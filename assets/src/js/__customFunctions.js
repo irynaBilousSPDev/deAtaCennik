@@ -133,10 +133,26 @@ export function filterAccordion(accordionHeaderSelector) {
         closeAllAccordions();
     }
 
-    // Toggle logic (independent toggling)
+    const isOfferMobilePanel = Boolean(document.querySelector('.offer_wrapper--offer-page'))
+        && !window.matchMedia('(min-width: 991px)').matches;
+
+    // Toggle logic
     $headers.on('click', function () {
         const $header = jQuery(this);
         const $content = $header.next('.accordion-content');
+
+        if (isOfferMobilePanel) {
+            if ($header.hasClass('active')) {
+                $header.removeClass('active');
+                $content.slideUp(300);
+                return;
+            }
+
+            closeAllAccordions();
+            $header.addClass('active');
+            $content.slideDown(300);
+            return;
+        }
 
         $header.toggleClass('active');
 
@@ -168,6 +184,12 @@ export function openOfferFilterPanel() {
     window.setTimeout(() => {
         if (window.closeAllAccordions) {
             window.closeAllAccordions();
+        }
+
+        const firstHeader = document.querySelector('.offer_wrapper--offer-page .filter_accordion_header');
+        if (firstHeader && window.jQuery) {
+            window.jQuery(firstHeader).addClass('active');
+            window.jQuery(firstHeader).next('.accordion-content').slideDown(300);
         }
     }, 10);
 }

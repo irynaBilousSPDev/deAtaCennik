@@ -133,18 +133,59 @@
 }
 
 // ===== WRAPPERS =====
-.offer_wrapper:not(.offer_wrapper--offer-page),
+.offer_wrapper,
+.offer_wrapper--offer-page,
 .offer_wrapper--pg-mba {
   overflow: hidden;
 
   .offer_content {
     overflow: visible;
   }
+}
 
-  #sidebar {
-    width: 25%;
-    position: fixed;
-    left: 0;
+@include mixins.ipad-pro-screen {
+  .offer_wrapper,
+  .offer_wrapper--offer-page,
+  .offer_wrapper--pg-mba {
+    #sidebar {
+      width: 25%;
+      position: fixed;
+      left: 0;
+    }
+  }
+
+  // Desktop offer page — restore pre-mobile layout; mobile UI lives in _offer-mobile.scss
+  .offer_wrapper--offer-page {
+    .mobile-filter-header,
+    .filter_results_wrapper,
+    .filter-overlay {
+      display: none !important;
+    }
+
+    #sidebar {
+      display: block !important;
+      position: fixed;
+      width: 25%;
+      left: 0;
+      top: auto;
+      height: auto;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: visible;
+      background: transparent;
+      z-index: auto;
+    }
+
+    .filter_side {
+      position: fixed;
+      top: 118px;
+      left: 0;
+      width: 100%;
+      max-width: 320px;
+      height: calc(100vh - 130px);
+      padding: 4rem 2rem;
+      overflow-y: scroll;
+    }
   }
 }
 
@@ -203,11 +244,14 @@
   }
 
   @include mixins.max-ipad-pro-screen {
-    max-width: 100%;
-    height: auto;
-    position: static;
-    padding: 2rem;
-    padding-bottom: 200px;
+    .offer_wrapper:not(.offer_wrapper--offer-page) &,
+    .offer_wrapper--pg-mba & {
+      max-width: 100%;
+      height: auto;
+      position: static;
+      padding: 2rem;
+      padding-bottom: 200px;
+    }
   }
 }
 

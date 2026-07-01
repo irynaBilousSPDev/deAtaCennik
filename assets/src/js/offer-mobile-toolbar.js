@@ -67,10 +67,10 @@ function syncChipStates() {
 function getDropdownElements() {
     return {
         root: document.getElementById('offer-mobile-dropdown'),
-        title: document.querySelector('.offer-mobile-dropdown__title'),
+        title: document.querySelector('.offer-mobile-dropdown__title-dynamic'),
         list: document.querySelector('.offer-mobile-dropdown__list'),
         backdrop: document.querySelector('.offer-mobile-dropdown__backdrop'),
-        close: document.querySelector('.offer-mobile-dropdown__close'),
+        collapse: document.querySelector('.offer-mobile-dropdown__collapse'),
     };
 }
 
@@ -140,7 +140,7 @@ export function initOfferMobileToolbar() {
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
     const clearBtn = document.getElementById('offer-mobile-clear-filters');
     const filterForm = getFilterForm();
-    const { backdrop, close } = getDropdownElements();
+    const { backdrop, collapse } = getDropdownElements();
 
     searchInput?.addEventListener('input', applyOfferSearchQuery);
 
@@ -195,7 +195,7 @@ export function initOfferMobileToolbar() {
     });
 
     backdrop?.addEventListener('click', closeOfferDropdown);
-    close?.addEventListener('click', closeOfferDropdown);
+    collapse?.addEventListener('click', closeOfferDropdown);
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {

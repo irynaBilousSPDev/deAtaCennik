@@ -38,9 +38,9 @@
 
             <?php if (!is_wp_error($terms)) : ?>
             <div class="taxonomy_group mb-3">
-                <h2 class="filter_accordion_header active" data-tax="<?php echo esc_attr($taxonomy); ?>">
+                <h2 class="filter_accordion_header" data-tax="<?php echo esc_attr($taxonomy); ?>">
                     <?php echo esc_html(ucwords(str_replace('_', ' ', $taxonomy_name))); ?>
-                    <div class="arrow-open-close">
+                    <div class="arrow-open-close" aria-hidden="true"></div>
                 </h2>
                 <div class="accordion-content">
                     <div class="labels_list">
