@@ -1,6 +1,7 @@
 import { openOfferFilterPanel } from './__customFunctions';
 
 const TABLET_MAX_WIDTH = 990;
+let lastChipTouchAt = 0;
 
 function isOfferMobileToolbarActive() {
     return Boolean(document.querySelector('.offer-mobile-toolbar'))
@@ -12,7 +13,7 @@ function getFilterResults() {
 }
 
 function getFilterForm() {
-    return document.querySelector('#ajax-filter-form');
+    return document.getElementById('ajax-filter-form');
 }
 
 function triggerFilterChange(input) {
@@ -40,6 +41,30 @@ function applyOfferSearchQuery() {
     });
 }
 
+function getTaxonomyInputs(taxonomy) {
+    const fieldName = `${taxonomy}[]`;
+    const form = getFilterForm();
+
+    if (window.jQuery && form) {
+        const $inputs = window.jQuery(form).find(`input[name="${taxonomy}[]"]`);
+        if ($inputs.length) {
+            return $inputs.toArray();
+        }
+    }
+
+    if (form) {
+        const fromForm = Array.from(form.elements).filter(
+            (element) => element.tagName === 'INPUT' && element.name === fieldName
+        );
+        if (fromForm.length) {
+            return fromForm;
+        }
+    }
+
+    return Array.from(document.querySelectorAll('#ajax-filter-form input[type="checkbox"]'))
+        .filter((input) => input.name === fieldName);
+}
+
 function syncChipStates() {
     const form = getFilterForm();
     const allChip = document.querySelector('.offer-mobile-chip[data-tax="all"]');
@@ -52,7 +77,7 @@ function syncChipStates() {
 
     document.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
         const tax = chip.dataset.tax;
-        const checkedCount = getTaxonomyInputs(form, tax).filter((input) => input.checked).length;
+        const checkedCount = getTaxonomyInputs(tax).filter((input) => input.checked).length;
         const hasFilter = checkedCount > 0;
 
         chip.classList.toggle('has-filter', hasFilter);
@@ -70,7 +95,7 @@ function getDropdownElements() {
         title: document.querySelector('.offer-mobile-dropdown__title-dynamic'),
         list: document.querySelector('.offer-mobile-dropdown__list'),
         backdrop: document.querySelector('.offer-mobile-dropdown__backdrop'),
-        collapse: document.querySelector('.offer-mobile-dropdown__collapse'),
+        close: document.querySelector('.offer-mobile-dropdown__close'),
     };
 }
 
@@ -96,19 +121,10 @@ function closeOfferDropdown() {
     document.body.classList.remove('offer-dropdown-open');
 }
 
-function getTaxonomyInputs(form, taxonomy) {
-    const fieldName = `${taxonomy}[]`;
-
-    return Array.from(form.elements).filter(
-        (element) => element.tagName === 'INPUT' && element.name === fieldName
-    );
-}
-
 function openOfferDropdown(taxonomy, label) {
-    const form = getFilterForm();
     const { root, title, list } = getDropdownElements();
 
-    if (!form || !root || !title || !list || !isOfferMobileToolbarActive()) {
+    if (!root || !title || !list || !isOfferMobileToolbarActive()) {
         return;
     }
 
@@ -116,9 +132,19 @@ function openOfferDropdown(taxonomy, label) {
     title.textContent = resolvedLabel;
     list.innerHTML = '';
 
-    const inputs = getTaxonomyInputs(form, taxonomy);
+    root.classList.add('is-open');
+    root.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('offer-dropdown-open');
+
+    const inputs = getTaxonomyInputs(taxonomy);
 
     if (!inputs.length) {
+        const empty = document.createElement('p');
+        empty.className = 'offer-mobile-dropdown__empty';
+        empty.style.padding = '14px 20px';
+        empty.style.margin = '0';
+        empty.textContent = 'Brak opcji filtra.';
+        list.appendChild(empty);
         return;
     }
 
@@ -143,10 +169,42 @@ function openOfferDropdown(taxonomy, label) {
 
         list.appendChild(option);
     });
+}
 
-    root.classList.add('is-open');
-    root.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('offer-dropdown-open');
+function handleToolbarChipTap(event) {
+    if (!isOfferMobileToolbarActive()) {
+        return;
+    }
+
+    const moreChip = event.target.closest('.offer-mobile-chip--more');
+    if (moreChip) {
+        event.preventDefault();
+        closeOfferDropdown();
+        openOfferFilterPanel();
+        return;
+    }
+
+    const chip = event.target.closest('.offer-mobile-chip--dropdown');
+    if (!chip) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const { root } = getDropdownElements();
+    const isSameChipOpen = root?.classList.contains('is-open')
+        && root.dataset.activeTax === chip.dataset.tax;
+
+    if (isSameChipOpen) {
+        closeOfferDropdown();
+        return;
+    }
+
+    if (root) {
+        root.dataset.activeTax = chip.dataset.tax;
+    }
+
+    openOfferDropdown(chip.dataset.tax, chip.dataset.label || '');
 }
 
 export function initOfferMobileToolbar() {
@@ -161,7 +219,7 @@ export function initOfferMobileToolbar() {
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
     const clearBtn = document.getElementById('offer-mobile-clear-filters');
     const filterForm = getFilterForm();
-    const { backdrop, collapse } = getDropdownElements();
+    const { backdrop, close } = getDropdownElements();
 
     searchInput?.addEventListener('input', applyOfferSearchQuery);
 
@@ -184,43 +242,23 @@ export function initOfferMobileToolbar() {
     });
 
     toolbar.addEventListener('click', (event) => {
-        if (!isOfferMobileToolbarActive()) {
+        if (Date.now() - lastChipTouchAt < 400) {
             return;
         }
+        handleToolbarChipTap(event);
+    });
 
-        const moreChip = event.target.closest('.offer-mobile-chip--more');
-        if (moreChip) {
-            event.preventDefault();
-            closeOfferDropdown();
-            openOfferFilterPanel();
-            return;
-        }
-
-        const chip = event.target.closest('.offer-mobile-chip--dropdown');
+    toolbar.addEventListener('touchend', (event) => {
+        const chip = event.target.closest('.offer-mobile-chip--dropdown, .offer-mobile-chip--more');
         if (!chip || !toolbar.contains(chip)) {
             return;
         }
-
-        event.preventDefault();
-
-        const { root } = getDropdownElements();
-        const isSameChipOpen = root?.classList.contains('is-open')
-            && root.dataset.activeTax === chip.dataset.tax;
-
-        if (isSameChipOpen) {
-            closeOfferDropdown();
-            return;
-        }
-
-        if (root) {
-            root.dataset.activeTax = chip.dataset.tax;
-        }
-
-        openOfferDropdown(chip.dataset.tax, chip.dataset.label || '');
-    });
+        lastChipTouchAt = Date.now();
+        handleToolbarChipTap(event);
+    }, { passive: false });
 
     backdrop?.addEventListener('click', closeOfferDropdown);
-    collapse?.addEventListener('click', closeOfferDropdown);
+    close?.addEventListener('click', closeOfferDropdown);
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {

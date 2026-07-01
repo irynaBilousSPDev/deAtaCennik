@@ -29,7 +29,9 @@ $om-filter-card-pad: 16px;
 
 .offer-mobile-toolbar,
 .offer-mobile-dropdown {
-  display: none;
+  @include mixins.ipad-pro-screen {
+    display: none;
+  }
 }
 
 @include mixins.max-ipad-pro-screen {
@@ -261,6 +263,8 @@ $om-filter-card-pad: 16px;
       line-height: 1;
       white-space: nowrap;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
 
       &__chevron,
       &__settings {
@@ -315,125 +319,6 @@ $om-filter-card-pad: 16px;
         flex-shrink: 0;
         opacity: 1;
         color: $om-navy;
-      }
-    }
-
-    // —— Quick-filter dropdown sheet ——
-    .offer-mobile-dropdown {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: $om-z-dropdown;
-
-      &.is-open {
-        display: block;
-      }
-
-      &__backdrop {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        border: none;
-        background: rgba(0, 0, 0, 0.35);
-        cursor: pointer;
-      }
-
-      &__panel {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        max-height: min(70vh, 520px);
-        display: flex;
-        flex-direction: column;
-        background: vars.$white;
-        border-radius: 16px 16px 0 0;
-        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
-        transform: translateY(100%);
-        transition: transform 0.28s ease;
-      }
-
-      &.is-open &__panel {
-        transform: translateY(0);
-      }
-
-      &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 16px 16px 12px;
-        border-bottom: 1px solid #eee;
-      }
-
-      &__title {
-        flex: 1;
-        min-width: 0;
-        margin: 0;
-        font-size: 1.7rem;
-        font-weight: vars.$weight-bold;
-        line-height: 1.2;
-      }
-
-      &__title-dynamic {
-        font-weight: inherit;
-
-        &:not(:empty)::before {
-          content: " ";
-        }
-      }
-
-      &__collapse {
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border: 1px solid #ddd;
-        border-radius: 50%;
-        background: vars.$white;
-        color: vars.$black;
-        cursor: pointer;
-      }
-
-      &__collapse-icon {
-        display: block;
-      }
-
-      &__list {
-        overflow-y: auto;
-        padding: 4px 0 20px;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      &__option {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 14px 20px;
-        border: none;
-        background: transparent;
-        color: vars.$black;
-        font-size: 1.5rem;
-        line-height: 1.3;
-        text-align: left;
-        cursor: pointer;
-
-        &.is-selected {
-          color: vars.$primary;
-          font-weight: vars.$weight-bold;
-
-          &::after {
-            content: "✓";
-            font-size: 1.6rem;
-            line-height: 1;
-          }
-        }
       }
     }
 
@@ -1083,6 +968,115 @@ $om-filter-card-pad: 16px;
               cursor: pointer;
             }
           }
+        }
+      }
+    }
+  }
+
+  // Quick-filter bottom sheet — direct selector (works when portaled to body)
+  .offer-mobile-dropdown {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: $om-z-dropdown;
+
+    &.is-open {
+      display: block !important;
+    }
+
+    &__backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: rgba(0, 0, 0, 0.35);
+      cursor: pointer;
+    }
+
+    &__panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: min(70vh, 520px);
+      display: flex;
+      flex-direction: column;
+      background: vars.$white;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid #eee;
+    }
+
+    &__title {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      font-size: 1.7rem;
+      font-weight: vars.$weight-bold;
+      line-height: 1.2;
+    }
+
+    &__close {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      background: vars.$white;
+      color: vars.$black;
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    &__list {
+      overflow-y: auto;
+      padding: 0 0 calc(20px + env(safe-area-inset-bottom, 0));
+      -webkit-overflow-scrolling: touch;
+    }
+
+    &__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-bottom: 1px solid #eee;
+      background: transparent;
+      color: vars.$black;
+      font-size: 1.5rem;
+      line-height: 1.3;
+      text-align: left;
+      cursor: pointer;
+      touch-action: manipulation;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.is-selected {
+        color: vars.$primary;
+        font-weight: vars.$weight-bold;
+
+        &::after {
+          content: "✓";
+          font-size: 1.6rem;
+          line-height: 1;
         }
       }
     }
