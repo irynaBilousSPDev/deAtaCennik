@@ -83,6 +83,9 @@ return [
             ['value' => '0', 'label' => '% ryzyka bezrobocia na kilku kierunkach'],
         ],
         'cards_title' => 'Kierunki nr 1 w Polsce',
+        'card_label_salary' => 'zarobki/mies.',
+        'card_label_time_to_job' => 'do pracy',
+        'card_label_unemployment' => 'bezrobocie',
         'cards' => [
             [
                 'badge_main' => '#1',

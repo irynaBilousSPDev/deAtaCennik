@@ -252,6 +252,9 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
     $ela = $acf_fields['rank_ela_section'];
     $ela_id = !empty($ela['section_id']) ? $ela['section_id'] : 'ela';
     $ela_logo_fallback = get_template_directory_uri() . '/assets/dist/img/ela-logo.svg';
+    $ela_card_label_salary = $ela['card_label_salary'] ?? 'zarobki/mies.';
+    $ela_card_label_time_to_job = $ela['card_label_time_to_job'] ?? 'do pracy';
+    $ela_card_label_unemployment = $ela['card_label_unemployment'] ?? 'bezrobocie';
     ?>
     <section class="rank-sec rank-sec--tint" id="<?php echo esc_attr($ela_id); ?>">
         <div class="container rank-wrap">
@@ -318,13 +321,13 @@ $lp_render_image = static function ($image, $fallback_url, $class, $alt) {
                             <?php endif; ?>
                             <div class="rank-card__data">
                                 <?php if (!empty($card['salary'])) : ?>
-                                    <div><span><?php echo esc_html($card['salary']); ?></span><?php esc_html_e('zarobki/mies.', 'akademiata'); ?></div>
+                                    <div><span><?php echo esc_html($card['salary']); ?></span><?php echo esc_html($ela_card_label_salary); ?></div>
                                 <?php endif; ?>
                                 <?php if (!empty($card['time_to_job'])) : ?>
-                                    <div><span><?php echo esc_html($card['time_to_job']); ?></span><?php esc_html_e('do pracy', 'akademiata'); ?></div>
+                                    <div><span><?php echo esc_html($card['time_to_job']); ?></span><?php echo esc_html($ela_card_label_time_to_job); ?></div>
                                 <?php endif; ?>
                                 <?php if (!empty($card['unemployment'])) : ?>
-                                    <div><span><?php echo esc_html($card['unemployment']); ?></span><?php esc_html_e('bezrobocie', 'akademiata'); ?></div>
+                                    <div><span><?php echo esc_html($card['unemployment']); ?></span><?php echo esc_html($ela_card_label_unemployment); ?></div>
                                 <?php endif; ?>
                             </div>
                         </article>

@@ -470,6 +470,39 @@
                         ]
                     },
                     {
+                        "key": "field_rank_ela_card_labels_tab",
+                        "label": "Etykiety statystyk na kartach",
+                        "name": "",
+                        "type": "message",
+                        "message": "Wspólne podpisy przy zarobkach, czasie do pracy i bezrobociu na wszystkich kartach kierunków.",
+                        "new_lines": "wpautop",
+                        "esc_html": 0
+                    },
+                    {
+                        "key": "field_rank_ela_card_label_salary",
+                        "label": "Etykieta — zarobki",
+                        "name": "card_label_salary",
+                        "type": "text",
+                        "default_value": "zarobki/mies.",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_rank_ela_card_label_time",
+                        "label": "Etykieta — czas do pracy",
+                        "name": "card_label_time_to_job",
+                        "type": "text",
+                        "default_value": "do pracy",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_rank_ela_card_label_unemployment",
+                        "label": "Etykieta — bezrobocie",
+                        "name": "card_label_unemployment",
+                        "type": "text",
+                        "default_value": "bezrobocie",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
                         "key": "field_rank_ela_cards_title",
                         "label": "Nagłówek kart",
                         "name": "cards_title",
