@@ -394,7 +394,7 @@
 
 // ===== MOBILE FILTER UI =====
 @include mixins.max-ipad-pro-screen {
-  .offer_wrapper,
+  .offer_wrapper:not(.offer_wrapper--offer-page),
   .offer_wrapper--pg-mba {
     #sidebar {
       display: none;

@@ -61,7 +61,8 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
         <?php get_template_part('partials/offer-view-toggle'); ?>
         <button type="button" class="offer-mobile-clear" id="offer-mobile-clear-filters">
             <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="none" stroke="currentColor" stroke-width="2" d="M4 4l16 16M20 4L4 20"/>
+                <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
+                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
             </svg>
             <?php esc_html_e('Wyczyść filtry', 'akademiata'); ?>
         </button>

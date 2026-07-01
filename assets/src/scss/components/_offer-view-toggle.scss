@@ -6,6 +6,54 @@
 }
 
 @include mixins.max-ipad-pro-screen {
+  // Offer page — segmented control (mockup: joined squares, shared border)
+  .page-template-page-offer .offer-mobile-actions .offer-view-toggle {
+    display: inline-flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: vars.$white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .page-template-page-offer .offer-view-toggle__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    border-right: 1px solid #e0e0e0;
+    background: vars.$white;
+    color: #3a4a63;
+    cursor: pointer;
+    transition: color 0.2s ease, box-shadow 0.2s ease;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.is-active {
+      color: vars.$primary;
+      box-shadow: inset 0 0 0 2px vars.$primary;
+      z-index: 1;
+    }
+  }
+
+  .page-template-page-offer .offer-view-toggle__icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+  }
+
+  // PG/MBA filter pages
   .offer-mobile-actions .offer-view-toggle {
     display: inline-flex;
     align-items: center;
