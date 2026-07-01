@@ -686,6 +686,18 @@ $om-filter-card-pad: 16px;
           }
         }
 
+        @include mixins.ipad-air-screen {
+          .card_post_image {
+            flex: 0 0 33.333%;
+            width: 33.333%;
+            max-width: 33.333%;
+
+            .image_bg {
+              min-height: 100% !important;
+            }
+          }
+        }
+
         .buttons_wrapper {
           margin-top: 8px;
         }
@@ -699,13 +711,24 @@ $om-filter-card-pad: 16px;
           .card_property {
             margin-bottom: 1rem !important;
 
-            .sub_title {
-              font-size: vars.$font-size-default;
-              line-height: 24px;
+            > div,
+            .sub_title,
+            > h3,
+            h3 {
+              font-size: vars.$font-size-default !important;
+              color: vars.$black;
             }
 
-            h3 {
-              @include mixins.font-style(vars.$font-size-default, 19px, vars.$weight-bold);
+            .sub_title,
+            > div {
+              line-height: 24px !important;
+              font-weight: vars.$weight-regular;
+            }
+
+            h3,
+            > h3 {
+              line-height: 19px !important;
+              font-weight: vars.$weight-bold;
             }
           }
         }
