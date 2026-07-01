@@ -5,31 +5,31 @@
 
 $current_page_slug = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $quick_chips       = [
-    'degree'   => __('Typ studiów', 'akademiata'),
-    'city'     => __('Miasto', 'akademiata'),
-    'program'  => __('Kierunek studiów', 'akademiata'),
-    'language' => __('Język', 'akademiata'),
+    'degree'   => akademiata_get_theme_lang_string('offer_chip_degree'),
+    'city'     => akademiata_get_theme_lang_string('offer_chip_city'),
+    'program'  => akademiata_get_theme_lang_string('offer_chip_program'),
+    'language' => akademiata_get_theme_lang_string('offer_chip_language'),
 ];
 $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>';
 ?>
-<div class="offer-mobile-toolbar" aria-label="<?php esc_attr_e('Wyszukiwanie i filtry oferty', 'akademiata'); ?>">
+<div class="offer-mobile-toolbar" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_toolbar_aria')); ?>">
     <label class="offer-mobile-search">
-        <span class="visually-hidden"><?php esc_html_e('Wyszukaj kierunek', 'akademiata'); ?></span>
+        <span class="visually-hidden"><?php echo esc_html(akademiata_get_theme_lang_string('offer_search_label')); ?></span>
         <svg class="offer-mobile-search__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
             <path d="M20 20l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <input type="search"
                class="offer-mobile-search__input"
-               placeholder="<?php esc_attr_e('Wyszukaj kierunek lub słowo kluczowe…', 'akademiata'); ?>"
+               placeholder="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_placeholder')); ?>"
                autocomplete="off"
                inputmode="search">
     </label>
 
-    <div class="offer-mobile-chips" role="toolbar" aria-label="<?php esc_attr_e('Szybkie filtry', 'akademiata'); ?>">
+    <div class="offer-mobile-chips" role="toolbar" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_quick_filters_aria')); ?>">
         <div class="offer-mobile-chips__row">
             <button type="button" class="offer-mobile-chip is-active" data-tax="all">
-                <?php esc_html_e('Wszystkie', 'akademiata'); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_chip_all')); ?>
             </button>
             <?php foreach (['degree' => $quick_chips['degree'], 'city' => $quick_chips['city'], 'program' => $quick_chips['program']] as $taxonomy => $label) : ?>
                 <?php
@@ -63,7 +63,7 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                     <circle fill="currentColor" cx="16" cy="12" r="2"/>
                     <circle fill="currentColor" cx="10" cy="17" r="2"/>
                 </svg>
-                <?php esc_html_e('Więcej filtrów', 'akademiata'); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('news_more_filters')); ?>
             </button>
         </div>
     </div>
@@ -75,7 +75,7 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                 <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
                 <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
             </svg>
-            <?php esc_html_e('Wyczyść filtry', 'akademiata'); ?>
+            <?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?>
         </button>
     </div>
 </div>

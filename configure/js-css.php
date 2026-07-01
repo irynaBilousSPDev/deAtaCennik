@@ -57,6 +57,12 @@ function akademiata_enqueue_scripts()
         ]);
     }
 
+    if (is_page_template('page-offer.php')) {
+        wp_localize_script('name-main-js', 'akademiataOffer', [
+            'filterNoOptions' => akademiata_get_theme_lang_string('offer_filter_no_options'),
+        ]);
+    }
+
     if (is_page_template('page-rankingi.php')) {
         $lp_rankingi_js_path = get_template_directory() . '/assets/dist/js/lpRankingi.js';
         $lp_rankingi_js_ver  = file_exists($lp_rankingi_js_path) ? filemtime($lp_rankingi_js_path) : null;

@@ -34,6 +34,13 @@ $om-filter-card-pad: 16px;
   }
 }
 
+// Narrow phone — single-column offer grid
+@mixin offer-narrow-phone-screen {
+  @media (max-width: 379px) {
+    @content;
+  }
+}
+
 .offer-mobile-toolbar,
 .offer-mobile-dropdown {
   @include mixins.ipad-pro-screen {
@@ -579,12 +586,19 @@ $om-filter-card-pad: 16px;
         }
       }
 
-      // Grid — 2 columns
+      // Grid — 2 columns (1 column below 380px)
       #filter-results.filter-results--grid {
         .card_post_item {
           width: calc(50% - 0.5rem) !important;
           max-width: calc(50% - 0.5rem) !important;
           padding: 0 !important;
+        }
+
+        @include offer-narrow-phone-screen {
+          .card_post_item {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
         }
 
         .card_post_wrapper {

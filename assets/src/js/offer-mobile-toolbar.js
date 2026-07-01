@@ -143,7 +143,7 @@ function openOfferDropdown(taxonomy, label) {
         empty.className = 'offer-mobile-dropdown__empty';
         empty.style.padding = '14px 20px';
         empty.style.margin = '0';
-        empty.textContent = 'Brak opcji filtra.';
+        empty.textContent = (window.akademiataOffer && akademiataOffer.filterNoOptions) || 'Brak opcji filtra.';
         list.appendChild(empty);
         return;
     }
