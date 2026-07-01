@@ -189,28 +189,50 @@
       transform: translateY(0);
     }
 
-    @include mixins.max-ipad-air-screen {
-      align-self: center;
+    @include mixins.max-ipad-pro-screen {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      align-self: flex-start;
       width: 100%;
       max-width: 100%;
-      align-items: center;
-      gap: 4px;
+      gap: 8px;
 
       .ranking-badge-tooltip__image {
-        max-width: min(100%, 260px);
-        max-height: 68px;
+        max-width: 108px;
+        max-height: 50px;
+      }
+
+      .ranking-badge-tooltip__fallback {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: none;
+        gap: 2px;
+
+        strong {
+          font-size: 1.25rem;
+          line-height: 1.1;
+        }
+
+        span {
+          font-size: 0.78rem;
+          line-height: 1.25;
+        }
       }
 
       .ranking-badge-tooltip__trigger {
+        flex: 0 0 auto;
         margin-top: 0;
-        font-size: 12px;
+        margin-left: auto;
+        font-size: 11px;
         gap: 4px;
+        white-space: nowrap;
       }
 
       .ranking-badge-tooltip__icon {
-        width: 16px;
-        height: 16px;
-        font-size: 11px;
+        width: 15px;
+        height: 15px;
+        font-size: 10px;
       }
 
       .ranking-badge-tooltip__popup {
@@ -253,13 +275,31 @@
     }
 
     @include mixins.max-sm-screen {
+      gap: 6px;
+
       .ranking-badge-tooltip__image {
-        max-width: min(100%, 220px);
-        max-height: 56px;
+        max-width: 88px;
+        max-height: 42px;
+      }
+
+      .ranking-badge-tooltip__fallback {
+        strong {
+          font-size: 1.1rem;
+        }
+
+        span {
+          font-size: 0.72rem;
+        }
       }
 
       .ranking-badge-tooltip__trigger {
-        font-size: 11px;
+        font-size: 10px;
+      }
+
+      .ranking-badge-tooltip__hint {
+        max-width: 72px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .ranking-badge-tooltip__popup {

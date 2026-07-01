@@ -53,42 +53,43 @@
     .card_post_wrapper {
       flex-direction: row;
       align-items: stretch;
-      padding: 10px 12px;
+      padding: 0;
+      overflow: hidden;
     }
 
     .card_post_image {
-      flex: 0 0 96px;
-      width: 96px;
-      min-height: 0;
+      flex: 0 0 108px;
+      width: 108px;
+      min-height: 0 !important;
+      display: flex;
+      flex-direction: column;
+      background-color: transparent;
       border-bottom: none;
       border-right: 2px solid vars.$primary;
+      overflow: hidden;
+      position: relative;
+
+      > a {
+        flex: 1 1 auto;
+        display: block;
+        min-height: 100%;
+      }
 
       .image_bg {
-        height: 84px;
+        height: 100% !important;
+        min-height: 108px;
         background-size: cover;
         background-position: center;
+        background-color: vars.$background-gray;
       }
 
       .ranking_icon {
-        max-width: 44px;
+        max-width: 40px;
+        z-index: 2;
       }
 
       .city_block {
-        max-width: 72px;
-        padding: 2px 4px;
-        font-size: 9px;
-        gap: 2px;
-
-        .location_icon {
-          width: 12px;
-          height: auto;
-        }
-
-        span {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+        display: none;
       }
 
       .label-new,
@@ -100,18 +101,20 @@
     .card_post_body {
       flex: 1;
       min-width: 0;
-      padding: 0 0 0 10px;
+      height: auto !important;
+      padding: 10px 12px 10px 10px;
       justify-content: space-between;
+      gap: 8px;
 
       h2 {
-        font-size: 1.5rem;
-        line-height: 1.25;
-        margin-bottom: 0.25rem;
+        font-size: 1.45rem;
+        line-height: 1.2;
+        margin-bottom: 0.15rem;
       }
     }
 
     .card_properties_wrapper {
-      margin: 0.2rem 0 0.4rem;
+      margin: 0;
 
       .row {
         margin-left: -4px;
@@ -119,7 +122,7 @@
       }
 
       .card_property {
-        margin-bottom: 0;
+        margin-bottom: 0.15rem;
         padding-left: 4px;
         padding-right: 4px;
 
@@ -136,14 +139,35 @@
     }
 
     .buttons_wrapper {
-      gap: 0.4rem;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      margin-top: 4px;
+
+      .button-primary,
+      .button-sing_up,
+      .button-sing_up_wrapper {
+        margin: 0;
+      }
 
       .button-primary,
       .button-sing_up {
-        max-width: 118px;
-        font-size: 1.1rem;
-        padding: 6px 8px;
+        max-width: none;
+        width: auto;
+        min-width: 0;
+        flex: 1 1 0;
+        font-size: 1.05rem;
+        padding: 7px 10px;
         margin-bottom: 0 !important;
+      }
+
+      .button-sing_up_wrapper {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+
+        .button-sing_up {
+          width: 100%;
+        }
       }
     }
   }
@@ -160,25 +184,36 @@
       }
 
       .card_post_image {
-        flex-basis: 80px;
-        width: 80px;
+        flex-basis: 92px;
+        width: 92px;
 
         .image_bg {
-          height: 72px;
-        }
-
-        .city_block span {
-          display: none;
+          min-height: 92px;
         }
       }
 
-      .card_post_body h2 {
-        font-size: 1.35rem;
+      .card_post_body {
+        padding: 8px 10px 8px 8px;
+
+        h2 {
+          font-size: 1.25rem;
+        }
       }
 
       .card_properties_wrapper .card_property {
         flex: 0 0 100%;
         max-width: 100%;
+      }
+
+      .buttons_wrapper {
+        flex-direction: column;
+        align-items: stretch;
+
+        .button-primary,
+        .button-sing_up_wrapper {
+          flex: none;
+          width: 100%;
+        }
       }
     }
   }
