@@ -1,4 +1,4 @@
-import { closeOfferFilterPanel, openOfferFilterPanel } from './__customFunctions';
+import { openOfferFilterPanel } from './__customFunctions';
 
 const TABLET_MAX_WIDTH = 990;
 
@@ -52,7 +52,7 @@ function syncChipStates() {
 
     document.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
         const tax = chip.dataset.tax;
-        const checkedCount = form.querySelectorAll(`input[name="${tax}[]"]:checked`).length;
+        const checkedCount = getTaxonomyInputs(form, tax).filter((input) => input.checked).length;
         const hasFilter = checkedCount > 0;
 
         chip.classList.toggle('has-filter', hasFilter);
@@ -96,6 +96,14 @@ function closeOfferDropdown() {
     document.body.classList.remove('offer-dropdown-open');
 }
 
+function getTaxonomyInputs(form, taxonomy) {
+    const fieldName = `${taxonomy}[]`;
+
+    return Array.from(form.elements).filter(
+        (element) => element.tagName === 'INPUT' && element.name === fieldName
+    );
+}
+
 function openOfferDropdown(taxonomy, label) {
     const form = getFilterForm();
     const { root, title, list } = getDropdownElements();
@@ -104,10 +112,11 @@ function openOfferDropdown(taxonomy, label) {
         return;
     }
 
-    title.textContent = label;
+    const resolvedLabel = label || taxonomy;
+    title.textContent = resolvedLabel;
     list.innerHTML = '';
 
-    const inputs = form.querySelectorAll(`input[name="${taxonomy}[]"]`);
+    const inputs = getTaxonomyInputs(form, taxonomy);
 
     if (!inputs.length) {
         return;
@@ -174,36 +183,40 @@ export function initOfferMobileToolbar() {
         syncChipStates();
     });
 
-    toolbar.querySelector('.offer-mobile-chip--more')?.addEventListener('click', (event) => {
-        event.preventDefault();
+    toolbar.addEventListener('click', (event) => {
         if (!isOfferMobileToolbarActive()) {
             return;
         }
-        closeOfferDropdown();
-        openOfferFilterPanel();
-    });
 
-    toolbar.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
-        chip.addEventListener('click', () => {
-            if (!isOfferMobileToolbarActive()) {
-                return;
-            }
+        const moreChip = event.target.closest('.offer-mobile-chip--more');
+        if (moreChip) {
+            event.preventDefault();
+            closeOfferDropdown();
+            openOfferFilterPanel();
+            return;
+        }
 
-            const { root } = getDropdownElements();
-            const isSameChipOpen = root?.classList.contains('is-open')
-                && root.dataset.activeTax === chip.dataset.tax;
+        const chip = event.target.closest('.offer-mobile-chip--dropdown');
+        if (!chip || !toolbar.contains(chip)) {
+            return;
+        }
 
-            if (isSameChipOpen) {
-                closeOfferDropdown();
-                return;
-            }
+        event.preventDefault();
 
-            if (root) {
-                root.dataset.activeTax = chip.dataset.tax;
-            }
+        const { root } = getDropdownElements();
+        const isSameChipOpen = root?.classList.contains('is-open')
+            && root.dataset.activeTax === chip.dataset.tax;
 
-            openOfferDropdown(chip.dataset.tax, chip.dataset.label || chip.textContent.trim());
-        });
+        if (isSameChipOpen) {
+            closeOfferDropdown();
+            return;
+        }
+
+        if (root) {
+            root.dataset.activeTax = chip.dataset.tax;
+        }
+
+        openOfferDropdown(chip.dataset.tax, chip.dataset.label || '');
     });
 
     backdrop?.addEventListener('click', closeOfferDropdown);

@@ -320,16 +320,13 @@ $om-filter-card-pad: 16px;
 
     // —— Quick-filter dropdown sheet ——
     .offer-mobile-dropdown {
-      display: block;
+      display: none;
       position: fixed;
       inset: 0;
       z-index: $om-z-dropdown;
-      pointer-events: none;
-      visibility: hidden;
 
       &.is-open {
-        pointer-events: auto;
-        visibility: visible;
+        display: block;
       }
 
       &__backdrop {
