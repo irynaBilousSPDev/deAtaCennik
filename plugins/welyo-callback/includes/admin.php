@@ -158,6 +158,20 @@ function welyo_admin_field_api_select( $key, $label, $settings, $args = array() 
 	$empty    = isset( $args['empty_label'] ) ? $args['empty_label'] : __( '— auto z API —', 'akademiata' );
 	$value    = (string) welyo_admin_get_value( $settings, $key, $lang );
 	$field_id = welyo_admin_field_id( $key, $lang );
+	$name_key = '';
+	if ( $key === 'campaign_id' ) {
+		$name_key = 'campaign_name';
+	} elseif ( $key === 'classifier_id' ) {
+		$name_key = 'classifier_name';
+	}
+	$saved_name = $name_key ? (string) welyo_admin_get_value( $settings, $name_key, $lang ) : '';
+	if ( $value !== '' ) {
+		$saved_label = $saved_name !== ''
+			? $saved_name . ' (#' . $value . ')'
+			: '#' . $value . ' (' . __( 'zapisane', 'akademiata' ) . ')';
+	} else {
+		$saved_label = '';
+	}
 	?>
 	<tr>
 		<th scope="row"><label for="<?php echo esc_attr( $field_id ); ?>"><?php echo esc_html( $label ); ?></label></th>
@@ -165,7 +179,7 @@ function welyo_admin_field_api_select( $key, $label, $settings, $args = array() 
 			<select class="regular-text welyo-api-select" id="<?php echo esc_attr( $field_id ); ?>" name="<?php echo esc_attr( welyo_admin_option_name( $key, $lang ) ); ?>" data-welyo-api="<?php echo esc_attr( $key ); ?>" data-welyo-lang="<?php echo esc_attr( $lang ? $lang : '' ); ?>">
 				<option value=""><?php echo esc_html( $empty ); ?></option>
 				<?php if ( $value !== '' ) : ?>
-					<option value="<?php echo esc_attr( $value ); ?>" selected><?php echo esc_html( '#' . $value . ' (zapisane)' ); ?></option>
+					<option value="<?php echo esc_attr( $value ); ?>" selected><?php echo esc_html( $saved_label ); ?></option>
 				<?php endif; ?>
 			</select>
 			<?php if ( $desc ) : ?>
@@ -530,49 +544,61 @@ function welyo_admin_render_page() {
 				});
 		}
 
-		if (loadBtn) {
-			loadBtn.addEventListener('click', function () {
-				loadStatus.textContent = '';
-				loadSpinner.classList.add('is-active');
-				loadBtn.disabled = true;
-				fetch(restBase + 'campaigns', { headers: { 'X-WP-Nonce': restNonce } })
-					.then(function (r) { return r.json(); })
-					.then(function (data) {
-						if (data && data.code) {
-							throw new Error(data.message || 'campaigns');
-						}
-						var items = data.items || [];
-						campaignSelects().forEach(function (sel) {
-							fillSelect(
-								sel,
-								items,
-								sel.value,
-								<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
-							);
-						});
+		function loadCampaignListsFromApi(showStatus) {
+			if (showStatus && loadStatus) { loadStatus.textContent = ''; }
+			if (showStatus && loadSpinner) { loadSpinner.classList.add('is-active'); }
+			if (showStatus && loadBtn) { loadBtn.disabled = true; }
+			return fetch(restBase + 'campaigns', { headers: { 'X-WP-Nonce': restNonce } })
+				.then(function (r) { return r.json(); })
+				.then(function (data) {
+					if (data && data.code) {
+						throw new Error(data.message || 'campaigns');
+					}
+					var items = data.items || [];
+					campaignSelects().forEach(function (sel) {
+						fillSelect(
+							sel,
+							items,
+							sel.value,
+							<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
+						);
+					});
+					if (showStatus && loadStatus) {
 						loadStatus.textContent = items.length
 							? (<?php echo wp_json_encode( __( 'Załadowano kampanii:', 'akademiata' ) ); ?> + ' ' + items.length)
 							: (data.debug
 								? (<?php echo wp_json_encode( __( 'Brak kampanii. Odpowiedź API:', 'akademiata' ) ); ?> + ' ' + data.debug)
 								: <?php echo wp_json_encode( __( 'Brak kampanii w odpowiedzi API.', 'akademiata' ) ); ?>);
-						var promises = [];
-						campaignSelects().forEach(function (sel) {
-							var lang = sel.getAttribute('data-welyo-lang');
-							var cid = sel.value || (items[0] ? items[0].id : '');
-							if (lang && cid) {
-								promises.push(loadClassifiers(cid, lang));
-							}
-						});
-						return Promise.all(promises);
-					})
-					.catch(function (err) {
-						loadStatus.textContent = err && err.message ? err.message : <?php echo wp_json_encode( __( 'Nie udało się pobrać listy.', 'akademiata' ) ); ?>;
-					})
-					.finally(function () {
-						loadSpinner.classList.remove('is-active');
-						loadBtn.disabled = false;
+					}
+					var promises = [];
+					campaignSelects().forEach(function (sel) {
+						var lang = sel.getAttribute('data-welyo-lang');
+						var cid = sel.value || (items[0] ? items[0].id : '');
+						if (lang && cid) {
+							promises.push(loadClassifiers(cid, lang));
+						}
 					});
+					return Promise.all(promises);
+				})
+				.catch(function (err) {
+					if (showStatus && loadStatus) {
+						loadStatus.textContent = err && err.message ? err.message : <?php echo wp_json_encode( __( 'Nie udało się pobrać listy.', 'akademiata' ) ); ?>;
+					}
+				})
+				.finally(function () {
+					if (showStatus && loadSpinner) { loadSpinner.classList.remove('is-active'); }
+					if (showStatus && loadBtn) { loadBtn.disabled = false; }
+				});
+		}
+
+		if (loadBtn) {
+			loadBtn.addEventListener('click', function () {
+				loadCampaignListsFromApi(true);
 			});
+		}
+
+		if (campaignSelects().some(function (sel) { return sel.value; })) {
+			loadCampaignListsFromApi(false);
 		}
 
 		campaignSelects().forEach(function (sel) {
