@@ -10,10 +10,6 @@ function hasFavoriteButtons() {
     return document.querySelector('.offer-favorite-btn') !== null;
 }
 
-function getFavoriteEventRoot() {
-    return getOfferRoot() || document;
-}
-
 function getOfferRoot() {
     return document.querySelector('.offer_wrapper--offer-page');
 }
@@ -347,15 +343,17 @@ function toggleFavoritesFilter() {
 }
 
 function bindFavoriteHeartEvents() {
-    if (!hasFavoriteButtons()) {
+    const root = getOfferRoot();
+
+    if (!root && !hasFavoriteButtons()) {
         return;
     }
 
-    const root = getFavoriteEventRoot();
+    const eventRoot = root || document;
 
-    root.addEventListener('touchend', (event) => {
+    eventRoot.addEventListener('touchend', (event) => {
         const button = event.target.closest('.offer-favorite-btn');
-        if (!button || !root.contains(button)) {
+        if (!button || !eventRoot.contains(button)) {
             return;
         }
 
@@ -365,9 +363,9 @@ function bindFavoriteHeartEvents() {
         toggleFavorite(button.dataset.postId);
     }, { passive: false });
 
-    root.addEventListener('click', (event) => {
+    eventRoot.addEventListener('click', (event) => {
         const button = event.target.closest('.offer-favorite-btn');
-        if (!button || !root.contains(button)) {
+        if (!button || !eventRoot.contains(button)) {
             return;
         }
 
