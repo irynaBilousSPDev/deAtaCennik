@@ -6,6 +6,14 @@ const DEGREE_SCOPES = ['bachelor', 'master'];
 let favoritesFilterActive = false;
 let lastFavoriteTouchAt = 0;
 
+function hasFavoriteButtons() {
+    return document.querySelector('.offer-favorite-btn') !== null;
+}
+
+function getFavoriteEventRoot() {
+    return getOfferRoot() || document;
+}
+
 function getOfferRoot() {
     return document.querySelector('.offer_wrapper--offer-page');
 }
@@ -339,10 +347,11 @@ function toggleFavoritesFilter() {
 }
 
 function bindFavoriteHeartEvents() {
-    const root = getOfferRoot();
-    if (!root) {
+    if (!hasFavoriteButtons()) {
         return;
     }
+
+    const root = getFavoriteEventRoot();
 
     root.addEventListener('touchend', (event) => {
         const button = event.target.closest('.offer-favorite-btn');
@@ -424,23 +433,32 @@ function bindFavoritesChips() {
 }
 
 export function initOfferFavorites() {
-    if (!getOfferRoot()) {
+    const onOfferPage = Boolean(getOfferRoot());
+    const onCardPage = hasFavoriteButtons();
+
+    if (!onOfferPage && !onCardPage) {
         return;
     }
 
     bindFavoriteHeartEvents();
-    bindFavoritesChips();
 
-    document.querySelector('.offer-mobile-search__input')
-        ?.addEventListener('input', applyOfferCardFilters);
+    if (onOfferPage) {
+        bindFavoritesChips();
 
-    document.addEventListener('akademiata:filter-results-updated', () => {
-        updateAllHeartButtons();
-        updateFavoritesChipCounts();
-        applyOfferCardFilters();
-    });
+        document.querySelector('.offer-mobile-search__input')
+            ?.addEventListener('input', applyOfferCardFilters);
+
+        document.addEventListener('akademiata:filter-results-updated', () => {
+            updateAllHeartButtons();
+            updateFavoritesChipCounts();
+            applyOfferCardFilters();
+        });
+    }
 
     updateAllHeartButtons();
-    updateFavoritesChipCounts();
-    applyOfferCardFilters();
+
+    if (onOfferPage) {
+        updateFavoritesChipCounts();
+        applyOfferCardFilters();
+    }
 }

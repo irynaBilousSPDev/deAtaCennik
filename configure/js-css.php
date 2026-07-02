@@ -57,15 +57,18 @@ function akademiata_enqueue_scripts()
         ]);
     }
 
+    $offer_localize = [
+        'favoriteAdd'    => akademiata_get_theme_lang_string('offer_favorite_add'),
+        'favoriteRemove' => akademiata_get_theme_lang_string('offer_favorite_remove'),
+        'chipFavorites'  => akademiata_get_theme_lang_string('offer_chip_favorites'),
+        'favoritesScope' => akademiata_get_offer_favorites_scope(),
+    ];
+
     if (is_page_template('page-offer.php')) {
-        wp_localize_script('name-main-js', 'akademiataOffer', [
-            'filterNoOptions' => akademiata_get_theme_lang_string('offer_filter_no_options'),
-            'favoriteAdd'     => akademiata_get_theme_lang_string('offer_favorite_add'),
-            'favoriteRemove'  => akademiata_get_theme_lang_string('offer_favorite_remove'),
-            'chipFavorites'   => akademiata_get_theme_lang_string('offer_chip_favorites'),
-            'favoritesScope'    => akademiata_get_offer_favorites_scope(),
-        ]);
+        $offer_localize['filterNoOptions'] = akademiata_get_theme_lang_string('offer_filter_no_options');
     }
+
+    wp_localize_script('name-main-js', 'akademiataOffer', $offer_localize);
 
     if (is_page_template('page-rankingi.php')) {
         $lp_rankingi_js_path = get_template_directory() . '/assets/dist/js/lpRankingi.js';
