@@ -532,7 +532,7 @@
 }
 
 .buttons_wrapper {
-  @include mixins.flexbox(row, center, center);
+  @include mixins.flexbox(row, space-between, center);
   flex-wrap: wrap;
   gap: 0.75rem;
 
