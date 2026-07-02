@@ -223,8 +223,8 @@ function welyo_admin_render_general_help_box() {
 	?>
 	<div class="welyo-admin-help welyo-admin-help--general">
 		<p>
-			<strong><?php esc_html_e( 'Wspólne dla całej obsługi klienta', 'akademiata' ); ?></strong> —
-			<?php esc_html_e( 'ten sam numer infolinii i te same godziny pracy dla widgetu „Oddzwonimy” i dla quizu Forminator (w tym recall po godzinach). Ustaw raz per język — nie powielaj w innych zakładkach.', 'akademiata' ); ?>
+			<strong><?php esc_html_e( 'Numery i godziny pracy', 'akademiata' ); ?></strong> —
+			<?php esc_html_e( 'obowiązują dla widgetu „Oddzwonimy” oraz dla leadów z quizu, także przy oddzwonieniu po godzinach.', 'akademiata' ); ?>
 		</p>
 	</div>
 	<?php
@@ -233,37 +233,29 @@ function welyo_admin_render_general_help_box() {
 function welyo_admin_render_forminator_help_box() {
 	?>
 	<div class="welyo-forminator-help">
-		<h3><?php esc_html_e( 'Instrukcja: quiz Forminator → Welyo', 'akademiata' ); ?></h3>
-		<p><?php esc_html_e( 'Wystarczy ID quizu + osobna kampania Welyo. Telefon leada, e-mail, zgoda i wynik quizu wykrywamy z Forminator. Godziny recall — w zakładce Ogólne.', 'akademiata' ); ?></p>
+		<h3><?php esc_html_e( 'Jak skonfigurować quiz', 'akademiata' ); ?></h3>
+		<p><?php esc_html_e( 'Potrzebujesz osobnej kampanii Welyo na każdy język oraz ID quizu z Forminator.', 'akademiata' ); ?></p>
 
 		<ol class="welyo-forminator-help__steps">
 			<li>
-				<strong><?php esc_html_e( 'Welyo — kampania quizu (panel Welyo, nie WordPress)', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Utwórz osobną kampanię na każdy język (np. „Rekrutacja - quiz Forminator WWW”). W „Podstawowe dane” dodaj pola:', 'akademiata' ); ?>
+				<strong><?php esc_html_e( 'W panelu Welyo', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Utwórz kampanię na dany język (np. „Rekrutacja - quiz Forminator WWW”). W polach kampanii dodaj:', 'akademiata' ); ?>
 				<code>TELEFON</code>, <code>EMAIL</code>, <code>WYNIK_QUIZU</code>.
-				<?php esc_html_e( 'Dodaj klasyfikator recall. Potem w zakładce Quiz Forminator wybierz tę kampanię z listy API.', 'akademiata' ); ?>
+				<?php esc_html_e( 'Dodaj też klasyfikator do oddzwonień po godzinach.', 'akademiata' ); ?>
 			</li>
 			<li>
-				<strong><?php esc_html_e( 'Forminator — quiz z leadami', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Potencjalni klienci: telefon ★, e-mail, zgoda. Quiz osobowości — wynik (Lider Zespołu itd.) zapisuje się sam.', 'akademiata' ); ?>
+				<strong><?php esc_html_e( 'W Forminatorze', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Quiz powinien zbierać telefon (wymagany), e-mail i zgodę RODO. Przy quizie osobowości wynik (np. Lider Zespołu) zapisze się automatycznie.', 'akademiata' ); ?>
 			</li>
 			<li>
-				<strong><?php esc_html_e( 'Ogólne (numery i godziny)', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Infolinia i godziny pracy — wspólne z widgetem callback. Ustaw w zakładce Ogólne, nie tutaj.', 'akademiata' ); ?>
-			</li>
-			<li>
-				<strong><?php esc_html_e( 'Ten panel — per język', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Zakładka Quiz Forminator → poniżej wybierz PL / EN / UK / RU: ☑ integracja, ID quizu (np. PL = 20803), kampania z API. Slugi — tylko w sekcji zaawansowanej.', 'akademiata' ); ?>
-			</li>
-			<li>
-				<strong><?php esc_html_e( 'Włącz integrację', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Na górze tej zakładki: ☑ Włącz wysyłkę leadów z quizu Forminator do Welyo.', 'akademiata' ); ?>
+				<strong><?php esc_html_e( 'Na tej zakładce', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Włącz integrację, wybierz język, podaj ID quizu i przypisz kampanię z listy.', 'akademiata' ); ?>
 			</li>
 		</ol>
 
 		<p class="welyo-forminator-help__note">
-			<strong><?php esc_html_e( 'Przypomnienie:', 'akademiata' ); ?></strong>
-			<?php esc_html_e( 'Widget „Oddzwonimy” i quiz to dwie osobne kampanie Welyo — nie mieszaj ich w ustawieniach.', 'akademiata' ); ?>
+			<strong><?php esc_html_e( 'Ważne:', 'akademiata' ); ?></strong>
+			<?php esc_html_e( 'Widget „Oddzwonimy” i quiz korzystają z osobnych kampanii Welyo — nie używaj tej samej kampanii w obu miejscach.', 'akademiata' ); ?>
 		</p>
 	</div>
 	<?php
@@ -287,11 +279,11 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 			welyo_admin_field_text( 'forminator_form_id', 'ID quizu Forminator', $settings, array(
 				'lang' => $lang,
 				'type' => 'number',
-				'desc' => 'Shortcode [forminator_quiz id="…"]. PL = 20803, EN/UK/RU — własne ID z listy quizów.',
+				'desc' => 'ID quizu ze shortcode na stronie (np. PL: 20803).',
 			) );
 			welyo_admin_field_api_select( 'forminator_quiz_campaign_id', 'Kampania quizu (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Osobna lista CC — nie mieszaj z kampanią callback (zakładka Widget Oddzwonimy).',
+				'desc' => 'Kampania dla leadów z quizu — inna niż dla widgetu „Oddzwonimy”.',
 			) );
 			welyo_admin_field_text( 'forminator_quiz_campaign_name', 'Nazwa kampanii quizu (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -299,7 +291,7 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 			) );
 			welyo_admin_field_api_select( 'forminator_quiz_classifier_id', 'Klasyfikator recall quizu (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Po godzinach — recall dla leadów z quizu.',
+				'desc' => 'Oddzwonienie po godzinach pracy.',
 			) );
 			welyo_admin_field_text( 'forminator_quiz_classifier_name', 'Nazwa klasyfikatora quizu (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -309,15 +301,15 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 		</table>
 
 		<details class="welyo-forminator-advanced">
-			<summary><?php esc_html_e( 'Zaawansowane — ręczne slugi pól (zwykle puste)', 'akademiata' ); ?></summary>
-			<p class="description"><?php esc_html_e( 'Wypełnij tylko jeśli auto-wykrywanie nie trafi w pole. Domyślnie wtyczka sama znajdzie telefon, e-mail, zgodę i wynik osobowości.', 'akademiata' ); ?></p>
+			<summary><?php esc_html_e( 'Zaawansowane — nazwy pól formularza', 'akademiata' ); ?></summary>
+			<p class="description"><?php esc_html_e( 'Zostaw puste — wtyczka sama odczyta telefon, e-mail, zgodę i wynik quizu. Wypełniaj tylko na prośbę supportu.', 'akademiata' ); ?></p>
 			<table class="form-table" role="presentation">
 				<?php
-				welyo_admin_field_text( 'forminator_field_phone', 'Slug: telefon', $settings, array( 'lang' => $lang ) );
-				welyo_admin_field_text( 'forminator_field_name', 'Slug: imię', $settings, array( 'lang' => $lang ) );
-				welyo_admin_field_text( 'forminator_field_email', 'Slug: e-mail', $settings, array( 'lang' => $lang ) );
-				welyo_admin_field_text( 'forminator_field_quiz_result', 'Slug: wynik quizu', $settings, array( 'lang' => $lang ) );
-				welyo_admin_field_text( 'forminator_field_consent', 'Slug: zgoda RODO', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_phone', 'Pole: telefon', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_name', 'Pole: imię', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_email', 'Pole: e-mail', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_quiz_result', 'Pole: wynik quizu', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_consent', 'Pole: zgoda RODO', $settings, array( 'lang' => $lang ) );
 				?>
 			</table>
 		</details>
@@ -356,7 +348,7 @@ function welyo_admin_render_callback_lang_panel( $lang, $label, $settings ) {
 			<?php
 			welyo_admin_field_api_select( 'campaign_id', 'Kampania callback (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Lista Welyo dla widgetu „Oddzwonimy” — osobna od kampanii quizu.',
+				'desc' => 'Kampania dla widgetu „Oddzwonimy” — inna niż dla quizu.',
 			) );
 			welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -364,7 +356,7 @@ function welyo_admin_render_callback_lang_panel( $lang, $label, $settings ) {
 			) );
 			welyo_admin_field_api_select( 'classifier_id', 'Klasyfikator recall (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Po godzinach — recall.',
+				'desc' => 'Oddzwonienie po godzinach pracy.',
 			) );
 			welyo_admin_field_text( 'classifier_name', 'Nazwa klasyfikatora (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -449,7 +441,7 @@ function welyo_admin_render_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Welyo Callback', 'akademiata' ); ?></h1>
-		<p><?php esc_html_e( 'Integracja techniczna i kampanie — osobne zakładki. Numery/godziny — Ogólne. Teksty i kolory widgetu — osobno, łatwe do edycji.', 'akademiata' ); ?></p>
+		<p><?php esc_html_e( 'Widget „Oddzwonimy” na stronie — połączenie z Welyo, kampanie, teksty i wygląd.', 'akademiata' ); ?></p>
 
 		<?php settings_errors( 'welyo_callback' ); ?>
 
@@ -477,7 +469,7 @@ function welyo_admin_render_page() {
 
 			<div class="welyo-api-lists-box">
 				<h3><?php esc_html_e( 'Kampanie z API', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo — kampanie callback w Widget Oddzwonimy, kampanie quizu w Quiz Forminator.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Pobierz listę kampanii z Welyo, a potem przypisz je w zakładce Widget Oddzwonimy lub Quiz Forminator.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-load-api-lists"><?php esc_html_e( 'Pobierz listę z API', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-api-lists-spinner" style="float:none;"></span>
@@ -491,7 +483,7 @@ function welyo_admin_render_page() {
 
 			<div class="welyo-diagnostics-box">
 				<h3><?php esc_html_e( 'Test połączenia (API)', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API i JWT. Test kampanii — w Widget Oddzwonimy lub Quiz Forminator.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Sprawdza, czy login i klucz API do Welyo są poprawne.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-run-diagnostics"><?php esc_html_e( 'Sprawdź połączenie z Welyo', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-diagnostics-spinner" style="float:none;"></span>
@@ -524,7 +516,7 @@ function welyo_admin_render_page() {
 			</div>
 
 			<div id="welyo-main-callback" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Kampania Welyo dla widgetu „Oddzwonimy” — per język. Teksty panelu — zakładka Treści widgetu.', 'akademiata' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Przypisz kampanię Welyo do widgetu „Oddzwonimy” dla wybranego języka.', 'akademiata' ); ?></p>
 			<nav class="nav-tab-wrapper welyo-callback-lang-tabs">
 				<?php
 				$first = true;
@@ -547,7 +539,7 @@ function welyo_admin_render_page() {
 			</div>
 
 			<div id="welyo-main-forminator" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Quiz Forminator → Welyo: osobna kampania CC, auto-wykrywanie pól leadów. Godziny recall — zakładka Ogólne.', 'akademiata' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Powiąż quiz Forminator z kampanią Welyo. Godziny oddzwonień ustawiasz w zakładce Ogólne.', 'akademiata' ); ?></p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Integracja quizu', 'akademiata' ); ?></th>
@@ -583,7 +575,7 @@ function welyo_admin_render_page() {
 			</div>
 
 			<div id="welyo-main-content" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Teksty panelu „Oddzwonimy” — per język WPML. Tu edytujesz copy jak kolory, bez dotykania kampanii Welyo.', 'akademiata' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Teksty widoczne w panelu „Oddzwonimy” — osobno dla każdej wersji językowej strony.', 'akademiata' ); ?></p>
 			<nav class="nav-tab-wrapper welyo-content-lang-tabs">
 				<?php
 				$first_content = true;
@@ -628,7 +620,7 @@ function welyo_admin_render_page() {
 					<td>
 						<label>
 							<input type="checkbox" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[auto_footer]" value="1" <?php checked( ! empty( $settings['auto_footer'] ) ); ?>>
-							<?php esc_html_e( 'Pokazuj automatycznie we wszystkich stopkach (wp_footer)', 'akademiata' ); ?>
+							<?php esc_html_e( 'Pokazuj automatycznie na wszystkich stronach (w stopce)', 'akademiata' ); ?>
 						</label>
 						<p class="description"><?php esc_html_e( 'Shortcode: [welyo_callback]', 'akademiata' ); ?></p>
 					</td>
@@ -651,7 +643,7 @@ function welyo_admin_render_page() {
 			</table>
 
 			<div class="welyo-config-box">
-				<h3><?php esc_html_e( 'Plik welyo-config.php (opcjonalnie)', 'akademiata' ); ?></h3>
+				<h3><?php esc_html_e( 'Plik konfiguracyjny (zwykle niepotrzebny)', 'akademiata' ); ?></h3>
 				<p>
 					<?php
 					if ( is_readable( $config_path ) ) {
@@ -664,11 +656,11 @@ function welyo_admin_render_page() {
 					}
 					?>
 				</p>
-				<p class="description"><?php esc_html_e( 'Ustawienia działają od razu z bazy WP. Plik config jest opcjonalny (np. starsze deploye) — zaznacz poniżej przy zapisie, jeśli chcesz go odświeżyć.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Ustawienia zapisują się od razu w WordPressie. Opcja poniżej jest tylko dla administratora serwera.', 'akademiata' ); ?></p>
 				<p>
 					<label>
 						<input type="checkbox" name="welyo_write_config_file" value="1">
-						<?php esc_html_e( 'Przy tym zapisie wygeneruj / nadpisz welyo-config.php', 'akademiata' ); ?>
+						<?php esc_html_e( 'Wygeneruj plik konfiguracyjny na serwerze', 'akademiata' ); ?>
 					</label>
 				</p>
 			</div>
