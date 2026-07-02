@@ -163,6 +163,10 @@ function welyo_admin_field_api_select( $key, $label, $settings, $args = array() 
 		$name_key = 'campaign_name';
 	} elseif ( $key === 'classifier_id' ) {
 		$name_key = 'classifier_name';
+	} elseif ( $key === 'forminator_quiz_campaign_id' ) {
+		$name_key = 'forminator_quiz_campaign_name';
+	} elseif ( $key === 'forminator_quiz_classifier_id' ) {
+		$name_key = 'forminator_quiz_classifier_name';
 	}
 	$saved_name = $name_key ? (string) welyo_admin_get_value( $settings, $name_key, $lang ) : '';
 	if ( $value !== '' ) {
@@ -215,6 +219,51 @@ function welyo_admin_field_text( $key, $label, $settings, $args = array() ) {
 	<?php
 }
 
+function welyo_admin_render_forminator_help_box() {
+	?>
+	<div class="welyo-forminator-help">
+		<h3><?php esc_html_e( 'Instrukcja: quiz Forminator → Welyo', 'akademiata' ); ?></h3>
+		<p><?php esc_html_e( 'Wystarczy ID quizu + kampania Welyo. Telefon, e-mail, zgoda i wynik (np. Analityczny Strateg) wykrywamy automatycznie z wpisu Forminator.', 'akademiata' ); ?></p>
+
+		<ol class="welyo-forminator-help__steps">
+			<li>
+				<strong><?php esc_html_e( 'Welyo — kampania quizu (panel Welyo, nie WordPress)', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Utwórz osobną kampanię na każdy język (np. „Rekrutacja - quiz Forminator WWW”). W „Podstawowe dane” dodaj pola:', 'akademiata' ); ?>
+				<code>TELEFON</code>, <code>EMAIL</code>, <code>WYNIK_QUIZU</code>.
+				<?php esc_html_e( 'Dodaj klasyfikator recall. Potem w tym panelu (zakładka Języki → Quiz Forminator) wybierz tę kampanię z listy API.', 'akademiata' ); ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Forminator — quiz z leadami', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Potencjalni klienci: telefon ★, e-mail, zgoda. Quiz osobowości — wynik (Lider Zespołu itd.) zapisuje się sam. Zakładki Integracje / API w Forminator — nie włączaj, nie są potrzebne.', 'akademiata' ); ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Forminator API (dokumentacja WPMU DEV)', 'akademiata' ); ?></strong>
+				<?php
+				printf(
+					/* translators: %s: URL to Forminator API docs */
+					esc_html__( 'Nie potrzebujemy go. To API do zewnętrznych aplikacji (tworzenie formularzy, odczyt wpisów zdalnie). My działamy wewnątrz WordPressa — po wysłaniu quizu PHP od razu czyta wpis i wysyła do Welyo. Przycisk „Zaczynamy” w Forminator → Integracje → API zostaw wyłączony. Docs: %s', 'akademiata' ),
+					'<a href="https://wpmudev.com/docs/wpmu-dev-plugins/forminator-api-docs/" target="_blank" rel="noopener noreferrer">Forminator API</a>'
+				);
+				?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Ten panel — per język', 'akademiata' ); ?></strong>
+				<?php esc_html_e( '☑ integracja, ID formularza (np. PL = 20803), kampania quizu z API. Slugi pól — tylko gdy auto nie zadziała (sekcja zaawansowana).', 'akademiata' ); ?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Wyświetlanie', 'akademiata' ); ?></strong>
+				<?php esc_html_e( '☑ Włącz wysyłkę leadów z quizu Forminator do Welyo.', 'akademiata' ); ?>
+			</li>
+		</ol>
+
+		<p class="welyo-forminator-help__note">
+			<strong><?php esc_html_e( 'Przypomnienie:', 'akademiata' ); ?></strong>
+			<?php esc_html_e( 'Widget „Oddzwonimy” i quiz to dwie osobne kampanie Welyo — nie mieszaj ich w ustawieniach.', 'akademiata' ); ?>
+		</p>
+	</div>
+	<?php
+}
+
 function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 	?>
 	<div class="welyo-lang-panel" id="welyo-lang-<?php echo esc_attr( $lang ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" hidden>
@@ -240,6 +289,59 @@ function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 			) );
 			?>
 		</table>
+
+		<h3><?php esc_html_e( 'Quiz Forminator → Welyo', 'akademiata' ); ?></h3>
+		<p class="description">
+			<?php esc_html_e( 'Wystarczy ID quizu + kampania. Pola (telefon, e-mail, zgoda, wynik) wykrywane automatycznie.', 'akademiata' ); ?>
+		</p>
+		<table class="form-table" role="presentation">
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Integracja quizu', 'akademiata' ); ?></th>
+				<td>
+					<label>
+						<input type="checkbox" name="<?php echo esc_attr( welyo_admin_option_name( 'forminator_enabled', $lang ) ); ?>" value="1" <?php checked( ! empty( welyo_admin_get_value( $settings, 'forminator_enabled', $lang ) ) ); ?>>
+						<?php esc_html_e( 'Wysyłaj wypełnienia tego quizu do Welyo', 'akademiata' ); ?>
+					</label>
+				</td>
+			</tr>
+			<?php
+			welyo_admin_field_text( 'forminator_form_id', 'ID quizu Forminator', $settings, array(
+				'lang' => $lang,
+				'type' => 'number',
+				'desc' => 'Shortcode [forminator_quiz id="…"]. PL = 20803, EN/UK/RU — własne ID z listy quizów.',
+			) );
+			welyo_admin_field_api_select( 'forminator_quiz_campaign_id', 'Kampania quizu (z API)', $settings, array(
+				'lang' => $lang,
+				'desc' => 'Osobna lista CC — nie mieszaj z kampanią callback.',
+			) );
+			welyo_admin_field_text( 'forminator_quiz_campaign_name', 'Nazwa kampanii quizu (opcjonalnie)', $settings, array(
+				'lang' => $lang,
+				'wide' => true,
+			) );
+			welyo_admin_field_api_select( 'forminator_quiz_classifier_id', 'Klasyfikator recall quizu (z API)', $settings, array(
+				'lang' => $lang,
+				'desc' => 'Po godzinach — recall dla leadów z quizu.',
+			) );
+			welyo_admin_field_text( 'forminator_quiz_classifier_name', 'Nazwa klasyfikatora quizu (opcjonalnie)', $settings, array(
+				'lang' => $lang,
+				'wide' => true,
+			) );
+			?>
+		</table>
+
+		<details class="welyo-forminator-advanced">
+			<summary><?php esc_html_e( 'Zaawansowane — ręczne slugi pól (zwykle puste)', 'akademiata' ); ?></summary>
+			<p class="description"><?php esc_html_e( 'Wypełnij tylko jeśli auto-wykrywanie nie trafi w pole. Domyślnie wtyczka sama znajdzie telefon, e-mail, zgodę i wynik osobowości.', 'akademiata' ); ?></p>
+			<table class="form-table" role="presentation">
+				<?php
+				welyo_admin_field_text( 'forminator_field_phone', 'Slug: telefon', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_name', 'Slug: imię', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_email', 'Slug: e-mail', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_quiz_result', 'Slug: wynik quizu', $settings, array( 'lang' => $lang ) );
+				welyo_admin_field_text( 'forminator_field_consent', 'Slug: zgoda RODO', $settings, array( 'lang' => $lang ) );
+				?>
+			</table>
+		</details>
 
 		<h3><?php esc_html_e( 'Telefon i godziny', 'akademiata' ); ?></h3>
 		<table class="form-table" role="presentation">
@@ -372,6 +474,7 @@ function welyo_admin_render_page() {
 
 			<div id="welyo-main-languages" class="welyo-main-panel" hidden>
 			<p class="description"><?php esc_html_e( 'Kampania, telefon, godziny i teksty — osobno dla każdego języka.', 'akademiata' ); ?></p>
+			<?php welyo_admin_render_forminator_help_box(); ?>
 			<nav class="nav-tab-wrapper welyo-lang-tabs">
 				<?php
 				$first = true;
@@ -411,6 +514,16 @@ function welyo_admin_render_page() {
 
 			<div id="welyo-main-display" class="welyo-main-panel" hidden>
 			<table class="form-table" role="presentation">
+				<tr>
+					<th scope="row"><?php esc_html_e( 'Quiz Forminator', 'akademiata' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="<?php echo esc_attr( WELYO_OPTION_KEY ); ?>[forminator_integration_enabled]" value="1" <?php checked( ! empty( $settings['forminator_integration_enabled'] ) ); ?>>
+							<?php esc_html_e( 'Włącz wysyłkę leadów z quizu Forminator do Welyo', 'akademiata' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'Wymaga aktywnej wtyczki Forminator. Szczegółowa instrukcja w zakładce Języki (ramka na górze).', 'akademiata' ); ?></p>
+					</td>
+				</tr>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Widget na stronie', 'akademiata' ); ?></th>
 					<td>
@@ -487,6 +600,17 @@ function welyo_admin_render_page() {
 		.welyo-main-panel { margin-top:16px; max-width:52rem; }
 		.welyo-config-box { margin-top:20px; padding:16px 18px; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
 		.welyo-config-box h3 { margin:0 0 8px; }
+		.welyo-forminator-help { margin:0 0 20px; padding:16px 20px; max-width:52rem; background:#fff8e5; border:1px solid #e6c200; border-radius:4px; }
+		.welyo-forminator-help h3 { margin:0 0 10px; font-size:1.05em; }
+		.welyo-forminator-help p { margin:0 0 10px; }
+		.welyo-forminator-help__steps { margin:0 0 12px; padding-left:1.4em; }
+		.welyo-forminator-help__steps > li { margin-bottom:12px; }
+		.welyo-forminator-help__steps ul { margin:6px 0 0; padding-left:1.2em; }
+		.welyo-forminator-help__steps ul li { margin-bottom:4px; }
+		.welyo-forminator-help__steps code { margin:0 2px; padding:1px 5px; background:#f6f7f7; border-radius:3px; font-size:12px; }
+		.welyo-forminator-help__note { margin:0; padding:10px 12px; background:#f6f7f7; border-radius:4px; font-size:13px; }
+		.welyo-forminator-advanced { margin:12px 0 20px; padding:12px 16px; max-width:52rem; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
+		.welyo-forminator-advanced summary { cursor:pointer; font-weight:600; margin-bottom:8px; }
 	</style>
 	<script>
 	(function () {
@@ -497,13 +621,40 @@ function welyo_admin_render_page() {
 		var loadStatus = document.getElementById('welyo-api-lists-status');
 
 		function campaignSelects() {
-			return Array.prototype.slice.call(document.querySelectorAll('.welyo-api-select[data-welyo-api="campaign_id"]'));
+			return Array.prototype.slice.call(document.querySelectorAll(
+				'.welyo-api-select[data-welyo-api="campaign_id"], .welyo-api-select[data-welyo-api="forminator_quiz_campaign_id"]'
+			));
 		}
-		function classifierSelectForLang(lang) {
-			return document.getElementById('welyo_' + lang + '_classifier_id');
+		function classifierSelectForLang(lang, campaignApiKey) {
+			var classifierKey = campaignApiKey === 'forminator_quiz_campaign_id'
+				? 'forminator_quiz_classifier_id'
+				: 'classifier_id';
+			return document.getElementById('welyo_' + lang + '_' + classifierKey);
 		}
-		function campaignSelectForLang(lang) {
-			return document.getElementById('welyo_' + lang + '_campaign_id');
+		function campaignSelectForLang(lang, campaignApiKey) {
+			campaignApiKey = campaignApiKey || 'campaign_id';
+			return document.getElementById('welyo_' + lang + '_' + campaignApiKey);
+		}
+
+		function loadClassifiers(campaignId, lang, campaignApiKey) {
+			campaignApiKey = campaignApiKey || 'campaign_id';
+			var classifierSelect = classifierSelectForLang(lang, campaignApiKey);
+			if (!classifierSelect || !campaignId) { return Promise.resolve(); }
+			return fetch(restBase + 'classifiers?campaign_id=' + encodeURIComponent(campaignId), {
+				headers: { 'X-WP-Nonce': restNonce }
+			})
+				.then(function (r) { return r.json(); })
+				.then(function (data) {
+					if (data && data.code) {
+						throw new Error(data.message || 'classifiers');
+					}
+					fillSelect(
+						classifierSelect,
+						data.items || [],
+						classifierSelect.value,
+						<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
+					);
+				});
 		}
 
 		function fillSelect(select, items, savedValue, emptyLabel) {
@@ -522,26 +673,6 @@ function welyo_admin_render_page() {
 				}
 				select.appendChild(opt);
 			});
-		}
-
-		function loadClassifiers(campaignId, lang) {
-			var classifierSelect = classifierSelectForLang(lang);
-			if (!classifierSelect || !campaignId) { return Promise.resolve(); }
-			return fetch(restBase + 'classifiers?campaign_id=' + encodeURIComponent(campaignId), {
-				headers: { 'X-WP-Nonce': restNonce }
-			})
-				.then(function (r) { return r.json(); })
-				.then(function (data) {
-					if (data && data.code) {
-						throw new Error(data.message || 'classifiers');
-					}
-					fillSelect(
-						classifierSelect,
-						data.items || [],
-						classifierSelect.value,
-						<?php echo wp_json_encode( __( '— auto z API —', 'akademiata' ) ); ?>
-					);
-				});
 		}
 
 		function loadCampaignListsFromApi(showStatus) {
@@ -573,9 +704,10 @@ function welyo_admin_render_page() {
 					var promises = [];
 					campaignSelects().forEach(function (sel) {
 						var lang = sel.getAttribute('data-welyo-lang');
+						var apiKey = sel.getAttribute('data-welyo-api') || 'campaign_id';
 						var cid = sel.value || (items[0] ? items[0].id : '');
 						if (lang && cid) {
-							promises.push(loadClassifiers(cid, lang));
+							promises.push(loadClassifiers(cid, lang, apiKey));
 						}
 					});
 					return Promise.all(promises);
@@ -604,8 +736,9 @@ function welyo_admin_render_page() {
 		campaignSelects().forEach(function (sel) {
 			sel.addEventListener('change', function () {
 				var lang = sel.getAttribute('data-welyo-lang');
+				var apiKey = sel.getAttribute('data-welyo-api') || 'campaign_id';
 				if (lang && sel.value) {
-					loadClassifiers(sel.value, lang);
+					loadClassifiers(sel.value, lang, apiKey);
 				}
 			});
 		});

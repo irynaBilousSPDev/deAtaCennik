@@ -26,6 +26,7 @@ function welyo_supported_languages() {
 function welyo_global_setting_keys() {
 	return array(
 		'base_url', 'login', 'api_key', 'hash_method', 'auto_footer', 'enabled_languages', 'settings_version',
+		'forminator_integration_enabled',
 		'color_brand', 'color_brand_hover', 'color_brand_dark', 'color_accent', 'color_accent_hover',
 		'color_text', 'color_text_muted', 'color_border', 'color_panel_bg', 'color_launcher_text',
 		'color_status_open', 'color_status_closed', 'color_success', 'color_footer_text',
@@ -37,6 +38,11 @@ function welyo_global_setting_keys() {
 function welyo_lang_setting_keys() {
 	return array(
 		'campaign_id', 'classifier_id', 'campaign_name', 'classifier_name',
+		'forminator_enabled', 'forminator_form_id',
+		'forminator_quiz_campaign_id', 'forminator_quiz_campaign_name',
+		'forminator_quiz_classifier_id', 'forminator_quiz_classifier_name',
+		'forminator_field_name', 'forminator_field_phone', 'forminator_field_email',
+		'forminator_field_consent', 'forminator_field_quiz_result',
 		'phone_dial', 'phone_pretty', 'default_prefix', 'privacy_url',
 		'open_hour', 'close_hour', 'workdays',
 		'text_status_open', 'text_status_closed', 'text_title_open', 'text_title_closed',
@@ -58,7 +64,8 @@ function welyo_default_global_settings() {
 		'hash_method'         => 'md5',
 		'auto_footer'         => 1,
 		'enabled_languages'   => array( 'pl' ),
-		'settings_version'    => 2,
+		'settings_version'    => 3,
+		'forminator_integration_enabled' => 1,
 		'color_brand'         => '#2a3a86',
 		'color_brand_hover'   => '#3650c8',
 		'color_brand_dark'    => '#1a2766',
@@ -86,6 +93,17 @@ function welyo_default_lang_settings( $lang ) {
 		'classifier_id'   => '',
 		'campaign_name'   => '',
 		'classifier_name' => '',
+		'forminator_enabled'                  => 0,
+		'forminator_form_id'                  => '',
+		'forminator_quiz_campaign_id'         => '',
+		'forminator_quiz_campaign_name'       => '',
+		'forminator_quiz_classifier_id'       => '',
+		'forminator_quiz_classifier_name'     => '',
+		'forminator_field_name'               => '',
+		'forminator_field_phone'              => '',
+		'forminator_field_email'              => '',
+		'forminator_field_consent'            => '',
+		'forminator_field_quiz_result'        => '',
 		'open_hour'       => 8,
 		'close_hour'      => 18,
 		'workdays'        => '1,2,3,4,5',
@@ -98,6 +116,7 @@ function welyo_default_lang_settings( $lang ) {
 			'phone_pretty'           => '+48 22 825 80 34',
 			'privacy_url'            => '/polityka-prywatnosci/',
 			'campaign_name'          => 'Rekrutacja - formularz WWW (callback)',
+			'forminator_quiz_campaign_name' => 'Rekrutacja - quiz Forminator WWW',
 			'text_status_open'       => 'Jesteśmy teraz dostępni',
 			'text_status_closed'     => 'Jesteśmy już po godzinach',
 			'text_title_open'        => 'Masz pytanie?',
@@ -133,6 +152,7 @@ function welyo_default_lang_settings( $lang ) {
 			'phone_pretty'           => '+48 71 333 11 07',
 			'privacy_url'            => '/en/privacy-policy/',
 			'campaign_name'          => 'Recruitment - website form (callback)',
+			'forminator_quiz_campaign_name' => 'Recruitment - Forminator quiz WWW',
 			'text_status_open'       => 'We are available now',
 			'text_status_closed'     => 'We are closed for today',
 			'text_title_open'        => 'Have a question?',
@@ -168,6 +188,7 @@ function welyo_default_lang_settings( $lang ) {
 			'phone_pretty'           => '+48 71 333 11 18',
 			'privacy_url'            => '/uk/polityka-konfidentsijnosti/',
 			'campaign_name'          => 'Рекрутація - форма WWW (callback)',
+			'forminator_quiz_campaign_name' => 'Рекрутація - quiz Forminator WWW',
 			'text_status_open'       => 'Ми зараз на зв\'язку',
 			'text_status_closed'     => 'Ми вже поза робочими годинами',
 			'text_title_open'        => 'Маєте запитання?',
@@ -203,6 +224,7 @@ function welyo_default_lang_settings( $lang ) {
 			'phone_pretty'           => '+48 71 333 11 18',
 			'privacy_url'            => '/ru/politika-konfidentsialnosti/',
 			'campaign_name'          => 'Рекрутинг - форма WWW (callback)',
+			'forminator_quiz_campaign_name' => 'Рекрутинг - quiz Forminator WWW',
 			'text_status_open'       => 'Мы сейчас на связи',
 			'text_status_closed'     => 'Мы уже вне рабочих часов',
 			'text_title_open'        => 'Есть вопрос?',
@@ -715,7 +737,7 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 	$defaults = welyo_default_lang_settings( $lang );
 	$out      = array();
 
-	$string_keys = array_diff( welyo_lang_setting_keys(), array( 'open_hour', 'close_hour' ) );
+	$string_keys = array_diff( welyo_lang_setting_keys(), array( 'open_hour', 'close_hour', 'forminator_form_id', 'forminator_enabled' ) );
 
 	foreach ( $string_keys as $key ) {
 		if ( ! isset( $input[ $key ] ) ) {
@@ -730,6 +752,10 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 
 	$out['open_hour']  = isset( $input['open_hour'] ) ? max( 0, min( 23, (int) $input['open_hour'] ) ) : (int) $current_lang['open_hour'];
 	$out['close_hour'] = isset( $input['close_hour'] ) ? max( 1, min( 24, (int) $input['close_hour'] ) ) : (int) $current_lang['close_hour'];
+	$out['forminator_enabled'] = ! empty( $input['forminator_enabled'] ) ? 1 : 0;
+	if ( isset( $input['forminator_form_id'] ) ) {
+		$out['forminator_form_id'] = max( 0, (int) $input['forminator_form_id'] );
+	}
 
 	return array_merge( $defaults, $current_lang, $out );
 }
@@ -761,6 +787,7 @@ function welyo_sanitize_settings( $input ) {
 	}
 
 	$out['auto_footer'] = ! empty( $input['auto_footer'] ) ? 1 : 0;
+	$out['forminator_integration_enabled'] = ! empty( $input['forminator_integration_enabled'] ) ? 1 : 0;
 
 	if ( isset( $input['hash_method'] ) && in_array( $input['hash_method'], array( 'md5', 'sha1' ), true ) ) {
 		$out['hash_method'] = $input['hash_method'];
@@ -784,7 +811,7 @@ function welyo_sanitize_settings( $input ) {
 		$out[ $color_key ] = welyo_sanitize_color( wp_unslash( $input[ $color_key ] ), $defaults[ $color_key ] );
 	}
 
-	$out['settings_version'] = 2;
+	$out['settings_version'] = 3;
 	$out['languages']        = array();
 	foreach ( welyo_supported_languages() as $code => $label ) {
 		$lang_in    = ( ! empty( $input['languages'][ $code ] ) && is_array( $input['languages'][ $code ] ) )
@@ -810,6 +837,8 @@ function welyo_clear_lang_transients() {
 	foreach ( array_keys( welyo_supported_languages() ) as $lang ) {
 		delete_transient( 'welyo_campaign_id_' . $lang );
 		delete_transient( 'welyo_classifier_id_' . $lang );
+		delete_transient( 'welyo_forminator_campaign_id_' . $lang );
+		delete_transient( 'welyo_forminator_classifier_id_' . $lang );
 	}
 	delete_transient( 'welyo_campaign_id' );
 	delete_transient( 'welyo_classifier_id' );
