@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.5.0
+ * Version: 1.5.1
  * Author: —
  * License: GPL-2.0-or-later
  */
