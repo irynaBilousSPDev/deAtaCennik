@@ -165,8 +165,6 @@ function welyo_admin_field_api_select( $key, $label, $settings, $args = array() 
 		$name_key = 'classifier_name';
 	} elseif ( $key === 'forminator_quiz_campaign_id' ) {
 		$name_key = 'forminator_quiz_campaign_name';
-	} elseif ( $key === 'forminator_quiz_classifier_id' ) {
-		$name_key = 'forminator_quiz_classifier_name';
 	}
 	$saved_name = $name_key ? (string) welyo_admin_get_value( $settings, $name_key, $lang ) : '';
 	if ( $value !== '' ) {
@@ -224,7 +222,7 @@ function welyo_admin_render_general_help_box() {
 	<div class="welyo-admin-help welyo-admin-help--general">
 		<p>
 			<strong><?php esc_html_e( 'Numery i godziny pracy', 'akademiata' ); ?></strong> —
-			<?php esc_html_e( 'obowiązują dla widgetu „Oddzwonimy” oraz dla leadów z quizu, także przy oddzwonieniu po godzinach.', 'akademiata' ); ?>
+			<?php esc_html_e( 'dotyczą widgetu „Oddzwonimy” na stronie (zadzwoń w godzinach pracy, formularz po godzinach).', 'akademiata' ); ?>
 		</p>
 	</div>
 	<?php
@@ -241,7 +239,6 @@ function welyo_admin_render_forminator_help_box() {
 				<strong><?php esc_html_e( 'W panelu Welyo', 'akademiata' ); ?></strong>
 				<?php esc_html_e( 'Utwórz kampanię na dany język (np. „Rekrutacja - quiz Forminator WWW”). W polach kampanii dodaj:', 'akademiata' ); ?>
 				<code>TELEFON</code>, <code>EMAIL</code>, <code>WYNIK_QUIZU</code>.
-				<?php esc_html_e( 'Dodaj też klasyfikator do oddzwonień po godzinach.', 'akademiata' ); ?>
 			</li>
 			<li>
 				<strong><?php esc_html_e( 'W Forminatorze', 'akademiata' ); ?></strong>
@@ -289,14 +286,6 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 				'lang' => $lang,
 				'wide' => true,
 			) );
-			welyo_admin_field_api_select( 'forminator_quiz_classifier_id', 'Klasyfikator recall quizu (z API)', $settings, array(
-				'lang' => $lang,
-				'desc' => 'Oddzwonienie po godzinach pracy.',
-			) );
-			welyo_admin_field_text( 'forminator_quiz_classifier_name', 'Nazwa klasyfikatora quizu (opcjonalnie)', $settings, array(
-				'lang' => $lang,
-				'wide' => true,
-			) );
 			?>
 		</table>
 
@@ -325,7 +314,7 @@ function welyo_admin_render_general_lang_panel( $lang, $label, $settings ) {
 			<?php
 			welyo_admin_field_text( 'phone_dial', 'Numer infolinii (tel:)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Widget „Zadzwoń” i ten sam kontakt dla obsługi leadów z quizu.',
+				'desc' => 'Numer widoczny w przycisku „Zadzwoń” w widgetcie.',
 			) );
 			welyo_admin_field_text( 'phone_pretty', 'Numer (wyświetlany)', $settings, array( 'lang' => $lang ) );
 			welyo_admin_field_text( 'open_hour', 'Godzina otwarcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
@@ -539,7 +528,7 @@ function welyo_admin_render_page() {
 			</div>
 
 			<div id="welyo-main-forminator" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Powiąż quiz Forminator z kampanią Welyo. Godziny oddzwonień ustawiasz w zakładce Ogólne.', 'akademiata' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Lead z quizu trafia od razu do kampanii Welyo — konsultanci dzwonią według reguł tej kampanii.', 'akademiata' ); ?></p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Integracja quizu', 'akademiata' ); ?></th>
@@ -725,10 +714,10 @@ function welyo_admin_render_page() {
 			));
 		}
 		function classifierSelectForLang(lang, campaignApiKey) {
-			var classifierKey = campaignApiKey === 'forminator_quiz_campaign_id'
-				? 'forminator_quiz_classifier_id'
-				: 'classifier_id';
-			return document.getElementById('welyo_' + lang + '_' + classifierKey);
+			if (campaignApiKey === 'forminator_quiz_campaign_id') {
+				return null;
+			}
+			return document.getElementById('welyo_' + lang + '_classifier_id');
 		}
 		function campaignSelectForLang(lang, campaignApiKey) {
 			campaignApiKey = campaignApiKey || 'campaign_id';

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.5.5
+ * Version: 1.5.6
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -595,41 +595,6 @@ function welyo_resolve_forminator_campaign_id( $jwt, $lang = null ) {
 		? ' Szukano: „' . welyo_cfg( 'forminator_quiz_campaign_name', $lang ) . '”.'
 		: ' Ustaw kampanię quizu w panelu Welyo Callback.';
 	return new WP_Error( 'welyo_no_campaign', 'Nie udało się wybrać kampanii quizu (' . $lang . ').' . $name_hint );
-}
-
-/** Klasyfikator recall dla kampanii quizu Forminator. */
-function welyo_resolve_forminator_classifier_id( $jwt, $campaign_id, $lang = null ) {
-	if ( $lang === null ) {
-		$lang = welyo_lang_context();
-	}
-	$cache_key = 'welyo_forminator_classifier_id_' . $lang;
-	if ( welyo_cfg( 'forminator_quiz_classifier_id', $lang ) !== '' ) {
-		return (string) welyo_cfg( 'forminator_quiz_classifier_id', $lang );
-	}
-	$cached = get_transient( $cache_key );
-	if ( $cached ) {
-		return $cached;
-	}
-	$raw = welyo_api_post( $jwt, '/fcc-classifiers-list', array( 'campaigns_id' => (string) $campaign_id ) );
-	if ( is_wp_error( $raw ) ) {
-		return $raw;
-	}
-	$items = welyo_extract_list( $raw );
-	$name_cfg = welyo_cfg( 'forminator_quiz_classifier_name', $lang );
-	$id       = welyo_pick_item(
-		$items,
-		welyo_cfg( 'forminator_quiz_classifier_id', $lang ),
-		$name_cfg,
-		array( 'recall', 'oddzwon', 'callback', 'quiz' )
-	);
-	if ( $id !== null ) {
-		set_transient( $cache_key, $id, DAY_IN_SECONDS );
-		return $id;
-	}
-	if ( empty( $items ) ) {
-		return new WP_Error( 'welyo_no_classifier_cfg', 'Brak klasyfikatorów recall w kampanii quizu — lead trafi bez recall.' );
-	}
-	return new WP_Error( 'welyo_no_classifier', 'Nie udało się wybrać klasyfikatora recall dla quizu.' );
 }
 
 /** Dodaje rekord do kampanii przez /fcc-add-records. */

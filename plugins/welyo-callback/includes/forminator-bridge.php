@@ -439,24 +439,13 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 		return;
 	}
 
-	$recall      = welyo_is_open_now( $lang ) ? null : welyo_next_working_morning( $lang );
-	$phone_e164  = welyo_normalize_phone( $phone, $lang );
-	$ext_id      = 'forminator-' . $lang . '-' . $form_id . '-' . $entry_id;
+	$phone_e164 = welyo_normalize_phone( $phone, $lang );
+	$ext_id     = 'forminator-' . $lang . '-' . $form_id . '-' . $entry_id;
 
 	$campaign_id = welyo_resolve_forminator_campaign_id( $jwt, $lang );
 	if ( is_wp_error( $campaign_id ) ) {
 		error_log( '[Welyo Forminator] campaign: ' . $campaign_id->get_error_message() );
 		return;
-	}
-
-	$classifier_id = '';
-	if ( $recall ) {
-		$classifier_id = welyo_resolve_forminator_classifier_id( $jwt, $campaign_id, $lang );
-		if ( is_wp_error( $classifier_id ) ) {
-			error_log( '[Welyo Forminator] classifier: ' . $classifier_id->get_error_message() );
-			$recall        = null;
-			$classifier_id = '';
-		}
 	}
 
 	$extra = array();
@@ -467,7 +456,7 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 		$extra['WYNIK_QUIZU'] = sanitize_text_field( $quiz_result );
 	}
 
-	$res = welyo_add_record( $jwt, $campaign_id, $classifier_id, $name, $phone_e164, $recall, $ext_id, $extra );
+	$res = welyo_add_record( $jwt, $campaign_id, '', $name, $phone_e164, null, $ext_id, $extra );
 	if ( is_wp_error( $res ) ) {
 		error_log( '[Welyo Forminator] add-records: ' . $res->get_error_message() );
 		delete_transient( $dedup_key );
