@@ -245,17 +245,7 @@ function welyo_admin_render_forminator_help_box() {
 			</li>
 			<li>
 				<strong><?php esc_html_e( 'Forminator — quiz z leadami', 'akademiata' ); ?></strong>
-				<?php esc_html_e( 'Potencjalni klienci: telefon ★, e-mail, zgoda. Quiz osobowości — wynik (Lider Zespołu itd.) zapisuje się sam. Zakładki Integracje / API w Forminator — nie włączaj, nie są potrzebne.', 'akademiata' ); ?>
-			</li>
-			<li>
-				<strong><?php esc_html_e( 'Forminator API (dokumentacja WPMU DEV)', 'akademiata' ); ?></strong>
-				<?php
-				printf(
-					/* translators: %s: URL to Forminator API docs */
-					esc_html__( 'Nie potrzebujemy go. To API do zewnętrznych aplikacji (tworzenie formularzy, odczyt wpisów zdalnie). My działamy wewnątrz WordPressa — po wysłaniu quizu PHP od razu czyta wpis i wysyła do Welyo. Przycisk „Zaczynamy” w Forminator → Integracje → API zostaw wyłączony. Docs: %s', 'akademiata' ),
-					'<a href="https://wpmudev.com/docs/wpmu-dev-plugins/forminator-api-docs/" target="_blank" rel="noopener noreferrer">Forminator API</a>'
-				);
-				?>
+				<?php esc_html_e( 'Potencjalni klienci: telefon ★, e-mail, zgoda. Quiz osobowości — wynik (Lider Zespołu itd.) zapisuje się sam.', 'akademiata' ); ?>
 			</li>
 			<li>
 				<strong><?php esc_html_e( 'Ogólne (numery i godziny)', 'akademiata' ); ?></strong>
