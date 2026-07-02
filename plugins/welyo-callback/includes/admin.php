@@ -219,11 +219,22 @@ function welyo_admin_field_text( $key, $label, $settings, $args = array() ) {
 	<?php
 }
 
+function welyo_admin_render_general_help_box() {
+	?>
+	<div class="welyo-admin-help welyo-admin-help--general">
+		<p>
+			<strong><?php esc_html_e( 'Wspólne dla całej obsługi klienta', 'akademiata' ); ?></strong> —
+			<?php esc_html_e( 'ten sam numer infolinii i te same godziny pracy dla widgetu „Oddzwonimy” i dla quizu Forminator (w tym recall po godzinach). Ustaw raz per język — nie powielaj w innych zakładkach.', 'akademiata' ); ?>
+		</p>
+	</div>
+	<?php
+}
+
 function welyo_admin_render_forminator_help_box() {
 	?>
 	<div class="welyo-forminator-help">
 		<h3><?php esc_html_e( 'Instrukcja: quiz Forminator → Welyo', 'akademiata' ); ?></h3>
-		<p><?php esc_html_e( 'Wystarczy ID quizu + kampania Welyo. Telefon, e-mail, zgoda i wynik (np. Analityczny Strateg) wykrywamy automatycznie z wpisu Forminator.', 'akademiata' ); ?></p>
+		<p><?php esc_html_e( 'Wystarczy ID quizu + osobna kampania Welyo. Telefon leada, e-mail, zgoda i wynik quizu wykrywamy z Forminator. Godziny recall — w zakładce Ogólne.', 'akademiata' ); ?></p>
 
 		<ol class="welyo-forminator-help__steps">
 			<li>
@@ -245,6 +256,10 @@ function welyo_admin_render_forminator_help_box() {
 					'<a href="https://wpmudev.com/docs/wpmu-dev-plugins/forminator-api-docs/" target="_blank" rel="noopener noreferrer">Forminator API</a>'
 				);
 				?>
+			</li>
+			<li>
+				<strong><?php esc_html_e( 'Ogólne (numery i godziny)', 'akademiata' ); ?></strong>
+				<?php esc_html_e( 'Infolinia i godziny pracy — wspólne z widgetem callback. Ustaw w zakładce Ogólne, nie tutaj.', 'akademiata' ); ?>
 			</li>
 			<li>
 				<strong><?php esc_html_e( 'Ten panel — per język', 'akademiata' ); ?></strong>
@@ -286,7 +301,7 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 			) );
 			welyo_admin_field_api_select( 'forminator_quiz_campaign_id', 'Kampania quizu (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Osobna lista CC — nie mieszaj z kampanią callback (zakładka Języki).',
+				'desc' => 'Osobna lista CC — nie mieszaj z kampanią callback (zakładka Widget Oddzwonimy).',
 			) );
 			welyo_admin_field_text( 'forminator_quiz_campaign_name', 'Nazwa kampanii quizu (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -320,16 +335,38 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 	<?php
 }
 
-function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
+function welyo_admin_render_general_lang_panel( $lang, $label, $settings ) {
 	?>
-	<div class="welyo-lang-panel" id="welyo-lang-<?php echo esc_attr( $lang ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" hidden>
+	<div class="welyo-general-lang-panel" id="welyo-general-lang-<?php echo esc_attr( $lang ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" hidden>
+		<h2 class="title"><?php echo esc_html( $label ); ?> <code><?php echo esc_html( $lang ); ?></code></h2>
+		<table class="form-table" role="presentation">
+			<?php
+			welyo_admin_field_text( 'phone_dial', 'Numer infolinii (tel:)', $settings, array(
+				'lang' => $lang,
+				'desc' => 'Widget „Zadzwoń” i ten sam kontakt dla obsługi leadów z quizu.',
+			) );
+			welyo_admin_field_text( 'phone_pretty', 'Numer (wyświetlany)', $settings, array( 'lang' => $lang ) );
+			welyo_admin_field_text( 'open_hour', 'Godzina otwarcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
+			welyo_admin_field_text( 'close_hour', 'Godzina zamknięcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
+			welyo_admin_field_text( 'workdays', 'Dni robocze', $settings, array( 'lang' => $lang, 'desc' => '1=pon … 7=niedz, np. 1,2,3,4,5' ) );
+			welyo_admin_field_text( 'default_prefix', 'Prefiks numeru klienta', $settings, array( 'lang' => $lang, 'desc' => 'Np. +48 — normalizacja telefonu z formularza / quizu.' ) );
+			welyo_admin_field_text( 'privacy_url', 'URL polityki prywatności', $settings, array( 'lang' => $lang, 'wide' => true ) );
+			?>
+		</table>
+	</div>
+	<?php
+}
+
+function welyo_admin_render_callback_lang_panel( $lang, $label, $settings ) {
+	?>
+	<div class="welyo-callback-lang-panel" id="welyo-callback-lang-<?php echo esc_attr( $lang ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" hidden>
 		<h2 class="title"><?php echo esc_html( $label ); ?> <code><?php echo esc_html( $lang ); ?></code></h2>
 
 		<table class="form-table" role="presentation">
 			<?php
-			welyo_admin_field_api_select( 'campaign_id', 'Kampania (z API)', $settings, array(
+			welyo_admin_field_api_select( 'campaign_id', 'Kampania callback (z API)', $settings, array(
 				'lang' => $lang,
-				'desc' => 'Wybierz kampanię Welyo dla tego języka.',
+				'desc' => 'Lista Welyo dla widgetu „Oddzwonimy” — osobna od kampanii quizu.',
 			) );
 			welyo_admin_field_text( 'campaign_name', 'Nazwa kampanii (opcjonalnie)', $settings, array(
 				'lang' => $lang,
@@ -346,20 +383,23 @@ function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 			?>
 		</table>
 
-		<h3><?php esc_html_e( 'Telefon i godziny', 'akademiata' ); ?></h3>
-		<table class="form-table" role="presentation">
-			<?php
-			welyo_admin_field_text( 'phone_dial', 'Numer (tel:)', $settings, array( 'lang' => $lang ) );
-			welyo_admin_field_text( 'phone_pretty', 'Numer (wyświetlany)', $settings, array( 'lang' => $lang ) );
-			welyo_admin_field_text( 'open_hour', 'Godzina otwarcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
-			welyo_admin_field_text( 'close_hour', 'Godzina zamknięcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
-			welyo_admin_field_text( 'workdays', 'Dni robocze', $settings, array( 'lang' => $lang, 'desc' => '1=pon … 7=niedz, np. 1,2,3,4,5' ) );
-			welyo_admin_field_text( 'default_prefix', 'Prefiks numeru', $settings, array( 'lang' => $lang ) );
-			welyo_admin_field_text( 'privacy_url', 'URL polityki prywatności', $settings, array( 'lang' => $lang, 'wide' => true ) );
-			?>
-		</table>
+		<p>
+			<button type="button" class="button button-secondary welyo-run-diagnostics-lang" data-lang="<?php echo esc_attr( $lang ); ?>">
+				<?php esc_html_e( 'Sprawdź połączenie (ten język)', 'akademiata' ); ?>
+			</button>
+			<span class="spinner welyo-diagnostics-lang-spinner" data-lang="<?php echo esc_attr( $lang ); ?>" style="float:none;"></span>
+		</p>
+		<ul class="welyo-diagnostics-results welyo-diagnostics-lang-results" data-lang="<?php echo esc_attr( $lang ); ?>" hidden></ul>
+	</div>
+	<?php
+}
 
-		<h3><?php esc_html_e( 'Teksty — w godzinach pracy', 'akademiata' ); ?></h3>
+function welyo_admin_render_content_lang_panel( $lang, $label, $settings ) {
+	?>
+	<div class="welyo-content-lang-panel" id="welyo-content-lang-<?php echo esc_attr( $lang ); ?>" data-lang="<?php echo esc_attr( $lang ); ?>" hidden>
+		<h2 class="title"><?php echo esc_html( $label ); ?> <code><?php echo esc_html( $lang ); ?></code></h2>
+
+		<h3><?php esc_html_e( 'W godzinach pracy', 'akademiata' ); ?></h3>
 		<table class="form-table" role="presentation">
 			<?php
 			welyo_admin_field_text( 'text_launch_open', 'Przycisk pływający', $settings, array( 'lang' => $lang, 'wide' => true ) );
@@ -370,7 +410,7 @@ function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 			?>
 		</table>
 
-		<h3><?php esc_html_e( 'Teksty — po godzinach', 'akademiata' ); ?></h3>
+		<h3><?php esc_html_e( 'Po godzinach', 'akademiata' ); ?></h3>
 		<table class="form-table" role="presentation">
 			<?php
 			welyo_admin_field_text( 'text_launch_closed', 'Przycisk pływający', $settings, array( 'lang' => $lang, 'wide' => true ) );
@@ -386,7 +426,7 @@ function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 			?>
 		</table>
 
-		<h3><?php esc_html_e( 'Teksty — komunikaty', 'akademiata' ); ?></h3>
+		<h3><?php esc_html_e( 'Komunikaty i błędy', 'akademiata' ); ?></h3>
 		<table class="form-table" role="presentation">
 			<?php
 			welyo_admin_field_text( 'text_done_title', 'Sukces: tytuł', $settings, array( 'lang' => $lang ) );
@@ -405,14 +445,6 @@ function welyo_admin_render_lang_panel( $lang, $label, $settings ) {
 			welyo_admin_field_text( 'text_sending', 'Trwa wysyłanie', $settings, array( 'lang' => $lang ) );
 			?>
 		</table>
-
-		<p>
-			<button type="button" class="button button-secondary welyo-run-diagnostics-lang" data-lang="<?php echo esc_attr( $lang ); ?>">
-				<?php esc_html_e( 'Sprawdź połączenie (ten język)', 'akademiata' ); ?>
-			</button>
-			<span class="spinner welyo-diagnostics-lang-spinner" data-lang="<?php echo esc_attr( $lang ); ?>" style="float:none;"></span>
-		</p>
-		<ul class="welyo-diagnostics-results welyo-diagnostics-lang-results" data-lang="<?php echo esc_attr( $lang ); ?>" hidden></ul>
 	</div>
 	<?php
 }
@@ -427,7 +459,7 @@ function welyo_admin_render_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Welyo Callback', 'akademiata' ); ?></h1>
-		<p><?php esc_html_e( 'API Welyo jest wspólne. Kampania, telefon, godziny i teksty ustawiasz osobno dla każdego języka WPML.', 'akademiata' ); ?></p>
+		<p><?php esc_html_e( 'Integracja techniczna i kampanie — osobne zakładki. Numery/godziny — Ogólne. Teksty i kolory widgetu — osobno, łatwe do edycji.', 'akademiata' ); ?></p>
 
 		<?php settings_errors( 'welyo_callback' ); ?>
 
@@ -436,8 +468,10 @@ function welyo_admin_render_page() {
 
 			<nav class="nav-tab-wrapper welyo-main-tabs" aria-label="<?php esc_attr_e( 'Sekcje ustawień', 'akademiata' ); ?>">
 				<a href="#welyo-main-api" class="nav-tab nav-tab-active" data-welyo-main="api"><?php esc_html_e( 'API Welyo', 'akademiata' ); ?></a>
-				<a href="#welyo-main-languages" class="nav-tab" data-welyo-main="languages"><?php esc_html_e( 'Języki', 'akademiata' ); ?></a>
+				<a href="#welyo-main-general" class="nav-tab" data-welyo-main="general"><?php esc_html_e( 'Ogólne', 'akademiata' ); ?></a>
+				<a href="#welyo-main-callback" class="nav-tab" data-welyo-main="callback"><?php esc_html_e( 'Widget Oddzwonimy', 'akademiata' ); ?></a>
 				<a href="#welyo-main-forminator" class="nav-tab" data-welyo-main="forminator"><?php esc_html_e( 'Quiz Forminator', 'akademiata' ); ?></a>
+				<a href="#welyo-main-content" class="nav-tab" data-welyo-main="content"><?php esc_html_e( 'Treści widgetu', 'akademiata' ); ?></a>
 				<a href="#welyo-main-colors" class="nav-tab" data-welyo-main="colors"><?php esc_html_e( 'Kolory', 'akademiata' ); ?></a>
 				<a href="#welyo-main-display" class="nav-tab" data-welyo-main="display"><?php esc_html_e( 'Wyświetlanie', 'akademiata' ); ?></a>
 			</nav>
@@ -453,7 +487,7 @@ function welyo_admin_render_page() {
 
 			<div class="welyo-api-lists-box">
 				<h3><?php esc_html_e( 'Kampanie z API', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo — kampanie callback w zakładce Języki, kampanie quizu w zakładce Quiz Forminator.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Pobierz listy z Welyo — kampanie callback w Widget Oddzwonimy, kampanie quizu w Quiz Forminator.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-load-api-lists"><?php esc_html_e( 'Pobierz listę z API', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-api-lists-spinner" style="float:none;"></span>
@@ -467,7 +501,7 @@ function welyo_admin_render_page() {
 
 			<div class="welyo-diagnostics-box">
 				<h3><?php esc_html_e( 'Test połączenia (API)', 'akademiata' ); ?></h3>
-				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API i JWT. Test kampanii — w zakładce Języki.', 'akademiata' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Sprawdza login, klucz API i JWT. Test kampanii — w Widget Oddzwonimy lub Quiz Forminator.', 'akademiata' ); ?></p>
 				<p>
 					<button type="button" class="button button-secondary" id="welyo-run-diagnostics"><?php esc_html_e( 'Sprawdź połączenie z Welyo', 'akademiata' ); ?></button>
 					<span class="spinner" id="welyo-diagnostics-spinner" style="float:none;"></span>
@@ -476,14 +510,37 @@ function welyo_admin_render_page() {
 			</div>
 			</div>
 
-			<div id="welyo-main-languages" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Widget „Oddzwonimy”: kampania callback, telefon, godziny i teksty — osobno dla każdego języka.', 'akademiata' ); ?></p>
-			<nav class="nav-tab-wrapper welyo-lang-tabs">
+			<div id="welyo-main-general" class="welyo-main-panel" hidden>
+			<?php welyo_admin_render_general_help_box(); ?>
+			<nav class="nav-tab-wrapper welyo-general-lang-tabs">
+				<?php
+				$first_general = true;
+				foreach ( welyo_supported_languages() as $code => $lang_label ) {
+					printf(
+						'<a href="#welyo-general-lang-%1$s" class="nav-tab%2$s" data-welyo-general-tab="%1$s">%3$s (%1$s)</a>',
+						esc_attr( $code ),
+						$first_general ? ' nav-tab-active' : '',
+						esc_html( $lang_label )
+					);
+					$first_general = false;
+				}
+				?>
+			</nav>
+			<?php
+			foreach ( welyo_supported_languages() as $code => $lang_label ) {
+				welyo_admin_render_general_lang_panel( $code, $lang_label, $settings );
+			}
+			?>
+			</div>
+
+			<div id="welyo-main-callback" class="welyo-main-panel" hidden>
+			<p class="description"><?php esc_html_e( 'Kampania Welyo dla widgetu „Oddzwonimy” — per język. Teksty panelu — zakładka Treści widgetu.', 'akademiata' ); ?></p>
+			<nav class="nav-tab-wrapper welyo-callback-lang-tabs">
 				<?php
 				$first = true;
 				foreach ( welyo_supported_languages() as $code => $lang_label ) {
 					printf(
-						'<a href="#welyo-lang-%1$s" class="nav-tab%2$s" data-welyo-tab="%1$s">%3$s (%1$s)</a>',
+						'<a href="#welyo-callback-lang-%1$s" class="nav-tab%2$s" data-welyo-callback-tab="%1$s">%3$s (%1$s)</a>',
 						esc_attr( $code ),
 						$first ? ' nav-tab-active' : '',
 						esc_html( $lang_label )
@@ -494,13 +551,13 @@ function welyo_admin_render_page() {
 			</nav>
 			<?php
 			foreach ( welyo_supported_languages() as $code => $lang_label ) {
-				welyo_admin_render_lang_panel( $code, $lang_label, $settings );
+				welyo_admin_render_callback_lang_panel( $code, $lang_label, $settings );
 			}
 			?>
 			</div>
 
 			<div id="welyo-main-forminator" class="welyo-main-panel" hidden>
-			<p class="description"><?php esc_html_e( 'Quiz Forminator → Welyo: osobna kampania call center, auto-wykrywanie pól. Nie mieszaj z widgetem callback.', 'akademiata' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Quiz Forminator → Welyo: osobna kampania CC, auto-wykrywanie pól leadów. Godziny recall — zakładka Ogólne.', 'akademiata' ); ?></p>
 			<table class="form-table" role="presentation">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Integracja quizu', 'akademiata' ); ?></th>
@@ -531,6 +588,29 @@ function welyo_admin_render_page() {
 			<?php
 			foreach ( welyo_supported_languages() as $code => $lang_label ) {
 				welyo_admin_render_forminator_lang_panel( $code, $lang_label, $settings );
+			}
+			?>
+			</div>
+
+			<div id="welyo-main-content" class="welyo-main-panel" hidden>
+			<p class="description"><?php esc_html_e( 'Teksty panelu „Oddzwonimy” — per język WPML. Tu edytujesz copy jak kolory, bez dotykania kampanii Welyo.', 'akademiata' ); ?></p>
+			<nav class="nav-tab-wrapper welyo-content-lang-tabs">
+				<?php
+				$first_content = true;
+				foreach ( welyo_supported_languages() as $code => $lang_label ) {
+					printf(
+						'<a href="#welyo-content-lang-%1$s" class="nav-tab%2$s" data-welyo-content-tab="%1$s">%3$s (%1$s)</a>',
+						esc_attr( $code ),
+						$first_content ? ' nav-tab-active' : '',
+						esc_html( $lang_label )
+					);
+					$first_content = false;
+				}
+				?>
+			</nav>
+			<?php
+			foreach ( welyo_supported_languages() as $code => $lang_label ) {
+				welyo_admin_render_content_lang_panel( $code, $lang_label, $settings );
 			}
 			?>
 			</div>
@@ -623,10 +703,16 @@ function welyo_admin_render_page() {
 		.welyo-color-wrap { display:flex; align-items:center; gap:10px; max-width:20rem; }
 		.welyo-color-wrap input[type="color"] { width:48px; height:36px; padding:2px; border:1px solid #8c8f94; border-radius:4px; cursor:pointer; background:#fff; }
 		.welyo-color-text { font-family:Consolas, Monaco, monospace; width:7.5em; }
-		.welyo-lang-panel { margin-top:12px; }
+		.welyo-general-lang-panel { margin-top:12px; }
+		.welyo-content-lang-panel { margin-top:12px; }
+		.welyo-callback-lang-panel { margin-top:12px; }
 		.welyo-forminator-lang-panel { margin-top:12px; }
-		.welyo-lang-tabs { margin-bottom:0; }
+		.welyo-general-lang-tabs { margin-bottom:0; }
+		.welyo-callback-lang-tabs { margin-bottom:0; }
+		.welyo-content-lang-tabs { margin-bottom:0; }
 		.welyo-forminator-lang-tabs { margin-bottom:0; }
+		.welyo-admin-help { margin:0 0 16px; padding:12px 16px; max-width:52rem; background:#f0f6fc; border:1px solid #c3d9ed; border-radius:4px; }
+		.welyo-admin-help p { margin:0; }
 		.welyo-main-tabs { margin-top:16px; }
 		.welyo-main-panel { margin-top:16px; max-width:52rem; }
 		.welyo-config-box { margin-top:20px; padding:16px 18px; background:#f6f7f7; border:1px solid #c3c4c7; border-radius:4px; }
@@ -774,35 +860,27 @@ function welyo_admin_render_page() {
 			});
 		});
 
-		document.querySelectorAll('.welyo-lang-tabs .nav-tab').forEach(function (tab) {
-			tab.addEventListener('click', function (e) {
-				e.preventDefault();
-				var code = tab.getAttribute('data-welyo-tab');
-				document.querySelectorAll('.welyo-lang-tabs .nav-tab').forEach(function (t) {
-					t.classList.toggle('nav-tab-active', t === tab);
-				});
-				document.querySelectorAll('.welyo-lang-panel').forEach(function (panel) {
-					panel.hidden = panel.getAttribute('data-lang') !== code;
+		function initLangSubTabs(tabSelector, panelSelector, tabAttr) {
+			document.querySelectorAll(tabSelector + ' .nav-tab').forEach(function (tab) {
+				tab.addEventListener('click', function (e) {
+					e.preventDefault();
+					var code = tab.getAttribute(tabAttr);
+					document.querySelectorAll(tabSelector + ' .nav-tab').forEach(function (t) {
+						t.classList.toggle('nav-tab-active', t === tab);
+					});
+					document.querySelectorAll(panelSelector).forEach(function (panel) {
+						panel.hidden = panel.getAttribute('data-lang') !== code;
+					});
 				});
 			});
-		});
-		var firstLangTab = document.querySelector('.welyo-lang-tabs .nav-tab');
-		if (firstLangTab) { firstLangTab.click(); }
+			var firstTab = document.querySelector(tabSelector + ' .nav-tab');
+			if (firstTab) { firstTab.click(); }
+		}
 
-		document.querySelectorAll('.welyo-forminator-lang-tabs .nav-tab').forEach(function (tab) {
-			tab.addEventListener('click', function (e) {
-				e.preventDefault();
-				var code = tab.getAttribute('data-welyo-forminator-tab');
-				document.querySelectorAll('.welyo-forminator-lang-tabs .nav-tab').forEach(function (t) {
-					t.classList.toggle('nav-tab-active', t === tab);
-				});
-				document.querySelectorAll('.welyo-forminator-lang-panel').forEach(function (panel) {
-					panel.hidden = panel.getAttribute('data-lang') !== code;
-				});
-			});
-		});
-		var firstForminatorTab = document.querySelector('.welyo-forminator-lang-tabs .nav-tab');
-		if (firstForminatorTab) { firstForminatorTab.click(); }
+		initLangSubTabs('.welyo-general-lang-tabs', '.welyo-general-lang-panel', 'data-welyo-general-tab');
+		initLangSubTabs('.welyo-callback-lang-tabs', '.welyo-callback-lang-panel', 'data-welyo-callback-tab');
+		initLangSubTabs('.welyo-content-lang-tabs', '.welyo-content-lang-panel', 'data-welyo-content-tab');
+		initLangSubTabs('.welyo-forminator-lang-tabs', '.welyo-forminator-lang-panel', 'data-welyo-forminator-tab');
 
 		document.querySelectorAll('.welyo-main-tabs .nav-tab').forEach(function (tab) {
 			tab.addEventListener('click', function (e) {
