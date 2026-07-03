@@ -922,6 +922,32 @@ add_action( 'rest_api_init', function () {
 		},
 	) );
 
+	register_rest_route( 'welyo/v1', '/forminator-send-last', array(
+		'methods'             => 'POST',
+		'callback'            => function ( WP_REST_Request $request ) {
+			$lang = sanitize_key( (string) $request->get_param( 'lang' ) );
+			if ( $lang === '' || ! isset( welyo_supported_languages()[ $lang ] ) ) {
+				return new WP_Error( 'welyo_fnt_lang', __( 'Podaj prawidłowy kod języka (np. pl).', 'akademiata' ), array( 'status' => 400 ) );
+			}
+			$result = welyo_forminator_send_latest_entry( $lang, true );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+			return new WP_REST_Response(
+				array(
+					'ok'      => true,
+					'entry_id' => isset( $result['entry_id'] ) ? (int) $result['entry_id'] : 0,
+					'message' => isset( $result['message'] ) ? (string) $result['message'] : '',
+					'steps'   => welyo_forminator_run_diagnostics( $lang ),
+				),
+				200
+			);
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
+
 	register_rest_route( 'welyo/v1', '/campaigns', array(
 		'methods'             => 'GET',
 		'callback'            => function () {

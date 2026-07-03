@@ -23,7 +23,71 @@ function welyo_forminator_register_hooks() {
 
 	add_action( 'forminator_form_after_save_entry', 'welyo_forminator_after_save_entry', 10, 2 );
 	add_action( 'forminator_form_after_handle_submit', 'welyo_forminator_after_handle_submit', 10, 2 );
-	add_action( 'forminator_quizzes_submit_after_set_fields', 'welyo_forminator_quiz_after_set_fields', 10, 3 );
+	add_action( 'forminator_quizzes_submit_before_set_fields', 'welyo_forminator_quiz_before_set_fields', 10, 3 );
+}
+
+/** Kolejka wysyłki na koniec requestu (po zapisie pól quizu w DB). */
+function welyo_forminator_schedule_submission( $entry_id, $form_id, $field_hints = array() ) {
+	global $welyo_forminator_shutdown_queue;
+
+	$entry_id = (int) $entry_id;
+	$form_id  = (int) $form_id;
+	if ( $entry_id <= 0 || $form_id <= 0 ) {
+		return;
+	}
+
+	if ( ! is_array( $welyo_forminator_shutdown_queue ) ) {
+		$welyo_forminator_shutdown_queue = array();
+	}
+
+	$key = $entry_id . ':' . $form_id;
+	if ( ! isset( $welyo_forminator_shutdown_queue[ $key ] ) ) {
+		$welyo_forminator_shutdown_queue[ $key ] = array(
+			'entry_id' => $entry_id,
+			'form_id'  => $form_id,
+			'hints'    => array(),
+		);
+		if ( ! has_action( 'shutdown', 'welyo_forminator_flush_shutdown_queue' ) ) {
+			add_action( 'shutdown', 'welyo_forminator_flush_shutdown_queue', 999 );
+		}
+	}
+
+	if ( is_array( $field_hints ) && $field_hints !== array() ) {
+		$welyo_forminator_shutdown_queue[ $key ]['hints'] = array_merge(
+			$welyo_forminator_shutdown_queue[ $key ]['hints'],
+			$field_hints
+		);
+	}
+}
+
+function welyo_forminator_flush_shutdown_queue() {
+	global $welyo_forminator_shutdown_queue;
+
+	if ( empty( $welyo_forminator_shutdown_queue ) || ! is_array( $welyo_forminator_shutdown_queue ) ) {
+		return;
+	}
+
+	foreach ( $welyo_forminator_shutdown_queue as $job ) {
+		welyo_forminator_process_submission(
+			(int) $job['entry_id'],
+			(int) $job['form_id'],
+			isset( $job['hints'] ) && is_array( $job['hints'] ) ? $job['hints'] : array()
+		);
+	}
+
+	$welyo_forminator_shutdown_queue = array();
+}
+
+function welyo_forminator_remember_send_status( $entry_id, $ok, $message ) {
+	set_transient(
+		'welyo_fnt_status_' . (int) $entry_id,
+		array(
+			'ok'      => (bool) $ok,
+			'message' => (string) $message,
+			'time'    => current_time( 'mysql' ),
+		),
+		HOUR_IN_SECONDS
+	);
 }
 
 /** Czy ID to quiz Forminator (nie osobny formularz leadów). */
@@ -33,10 +97,6 @@ function welyo_forminator_is_quiz_post( $form_id ) {
 }
 
 function welyo_forminator_after_save_entry( $form_id, $response ) {
-	if ( welyo_forminator_is_quiz_post( $form_id ) ) {
-		return;
-	}
-
 	if ( ! is_array( $response ) || empty( $response['success'] ) ) {
 		return;
 	}
@@ -47,22 +107,29 @@ function welyo_forminator_after_save_entry( $form_id, $response ) {
 			$entry_id = (int) $entry->entry_id;
 		}
 	}
-	if ( $entry_id > 0 ) {
-		welyo_forminator_process_submission( $entry_id, (int) $form_id );
+	if ( $entry_id <= 0 ) {
+		return;
 	}
+
+	if ( welyo_forminator_is_quiz_post( $form_id ) ) {
+		welyo_forminator_schedule_submission( $entry_id, (int) $form_id );
+		return;
+	}
+
+	welyo_forminator_process_submission( $entry_id, (int) $form_id );
 }
 
 function welyo_forminator_after_handle_submit( $form_id, $response ) {
 	welyo_forminator_after_save_entry( $form_id, is_array( $response ) ? $response : array() );
 }
 
-/** Quiz — wysyłka po zapisie pełnego wpisu (telefon + wynik osobowości). */
-function welyo_forminator_quiz_after_set_fields( $entry, $form_id, $field_data_array ) {
+/** Quiz — hook Forminator przed zapisem pól; wysyłka na shutdown po pełnym zapisie wpisu. */
+function welyo_forminator_quiz_before_set_fields( $entry, $form_id, $field_data_array ) {
 	if ( empty( $entry->entry_id ) ) {
 		return;
 	}
 
-	welyo_forminator_process_submission(
+	welyo_forminator_schedule_submission(
 		(int) $entry->entry_id,
 		(int) $form_id,
 		is_array( $field_data_array ) ? $field_data_array : array()
@@ -783,6 +850,27 @@ function welyo_forminator_run_diagnostics( $lang ) {
 		);
 	}
 
+	$send_status = get_transient( 'welyo_fnt_status_' . $entry_id );
+	if ( is_array( $send_status ) && ! empty( $send_status['message'] ) ) {
+		$steps[] = array(
+			'id'      => 'last_send',
+			'ok'      => ! empty( $send_status['ok'] ),
+			'message' => sprintf(
+				/* translators: 1: status message, 2: datetime */
+				__( 'Ostatnia próba wysyłki wpisu #%1$d: %2$s (%3$s).', 'akademiata' ),
+				$entry_id,
+				$send_status['message'],
+				isset( $send_status['time'] ) ? $send_status['time'] : '—'
+			),
+		);
+	} elseif ( ! get_transient( $dedup_key ) ) {
+		$steps[] = array(
+			'id'      => 'last_send',
+			'ok'      => false,
+			'message' => __( 'Brak zapisu o wysyłce tego wpisu — hook quizu mógł nie zadziałać. Użyj „Wyślij ostatni wpis do Welyo”.', 'akademiata' ),
+		);
+	}
+
 	$jwt = welyo_get_jwt();
 	if ( is_wp_error( $jwt ) ) {
 		$steps[] = array(
@@ -927,14 +1015,24 @@ function welyo_forminator_truthy( $value ) {
 	return true;
 }
 
-function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints = array() ) {
+function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints = array(), $force = false ) {
+	static $in_request = array();
+
 	if ( $entry_id <= 0 || $form_id <= 0 ) {
 		return;
 	}
 
+	$request_key = $form_id . ':' . $entry_id;
+	if ( isset( $in_request[ $request_key ] ) ) {
+		return;
+	}
+	$in_request[ $request_key ] = true;
+
 	$config = welyo_forminator_quiz_config_for_form( $form_id );
 	if ( $config === null ) {
-		error_log( '[Welyo Forminator] Pominięto formularz #' . $form_id . ' — brak dopasowania do ID quizu lub formularza leadów.' );
+		$msg = 'Pominięto formularz #' . $form_id . ' — brak dopasowania do ID quizu lub formularza leadów.';
+		error_log( '[Welyo Forminator] ' . $msg );
+		welyo_forminator_remember_send_status( $entry_id, false, $msg );
 		return;
 	}
 
@@ -942,7 +1040,8 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$quiz_id = (int) $config['quiz_id'];
 
 	$dedup_key = 'welyo_fnt_sent_' . $quiz_id . '_' . $entry_id;
-	if ( get_transient( $dedup_key ) ) {
+	if ( ! $force && get_transient( $dedup_key ) ) {
+		welyo_forminator_remember_send_status( $entry_id, true, 'Wpis już wysłany (deduplikacja).' );
 		return;
 	}
 
@@ -982,25 +1081,32 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	}
 
 	if ( $lead['consent'] === false ) {
-		error_log( '[Welyo Forminator] Pominięto wpis #' . $entry_id . ' — brak zgody (' . $lang . ').' );
+		$msg = 'Pominięto wpis #' . $entry_id . ' — brak zgody (' . $lang . ').';
+		error_log( '[Welyo Forminator] ' . $msg );
+		welyo_forminator_remember_send_status( $entry_id, false, $msg );
 		return;
 	}
 
 	$digits = preg_replace( '/\D/', '', $phone );
 	if ( strlen( $digits ) < 9 ) {
-		error_log( '[Welyo Forminator] Pominięto wpis #' . $entry_id . ' (form #' . $form_id . ') — nieprawidłowy telefon (' . $lang . ').' );
+		$msg = 'Pominięto wpis #' . $entry_id . ' (form #' . $form_id . ') — nieprawidłowy telefon (' . $lang . ').';
+		error_log( '[Welyo Forminator] ' . $msg );
+		welyo_forminator_remember_send_status( $entry_id, false, $msg );
 		return;
 	}
 
 	$rate = welyo_check_rate_limit();
 	if ( is_wp_error( $rate ) ) {
-		error_log( '[Welyo Forminator] Limit zapytań dla wpisu #' . $entry_id . '.' );
+		$msg = 'Limit zapytań dla wpisu #' . $entry_id . '.';
+		error_log( '[Welyo Forminator] ' . $msg );
+		welyo_forminator_remember_send_status( $entry_id, false, $rate->get_error_message() );
 		return;
 	}
 
 	$jwt = welyo_get_jwt();
 	if ( is_wp_error( $jwt ) ) {
 		error_log( '[Welyo Forminator] JWT: ' . $jwt->get_error_message() );
+		welyo_forminator_remember_send_status( $entry_id, false, 'JWT: ' . $jwt->get_error_message() );
 		return;
 	}
 
@@ -1010,6 +1116,7 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$campaign_id = welyo_resolve_forminator_campaign_id( $jwt, $lang );
 	if ( is_wp_error( $campaign_id ) ) {
 		error_log( '[Welyo Forminator] campaign: ' . $campaign_id->get_error_message() );
+		welyo_forminator_remember_send_status( $entry_id, false, $campaign_id->get_error_message() );
 		return;
 	}
 
@@ -1027,11 +1134,50 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$res = welyo_add_record( $jwt, $campaign_id, '', $name, $phone_e164, null, $ext_id, $extra );
 	if ( is_wp_error( $res ) ) {
 		error_log( '[Welyo Forminator] add-records: ' . $res->get_error_message() );
+		welyo_forminator_remember_send_status( $entry_id, false, $res->get_error_message() );
 		return;
 	}
 
 	set_transient( $dedup_key, 1, 10 * MINUTE_IN_SECONDS );
-	error_log( '[Welyo Forminator] Wysłano lead #' . $entry_id . ' → kampania #' . $campaign_id . ' (' . $lang . ').' );
+	$success_msg = 'Wysłano lead #' . $entry_id . ' → kampania #' . $campaign_id . ' (' . $lang . ').';
+	error_log( '[Welyo Forminator] ' . $success_msg );
+	welyo_forminator_remember_send_status( $entry_id, true, $success_msg );
 
 	do_action( 'welyo_forminator_lead_sent', $entry_id, $form_id, $lang, $ext_id );
+}
+
+/** Ręczna wysyłka ostatniego wpisu (panel admina / REST). */
+function welyo_forminator_send_latest_entry( $lang, $force = true ) {
+	$entry = welyo_forminator_find_latest_entry_for_lang( $lang );
+	if ( ! $entry || empty( $entry->entry_id ) ) {
+		return new WP_Error( 'welyo_fnt_no_entry', __( 'Brak wpisów quizu dla tego języka.', 'akademiata' ) );
+	}
+
+	$entry_id = (int) $entry->entry_id;
+	$form_id  = isset( $entry->form_id ) ? (int) $entry->form_id : 0;
+	if ( $form_id <= 0 ) {
+		return new WP_Error( 'welyo_fnt_no_form', __( 'Nie można ustalić ID formularza wpisu.', 'akademiata' ) );
+	}
+
+	if ( $force ) {
+		$config = welyo_forminator_quiz_config_for_form( $form_id );
+		if ( $config ) {
+			delete_transient( 'welyo_fnt_sent_' . (int) $config['quiz_id'] . '_' . $entry_id );
+		}
+	}
+
+	welyo_forminator_process_submission( $entry_id, $form_id, array(), $force );
+
+	$status = get_transient( 'welyo_fnt_status_' . $entry_id );
+	if ( is_array( $status ) ) {
+		if ( ! empty( $status['ok'] ) ) {
+			return array(
+				'entry_id' => $entry_id,
+				'message'  => $status['message'],
+			);
+		}
+		return new WP_Error( 'welyo_fnt_send_failed', $status['message'] );
+	}
+
+	return new WP_Error( 'welyo_fnt_send_unknown', __( 'Wysyłka zakończona bez potwierdzenia statusu.', 'akademiata' ) );
 }
