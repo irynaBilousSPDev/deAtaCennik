@@ -1,6 +1,6 @@
 <?php
 /**
- * Forminator quiz → Welyo (osobna kampania CC, pola EMAIL + WYNIK_QUIZU + OPIS_OSOBOWOSCI).
+ * Forminator quiz → Welyo (osobna kampania CC, pola EMAIL + WYNIK_QUIZU).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,6 +24,7 @@ function welyo_forminator_register_hooks() {
 	add_action( 'forminator_form_after_save_entry', 'welyo_forminator_after_save_entry', 10, 2 );
 	add_action( 'forminator_form_after_handle_submit', 'welyo_forminator_after_handle_submit', 10, 2 );
 	add_action( 'forminator_quizzes_submit_before_set_fields', 'welyo_forminator_quiz_before_set_fields', 10, 3 );
+	add_action( 'forminator_custom_form_submit_before_set_fields', 'welyo_forminator_lead_before_set_fields', 10, 3 );
 }
 
 /** Kolejka wysyłki na koniec requestu (po zapisie pól quizu w DB). */
@@ -48,7 +49,7 @@ function welyo_forminator_schedule_submission( $entry_id, $form_id, $field_hints
 			'hints'    => array(),
 		);
 		if ( ! has_action( 'shutdown', 'welyo_forminator_flush_shutdown_queue' ) ) {
-			add_action( 'shutdown', 'welyo_forminator_flush_shutdown_queue', 999 );
+			add_action( 'shutdown', 'welyo_forminator_flush_shutdown_queue', 9999 );
 		}
 	}
 
@@ -126,6 +127,22 @@ function welyo_forminator_after_handle_submit( $form_id, $response ) {
 /** Quiz — hook Forminator przed zapisem pól; wysyłka na shutdown po pełnym zapisie wpisu. */
 function welyo_forminator_quiz_before_set_fields( $entry, $form_id, $field_data_array ) {
 	if ( empty( $entry->entry_id ) ) {
+		return;
+	}
+
+	welyo_forminator_schedule_submission(
+		(int) $entry->entry_id,
+		(int) $form_id,
+		is_array( $field_data_array ) ? $field_data_array : array()
+	);
+}
+
+/** Powiązany formularz leadów (nie quiz) — ten sam shutdown co quiz. */
+function welyo_forminator_lead_before_set_fields( $entry, $form_id, $field_data_array ) {
+	if ( welyo_forminator_is_quiz_post( $form_id ) || empty( $entry->entry_id ) ) {
+		return;
+	}
+	if ( welyo_forminator_quiz_config_for_form( (int) $form_id ) === null ) {
 		return;
 	}
 
@@ -394,9 +411,9 @@ function welyo_forminator_parse_result_data( $data ) {
 	}
 
 	if ( ! empty( $data['result']['description'] ) && is_string( $data['result']['description'] ) ) {
-		$out['description'] = trim( $data['result']['description'] );
+		$out['description'] = welyo_forminator_clean_result_description( $data['result']['description'] );
 	} elseif ( ! empty( $data['description'] ) && is_string( $data['description'] ) ) {
-		$out['description'] = trim( $data['description'] );
+		$out['description'] = welyo_forminator_clean_result_description( $data['description'] );
 	}
 
 	if ( $out['title'] === '' && ! empty( $data['title'] ) && is_string( $data['title'] )
@@ -494,10 +511,10 @@ function welyo_forminator_deep_find_result_description( $data, $depth = 0 ) {
 	}
 
 	if ( ! empty( $data['result']['description'] ) && is_string( $data['result']['description'] ) ) {
-		return trim( $data['result']['description'] );
+		return welyo_forminator_clean_result_description( $data['result']['description'] );
 	}
 	if ( ! empty( $data['description'] ) && is_string( $data['description'] ) ) {
-		return trim( $data['description'] );
+		return welyo_forminator_clean_result_description( $data['description'] );
 	}
 
 	foreach ( $data as $key => $value ) {
@@ -552,6 +569,49 @@ function welyo_forminator_result_data_from_field_hints( $field_hints ) {
 function welyo_forminator_result_from_field_hints( $field_hints ) {
 	$data = welyo_forminator_result_data_from_field_hints( $field_hints );
 	return $data['title'];
+}
+
+/** Opis osobowości bez tekstu rekomendacji studiów z kolejnego kroku quizu. */
+function welyo_forminator_clean_result_description( $text ) {
+	$text = trim( preg_replace( '/\s+/u', ' ', wp_strip_all_tags( (string) $text ) ) );
+	if ( $text === '' ) {
+		return '';
+	}
+	if ( preg_match( '/^(.*?)(?:\s*Idealne studia\b|\s*idealne studia\b)/u', $text, $matches ) ) {
+		$text = trim( $matches[1] );
+	}
+	return $text;
+}
+
+/** Nazwa + opis w jednym polu WYNIK_QUIZU (kampania ma tylko to pole). */
+function welyo_forminator_format_wynik_quizu( $title, $description ) {
+	$title       = trim( (string) $title );
+	$description = welyo_forminator_clean_result_description( $description );
+	if ( $title === '' ) {
+		return $description;
+	}
+	if ( $description === '' ) {
+		return $title;
+	}
+	return $title . ' — ' . $description;
+}
+
+/** Limit zgłoszeń quizu (osobny od widgetu „Oddzwonimy”). */
+function welyo_forminator_check_rate_limit() {
+	if ( current_user_can( 'manage_options' ) ) {
+		return true;
+	}
+
+	$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'x';
+	$key = 'welyo_fnt_rl_' . md5( $ip );
+	$cnt = (int) get_transient( $key );
+
+	if ( $cnt >= 30 ) {
+		return new WP_Error( 'welyo_fnt_rate', __( 'Zbyt wiele prób wysłania quizu. Spróbuj za chwilę.', 'akademiata' ) );
+	}
+
+	set_transient( $key, $cnt + 1, 10 * MINUTE_IN_SECONDS );
+	return true;
 }
 
 /** Konfiguracja quizu dla ID formularza (quiz lub powiązany formularz leadów). */
@@ -820,25 +880,17 @@ function welyo_forminator_run_diagnostics( $lang ) {
 	$steps[] = array(
 		'id'      => 'quiz_result',
 		'ok'      => true,
-		'message' => $lead['quiz_result'] !== ''
+		'message' => welyo_forminator_format_wynik_quizu( $lead['quiz_result'], $lead['quiz_result_description'] ) !== ''
 			? sprintf(
-				/* translators: %s: quiz personality result */
-				__( 'Wynik quizu: „%s”.', 'akademiata' ),
-				$lead['quiz_result']
+				/* translators: %s: quiz result sent to WYNIK_QUIZU */
+				__( 'WYNIK_QUIZU (nazwa + opis): „%s”.', 'akademiata' ),
+				wp_html_excerpt(
+					welyo_forminator_format_wynik_quizu( $lead['quiz_result'], $lead['quiz_result_description'] ),
+					160,
+					'…'
+				)
 			)
-			: __( 'Brak wyniku quizu w zapisanym wpisie (pole WYNIK_QUIZU będzie puste). Lead i tak może zostać wysłany — wypełnij quiz ponownie po tej poprawce.', 'akademiata' ),
-	);
-
-	$steps[] = array(
-		'id'      => 'quiz_result_description',
-		'ok'      => true,
-		'message' => $lead['quiz_result_description'] !== ''
-			? sprintf(
-				/* translators: %s: quiz personality description */
-				__( 'Opis osobowości: „%s”.', 'akademiata' ),
-				wp_html_excerpt( $lead['quiz_result_description'], 120, '…' )
-			)
-			: __( 'Brak opisu osobowości w wpisie (pole OPIS_OSOBOWOSCI będzie puste).', 'akademiata' ),
+			: __( 'Brak wyniku quizu w zapisanym wpisie (pole WYNIK_QUIZU będzie puste).', 'akademiata' ),
 	);
 
 	$dedup_key = 'welyo_fnt_sent_' . $quiz_id_cfg . '_' . $entry_id;
@@ -1095,7 +1147,7 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 		return;
 	}
 
-	$rate = welyo_check_rate_limit();
+	$rate = welyo_forminator_check_rate_limit();
 	if ( is_wp_error( $rate ) ) {
 		$msg = 'Limit zapytań dla wpisu #' . $entry_id . '.';
 		error_log( '[Welyo Forminator] ' . $msg );
@@ -1120,15 +1172,14 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 		return;
 	}
 
+	$wynik_quizu = welyo_forminator_format_wynik_quizu( $quiz_result, $quiz_desc );
+
 	$extra = array();
 	if ( $email !== '' ) {
 		$extra['EMAIL'] = sanitize_email( $email );
 	}
-	if ( $quiz_result !== '' ) {
-		$extra['WYNIK_QUIZU'] = sanitize_text_field( $quiz_result );
-	}
-	if ( $quiz_desc !== '' ) {
-		$extra['OPIS_OSOBOWOSCI'] = sanitize_textarea_field( $quiz_desc );
+	if ( $wynik_quizu !== '' ) {
+		$extra['WYNIK_QUIZU'] = sanitize_textarea_field( $wynik_quizu );
 	}
 
 	$res = welyo_add_record( $jwt, $campaign_id, '', $name, $phone_e164, null, $ext_id, $extra );
