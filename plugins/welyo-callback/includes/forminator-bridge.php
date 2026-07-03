@@ -1,6 +1,6 @@
 <?php
 /**
- * Forminator quiz → Welyo (osobna kampania CC, pola EMAIL + WYNIK_QUIZU).
+ * Forminator quiz → Welyo (osobna kampania CC, pola EMAIL + WYNIK_QUIZU + OPIS_OSOBOWOSCI).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -183,15 +183,16 @@ function welyo_forminator_guess_field_kind( $slug, $field_map ) {
 /**
  * Telefon, e-mail, zgoda, imię i wynik — slugi opcjonalne (auto z wpisu).
  *
- * @return array{phone:string,name:string,email:string,consent:?bool,quiz_result:string}
+ * @return array{phone:string,name:string,email:string,consent:?bool,quiz_result:string,quiz_result_description:string}
  */
 function welyo_forminator_resolve_lead_values( $entry_id, $form_id, $slug_overrides = array(), $field_hints = array() ) {
 	$out = array(
-		'phone'       => '',
-		'name'        => '',
-		'email'       => '',
-		'consent'     => null,
-		'quiz_result' => '',
+		'phone'                    => '',
+		'name'                     => '',
+		'email'                    => '',
+		'consent'                  => null,
+		'quiz_result'              => '',
+		'quiz_result_description'  => '',
 	);
 
 	if ( ! class_exists( 'Forminator_Form_Entry_Model' ) ) {
@@ -267,7 +268,81 @@ function welyo_forminator_resolve_lead_values( $entry_id, $form_id, $slug_overri
 	}
 
 	$result_slug = trim( (string) ( $slug_overrides['quiz_result'] ?? '' ) );
-	$out['quiz_result'] = welyo_forminator_get_quiz_result( $entry_id, $result_slug, $field_hints );
+	$quiz_data   = welyo_forminator_get_personality_result_data( $entry_id, $field_hints );
+	if ( $result_slug !== '' ) {
+		$from_field = welyo_forminator_entry_field( $entry_id, $result_slug );
+		if ( $from_field !== '' ) {
+			$quiz_data['title'] = $from_field;
+		}
+	}
+	$out['quiz_result']             = $quiz_data['title'];
+	$out['quiz_result_description'] = $quiz_data['description'];
+
+	return $out;
+}
+
+/**
+ * @return array{title:string,description:string}
+ */
+function welyo_forminator_merge_result_data( $base, $add ) {
+	if ( ! is_array( $add ) ) {
+		return $base;
+	}
+	if ( $base['title'] === '' && ! empty( $add['title'] ) ) {
+		$base['title'] = trim( (string) $add['title'] );
+	}
+	if ( $base['description'] === '' && ! empty( $add['description'] ) ) {
+		$base['description'] = trim( (string) $add['description'] );
+	}
+	return $base;
+}
+
+/**
+ * @return array{title:string,description:string}
+ */
+function welyo_forminator_parse_result_data( $data ) {
+	$out = array( 'title' => '', 'description' => '' );
+
+	if ( is_string( $data ) ) {
+		$trim = trim( $data );
+		if ( $trim !== '' && ( $trim[0] === '{' || $trim[0] === '[' ) ) {
+			$decoded = json_decode( $trim, true );
+			if ( is_array( $decoded ) ) {
+				return welyo_forminator_parse_result_data( $decoded );
+			}
+		}
+		return $out;
+	}
+
+	if ( ! is_array( $data ) ) {
+		return $out;
+	}
+
+	if ( ! empty( $data['result']['title'] ) && is_string( $data['result']['title'] ) ) {
+		$out['title'] = trim( $data['result']['title'] );
+	} elseif ( ! empty( $data['result']['name'] ) && is_string( $data['result']['name'] ) ) {
+		$out['title'] = trim( $data['result']['name'] );
+	} elseif ( ! empty( $data['result'] ) && is_string( $data['result'] ) ) {
+		$out['title'] = trim( $data['result'] );
+	}
+
+	if ( ! empty( $data['result']['description'] ) && is_string( $data['result']['description'] ) ) {
+		$out['description'] = trim( $data['result']['description'] );
+	} elseif ( ! empty( $data['description'] ) && is_string( $data['description'] ) ) {
+		$out['description'] = trim( $data['description'] );
+	}
+
+	if ( $out['title'] === '' && ! empty( $data['title'] ) && is_string( $data['title'] )
+		&& ( $out['description'] !== '' || ! empty( $data['slug'] ) || isset( $data['personality'] ) ) ) {
+		$out['title'] = trim( $data['title'] );
+	}
+
+	if ( $out['title'] === '' ) {
+		$out['title'] = welyo_forminator_deep_find_result_title( $data );
+	}
+	if ( $out['description'] === '' ) {
+		$out['description'] = welyo_forminator_deep_find_result_description( $data );
+	}
 
 	return $out;
 }
@@ -327,31 +402,89 @@ function welyo_forminator_deep_find_result_title( $data, $depth = 0 ) {
 	return '';
 }
 
-/** Wynik z tablicy field_data (hook po zapisie quizu). */
-function welyo_forminator_result_from_field_hints( $field_hints ) {
-	if ( ! is_array( $field_hints ) ) {
+/** Szuka opisu wyniku quizu w zagnieżdżonej strukturze Forminator. */
+function welyo_forminator_deep_find_result_description( $data, $depth = 0 ) {
+	if ( $depth > 10 ) {
 		return '';
 	}
 
-	$found = welyo_forminator_deep_find_result_title( $field_hints );
-	if ( $found !== '' ) {
-		return $found;
+	if ( is_string( $data ) ) {
+		$trim = trim( $data );
+		if ( $trim !== '' && ( $trim[0] === '{' || $trim[0] === '[' ) ) {
+			$decoded = json_decode( $trim, true );
+			if ( is_array( $decoded ) ) {
+				$found = welyo_forminator_deep_find_result_description( $decoded, $depth + 1 );
+				if ( $found !== '' ) {
+					return $found;
+				}
+			}
+		}
+		return '';
 	}
+
+	if ( ! is_array( $data ) ) {
+		return '';
+	}
+
+	if ( ! empty( $data['result']['description'] ) && is_string( $data['result']['description'] ) ) {
+		return trim( $data['result']['description'] );
+	}
+	if ( ! empty( $data['description'] ) && is_string( $data['description'] ) ) {
+		return trim( $data['description'] );
+	}
+
+	foreach ( $data as $key => $value ) {
+		if ( is_string( $key ) && preg_match( '/(?:description|opis)/i', $key ) ) {
+			if ( is_string( $value ) && trim( $value ) !== '' ) {
+				return trim( $value );
+			}
+		}
+		if ( is_array( $value ) || is_string( $value ) ) {
+			$found = welyo_forminator_deep_find_result_description( $value, $depth + 1 );
+			if ( $found !== '' ) {
+				return $found;
+			}
+		}
+	}
+
+	return '';
+}
+
+/** Wynik z tablicy field_data (hook po zapisie quizu). */
+function welyo_forminator_result_data_from_field_hints( $field_hints ) {
+	if ( ! is_array( $field_hints ) ) {
+		return array( 'title' => '', 'description' => '' );
+	}
+
+	$out = welyo_forminator_parse_result_data( $field_hints );
 
 	foreach ( $field_hints as $hint ) {
 		if ( ! is_array( $hint ) ) {
 			continue;
 		}
 		$name = isset( $hint['name'] ) ? (string) $hint['name'] : '';
-		if ( $name !== '' && preg_match( '/(?:quiz[_-]?result|personality|result)/i', $name ) ) {
-			$value = welyo_forminator_normalize_field_value( $hint );
-			if ( $value !== '' ) {
-				return $value;
-			}
+		if ( $name === '' ) {
+			continue;
+		}
+		$value = welyo_forminator_normalize_field_value( $hint );
+		if ( $value === '' ) {
+			continue;
+		}
+		if ( preg_match( '/(?:quiz[_-]?result|personality|result)/i', $name ) && $out['title'] === '' ) {
+			$out['title'] = $value;
+		}
+		if ( preg_match( '/(?:description|opis)/i', $name ) && $out['description'] === '' ) {
+			$out['description'] = $value;
 		}
 	}
 
-	return '';
+	return $out;
+}
+
+/** Wynik z tablicy field_data (hook po zapisie quizu). */
+function welyo_forminator_result_from_field_hints( $field_hints ) {
+	$data = welyo_forminator_result_data_from_field_hints( $field_hints );
+	return $data['title'];
 }
 
 /** Konfiguracja quizu dla ID formularza (quiz lub powiązany formularz leadów). */
@@ -570,8 +703,14 @@ function welyo_forminator_run_diagnostics( $lang ) {
 		)
 	);
 
-	if ( $lead['quiz_result'] === '' && $result_entry_id !== $entry_id ) {
-		$lead['quiz_result'] = welyo_forminator_get_quiz_result( $result_entry_id );
+	if ( $lead['quiz_result'] === '' || $lead['quiz_result_description'] === '' ) {
+		$alt_data = welyo_forminator_get_personality_result_data( $result_entry_id );
+		if ( $lead['quiz_result'] === '' && $alt_data['title'] !== '' ) {
+			$lead['quiz_result'] = $alt_data['title'];
+		}
+		if ( $lead['quiz_result_description'] === '' && $alt_data['description'] !== '' ) {
+			$lead['quiz_result_description'] = $alt_data['description'];
+		}
 	}
 
 	$phone_digits = preg_replace( '/\D/', '', $lead['phone'] );
@@ -621,6 +760,18 @@ function welyo_forminator_run_diagnostics( $lang ) {
 				$lead['quiz_result']
 			)
 			: __( 'Brak wyniku quizu w zapisanym wpisie (pole WYNIK_QUIZU będzie puste). Lead i tak może zostać wysłany — wypełnij quiz ponownie po tej poprawce.', 'akademiata' ),
+	);
+
+	$steps[] = array(
+		'id'      => 'quiz_result_description',
+		'ok'      => true,
+		'message' => $lead['quiz_result_description'] !== ''
+			? sprintf(
+				/* translators: %s: quiz personality description */
+				__( 'Opis osobowości: „%s”.', 'akademiata' ),
+				wp_html_excerpt( $lead['quiz_result_description'], 120, '…' )
+			)
+			: __( 'Brak opisu osobowości w wpisie (pole OPIS_OSOBOWOSCI będzie puste).', 'akademiata' ),
 	);
 
 	$dedup_key = 'welyo_fnt_sent_' . $quiz_id_cfg . '_' . $entry_id;
@@ -682,63 +833,60 @@ function welyo_forminator_entry_field( $entry_id, $field_slug ) {
 	return '';
 }
 
-/** Wynik quizu typu „osobowość” (Lider Zespołu itd.) — Forminator liczy go sam, bez sluga pola. */
-function welyo_forminator_get_personality_result( $entry_id ) {
+/** Wynik quizu typu „osobowość” — nazwa i opis z meta wpisu Forminator. */
+function welyo_forminator_get_personality_result_data( $entry_id, $field_hints = array() ) {
+	$out = welyo_forminator_result_data_from_field_hints( $field_hints );
+
 	if ( ! class_exists( 'Forminator_Form_Entry_Model' ) ) {
-		return '';
+		return $out;
 	}
 
 	$entry = new Forminator_Form_Entry_Model( (int) $entry_id );
 	if ( empty( $entry->meta_data ) || ! is_array( $entry->meta_data ) ) {
-		return '';
+		return $out;
 	}
 
 	if ( isset( $entry->meta_data['entry'] ) ) {
 		$raw_entry = $entry->meta_data['entry'];
 		$data      = is_array( $raw_entry ) && isset( $raw_entry['value'] ) ? $raw_entry['value'] : $raw_entry;
-		if ( is_string( $data ) ) {
-			$decoded = json_decode( $data, true );
-			if ( is_array( $decoded ) ) {
-				$data = $decoded;
-			}
-		}
-		if ( is_array( $data ) ) {
-			if ( ! empty( $data['result']['title'] ) ) {
-				return trim( (string) $data['result']['title'] );
-			}
-			if ( ! empty( $data['result'] ) && is_string( $data['result'] ) ) {
-				return trim( $data['result'] );
-			}
-			$found = welyo_forminator_deep_find_result_title( $data );
-			if ( $found !== '' ) {
-				return $found;
-			}
-		}
+		$out       = welyo_forminator_merge_result_data( $out, welyo_forminator_parse_result_data( $data ) );
 	}
 
 	foreach ( array( 'quiz_result', 'personality', 'result' ) as $meta_key ) {
-		if ( isset( $entry->meta_data[ $meta_key ] ) ) {
+		if ( ! isset( $entry->meta_data[ $meta_key ] ) ) {
+			continue;
+		}
+		$parsed = welyo_forminator_parse_result_data( $entry->meta_data[ $meta_key ] );
+		if ( $parsed['title'] === '' ) {
 			$val = welyo_forminator_normalize_field_value( $entry->meta_data[ $meta_key ] );
 			if ( $val !== '' ) {
-				return $val;
+				$parsed['title'] = $val;
 			}
 		}
+		$out = welyo_forminator_merge_result_data( $out, $parsed );
 	}
 
 	foreach ( $entry->meta_data as $meta_key => $meta_value ) {
 		if ( is_string( $meta_key ) && preg_match( '/(?:quiz[_-]?result|personality|result)/i', $meta_key ) ) {
-			$val = welyo_forminator_normalize_field_value( $meta_value );
-			if ( $val !== '' ) {
-				return $val;
+			$parsed = welyo_forminator_parse_result_data( $meta_value );
+			if ( $parsed['title'] === '' ) {
+				$val = welyo_forminator_normalize_field_value( $meta_value );
+				if ( $val !== '' ) {
+					$parsed['title'] = $val;
+				}
 			}
+			$out = welyo_forminator_merge_result_data( $out, $parsed );
+			continue;
 		}
-		$found = welyo_forminator_deep_find_result_title( $meta_value );
-		if ( $found !== '' ) {
-			return $found;
-		}
+		$out = welyo_forminator_merge_result_data( $out, welyo_forminator_parse_result_data( $meta_value ) );
 	}
 
-	return '';
+	return $out;
+}
+
+/** @return string Tytuł wyniku quizu osobowości. */
+function welyo_forminator_get_personality_result( $entry_id ) {
+	return welyo_forminator_get_personality_result_data( $entry_id )['title'];
 }
 
 function welyo_forminator_get_quiz_result( $entry_id, $result_slug = '', $field_hints = array() ) {
@@ -750,12 +898,8 @@ function welyo_forminator_get_quiz_result( $entry_id, $result_slug = '', $field_
 		}
 	}
 
-	$from_hints = welyo_forminator_result_from_field_hints( $field_hints );
-	if ( $from_hints !== '' ) {
-		return $from_hints;
-	}
-
-	return welyo_forminator_get_personality_result( $entry_id );
+	$data = welyo_forminator_get_personality_result_data( $entry_id, $field_hints );
+	return $data['title'];
 }
 
 function welyo_forminator_normalize_field_value( $raw ) {
@@ -821,11 +965,16 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$name        = $lead['name'];
 	$email       = $lead['email'];
 	$quiz_result = $lead['quiz_result'];
+	$quiz_desc   = $lead['quiz_result_description'];
 
-	if ( $quiz_result === '' ) {
+	if ( $quiz_result === '' || $quiz_desc === '' ) {
 		$result_entry_id = welyo_forminator_resolve_quiz_result_entry_id( $entry_id, $form_id, $quiz_id );
-		if ( $result_entry_id !== $entry_id ) {
-			$quiz_result = welyo_forminator_get_quiz_result( $result_entry_id, '', $field_hints );
+		$alt_data        = welyo_forminator_get_personality_result_data( $result_entry_id, $field_hints );
+		if ( $quiz_result === '' && $alt_data['title'] !== '' ) {
+			$quiz_result = $alt_data['title'];
+		}
+		if ( $quiz_desc === '' && $alt_data['description'] !== '' ) {
+			$quiz_desc = $alt_data['description'];
 		}
 	}
 	if ( $quiz_result === '' ) {
@@ -870,6 +1019,9 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	}
 	if ( $quiz_result !== '' ) {
 		$extra['WYNIK_QUIZU'] = sanitize_text_field( $quiz_result );
+	}
+	if ( $quiz_desc !== '' ) {
+		$extra['OPIS_OSOBOWOSCI'] = sanitize_textarea_field( $quiz_desc );
 	}
 
 	$res = welyo_add_record( $jwt, $campaign_id, '', $name, $phone_e164, null, $ext_id, $extra );

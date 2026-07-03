@@ -238,7 +238,7 @@ function welyo_admin_render_forminator_help_box() {
 			<li>
 				<strong><?php esc_html_e( 'W panelu Welyo', 'akademiata' ); ?></strong>
 				<?php esc_html_e( 'Utwórz kampanię na dany język (np. „Rekrutacja - quiz Forminator WWW”). W polach kampanii dodaj:', 'akademiata' ); ?>
-				<code>TELEFON</code>, <code>EMAIL</code>, <code>WYNIK_QUIZU</code>.
+				<code>TELEFON</code>, <code>EMAIL</code>, <code>WYNIK_QUIZU</code>, <code>OPIS_OSOBOWOSCI</code>.
 			</li>
 			<li>
 				<strong><?php esc_html_e( 'W Forminatorze', 'akademiata' ); ?></strong>
