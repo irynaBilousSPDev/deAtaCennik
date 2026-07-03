@@ -995,7 +995,7 @@ function welyo_forminator_run_diagnostics( $lang ) {
 		$steps[] = array(
 			'id'      => 'last_send',
 			'ok'      => false,
-			'message' => __( 'Brak zapisu o wysyłce tego wpisu — hook quizu mógł nie zadziałać. Użyj „Wyślij ostatni wpis do Welyo”.', 'akademiata' ),
+			'message' => __( 'Brak zapisu o wysyłce tego wpisu — wypełnij quiz ponownie i sprawdź status tutaj.', 'akademiata' ),
 		);
 	}
 
@@ -1271,40 +1271,4 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	welyo_forminator_remember_send_status( $entry_id, true, $success_msg );
 
 	do_action( 'welyo_forminator_lead_sent', $entry_id, $form_id, $lang, $ext_id );
-}
-
-/** Ręczna wysyłka ostatniego wpisu (panel admina / REST). */
-function welyo_forminator_send_latest_entry( $lang, $force = true ) {
-	$entry = welyo_forminator_find_latest_entry_for_lang( $lang );
-	if ( ! $entry || empty( $entry->entry_id ) ) {
-		return new WP_Error( 'welyo_fnt_no_entry', __( 'Brak wpisów quizu dla tego języka.', 'akademiata' ) );
-	}
-
-	$entry_id = (int) $entry->entry_id;
-	$form_id  = isset( $entry->form_id ) ? (int) $entry->form_id : 0;
-	if ( $form_id <= 0 ) {
-		return new WP_Error( 'welyo_fnt_no_form', __( 'Nie można ustalić ID formularza wpisu.', 'akademiata' ) );
-	}
-
-	if ( $force ) {
-		$config = welyo_forminator_quiz_config_for_form( $form_id );
-		if ( $config ) {
-			delete_transient( 'welyo_fnt_sent_' . (int) $config['quiz_id'] . '_' . $entry_id );
-		}
-	}
-
-	welyo_forminator_process_submission( $entry_id, $form_id, array(), $force );
-
-	$status = get_transient( 'welyo_fnt_status_' . $entry_id );
-	if ( is_array( $status ) ) {
-		if ( ! empty( $status['ok'] ) ) {
-			return array(
-				'entry_id' => $entry_id,
-				'message'  => $status['message'],
-			);
-		}
-		return new WP_Error( 'welyo_fnt_send_failed', $status['message'] );
-	}
-
-	return new WP_Error( 'welyo_fnt_send_unknown', __( 'Wysyłka zakończona bez potwierdzenia statusu.', 'akademiata' ) );
 }

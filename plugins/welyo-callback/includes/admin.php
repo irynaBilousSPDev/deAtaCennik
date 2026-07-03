@@ -307,12 +307,9 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 			<button type="button" class="button button-secondary welyo-run-forminator-diagnostics" data-lang="<?php echo esc_attr( $lang ); ?>">
 				<?php esc_html_e( 'Testuj ostatni wpis quizu', 'akademiata' ); ?>
 			</button>
-			<button type="button" class="button button-primary welyo-send-forminator-last" data-lang="<?php echo esc_attr( $lang ); ?>">
-				<?php esc_html_e( 'Wyślij ostatni wpis do Welyo', 'akademiata' ); ?>
-			</button>
 			<span class="spinner welyo-forminator-diagnostics-spinner" data-lang="<?php echo esc_attr( $lang ); ?>" style="float:none;"></span>
 		</p>
-		<p class="description"><?php esc_html_e( '„Testuj” sprawdza dane bez wysyłki. „Wyślij” faktycznie dodaje rekord do kampanii Welyo (przydatne po naprawie integracji).', 'akademiata' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Wypełnij quiz na stronie, potem kliknij — zobaczysz czy wtyczka widzi telefon, e-mail, zgodę, wynik i status ostatniej wysyłki do Welyo.', 'akademiata' ); ?></p>
 		<ul class="welyo-diagnostics-results welyo-forminator-diagnostics-results" data-lang="<?php echo esc_attr( $lang ); ?>" hidden></ul>
 	</div>
 	<?php
@@ -936,52 +933,6 @@ function welyo_admin_render_page() {
 				if (list && spinner) {
 					runDiagnostics(restBase + 'forminator-diagnostics?lang=' + encodeURIComponent(lang), list, spinner, btn);
 				}
-			});
-		});
-
-		document.querySelectorAll('.welyo-send-forminator-last').forEach(function (btn) {
-			btn.addEventListener('click', function () {
-				var lang = btn.getAttribute('data-lang');
-				var list = document.querySelector('.welyo-forminator-diagnostics-results[data-lang="' + lang + '"]');
-				var spinner = document.querySelector('.welyo-forminator-diagnostics-spinner[data-lang="' + lang + '"]');
-				if (!list || !spinner) { return; }
-				list.hidden = false;
-				list.innerHTML = '';
-				spinner.classList.add('is-active');
-				btn.disabled = true;
-				fetch(restBase + 'forminator-send-last?lang=' + encodeURIComponent(lang), {
-					method: 'POST',
-					headers: {
-						'X-WP-Nonce': restNonce,
-						'Content-Type': 'application/json'
-					}
-				})
-					.then(function (r) { return r.json(); })
-					.then(function (data) {
-						if (data && data.steps) {
-							data.steps.forEach(function (step) {
-								var li = document.createElement('li');
-								li.className = step.ok ? 'is-ok' : 'is-fail';
-								li.textContent = step.message || '';
-								list.appendChild(li);
-							});
-							return;
-						}
-						var li = document.createElement('li');
-						li.className = data && data.ok ? 'is-ok' : 'is-fail';
-						li.textContent = (data && data.message) ? data.message : (data && data.code ? data.message || data.code : <?php echo wp_json_encode( __( 'Wysyłka nie powiodła się.', 'akademiata' ) ); ?>);
-						list.appendChild(li);
-					})
-					.catch(function () {
-						var li = document.createElement('li');
-						li.className = 'is-fail';
-						li.textContent = <?php echo wp_json_encode( __( 'Nie udało się wysłać wpisu do Welyo.', 'akademiata' ) ); ?>;
-						list.appendChild(li);
-					})
-					.finally(function () {
-						spinner.classList.remove('is-active');
-						btn.disabled = false;
-					});
 			});
 		});
 
