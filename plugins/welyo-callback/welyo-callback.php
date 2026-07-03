@@ -898,6 +898,30 @@ add_action( 'rest_api_init', function () {
 		},
 	) );
 
+	register_rest_route( 'welyo/v1', '/forminator-diagnostics', array(
+		'methods'             => 'GET',
+		'callback'            => function ( WP_REST_Request $request ) {
+			$lang = sanitize_key( (string) $request->get_param( 'lang' ) );
+			if ( $lang === '' || ! isset( welyo_supported_languages()[ $lang ] ) ) {
+				return new WP_REST_Response(
+					array( 'steps' => array( array(
+						'id'      => 'lang',
+						'ok'      => false,
+						'message' => __( 'Podaj prawidłowy kod języka (np. pl).', 'akademiata' ),
+					) ) ),
+					200
+				);
+			}
+			return new WP_REST_Response(
+				array( 'steps' => welyo_forminator_run_diagnostics( $lang ) ),
+				200
+			);
+		},
+		'permission_callback' => function () {
+			return current_user_can( 'manage_options' );
+		},
+	) );
+
 	register_rest_route( 'welyo/v1', '/campaigns', array(
 		'methods'             => 'GET',
 		'callback'            => function () {

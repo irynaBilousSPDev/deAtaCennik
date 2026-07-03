@@ -302,6 +302,15 @@ function welyo_admin_render_forminator_lang_panel( $lang, $label, $settings ) {
 				?>
 			</table>
 		</details>
+
+		<p>
+			<button type="button" class="button button-secondary welyo-run-forminator-diagnostics" data-lang="<?php echo esc_attr( $lang ); ?>">
+				<?php esc_html_e( 'Testuj ostatni wpis quizu', 'akademiata' ); ?>
+			</button>
+			<span class="spinner welyo-forminator-diagnostics-spinner" data-lang="<?php echo esc_attr( $lang ); ?>" style="float:none;"></span>
+		</p>
+		<p class="description"><?php esc_html_e( 'Wypełnij quiz na stronie, potem kliknij — zobaczysz czy wtyczka widzi telefon, e-mail, zgodę i wynik (bez ponownej wysyłki).', 'akademiata' ); ?></p>
+		<ul class="welyo-diagnostics-results welyo-forminator-diagnostics-results" data-lang="<?php echo esc_attr( $lang ); ?>" hidden></ul>
 	</div>
 	<?php
 }
@@ -912,6 +921,17 @@ function welyo_admin_render_page() {
 				var spinner = document.querySelector('.welyo-diagnostics-lang-spinner[data-lang="' + lang + '"]');
 				if (list && spinner) {
 					runDiagnostics(restBase + 'diagnostics?lang=' + encodeURIComponent(lang), list, spinner, btn);
+				}
+			});
+		});
+
+		document.querySelectorAll('.welyo-run-forminator-diagnostics').forEach(function (btn) {
+			btn.addEventListener('click', function () {
+				var lang = btn.getAttribute('data-lang');
+				var list = document.querySelector('.welyo-forminator-diagnostics-results[data-lang="' + lang + '"]');
+				var spinner = document.querySelector('.welyo-forminator-diagnostics-spinner[data-lang="' + lang + '"]');
+				if (list && spinner) {
+					runDiagnostics(restBase + 'forminator-diagnostics?lang=' + encodeURIComponent(lang), list, spinner, btn);
 				}
 			});
 		});

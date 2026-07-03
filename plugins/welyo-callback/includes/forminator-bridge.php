@@ -46,12 +46,25 @@ function welyo_forminator_after_handle_submit( $form_id, $response ) {
 	welyo_forminator_after_save_entry( $form_id, is_array( $response ) ? $response : array() );
 }
 
-/** Quiz z leadami — czasem zapis jest tu, zanim poleci standardowy hook. */
+/** Quiz z leadami — tylko gdy telefon już jest w danych (inaczej after_save). */
 function welyo_forminator_quiz_before_set_fields( $entry, $form_id, $field_data_array ) {
 	if ( empty( $entry->entry_id ) ) {
 		return;
 	}
-	welyo_forminator_process_submission( (int) $entry->entry_id, (int) $form_id, is_array( $field_data_array ) ? $field_data_array : array() );
+
+	$hints = is_array( $field_data_array ) ? $field_data_array : array();
+	$lead  = welyo_forminator_resolve_lead_values(
+		(int) $entry->entry_id,
+		(int) $form_id,
+		array(),
+		$hints
+	);
+	$digits = preg_replace( '/\D/', '', $lead['phone'] );
+	if ( strlen( $digits ) < 9 ) {
+		return;
+	}
+
+	welyo_forminator_process_submission( (int) $entry->entry_id, (int) $form_id, $hints );
 }
 
 /** ID quizu + ewentualny powiązany formularz leadów. */
@@ -257,21 +270,295 @@ function welyo_forminator_resolve_lead_values( $entry_id, $form_id, $slug_overri
 	return $out;
 }
 
-/** Język WPML powiązany z ID formularza Forminator. */
-function welyo_forminator_lang_for_form( $form_id ) {
+/** Konfiguracja quizu dla ID formularza (quiz lub powiązany formularz leadów). */
+function welyo_forminator_quiz_config_for_form( $form_id ) {
 	$form_id = (int) $form_id;
 	if ( $form_id <= 0 ) {
 		return null;
 	}
+
 	foreach ( welyo_supported_languages() as $code => $label ) {
 		if ( empty( welyo_cfg( 'forminator_enabled', $code ) ) ) {
 			continue;
 		}
-		if ( (int) welyo_cfg( 'forminator_form_id', $code ) === $form_id ) {
-			return $code;
+
+		$quiz_id = (int) welyo_cfg( 'forminator_form_id', $code );
+		if ( $quiz_id <= 0 ) {
+			continue;
+		}
+
+		if ( $form_id === $quiz_id ) {
+			return array(
+				'lang'    => $code,
+				'quiz_id' => $quiz_id,
+			);
+		}
+
+		$related = welyo_forminator_related_form_ids( $quiz_id );
+		if ( in_array( $form_id, $related, true ) ) {
+			return array(
+				'lang'    => $code,
+				'quiz_id' => $quiz_id,
+			);
 		}
 	}
+
 	return null;
+}
+
+/** @deprecated Użyj welyo_forminator_quiz_config_for_form(). */
+function welyo_forminator_lang_for_form( $form_id ) {
+	$config = welyo_forminator_quiz_config_for_form( $form_id );
+	return $config ? $config['lang'] : null;
+}
+
+/** Wpis quizu z wynikiem osobowości (gdy lead jest osobnym formularzem). */
+function welyo_forminator_resolve_quiz_result_entry_id( $entry_id, $form_id, $quiz_id ) {
+	$entry_id = (int) $entry_id;
+	$form_id  = (int) $form_id;
+	$quiz_id  = (int) $quiz_id;
+
+	if ( $form_id === $quiz_id ) {
+		return $entry_id;
+	}
+
+	if ( ! class_exists( 'Forminator_Form_Entry_Model' ) || $quiz_id <= 0 ) {
+		return $entry_id;
+	}
+
+	$latest = Forminator_Form_Entry_Model::get_latest_entry_by_form_id( $quiz_id );
+	if ( $latest && ! empty( $latest->entry_id ) ) {
+		return (int) $latest->entry_id;
+	}
+
+	return $entry_id;
+}
+
+/** Ostatni wpis quizu lub formularza leadów powiązanego z konfiguracją języka. */
+function welyo_forminator_find_latest_entry_for_lang( $lang ) {
+	if ( ! class_exists( 'Forminator_Form_Entry_Model' ) ) {
+		return null;
+	}
+
+	welyo_lang_context( $lang );
+	$quiz_id = (int) welyo_cfg( 'forminator_form_id', $lang );
+	if ( $quiz_id <= 0 ) {
+		return null;
+	}
+
+	$candidates = welyo_forminator_related_form_ids( $quiz_id );
+	$best       = null;
+	$best_time  = 0;
+
+	foreach ( $candidates as $candidate_id ) {
+		$entry = Forminator_Form_Entry_Model::get_latest_entry_by_form_id( (int) $candidate_id );
+		if ( ! $entry || empty( $entry->entry_id ) ) {
+			continue;
+		}
+		$time = isset( $entry->date_created_sql ) ? strtotime( $entry->date_created_sql ) : 0;
+		if ( ! $time && isset( $entry->date_created ) ) {
+			$time = strtotime( $entry->date_created );
+		}
+		if ( $time >= $best_time ) {
+			$best_time = $time;
+			$best      = $entry;
+		}
+	}
+
+	return $best;
+}
+
+/**
+ * Diagnostyka ostatniego wpisu quizu — bez wysyłki do Welyo.
+ *
+ * @return array<int, array{id:string, ok:bool, message:string}>
+ */
+function welyo_forminator_run_diagnostics( $lang ) {
+	$steps = array();
+	$lang  = strtolower( sanitize_key( (string) $lang ) );
+
+	if ( ! isset( welyo_supported_languages()[ $lang ] ) ) {
+		$steps[] = array(
+			'id'      => 'lang',
+			'ok'      => false,
+			'message' => __( 'Nieobsługiwany kod języka.', 'akademiata' ),
+		);
+		return $steps;
+	}
+
+	welyo_lang_context( $lang );
+
+	if ( ! welyo_forminator_integration_active() ) {
+		$steps[] = array(
+			'id'      => 'integration',
+			'ok'      => false,
+			'message' => __( 'Integracja quizu wyłączona lub plugin Forminator nieaktywny.', 'akademiata' ),
+		);
+		return $steps;
+	}
+
+	if ( empty( welyo_cfg( 'forminator_enabled', $lang ) ) ) {
+		$steps[] = array(
+			'id'      => 'enabled',
+			'ok'      => false,
+			'message' => __( 'Quiz dla tego języka nie jest włączony w ustawieniach.', 'akademiata' ),
+		);
+		return $steps;
+	}
+
+	$quiz_id = (int) welyo_cfg( 'forminator_form_id', $lang );
+	$related = welyo_forminator_related_form_ids( $quiz_id );
+	$lead_ids = array_values( array_diff( $related, array( $quiz_id ) ) );
+
+	$steps[] = array(
+		'id'      => 'quiz_id',
+		'ok'      => $quiz_id > 0,
+		'message' => $quiz_id > 0
+			? sprintf( __( 'ID quizu w ustawieniach: %d', 'akademiata' ), $quiz_id )
+			: __( 'Brak ID quizu — uzupełnij i zapisz ustawienia.', 'akademiata' ),
+	);
+
+	if ( ! empty( $lead_ids ) ) {
+		$steps[] = array(
+			'id'      => 'lead_forms',
+			'ok'      => true,
+			'message' => sprintf(
+				/* translators: %s: comma-separated form IDs */
+				__( 'Powiązane formularze leadów Forminator: %s', 'akademiata' ),
+				implode( ', ', array_map( 'intval', $lead_ids ) )
+			),
+		);
+	}
+
+	$campaign_id = (string) welyo_cfg( 'forminator_quiz_campaign_id', $lang );
+	$steps[] = array(
+		'id'      => 'campaign',
+		'ok'      => $campaign_id !== '',
+		'message' => $campaign_id !== ''
+			? sprintf( __( 'Kampania quizu: #%s', 'akademiata' ), $campaign_id )
+			: __( 'Nie wybrano kampanii quizu — pobierz listę z API i zapisz.', 'akademiata' ),
+	);
+
+	$entry = welyo_forminator_find_latest_entry_for_lang( $lang );
+	if ( ! $entry || empty( $entry->entry_id ) ) {
+		$steps[] = array(
+			'id'      => 'entry',
+			'ok'      => false,
+			'message' => __( 'Brak wpisów Forminator dla tego quizu — wypełnij quiz na stronie i uruchom test ponownie.', 'akademiata' ),
+		);
+		return $steps;
+	}
+
+	$form_id  = isset( $entry->form_id ) ? (int) $entry->form_id : 0;
+	$entry_id = (int) $entry->entry_id;
+	$config   = welyo_forminator_quiz_config_for_form( $form_id );
+
+	$steps[] = array(
+		'id'      => 'entry',
+		'ok'      => true,
+		'message' => sprintf(
+			/* translators: 1: entry ID, 2: form ID */
+			__( 'Ostatni wpis Forminator: #%1$d (formularz #%2$d).', 'akademiata' ),
+			$entry_id,
+			$form_id
+		),
+	);
+
+	$steps[] = array(
+		'id'      => 'form_match',
+		'ok'      => (bool) $config,
+		'message' => $config
+			? __( 'Formularz rozpoznany przez integrację Welyo.', 'akademiata' )
+			: __( 'Formularz NIE pasuje do ID quizu ani formularza leadów — sprawdź ID w ustawieniach.', 'akademiata' ),
+	);
+
+	$quiz_id_cfg = $config ? (int) $config['quiz_id'] : $quiz_id;
+	$result_entry_id = welyo_forminator_resolve_quiz_result_entry_id( $entry_id, $form_id, $quiz_id_cfg );
+	$lead = welyo_forminator_resolve_lead_values(
+		$entry_id,
+		$form_id,
+		array(
+			'phone'       => (string) welyo_cfg( 'forminator_field_phone', $lang ),
+			'name'        => (string) welyo_cfg( 'forminator_field_name', $lang ),
+			'email'       => (string) welyo_cfg( 'forminator_field_email', $lang ),
+			'consent'     => (string) welyo_cfg( 'forminator_field_consent', $lang ),
+			'quiz_result' => (string) welyo_cfg( 'forminator_field_quiz_result', $lang ),
+		)
+	);
+
+	if ( $lead['quiz_result'] === '' && $result_entry_id !== $entry_id ) {
+		$lead['quiz_result'] = welyo_forminator_get_quiz_result( $result_entry_id );
+	}
+
+	$phone_digits = preg_replace( '/\D/', '', $lead['phone'] );
+	$steps[] = array(
+		'id'      => 'phone',
+		'ok'      => strlen( $phone_digits ) >= 9,
+		'message' => strlen( $phone_digits ) >= 9
+			? __( 'Telefon wykryty w wpisie.', 'akademiata' )
+			: __( 'Brak poprawnego telefonu — quiz musi zbierać numer (min. 9 cyfr).', 'akademiata' ),
+	);
+
+	$steps[] = array(
+		'id'      => 'email',
+		'ok'      => $lead['email'] !== '',
+		'message' => $lead['email'] !== ''
+			? __( 'E-mail wykryty w wpisie.', 'akademiata' )
+			: __( 'Brak e-maila w wpisie (pole opcjonalne w Welyo, ale zalecane).', 'akademiata' ),
+	);
+
+	if ( $lead['consent'] === false ) {
+		$steps[] = array(
+			'id'      => 'consent',
+			'ok'      => false,
+			'message' => __( 'Zgoda RODO niezaznaczona — lead nie zostanie wysłany.', 'akademiata' ),
+		);
+	} elseif ( $lead['consent'] === true ) {
+		$steps[] = array(
+			'id'      => 'consent',
+			'ok'      => true,
+			'message' => __( 'Zgoda RODO: tak.', 'akademiata' ),
+		);
+	} else {
+		$steps[] = array(
+			'id'      => 'consent',
+			'ok'      => true,
+			'message' => __( 'Pole zgody nie wykryte — wysyłka dozwolona (brak jawnej odmowy).', 'akademiata' ),
+		);
+	}
+
+	$steps[] = array(
+		'id'      => 'quiz_result',
+		'ok'      => $lead['quiz_result'] !== '',
+		'message' => $lead['quiz_result'] !== ''
+			? sprintf(
+				/* translators: %s: quiz personality result */
+				__( 'Wynik quizu: „%s”.', 'akademiata' ),
+				$lead['quiz_result']
+			)
+			: __( 'Brak wyniku quizu w wpisie — przy quizie osobowości powinien pojawić się automatycznie.', 'akademiata' ),
+	);
+
+	$jwt = welyo_get_jwt();
+	if ( is_wp_error( $jwt ) ) {
+		$steps[] = array(
+			'id'      => 'jwt',
+			'ok'      => false,
+			'message' => $jwt->get_error_message(),
+		);
+		return $steps;
+	}
+
+	$resolved_campaign = welyo_resolve_forminator_campaign_id( $jwt, $lang );
+	$steps[] = array(
+		'id'      => 'campaign_api',
+		'ok'      => ! is_wp_error( $resolved_campaign ),
+		'message' => ! is_wp_error( $resolved_campaign )
+			? sprintf( __( 'Kampania gotowa do wysyłki: #%s.', 'akademiata' ), $resolved_campaign )
+			: $resolved_campaign->get_error_message(),
+	);
+
+	return $steps;
 }
 
 /** Wartość pola z wpisu Forminator (slug pola z kreatora). */
@@ -385,16 +672,19 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 		return;
 	}
 
-	$lang = welyo_forminator_lang_for_form( $form_id );
-	if ( $lang === null ) {
+	$config = welyo_forminator_quiz_config_for_form( $form_id );
+	if ( $config === null ) {
+		error_log( '[Welyo Forminator] Pominięto formularz #' . $form_id . ' — brak dopasowania do ID quizu lub formularza leadów.' );
 		return;
 	}
 
-	$dedup_key = 'welyo_fnt_sent_' . $form_id . '_' . $entry_id;
+	$lang    = $config['lang'];
+	$quiz_id = (int) $config['quiz_id'];
+
+	$dedup_key = 'welyo_fnt_sent_' . $quiz_id . '_' . $entry_id;
 	if ( get_transient( $dedup_key ) ) {
 		return;
 	}
-	set_transient( $dedup_key, 1, 10 * MINUTE_IN_SECONDS );
 
 	welyo_lang_context( $lang );
 
@@ -416,6 +706,13 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$email       = $lead['email'];
 	$quiz_result = $lead['quiz_result'];
 
+	if ( $quiz_result === '' ) {
+		$result_entry_id = welyo_forminator_resolve_quiz_result_entry_id( $entry_id, $form_id, $quiz_id );
+		if ( $result_entry_id !== $entry_id ) {
+			$quiz_result = welyo_forminator_get_quiz_result( $result_entry_id );
+		}
+	}
+
 	if ( $lead['consent'] === false ) {
 		error_log( '[Welyo Forminator] Pominięto wpis #' . $entry_id . ' — brak zgody (' . $lang . ').' );
 		return;
@@ -423,7 +720,7 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 
 	$digits = preg_replace( '/\D/', '', $phone );
 	if ( strlen( $digits ) < 9 ) {
-		error_log( '[Welyo Forminator] Pominięto wpis #' . $entry_id . ' — nieprawidłowy telefon (' . $lang . ').' );
+		error_log( '[Welyo Forminator] Pominięto wpis #' . $entry_id . ' (form #' . $form_id . ') — nieprawidłowy telefon (' . $lang . ').' );
 		return;
 	}
 
@@ -440,7 +737,7 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	}
 
 	$phone_e164 = welyo_normalize_phone( $phone, $lang );
-	$ext_id     = 'forminator-' . $lang . '-' . $form_id . '-' . $entry_id;
+	$ext_id     = 'forminator-' . $lang . '-' . $quiz_id . '-' . $entry_id;
 
 	$campaign_id = welyo_resolve_forminator_campaign_id( $jwt, $lang );
 	if ( is_wp_error( $campaign_id ) ) {
@@ -459,9 +756,11 @@ function welyo_forminator_process_submission( $entry_id, $form_id, $field_hints 
 	$res = welyo_add_record( $jwt, $campaign_id, '', $name, $phone_e164, null, $ext_id, $extra );
 	if ( is_wp_error( $res ) ) {
 		error_log( '[Welyo Forminator] add-records: ' . $res->get_error_message() );
-		delete_transient( $dedup_key );
 		return;
 	}
+
+	set_transient( $dedup_key, 1, 10 * MINUTE_IN_SECONDS );
+	error_log( '[Welyo Forminator] Wysłano lead #' . $entry_id . ' → kampania #' . $campaign_id . ' (' . $lang . ').' );
 
 	do_action( 'welyo_forminator_lead_sent', $entry_id, $form_id, $lang, $ext_id );
 }
