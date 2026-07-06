@@ -390,22 +390,6 @@ function akademiata_is_bachelor_master_offer_listing_page($page_id = null) {
     );
 }
 
-function enqueue_slider_front_scripts() {
-    wp_enqueue_script(
-        'slider-ajax',
-        get_template_directory_uri() . '/assets/dist/js/ajaxSlider.js',
-        ['jquery'],
-        null,
-        true
-    );
-
-    wp_localize_script('slider-ajax', 'ajax_data', [
-        'ajaxurl' => admin_url('admin-ajax.php'),
-        'lang'    => apply_filters('wpml_current_language', null), // ✅ Add WPML language
-    ]);
-}
-add_action('wp_enqueue_scripts', 'enqueue_slider_front_scripts');
-
 /**
  * Hero slider slides: show_slide on + desktop image present.
  *

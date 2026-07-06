@@ -258,6 +258,64 @@ function akademiata_youtube_fetch_data( $playlist_id = '', $video_id = '' ) {
 	return $data;
 }
 
+/**
+ * Playlist items for sliders (transient cache, 1 h).
+ *
+ * @param string $playlist_id Raw or normalized playlist ID / URL.
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_get_youtube_playlist_items( $playlist_id ) {
+	$playlist_id = akademiata_normalize_youtube_playlist_id( $playlist_id );
+	if ( ! akademiata_validate_youtube_playlist_id( $playlist_id ) ) {
+		return array();
+	}
+
+	$cache_key = 'akademiata_yt_pl_' . md5( $playlist_id );
+	$cached    = get_transient( $cache_key );
+	if ( is_array( $cached ) ) {
+		return $cached;
+	}
+
+	$result = akademiata_youtube_fetch_data( $playlist_id );
+	if ( is_wp_error( $result ) ) {
+		return array();
+	}
+
+	$items = ( isset( $result['items'] ) && is_array( $result['items'] ) ) ? $result['items'] : array();
+	set_transient( $cache_key, $items, HOUR_IN_SECONDS );
+
+	return $items;
+}
+
+/**
+ * @param array<string, mixed> $item YouTube playlistItems API row.
+ */
+function akademiata_render_youtube_slide( $item ) {
+	$video_id = $item['snippet']['resourceId']['videoId'] ?? '';
+	if ( ! akademiata_validate_youtube_video_id( $video_id ) ) {
+		return;
+	}
+
+	$title = isset( $item['snippet']['title'] ) ? (string) $item['snippet']['title'] : '';
+	$thumb = 'https://images.weserv.nl/?url=' . rawurlencode( 'img.youtube.com/vi/' . $video_id . '/sddefault.jpg' ) . '&output=webp';
+	?>
+	<div class="youtube-slide" data-video-id="<?php echo esc_attr( $video_id ); ?>">
+		<div class="youtube-wrapper">
+			<img
+				class="youtube-thumbnail"
+				src="<?php echo esc_url( $thumb ); ?>"
+				alt="<?php echo esc_attr( $title ); ?>"
+				loading="lazy"
+				decoding="async"
+				width="640"
+				height="480"
+			>
+			<button type="button" class="youtube-play" aria-label="<?php esc_attr_e( 'Odtwórz wideo', 'akademiata' ); ?>">▶</button>
+		</div>
+	</div>
+	<?php
+}
+
 function akademiata_youtube_test_api_key() {
 	$api_key = akademiata_get_youtube_api_key();
 	if ( $api_key === '' ) {

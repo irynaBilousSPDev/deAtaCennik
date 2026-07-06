@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 // Group imports by functionality
 import * as Sliders from './__sliders';
-import {fetchYouTubeShorts} from './__YouTubeSlider';
+import {initYouTubeSlider} from './__YouTubeSlider';
 import * as CustomFunctions from './__customFunctions';
 import {initCityTabs, initContactTabs, initLanguageFilters, initLanguageTabs} from "./__customFunctions";
 import initPgMbaThemeFilter from './pg-mba-theme-filter';
@@ -21,9 +21,8 @@ class General {
     }
 
     youTubeSlider() {
-        // Fetch YouTube Shorts for all instances of .youtube-slider
         document.querySelectorAll(".youtube-slider").forEach(slider => {
-            fetchYouTubeShorts(slider);
+            initYouTubeSlider(slider);
         });
     }
 
