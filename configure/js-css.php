@@ -70,6 +70,11 @@ function akademiata_enqueue_scripts()
 
     wp_localize_script('name-main-js', 'akademiataOffer', $offer_localize);
 
+    wp_localize_script('name-main-js', 'akademiataYouTube', [
+        'proxyUrl' => akademiata_youtube_proxy_url(),
+        'nonce'    => wp_create_nonce('wp_rest'),
+    ]);
+
     if (is_page_template('page-rankingi.php')) {
         $lp_rankingi_js_path = get_template_directory() . '/assets/dist/js/lpRankingi.js';
         $lp_rankingi_js_ver  = file_exists($lp_rankingi_js_path) ? filemtime($lp_rankingi_js_path) : null;

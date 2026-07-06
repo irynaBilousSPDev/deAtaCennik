@@ -35,15 +35,26 @@ export async function fetchYouTubeShorts(sliderContainer) {
     try {
         loadYouTubeAPI(() => console.log("YouTube API Loaded"));
 
-        const proxyUrl = `/wp-content/themes/devata/youtube-proxy.php?id=${youtubePlaylistId}`;
-        // console.log("Fetching from:", proxyUrl);
+        const proxyBase = (typeof akademiataYouTube !== 'undefined' && akademiataYouTube.proxyUrl)
+            ? akademiataYouTube.proxyUrl
+            : '';
+        if (!proxyBase) {
+            console.error("YouTube proxy URL is not configured.");
+            return;
+        }
+
+        const proxyUrl = `${proxyBase}?id=${encodeURIComponent(youtubePlaylistId)}`;
+        const headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        };
+        if (typeof akademiataYouTube !== 'undefined' && akademiataYouTube.nonce) {
+            headers["X-WP-Nonce"] = akademiataYouTube.nonce;
+        }
 
         const response = await fetch(proxyUrl, {
             method: "GET",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
+            headers,
         });
 
         if (!response.ok) {
@@ -82,6 +93,15 @@ function waitForElement(selector, callback) {
     observer.observe(document.body, {childList: true, subtree: true});
 }
 
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function addVideosToSlider(videos, sliderContainer) {
     sliderContainer.innerHTML = "";
     videos.forEach(video => {
@@ -95,7 +115,7 @@ function addVideosToSlider(videos, sliderContainer) {
         slide.innerHTML = `
             <div class="youtube-wrapper">
 <!--                <img src="https://img.youtube.com/vi/${videoId}/sddefault.jpg" alt="${video.snippet.title}" class="youtube-thumbnail">-->
-              <img src="https://images.weserv.nl/?url=img.youtube.com/vi/${videoId}/sddefault.jpg&output=webp" alt="${video.snippet.title}" class="youtube-thumbnail">
+              <img src="https://images.weserv.nl/?url=img.youtube.com/vi/${videoId}/sddefault.jpg&output=webp" alt="${escapeHtml(video.snippet.title)}" class="youtube-thumbnail">
                 <button class="youtube-play">▶</button>
             </div>
         `;

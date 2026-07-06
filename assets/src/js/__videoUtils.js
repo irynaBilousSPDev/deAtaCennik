@@ -132,7 +132,19 @@ export function addVideo(videoContainer, videoId) {
 
 async function fetchVideoDetails(videoId) {
     try {
-        const response = await fetch(`/wp-content/themes/devata/youtube-proxy.php?videoId=${videoId}`);
+        const proxyBase = (typeof akademiataYouTube !== 'undefined' && akademiataYouTube.proxyUrl)
+            ? akademiataYouTube.proxyUrl
+            : '';
+        if (!proxyBase) {
+            throw new Error("YouTube proxy URL is not configured.");
+        }
+
+        const headers = {};
+        if (typeof akademiataYouTube !== 'undefined' && akademiataYouTube.nonce) {
+            headers["X-WP-Nonce"] = akademiataYouTube.nonce;
+        }
+
+        const response = await fetch(`${proxyBase}?videoId=${encodeURIComponent(videoId)}`, { headers });
         if (!response.ok) throw new Error("Failed to fetch video details");
         return await response.json();
     } catch (error) {

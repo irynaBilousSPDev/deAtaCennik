@@ -89,9 +89,9 @@ if (!empty($our_students)) :
     ?>
     <section class="section_our_students left_space gray_arrows my-5">
         <div class="container">
-            <h2 class="small_title mb-5"><?php echo $title; ?></h2>
+            <h2 class="small_title mb-5"><?php echo esc_html($title); ?></h2>
             <?php
-            set_query_var('data_youtube_playlist', $data_youtube_playlist);
+            set_query_var('data_youtube_playlist', esc_attr($data_youtube_playlist));
             locate_template('./template-parts/youtube_slider.php', true, true);
             ?>
         </div>

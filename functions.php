@@ -21,6 +21,8 @@ include('configure/ajax_filters.php');
 
 include('configure/configure.php');
 
+include('configure/youtube-api.php');
+
 // JAVASCRIPT & CSS
 
 include('configure/js-css.php');

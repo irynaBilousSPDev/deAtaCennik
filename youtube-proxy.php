@@ -1,83 +1,49 @@
 <?php
 
-//$my_youtube_api_key = 'AIzaSyAmv-a8SXP2ckayL-RawlIGSR6VA4oS3-E';
-// $youtube_api_key = 'AIzaSyC-O5PCUNxaFhOdnJ-ZOcEG67f05xerpwo';
+/**
+ * Legacy entry point — bootstraps WordPress and delegates to shared handler.
+ * Prefer /wp-json/akademiata/v1/youtube (used by theme JS).
+ */
 
-header('Content-Type: application/json');
-
-// 🔒 Secure API Key Storage
-$apiKey = 'AIzaSyC-O5PCUNxaFhOdnJ-ZOcEG67f05xerpwo';
-if (!$apiKey) {
-    error_log("YouTube API Error: Missing API Key.");
-    echo json_encode(["error" => "Server misconfiguration: API Key missing"]);
-    exit;
+$wp_load = dirname( __DIR__, 3 ) . '/wp-load.php';
+if ( ! is_readable( $wp_load ) ) {
+	header( 'Content-Type: application/json; charset=utf-8' );
+	http_response_code( 500 );
+	echo wp_json_encode( array( 'error' => 'WordPress bootstrap failed.' ) );
+	exit;
 }
 
-// 🔐 CORS Restriction - Allow only trusted domains
-$allowedOrigins = [
-    "https://yourdomain.com",
-    "https://another-trusted-site.com"
-];
+require_once $wp_load;
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-if (in_array($origin, $allowedOrigins)) {
-    header("Access-Control-Allow-Origin: $origin");
-}
-header("Access-Control-Allow-Methods: GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header( 'Content-Type: application/json; charset=utf-8' );
 
-// ✅ Securely Get API Parameters
-$playlistId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
-$videoId = filter_input(INPUT_GET, 'videoId', FILTER_SANITIZE_STRING);
+$nonce = isset( $_SERVER['HTTP_X_WP_NONCE'] )
+	? sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_WP_NONCE'] ) )
+	: '';
 
-// 🎯 Determine API Request Type
-if ($playlistId) {
-    // Fetch Playlist Videos
-    $url = "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=10&playlistId={$playlistId}&key={$apiKey}";
-} elseif ($videoId) {
-    // Fetch Single Video Details
-    $url = "https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id={$videoId}&key={$apiKey}";
-} else {
-    echo json_encode(["error" => "No valid parameters provided"]);
-    exit;
+if ( ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+	http_response_code( 403 );
+	echo wp_json_encode( array( 'error' => 'Forbidden' ) );
+	exit;
 }
 
-// 🌐 Use cURL to Fetch YouTube Data
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // ✅ Enable SSL verification for security
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Accept: application/json",
-    "User-Agent: MyYouTubeAPI/1.0"
-]);
+$playlist_id = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : '';
+$video_id    = isset( $_GET['videoId'] ) ? sanitize_text_field( wp_unslash( $_GET['videoId'] ) ) : '';
 
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$error = curl_error($ch);
-curl_close($ch);
+$result = akademiata_youtube_fetch_data( $playlist_id, $video_id );
 
-// 🛠️ Log API Response
-error_log("YouTube API Request: $url");
-error_log("YouTube API HTTP Response Code: $httpCode");
-
-// ⚠️ Handle API Errors Gracefully
-if ($httpCode !== 200 || !$response) {
-    echo json_encode([
-        "error" => "Failed to fetch YouTube data",
-        "status" => $httpCode,
-        "details" => $error ?: "Unknown Error"
-    ], JSON_PRETTY_PRINT);
-    exit;
+if ( is_wp_error( $result ) ) {
+	$data   = $result->get_error_data();
+	$status = ( is_array( $data ) && isset( $data['status'] ) ) ? (int) $data['status'] : 500;
+	http_response_code( $status );
+	echo wp_json_encode(
+		array(
+			'error'   => $result->get_error_code(),
+			'message' => $result->get_error_message(),
+		),
+		JSON_UNESCAPED_SLASHES
+	);
+	exit;
 }
 
-// 📌 Validate JSON Response
-$data = json_decode($response, true);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo json_encode(["error" => "Invalid JSON response from YouTube API"], JSON_PRETTY_PRINT);
-    exit;
-}
-
-// 🎯 Return JSON Response
-echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-?>
+echo wp_json_encode( $result, JSON_UNESCAPED_SLASHES );

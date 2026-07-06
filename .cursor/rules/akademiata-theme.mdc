@@ -44,7 +44,7 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 ## External data
 
 - Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`.
-- YouTube: `youtube-proxy.php` + `__YouTubeSlider.js`.
+- YouTube: `configure/youtube-api.php` (Theme Settings → YouTube API, encrypted key) + REST `/wp-json/akademiata/v1/youtube` + `__YouTubeSlider.js`. Legacy `youtube-proxy.php` delegates to same handler. Optional `YOUTUBE_API_KEY` in `wp-config.php`.
 
 ## Cursor rules
 
