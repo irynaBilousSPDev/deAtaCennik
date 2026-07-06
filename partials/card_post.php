@@ -3,7 +3,8 @@
     <div class="card_post_wrapper">
         <div class="card_post_image">
             <?php
-            $city_terms = wp_get_post_terms($post->ID, 'city');
+            $terms_by_tax = akademiata_get_offer_terms($post->ID);
+            $city_terms = !empty($terms_by_tax['city']) ? $terms_by_tax['city'] : array();
             $ranking_icon_url = akademiata_get_offer_ranking_icon_url($post->ID);
 
             //            etykieta_studia
@@ -71,7 +72,14 @@
             </button>
         </div>
         <?php
-        $terms = wp_get_post_terms($post->ID, ['degree', 'language', 'obtained_title', 'duration', 'city', 'recruitment_date']);
+        $card_term_taxonomies = array('degree', 'language', 'obtained_title', 'duration', 'city', 'recruitment_date');
+        $terms = array();
+
+        foreach ($card_term_taxonomies as $taxonomy) {
+            if (!empty($terms_by_tax[ $taxonomy ])) {
+                $terms = array_merge($terms, $terms_by_tax[ $taxonomy ]);
+            }
+        }
         ?>
         <div class="card_post_body">
             <div>

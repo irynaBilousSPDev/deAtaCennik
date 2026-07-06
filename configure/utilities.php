@@ -43,28 +43,62 @@ function flush_safe_filter_rewrite_rules()
 }
 register_activation_hook(__FILE__, 'flush_safe_filter_rewrite_rules');
 
+/**
+ * WPML-aware AJAX action for bachelor / master / general offer listing pages.
+ *
+ * @param int|null $page_id Optional page ID.
+ * @return string filter_bachelor|filter_master|filter_posts
+ */
+function akademiata_get_offer_filter_action($page_id = null) {
+    if ($page_id === null) {
+        if (!is_page()) {
+            return 'filter_posts';
+        }
+        $page_id = (int) get_queried_object_id();
+    } else {
+        $page_id = (int) $page_id;
+    }
+
+    if ($page_id === akademiata_get_offer_listing_page_id_for_level('bachelor')) {
+        return 'filter_bachelor';
+    }
+
+    if ($page_id === akademiata_get_offer_listing_page_id_for_level('master')) {
+        return 'filter_master';
+    }
+
+    return 'filter_posts';
+}
+
 // Enqueue AJAX filter scripts
 function enqueue_filter_scripts()
 {
     $lang = apply_filters('wpml_current_language', null);
 
-    wp_enqueue_script(
-        'ajax-filter',
-        get_template_directory_uri() . '/assets/dist/js/ajaxFilter.js',
-        array('jquery'),
-        null,
-        true
-    );
+    if (is_page_template('page-offer.php')) {
+        $filter_js_path = get_template_directory() . '/assets/dist/js/ajaxFilter.js';
+        $filter_js_ver  = file_exists($filter_js_path) ? filemtime($filter_js_path) : null;
 
-    wp_localize_script(
-        'ajax-filter',
-        'ajax_filter_params',
-        array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'page_id'  => get_queried_object_id(),
-            'lang'     => $lang,
-        )
-    );
+        wp_enqueue_script(
+            'ajax-filter',
+            get_template_directory_uri() . '/assets/dist/js/ajaxFilter.js',
+            array('jquery'),
+            $filter_js_ver,
+            true
+        );
+
+        wp_localize_script(
+            'ajax-filter',
+            'ajax_filter_params',
+            array(
+                'ajax_url'        => admin_url('admin-ajax.php'),
+                'lang'            => $lang,
+                'filter_action'   => akademiata_get_offer_filter_action(),
+                'initial_limit'   => akademiata_offer_listing_initial_count(),
+                'load_more_limit' => akademiata_offer_listing_load_more_count(),
+            )
+        );
+    }
 
     if (is_post_type_archive(array('postgraduate', 'mba'))) {
         $post_type = get_query_var('post_type');

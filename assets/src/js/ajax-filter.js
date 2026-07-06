@@ -1,171 +1,270 @@
 import { initOfferViewToggle } from './offer-view-toggle';
 
 (function ($) {
-    const ajaxUrl = ajax_filter_params.ajax_url;
-    const pageId = ajax_filter_params.page_id;
-    const currentLang = ajax_filter_params.lang;
-
-    const filter_bachelor = {
-        122: 'filter_bachelor',
-        17712: 'filter_bachelor',
-        17904: 'filter_bachelor',
-        17905: 'filter_bachelor',
-        120: 'filter_master',
-        17713: 'filter_master',
-        17906: 'filter_master',
-        17907: 'filter_master',
-    }[pageId] || 'filter_posts';
-
-    const form = $('#ajax-filter-form');
-    const filterResults = $('#filter-results');
-
-    if (!form.length) {
+    if (typeof ajax_filter_params === 'undefined') {
         return;
     }
 
-    let offset = 0;
-    const limit = 5;
+    const ajaxUrl = ajax_filter_params.ajax_url;
+    const currentLang = ajax_filter_params.lang;
+    const filterAction = ajax_filter_params.filter_action || 'filter_posts';
+    const initialLimit = parseInt(ajax_filter_params.initial_limit, 10) || 24;
+    const loadMoreLimit = parseInt(ajax_filter_params.load_more_limit, 10) || 18;
+
+    const form = $('#ajax-filter-form');
+    const filterResults = $('#filter-results');
+    let loadSentinel = $('#filter-load-sentinel');
+
+    if (!form.length || !filterResults.length) {
+        return;
+    }
+
+    let offset = parseInt(filterResults.data('next-offset'), 10);
+    if (Number.isNaN(offset)) {
+        offset = filterResults.children('.card_post_item').length || initialLimit;
+    }
+
+    let noMorePosts = filterResults.data('has-more') === 0 || filterResults.data('has-more') === '0';
     let loading = false;
-    let noMorePosts = false;
     let currentAjax = null;
     let activeRequestId = 0;
     let debounceTimer = null;
+    let prefetchTimer = null;
+    let loadObserver = null;
 
+    function dispatchResultsUpdated() {
+        document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
+    }
+
+    function ensureLoadSentinel() {
+        if (!loadSentinel.length) {
+            loadSentinel = $('<div id="filter-load-sentinel" class="filter-load-sentinel" aria-hidden="true"></div>');
+            filterResults.after(loadSentinel);
+        }
+    }
+
+    function setLoadSentinelVisible(visible) {
+        if (visible) {
+            ensureLoadSentinel();
+            loadSentinel.show();
+        } else if (loadSentinel.length) {
+            loadSentinel.hide();
+        }
+    }
+
+    function applyPaginationState(count, limit, startOffset, append) {
+        if (count <= 0) {
+            if (!append) {
+                $('#no-results-message').fadeIn(200);
+            }
+            noMorePosts = true;
+            setLoadSentinelVisible(false);
+            return;
+        }
+
+        $('#no-results-message').hide();
+        offset = startOffset + count;
+        noMorePosts = count < limit;
+        filterResults.attr('data-next-offset', String(offset));
+        filterResults.attr('data-has-more', noMorePosts ? '0' : '1');
+        setLoadSentinelVisible(!noMorePosts);
+    }
+
+    function schedulePrefetch() {
+        if (noMorePosts || loading) {
+            return;
+        }
+
+        clearTimeout(prefetchTimer);
+
+        const runPrefetch = () => {
+            if (!noMorePosts && !loading) {
+                loadMorePosts({ background: true });
+            }
+        };
+
+        if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(runPrefetch, { timeout: 1500 });
+        } else {
+            prefetchTimer = setTimeout(runPrefetch, 400);
+        }
+    }
 
     function triggerFilterUpdate() {
-        offset = 0;
-        noMorePosts = false;
-
         if (currentAjax && currentAjax.readyState !== 4) {
-            currentAjax.abort(); // cancel previous request
+            currentAjax.abort();
         }
+
+        clearTimeout(prefetchTimer);
 
         const thisRequestId = ++activeRequestId;
         loading = true;
+        offset = 0;
+        noMorePosts = false;
         $('#ajax-loader').show();
         $('#no-results-message').hide();
-
-        const currentLimit = 9;
-        const formData = $('#ajax-filter-form').serialize();
+        setLoadSentinelVisible(false);
 
         currentAjax = $.ajax({
             url: ajaxUrl,
             method: 'POST',
             data: {
-                action: filter_bachelor,
+                action: filterAction,
                 lang: currentLang,
                 offset: 0,
-                limit: currentLimit,
-                form_data: formData,
+                limit: initialLimit,
+                form_data: form.serialize(),
             },
             success(response) {
-                if (thisRequestId !== activeRequestId) return; // ️Ignore outdated response
+                if (thisRequestId !== activeRequestId) {
+                    return;
+                }
 
-                if (response.success && response.data && response.data.html !== undefined) {
-                    const newHtml = response.data.html.trim();
-                    filterResults.html(newHtml);
-
-                    if (newHtml === '') {
-                        $('#no-results-message').fadeIn(200);
-                        noMorePosts = true;
-                    } else {
-                        $('#no-results-message').hide();
-                        offset = currentLimit;
-                    }
-                    document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
-                } else {
+                if (!response.success || !response.data || response.data.html === undefined) {
                     noMorePosts = true;
+                    return;
+                }
+
+                const newHtml = response.data.html.trim();
+                filterResults.html(newHtml);
+                applyPaginationState(
+                    response.data.count ?? (newHtml ? initialLimit : 0),
+                    initialLimit,
+                    0,
+                    false
+                );
+                dispatchResultsUpdated();
+                if (!noMorePosts) {
+                    initLoadObserver();
+                    schedulePrefetch();
                 }
             },
             error(jqXHR, textStatus) {
-                if (textStatus === 'abort' || thisRequestId !== activeRequestId) return;
+                if (textStatus === 'abort' || thisRequestId !== activeRequestId) {
+                    return;
+                }
             },
             complete() {
                 if (thisRequestId === activeRequestId) {
                     loading = false;
                     $('#ajax-loader').hide();
                 }
-            }
+            },
         });
     }
 
-
     function debouncedFilterUpdate() {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    triggerFilterUpdate();
-                }, 0);
-            });
-        }, 200);
+        debounceTimer = setTimeout(triggerFilterUpdate, 200);
     }
-    function loadMorePosts(reset = false) {
-        if (loading || noMorePosts) return;
 
-        const thisRequestId = ++activeRequestId;
+    function loadMorePosts(options = {}) {
+        const background = options.background === true;
+
+        if (loading || noMorePosts) {
+            return;
+        }
 
         if (currentAjax && currentAjax.readyState !== 4) {
             currentAjax.abort();
         }
 
+        const thisRequestId = ++activeRequestId;
+        const startOffset = offset;
         loading = true;
-        $('#ajax-loader').show();
-        $('#no-results-message').hide();
 
-        let currentLimit = reset ? 9 : 5;
-        if (reset) {
-            offset = 0;
-            noMorePosts = false;
-            filterResults.html('');
+        if (!background) {
+            $('#ajax-loader').show();
         }
 
         currentAjax = $.ajax({
             url: ajaxUrl,
             method: 'POST',
             data: {
-                action: filter_bachelor,
+                action: filterAction,
                 lang: currentLang,
-                offset: offset,
-                limit: currentLimit,
-                form_data: $('#ajax-filter-form').serialize()
+                offset: startOffset,
+                limit: loadMoreLimit,
+                form_data: form.serialize(),
             },
             success(response) {
-                if (thisRequestId !== activeRequestId) return;
+                if (thisRequestId !== activeRequestId) {
+                    return;
+                }
 
-                if (response.success && response.data && response.data.html !== undefined) {
-                    const newHtml = response.data.html.trim();
-
-                    if (reset || offset === 0) {
-                        filterResults.html(newHtml);
-                    } else {
-                        filterResults.append(newHtml);
-                    }
-
-                    if (newHtml === '') {
-                        if (offset === 0 && reset) {
-                            $('#no-results-message').fadeIn(200);
-                        }
-                        noMorePosts = true;
-                    } else {
-                        $('#no-results-message').hide();
-                        offset += currentLimit;
-                    }
-                    document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
-                } else {
+                if (!response.success || !response.data || response.data.html === undefined) {
                     noMorePosts = true;
+                    setLoadSentinelVisible(false);
+                    return;
+                }
+
+                const newHtml = response.data.html.trim();
+                if (newHtml !== '') {
+                    filterResults.append(newHtml);
+                }
+
+                const count = typeof response.data.count === 'number'
+                    ? response.data.count
+                    : (newHtml ? loadMoreLimit : 0);
+
+                if (typeof response.data.has_more === 'boolean') {
+                    noMorePosts = !response.data.has_more;
+                    offset = response.data.next_offset ?? (startOffset + count);
+                    filterResults.attr('data-next-offset', String(offset));
+                    filterResults.attr('data-has-more', noMorePosts ? '0' : '1');
+                    setLoadSentinelVisible(!noMorePosts);
+                } else {
+                    applyPaginationState(count, loadMoreLimit, startOffset, true);
+                }
+
+                if (newHtml !== '') {
+                    dispatchResultsUpdated();
+                }
+
+                if (!noMorePosts) {
+                    schedulePrefetch();
                 }
             },
             error(jqXHR, textStatus) {
-                if (textStatus === 'abort' || thisRequestId !== activeRequestId) return;
+                if (textStatus === 'abort' || thisRequestId !== activeRequestId) {
+                    return;
+                }
             },
             complete() {
                 if (thisRequestId === activeRequestId) {
                     loading = false;
                     $('#ajax-loader').hide();
                 }
-            }
+            },
         });
+    }
+
+    function initLoadObserver() {
+        if (!('IntersectionObserver' in window)) {
+            return;
+        }
+
+        ensureLoadSentinel();
+
+        if (loadObserver) {
+            loadObserver.disconnect();
+        }
+
+        loadObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting && !loading && !noMorePosts) {
+                    loadMorePosts();
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '600px 0px',
+            threshold: 0,
+        });
+
+        if (loadSentinel.length && loadSentinel.is(':visible')) {
+            loadObserver.observe(loadSentinel[0]);
+        }
     }
 
     function addTag(label, tagValue) {
@@ -208,7 +307,6 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     function initializeFiltersFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
-        const data = {};
 
         urlParams.forEach((value, key) => {
             const checkbox = form.find(`input[name="${key}[]"][value="${value}"]`);
@@ -216,46 +314,24 @@ import { initOfferViewToggle } from './offer-view-toggle';
                 checkbox.prop('checked', true);
                 const label = checkbox.closest('label').text().trim();
                 addTag(label, value);
-                data[key] = data[key] || [];
-                data[key].push(value);
             }
         });
-
-        if (Object.keys(data).length > 0) {
-            triggerFilterUpdate();
-        } else {
-            loadMorePosts(true);
-        }
 
         if ($('.selected_tags_container .filter-tag').length === 0) {
             $('#tags-container').hide();
         }
-    }
 
-    let wheelTimeout;
-
-    $(window).on('wheel', function () {
-        clearTimeout(wheelTimeout);
-        wheelTimeout = setTimeout(() => {
-            if (!loading) handleScrollLoad();
-        }, 150);
-    });
-
-    function handleScrollLoad() {
-        if (loading || noMorePosts) return;
-
-        const scrollTop = $(window).scrollTop();
-        const windowHeight = $(window).height();
-        const documentHeight = $(document).height();
-
-        const scrollPosition = scrollTop + windowHeight;
-        const halfwayPoint = documentHeight * 0.5;
-
-        if (scrollPosition >= halfwayPoint) {
-            loadMorePosts();
+        if (filterResults.children('.card_post_item').length === 0) {
+            triggerFilterUpdate();
+        } else {
+            dispatchResultsUpdated();
+            if (!noMorePosts) {
+                setLoadSentinelVisible(true);
+                initLoadObserver();
+                schedulePrefetch();
+            }
         }
     }
-    let filterChangeTimeout;
 
     form.on('change', 'input[type="checkbox"]', function () {
         const checkbox = $(this);
@@ -272,9 +348,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         updateBrowserUrl();
     });
 
-
-
-    $(document).on('click', '.filter-tag', function () {
+    $(document).on('click', '.offer_wrapper--offer-page .filter-tag', function () {
         const tag = $(this);
         const tagValue = tag.data('value');
 
@@ -285,7 +359,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         updateBrowserUrl();
     });
 
-    $('#clear-filters').on('click', () => {
+    $('#clear-filters, .offer_wrapper--offer-page .clear-filters').on('click', () => {
         form.find('input[type="checkbox"]').prop('checked', false);
         $('.selected_tags_container').empty();
         $('#tags-container').hide();
@@ -301,7 +375,6 @@ import { initOfferViewToggle } from './offer-view-toggle';
         updateBrowserUrl();
     });
 
-    $(window).on('scroll', handleScrollLoad);
     initializeFiltersFromURL();
     initOfferViewToggle();
 
