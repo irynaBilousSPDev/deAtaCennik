@@ -45,7 +45,7 @@ $has_new         = !empty($etykieta_studia) && in_array('new_icon', (array) $ety
 ?>
 <?php if (wp_is_mobile()) : ?>
     <a title="<?php the_title(); ?> - <?php echo esc_html($category_name); ?>"
-       href="<?php the_permalink(); ?>" class="button-primary image_bg " role="img"
+       href="<?php the_permalink(); ?>" class="product_slide__link image_bg" role="img"
        aria-label="<?php echo esc_attr($alt_text); ?>"
        style="background-image: url(<?php echo esc_url($image_url_mobile); ?>);">
         <?php

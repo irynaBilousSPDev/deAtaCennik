@@ -787,7 +787,11 @@
   position: absolute;
   left: 0;
   top: 0;
-  max-width: 95px
+  max-width: 95px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 .city_block {

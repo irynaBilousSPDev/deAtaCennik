@@ -1,0 +1,111 @@
+---
+description: PageSpeed backlog — homepage mobile/desktop (2026-07-06). Read this before re-analyzing; start implementation from the agreed phase.
+globs: front-page.php,template-parts/offers_sliders.php,template-parts/product-slide.php,configure/load-cpt-slider.php,configure/js-css.php,header.php,assets/src/js/**
+alwaysApply: false
+---
+
+# Performance backlog (handoff 2026-07-06)
+
+**Status:** Analysis done. **Do not re-run full PageSpeed audit** unless metrics changed after deploy. User will continue **next session** (e.g. home PC). Start from **Recommended next step** below.
+
+## Context — what was already shipped
+
+| Area | State | Commit ref |
+|------|--------|------------|
+| Homepage offer sliders | All products **SSR** (`posts_per_page => -1`) — fixes empty slider UX, **hurts TTFB** | `5b40e43`, `da735b8` |
+| YouTube section | SSR + 1h transient (`akademiata_get_youtube_playlist_items`) | `da735b8` |
+| Offer listings (`page-offer.php`) | SSR 24 cards + prefetch/load-more AJAX, WPML `filter_action` from PHP | `23bf7a4` — **dev + prod** |
+| PG/MBA filters | Unchanged (`ajaxFilterPgMba.js`) | — |
+
+## PageSpeed snapshot (akademiata.pl homepage, ~2026-07-06)
+
+| Metric | Mobile | Desktop |
+|--------|--------|---------|
+| Performance score | **27** | better (FCP/LCP OK) |
+| Document request latency | **~6.4 s** | **~5.0 s** |
+| Render blocking | **~4.6 s** | **~1.0 s** |
+| FCP | 8.2 s | 1.8 s |
+| LCP | 11.4 s | 2.0 s |
+| TBT | **2 180 ms** | 50 ms |
+| CLS | 0.043 | 0.009 (good) |
+
+Filmstrip: **5–8 blank frames** before content — server HTML + blocking CSS, not empty AJAX sliders.
+
+## Root causes (confirmed in code)
+
+1. **TTFB / document latency** — `#1 bottleneck`
+   - `offers_sliders.php` + `load-cpt-slider.php`: full SSR of all bachelor/master slides
+   - `product-slide.php`: multiple `get_field()`, `get_the_terms()`, `wp_get_post_terms()` per slide (no `akademiata_get_offer_terms` yet)
+   - `front-page.php`: `get_fields()`, hero, YouTube SSR, news `WP_Query`, WPML
+
+2. **Render blocking** — `configure/js-css.php`: Bootstrap 4 CDN CSS, `main.css` (~364 KB), Adobe Typekit; `header.php`: GTM/gtag on prod after `wp_head`
+
+3. **Mobile TBT** — global `vendors.js` (~455 KB) + `main.js` (~98 KB) + jQuery + Bootstrap/Popper CDN on every page; webpack `splitChunks` puts slick/swiper/fancyapps/vimeo in shared `vendors.js` even where unused
+
+4. **Images** — slider `background-image` without lazy strategy; hero has `akademiata_preload_main_slider_image` (OK for LCP)
+
+## Do NOT break
+
+- Offer listing SSR + prefetch (`page-offer.php`, `ajax-filter.js`, `ajax_filters.php`)
+- PG/MBA separate flow
+- Cookiebot (WP plugin only — do not duplicate in theme)
+- GTM on prod without user/marketing approval
+- Bootstrap CDN vs npm BS5 — audit before removing either (BS4 CDN + BS5 in bundle coexist)
+
+## Implementation plan (in order)
+
+### Phase 0 — Hosting (no theme code, highest TTFB win)
+
+- [ ] Page cache on prod (LiteSpeed Cache / WP Rocket) for homepage
+- [ ] Object cache (Redis) if available
+- [ ] Long cache headers on `assets/dist/`
+- [ ] HTTP/2 or HTTP/3 on server
+
+### Phase 1 — Low-risk theme (start here if no hosting access)
+
+- [ ] `product-slide.php`: use `akademiata_get_offer_terms()` (like `card_post.php`)
+- [ ] Transient cache HTML of `offers_sliders` fragment (per WPML lang, ~1 h); invalidate on bachelor/master save if feasible
+- [ ] `preconnect` in `header.php` or `js-css.php`: `cdn.jsdelivr.net`, `use.typekit.net`
+- [ ] Typekit kit: `font-display: swap` in Adobe project settings
+
+### Phase 2 — Homepage sliders hybrid (medium risk, big TTFB win)
+
+Same pattern as offer listings (`23bf7a4`):
+
+- [ ] SSR first **12–16** visible Slick slides per CPT
+- [ ] Background AJAX for rest + Slick init/refresh (`ajax-load-cpt.js`, `load-cpt-slider.php`)
+- [ ] Do **not** return to empty slider containers
+
+### Phase 3 — JS split (medium risk, mobile TBT)
+
+- [ ] Webpack: slick/swiper not in global `vendors.js` on non-slider pages
+- [ ] Dynamic import in `_generalScripts.js` for video/YouTube/fancybox where possible
+- [ ] Audit duplicate Bootstrap 4 CDN vs npm BS5
+
+### Phase 4 — Only with explicit approval
+
+- [ ] Defer GTM/gtag load
+- [ ] Critical CSS inline
+
+## Bugs / quick fixes
+
+- [x] **2026-07-06** Homepage slider `ranking_icon` stretch in incognito — fixed: explicit `width/height: auto`, `object-fit: contain` in `_front-page.scss` + global `.ranking_icon`; mobile slide link uses `product_slide__link` instead of `button-primary`.
+
+## Recommended next step for tomorrow
+
+**User intent:** continue work without re-analysis.
+
+1. If hosting page cache available → **Phase 0** first.
+2. Else → **Phase 1** in theme (terms cache + slider HTML transient + preconnect).
+3. If mobile score still poor → **Phase 2** (hybrid homepage sliders).
+
+## Key files
+
+- `front-page.php`, `template-parts/offers_sliders.php`, `template-parts/product-slide.php`
+- `configure/load-cpt-slider.php`, `configure/js-css.php`, `header.php`
+- `assets/src/js/ajax-load-cpt.js`, `assets/src/js/_generalScripts.js`, `webpack.config.js`
+- `partials/card_post.php` (reference for terms cache pattern)
+
+## Git note for second PC
+
+This file lives in repo. After saving locally run **`/push-dev`** or commit on `dev` so home PC can **`/sync-git`**.

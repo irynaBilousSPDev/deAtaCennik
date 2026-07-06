@@ -191,7 +191,34 @@
     }
 
     .ranking_icon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 3;
       max-width: 65px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    &.product_slide__link {
+      max-width: none;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background-color: transparent;
+      color: inherit;
+      text-decoration: none;
+
+      &:hover,
+      &:active {
+        background-color: transparent;
+        border-color: transparent;
+        color: inherit;
+      }
     }
 
     &:before {
