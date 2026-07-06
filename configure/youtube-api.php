@@ -54,24 +54,63 @@ function akademiata_youtube_decrypt_secret( $stored ) {
 	return $plain !== false ? $plain : '';
 }
 
-function akademiata_youtube_has_api_key() {
+function akademiata_validate_youtube_api_key_format( $api_key ) {
+	$api_key = trim( (string) $api_key );
+
+	return $api_key !== '' && (bool) preg_match( '/^AIza[0-9A-Za-z_-]{10,}$/', $api_key );
+}
+
+function akademiata_youtube_key_storage_broken() {
+	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
+		return false;
+	}
+
+	$settings = akademiata_youtube_get_settings();
+	$stored   = isset( $settings['api_key'] ) ? (string) $settings['api_key'] : '';
+	if ( $stored === '' ) {
+		return false;
+	}
+
+	$plain = trim( akademiata_youtube_decrypt_secret( $stored ) );
+
+	return ! akademiata_validate_youtube_api_key_format( $plain );
+}
+
+function akademiata_youtube_has_stored_secret() {
 	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
 		return true;
 	}
 
 	$settings = akademiata_youtube_get_settings();
+
 	return isset( $settings['api_key'] ) && (string) $settings['api_key'] !== '';
+}
+
+function akademiata_youtube_has_api_key() {
+	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
+		return true;
+	}
+
+	return ! akademiata_youtube_key_storage_broken() && akademiata_validate_youtube_api_key_format( akademiata_get_youtube_api_key() );
 }
 
 function akademiata_get_youtube_api_key() {
 	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
-		return (string) YOUTUBE_API_KEY;
+		return trim( (string) YOUTUBE_API_KEY );
 	}
 
 	$settings = akademiata_youtube_get_settings();
 	$stored   = isset( $settings['api_key'] ) ? (string) $settings['api_key'] : '';
+	if ( $stored === '' ) {
+		return '';
+	}
 
-	return akademiata_youtube_decrypt_secret( $stored );
+	$plain = trim( akademiata_youtube_decrypt_secret( $stored ) );
+	if ( ! akademiata_validate_youtube_api_key_format( $plain ) ) {
+		return '';
+	}
+
+	return $plain;
 }
 
 function akademiata_normalize_youtube_playlist_id( $value ) {
@@ -205,6 +244,61 @@ function akademiata_youtube_fetch_data( $playlist_id = '', $video_id = '' ) {
 	return $data;
 }
 
+function akademiata_youtube_test_api_key() {
+	$api_key = akademiata_get_youtube_api_key();
+	if ( $api_key === '' ) {
+		if ( akademiata_youtube_key_storage_broken() ) {
+			return new WP_Error(
+				'akademiata_youtube_key_broken',
+				__( 'Zapisany klucz nie może zostać odczytany na tym środowisku. Usuń go i wklej ponownie.', 'akademiata' )
+			);
+		}
+
+		return new WP_Error(
+			'akademiata_youtube_no_key',
+			__( 'Brak zapisanego klucza API.', 'akademiata' )
+		);
+	}
+
+	$url = add_query_arg(
+		array(
+			'part' => 'id',
+			'id'   => 'jNQXAC9IVRw',
+			'key'  => $api_key,
+		),
+		'https://www.googleapis.com/youtube/v3/videos'
+	);
+
+	$response = wp_remote_get(
+		$url,
+		array(
+			'timeout' => 15,
+			'headers' => array(
+				'Accept'     => 'application/json',
+				'User-Agent' => 'AkademiataYouTube/1.0',
+			),
+		)
+	);
+
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	$http_code = (int) wp_remote_retrieve_response_code( $response );
+	$body      = wp_remote_retrieve_body( $response );
+	$data      = json_decode( $body, true );
+
+	if ( $http_code !== 200 ) {
+		$google_message = is_array( $data ) && isset( $data['error']['message'] )
+			? (string) $data['error']['message']
+			: __( 'Google odrzuciło klucz API.', 'akademiata' );
+
+		return new WP_Error( 'akademiata_youtube_test_failed', $google_message );
+	}
+
+	return true;
+}
+
 function akademiata_youtube_rest_permission( WP_REST_Request $request ) {
 	$playlist_id = akademiata_normalize_youtube_playlist_id( (string) $request->get_param( 'id' ) );
 	$video_id    = sanitize_text_field( (string) $request->get_param( 'videoId' ) );
@@ -274,9 +368,19 @@ function akademiata_youtube_sanitize_settings( $input ) {
 	if ( ! empty( $input['api_key_clear'] ) ) {
 		$out['api_key'] = '';
 	} elseif ( isset( $input['api_key'] ) ) {
-		$api_key = sanitize_text_field( wp_unslash( $input['api_key'] ) );
+		$api_key = trim( sanitize_text_field( wp_unslash( $input['api_key'] ) ) );
 		if ( $api_key !== '' ) {
-			$out['api_key'] = akademiata_youtube_encrypt_secret( $api_key );
+			if ( ! akademiata_validate_youtube_api_key_format( $api_key ) ) {
+				add_settings_error(
+					AKADEMIATA_YOUTUBE_OPTION,
+					'akademiata_youtube_invalid_key_format',
+					__( 'Nieprawidłowy format klucza API. Skopiuj pełny klucz z Google Cloud (zaczyna się od AIza).', 'akademiata' ),
+					'error'
+				);
+				$out['api_key'] = $current['api_key'];
+			} else {
+				$out['api_key'] = akademiata_youtube_encrypt_secret( $api_key );
+			}
 		} else {
 			$out['api_key'] = $current['api_key'];
 			if ( $out['api_key'] !== '' && ! akademiata_youtube_is_encrypted_secret( $out['api_key'] ) ) {
@@ -316,7 +420,8 @@ add_action( 'admin_menu', 'akademiata_youtube_register_admin_menu', 100 );
 add_action( 'admin_init', 'akademiata_youtube_register_settings' );
 
 function akademiata_youtube_admin_field_secret( $settings ) {
-	$has_value = akademiata_youtube_has_api_key();
+	$has_value = akademiata_youtube_has_stored_secret();
+	$key_works = akademiata_youtube_has_api_key();
 	$from_env  = defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '';
 	?>
 	<tr>
@@ -348,11 +453,15 @@ function akademiata_youtube_admin_field_secret( $settings ) {
 				<?php endif; ?>
 			>
 			<p class="description">
-				<?php if ( $has_value && ! $from_env ) : ?>
+				<?php if ( $has_value && $key_works && ! $from_env ) : ?>
 					<span class="akademiata-youtube-secret-status akademiata-youtube-secret-status--saved">
 						<?php esc_html_e( 'Zapisano — wartość jest ukryta.', 'akademiata' ); ?>
 					</span>
 					<?php esc_html_e( 'Wpisz nowy klucz tylko przy zmianie.', 'akademiata' ); ?>
+				<?php elseif ( $has_value && ! $key_works && ! $from_env ) : ?>
+					<span class="akademiata-youtube-secret-status akademiata-youtube-secret-status--error">
+						<?php esc_html_e( 'Zapisany klucz jest nieprawidłowy lub nieczytelny — usuń i wklej ponownie.', 'akademiata' ); ?>
+					</span>
 				<?php else : ?>
 					<?php esc_html_e( 'Klucz z Google Cloud Console (YouTube Data API v3).', 'akademiata' ); ?>
 				<?php endif; ?>
@@ -376,12 +485,45 @@ function akademiata_youtube_render_admin_page() {
 	}
 
 	$settings = akademiata_youtube_get_settings();
+
+	if ( isset( $_GET['akademiata_youtube_test'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ?? '' ) ), 'akademiata_youtube_test' ) ) {
+		$test_result = akademiata_youtube_test_api_key();
+		if ( is_wp_error( $test_result ) ) {
+			add_settings_error(
+				AKADEMIATA_YOUTUBE_OPTION,
+				'akademiata_youtube_test_failed',
+				$test_result->get_error_message(),
+				'error'
+			);
+		} else {
+			add_settings_error(
+				AKADEMIATA_YOUTUBE_OPTION,
+				'akademiata_youtube_test_ok',
+				__( 'Połączenie z YouTube API działa poprawnie.', 'akademiata' ),
+				'success'
+			);
+		}
+	}
+
+	settings_errors( AKADEMIATA_YOUTUBE_OPTION );
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'YouTube API', 'akademiata' ); ?></h1>
+		<?php if ( akademiata_youtube_key_storage_broken() ) : ?>
+			<div class="notice notice-error">
+				<p>
+					<?php esc_html_e( 'Zapisany klucz jest nieczytelny na tym środowisku (np. po skopiowaniu bazy z produkcji). Zaznacz „Usuń zapisany klucz”, zapisz, a następnie wklej klucz ponownie.', 'akademiata' ); ?>
+				</p>
+			</div>
+		<?php endif; ?>
 		<p><?php esc_html_e( 'Klucz jest szyfrowany w bazie i nie jest wyświetlany po zapisaniu. Slider na stronie głównej i inne sekcje z playlistami używają go przez endpoint REST.', 'akademiata' ); ?></p>
 		<p class="description">
 			<?php esc_html_e( 'ID playlisty ustawiasz w ACF — na stronie głównej w polu „our students → youtube playlist code”, nie tutaj.', 'akademiata' ); ?>
+		</p>
+		<p>
+			<a class="button button-secondary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=akademiata-youtube-api&akademiata_youtube_test=1' ), 'akademiata_youtube_test' ) ); ?>">
+				<?php esc_html_e( 'Testuj klucz API', 'akademiata' ); ?>
+			</a>
 		</p>
 		<form method="post" action="options.php">
 			<?php
@@ -392,6 +534,9 @@ function akademiata_youtube_render_admin_page() {
 			</table>
 			<?php submit_button(); ?>
 		</form>
+		<p class="description">
+			<?php esc_html_e( 'W Google Cloud włącz „YouTube Data API v3” i użyj klucza bez ograniczenia HTTP referrer (serwer łączy się bez przeglądarki).', 'akademiata' ); ?>
+		</p>
 	</div>
 	<style>
 		.akademiata-youtube-secret-input { max-width: 36rem; font-family: Consolas, Monaco, monospace; }
@@ -402,6 +547,15 @@ function akademiata_youtube_render_admin_page() {
 			border-radius: 999px;
 			background: #edfaef;
 			color: #1f6b3a;
+			font-weight: 600;
+		}
+		.akademiata-youtube-secret-status--error {
+			display: inline-block;
+			margin-right: 6px;
+			padding: 2px 8px;
+			border-radius: 999px;
+			background: #fcf0f1;
+			color: #8a1f2d;
 			font-weight: 600;
 		}
 	</style>
