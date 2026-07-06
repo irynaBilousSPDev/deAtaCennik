@@ -413,21 +413,80 @@ function akademiata_youtube_register_admin_menu() {
 	);
 }
 
-function akademiata_youtube_register_settings() {
-	register_setting(
-		'akademiata_youtube_settings_group',
-		AKADEMIATA_YOUTUBE_OPTION,
-		array(
-			'type'              => 'array',
-			'sanitize_callback' => 'akademiata_youtube_sanitize_settings',
-			'default'           => akademiata_youtube_default_settings(),
-		)
-	);
+function akademiata_youtube_persist_settings_errors() {
+	$errors = get_settings_errors();
+	if ( $errors ) {
+		set_transient( 'settings_errors', $errors, 30 );
+	}
+}
+
+function akademiata_youtube_handle_save_settings() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'Brak uprawnień.', 'akademiata' ) );
+	}
+
+	check_admin_referer( 'akademiata_youtube_save_settings', 'akademiata_youtube_nonce' );
+
+	$redirect = admin_url( 'admin.php?page=akademiata-youtube-api' );
+
+	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
+		add_settings_error(
+			AKADEMIATA_YOUTUBE_OPTION,
+			'akademiata_youtube_env_blocks_panel',
+			__( 'Klucz nadal jest ustawiony w wp-config.php (YOUTUBE_API_KEY). Usuń lub zakomentuj tę stałą, aby zapisywać klucz z panelu.', 'akademiata' ),
+			'error'
+		);
+		akademiata_youtube_persist_settings_errors();
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	$raw_input = isset( $_POST[ AKADEMIATA_YOUTUBE_OPTION ] ) && is_array( $_POST[ AKADEMIATA_YOUTUBE_OPTION ] )
+		? wp_unslash( $_POST[ AKADEMIATA_YOUTUBE_OPTION ] )
+		: array();
+
+	$normalized_key = isset( $raw_input['api_key'] ) ? akademiata_youtube_normalize_api_key_input( $raw_input['api_key'] ) : '';
+	$clear_key      = ! empty( $raw_input['api_key_clear'] );
+
+	$sanitized = akademiata_youtube_sanitize_settings( $raw_input );
+	$errors    = get_settings_errors( AKADEMIATA_YOUTUBE_OPTION );
+	$failed    = false;
+
+	foreach ( $errors as $error ) {
+		if ( isset( $error['code'] ) && $error['code'] === 'akademiata_youtube_invalid_key_format' ) {
+			$failed = true;
+			break;
+		}
+	}
+
+	update_option( AKADEMIATA_YOUTUBE_OPTION, $sanitized );
+
+	if ( ! $failed ) {
+		if ( $normalized_key !== '' ) {
+			add_settings_error(
+				AKADEMIATA_YOUTUBE_OPTION,
+				'akademiata_youtube_saved',
+				__( 'Klucz API został zapisany.', 'akademiata' ),
+				'success'
+			);
+		} elseif ( $clear_key ) {
+			add_settings_error(
+				AKADEMIATA_YOUTUBE_OPTION,
+				'akademiata_youtube_cleared',
+				__( 'Zapisany klucz został usunięty.', 'akademiata' ),
+				'success'
+			);
+		}
+	}
+
+	akademiata_youtube_persist_settings_errors();
+	wp_safe_redirect( add_query_arg( 'settings-updated', 'true', $redirect ) );
+	exit;
 }
 
 // After ACF registers Theme Settings (admin_menu priority 99).
 add_action( 'admin_menu', 'akademiata_youtube_register_admin_menu', 100 );
-add_action( 'admin_init', 'akademiata_youtube_register_settings' );
+add_action( 'admin_post_akademiata_youtube_save_settings', 'akademiata_youtube_handle_save_settings' );
 
 function akademiata_youtube_admin_field_secret( $settings ) {
 	$has_value = akademiata_youtube_has_stored_secret();
@@ -531,10 +590,9 @@ function akademiata_youtube_render_admin_page() {
 		<p class="description">
 			<?php esc_html_e( 'ID playlisty ustawiasz w ACF — na stronie głównej w polu „our students → youtube playlist code”, nie tutaj.', 'akademiata' ); ?>
 		</p>
-		<form method="post" action="options.php">
-			<?php
-			settings_fields( 'akademiata_youtube_settings_group' );
-			?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'akademiata_youtube_save_settings', 'akademiata_youtube_nonce' ); ?>
+			<input type="hidden" name="action" value="akademiata_youtube_save_settings">
 			<table class="form-table" role="presentation">
 				<?php akademiata_youtube_admin_field_secret( $settings ); ?>
 			</table>
