@@ -60,7 +60,7 @@ function akademiata_validate_youtube_api_key_format( $api_key ) {
 	return $api_key !== '' && (bool) preg_match( '/^AIza[0-9A-Za-z_-]{10,}$/', $api_key );
 }
 
-/** Wyciąga sam klucz z wklejki (np. z youtube-proxy.php z cudzysłowami lub $apiKey = ...). */
+/** Wyciąga klucz AIza… z wklejki (np. z linii PHP). */
 function akademiata_youtube_normalize_api_key_input( $value ) {
 	$value = trim( (string) wp_unslash( $value ) );
 	if ( $value === '' ) {
@@ -586,10 +586,8 @@ function akademiata_youtube_render_admin_page() {
 				</p>
 			</div>
 		<?php endif; ?>
-		<p><?php esc_html_e( 'Klucz jest szyfrowany w bazie i nie jest wyświetlany po zapisaniu. Slider na stronie głównej i inne sekcje z playlistami używają go przez endpoint REST.', 'akademiata' ); ?></p>
-		<p class="description">
-			<?php esc_html_e( 'ID playlisty ustawiasz w ACF — na stronie głównej w polu „our students → youtube playlist code”, nie tutaj.', 'akademiata' ); ?>
-		</p>
+		<p><?php esc_html_e( 'Klucz globalny dla sliderów YouTube. Po zapisaniu nie jest wyświetlany.', 'akademiata' ); ?></p>
+		<p class="description"><?php esc_html_e( 'ID playlist ustawiasz w ACF na danej stronie lub ofercie.', 'akademiata' ); ?></p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<?php wp_nonce_field( 'akademiata_youtube_save_settings', 'akademiata_youtube_nonce' ); ?>
 			<input type="hidden" name="action" value="akademiata_youtube_save_settings">
@@ -607,7 +605,7 @@ function akademiata_youtube_render_admin_page() {
 			</span>
 		</p>
 		<p class="description">
-			<?php esc_html_e( 'W Google Cloud włącz „YouTube Data API v3” i użyj klucza bez ograniczenia HTTP referrer (serwer łączy się bez przeglądarki).', 'akademiata' ); ?>
+			<?php esc_html_e( 'Google Cloud: YouTube Data API v3, klucz bez ograniczenia HTTP referrer.', 'akademiata' ); ?>
 		</p>
 	</div>
 	<style>
