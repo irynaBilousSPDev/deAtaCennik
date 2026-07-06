@@ -1,7 +1,6 @@
 <?php
 $post_types = get_query_var('post_types', []);
 if (!empty($post_types)) :
-    $initial_count = akademiata_offer_slider_initial_count();
     foreach ($post_types as $post_type) :
         $cpt_object = get_post_type_object($post_type);
         if ($cpt_object) :
@@ -21,8 +20,7 @@ if (!empty($post_types)) :
                     </div>
                 </div>
                 <div class="offer_category_slider py-3 slick-slider"
-                     id="ajax-container-<?php echo esc_attr($post_type); ?>"
-                     data-initial-count="<?php echo esc_attr((string) $initial_count); ?>">
+                     id="ajax-container-<?php echo esc_attr($post_type); ?>">
                     <?php
                     if ($query->have_posts()) :
                         while ($query->have_posts()) :
