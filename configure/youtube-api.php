@@ -74,6 +74,19 @@ function akademiata_get_youtube_api_key() {
 	return akademiata_youtube_decrypt_secret( $stored );
 }
 
+function akademiata_normalize_youtube_playlist_id( $value ) {
+	$value = trim( (string) $value );
+	if ( $value === '' ) {
+		return '';
+	}
+
+	if ( preg_match( '/[?&]list=([A-Za-z0-9_-]+)/', $value, $matches ) ) {
+		return $matches[1];
+	}
+
+	return $value;
+}
+
 function akademiata_validate_youtube_playlist_id( $playlist_id ) {
 	return (bool) preg_match( '/^PL[\w-]{10,}$/', (string) $playlist_id );
 }
@@ -163,18 +176,24 @@ function akademiata_youtube_fetch_data( $playlist_id = '', $video_id = '' ) {
 
 	$http_code = (int) wp_remote_retrieve_response_code( $response );
 	$body      = wp_remote_retrieve_body( $response );
+	$data      = json_decode( $body, true );
 
 	if ( $http_code !== 200 || $body === '' ) {
+		$google_message = '';
+		if ( is_array( $data ) && isset( $data['error']['message'] ) ) {
+			$google_message = (string) $data['error']['message'];
+		}
+
 		return new WP_Error(
 			'akademiata_youtube_upstream_error',
-			__( 'Failed to fetch YouTube data.', 'akademiata' ),
+			$google_message !== '' ? $google_message : __( 'Failed to fetch YouTube data.', 'akademiata' ),
 			array(
-				'status' => $http_code ?: 502,
+				'status'  => $http_code ?: 502,
+				'details' => $google_message,
 			)
 		);
 	}
 
-	$data = json_decode( $body, true );
 	if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $data ) ) {
 		return new WP_Error(
 			'akademiata_youtube_invalid_json',
@@ -187,16 +206,22 @@ function akademiata_youtube_fetch_data( $playlist_id = '', $video_id = '' ) {
 }
 
 function akademiata_youtube_rest_permission( WP_REST_Request $request ) {
-	$nonce = $request->get_header( 'X-WP-Nonce' );
-	if ( ! $nonce ) {
-		$nonce = $request->get_param( '_wpnonce' );
+	$playlist_id = akademiata_normalize_youtube_playlist_id( (string) $request->get_param( 'id' ) );
+	$video_id    = sanitize_text_field( (string) $request->get_param( 'videoId' ) );
+
+	if ( $playlist_id !== '' ) {
+		return akademiata_validate_youtube_playlist_id( $playlist_id );
 	}
 
-	return (bool) wp_verify_nonce( $nonce, 'wp_rest' );
+	if ( $video_id !== '' ) {
+		return akademiata_validate_youtube_video_id( $video_id );
+	}
+
+	return false;
 }
 
 function akademiata_youtube_rest_handler( WP_REST_Request $request ) {
-	$playlist_id = sanitize_text_field( (string) $request->get_param( 'id' ) );
+	$playlist_id = akademiata_normalize_youtube_playlist_id( (string) $request->get_param( 'id' ) );
 	$video_id    = sanitize_text_field( (string) $request->get_param( 'videoId' ) );
 
 	$result = akademiata_youtube_fetch_data( $playlist_id, $video_id );
@@ -208,6 +233,7 @@ function akademiata_youtube_rest_handler( WP_REST_Request $request ) {
 			array(
 				'error'   => $result->get_error_code(),
 				'message' => $result->get_error_message(),
+				'details' => is_array( $data ) && isset( $data['details'] ) ? $data['details'] : '',
 			),
 			$status
 		);
@@ -353,7 +379,10 @@ function akademiata_youtube_render_admin_page() {
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'YouTube API', 'akademiata' ); ?></h1>
-		<p><?php esc_html_e( 'Klucz jest szyfrowany w bazie i nie jest wyświetlany po zapisaniu. Slider „Nasi studenci” i inne sekcje z playlistami używają go przez zabezpieczony endpoint REST.', 'akademiata' ); ?></p>
+		<p><?php esc_html_e( 'Klucz jest szyfrowany w bazie i nie jest wyświetlany po zapisaniu. Slider na stronie głównej i inne sekcje z playlistami używają go przez endpoint REST.', 'akademiata' ); ?></p>
+		<p class="description">
+			<?php esc_html_e( 'ID playlisty ustawiasz w ACF — na stronie głównej w polu „our students → youtube playlist code”, nie tutaj.', 'akademiata' ); ?>
+		</p>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( 'akademiata_youtube_settings_group' );

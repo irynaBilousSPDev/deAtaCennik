@@ -68,7 +68,7 @@ export async function fetchYouTubeShorts(sliderContainer) {
         // console.log("Fetched YouTube Playlist Data:", data);
 
         if (data.error) {
-            console.error("YouTube API Error:", data.details);
+            console.error("YouTube API Error:", data.message || data.details || data.error);
             return;
         }
 

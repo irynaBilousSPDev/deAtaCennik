@@ -85,13 +85,13 @@ get_template_part('template-parts/front-page/home-rankings');
 <?php $our_students = $acf_fields['our_students'];
 if (!empty($our_students)) :
     $title = $our_students['title'];
-    $data_youtube_playlist = $our_students['data_youtube_playlist'];
+    $data_youtube_playlist = akademiata_normalize_youtube_playlist_id($our_students['data_youtube_playlist'] ?? '');
     ?>
     <section class="section_our_students left_space gray_arrows my-5">
         <div class="container">
             <h2 class="small_title mb-5"><?php echo esc_html($title); ?></h2>
             <?php
-            set_query_var('data_youtube_playlist', esc_attr($data_youtube_playlist));
+            set_query_var('data_youtube_playlist', $data_youtube_playlist);
             locate_template('./template-parts/youtube_slider.php', true, true);
             ?>
         </div>
