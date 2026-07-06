@@ -262,7 +262,7 @@ function akademiata_youtube_sanitize_settings( $input ) {
 	return $out;
 }
 
-function akademiata_youtube_register_admin() {
+function akademiata_youtube_register_admin_menu() {
 	add_submenu_page(
 		'theme-general-settings',
 		__( 'YouTube API', 'akademiata' ),
@@ -271,7 +271,9 @@ function akademiata_youtube_register_admin() {
 		'akademiata-youtube-api',
 		'akademiata_youtube_render_admin_page'
 	);
+}
 
+function akademiata_youtube_register_settings() {
 	register_setting(
 		'akademiata_youtube_settings_group',
 		AKADEMIATA_YOUTUBE_OPTION,
@@ -282,7 +284,10 @@ function akademiata_youtube_register_admin() {
 		)
 	);
 }
-add_action( 'admin_menu', 'akademiata_youtube_register_admin', 20 );
+
+// After ACF registers Theme Settings (admin_menu priority 99).
+add_action( 'admin_menu', 'akademiata_youtube_register_admin_menu', 100 );
+add_action( 'admin_init', 'akademiata_youtube_register_settings' );
 
 function akademiata_youtube_admin_field_secret( $settings ) {
 	$has_value = akademiata_youtube_has_api_key();
