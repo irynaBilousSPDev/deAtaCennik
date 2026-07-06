@@ -60,6 +60,20 @@ function akademiata_validate_youtube_api_key_format( $api_key ) {
 	return $api_key !== '' && (bool) preg_match( '/^AIza[0-9A-Za-z_-]{10,}$/', $api_key );
 }
 
+/** Wyciąga sam klucz z wklejki (np. z youtube-proxy.php z cudzysłowami lub $apiKey = ...). */
+function akademiata_youtube_normalize_api_key_input( $value ) {
+	$value = trim( (string) wp_unslash( $value ) );
+	if ( $value === '' ) {
+		return '';
+	}
+
+	if ( preg_match( '/AIza[0-9A-Za-z_-]{10,}/', $value, $matches ) ) {
+		return $matches[0];
+	}
+
+	return preg_replace( '/[^A-Za-z0-9_-]/', '', $value );
+}
+
 function akademiata_youtube_key_storage_broken() {
 	if ( defined( 'YOUTUBE_API_KEY' ) && YOUTUBE_API_KEY !== '' ) {
 		return false;
@@ -364,29 +378,25 @@ add_action( 'rest_api_init', 'akademiata_youtube_register_rest_route' );
 function akademiata_youtube_sanitize_settings( $input ) {
 	$current = akademiata_youtube_get_settings();
 	$out     = $current;
+	$input   = is_array( $input ) ? $input : array();
+	$api_key = isset( $input['api_key'] ) ? akademiata_youtube_normalize_api_key_input( $input['api_key'] ) : '';
 
-	if ( ! empty( $input['api_key_clear'] ) ) {
-		$out['api_key'] = '';
-	} elseif ( isset( $input['api_key'] ) ) {
-		$api_key = trim( sanitize_text_field( wp_unslash( $input['api_key'] ) ) );
-		if ( $api_key !== '' ) {
-			if ( ! akademiata_validate_youtube_api_key_format( $api_key ) ) {
-				add_settings_error(
-					AKADEMIATA_YOUTUBE_OPTION,
-					'akademiata_youtube_invalid_key_format',
-					__( 'Nieprawidłowy format klucza API. Skopiuj pełny klucz z Google Cloud (zaczyna się od AIza).', 'akademiata' ),
-					'error'
-				);
-				$out['api_key'] = $current['api_key'];
-			} else {
-				$out['api_key'] = akademiata_youtube_encrypt_secret( $api_key );
-			}
-		} else {
+	if ( $api_key !== '' ) {
+		if ( ! akademiata_validate_youtube_api_key_format( $api_key ) ) {
+			add_settings_error(
+				AKADEMIATA_YOUTUBE_OPTION,
+				'akademiata_youtube_invalid_key_format',
+				__( 'Nieprawidłowy format klucza API. Wklej sam klucz z Google Cloud (zaczyna się od AIza), bez cudzysłowów i kodu PHP.', 'akademiata' ),
+				'error'
+			);
 			$out['api_key'] = $current['api_key'];
-			if ( $out['api_key'] !== '' && ! akademiata_youtube_is_encrypted_secret( $out['api_key'] ) ) {
-				$out['api_key'] = akademiata_youtube_encrypt_secret( akademiata_youtube_decrypt_secret( $out['api_key'] ) );
-			}
+		} else {
+			$out['api_key'] = akademiata_youtube_encrypt_secret( $api_key );
 		}
+	} elseif ( ! empty( $input['api_key_clear'] ) ) {
+		$out['api_key'] = '';
+	} elseif ( $out['api_key'] !== '' && ! akademiata_youtube_is_encrypted_secret( $out['api_key'] ) ) {
+		$out['api_key'] = akademiata_youtube_encrypt_secret( akademiata_youtube_decrypt_secret( $out['api_key'] ) );
 	}
 
 	return $out;
@@ -440,13 +450,14 @@ function akademiata_youtube_admin_field_secret( $settings ) {
 				</p>
 			<?php endif; ?>
 			<input
-				type="password"
+				type="text"
 				class="large-text akademiata-youtube-secret-input"
 				id="akademiata_youtube_api_key"
 				name="<?php echo esc_attr( AKADEMIATA_YOUTUBE_OPTION ); ?>[api_key]"
 				value=""
-				autocomplete="new-password"
+				autocomplete="off"
 				spellcheck="false"
+				inputmode="verbatim"
 				<?php disabled( $from_env ); ?>
 				<?php if ( $has_value && ! $from_env ) : ?>
 					placeholder="<?php echo esc_attr( str_repeat( '•', 16 ) ); ?>"
@@ -520,11 +531,6 @@ function akademiata_youtube_render_admin_page() {
 		<p class="description">
 			<?php esc_html_e( 'ID playlisty ustawiasz w ACF — na stronie głównej w polu „our students → youtube playlist code”, nie tutaj.', 'akademiata' ); ?>
 		</p>
-		<p>
-			<a class="button button-secondary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=akademiata-youtube-api&akademiata_youtube_test=1' ), 'akademiata_youtube_test' ) ); ?>">
-				<?php esc_html_e( 'Testuj klucz API', 'akademiata' ); ?>
-			</a>
-		</p>
 		<form method="post" action="options.php">
 			<?php
 			settings_fields( 'akademiata_youtube_settings_group' );
@@ -534,6 +540,14 @@ function akademiata_youtube_render_admin_page() {
 			</table>
 			<?php submit_button(); ?>
 		</form>
+		<p>
+			<a class="button button-secondary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin.php?page=akademiata-youtube-api&akademiata_youtube_test=1' ), 'akademiata_youtube_test' ) ); ?>">
+				<?php esc_html_e( 'Testuj klucz API', 'akademiata' ); ?>
+			</a>
+			<span class="description" style="margin-left: 8px;">
+				<?php esc_html_e( 'Najpierw zapisz klucz, potem testuj.', 'akademiata' ); ?>
+			</span>
+		</p>
 		<p class="description">
 			<?php esc_html_e( 'W Google Cloud włącz „YouTube Data API v3” i użyj klucza bez ograniczenia HTTP referrer (serwer łączy się bez przeglądarki).', 'akademiata' ); ?>
 		</p>
