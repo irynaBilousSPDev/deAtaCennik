@@ -32,8 +32,11 @@ $show_register_button = !empty($register_url);
                             ?>
                         </div>
                     </div>
-                    <div class="main_title">
-                        <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+                    <div class="offer_header__title-row">
+                        <div class="main_title">
+                            <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+                        </div>
+                        <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -54,8 +57,11 @@ $show_register_button = !empty($register_url);
                                         ?>
                                     </div>
                                 </div>
-                                <div class="main_title">
-                                    <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+                                <div class="offer_header__title-row">
+                                    <div class="main_title">
+                                        <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
+                                    </div>
+                                    <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -168,6 +174,4 @@ $sections = [
 foreach ($sections as $section) {
     get_template_part("template-parts/single-offer/{$section}");
 }
-
-get_template_part('template-parts/single-offer/daily-interest-notice');
 ?>

@@ -269,16 +269,20 @@ function akademiata_enqueue_offer_daily_interest_script() {
         true
     );
 
+    $post_id = get_the_ID();
+    $lang    = akademiata_offer_daily_interest_lang();
+
     wp_localize_script(
         'akademiata-offer-daily-interest',
         'akademiataOfferDailyInterest',
         array(
             'restUrl'       => rest_url('akademiata/v1/offer-daily-interest'),
             'nonce'         => wp_create_nonce('wp_rest'),
-            'postId'        => get_the_ID(),
-            'lang'          => akademiata_offer_daily_interest_lang(),
+            'postId'        => $post_id,
+            'lang'          => $lang,
             'minCount'      => akademiata_offer_daily_interest_min_count(),
-            'delayMs'       => 4000,
+            'initialCount'  => akademiata_offer_daily_interest_get_count($post_id, $lang),
+            'delayMs'       => 500,
             'closeLabel'    => akademiata_get_theme_lang_string('offer_daily_interest_close'),
             'title'         => akademiata_get_theme_lang_string('offer_daily_interest_title'),
             'storagePrefix' => 'akademiata_offer_daily_interest',

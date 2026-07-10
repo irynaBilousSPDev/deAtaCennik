@@ -13,7 +13,7 @@
     const messageEl = notice.querySelector('.offer-daily-interest__message');
     const closeBtn = notice.querySelector('.offer-daily-interest__close');
     const minCount = parseInt(config.minCount, 10) || 2;
-    const delayMs = parseInt(config.delayMs, 10) || 4000;
+    const delayMs = parseInt(config.delayMs, 10) || 500;
     const storagePrefix = config.storagePrefix || 'akademiata_offer_daily_interest';
     const dismissedKey = `${storagePrefix}_dismissed_${config.postId}_${todayKey()}`;
 
@@ -65,6 +65,18 @@
         }
     }
 
+    function normalizePayload(raw) {
+        if (!raw || typeof raw !== 'object') {
+            return null;
+        }
+
+        if (raw.data && typeof raw.data === 'object') {
+            return raw.data;
+        }
+
+        return raw;
+    }
+
     function showNotice(message) {
         if (!message || isDismissed()) {
             return;
@@ -88,6 +100,21 @@
         });
     }
 
+    function maybeShowFromPayload(payload) {
+        if (!payload) {
+            return;
+        }
+
+        const count = typeof payload.count === 'number' ? payload.count : 0;
+        const shouldShow = payload.show === true || count >= minCount;
+
+        if (!shouldShow || count < minCount) {
+            return;
+        }
+
+        showNotice(payload.message || '');
+    }
+
     async function registerInterest() {
         const response = await fetch(config.restUrl, {
             method: 'POST',
@@ -107,8 +134,8 @@
             return null;
         }
 
-        const data = await response.json();
-        return data && typeof data === 'object' ? data : null;
+        const raw = await response.json();
+        return normalizePayload(raw);
     }
 
     if (closeBtn) {
@@ -121,19 +148,10 @@
         }
 
         try {
-            const data = await registerInterest();
-            if (!data || !data.show) {
-                return;
-            }
-
-            const count = typeof data.count === 'number' ? data.count : 0;
-            if (count < minCount) {
-                return;
-            }
-
-            showNotice(data.message || '');
+            const payload = await registerInterest();
+            maybeShowFromPayload(payload);
         } catch (error) {
-            // Silent fail — notice is optional UX.
+            // Optional UX — silent fail.
         }
     }, delayMs);
 }());
