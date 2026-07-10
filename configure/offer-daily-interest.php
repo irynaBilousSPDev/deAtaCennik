@@ -4,6 +4,90 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+const AKADEMIATA_OFFER_DAILY_INTEREST_OPTION = 'akademiata_offer_daily_interest_settings';
+
+/** One-time prod launch: first counting day after deploy (remove after this date passed). */
+const AKADEMIATA_OFFER_DAILY_INTEREST_PROD_LAUNCH_DATE = '2026-07-11';
+
+/**
+ * @return array{enabled: bool, active_from: string}
+ */
+function akademiata_offer_daily_interest_default_settings() {
+    return array(
+        'enabled'     => true,
+        'active_from' => '',
+    );
+}
+
+/**
+ * @return array{enabled: bool, active_from: string}
+ */
+function akademiata_offer_daily_interest_get_settings() {
+    $saved = get_option(AKADEMIATA_OFFER_DAILY_INTEREST_OPTION, null);
+
+    if ($saved === null) {
+        return akademiata_offer_daily_interest_default_settings();
+    }
+
+    $settings = wp_parse_args(is_array($saved) ? $saved : array(), akademiata_offer_daily_interest_default_settings());
+
+    return array(
+        'enabled'     => !empty($settings['enabled']),
+        'active_from' => sanitize_text_field((string) $settings['active_from']),
+    );
+}
+
+/**
+ * @param array<string, mixed> $input
+ * @return array{enabled: bool, active_from: string}
+ */
+function akademiata_offer_daily_interest_sanitize_settings($input) {
+    $input = is_array($input) ? $input : array();
+
+    $active_from = isset($input['active_from']) ? sanitize_text_field((string) $input['active_from']) : '';
+    if ($active_from !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $active_from)) {
+        $active_from = '';
+    }
+
+    return array(
+        'enabled'     => !empty($input['enabled']),
+        'active_from' => $active_from,
+    );
+}
+
+/**
+ * One-time: on production, no counting/display until launch date (midnight).
+ */
+function akademiata_offer_daily_interest_is_live_today() {
+    if (!akademiata_is_production()) {
+        return true;
+    }
+
+    return wp_date('Y-m-d') >= AKADEMIATA_OFFER_DAILY_INTEREST_PROD_LAUNCH_DATE;
+}
+
+/**
+ * Global on/off from Theme Settings + optional start date + one-time prod launch.
+ */
+function akademiata_offer_daily_interest_is_globally_enabled() {
+    $settings = akademiata_offer_daily_interest_get_settings();
+
+    if (empty($settings['enabled'])) {
+        return false;
+    }
+
+    if (!akademiata_offer_daily_interest_is_live_today()) {
+        return false;
+    }
+
+    $active_from = trim($settings['active_from']);
+    if ($active_from !== '' && wp_date('Y-m-d') < $active_from) {
+        return false;
+    }
+
+    return true;
+}
+
 function akademiata_offer_daily_interest_min_count() {
     return akademiata_is_production() ? 2 : 1;
 }
@@ -16,6 +100,10 @@ function akademiata_offer_daily_interest_cookie_name() {
  * @param int|null $post_id
  */
 function akademiata_should_show_offer_daily_interest($post_id = null) {
+    if (!akademiata_offer_daily_interest_is_globally_enabled()) {
+        return false;
+    }
+
     if (!is_singular(array('bachelor', 'master'))) {
         return false;
     }
@@ -440,3 +528,144 @@ function akademiata_enqueue_offer_daily_interest_script() {
     );
 }
 add_action('wp_enqueue_scripts', 'akademiata_enqueue_offer_daily_interest_script', 102);
+
+function akademiata_offer_daily_interest_register_admin_menu() {
+    add_submenu_page(
+        'theme-general-settings',
+        __('Licznik zainteresowania', 'akademiata'),
+        __('Licznik zainteresowania', 'akademiata'),
+        'manage_options',
+        'akademiata-offer-daily-interest',
+        'akademiata_offer_daily_interest_render_admin_page'
+    );
+}
+
+function akademiata_offer_daily_interest_persist_settings_errors() {
+    $errors = get_settings_errors();
+    if ($errors) {
+        set_transient('settings_errors', $errors, 30);
+    }
+}
+
+function akademiata_offer_daily_interest_handle_save_settings() {
+    if (!current_user_can('manage_options')) {
+        wp_die(esc_html__('Brak uprawnień.', 'akademiata'));
+    }
+
+    check_admin_referer('akademiata_offer_daily_interest_save_settings', 'akademiata_offer_daily_interest_nonce');
+
+    $raw_input = isset($_POST[ AKADEMIATA_OFFER_DAILY_INTEREST_OPTION ]) && is_array($_POST[ AKADEMIATA_OFFER_DAILY_INTEREST_OPTION ])
+        ? wp_unslash($_POST[ AKADEMIATA_OFFER_DAILY_INTEREST_OPTION ])
+        : array();
+
+    $sanitized = akademiata_offer_daily_interest_sanitize_settings($raw_input);
+    update_option(AKADEMIATA_OFFER_DAILY_INTEREST_OPTION, $sanitized);
+
+    add_settings_error(
+        AKADEMIATA_OFFER_DAILY_INTEREST_OPTION,
+        'akademiata_offer_daily_interest_saved',
+        __('Ustawienia licznika zainteresowania zostały zapisane.', 'akademiata'),
+        'success'
+    );
+
+    akademiata_offer_daily_interest_persist_settings_errors();
+    wp_safe_redirect(admin_url('admin.php?page=akademiata-offer-daily-interest&settings-updated=true'));
+    exit;
+}
+
+function akademiata_offer_daily_interest_admin_status_label() {
+    $settings = akademiata_offer_daily_interest_get_settings();
+
+    if (empty($settings['enabled'])) {
+        return __('Wyłączony — widżet nie jest pokazywany i nie liczy odwiedzin.', 'akademiata');
+    }
+
+    if (!akademiata_offer_daily_interest_is_live_today()) {
+        return sprintf(
+            /* translators: %s: date Y-m-d */
+            __('Włączony — start na produkcji od %s (00:00). Licznik resetuje się każdej nocy.', 'akademiata'),
+            AKADEMIATA_OFFER_DAILY_INTEREST_PROD_LAUNCH_DATE
+        );
+    }
+
+    $active_from = trim($settings['active_from']);
+    if ($active_from !== '' && wp_date('Y-m-d') < $active_from) {
+        return sprintf(
+            /* translators: %s: date Y-m-d */
+            __('Włączony — start od %s (00:00). Do tej pory brak licznika i widżetu.', 'akademiata'),
+            $active_from
+        );
+    }
+
+    return __('Aktywny — licznik i widżet na ofertach z przyciskiem ZAPISZ SIĘ. Reset licznika o północy.', 'akademiata');
+}
+
+function akademiata_offer_daily_interest_render_admin_page() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+
+    $settings = akademiata_offer_daily_interest_get_settings();
+    $option   = AKADEMIATA_OFFER_DAILY_INTEREST_OPTION;
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('Licznik zainteresowania — oferty', 'akademiata'); ?></h1>
+        <p>
+            <?php esc_html_e('Widżet na stronach bachelor/master z linkiem ZAPISZ SIĘ. Unikalne sesje dziennie, wspólny licznik dla tłumaczeń WPML tej samej specjalizacji.', 'akademiata'); ?>
+        </p>
+
+        <?php settings_errors($option); ?>
+
+        <div class="notice notice-info inline" style="margin: 1em 0 1.5em; padding: 12px;">
+            <p><strong><?php esc_html_e('Status teraz:', 'akademiata'); ?></strong> <?php echo esc_html(akademiata_offer_daily_interest_admin_status_label()); ?></p>
+        </div>
+
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+            <?php wp_nonce_field('akademiata_offer_daily_interest_save_settings', 'akademiata_offer_daily_interest_nonce'); ?>
+            <input type="hidden" name="action" value="akademiata_offer_daily_interest_save_settings">
+
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row"><?php esc_html_e('Widżet na stronie', 'akademiata'); ?></th>
+                    <td>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="<?php echo esc_attr($option); ?>[enabled]"
+                                value="1"
+                                <?php checked(!empty($settings['enabled'])); ?>>
+                            <?php esc_html_e('Włącz licznik zainteresowania na ofertach', 'akademiata'); ?>
+                        </label>
+                        <p class="description">
+                            <?php esc_html_e('Domyślnie włączone. Odznacz, aby całkowicie wyłączyć widżet i liczenie.', 'akademiata'); ?>
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="akademiata_offer_daily_interest_active_from">
+                            <?php esc_html_e('Pokaż od dnia', 'akademiata'); ?>
+                        </label>
+                    </th>
+                    <td>
+                        <input
+                            type="date"
+                            class="regular-text"
+                            id="akademiata_offer_daily_interest_active_from"
+                            name="<?php echo esc_attr($option); ?>[active_from]"
+                            value="<?php echo esc_attr($settings['active_from']); ?>">
+                        <p class="description">
+                            <?php esc_html_e('Opcjonalnie. Puste = od razu po włączeniu (z uwzględnieniem jednorazowego startu na produkcji).', 'akademiata'); ?>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+            <?php submit_button(__('Zapisz ustawienia', 'akademiata')); ?>
+        </form>
+    </div>
+    <?php
+}
+
+add_action('admin_menu', 'akademiata_offer_daily_interest_register_admin_menu', 100);
+add_action('admin_post_akademiata_offer_daily_interest_save_settings', 'akademiata_offer_daily_interest_handle_save_settings');
