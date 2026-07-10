@@ -1,6 +1,6 @@
 (function () {
     const config = window.akademiataOfferDailyInterest;
-    if (!config || !config.restUrl || !config.postId) {
+    if (!config) {
         return;
     }
 
@@ -9,42 +9,15 @@
         return;
     }
 
-    const titleEl = notice.querySelector('.offer-daily-interest__title');
-    const messageEl = notice.querySelector('.offer-daily-interest__message');
     const closeBtn = notice.querySelector('.offer-daily-interest__close');
-    const minCount = parseInt(config.minCount, 10) || 2;
-    const delayMs = parseInt(config.delayMs, 10) || 500;
     const storagePrefix = config.storagePrefix || 'akademiata_offer_daily_interest';
-    const dismissedKey = `${storagePrefix}_dismissed_${config.postId}_${todayKey()}`;
+    const postId = config.postId || notice.closest('.single-offer')?.id?.replace('post-', '') || '';
 
     function todayKey() {
         return new Date().toISOString().slice(0, 10);
     }
 
-    function getSessionToken() {
-        const storageKey = `${storagePrefix}_session`;
-        let token = '';
-
-        try {
-            token = window.sessionStorage.getItem(storageKey) || '';
-        } catch (error) {
-            token = '';
-        }
-
-        if (!token) {
-            token = typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : `sess-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-
-            try {
-                window.sessionStorage.setItem(storageKey, token);
-            } catch (error) {
-                // Ignore private mode storage errors.
-            }
-        }
-
-        return token;
-    }
+    const dismissedKey = `${storagePrefix}_dismissed_${postId}_${todayKey()}`;
 
     function isDismissed() {
         try {
@@ -65,93 +38,11 @@
         }
     }
 
-    function normalizePayload(raw) {
-        if (!raw || typeof raw !== 'object') {
-            return null;
-        }
-
-        if (raw.data && typeof raw.data === 'object') {
-            return raw.data;
-        }
-
-        return raw;
-    }
-
-    function showNotice(message) {
-        if (!message || isDismissed()) {
-            return;
-        }
-
-        if (titleEl && config.title) {
-            titleEl.textContent = config.title;
-        }
-
-        if (messageEl) {
-            messageEl.textContent = message;
-        }
-
-        if (closeBtn && config.closeLabel) {
-            closeBtn.setAttribute('aria-label', config.closeLabel);
-        }
-
-        notice.hidden = false;
-        window.requestAnimationFrame(() => {
-            notice.classList.add('is-visible');
-        });
-    }
-
-    function maybeShowFromPayload(payload) {
-        if (!payload) {
-            return;
-        }
-
-        const count = typeof payload.count === 'number' ? payload.count : 0;
-        const shouldShow = payload.show === true || count >= minCount;
-
-        if (!shouldShow || count < minCount) {
-            return;
-        }
-
-        showNotice(payload.message || '');
-    }
-
-    async function registerInterest() {
-        const response = await fetch(config.restUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': config.nonce,
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                post_id: config.postId,
-                session_token: getSessionToken(),
-                lang: config.lang,
-            }),
-        });
-
-        if (!response.ok) {
-            return null;
-        }
-
-        const raw = await response.json();
-        return normalizePayload(raw);
+    if (isDismissed()) {
+        dismissNotice();
     }
 
     if (closeBtn) {
         closeBtn.addEventListener('click', dismissNotice);
     }
-
-    window.setTimeout(async () => {
-        if (isDismissed()) {
-            return;
-        }
-
-        try {
-            const payload = await registerInterest();
-            maybeShowFromPayload(payload);
-        } catch (error) {
-            // Optional UX — silent fail.
-        }
-    }, delayMs);
 }());

@@ -5,7 +5,11 @@ if (!defined('ABSPATH')) {
 }
 
 function akademiata_offer_daily_interest_min_count() {
-    return 2;
+    return akademiata_is_production() ? 2 : 1;
+}
+
+function akademiata_offer_daily_interest_cookie_name() {
+    return 'akademiata_offer_view_sid';
 }
 
 /**
@@ -101,7 +105,43 @@ function akademiata_offer_daily_interest_is_valid_post($post_id) {
 function akademiata_offer_daily_interest_is_valid_session_token($session_token) {
     $session_token = (string) $session_token;
 
-    return (bool) preg_match('/^[a-f0-9-]{16,64}$/i', $session_token);
+    return (bool) preg_match('/^[a-z0-9-]{16,64}$/i', $session_token);
+}
+
+/**
+ * @return string
+ */
+function akademiata_offer_daily_interest_get_or_set_session_token() {
+    $cookie_name = akademiata_offer_daily_interest_cookie_name();
+
+    if (
+        !empty($_COOKIE[ $cookie_name ])
+        && akademiata_offer_daily_interest_is_valid_session_token(wp_unslash($_COOKIE[ $cookie_name ]))
+    ) {
+        return sanitize_text_field(wp_unslash($_COOKIE[ $cookie_name ]));
+    }
+
+    if (function_exists('wp_generate_uuid4')) {
+        $token = wp_generate_uuid4();
+    } else {
+        $token = 'sess-' . bin2hex(random_bytes(16));
+    }
+
+    if (!headers_sent()) {
+        setcookie(
+            $cookie_name,
+            $token,
+            time() + DAY_IN_SECONDS,
+            COOKIEPATH ? COOKIEPATH : '/',
+            COOKIE_DOMAIN,
+            is_ssl(),
+            true
+        );
+    }
+
+    $_COOKIE[ $cookie_name ] = $token;
+
+    return $token;
 }
 
 /**
@@ -140,10 +180,28 @@ function akademiata_offer_daily_interest_register_view($post_id, $session_token,
         set_transient($session_key, 1, $ttl);
         $count = akademiata_offer_daily_interest_get_count($post_id, $lang) + 1;
         set_transient($count_key, $count, $ttl);
+
         return $count;
     }
 
     return akademiata_offer_daily_interest_get_count($post_id, $lang);
+}
+
+/**
+ * @param int|null $post_id
+ * @return array<string, mixed>
+ */
+function akademiata_offer_daily_interest_track_current_view($post_id = null) {
+    if ($post_id === null) {
+        $post_id = get_the_ID();
+    }
+
+    $post_id = (int) $post_id;
+    $lang    = akademiata_offer_daily_interest_lang();
+    $token   = akademiata_offer_daily_interest_get_or_set_session_token();
+    $count   = akademiata_offer_daily_interest_register_view($post_id, $token, $lang);
+
+    return akademiata_offer_daily_interest_payload($count);
 }
 
 /**
@@ -185,16 +243,15 @@ function akademiata_offer_daily_interest_message($count) {
  * @return array<string, mixed>
  */
 function akademiata_offer_daily_interest_payload($count) {
-    $count    = max(0, (int) $count);
-    $min      = akademiata_offer_daily_interest_min_count();
-    $show     = $count >= $min;
-    $message  = $show ? akademiata_offer_daily_interest_message($count) : '';
+    $count = max(0, (int) $count);
+    $min   = akademiata_offer_daily_interest_min_count();
+    $show  = $count >= $min;
 
     return array(
         'count'   => $count,
         'min'     => $min,
         'show'    => $show,
-        'message' => $message,
+        'message' => $show ? akademiata_offer_daily_interest_message($count) : '',
     );
 }
 
@@ -214,7 +271,11 @@ function akademiata_offer_daily_interest_rest_handler(WP_REST_Request $request) 
     }
 
     $session_token = sanitize_text_field((string) $request->get_param('session_token'));
-    $count         = akademiata_offer_daily_interest_register_view($post_id, $session_token, $lang);
+    if ($session_token === '') {
+        $session_token = akademiata_offer_daily_interest_get_or_set_session_token();
+    }
+
+    $count = akademiata_offer_daily_interest_register_view($post_id, $session_token, $lang);
 
     return rest_ensure_response(akademiata_offer_daily_interest_payload($count));
 }
@@ -239,7 +300,7 @@ function akademiata_offer_daily_interest_register_rest_route() {
                 ),
                 'session_token' => array(
                     'type'              => 'string',
-                    'required'          => true,
+                    'required'          => false,
                     'sanitize_callback' => 'sanitize_text_field',
                 ),
                 'lang'          => array(
@@ -269,22 +330,12 @@ function akademiata_enqueue_offer_daily_interest_script() {
         true
     );
 
-    $post_id = get_the_ID();
-    $lang    = akademiata_offer_daily_interest_lang();
-
     wp_localize_script(
         'akademiata-offer-daily-interest',
         'akademiataOfferDailyInterest',
         array(
-            'restUrl'       => rest_url('akademiata/v1/offer-daily-interest'),
-            'nonce'         => wp_create_nonce('wp_rest'),
-            'postId'        => $post_id,
-            'lang'          => $lang,
-            'minCount'      => akademiata_offer_daily_interest_min_count(),
-            'initialCount'  => akademiata_offer_daily_interest_get_count($post_id, $lang),
-            'delayMs'       => 500,
+            'postId'        => get_the_ID(),
             'closeLabel'    => akademiata_get_theme_lang_string('offer_daily_interest_close'),
-            'title'         => akademiata_get_theme_lang_string('offer_daily_interest_title'),
             'storagePrefix' => 'akademiata_offer_daily_interest',
         )
     );
