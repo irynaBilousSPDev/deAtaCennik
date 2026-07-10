@@ -45,27 +45,58 @@ function akademiata_offer_daily_interest_lang() {
 }
 
 /**
- * @param int    $post_id
- * @param string $lang
+ * Stable counter group for WPML translation sets (same specialization, all languages).
+ *
+ * @param int $post_id
  * @return string
  */
-function akademiata_offer_daily_interest_count_transient_key($post_id, $lang) {
-    return 'akademiata_offer_daily_' . wp_date('Y-m-d') . '_' . (int) $post_id . '_' . sanitize_key($lang);
+function akademiata_offer_daily_interest_group_key($post_id) {
+    static $cache = array();
+
+    $post_id = (int) $post_id;
+    if (isset($cache[ $post_id ])) {
+        return $cache[ $post_id ];
+    }
+
+    $post = get_post($post_id);
+    if (!$post || !in_array($post->post_type, array('bachelor', 'master'), true)) {
+        $cache[ $post_id ] = 'offer_post_' . $post_id;
+
+        return $cache[ $post_id ];
+    }
+
+    $element_type = 'post_' . $post->post_type;
+    $trid         = apply_filters('wpml_element_trid', null, $post_id, $element_type);
+    if ($trid) {
+        $cache[ $post_id ] = sanitize_key($post->post_type . '_trid_' . (int) $trid);
+
+        return $cache[ $post_id ];
+    }
+
+    $cache[ $post_id ] = sanitize_key($post->post_type . '_post_' . $post_id);
+
+    return $cache[ $post_id ];
+}
+
+/**
+ * @param int $post_id
+ * @return string
+ */
+function akademiata_offer_daily_interest_count_transient_key($post_id) {
+    return 'akademiata_offer_daily_' . wp_date('Y-m-d') . '_' . akademiata_offer_daily_interest_group_key($post_id);
 }
 
 /**
  * @param int    $post_id
- * @param string $lang
  * @param string $session_token
  * @return string
  */
-function akademiata_offer_daily_interest_session_transient_key($post_id, $lang, $session_token) {
+function akademiata_offer_daily_interest_session_transient_key($post_id, $session_token) {
     $hash = hash('sha256', (string) $session_token);
 
     return 'akademiata_offer_daily_sess_'
         . wp_date('Y-m-d') . '_'
-        . (int) $post_id . '_'
-        . sanitize_key($lang) . '_'
+        . akademiata_offer_daily_interest_group_key($post_id) . '_'
         . substr($hash, 0, 16);
 }
 
@@ -145,27 +176,26 @@ function akademiata_offer_daily_interest_get_or_set_session_token() {
 }
 
 /**
- * @param int    $post_id
- * @param string $lang
+ * @param int $post_id
  * @return int
  */
-function akademiata_offer_daily_interest_get_count($post_id, $lang) {
-    return max(0, (int) get_transient(akademiata_offer_daily_interest_count_transient_key($post_id, $lang)));
+function akademiata_offer_daily_interest_get_count($post_id) {
+    return max(0, (int) get_transient(akademiata_offer_daily_interest_count_transient_key($post_id)));
 }
 
 /**
- * @param int    $post_id
- * @param string $session_token
- * @param string $lang
+ * @param int         $post_id
+ * @param string      $session_token
+ * @param string|null $lang Unused; kept for REST compatibility. Message language uses current locale.
  * @return int
  */
-function akademiata_offer_daily_interest_register_view($post_id, $session_token, $lang) {
+function akademiata_offer_daily_interest_register_view($post_id, $session_token, $lang = null) {
     if (!akademiata_offer_daily_interest_is_valid_post($post_id)) {
         return 0;
     }
 
     if (!akademiata_offer_daily_interest_is_valid_session_token($session_token)) {
-        return akademiata_offer_daily_interest_get_count($post_id, $lang);
+        return akademiata_offer_daily_interest_get_count($post_id);
     }
 
     if (!akademiata_should_show_offer_daily_interest($post_id)) {
@@ -173,18 +203,18 @@ function akademiata_offer_daily_interest_register_view($post_id, $session_token,
     }
 
     $ttl         = akademiata_offer_daily_interest_seconds_until_midnight();
-    $session_key = akademiata_offer_daily_interest_session_transient_key($post_id, $lang, $session_token);
-    $count_key   = akademiata_offer_daily_interest_count_transient_key($post_id, $lang);
+    $session_key = akademiata_offer_daily_interest_session_transient_key($post_id, $session_token);
+    $count_key   = akademiata_offer_daily_interest_count_transient_key($post_id);
 
     if (false === get_transient($session_key)) {
         set_transient($session_key, 1, $ttl);
-        $count = akademiata_offer_daily_interest_get_count($post_id, $lang) + 1;
+        $count = akademiata_offer_daily_interest_get_count($post_id) + 1;
         set_transient($count_key, $count, $ttl);
 
         return $count;
     }
 
-    return akademiata_offer_daily_interest_get_count($post_id, $lang);
+    return akademiata_offer_daily_interest_get_count($post_id);
 }
 
 /**
@@ -358,6 +388,7 @@ function akademiata_enqueue_offer_daily_interest_script() {
         'akademiataOfferDailyInterest',
         array(
             'postId'        => get_the_ID(),
+            'groupKey'      => akademiata_offer_daily_interest_group_key(get_the_ID()),
             'closeLabel'    => akademiata_get_theme_lang_string('offer_daily_interest_close'),
             'storagePrefix' => 'akademiata_offer_daily_interest',
         )

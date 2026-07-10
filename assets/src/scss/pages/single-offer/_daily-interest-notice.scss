@@ -7,10 +7,10 @@
 
 .offer-daily-interest {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 24px;
+  right: max(32px, 2.5vw);
   z-index: 3;
-  width: min(292px, calc(100% - 32px));
+  width: min(292px, calc(100% - max(64px, 5vw)));
   opacity: 0;
   transform: translateX(12px);
   transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -22,10 +22,19 @@
     pointer-events: auto;
   }
 
+  @include mixins.lg-screen {
+    right: max(40px, 3vw);
+  }
+
+  @include mixins.xl-screen {
+    top: 28px;
+    right: max(48px, 3.5vw);
+  }
+
   @include mixins.max-sm-screen {
-    top: 14px;
-    right: 14px;
-    left: 14px;
+    top: 16px;
+    right: 16px;
+    left: 16px;
     width: auto;
   }
 
