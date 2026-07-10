@@ -68,6 +68,23 @@
     animation: offer-interest-pulse 2.2s ease-out infinite;
   }
 
+  &--tier-3 &__pulse {
+    animation-duration: 1.8s;
+  }
+
+  &--tier-4 &__pulse,
+  &--tier-5 &__pulse {
+    animation-duration: 1.5s;
+  }
+
+  &--tier-4 &__inner,
+  &--tier-5 &__inner {
+    box-shadow:
+      0 10px 36px rgba(0, 0, 0, 0.16),
+      0 2px 8px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(vars.$white, 0.9);
+  }
+
   &__title {
     margin: 0;
     font-size: 1.1rem;

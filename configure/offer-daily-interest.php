@@ -236,6 +236,48 @@ function akademiata_offer_daily_interest_track_current_view($post_id = null) {
 
 /**
  * @param int $count
+ * @return int 0 when below visible threshold.
+ */
+function akademiata_offer_daily_interest_resolve_tier($count) {
+    $count = (int) $count;
+
+    if ($count >= 40) {
+        return 5;
+    }
+    if ($count >= 20) {
+        return 4;
+    }
+    if ($count >= 10) {
+        return 3;
+    }
+    if ($count >= 5) {
+        return 2;
+    }
+    if ($count >= 2) {
+        return 1;
+    }
+    if ($count >= 1 && !akademiata_is_production()) {
+        return 1;
+    }
+
+    return 0;
+}
+
+/**
+ * @param int $count
+ * @return string
+ */
+function akademiata_offer_daily_interest_tier_title($count) {
+    $tier = akademiata_offer_daily_interest_resolve_tier($count);
+    if ($tier <= 0) {
+        return '';
+    }
+
+    return akademiata_get_theme_lang_string('offer_daily_interest_tier_' . $tier);
+}
+
+/**
+ * @param int $count
  * @return string
  */
 function akademiata_offer_daily_interest_message_html($count) {
@@ -299,11 +341,14 @@ function akademiata_offer_daily_interest_payload($count) {
     $count = max(0, (int) $count);
     $min   = akademiata_offer_daily_interest_min_count();
     $show  = $count >= $min;
+    $tier  = $show ? akademiata_offer_daily_interest_resolve_tier($count) : 0;
 
     return array(
         'count'   => $count,
         'min'     => $min,
+        'tier'    => $tier,
         'show'    => $show,
+        'title'   => $show ? akademiata_offer_daily_interest_tier_title($count) : '',
         'message' => $show ? akademiata_offer_daily_interest_message($count) : '',
     );
 }

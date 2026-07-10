@@ -6,15 +6,17 @@ if (!akademiata_should_show_offer_daily_interest()) {
 
 $interest_payload = akademiata_offer_daily_interest_track_current_view();
 $interest_visible = !empty($interest_payload['show']);
-$interest_title   = akademiata_get_theme_lang_string('offer_daily_interest_title');
+$interest_tier    = !empty($interest_payload['tier']) ? (int) $interest_payload['tier'] : 0;
+$interest_title   = !empty($interest_payload['title']) ? $interest_payload['title'] : '';
 $interest_message = !empty($interest_payload['message'])
     ? akademiata_offer_daily_interest_message_html((int) $interest_payload['count'])
     : '';
 $interest_close = akademiata_get_theme_lang_string('offer_daily_interest_close');
+$tier_class       = $interest_tier > 0 ? ' offer-daily-interest--tier-' . $interest_tier : '';
 ?>
 
 <div id="offer-daily-interest"
-     class="offer-daily-interest<?php echo $interest_visible ? ' is-visible' : ''; ?>"
+     class="offer-daily-interest<?php echo $interest_visible ? ' is-visible' : ''; ?><?php echo esc_attr($tier_class); ?>"
      <?php echo $interest_visible ? '' : 'hidden'; ?>
      role="status"
      aria-live="polite"

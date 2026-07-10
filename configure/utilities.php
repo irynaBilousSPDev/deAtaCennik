@@ -1981,6 +1981,36 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Популярна програма',
                 'ru' => 'Популярная программа',
             ),
+            'offer_daily_interest_tier_1' => array(
+                'pl' => 'Rosnące zainteresowanie',
+                'en' => 'Growing interest',
+                'uk' => 'Зростаючий інтерес',
+                'ru' => 'Растущий интерес',
+            ),
+            'offer_daily_interest_tier_2' => array(
+                'pl' => 'Popularny kierunek',
+                'en' => 'Popular program',
+                'uk' => 'Популярна програма',
+                'ru' => 'Популярная программа',
+            ),
+            'offer_daily_interest_tier_3' => array(
+                'pl' => 'Bardzo popularny kierunek',
+                'en' => 'Very popular program',
+                'uk' => 'Дуже популярна програма',
+                'ru' => 'Очень популярная программа',
+            ),
+            'offer_daily_interest_tier_4' => array(
+                'pl' => 'W czołówce zainteresowań',
+                'en' => 'Top interest today',
+                'uk' => 'У топі зацікавленості',
+                'ru' => 'В топе интереса',
+            ),
+            'offer_daily_interest_tier_5' => array(
+                'pl' => 'Szczególnie wybierany dziś',
+                'en' => 'Highly sought today',
+                'uk' => 'Особливо популярний сьогодні',
+                'ru' => 'Особенно востребован сегодня',
+            ),
             'offer_daily_interest_pl_one' => array(
                 'pl' => 'Dziś 1 osoba zainteresowała się tą specjalizacją',
                 'en' => 'Today 1 person showed interest in this program',
