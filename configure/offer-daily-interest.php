@@ -432,12 +432,13 @@ function akademiata_offer_daily_interest_payload($count) {
     $tier  = $show ? akademiata_offer_daily_interest_resolve_tier($count) : 0;
 
     return array(
-        'count'   => $count,
-        'min'     => $min,
-        'tier'    => $tier,
-        'show'    => $show,
-        'title'   => $show ? akademiata_offer_daily_interest_tier_title($count) : '',
-        'message' => $show ? akademiata_offer_daily_interest_message($count) : '',
+        'count'        => $count,
+        'min'          => $min,
+        'tier'         => $tier,
+        'show'         => $show,
+        'title'        => $show ? akademiata_offer_daily_interest_tier_title($count) : '',
+        'message'      => $show ? akademiata_offer_daily_interest_message($count) : '',
+        'message_html' => $show ? akademiata_offer_daily_interest_message_html($count) : '',
     );
 }
 
@@ -520,7 +521,11 @@ function akademiata_enqueue_offer_daily_interest_script() {
         'akademiata-offer-daily-interest',
         'akademiataOfferDailyInterest',
         array(
+            'restUrl'       => rest_url('akademiata/v1/offer-daily-interest'),
+            'nonce'         => wp_create_nonce('wp_rest'),
             'postId'        => get_the_ID(),
+            'lang'          => akademiata_offer_daily_interest_lang(),
+            'minCount'      => akademiata_offer_daily_interest_min_count(),
             'groupKey'      => akademiata_offer_daily_interest_group_key(get_the_ID()),
             'closeLabel'    => akademiata_get_theme_lang_string('offer_daily_interest_close'),
             'storagePrefix' => 'akademiata_offer_daily_interest',
@@ -528,6 +533,25 @@ function akademiata_enqueue_offer_daily_interest_script() {
     );
 }
 add_action('wp_enqueue_scripts', 'akademiata_enqueue_offer_daily_interest_script', 102);
+
+/**
+ * REST responses must not be cached (WP Rocket / CDN).
+ *
+ * @param WP_REST_Response $response
+ * @param WP_REST_Server   $server
+ * @param WP_REST_Request  $request
+ * @return WP_REST_Response
+ */
+function akademiata_offer_daily_interest_rest_no_cache($response, $server, $request) {
+    if ($request->get_route() !== '/akademiata/v1/offer-daily-interest') {
+        return $response;
+    }
+
+    $response->header('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+    return $response;
+}
+add_filter('rest_post_dispatch', 'akademiata_offer_daily_interest_rest_no_cache', 10, 3);
 
 function akademiata_offer_daily_interest_register_admin_menu() {
     add_submenu_page(
