@@ -23,6 +23,8 @@ include('configure/configure.php');
 
 include('configure/youtube-api.php');
 
+include('configure/offer-daily-interest.php');
+
 // JAVASCRIPT & CSS
 
 include('configure/js-css.php');

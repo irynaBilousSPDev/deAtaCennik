@@ -168,4 +168,6 @@ $sections = [
 foreach ($sections as $section) {
     get_template_part("template-parts/single-offer/{$section}");
 }
+
+get_template_part('template-parts/single-offer/daily-interest-notice');
 ?>

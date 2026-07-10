@@ -9,6 +9,7 @@ module.exports = {
         ajaxFilterPgMba: './assets/src/js/ajax-filter-pg-mba.js',
         ajaxSlider: './assets/src/js/ajax-load-cpt.js',
         lpRankingi: './assets/src/js/lp-rankingi.js',
+        offerDailyInterest: './assets/src/js/offer-daily-interest.js',
     },
     output: {
         filename: '[name].js',

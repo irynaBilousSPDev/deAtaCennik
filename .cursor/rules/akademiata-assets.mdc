@@ -21,8 +21,11 @@ alwaysApply: false
 | `ajaxFilter` | `assets/src/js/ajax-filter.js` |
 | `ajaxSlider` | `assets/src/js/ajax-load-cpt.js` |
 | `lpRankingi` | `assets/src/js/lp-rankingi.js` |
+| `offerDailyInterest` | `assets/src/js/offer-daily-interest.js` |
 
 `main.js` imports `_generalScripts.js` (sliders, tabs, YouTube) and `prices-calculator.js`.
+
+Conditional enqueue (`configure/js-css.php`, `configure/offer-daily-interest.php`): `ajaxFilter.js`, `ajaxSlider.js`, `lpRankingi.js`, `offerDailyInterest.js` (single bachelor/master with `register_url`).
 
 ## SCSS (`assets/src/scss/main.scss`)
 

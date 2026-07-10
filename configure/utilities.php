@@ -1975,6 +1975,48 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Видалити з обраного',
                 'ru' => 'Удалить из избранного',
             ),
+            'offer_daily_interest_title' => array(
+                'pl' => 'Popularny kierunek',
+                'en' => 'Popular program',
+                'uk' => 'Популярна програма',
+                'ru' => 'Популярная программа',
+            ),
+            'offer_daily_interest_pl_one' => array(
+                'pl' => 'Dziś 1 osoba zainteresowała się tą specjalizacją',
+                'en' => 'Today 1 person showed interest in this program',
+                'uk' => 'Сьогодні 1 особа зацікавилася цією спеціалізацією',
+                'ru' => 'Сегодня 1 человек проявил интерес к этой специализации',
+            ),
+            'offer_daily_interest_pl_few' => array(
+                'pl' => 'Dziś %d osoby zainteresowały się tą specjalizacją',
+                'en' => 'Today %d people showed interest in this program',
+                'uk' => 'Сьогодні %d особи зацікавилися цією спеціалізацією',
+                'ru' => 'Сегодня %d человека проявили интерес к этой специализации',
+            ),
+            'offer_daily_interest_pl_many' => array(
+                'pl' => 'Dziś %d osób zainteresowało się tą specjalizacją',
+                'en' => 'Today %d people showed interest in this program',
+                'uk' => 'Сьогодні %d осіб зацікавилися цією спеціалізацією',
+                'ru' => 'Сегодня %d человек проявили интерес к этой специализации',
+            ),
+            'offer_daily_interest_en_one' => array(
+                'pl' => 'Today 1 person showed interest in this program',
+                'en' => 'Today 1 person showed interest in this program',
+                'uk' => 'Today 1 person showed interest in this program',
+                'ru' => 'Today 1 person showed interest in this program',
+            ),
+            'offer_daily_interest_en_many' => array(
+                'pl' => 'Today %d people showed interest in this program',
+                'en' => 'Today %d people showed interest in this program',
+                'uk' => 'Today %d people showed interest in this program',
+                'ru' => 'Today %d people showed interest in this program',
+            ),
+            'offer_daily_interest_close' => array(
+                'pl' => 'Zamknij powiadomienie',
+                'en' => 'Close notification',
+                'uk' => 'Закрити сповіщення',
+                'ru' => 'Закрыть уведомление',
+            ),
             'offer_achievements_partners_title' => array(
                 'pl' => 'OSIĄGNIĘCIA I PARTNERZY',
                 'en' => 'ACHIEVEMENTS AND PARTNERS',

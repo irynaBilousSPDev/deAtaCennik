@@ -1,0 +1,72 @@
+@use "../../abstracts/variables" as vars;
+@use "../../abstracts/mixins" as mixins;
+
+.offer-daily-interest {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 120;
+  max-width: 320px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  @include mixins.max-sm-screen {
+    left: 16px;
+    right: 16px;
+    bottom: 88px;
+    max-width: none;
+  }
+
+  &__inner {
+    position: relative;
+    padding: 16px 40px 16px 18px;
+    background: vars.$white;
+    border: 1px solid rgba(vars.$border-gray, 0.25);
+    border-left: 3px solid vars.$primary;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  &__title {
+    margin: 0 0 6px;
+    font-size: vars.$font-size-s-medium;
+    font-weight: vars.$weight-bold;
+    line-height: 1.3;
+    color: vars.$black;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: vars.$font-size-default;
+    line-height: 1.4;
+    color: vars.$color-nav-gray;
+  }
+
+  &__close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: vars.$border-gray;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: vars.$black;
+    }
+  }
+}
