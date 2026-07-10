@@ -655,7 +655,7 @@ function akademiata_offer_daily_interest_render_admin_page() {
                             name="<?php echo esc_attr($option); ?>[active_from]"
                             value="<?php echo esc_attr($settings['active_from']); ?>">
                         <p class="description">
-                            <?php esc_html_e('Opcjonalnie. Puste = od razu po włączeniu (z uwzględnieniem jednorazowego startu na produkcji).', 'akademiata'); ?>
+                            <?php esc_html_e('Opcjonalnie. Puste pole — widżet startuje od razu po włączeniu. Wybrana data — liczenie i pokazywanie od tego dnia (00:00).', 'akademiata'); ?>
                         </p>
                     </td>
                 </tr>
