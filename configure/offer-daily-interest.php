@@ -208,6 +208,29 @@ function akademiata_offer_daily_interest_track_current_view($post_id = null) {
  * @param int $count
  * @return string
  */
+function akademiata_offer_daily_interest_message_html($count) {
+    $count = (int) $count;
+    if ($count <= 0) {
+        return '';
+    }
+
+    $plain     = akademiata_offer_daily_interest_message($count);
+    $count_str = (string) $count;
+    $escaped   = esc_html($plain);
+    $highlight = '<span class="offer-daily-interest__count">' . esc_html($count_str) . '</span>';
+
+    return preg_replace(
+        '/' . preg_quote($count_str, '/') . '/',
+        $highlight,
+        $escaped,
+        1
+    );
+}
+
+/**
+ * @param int $count
+ * @return string
+ */
 function akademiata_offer_daily_interest_message($count) {
     $count = (int) $count;
     if ($count <= 0) {

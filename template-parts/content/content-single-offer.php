@@ -32,11 +32,8 @@ $show_register_button = !empty($register_url);
                             ?>
                         </div>
                     </div>
-                    <div class="offer_header__title-row">
-                        <div class="main_title">
-                            <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-                        </div>
-                        <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
+                    <div class="main_title">
+                        <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -57,11 +54,8 @@ $show_register_button = !empty($register_url);
                                         ?>
                                     </div>
                                 </div>
-                                <div class="offer_header__title-row">
-                                    <div class="main_title">
-                                        <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
-                                    </div>
-                                    <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
+                                <div class="main_title">
+                                    <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
                                 </div>
                             </div>
                         <?php endif; ?>
@@ -130,7 +124,8 @@ $show_register_button = !empty($register_url);
                     </div>
                 </div>
                 <!-- Featured Image Column -->
-                <div class="col-lg-6">
+                <div class="col-lg-6 offer_header__media">
+                    <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
                     <?php if (has_post_thumbnail()) : ?>
                         <?php
                         // Get post thumbnail ID

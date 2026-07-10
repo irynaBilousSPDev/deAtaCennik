@@ -1,85 +1,121 @@
 @use "../../abstracts/variables" as vars;
 @use "../../abstracts/mixins" as mixins;
 
-.offer_header__title-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px 20px;
-  margin-top: 0.5rem;
-
-  .main_title {
-    flex: 1 1 240px;
-    min-width: 0;
-    margin: 0;
-  }
+.offer_header__media {
+  position: relative;
 }
 
 .offer-daily-interest {
-  flex: 0 1 300px;
-  width: 100%;
-  max-width: 300px;
-  margin-left: auto;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
+  width: min(292px, calc(100% - 32px));
   opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateX(12px);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 
   &.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
     pointer-events: auto;
   }
 
   @include mixins.max-sm-screen {
-    flex: 1 1 100%;
-    max-width: none;
-    margin-left: 0;
+    top: 14px;
+    right: 14px;
+    left: 14px;
+    width: auto;
   }
 
   &__inner {
     position: relative;
-    padding: 12px 36px 12px 14px;
-    background: vars.$white;
-    border: 1px solid rgba(vars.$border-gray, 0.22);
-    border-left: 3px solid vars.$primary;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 14px 40px 14px 14px;
+    background: rgba(vars.$white, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(vars.$white, 0.75);
+    border-radius: 14px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.14),
+      0 2px 8px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(vars.$white, 0.9);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  &__pulse {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: vars.$primary;
+    animation: offer-interest-pulse 2.2s ease-out infinite;
   }
 
   &__title {
-    margin: 0 0 4px;
-    font-size: vars.$font-size-s;
+    margin: 0;
+    font-size: 1.1rem;
     font-weight: vars.$weight-bold;
-    line-height: 1.25;
-    color: vars.$black;
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: vars.$primary;
   }
 
   &__message {
     margin: 0;
-    font-size: vars.$font-size-s-medium;
-    line-height: 1.35;
+    font-size: vars.$font-size-s;
+    line-height: 1.45;
     color: vars.$color-nav-gray;
+  }
+
+  &__count {
+    font-weight: vars.$weight-bold;
+    color: vars.$black;
   }
 
   &__close {
     position: absolute;
-    top: 6px;
+    top: 8px;
     right: 8px;
-    width: 24px;
-    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
     padding: 0;
     border: 0;
+    border-radius: 50%;
     background: transparent;
     color: vars.$border-gray;
-    font-size: 1.8rem;
-    line-height: 1;
     cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
 
     &:hover,
     &:focus {
+      background: rgba(0, 0, 0, 0.06);
       color: vars.$black;
     }
+  }
+}
+
+@keyframes offer-interest-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 104, 44, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 7px rgba(245, 104, 44, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 104, 44, 0);
   }
 }
