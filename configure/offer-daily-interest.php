@@ -104,16 +104,16 @@ function akademiata_should_show_offer_daily_interest($post_id = null) {
         return false;
     }
 
-    if (!is_singular(array('bachelor', 'master'))) {
-        return false;
-    }
-
     if ($post_id === null) {
+        if (!is_singular(array('bachelor', 'master'))) {
+            return false;
+        }
+
         $post_id = get_the_ID();
     }
 
     $post_id = (int) $post_id;
-    if ($post_id <= 0) {
+    if ($post_id <= 0 || !akademiata_offer_daily_interest_is_valid_post($post_id)) {
         return false;
     }
 
