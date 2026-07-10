@@ -573,31 +573,42 @@ function akademiata_offer_daily_interest_handle_save_settings() {
     exit;
 }
 
+/**
+ * @param string $ymd Date as Y-m-d.
+ * @return string
+ */
+function akademiata_offer_daily_interest_format_admin_date($ymd) {
+    $ymd = trim($ymd);
+    if ($ymd === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $ymd)) {
+        return $ymd;
+    }
+
+    $timestamp = strtotime($ymd . ' 00:00:00');
+
+    return $timestamp ? wp_date('j.m.Y', $timestamp) : $ymd;
+}
+
 function akademiata_offer_daily_interest_admin_status_label() {
     $settings = akademiata_offer_daily_interest_get_settings();
 
     if (empty($settings['enabled'])) {
-        return __('Wyłączony — widżet nie jest pokazywany i nie liczy odwiedzin.', 'akademiata');
+        return __('Wyłączony. Widżet jest ukryty, odwiedziny nie są liczone.', 'akademiata');
     }
 
     if (!akademiata_offer_daily_interest_is_live_today()) {
-        return sprintf(
-            /* translators: %s: date Y-m-d */
-            __('Włączony — start na produkcji od %s (00:00). Licznik resetuje się każdej nocy.', 'akademiata'),
-            AKADEMIATA_OFFER_DAILY_INTEREST_PROD_LAUNCH_DATE
-        );
+        return __('Włączony. Widżet nie jest jeszcze widoczny na stronie.', 'akademiata');
     }
 
     $active_from = trim($settings['active_from']);
     if ($active_from !== '' && wp_date('Y-m-d') < $active_from) {
         return sprintf(
-            /* translators: %s: date Y-m-d */
-            __('Włączony — start od %s (00:00). Do tej pory brak licznika i widżetu.', 'akademiata'),
-            $active_from
+            /* translators: %s: formatted date, e.g. 11.07.2026 */
+            __('Włączony. Od %s widżet będzie widoczny na stronie.', 'akademiata'),
+            akademiata_offer_daily_interest_format_admin_date($active_from)
         );
     }
 
-    return __('Aktywny — licznik i widżet na ofertach z przyciskiem ZAPISZ SIĘ. Reset licznika o północy.', 'akademiata');
+    return __('Działa na ofertach z przyciskiem ZAPISZ SIĘ. Licznik zeruje się każdej nocy.', 'akademiata');
 }
 
 function akademiata_offer_daily_interest_render_admin_page() {

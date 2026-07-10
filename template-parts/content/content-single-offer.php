@@ -35,6 +35,7 @@ $show_register_button = !empty($register_url);
                     <div class="main_title">
                         <?php the_title('<h1 class="entry-title">', '</h1>'); ?>
                     </div>
+                    <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
                 </div>
             <?php endif; ?>
             <div class="offer_wrapper d-flex flex-column-reverse flex-lg-row">
@@ -125,7 +126,9 @@ $show_register_button = !empty($register_url);
                 </div>
                 <!-- Featured Image Column -->
                 <div class="col-lg-6 offer_header__media">
-                    <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
+                    <?php if (!$is_mobile) : ?>
+                        <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
+                    <?php endif; ?>
                     <?php if (has_post_thumbnail()) : ?>
                         <?php
                         // Get post thumbnail ID

@@ -6,36 +6,52 @@
 }
 
 .offer-daily-interest {
-  position: absolute;
-  top: 24px;
-  right: max(32px, 2.5vw);
   z-index: 3;
-  width: min(292px, calc(100% - max(64px, 5vw)));
   opacity: 0;
-  transform: translateX(12px);
-  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateX(110%);
   pointer-events: none;
 
   &.is-visible {
-    opacity: 1;
-    transform: translateX(0);
+    animation: offer-interest-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     pointer-events: auto;
   }
 
-  @include mixins.lg-screen {
-    right: max(40px, 3vw);
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+
+    &.is-visible {
+      animation: none;
+      opacity: 1;
+    }
   }
 
-  @include mixins.xl-screen {
-    top: 28px;
-    right: max(48px, 3.5vw);
+  .offer_header__media & {
+    position: absolute;
+    top: 24px;
+    right: max(32px, 2.5vw);
+    width: min(292px, calc(100% - max(64px, 5vw)));
+
+    @include mixins.lg-screen {
+      right: max(40px, 3vw);
+    }
+
+    @include mixins.xl-screen {
+      top: 28px;
+      right: max(48px, 3.5vw);
+    }
   }
 
-  @include mixins.max-sm-screen {
-    top: 16px;
-    right: 16px;
-    left: 16px;
-    width: auto;
+  .offer_header.mobile_visible & {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    width: 100%;
+    max-width: none;
+    margin: 14px 0 0;
+    padding: 0 15px;
+    box-sizing: border-box;
+    transform: translateX(105%);
   }
 
   &__inner {
@@ -129,6 +145,18 @@
       background: rgba(0, 0, 0, 0.06);
       color: vars.$black;
     }
+  }
+}
+
+@keyframes offer-interest-enter {
+  from {
+    opacity: 0;
+    transform: translateX(110%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
