@@ -10,7 +10,9 @@ $lead    = akademiata_get_theme_lang_string('decision_today_lead');
 
 $countdown_target   = $config['countdown_target'] ?? '2026-10-01';
 $countdown_parts    = akademiata_decision_today_countdown_parts($countdown_target);
-$timer_watermark    = akademiata_get_theme_lang_string('decision_today_timer_watermark');
+// PL static until section is approved — WPML later.
+$timer_line_top     = 'Start';
+$timer_line_bottom  = 'studiów';
 
 $group_title_before = akademiata_get_theme_lang_string('decision_today_group_title_before');
 $group_title_accent = akademiata_get_theme_lang_string('decision_today_group_title_accent');
@@ -81,19 +83,28 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
 
         <div class="home-decision__cards">
             <article class="home-decision__timer-card">
-                <?php if ($timer_watermark !== '') : ?>
-                    <p class="home-decision__timer-watermark" aria-hidden="true"><?php echo esc_html($timer_watermark); ?></p>
-                <?php endif; ?>
-                <div class="home-decision__timer-box" role="timer" aria-live="polite" aria-atomic="true">
-                    <?php foreach ($timer_units as $index => $unit) : ?>
-                        <?php if ($index > 0) : ?>
-                            <span class="home-decision__timer-colon" aria-hidden="true"></span>
-                        <?php endif; ?>
-                        <div class="home-decision__timer-unit">
-                            <span class="home-decision__timer-value" data-unit="<?php echo esc_attr($unit['key']); ?>"><?php echo esc_html($unit['value']); ?></span>
-                            <span class="home-decision__timer-label"><?php echo esc_html($unit['label']); ?></span>
-                        </div>
-                    <?php endforeach; ?>
+                <div class="home-decision__timer-stack">
+                    <?php if ($timer_line_top !== '') : ?>
+                        <p class="home-decision__timer-line home-decision__timer-line--top" aria-hidden="true">
+                            <?php echo esc_html($timer_line_top); ?>
+                        </p>
+                    <?php endif; ?>
+                    <div class="home-decision__timer-box" role="timer" aria-live="polite" aria-atomic="true">
+                        <?php foreach ($timer_units as $index => $unit) : ?>
+                            <?php if ($index > 0) : ?>
+                                <span class="home-decision__timer-colon" aria-hidden="true"></span>
+                            <?php endif; ?>
+                            <div class="home-decision__timer-unit">
+                                <span class="home-decision__timer-value" data-unit="<?php echo esc_attr($unit['key']); ?>"><?php echo esc_html($unit['value']); ?></span>
+                                <span class="home-decision__timer-label"><?php echo esc_html($unit['label']); ?></span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php if ($timer_line_bottom !== '') : ?>
+                        <p class="home-decision__timer-line home-decision__timer-line--bottom" aria-hidden="true">
+                            <?php echo esc_html($timer_line_bottom); ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </article>
 
@@ -173,8 +184,8 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                         class="home-decision__group-art"
                         src="<?php echo esc_url($group_visual_url); ?>"
                         alt=""
-                        width="492"
-                        height="445"
+                        width="410"
+                        height="229"
                         loading="lazy"
                         decoding="async"
                     >

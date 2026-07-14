@@ -2096,10 +2096,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Начните обучение, не откладывая решение',
             ),
             'decision_today_lead' => array(
-                'pl' => 'Do startu studiów zostało niewiele czasu. Sprawdź promocję grupową, zanim znikną wolne miejsca.',
-                'en' => 'Not much time left until studies begin. Check the group offer before places run out.',
-                'uk' => 'До старту навчання залишилось небагато часу. Перевірте групову пропозицію, поки є вільні місця.',
-                'ru' => 'До начала обучения осталось немного времени. Проверьте групповое предложение, пока есть места.',
+                'pl' => 'Najważniejsze informacje w jednym miejscu — zostało niewiele czasu do startu studiów.',
+                'en' => 'Everything you need in one place — not much time left until studies begin.',
+                'uk' => 'Найважливіша інформація в одному місці — до старту навчання залишилось небагато часу.',
+                'ru' => 'Вся важная информация в одном месте — до начала обучения осталось немного времени.',
             ),
             'decision_today_timer_watermark' => array(
                 'pl' => 'Start studiów',
@@ -2126,10 +2126,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'В группе дешевле!',
             ),
             'decision_today_group_lead' => array(
-                'pl' => 'Zapisz się z grupą znajomych lub rodziny — im większa grupa, tym niższy koszt:',
-                'en' => 'Enroll with friends or family — the bigger the group, the lower the cost:',
-                'uk' => 'Запишіться з групою друзів або родини — чим більша група, тим нижча ціна:',
-                'ru' => 'Запишитесь с группой друзей или семьи — чем больше группа, тем ниже цена:',
+                'pl' => 'Zapis razem z grupą znajomych lub rodziny i zyskaj aż do',
+                'en' => 'Enroll with friends or family and save up to',
+                'uk' => 'Запишіться разом із групою друзів або родини та отримайте до',
+                'ru' => 'Запишитесь вместе с группой друзей или семьи и получите до',
             ),
             'decision_today_group_valid_until' => array(
                 'pl' => 'Ważne do 30.09.2026',
