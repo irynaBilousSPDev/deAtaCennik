@@ -45,17 +45,12 @@ $timer_units = array(
         'value' => akademiata_decision_today_pad_time($countdown_parts['minutes']),
         'label' => 'MINUT',
     ),
-    array(
-        'key'   => 'seconds',
-        'value' => akademiata_decision_today_pad_time($countdown_parts['seconds']),
-        'label' => 'SEKUND',
-    ),
 );
 
-$timezone        = wp_timezone();
-$target_dt       = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $countdown_target . ' 00:00:00', $timezone);
+$timezone   = wp_timezone();
+$target_dt  = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $countdown_target . ' 00:00:00', $timezone);
 $countdown_ts = $target_dt ? $target_dt->getTimestamp() : 0;
-$avatars      = akademiata_decision_today_avatar_images();
+$group_visual_url = akademiata_decision_today_group_visual_url();
 ?>
 <section
     class="home-decision"
@@ -176,29 +171,15 @@ $avatars      = akademiata_decision_today_avatar_images();
                     <?php endif; ?>
                 </div>
                 <div class="home-decision__group-visual" aria-hidden="true">
-                    <span class="home-decision__group-orbit home-decision__group-orbit--1"></span>
-                    <span class="home-decision__group-orbit home-decision__group-orbit--2"></span>
-                    <span class="home-decision__group-orbit home-decision__group-orbit--3"></span>
-                    <span class="home-decision__group-dot home-decision__group-dot--1"></span>
-                    <span class="home-decision__group-dot home-decision__group-dot--2"></span>
-                    <span class="home-decision__group-dot home-decision__group-dot--3"></span>
-                    <span class="home-decision__group-dot home-decision__group-dot--4"></span>
-                    <?php foreach ($avatars as $i => $avatar) : ?>
-                        <img
-                            class="home-decision__avatar home-decision__avatar--<?php echo (int) ($i + 1); ?>"
-                            src="<?php echo esc_url($avatar['src']); ?>"
-                            alt=""
-                            width="72"
-                            height="72"
-                            loading="lazy"
-                            decoding="async"
-                        >
-                    <?php endforeach; ?>
-                    <span class="home-decision__group-hub">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/>
-                        </svg>
-                    </span>
+                    <img
+                        class="home-decision__group-scene"
+                        src="<?php echo esc_url($group_visual_url); ?>"
+                        alt=""
+                        width="430"
+                        height="208"
+                        loading="lazy"
+                        decoding="async"
+                    >
                 </div>
             </article>
         </div>

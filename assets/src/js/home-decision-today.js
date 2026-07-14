@@ -5,7 +5,8 @@
     }
 
     function pad(value) {
-        return String(Math.max(0, value)).padStart(2, '0');
+        const n = Math.max(0, Math.floor(Number(value) || 0));
+        return n > 99 ? String(n) : String(n).padStart(2, '0');
     }
 
     function getParts(targetMs) {
@@ -14,9 +15,8 @@
         const days = Math.floor(totalSeconds / 86400);
         const hours = Math.floor((totalSeconds % 86400) / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
 
-        return { days, hours, minutes, seconds };
+        return { days, hours, minutes };
     }
 
     function flashNode(node) {
@@ -42,7 +42,6 @@
             days: section.querySelector('[data-unit="days"]'),
             hours: section.querySelector('[data-unit="hours"]'),
             minutes: section.querySelector('[data-unit="minutes"]'),
-            seconds: section.querySelector('[data-unit="seconds"]'),
         };
 
         let lastParts = null;
