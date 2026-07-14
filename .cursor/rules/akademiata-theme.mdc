@@ -46,7 +46,7 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 - Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`.
 - YouTube: `configure/youtube-api.php` (Theme Settings → YouTube API, encrypted key) + REST `/wp-json/akademiata/v1/youtube` + `__YouTubeSlider.js`. Legacy `youtube-proxy.php` delegates to same handler. Optional `YOUTUBE_API_KEY` in `wp-config.php`.
 - **Offer daily interest:** `configure/offer-daily-interest.php` — Theme Settings → **Licznik zainteresowania** (enable/disable, optional `active_from` date, default on). Singles bachelor/master with `register_url`. Daily reset at midnight; one-time prod launch date in code until first live day.
-- **Site daily visitors:** `configure/site-daily-visitors.php` — same global toggle as offer interest counter; unique visitors across whole site per day (min 2 on prod). Homepage section **Decyzja na dziś** (`template-parts/front-page/decision-today.php`).
+- **Site daily visitors:** `configure/site-daily-visitors.php` — same global toggle as offer interest counter; unique visitors across whole site per day (min 2 on prod). **REST + JS** (`siteDailyVisitors.js`) so WP Rocket page cache stays valid; filters `rocket_cache_reject_uri` + `rocket_delay_js_exclusions`. Homepage display in **Decyzja na dziś** (`template-parts/front-page/decision-today.php`).
 
 ## Cursor rules
 

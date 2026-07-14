@@ -145,3 +145,18 @@ function akademiata_decision_today_share_channels() {
 function akademiata_decision_today_group_visual_url() {
     return get_template_directory_uri() . '/static/img/decision-today/group-people.png';
 }
+
+/**
+ * @return array<int, array{src: string, alt: string}>
+ */
+function akademiata_decision_today_avatar_images() {
+    $base = get_template_directory_uri() . '/static/img/decision-today';
+
+    return array(
+        array('src' => $base . '/avatar-1.jpg', 'alt' => ''),
+        array('src' => $base . '/avatar-2.jpg', 'alt' => ''),
+        array('src' => $base . '/avatar-3.jpg', 'alt' => ''),
+        array('src' => $base . '/avatar-4.jpg', 'alt' => ''),
+        array('src' => $base . '/avatar-5.jpg', 'alt' => ''),
+    );
+}

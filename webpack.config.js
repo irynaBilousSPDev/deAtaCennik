@@ -11,6 +11,7 @@ module.exports = {
         lpRankingi: './assets/src/js/lp-rankingi.js',
         offerDailyInterest: './assets/src/js/offer-daily-interest.js',
         homeDecisionToday: './assets/src/js/home-decision-today.js',
+        siteDailyVisitors: './assets/src/js/site-daily-visitors.js',
     },
     output: {
         filename: '[name].js',

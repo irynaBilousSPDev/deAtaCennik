@@ -142,7 +142,76 @@ function akademiata_site_daily_visitors_track_current_view() {
 
     return akademiata_site_daily_visitors_register_view($token);
 }
-add_action('template_redirect', 'akademiata_site_daily_visitors_track_current_view', 5);
+
+/**
+ * Tracking runs via REST + JS so WP Rocket page cache stays valid (same pattern as offer-daily-interest).
+ */
+function akademiata_site_daily_visitors_enqueue_script() {
+    if (!akademiata_site_daily_visitors_is_enabled()) {
+        return;
+    }
+
+    if (is_admin() || wp_doing_ajax() || wp_doing_cron()) {
+        return;
+    }
+
+    $script_path = get_template_directory() . '/assets/dist/js/siteDailyVisitors.js';
+    $script_ver  = file_exists($script_path) ? filemtime($script_path) : null;
+
+    wp_enqueue_script(
+        'akademiata-site-daily-visitors',
+        get_template_directory_uri() . '/assets/dist/js/siteDailyVisitors.js',
+        array(),
+        $script_ver,
+        true
+    );
+
+    wp_localize_script(
+        'akademiata-site-daily-visitors',
+        'akademiataSiteDailyVisitors',
+        array(
+            'restUrl'  => rest_url('akademiata/v1/site-daily-visitors'),
+            'nonce'    => wp_create_nonce('wp_rest'),
+            'minCount' => akademiata_site_daily_visitors_min_count(),
+        )
+    );
+}
+add_action('wp_enqueue_scripts', 'akademiata_site_daily_visitors_enqueue_script', 101);
+
+/**
+ * WP Rocket: REST endpoints must bypass page cache.
+ *
+ * @param string[] $uris
+ * @return string[]
+ */
+function akademiata_site_daily_visitors_rocket_reject_uris($uris) {
+    if (!is_array($uris)) {
+        $uris = array();
+    }
+
+    $uris[] = '/wp-json/akademiata/v1/site-daily-visitors(?:/|$)';
+    $uris[] = '/wp-json/akademiata/v1/offer-daily-interest(?:/|$)';
+
+    return $uris;
+}
+add_filter('rocket_cache_reject_uri', 'akademiata_site_daily_visitors_rocket_reject_uris');
+
+/**
+ * @param string[] $excluded
+ * @return string[]
+ */
+function akademiata_site_daily_visitors_rocket_delay_js_exclusions($excluded) {
+    if (!is_array($excluded)) {
+        $excluded = array();
+    }
+
+    $excluded[] = 'siteDailyVisitors';
+    $excluded[] = 'homeDecisionToday';
+    $excluded[] = 'offerDailyInterest';
+
+    return $excluded;
+}
+add_filter('rocket_delay_js_exclusions', 'akademiata_site_daily_visitors_rocket_delay_js_exclusions');
 
 /**
  * @param int $count

@@ -34,6 +34,8 @@ get_header();
 set_query_var('hero_slider_slides', $hero_slider_slides);
 get_template_part('template-parts/front-page/hero-slider');
 
+get_template_part('template-parts/front-page/decision-today');
+
 $counter = $acf_fields['counter'];
 if (!empty($counter)) : ?>
     <section class="section_counter mb-5">
@@ -74,11 +76,6 @@ if (!empty($post_types)) : ?>
 
     ?>
 <?php endif; ?>
-
-<?php
-get_template_part('template-parts/front-page/decision-today');
-?>
-
 
 <?php
 set_query_var('home_rankings', $acf_fields['home_rankings'] ?? null);

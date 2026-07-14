@@ -21,14 +21,13 @@ $share_copied       = 'Skopiowano — wklej w wiadomości';
 $share_channels     = akademiata_decision_today_share_channels();
 $urgency_text       = 'Pospiesz się — liczba miejsc jest ograniczona!';
 
+$visitors_enabled = function_exists('akademiata_site_daily_visitors_is_enabled')
+    && akademiata_site_daily_visitors_is_enabled();
+
 $countdown_target   = $config['countdown_target'] ?? '2026-10-01';
 $countdown_parts    = akademiata_decision_today_countdown_parts($countdown_target);
 $timer_line_top     = 'Start';
 $timer_line_bottom  = 'studiów';
-
-$visitor_payload = function_exists('akademiata_site_daily_visitors_payload')
-    ? akademiata_site_daily_visitors_payload(akademiata_site_daily_visitors_get_count())
-    : array('show' => false, 'message_html' => '');
 
 $timer_units = array(
     array(
@@ -55,8 +54,8 @@ $timer_units = array(
 
 $timezone        = wp_timezone();
 $target_dt       = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $countdown_target . ' 00:00:00', $timezone);
-$countdown_ts    = $target_dt ? $target_dt->getTimestamp() : 0;
-$group_visual_url = akademiata_decision_today_group_visual_url();
+$countdown_ts = $target_dt ? $target_dt->getTimestamp() : 0;
+$avatars      = akademiata_decision_today_avatar_images();
 ?>
 <section
     class="home-decision"
@@ -177,36 +176,52 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                     <?php endif; ?>
                 </div>
                 <div class="home-decision__group-visual" aria-hidden="true">
-                    <img
-                        class="home-decision__group-art"
-                        src="<?php echo esc_url($group_visual_url); ?>"
-                        alt=""
-                        width="430"
-                        height="208"
-                        loading="lazy"
-                        decoding="async"
-                    >
+                    <span class="home-decision__group-orbit home-decision__group-orbit--1"></span>
+                    <span class="home-decision__group-orbit home-decision__group-orbit--2"></span>
+                    <span class="home-decision__group-orbit home-decision__group-orbit--3"></span>
+                    <span class="home-decision__group-dot home-decision__group-dot--1"></span>
+                    <span class="home-decision__group-dot home-decision__group-dot--2"></span>
+                    <span class="home-decision__group-dot home-decision__group-dot--3"></span>
+                    <span class="home-decision__group-dot home-decision__group-dot--4"></span>
+                    <?php foreach ($avatars as $i => $avatar) : ?>
+                        <img
+                            class="home-decision__avatar home-decision__avatar--<?php echo (int) ($i + 1); ?>"
+                            src="<?php echo esc_url($avatar['src']); ?>"
+                            alt=""
+                            width="72"
+                            height="72"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    <?php endforeach; ?>
+                    <span class="home-decision__group-hub">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" fill="currentColor"/>
+                        </svg>
+                    </span>
                 </div>
             </article>
         </div>
 
-        <?php if (!empty($visitor_payload['show']) || $urgency_text !== '') : ?>
+        <?php if ($visitors_enabled || $urgency_text !== '') : ?>
             <div class="home-decision__status">
-                <?php if (!empty($visitor_payload['show'])) : ?>
-                    <div class="home-decision__status-item home-decision__status-item--visitors">
+                <?php if ($visitors_enabled) : ?>
+                    <div
+                        class="home-decision__status-item home-decision__status-item--visitors"
+                        data-site-daily-visitors
+                        hidden
+                    >
                         <span class="home-decision__status-icon" aria-hidden="true">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M4 18V6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-                                <path d="M4 18h16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
-                                <path d="M7 15l3.5-4.5L14 13l3-4.5 3.5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M18 8.5h2.5V11" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 19V5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M7 15l4-5 4 3 5-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </span>
-                        <p class="home-decision__status-text"><?php echo wp_kses_post($visitor_payload['message_html']); ?></p>
+                        <p class="home-decision__status-text" data-site-daily-visitors-text></p>
                     </div>
                 <?php endif; ?>
-                <?php if (!empty($visitor_payload['show']) && $urgency_text !== '') : ?>
-                    <span class="home-decision__status-divider" aria-hidden="true"></span>
+                <?php if ($visitors_enabled && $urgency_text !== '') : ?>
+                    <span class="home-decision__status-divider" aria-hidden="true" hidden></span>
                 <?php endif; ?>
                 <?php if ($urgency_text !== '') : ?>
                     <p class="home-decision__status-item home-decision__status-item--urgency"><?php echo esc_html($urgency_text); ?></p>
