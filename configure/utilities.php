@@ -2096,10 +2096,10 @@ function akademiata_get_theme_lang_string($key) {
                 'ru' => 'Начните обучение, не откладывая решение',
             ),
             'decision_today_lead' => array(
-                'pl' => 'Odliczamy do 1 października. Sprawdź promocję grupową i zobacz, ilu kandydatów szuka dziś informacji o studiach.',
-                'en' => 'Counting down to October 1. Check the group offer and see how many candidates are looking for study information today.',
-                'uk' => 'Відліковуємо до 1 жовтня. Перевірте групову пропозицію та подивіться, скільки кандидатів шукають інформацію про навчання сьогодні.',
-                'ru' => 'Отсчитываем до 1 октября. Проверьте групповое предложение и посмотрите, сколько кандидатов ищут информацию об обучении сегодня.',
+                'pl' => 'Start 1 października — zostało niewiele czasu. Zapisz się z grupą i skorzystaj z niższej ceny.',
+                'en' => 'Studies start October 1 — not much time left. Enroll with a group and save on tuition.',
+                'uk' => 'Старт 1 жовтня — залишилось небагато часу. Запишіться з групою та скористайтеся нижчою ціною.',
+                'ru' => 'Старт 1 октября — осталось немного времени. Запишитесь с группой и получите скидку.',
             ),
             'decision_today_timer_line_top' => array(
                 'pl' => 'Start',
@@ -2142,18 +2142,6 @@ function akademiata_get_theme_lang_string($key) {
                 'en' => 'Hurry — places are limited!',
                 'uk' => 'Поспішайте — кількість місць обмежена!',
                 'ru' => 'Спешите — количество мест ограничено!',
-            ),
-            'decision_today_variant_cards' => array(
-                'pl' => 'Wersja: karty (design)',
-                'en' => 'Version: cards (design)',
-                'uk' => 'Версія: картки (design)',
-                'ru' => 'Версия: карточки (design)',
-            ),
-            'decision_today_variant_compact' => array(
-                'pl' => 'Wersja: kompaktowa',
-                'en' => 'Version: compact',
-                'uk' => 'Версія: компактна',
-                'ru' => 'Версия: компактная',
             ),
             'decision_today_hours' => array(
                 'pl' => 'GODZIN',

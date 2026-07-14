@@ -8,7 +8,6 @@
 function akademiata_decision_today_config(): array {
     return array(
         'countdown_target' => '2026-10-01',
-        'layouts'          => array('cards', 'compact'),
     );
 }
 
@@ -22,15 +21,15 @@ function akademiata_decision_today_cta_url() {
         return $cached;
     }
 
-    $page_id = akademiata_get_offer_listing_page_id_for_level('bachelor');
-    if ($page_id > 0) {
-        $cached = (string) get_permalink($page_id);
-        return $cached;
-    }
-
     $oferta_id = akademiata_get_oferta_page_id();
     if ($oferta_id > 0) {
         $cached = (string) get_permalink($oferta_id);
+        return $cached;
+    }
+
+    $page_id = akademiata_get_offer_listing_page_id_for_level('bachelor');
+    if ($page_id > 0) {
+        $cached = (string) get_permalink($page_id);
         return $cached;
     }
 
@@ -103,15 +102,4 @@ function akademiata_decision_today_avatar_images() {
         array('src' => $base . '/avatar-4.jpg', 'alt' => 'Student ATA'),
         array('src' => $base . '/avatar-5.jpg', 'alt' => 'Student ATA'),
     );
-}
-
-/**
- * @param string $layout cards|compact
- */
-function akademiata_decision_today_variant_label($layout) {
-    if ($layout === 'compact') {
-        return akademiata_get_theme_lang_string('decision_today_variant_compact');
-    }
-
-    return akademiata_get_theme_lang_string('decision_today_variant_cards');
 }
