@@ -10,6 +10,7 @@ module.exports = {
         ajaxSlider: './assets/src/js/ajax-load-cpt.js',
         lpRankingi: './assets/src/js/lp-rankingi.js',
         offerDailyInterest: './assets/src/js/offer-daily-interest.js',
+        homeDecisionToday: './assets/src/js/home-decision-today.js',
     },
     output: {
         filename: '[name].js',

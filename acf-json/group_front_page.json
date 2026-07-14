@@ -277,6 +277,139 @@
                 "wpml_cf_preferences": 2
             },
             {
+                "key": "field_decision_today_tab",
+                "label": "Decyzja na dziś",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_decision_today",
+                "label": "Decyzja na dziś",
+                "name": "decision_today",
+                "type": "group",
+                "layout": "block",
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_decision_today_enabled",
+                        "label": "Włącz sekcję",
+                        "name": "enabled",
+                        "type": "true_false",
+                        "default_value": 1,
+                        "ui": 1,
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_decision_today_layout",
+                        "label": "Układ",
+                        "name": "layout",
+                        "type": "select",
+                        "choices": {
+                            "cards": "Karty (design)",
+                            "compact": "Kompaktowy"
+                        },
+                        "default_value": "cards",
+                        "return_format": "value",
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_decision_today_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": "DECYZJA NA DZIŚ",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Zacznij studia bez odkładania decyzji",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "br",
+                        "default_value": "Odliczamy do 1 października. Sprawdź promocję grupową i zobacz, ilu kandydatów szuka dziś informacji o studiach.",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_countdown_target",
+                        "label": "Data startu (timer)",
+                        "name": "countdown_target",
+                        "type": "date_picker",
+                        "display_format": "d/m/Y",
+                        "return_format": "Y-m-d",
+                        "first_day": 1,
+                        "default_value": "20261001",
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_decision_today_countdown_label",
+                        "label": "Tekst tła timera",
+                        "name": "countdown_label",
+                        "type": "text",
+                        "default_value": "Start studiów",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_group_title",
+                        "label": "Promocja — tytuł",
+                        "name": "group_title",
+                        "type": "text",
+                        "default_value": "W Grupie Taniej!",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_group_lead",
+                        "label": "Promocja — lead",
+                        "name": "group_lead",
+                        "type": "text",
+                        "default_value": "Zapis razem z grupą znajomych lub rodziny i zyskaj aż do",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_group_discount",
+                        "label": "Promocja — kwota",
+                        "name": "group_discount",
+                        "type": "text",
+                        "default_value": "−200 / −400 zł",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_group_button_text",
+                        "label": "Przycisk — tekst",
+                        "name": "group_button_text",
+                        "type": "text",
+                        "default_value": "Zapisz się razem",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_group_button_url",
+                        "label": "Przycisk — URL",
+                        "name": "group_button_url",
+                        "type": "url",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_decision_today_urgency_text",
+                        "label": "Tekst pilności",
+                        "name": "urgency_text",
+                        "type": "text",
+                        "default_value": "Pospiesz się — liczba miejsc jest ograniczona!",
+                        "wpml_cf_preferences": 2
+                    }
+                ]
+            },
+            {
                 "key": "field_67bc41a61223b",
                 "label": "Offers",
                 "name": "",

@@ -25,6 +25,8 @@ include('configure/youtube-api.php');
 
 include('configure/offer-daily-interest.php');
 
+include('configure/site-daily-visitors.php');
+
 // JAVASCRIPT & CSS
 
 include('configure/js-css.php');

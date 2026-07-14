@@ -88,6 +88,19 @@ function akademiata_enqueue_scripts()
         );
     }
 
+    if (is_front_page()) {
+        $home_decision_js_path = get_template_directory() . '/assets/dist/js/homeDecisionToday.js';
+        $home_decision_js_ver  = file_exists($home_decision_js_path) ? filemtime($home_decision_js_path) : null;
+
+        wp_enqueue_script(
+            'akademiata-home-decision-today',
+            $theme_dir . '/assets/dist/js/homeDecisionToday.js',
+            array(),
+            $home_decision_js_ver,
+            true
+        );
+    }
+
     // Smooth anchor scrolling for Podcast ATA (some browsers/themes ignore CSS scroll-behavior).
     if (is_singular('podcast-ata')) {
         wp_add_inline_script(

@@ -64,6 +64,11 @@ if (!empty($main_title)) : ?>
     </section>
 <?php endif; ?>
 
+<?php
+set_query_var('decision_today', $acf_fields['decision_today'] ?? null);
+get_template_part('template-parts/front-page/decision-today');
+?>
+
     <!-- offers sliders -->
 <?php $post_types = $acf_fields['offers'];
 if (!empty($post_types)) : ?>
