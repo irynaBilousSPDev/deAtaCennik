@@ -4,28 +4,27 @@ require_once get_template_directory() . '/configure/front-page-defaults/decision
 
 $config = akademiata_decision_today_config();
 
-$eyebrow = akademiata_get_theme_lang_string('decision_today_eyebrow');
-$title   = akademiata_get_theme_lang_string('decision_today_title');
-$lead    = akademiata_get_theme_lang_string('decision_today_lead');
+// PL static copy — WPML after section approval.
+$eyebrow            = 'DECYZJA NA DZIŚ';
+$title              = 'Zacznij studia w Akademia Techniczno-Artystyczna bez odkładania decyzji';
+$lead               = '';
+$group_title_before = 'W Grupie';
+$group_title_accent = 'Taniej!';
+$group_lead         = 'Zapis razem z grupą znajomych lub rodziny i zyskaj aż do';
+$group_discount     = '−200 / −400 zł';
+$group_valid_until  = 'Ważne do 30.09.2026';
+$cta_text           = 'Zaproś znajomych';
+$share_url          = akademiata_decision_today_share_url();
+$share_text         = akademiata_decision_today_share_text();
+$share_title        = 'Udostępnij ofertę';
+$share_copied       = 'Skopiowano — wklej w wiadomości';
+$share_channels     = akademiata_decision_today_share_channels();
+$urgency_text       = 'Pospiesz się — liczba miejsc jest ograniczona!';
 
 $countdown_target   = $config['countdown_target'] ?? '2026-10-01';
 $countdown_parts    = akademiata_decision_today_countdown_parts($countdown_target);
-// PL static until section is approved — WPML later.
 $timer_line_top     = 'Start';
 $timer_line_bottom  = 'studiów';
-
-$group_title_before = akademiata_get_theme_lang_string('decision_today_group_title_before');
-$group_title_accent = akademiata_get_theme_lang_string('decision_today_group_title_accent');
-$group_lead         = akademiata_get_theme_lang_string('decision_today_group_lead');
-$group_discount     = akademiata_get_theme_lang_string('decision_today_group_discount');
-$group_valid_until  = akademiata_get_theme_lang_string('decision_today_group_valid_until');
-$cta_text           = akademiata_get_theme_lang_string('decision_today_cta');
-$share_url          = akademiata_decision_today_share_url();
-$share_text         = akademiata_decision_today_share_text();
-$share_title        = akademiata_get_theme_lang_string('decision_today_share_title');
-$share_copied       = akademiata_get_theme_lang_string('decision_today_share_copied');
-$share_channels     = akademiata_decision_today_share_channels();
-$urgency_text       = akademiata_get_theme_lang_string('decision_today_urgency');
 
 $visitor_payload = function_exists('akademiata_site_daily_visitors_payload')
     ? akademiata_site_daily_visitors_payload(akademiata_site_daily_visitors_get_count())
@@ -35,35 +34,34 @@ $timer_units = array(
     array(
         'key'   => 'days',
         'value' => akademiata_decision_today_pad_time($countdown_parts['days']),
-        'label' => akademiata_get_theme_lang_string('decision_today_days'),
+        'label' => 'DNI',
     ),
     array(
         'key'   => 'hours',
         'value' => akademiata_decision_today_pad_time($countdown_parts['hours']),
-        'label' => akademiata_get_theme_lang_string('decision_today_hours'),
+        'label' => 'GODZIN',
     ),
     array(
         'key'   => 'minutes',
         'value' => akademiata_decision_today_pad_time($countdown_parts['minutes']),
-        'label' => akademiata_get_theme_lang_string('decision_today_minutes'),
+        'label' => 'MINUT',
     ),
     array(
         'key'   => 'seconds',
         'value' => akademiata_decision_today_pad_time($countdown_parts['seconds']),
-        'label' => akademiata_get_theme_lang_string('decision_today_seconds'),
+        'label' => 'SEKUND',
     ),
 );
 
-$timezone   = wp_timezone();
-$target_dt  = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $countdown_target . ' 00:00:00', $timezone);
-$iso_target = $target_dt ? $target_dt->format('c') : $countdown_target . 'T00:00:00';
-
+$timezone        = wp_timezone();
+$target_dt       = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $countdown_target . ' 00:00:00', $timezone);
+$countdown_ts    = $target_dt ? $target_dt->getTimestamp() : 0;
 $group_visual_url = akademiata_decision_today_group_visual_url();
 ?>
 <section
     class="home-decision"
     aria-labelledby="home-decision-title"
-    data-countdown-target="<?php echo esc_attr($iso_target); ?>"
+    data-countdown-ts="<?php echo esc_attr((string) $countdown_ts); ?>"
     data-share-url="<?php echo esc_url($share_url); ?>"
     data-share-text="<?php echo esc_attr($share_text); ?>"
     data-share-copied="<?php echo esc_attr($share_copied); ?>"
@@ -74,10 +72,7 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                 <p class="home-decision__eyebrow"><?php echo esc_html($eyebrow); ?></p>
             <?php endif; ?>
             <?php if ($title !== '') : ?>
-                <h2 id="home-decision-title" class="home-decision__title"><?php echo esc_html($title); ?></h2>
-            <?php endif; ?>
-            <?php if ($lead !== '') : ?>
-                <p class="home-decision__lead"><?php echo esc_html($lead); ?></p>
+                <h1 id="home-decision-title" class="home-decision__title"><?php echo esc_html($title); ?></h1>
             <?php endif; ?>
         </header>
 
@@ -89,15 +84,12 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                             <?php echo esc_html($timer_line_top); ?>
                         </p>
                     <?php endif; ?>
-                    <div class="home-decision__timer-box" role="timer" aria-live="polite" aria-atomic="true">
+                    <div class="home-decision__timer-pill" role="timer" aria-live="polite" aria-atomic="true">
                         <?php foreach ($timer_units as $index => $unit) : ?>
                             <?php if ($index > 0) : ?>
-                                <span class="home-decision__timer-colon" aria-hidden="true"></span>
+                                <span class="home-decision__timer-sep" aria-hidden="true">:</span>
                             <?php endif; ?>
-                            <div class="home-decision__timer-unit">
-                                <span class="home-decision__timer-value" data-unit="<?php echo esc_attr($unit['key']); ?>"><?php echo esc_html($unit['value']); ?></span>
-                                <span class="home-decision__timer-label"><?php echo esc_html($unit['label']); ?></span>
-                            </div>
+                            <span class="home-decision__timer-value" data-unit="<?php echo esc_attr($unit['key']); ?>"><?php echo esc_html($unit['value']); ?></span>
                         <?php endforeach; ?>
                     </div>
                     <?php if ($timer_line_bottom !== '') : ?>
@@ -106,6 +98,11 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                         </p>
                     <?php endif; ?>
                 </div>
+                <ul class="home-decision__timer-labels" aria-hidden="true">
+                    <?php foreach ($timer_units as $unit) : ?>
+                        <li><?php echo esc_html($unit['label']); ?></li>
+                    <?php endforeach; ?>
+                </ul>
             </article>
 
             <article class="home-decision__group-card">
@@ -113,10 +110,10 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                     <?php if ($group_title_before !== '' || $group_title_accent !== '') : ?>
                         <h3 class="home-decision__group-title">
                             <?php if ($group_title_before !== '') : ?>
-                                <span><?php echo esc_html($group_title_before); ?></span>
+                                <span class="home-decision__group-line"><?php echo esc_html($group_title_before); ?></span>
                             <?php endif; ?>
                             <?php if ($group_title_accent !== '') : ?>
-                                <span class="home-decision__group-accent"><?php echo esc_html($group_title_accent); ?></span>
+                                <span class="home-decision__group-accent"><?php echo esc_html(' ' . $group_title_accent); ?></span>
                             <?php endif; ?>
                         </h3>
                     <?php endif; ?>
@@ -184,8 +181,8 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                         class="home-decision__group-art"
                         src="<?php echo esc_url($group_visual_url); ?>"
                         alt=""
-                        width="410"
-                        height="229"
+                        width="430"
+                        height="208"
                         loading="lazy"
                         decoding="async"
                     >
@@ -199,9 +196,10 @@ $group_visual_url = akademiata_decision_today_group_visual_url();
                     <div class="home-decision__status-item home-decision__status-item--visitors">
                         <span class="home-decision__status-icon" aria-hidden="true">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <path d="M4 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                <path d="M8 15l3-4 3 2 4-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 18V6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+                                <path d="M4 18h16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+                                <path d="M7 15l3.5-4.5L14 13l3-4.5 3.5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18 8.5h2.5V11" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </span>
                         <p class="home-decision__status-text"><?php echo wp_kses_post($visitor_payload['message_html']); ?></p>

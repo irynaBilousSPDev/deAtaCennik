@@ -16,7 +16,8 @@
     @include mixins.flexbox(row, flex-start, flex-end);
   }
 
-  h1 {
+  h1,
+  h2 {
     margin: 0 1rem;
     @include mixins.heading-style(vars.$font-size-default, 1, vars.$weight-bold, vars.$primary);
 

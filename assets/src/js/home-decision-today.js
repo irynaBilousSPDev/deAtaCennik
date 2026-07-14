@@ -1,5 +1,5 @@
 (function () {
-    const sections = document.querySelectorAll('.home-decision[data-countdown-target]');
+    const sections = document.querySelectorAll('.home-decision[data-countdown-ts]');
     if (!sections.length) {
         return;
     }
@@ -31,17 +31,13 @@
     }
 
     function initCountdown(section) {
-        const targetIso = section.getAttribute('data-countdown-target');
-        if (!targetIso) {
+        const targetTs = parseInt(section.getAttribute('data-countdown-ts'), 10);
+        if (!Number.isFinite(targetTs) || targetTs <= 0) {
             return null;
         }
 
-        const targetMs = Date.parse(targetIso);
-        if (Number.isNaN(targetMs)) {
-            return null;
-        }
-
-        const box = section.querySelector('.home-decision__timer-box');
+        const targetMs = targetTs * 1000;
+        const pill = section.querySelector('.home-decision__timer-pill');
         const valueNodes = {
             days: section.querySelector('[data-unit="days"]'),
             hours: section.querySelector('[data-unit="hours"]'),
@@ -71,13 +67,13 @@
 
             if (
                 forceAnimation
-                && box
+                && pill
                 && lastParts
                 && JSON.stringify(lastParts) !== JSON.stringify(parts)
             ) {
-                box.classList.add('is-ticking');
+                pill.classList.add('is-ticking');
                 window.setTimeout(function () {
-                    box.classList.remove('is-ticking');
+                    pill.classList.remove('is-ticking');
                 }, 220);
             }
 

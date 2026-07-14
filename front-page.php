@@ -58,15 +58,11 @@ if (!empty($main_title)) : ?>
                 <img width="34" height="34"
                      src="<?php echo get_template_directory_uri() ?>/static/img/small_logo_ATA.webp"
                      alt="<?php _e('small logo AT', 'akademiata'); ?>">
-                <h1><?php echo $main_title; ?></h1>
+                <h2><?php echo $main_title; ?></h2>
             </div>
         </div>
     </section>
 <?php endif; ?>
-
-<?php
-get_template_part('template-parts/front-page/decision-today');
-?>
 
     <!-- offers sliders -->
 <?php $post_types = $acf_fields['offers'];
@@ -78,6 +74,10 @@ if (!empty($post_types)) : ?>
 
     ?>
 <?php endif; ?>
+
+<?php
+get_template_part('template-parts/front-page/decision-today');
+?>
 
 
 <?php

@@ -40,7 +40,7 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     font-weight: vars.$weight-medium-bold;
     line-height: 1.08;
     letter-spacing: -0.02em;
-    max-width: 24ch;
+    max-width: 28ch;
   }
 
   &__lead {
@@ -53,7 +53,7 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
 
   &__cards {
     display: grid;
-    grid-template-columns: minmax(250px, 0.78fr) minmax(380px, 1.32fr);
+    grid-template-columns: minmax(240px, 0.82fr) minmax(360px, 1.28fr);
     gap: 20px;
     align-items: stretch;
   }
@@ -85,56 +85,48 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
 
   &__timer-line {
     margin: 0;
-    color: rgba(22, 25, 29, 0.1);
+    color: rgba(22, 25, 29, 0.14);
     font-family: $decision-display;
-    font-size: clamp(36px, 5.8vw, 64px);
-    font-weight: vars.$weight-medium-bold;
-    line-height: 1;
+    font-size: clamp(38px, 6vw, 68px);
+    font-weight: 800;
+    line-height: 1.14;
     letter-spacing: -0.03em;
     user-select: none;
     pointer-events: none;
 
     &--top {
-      margin-bottom: -14px;
+      margin-bottom: -10px;
     }
 
     &--bottom {
-      margin-top: -14px;
+      margin-top: -10px;
     }
   }
 
-  &__timer-box {
+  &__timer-pill {
     position: relative;
     z-index: 2;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: min(100%, 380px);
-    padding: 16px 14px;
-    border-radius: 20px;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
     background: $decision-timer;
-    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 
     &.is-ticking {
       transform: translateY(-1px);
-      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.26);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
     }
   }
 
-  &__timer-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    min-width: 42px;
-  }
-
   &__timer-value {
+    min-width: 2.4ch;
     color: #fff;
     font-family: $decision-display;
-    font-size: clamp(20px, 2.8vw, 30px);
+    font-size: clamp(24px, 3.4vw, 36px);
     font-weight: vars.$weight-medium-bold;
     line-height: 1;
     font-variant-numeric: tabular-nums;
@@ -146,31 +138,29 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     }
   }
 
-  &__timer-label {
-    color: rgba(255, 255, 255, 0.42);
-    font-size: 9px;
+  &__timer-sep {
+    color: vars.$primary;
+    font-family: $decision-display;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: vars.$weight-medium-bold;
+    line-height: 1;
+    margin-top: -2px;
+  }
+
+  &__timer-labels {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    width: min(100%, 320px);
+    margin: 14px 0 0;
+    padding: 0;
+    list-style: none;
+    color: $decision-ink-soft;
+    font-size: 10px;
     font-weight: vars.$weight-medium;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    line-height: 1;
-  }
-
-  &__timer-colon {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 6px;
-    margin-bottom: 16px;
-    flex-shrink: 0;
-
-    &::before,
-    &::after {
-      content: "";
-      width: 5px;
-      height: 5px;
-      border-radius: 1px;
-      background: vars.$primary;
-    }
+    text-align: center;
   }
 
   &__group-card {
@@ -179,11 +169,23 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     grid-template-columns: minmax(0, 1fr) minmax(220px, 0.95fr);
     gap: 8px;
     min-height: 290px;
-    padding: 34px 0 34px 34px;
+    padding: 32px 0 32px 34px;
     border-radius: 28px;
     background: $decision-beige;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: -8%;
+      bottom: -18%;
+      width: 52%;
+      height: 72%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 104, 44, 0.16) 0%, rgba(245, 104, 44, 0) 72%);
+      pointer-events: none;
+    }
   }
 
   &__group-copy {
@@ -203,15 +205,16 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     font-family: $decision-display;
     font-size: clamp(28px, 3.2vw, 38px);
     font-weight: vars.$weight-medium-bold;
-    line-height: 1.1;
+    line-height: 1.05;
     white-space: nowrap;
+  }
 
-    span:first-child {
-      margin-right: 0.22em;
-    }
+  &__group-line {
+    display: inline;
   }
 
   &__group-accent {
+    display: inline;
     color: vars.$primary;
   }
 
@@ -223,12 +226,12 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
   }
 
   &__group-discount {
-    margin: 4px 0 0;
+    margin: 2px 0 0;
     color: vars.$primary;
     font-family: $decision-display;
-    font-size: clamp(18px, 2.2vw, 24px);
+    font-size: clamp(30px, 4vw, 42px);
     font-weight: vars.$weight-medium-bold;
-    line-height: 1.2;
+    line-height: 1;
   }
 
   &__group-valid {
@@ -248,8 +251,7 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     padding: 12px 20px;
     border: 1px solid rgba(22, 25, 29, 0.08);
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.92);
     color: $decision-ink;
     font-size: 14px;
     font-weight: vars.$weight-medium;
@@ -413,6 +415,7 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
 
   &__group-visual {
     position: relative;
+    z-index: 1;
     overflow: hidden;
     min-height: 220px;
   }
@@ -420,11 +423,11 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
   &__group-art {
     position: absolute;
     top: 50%;
-    right: 0;
-    width: 100%;
+    right: -4%;
+    width: 108%;
     max-width: none;
     height: auto;
-    transform: translateY(-50%);
+    transform: translateY(-48%);
     object-fit: contain;
     object-position: right center;
     pointer-events: none;
@@ -465,12 +468,13 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: vars.$primary;
-    color: $decision-ink;
+    color: #fff;
     flex-shrink: 0;
+    box-shadow: 0 8px 18px rgba(245, 104, 44, 0.28);
     animation: home-decision-pulse 2.4s ease-out infinite;
   }
 
@@ -516,6 +520,10 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
       white-space: normal;
     }
 
+    &__group-card::after {
+      display: none;
+    }
+
     &__group-visual {
       min-height: 200px;
       margin-top: 4px;
@@ -555,26 +563,22 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
       padding-right: 18px;
     }
 
-    &__timer-box {
+    &__timer-pill {
       gap: 6px;
-      padding: 14px 10px;
-    }
-
-    &__timer-unit {
-      min-width: 36px;
+      padding: 12px 16px;
     }
 
     &__timer-value {
+      font-size: 20px;
+    }
+
+    &__timer-sep {
       font-size: 18px;
     }
 
-    &__timer-label {
-      font-size: 8px;
-      letter-spacing: 0.1em;
-    }
-
-    &__timer-colon {
-      margin-bottom: 14px;
+    &__timer-labels {
+      width: min(100%, 280px);
+      font-size: 9px;
     }
 
     &__timer-line {
@@ -592,6 +596,7 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
 @media (prefers-reduced-motion: reduce) {
   .home-decision {
     &__timer-box,
+    &__timer-pill,
     &__timer-value,
     &__cta,
     &__status-icon {
