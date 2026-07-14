@@ -262,8 +262,30 @@ function akademiata_site_daily_visitors_message_html($count) {
 }
 
 /**
+ * PL-only count noun for homepage status (WPML later).
+ *
  * @param int $count
- * @return array{count: int, show: bool, message: string, message_html: string}
+ */
+function akademiata_site_daily_visitors_pl_count_word($count) {
+    $count = max(0, (int) $count);
+
+    if ($count === 1) {
+        return 'osoba';
+    }
+
+    $mod10  = $count % 10;
+    $mod100 = $count % 100;
+
+    if ($mod10 >= 2 && $mod10 <= 4 && ($mod100 < 12 || $mod100 > 14)) {
+        return 'osoby';
+    }
+
+    return 'osób';
+}
+
+/**
+ * @param int $count
+ * @return array{count: int, show: bool, message: string, message_html: string, count_formatted: string, count_word: string}
  */
 function akademiata_site_daily_visitors_payload($count) {
     $count = max(0, (int) $count);
@@ -271,10 +293,12 @@ function akademiata_site_daily_visitors_payload($count) {
     $show  = $count >= $min;
 
     return array(
-        'count'        => $count,
-        'show'         => $show,
-        'message'      => $show ? akademiata_site_daily_visitors_message($count) : '',
-        'message_html' => $show ? akademiata_site_daily_visitors_message_html($count) : '',
+        'count'            => $count,
+        'show'             => $show,
+        'count_formatted'  => number_format_i18n($count),
+        'count_word'       => akademiata_site_daily_visitors_pl_count_word($count),
+        'message'          => $show ? akademiata_site_daily_visitors_message($count) : '',
+        'message_html'     => $show ? akademiata_site_daily_visitors_message_html($count) : '',
     );
 }
 

@@ -435,28 +435,33 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
 
   &__status-item {
     margin: 0;
-    font-size: 14px;
-    line-height: 1.45;
+    font-size: 15px;
+    line-height: 1.5;
 
     &--visitors {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       flex: 1 1 300px;
     }
 
     &--urgency {
       color: $decision-ink-soft;
+      font-size: 14px;
       flex: 1 1 220px;
     }
+  }
+
+  &__status-text {
+    margin: 0;
   }
 
   &__status-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: vars.$primary;
     color: $decision-ink;
@@ -464,7 +469,15 @@ $decision-accent-ring: rgba(245, 104, 44, 0.28);
   }
 
   &__visitor-count {
+    margin: 0 0.22em 0 0.28em;
     color: vars.$primary;
+    font-size: 17px;
+    font-weight: vars.$weight-bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__visitor-word {
+    margin-right: 0.28em;
     font-weight: vars.$weight-bold;
   }
 

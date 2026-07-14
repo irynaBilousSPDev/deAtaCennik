@@ -8,18 +8,25 @@
 
     function updateStatusBar(data) {
         const block = document.querySelector('[data-site-daily-visitors]');
-        if (!block || !data || !data.show) {
+        if (!block) {
             return;
         }
 
-        const count = typeof data.count === 'number' ? data.count : 0;
-        if (count < minCount) {
+        const countEl = block.querySelector('[data-site-daily-visitors-count]');
+        const wordEl = block.querySelector('[data-site-daily-visitors-word]');
+        const count = typeof data?.count === 'number' ? data.count : 0;
+
+        if (!data || !data.show || count < minCount) {
+            block.hidden = true;
             return;
         }
 
-        const textEl = block.querySelector('[data-site-daily-visitors-text]');
-        if (textEl && (data.message_html || data.message)) {
-            textEl.innerHTML = data.message_html || data.message;
+        if (countEl && data.count_formatted) {
+            countEl.textContent = data.count_formatted;
+        }
+
+        if (wordEl && data.count_word) {
+            wordEl.textContent = data.count_word;
         }
 
         block.hidden = false;
@@ -56,6 +63,9 @@
     registerView()
         .then(updateStatusBar)
         .catch(function () {
-            // Silent fail — counter is optional UX.
+            const block = document.querySelector('[data-site-daily-visitors]');
+            if (block) {
+                block.hidden = true;
+            }
         });
 }());
