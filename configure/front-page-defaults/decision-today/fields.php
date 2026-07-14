@@ -1,82 +1,40 @@
 <?php
 
-require_once dirname(__DIR__, 2) . '/lp-defaults/merge.php';
-
 /**
- * @return array<string, mixed>
- */
-function akademiata_decision_today_defaults(): array {
-    return require __DIR__ . '/content.php';
-}
-
-/**
- * @param array<string, mixed>|false|null $acf_group
- * @return array<string, mixed>
- */
-function akademiata_decision_today_fields($acf_group): array {
-    $defaults  = akademiata_decision_today_defaults();
-    $acf_group = is_array($acf_group) ? $acf_group : [];
-    $merged    = akademiata_lp_merge_defaults($defaults, $acf_group);
-
-    $layout = isset($merged['layout']) ? sanitize_key((string) $merged['layout']) : 'cards';
-    if (!in_array($layout, array('cards', 'compact'), true)) {
-        $layout = 'cards';
-    }
-    $merged['layout'] = $layout;
-
-    $merged['enabled'] = !empty($merged['enabled']);
-
-    $target = trim((string) ($merged['countdown_target'] ?? ''));
-    if ($target === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $target)) {
-        $target = (string) ($defaults['countdown_target'] ?? '2026-10-01');
-    }
-    $merged['countdown_target'] = $target;
-
-    return $merged;
-}
-
-/**
- * @return string
- */
-function akademiata_decision_today_group_button_url(array $section) {
-    $url = trim((string) ($section['group_button_url'] ?? ''));
-    if ($url !== '') {
-        return $url;
-    }
-
-    return akademiata_get_zasady_rekrutacji_page_url();
-}
-
-/**
- * Permalink of Zasady rekrutacji (WPML-safe).
+ * Homepage “Decyzja na dziś” section — static config (no ACF).
  *
+ * @return array<string, mixed>
+ */
+function akademiata_decision_today_config(): array {
+    return array(
+        'countdown_target' => '2026-10-01',
+        'layouts'          => array('cards', 'compact'),
+    );
+}
+
+/**
  * @return string
  */
-function akademiata_get_zasady_rekrutacji_page_url() {
+function akademiata_decision_today_cta_url() {
     static $cached = null;
 
     if ($cached !== null) {
         return $cached;
     }
 
-    $cached = '';
-    $page   = get_page_by_path('zasady-rekrutacji');
-
-    if (!$page) {
+    $page_id = akademiata_get_offer_listing_page_id_for_level('bachelor');
+    if ($page_id > 0) {
+        $cached = (string) get_permalink($page_id);
         return $cached;
     }
 
-    $page_id = (int) $page->ID;
-
-    if (function_exists('icl_object_id')) {
-        $lang = apply_filters('wpml_current_language', null);
-        $translated_id = (int) apply_filters('wpml_object_id', $page_id, 'page', false, $lang);
-        if ($translated_id > 0) {
-            $page_id = $translated_id;
-        }
+    $oferta_id = akademiata_get_oferta_page_id();
+    if ($oferta_id > 0) {
+        $cached = (string) get_permalink($oferta_id);
+        return $cached;
     }
 
-    $cached = (string) get_permalink($page_id);
+    $cached = home_url('/');
 
     return $cached;
 }
@@ -133,14 +91,27 @@ function akademiata_decision_today_pad_time($value) {
 }
 
 /**
- * @return array<int, array{label: string, bg: string}>
+ * @return array<int, array{src: string, alt: string}>
  */
-function akademiata_decision_today_avatar_presets() {
+function akademiata_decision_today_avatar_images() {
+    $base = get_template_directory_uri() . '/static/img/decision-today';
+
     return array(
-        array('label' => 'A', 'bg' => '#5B8DEF'),
-        array('label' => 'K', 'bg' => '#3CB8A7'),
-        array('label' => 'M', 'bg' => '#F2C94C'),
-        array('label' => 'J', 'bg' => '#EB5757'),
-        array('label' => 'L', 'bg' => '#D9A679'),
+        array('src' => $base . '/avatar-1.jpg', 'alt' => 'Student ATA'),
+        array('src' => $base . '/avatar-2.jpg', 'alt' => 'Student ATA'),
+        array('src' => $base . '/avatar-3.jpg', 'alt' => 'Student ATA'),
+        array('src' => $base . '/avatar-4.jpg', 'alt' => 'Student ATA'),
+        array('src' => $base . '/avatar-5.jpg', 'alt' => 'Student ATA'),
     );
+}
+
+/**
+ * @param string $layout cards|compact
+ */
+function akademiata_decision_today_variant_label($layout) {
+    if ($layout === 'compact') {
+        return akademiata_get_theme_lang_string('decision_today_variant_compact');
+    }
+
+    return akademiata_get_theme_lang_string('decision_today_variant_cards');
 }

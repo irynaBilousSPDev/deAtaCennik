@@ -7,11 +7,24 @@ $decision-card: #ffffff;
 $decision-pill: #121212;
 $decision-display: "Nunito Sans", serif;
 
+.home-decision-wrap {
+  padding: clamp(24px, 4vw, 48px) 0 clamp(12px, 3vw, 32px);
+}
+
+.home-decision__intro {
+  max-width: 1180px;
+  margin-bottom: 8px;
+}
+
 .home-decision {
-  padding: clamp(32px, 5vw, 64px) 0;
+  padding: clamp(18px, 3vw, 28px) 0;
   color: $decision-ink;
   font-family: vars.$font-family-sans-serif;
   -webkit-font-smoothing: antialiased;
+
+  & + & {
+    border-top: 1px solid $decision-line;
+  }
 
   &__inner {
     max-width: 1180px;
@@ -44,46 +57,67 @@ $decision-display: "Nunito Sans", serif;
     line-height: 1.55;
   }
 
+  &__variant-label {
+    margin: 0 0 14px;
+    color: $decision-ink-soft;
+    font-size: 11px;
+    font-weight: vars.$weight-medium;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
   &__cards {
     display: grid;
     gap: 18px;
-    margin-top: 28px;
   }
 
   &__timer-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    padding: 34px 20px 24px;
+    border-radius: 22px;
+    background: $decision-card;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
+    text-align: center;
+  }
+
+  &__timer-stack {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 220px;
-    padding: 28px 20px 22px;
-    border-radius: 22px;
-    background: $decision-card;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-    text-align: center;
+    width: min(100%, 360px);
+    min-height: 170px;
+    padding: 8px 0;
   }
 
-  &__timer-bg {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &__timer-line {
     margin: 0;
-    color: rgba(22, 25, 29, 0.08);
+    color: rgba(22, 25, 29, 0.1);
     font-family: $decision-display;
-    font-size: clamp(42px, 7vw, 72px);
+    font-size: clamp(34px, 6vw, 58px);
     font-weight: vars.$weight-medium-bold;
-    line-height: 1;
-    pointer-events: none;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
     user-select: none;
+    pointer-events: none;
+
+    &--top {
+      margin-bottom: -18px;
+    }
+
+    &--bottom {
+      margin-top: -18px;
+    }
   }
 
   &__timer-pill {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -123,13 +157,11 @@ $decision-display: "Nunito Sans", serif;
   }
 
   &__timer-labels {
-    position: relative;
-    z-index: 1;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
     width: min(100%, 280px);
-    margin: 14px 0 0;
+    margin: 16px 0 0;
     padding: 0;
     list-style: none;
     color: $decision-ink-soft;
@@ -234,15 +266,10 @@ $decision-display: "Nunito Sans", serif;
 
   &__avatar {
     position: absolute;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    object-fit: cover;
     border-radius: 50%;
-    background: var(--avatar-bg, vars.$primary);
-    color: #fff;
-    font-size: 13px;
-    font-weight: vars.$weight-bold;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    border: 3px solid #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
   }
 
   &__avatar--1 { top: 8%; left: 18%; width: 54px; height: 54px; }
@@ -367,14 +394,6 @@ $decision-display: "Nunito Sans", serif;
     .home-decision__cards {
       grid-template-columns: 1fr;
     }
-
-    .home-decision__timer-card {
-      min-height: 250px;
-    }
-
-    .home-decision__group-strip {
-      margin-top: 2px;
-    }
   }
 }
 
@@ -406,6 +425,10 @@ $decision-display: "Nunito Sans", serif;
     &__group-card,
     &__timer-card {
       padding: 22px 18px;
+    }
+
+    &__timer-line {
+      font-size: clamp(28px, 10vw, 42px);
     }
 
     &__cta--compact {

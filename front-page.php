@@ -65,7 +65,6 @@ if (!empty($main_title)) : ?>
 <?php endif; ?>
 
 <?php
-set_query_var('decision_today', $acf_fields['decision_today'] ?? null);
 get_template_part('template-parts/front-page/decision-today');
 ?>
 
