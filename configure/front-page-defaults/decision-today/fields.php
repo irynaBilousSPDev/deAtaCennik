@@ -7,7 +7,8 @@
  */
 function akademiata_decision_today_config(): array {
     return array(
-        'countdown_target' => '2026-10-01',
+        'countdown_target'  => '2026-10-01',
+        'promo_valid_until' => '2026-09-30',
     );
 }
 
@@ -40,7 +41,7 @@ function akademiata_decision_today_cta_url() {
 
 /**
  * @param string $date Y-m-d
- * @return array{days: int, hours: int, minutes: int, total_seconds: int, expired: bool}
+ * @return array{days: int, hours: int, minutes: int, seconds: int, total_seconds: int, expired: bool}
  */
 function akademiata_decision_today_countdown_parts($date) {
     $timezone = wp_timezone();
@@ -51,6 +52,7 @@ function akademiata_decision_today_countdown_parts($date) {
             'days'          => 0,
             'hours'         => 0,
             'minutes'       => 0,
+            'seconds'       => 0,
             'total_seconds' => 0,
             'expired'       => true,
         );
@@ -64,6 +66,7 @@ function akademiata_decision_today_countdown_parts($date) {
             'days'          => 0,
             'hours'         => 0,
             'minutes'       => 0,
+            'seconds'       => 0,
             'total_seconds' => 0,
             'expired'       => true,
         );
@@ -72,11 +75,13 @@ function akademiata_decision_today_countdown_parts($date) {
     $days    = (int) floor($seconds / DAY_IN_SECONDS);
     $hours   = (int) floor(($seconds % DAY_IN_SECONDS) / HOUR_IN_SECONDS);
     $minutes = (int) floor(($seconds % HOUR_IN_SECONDS) / MINUTE_IN_SECONDS);
+    $secs    = (int) ($seconds % MINUTE_IN_SECONDS);
 
     return array(
         'days'          => $days,
         'hours'         => $hours,
         'minutes'       => $minutes,
+        'seconds'       => $secs,
         'total_seconds' => $seconds,
         'expired'       => false,
     );
@@ -90,16 +95,53 @@ function akademiata_decision_today_pad_time($value) {
 }
 
 /**
- * @return array<int, array{src: string, alt: string}>
+ * @return string
  */
-function akademiata_decision_today_avatar_images() {
-    $base = get_template_directory_uri() . '/static/img/decision-today';
+function akademiata_decision_today_share_url() {
+    return akademiata_decision_today_cta_url();
+}
 
+/**
+ * Full share text (message + offer URL).
+ *
+ * @return string
+ */
+function akademiata_decision_today_share_text() {
+    $url     = akademiata_decision_today_share_url();
+    $pattern = akademiata_get_theme_lang_string('decision_today_share_message');
+
+    if ($pattern === '') {
+        return $url;
+    }
+
+    if (strpos($pattern, '%s') !== false) {
+        return sprintf($pattern, $url);
+    }
+
+    return trim($pattern . ' ' . $url);
+}
+
+/**
+ * Share channels shown after “Zaproś znajomych”.
+ *
+ * @return array<int, array{id: string, label_key: string, mode: string}>
+ */
+function akademiata_decision_today_share_channels() {
     return array(
-        array('src' => $base . '/avatar-1.jpg', 'alt' => 'Student ATA'),
-        array('src' => $base . '/avatar-2.jpg', 'alt' => 'Student ATA'),
-        array('src' => $base . '/avatar-3.jpg', 'alt' => 'Student ATA'),
-        array('src' => $base . '/avatar-4.jpg', 'alt' => 'Student ATA'),
-        array('src' => $base . '/avatar-5.jpg', 'alt' => 'Student ATA'),
+        array('id' => 'whatsapp',  'label_key' => 'decision_today_share_whatsapp',  'mode' => 'link'),
+        array('id' => 'messenger', 'label_key' => 'decision_today_share_messenger', 'mode' => 'link'),
+        array('id' => 'telegram',  'label_key' => 'decision_today_share_telegram',  'mode' => 'link'),
+        array('id' => 'instagram', 'label_key' => 'decision_today_share_instagram', 'mode' => 'copy'),
+        array('id' => 'tiktok',    'label_key' => 'decision_today_share_tiktok',    'mode' => 'copy'),
+        array('id' => 'snapchat',  'label_key' => 'decision_today_share_snapchat',  'mode' => 'copy'),
+        array('id' => 'copy',      'label_key' => 'decision_today_share_copy',      'mode' => 'copy'),
+        array('id' => 'native',    'label_key' => 'decision_today_share_more',      'mode' => 'native'),
     );
+}
+
+/**
+ * @return string
+ */
+function akademiata_decision_today_group_visual_url() {
+    return get_template_directory_uri() . '/static/img/decision-today/group-people.png';
 }
