@@ -461,47 +461,51 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 			<?php if (!empty($hist['lede'])) : ?>
 				<p class="lede"><?php $lp_text($hist['lede']); ?></p>
 			<?php endif; ?>
-			<?php if (!empty($hist['steps'])) : ?>
-				<div class="tl">
-					<?php foreach ($hist['steps'] as $step) : ?>
-						<div class="tl-item">
-							<div class="tl-dot"></div>
-							<div class="tl-year">
-								<?php $lp_text($step['year'] ?? ''); ?>
-								<?php if (!empty($step['stage'])) : ?>
-									<small><?php $lp_text($step['stage']); ?></small>
-								<?php endif; ?>
-							</div>
-							<div class="tl-card">
-								<div class="tl-body">
-									<?php
-									$lp_img(
-										$step['logo'] ?? null,
-										$step['logo_url'] ?? '',
-										'tl-logo',
-										$step['logo_alt'] ?? ''
-									);
-									?>
-									<?php if (!empty($step['kicker'])) : ?>
-										<div class="kicker"><?php $lp_text($step['kicker']); ?></div>
-									<?php endif; ?>
-									<?php if (!empty($step['title'])) : ?>
-										<h3><?php $lp_text($step['title']); ?></h3>
-									<?php endif; ?>
-									<?php $lp_html($step['text'] ?? ''); ?>
+			<?php if (!empty($hist['steps']) || !empty($hist['note_head']) || !empty($hist['note_text'])) : ?>
+				<div class="tl-wrap">
+					<?php if (!empty($hist['steps'])) : ?>
+						<div class="tl">
+							<?php foreach ($hist['steps'] as $step) : ?>
+								<div class="tl-item">
+									<div class="tl-dot"></div>
+									<div class="tl-year">
+										<?php $lp_text($step['year'] ?? ''); ?>
+										<?php if (!empty($step['stage'])) : ?>
+											<small><?php $lp_text($step['stage']); ?></small>
+										<?php endif; ?>
+									</div>
+									<div class="tl-card">
+										<div class="tl-body">
+											<?php
+											$lp_img(
+												$step['logo'] ?? null,
+												$step['logo_url'] ?? '',
+												'tl-logo',
+												$step['logo_alt'] ?? ''
+											);
+											?>
+											<?php if (!empty($step['kicker'])) : ?>
+												<div class="kicker"><?php $lp_text($step['kicker']); ?></div>
+											<?php endif; ?>
+											<?php if (!empty($step['title'])) : ?>
+												<h3><?php $lp_text($step['title']); ?></h3>
+											<?php endif; ?>
+											<?php $lp_html($step['text'] ?? ''); ?>
+										</div>
+									</div>
 								</div>
-							</div>
+							<?php endforeach; ?>
 						</div>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
-			<?php if (!empty($hist['note_head']) || !empty($hist['note_text'])) : ?>
-				<div class="ata-note">
-					<?php if (!empty($hist['note_head'])) : ?>
-						<div class="ata-note-head"><?php $lp_text($hist['note_head']); ?></div>
 					<?php endif; ?>
-					<?php if (!empty($hist['note_text'])) : ?>
-						<p><?php $lp_text($hist['note_text']); ?></p>
+					<?php if (!empty($hist['note_head']) || !empty($hist['note_text'])) : ?>
+						<div class="ata-note">
+							<?php if (!empty($hist['note_head'])) : ?>
+								<div class="ata-note-head"><?php $lp_text($hist['note_head']); ?></div>
+							<?php endif; ?>
+							<?php if (!empty($hist['note_text'])) : ?>
+								<p><?php $lp_text($hist['note_text']); ?></p>
+							<?php endif; ?>
+						</div>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>

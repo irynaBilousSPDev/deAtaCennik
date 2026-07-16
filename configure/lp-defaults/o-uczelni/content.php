@@ -66,7 +66,7 @@ return [
 		'logo_image_old_alt' => 'Dawne logo Wyższej Szkoły Ekologii i Zarządzania w Warszawie — Miś w okręgu',
 		'logo_image_old_label' => 'WSEiZ',
 		'logo_image_new' => null,
-		'logo_image_new_url' => '', // static: logo-ata-obecne.svg
+		'logo_image_new_url' => '', // static/img/ATA_logo_main.webp (header)
 		'logo_image_new_alt' => 'Obecne logo Akademii Techniczno-Artystycznej Nauk Stosowanych w Warszawie',
 		'logo_image_new_label' => 'ATA',
 		'logo_caption' => 'Dawne logo WSEiZ i obecne logo ATA — Miś obecny w obu.',

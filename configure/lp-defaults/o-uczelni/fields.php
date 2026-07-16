@@ -51,9 +51,7 @@ function akademiata_o_uczelni_remote_basename_map(): array {
 		'1200px-Kampinoski_okragle_podstawowe.png' => 'partner-kampinoski-park-narodowy.png',
 		'logo-ilot.png' => 'partner-ilot.png',
 		// Logo uczelni
-		'Logo_ATA__wczesniej_logo.png' => 'logo-ata-obecne.svg',
 		'logo.png' => 'logo-wseiz-dawne.png',
-		'logo-ata.svg' => 'logo-ata-obecne.svg',
 		// Infrastruktura — Olszewska
 		'IMG_0201.jpg' => 'infra-olszewska-01.jpg',
 		'IMG_0204.jpg' => 'infra-olszewska-02.jpg',
@@ -96,6 +94,19 @@ function akademiata_o_uczelni_remote_basename_map(): array {
 /**
  * Prefer local static file for known remote uploads / theme_key.
  */
+/**
+ * Same file as site header (`partials/header.php`).
+ */
+function akademiata_o_uczelni_header_logo_url(): string {
+	$rel = 'static/img/ATA_logo_main.webp';
+	$path = get_template_directory() . '/' . $rel;
+	if (!is_readable($path)) {
+		return '';
+	}
+
+	return get_template_directory_uri() . '/' . $rel;
+}
+
 function akademiata_o_uczelni_localize_url(string $url = '', string $theme_key = ''): string {
 	if ($theme_key !== '') {
 		$local = akademiata_o_uczelni_static_url($theme_key);
@@ -153,10 +164,12 @@ function akademiata_o_uczelni_resolve_static_assets(array $fields): array {
 			(string) ($kim['logo_image_old_url'] ?? ''),
 			'logo-wseiz-dawne.png'
 		);
-		$kim['logo_image_new_url'] = akademiata_o_uczelni_localize_url(
-			(string) ($kim['logo_image_new_url'] ?? ''),
-			'logo-ata-obecne.svg'
-		);
+		$logo_new = trim((string) ($kim['logo_image_new_url'] ?? ''));
+		if ($logo_new === '' || strpos($logo_new, 'logo-ata-obecne') !== false) {
+			$kim['logo_image_new_url'] = akademiata_o_uczelni_header_logo_url();
+		} else {
+			$kim['logo_image_new_url'] = akademiata_o_uczelni_localize_url($logo_new);
+		}
 		// Legacy single-image field → treat as dawne logo when new pair empty.
 		if (($kim['logo_image_old_url'] ?? '') === '' && !empty($kim['logo_image_url'])) {
 			$kim['logo_image_old_url'] = akademiata_o_uczelni_localize_url((string) $kim['logo_image_url']);

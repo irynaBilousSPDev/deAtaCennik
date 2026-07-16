@@ -142,7 +142,8 @@ body.page-template-page-o-uczelni {
     .rank-card li em{font-style:normal;color:$oucz-muted;font-size:13px}
 
     /* ---------- Timeline / history ---------- */
-    .tl{position:relative;margin-top:38px;--oucz-tl-year:112px;--oucz-tl-gap:40px;--oucz-tl-rail:calc(var(--oucz-tl-year) + (var(--oucz-tl-gap) / 2))}
+    .tl-wrap{margin-top:38px;--oucz-tl-year:112px;--oucz-tl-gap:40px;--oucz-tl-rail:calc(var(--oucz-tl-year) + (var(--oucz-tl-gap) / 2))}
+    .tl{position:relative}
     .tl::before{content:"";position:absolute;left:var(--oucz-tl-rail);top:12px;bottom:12px;width:2px;background:#e5e8ec;transform:translateX(-50%)}
     .tl-item{position:relative;display:grid;grid-template-columns:var(--oucz-tl-year) 1fr;gap:var(--oucz-tl-gap);padding-bottom:26px}
     .tl-item:last-child{padding-bottom:0}
@@ -158,7 +159,7 @@ body.page-template-page-o-uczelni {
     .tl-card .kicker{font-family:'Nunito Sans';font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:$oucz-blue;margin-bottom:6px}
     .tl-card p{font-size:14.5px;color:#4a5058;margin-bottom:10px}
     .tl-card p:last-child{margin-bottom:0}
-    .ata-note{margin:6px 0 0 calc(var(--oucz-tl-year) + var(--oucz-tl-gap));background:#fff;border:1px solid $oucz-line;border-left:4px solid $oucz-orange;border-radius:14px;padding:24px 28px}
+    .ata-note{margin:28px 0 0 calc(var(--oucz-tl-year) + var(--oucz-tl-gap));background:#fff;border:1px solid $oucz-line;border-left:4px solid $oucz-orange;border-radius:14px;padding:24px 28px}
     .ata-note-head{font-family:'Nunito Sans';font-weight:800;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:$oucz-orange;margin-bottom:10px}
     .ata-note p{font-size:16px;color:#3a3f46;margin:0}
     /* Pozioma oś przeglądowa (historia całej Uczelni) */
@@ -188,6 +189,7 @@ body.page-template-page-o-uczelni {
     .logo-visual{background:$oucz-bg-soft;border:1px solid $oucz-line;border-radius:18px;padding:28px 24px 22px}
     .logo-compare{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
     .logo-compare__item{margin:0;flex:1 1 140px;max-width:220px;text-align:center}
+    .logo-compare__item:last-of-type{max-width:280px;flex-basis:180px}
     .logo-compare__item img{max-width:100%;width:auto;height:88px;object-fit:contain;display:block;margin:0 auto}
     .logo-compare__item figcaption{margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:$oucz-muted;font-family:'Nunito Sans'}
     .logo-compare__arrow{flex:none;font-size:28px;font-weight:300;color:#b7bdc6;line-height:1;padding-bottom:18px}
@@ -373,13 +375,9 @@ body.page-template-page-o-uczelni {
       padding-bottom: 14px;
     }
 
-    .tl {
+    .tl-wrap {
       --oucz-tl-year: 96px;
       --oucz-tl-gap: 28px;
-    }
-
-    .ata-note {
-      margin-left: calc(var(--oucz-tl-year) + var(--oucz-tl-gap));
     }
 
     .coop-grid,
@@ -513,10 +511,13 @@ body.page-template-page-o-uczelni {
     }
 
     /* Timeline: year above card, rail on the left */
-    .tl {
+    .tl-wrap {
       --oucz-tl-year: auto;
       --oucz-tl-gap: 10px;
       --oucz-tl-rail: 7px;
+    }
+
+    .tl {
       padding-left: 28px;
     }
 
@@ -552,7 +553,7 @@ body.page-template-page-o-uczelni {
     }
 
     .ata-note {
-      margin: 4px 0 0;
+      margin: 20px 0 0;
       padding: 18px;
     }
 
