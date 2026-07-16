@@ -27,27 +27,43 @@ $pad = static function ($n) {
 	return str_pad((string) max(0, (int) $n), 2, '0', STR_PAD_LEFT);
 };
 
-$phrases = array(
-	'start studiów',
-	'pierwszego października',
+// Two-line pairs (top / bottom), swapped with scroll-down.
+$pairs = array(
+	array('start', 'studiów'),
+	array('pierwszego', 'października'),
 );
 ?>
 <div
 	class="offer-start-timer"
 	data-countdown-ts="<?php echo esc_attr((string) $countdown_ts); ?>"
-	data-phrases="<?php echo esc_attr(wp_json_encode($phrases)); ?>"
+	data-pair-count="<?php echo esc_attr((string) count($pairs)); ?>"
 	aria-label="<?php echo esc_attr__('Odliczanie do startu studiów', 'akademiata'); ?>"
 >
-	<p class="offer-start-timer__type" aria-live="polite">
-		<span class="offer-start-timer__type-text"></span><span class="offer-start-timer__caret" aria-hidden="true"></span>
-	</p>
-	<div class="offer-start-timer__pill" role="timer">
-		<span class="offer-start-timer__value" data-unit="days"><?php echo esc_html($pad($days)); ?></span>
-		<span class="offer-start-timer__sep" aria-hidden="true">:</span>
-		<span class="offer-start-timer__value" data-unit="hours"><?php echo esc_html($pad($hours)); ?></span>
-		<span class="offer-start-timer__sep" aria-hidden="true">:</span>
-		<span class="offer-start-timer__value" data-unit="minutes"><?php echo esc_html($pad($minutes)); ?></span>
-		<span class="offer-start-timer__sep" aria-hidden="true">:</span>
-		<span class="offer-start-timer__value" data-unit="seconds"><?php echo esc_html($pad($secs)); ?></span>
+	<div class="offer-start-timer__stack">
+		<div class="offer-start-timer__line offer-start-timer__line--top" aria-hidden="true">
+			<div class="offer-start-timer__reel" data-reel="top">
+				<?php foreach ($pairs as $pair) : ?>
+					<span class="offer-start-timer__word"><?php echo esc_html($pair[0]); ?></span>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
+		<div class="offer-start-timer__pill" role="timer">
+			<span class="offer-start-timer__value" data-unit="days"><?php echo esc_html($pad($days)); ?></span>
+			<span class="offer-start-timer__sep" aria-hidden="true">:</span>
+			<span class="offer-start-timer__value" data-unit="hours"><?php echo esc_html($pad($hours)); ?></span>
+			<span class="offer-start-timer__sep" aria-hidden="true">:</span>
+			<span class="offer-start-timer__value" data-unit="minutes"><?php echo esc_html($pad($minutes)); ?></span>
+			<span class="offer-start-timer__sep" aria-hidden="true">:</span>
+			<span class="offer-start-timer__value" data-unit="seconds"><?php echo esc_html($pad($secs)); ?></span>
+		</div>
+
+		<div class="offer-start-timer__line offer-start-timer__line--bottom" aria-hidden="true">
+			<div class="offer-start-timer__reel" data-reel="bottom">
+				<?php foreach ($pairs as $pair) : ?>
+					<span class="offer-start-timer__word"><?php echo esc_html($pair[1]); ?></span>
+				<?php endforeach; ?>
+			</div>
+		</div>
 	</div>
 </div>

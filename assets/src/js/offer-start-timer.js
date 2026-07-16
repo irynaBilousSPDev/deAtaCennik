@@ -1,5 +1,5 @@
 /**
- * Compact offer countdown + typewriter phrase swap (bachelor/master test).
+ * Compact offer countdown + scroll-down word pairs (bachelor/master test).
  */
 export default function initOfferStartTimer() {
 	const root = document.querySelector('.offer-start-timer[data-countdown-ts]');
@@ -13,23 +13,14 @@ export default function initOfferStartTimer() {
 	}
 
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const pairCount = Math.max(1, parseInt(root.getAttribute('data-pair-count'), 10) || 2);
+	const reels = Array.from(root.querySelectorAll('.offer-start-timer__reel'));
 	const valueNodes = {
 		days: root.querySelector('[data-unit="days"]'),
 		hours: root.querySelector('[data-unit="hours"]'),
 		minutes: root.querySelector('[data-unit="minutes"]'),
 		seconds: root.querySelector('[data-unit="seconds"]'),
 	};
-	const typeNode = root.querySelector('.offer-start-timer__type-text');
-
-	let phrases = [];
-	try {
-		phrases = JSON.parse(root.getAttribute('data-phrases') || '[]');
-	} catch (e) {
-		phrases = [];
-	}
-	if (!Array.isArray(phrases) || !phrases.length) {
-		phrases = ['start studiów', 'pierwszego października'];
-	}
 
 	function pad(value) {
 		const n = Math.max(0, Math.floor(Number(value) || 0));
@@ -64,47 +55,39 @@ export default function initOfferStartTimer() {
 	renderCountdown();
 	window.setInterval(renderCountdown, 1000);
 
-	if (!typeNode) {
+	if (!reels.length || pairCount < 2 || reduce) {
 		return;
 	}
 
-	if (reduce) {
-		typeNode.textContent = phrases[0];
-		return;
+	// Duplicate first word so the reel can always scroll downward.
+	reels.forEach((reel) => {
+		const first = reel.querySelector('.offer-start-timer__word');
+		if (first) {
+			reel.appendChild(first.cloneNode(true));
+		}
+	});
+
+	let index = 0;
+	const stepCount = pairCount; // 0 -> 1 -> 2(clone of 0) -> reset to 0
+
+	function setReel(indexValue, animate) {
+		reels.forEach((reel) => {
+			reel.style.transition = animate ? '' : 'none';
+			reel.style.transform = `translateY(calc(-${indexValue} * 1.15em))`;
+		});
 	}
 
-	let phraseIndex = 0;
-	let charIndex = 0;
-	let deleting = false;
-	let pauseUntil = 0;
+	setReel(0, false);
 
-	function tickTypewriter(now) {
-		if (now < pauseUntil) {
-			window.requestAnimationFrame(tickTypewriter);
-			return;
+	window.setInterval(() => {
+		index += 1;
+		setReel(index, true);
+
+		if (index >= stepCount) {
+			window.setTimeout(() => {
+				index = 0;
+				setReel(0, false);
+			}, 580);
 		}
-
-		const phrase = phrases[phraseIndex] || '';
-
-		if (!deleting && charIndex < phrase.length) {
-			charIndex += 1;
-			typeNode.textContent = phrase.slice(0, charIndex);
-			pauseUntil = now + 55;
-		} else if (!deleting && charIndex >= phrase.length) {
-			deleting = true;
-			pauseUntil = now + 1800;
-		} else if (deleting && charIndex > 0) {
-			charIndex -= 1;
-			typeNode.textContent = phrase.slice(0, charIndex);
-			pauseUntil = now + 32;
-		} else {
-			deleting = false;
-			phraseIndex = (phraseIndex + 1) % phrases.length;
-			pauseUntil = now + 320;
-		}
-
-		window.requestAnimationFrame(tickTypewriter);
-	}
-
-	window.requestAnimationFrame(tickTypewriter);
+	}, 3200);
 }
