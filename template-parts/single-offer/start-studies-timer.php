@@ -1,38 +1,33 @@
 <?php
 /**
- * Compact start-of-studies countdown — bachelor/master test only.
+ * Compact start-of-studies countdown — bachelor/master.
  */
 
-if (!is_singular(array('bachelor', 'master'))) {
+if (!function_exists('akademiata_offer_start_timer_should_show') || !akademiata_offer_start_timer_should_show()) {
 	return;
 }
 
-$target_date = '2026-10-01';
-$timezone    = wp_timezone();
-$target_dt   = DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $target_date . ' 00:00:00', $timezone);
-$countdown_ts = $target_dt ? $target_dt->getTimestamp() : 0;
-
+$countdown_ts = akademiata_offer_start_timer_countdown_ts();
 if ($countdown_ts <= 0) {
 	return;
 }
 
-$now     = new DateTimeImmutable('now', $timezone);
-$seconds = max(0, $countdown_ts - $now->getTimestamp());
-$days    = (int) floor($seconds / DAY_IN_SECONDS);
-$hours   = (int) floor(($seconds % DAY_IN_SECONDS) / HOUR_IN_SECONDS);
-$minutes = (int) floor(($seconds % HOUR_IN_SECONDS) / MINUTE_IN_SECONDS);
-$secs    = (int) ($seconds % MINUTE_IN_SECONDS);
+$pairs = akademiata_offer_start_timer_get_pairs_for_display();
+if (empty($pairs)) {
+	return;
+}
+
+$timezone = wp_timezone();
+$now      = new DateTimeImmutable('now', $timezone);
+$seconds  = max(0, $countdown_ts - $now->getTimestamp());
+$days     = (int) floor($seconds / DAY_IN_SECONDS);
+$hours    = (int) floor(($seconds % DAY_IN_SECONDS) / HOUR_IN_SECONDS);
+$minutes  = (int) floor(($seconds % HOUR_IN_SECONDS) / MINUTE_IN_SECONDS);
+$secs     = (int) ($seconds % MINUTE_IN_SECONDS);
 
 $pad = static function ($n) {
 	return str_pad((string) max(0, (int) $n), 2, '0', STR_PAD_LEFT);
 };
-
-$pairs = array(
-	array('start', 'studiów'),
-	array('pierwszego', 'października'),
-	array('zarezerwuj', 'swoje miejsce'),
-	array('liczba miejsc', 'ograniczona'),
-);
 ?>
 <div
 	class="offer-start-timer"
