@@ -34,9 +34,6 @@ get_header();
 set_query_var('hero_slider_slides', $hero_slider_slides);
 get_template_part('template-parts/front-page/hero-slider');
 
-// TODO: Decyzja na dziś — wyłączone tymczasowo (2026-07-14), wrócić do dopracowania layoutu
-// get_template_part('template-parts/front-page/decision-today');
-
 $counter = $acf_fields['counter'];
 if (!empty($counter)) : ?>
     <section class="section_counter mb-5">

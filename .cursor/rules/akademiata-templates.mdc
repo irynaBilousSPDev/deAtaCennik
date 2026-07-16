@@ -18,9 +18,9 @@ alwaysApply: false
 
 ## Page templates (root)
 
-`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page.php`.
+`front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page-o-uczelni.php`, `page.php`.
 
-**Front page sections (order):** hero-slider → counter → main title → **decision-today** (static PHP + WPML, design layout) → offers sliders → home-rankings → …
+**Front page sections (order):** hero-slider → counter → main title → offers sliders → home-rankings → …
 
 ## LP landing pages
 
@@ -45,6 +45,10 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 
 **Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ). Prefix ACF: `rekr_`.
 
+### O Uczelni
+
+**O Uczelni** — `page-o-uczelni.php` (hero, subnav, kim jesteśmy + historia ATA + logo, cel, oferta WA/WR, współpraca, absolwenci ELA, historia filii Wrocław, filary, infrastruktura accordion, closing). Prefix ACF: `oucz_`. Assets: `assets/dist/img/o-uczelni/`.
+
 ## `partials/` vs `template-parts/`
 
 | Folder | Use for |
@@ -62,7 +66,7 @@ From `content-single-offer.php`: `section_why_study`, `section_student_testimoni
 ## ACF in templates
 
 - Top of templates: `get_fields()` → `set_query_var('acf_fields', $acf_fields)`.
-- **Front page:** `acf-json/group_front_page.json` (`Front: Page`) — tab **Decyzja na dziś** → group `decision_today` (layouts `cards`|`compact`; defaults `configure/front-page-defaults/decision-today/`). Tab **Rankingi** → group `home_rankings`.
+- **Front page:** `acf-json/group_front_page.json` (`Front: Page`) — tab **Rankingi** → group `home_rankings`. (Tab **Decyzja na dziś** / `decision_today` remains in ACF; section currently not included in `front-page.php`.)
 - Options pages: Theme Settings (Header, Footer, contacts) registered in `configure/configure.php`.
 - Components: `render_acf_component($type, $data)` → `acf-components/acf-{type}.php`.
 

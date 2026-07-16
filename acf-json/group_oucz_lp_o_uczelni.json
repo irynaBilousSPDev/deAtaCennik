@@ -1,0 +1,1197 @@
+[
+    {
+        "key": "group_oucz_lp_o_uczelni",
+        "title": "LP — O Uczelni",
+        "fields": [
+            {
+                "key": "field_oucz_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_hero_section",
+                "label": "Hero",
+                "name": "oucz_hero_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_hero_title_before",
+                        "label": "Tytuł (przed akcentem)",
+                        "name": "title_before",
+                        "type": "text",
+                        "default_value": "O"
+                    },
+                    {
+                        "key": "field_oucz_hero_title_accent",
+                        "label": "Tytuł (akcent)",
+                        "name": "title_accent",
+                        "type": "text",
+                        "default_value": "Uczelni"
+                    },
+                    {
+                        "key": "field_oucz_hero_lead",
+                        "label": "Lead",
+                        "name": "lead",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_hero_crumbs",
+                        "label": "Breadcrumbs",
+                        "name": "crumbs",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj okruszek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_hero_crumb_label",
+                                "label": "Etykieta",
+                                "name": "label",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hero_crumbs"
+                            },
+                            {
+                                "key": "field_oucz_hero_crumb_url",
+                                "label": "URL (puste = tekst)",
+                                "name": "url",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hero_crumbs"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_subnav",
+                "label": "Nawigacja kotwic",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_subnav",
+                "label": "Subnav",
+                "name": "oucz_subnav",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_subnav_links",
+                        "label": "Linki",
+                        "name": "links",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj link",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_subnav_link_text",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_subnav_links"
+                            },
+                            {
+                                "key": "field_oucz_subnav_link_anchor",
+                                "label": "Kotwica (#...)",
+                                "name": "anchor",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_subnav_links"
+                            },
+                            {
+                                "key": "field_oucz_subnav_link_hl",
+                                "label": "Podświetlenie (hl)",
+                                "name": "highlight",
+                                "type": "true_false",
+                                "default_value": 0,
+                                "ui": 1,
+                                "parent_repeater": "field_oucz_subnav_links"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_kim",
+                "label": "Kim jesteśmy",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_kim_section",
+                "label": "Kim jesteśmy",
+                "name": "oucz_kim_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_kim_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_badge",
+                        "label": "Odznaka rankingu",
+                        "name": "badge_image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_oucz_kim_badge_alt",
+                        "label": "Alt odznaki",
+                        "name": "badge_alt",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_col_left",
+                        "label": "Kolumna lewa (HTML)",
+                        "name": "col_left",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_highlight",
+                        "label": "Highlight (HTML)",
+                        "name": "highlight",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_hist_eyebrow",
+                        "label": "Historia — eyebrow",
+                        "name": "history_eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_hist_title",
+                        "label": "Historia — tytuł",
+                        "name": "history_title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_hist_lede",
+                        "label": "Historia — lead",
+                        "name": "history_lede",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_hist_steps",
+                        "label": "Historia — kroki",
+                        "name": "history_steps",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj krok",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_kim_hist_year",
+                                "label": "Rok",
+                                "name": "year",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_kim_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_kim_hist_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_kim_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_kim_hist_stitle",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_kim_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_kim_hist_stext",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "default_value": "",
+                                "rows": 4,
+                                "new_lines": "",
+                                "parent_repeater": "field_oucz_kim_hist_steps"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_title",
+                        "label": "Logo — tytuł",
+                        "name": "logo_title",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_text",
+                        "label": "Logo — tekst (HTML)",
+                        "name": "logo_text",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_img",
+                        "label": "Logo — obraz",
+                        "name": "logo_image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_alt",
+                        "label": "Logo — alt",
+                        "name": "logo_image_alt",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_cap",
+                        "label": "Logo — podpis",
+                        "name": "logo_caption",
+                        "type": "text",
+                        "default_value": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_cel",
+                "label": "Nasz cel",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_cel_section",
+                "label": "Nasz cel",
+                "name": "oucz_cel_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_cel_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_cel_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_cel_left",
+                        "label": "Kolumna lewa",
+                        "name": "col_left",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_cel_right",
+                        "label": "Kolumna prawa",
+                        "name": "col_right",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_oferta",
+                "label": "Oferta",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_oferta_section",
+                "label": "Oferta edukacyjna",
+                "name": "oucz_oferta_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_oferta_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_oferta_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_oferta_lede",
+                        "label": "Lead",
+                        "name": "lede",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_oferta_campuses",
+                        "label": "Kampusy",
+                        "name": "campuses",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kampus",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_oferta_campus_variant",
+                                "label": "Wariant",
+                                "name": "variant",
+                                "type": "select",
+                                "choices": {
+                                    "wa": "Warszawa (wa)",
+                                    "wr": "Wrocław (wr)"
+                                },
+                                "default_value": "wa",
+                                "parent_repeater": "field_oucz_oferta_campuses"
+                            },
+                            {
+                                "key": "field_oucz_oferta_campus_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_oferta_campuses"
+                            },
+                            {
+                                "key": "field_oucz_oferta_campus_tag",
+                                "label": "Tag",
+                                "name": "tag",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_oferta_campuses"
+                            },
+                            {
+                                "key": "field_oucz_oferta_programs",
+                                "label": "Kierunki",
+                                "name": "programs",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj kierunek",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_oucz_oferta_prog_name",
+                                        "label": "Nazwa",
+                                        "name": "name",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_oferta_programs"
+                                    },
+                                    {
+                                        "key": "field_oucz_oferta_prog_url",
+                                        "label": "URL",
+                                        "name": "url",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_oferta_programs"
+                                    },
+                                    {
+                                        "key": "field_oucz_oferta_prog_meta",
+                                        "label": "Meta (stopień)",
+                                        "name": "meta",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_oferta_programs"
+                                    }
+                                ],
+                                "parent_repeater": "field_oucz_oferta_campuses"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_oucz_oferta_note",
+                        "label": "Notatka (highlight)",
+                        "name": "note",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_wspol",
+                "label": "Współpraca",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_wspolpraca_section",
+                "label": "Współpraca",
+                "name": "oucz_wspolpraca_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_wspol_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_wspol_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_wspol_lede",
+                        "label": "Lead (HTML)",
+                        "name": "lede",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_wspol_columns",
+                        "label": "Kolumny",
+                        "name": "columns",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj kolumnę",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_wspol_col_title",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_wspol_columns"
+                            },
+                            {
+                                "key": "field_oucz_wspol_col_items",
+                                "label": "Punkty",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj punkt",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_oucz_wspol_col_item",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_wspol_col_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_oucz_wspol_columns"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_oucz_wspol_partners_eyebrow",
+                        "label": "Eyebrow partnerów",
+                        "name": "partners_eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_wspol_partners",
+                        "label": "Logotypy partnerów",
+                        "name": "partners",
+                        "type": "repeater",
+                        "layout": "table",
+                        "button_label": "Dodaj logo",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_wspol_partner_img",
+                                "label": "Obraz",
+                                "name": "image",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
+                                "parent_repeater": "field_oucz_wspol_partners"
+                            },
+                            {
+                                "key": "field_oucz_wspol_partner_url",
+                                "label": "URL fallback",
+                                "name": "url",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_wspol_partners"
+                            },
+                            {
+                                "key": "field_oucz_wspol_partner_alt",
+                                "label": "Alt",
+                                "name": "alt",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_wspol_partners"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_abs",
+                "label": "Absolwenci",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_absolwenci_section",
+                "label": "Nasi absolwenci",
+                "name": "oucz_absolwenci_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_abs_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_abs_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_abs_badge",
+                        "label": "Odznaka ELA",
+                        "name": "badge_image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all"
+                    },
+                    {
+                        "key": "field_oucz_abs_badge_alt",
+                        "label": "Alt odznaki",
+                        "name": "badge_alt",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_abs_lede",
+                        "label": "Lead (HTML)",
+                        "name": "lede",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_abs_ranks",
+                        "label": "Miejsca",
+                        "name": "ranks",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj miejsce",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_abs_rank_variant",
+                                "label": "Wariant CSS (silver/bronze)",
+                                "name": "variant",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_abs_ranks"
+                            },
+                            {
+                                "key": "field_oucz_abs_rank_place",
+                                "label": "Etykieta miejsca",
+                                "name": "place",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_abs_ranks"
+                            },
+                            {
+                                "key": "field_oucz_abs_rank_items",
+                                "label": "Kierunki",
+                                "name": "items",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj kierunek",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_oucz_abs_rank_name",
+                                        "label": "Nazwa",
+                                        "name": "name",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_abs_rank_items"
+                                    },
+                                    {
+                                        "key": "field_oucz_abs_rank_meta",
+                                        "label": "Meta",
+                                        "name": "meta",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_abs_rank_items"
+                                    }
+                                ],
+                                "parent_repeater": "field_oucz_abs_ranks"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_oucz_abs_note",
+                        "label": "Notatka",
+                        "name": "note",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_hist",
+                "label": "Historia Wrocław",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_historia_section",
+                "label": "Historia filii",
+                "name": "oucz_historia_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_hist_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_hist_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_hist_lede",
+                        "label": "Lead",
+                        "name": "lede",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_hist_steps",
+                        "label": "Etapy",
+                        "name": "steps",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj etap",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_hist_year",
+                                "label": "Rok",
+                                "name": "year",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_stage",
+                                "label": "Etap",
+                                "name": "stage",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_logo",
+                                "label": "Logo",
+                                "name": "logo",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_logo_alt",
+                                "label": "Alt logo",
+                                "name": "logo_alt",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_kicker",
+                                "label": "Kicker",
+                                "name": "kicker",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_stitle",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_stext",
+                                "label": "Tekst (HTML)",
+                                "name": "text",
+                                "type": "wysiwyg",
+                                "tabs": "all",
+                                "toolbar": "basic",
+                                "media_upload": 0,
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            }
+                        ]
+                    },
+                    {
+                        "key": "field_oucz_hist_note_head",
+                        "label": "Notatka — nagłówek",
+                        "name": "note_head",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_hist_note_text",
+                        "label": "Notatka — tekst",
+                        "name": "note_text",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_filary",
+                "label": "Filary",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_filary_section",
+                "label": "Trzy filary",
+                "name": "oucz_filary_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_filary_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_filary_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_filary_pillars",
+                        "label": "Filary",
+                        "name": "pillars",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj filar",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_filary_num",
+                                "label": "Numer",
+                                "name": "num",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_filary_pillars"
+                            },
+                            {
+                                "key": "field_oucz_filary_variant",
+                                "label": "Wariant (p1/p2/p3)",
+                                "name": "variant",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_filary_pillars"
+                            },
+                            {
+                                "key": "field_oucz_filary_ptitle",
+                                "label": "Tytuł",
+                                "name": "title",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_filary_pillars"
+                            },
+                            {
+                                "key": "field_oucz_filary_ptext",
+                                "label": "Tekst",
+                                "name": "text",
+                                "type": "textarea",
+                                "default_value": "",
+                                "rows": 4,
+                                "new_lines": "",
+                                "parent_repeater": "field_oucz_filary_pillars"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_infra",
+                "label": "Infrastruktura",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_infra_section",
+                "label": "Infrastruktura",
+                "name": "oucz_infra_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_infra_eyebrow",
+                        "label": "Eyebrow",
+                        "name": "eyebrow",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_infra_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_infra_lede",
+                        "label": "Lead",
+                        "name": "lede",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_infra_buildings",
+                        "label": "Budynki",
+                        "name": "buildings",
+                        "type": "repeater",
+                        "layout": "block",
+                        "button_label": "Dodaj budynek",
+                        "min": 0,
+                        "max": 0,
+                        "sub_fields": [
+                            {
+                                "key": "field_oucz_infra_open",
+                                "label": "Otwarty domyślnie",
+                                "name": "open",
+                                "type": "true_false",
+                                "default_value": 0,
+                                "ui": 1,
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            },
+                            {
+                                "key": "field_oucz_infra_name",
+                                "label": "Nazwa",
+                                "name": "name",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            },
+                            {
+                                "key": "field_oucz_infra_loc",
+                                "label": "Lokalizacja",
+                                "name": "loc",
+                                "type": "text",
+                                "default_value": "",
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            },
+                            {
+                                "key": "field_oucz_infra_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "default_value": "",
+                                "rows": 4,
+                                "new_lines": "",
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            },
+                            {
+                                "key": "field_oucz_infra_facts",
+                                "label": "Fakty",
+                                "name": "facts",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj fakt",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_oucz_infra_fact",
+                                        "label": "Tekst",
+                                        "name": "text",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_infra_facts"
+                                    }
+                                ],
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            },
+                            {
+                                "key": "field_oucz_infra_gallery",
+                                "label": "Galeria",
+                                "name": "gallery",
+                                "type": "repeater",
+                                "layout": "table",
+                                "button_label": "Dodaj zdjęcie",
+                                "min": 0,
+                                "max": 0,
+                                "sub_fields": [
+                                    {
+                                        "key": "field_oucz_infra_gal_img",
+                                        "label": "Obraz",
+                                        "name": "image",
+                                        "type": "image",
+                                        "return_format": "array",
+                                        "preview_size": "medium",
+                                        "library": "all",
+                                        "parent_repeater": "field_oucz_infra_gallery"
+                                    },
+                                    {
+                                        "key": "field_oucz_infra_gal_url",
+                                        "label": "URL fallback",
+                                        "name": "url",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_infra_gallery"
+                                    },
+                                    {
+                                        "key": "field_oucz_infra_gal_alt",
+                                        "label": "Alt",
+                                        "name": "alt",
+                                        "type": "text",
+                                        "default_value": "",
+                                        "parent_repeater": "field_oucz_infra_gallery"
+                                    }
+                                ],
+                                "parent_repeater": "field_oucz_infra_buildings"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key": "field_oucz_tab_closing",
+                "label": "Zamknięcie",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_oucz_closing_section",
+                "label": "Closing CTA",
+                "name": "oucz_closing_section",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_oucz_closing_before",
+                        "label": "Tytuł — przed",
+                        "name": "title_before",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_accent",
+                        "label": "Tytuł — akcent",
+                        "name": "title_accent",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_after",
+                        "label": "Tytuł — po",
+                        "name": "title_after",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "textarea",
+                        "default_value": "",
+                        "rows": 4,
+                        "new_lines": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_cta1_text",
+                        "label": "CTA 1 — tekst",
+                        "name": "cta_primary_text",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_cta1_url",
+                        "label": "CTA 1 — URL",
+                        "name": "cta_primary_url",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_cta2_text",
+                        "label": "CTA 2 — tekst",
+                        "name": "cta_secondary_text",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_closing_cta2_url",
+                        "label": "CTA 2 — URL",
+                        "name": "cta_secondary_url",
+                        "type": "text",
+                        "default_value": ""
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "page"
+                },
+                {
+                    "param": "page_template",
+                    "operator": "==",
+                    "value": "page-o-uczelni.php"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
