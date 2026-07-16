@@ -1,5 +1,5 @@
 /**
- * Compact offer countdown + scroll-down word pairs (bachelor/master test).
+ * Compact offer countdown + seamless scroll-down word loop.
  */
 export default function initOfferStartTimer() {
 	const root = document.querySelector('.offer-start-timer[data-countdown-ts]');
@@ -59,7 +59,7 @@ export default function initOfferStartTimer() {
 		return;
 	}
 
-	// Duplicate first word so the reel can always scroll downward.
+	// Clone first pair at the end → seamless loop (always scrolls down).
 	reels.forEach((reel) => {
 		const first = reel.querySelector('.offer-start-timer__word');
 		if (first) {
@@ -68,26 +68,54 @@ export default function initOfferStartTimer() {
 	});
 
 	let index = 0;
-	const stepCount = pairCount; // 0 -> 1 -> 2(clone of 0) -> reset to 0
+	let busy = false;
+	const lineH = () => {
+		const line = root.querySelector('.offer-start-timer__line');
+		return line ? line.getBoundingClientRect().height : 16;
+	};
 
 	function setReel(indexValue, animate) {
+		const y = -(indexValue * lineH());
 		reels.forEach((reel) => {
-			reel.style.transition = animate ? '' : 'none';
-			reel.style.transform = `translateY(calc(-${indexValue} * 1.15em))`;
+			if (!animate) {
+				reel.style.transition = 'none';
+			} else {
+				reel.style.transition = '';
+			}
+			reel.style.transform = `translateY(${y}px)`;
 		});
 	}
 
-	setReel(0, false);
-
-	window.setInterval(() => {
+	function advance() {
+		if (busy) {
+			return;
+		}
+		busy = true;
 		index += 1;
 		setReel(index, true);
 
-		if (index >= stepCount) {
-			window.setTimeout(() => {
+		const lead = reels[0];
+		const onEnd = (event) => {
+			if (event.propertyName !== 'transform') {
+				return;
+			}
+			lead.removeEventListener('transitionend', onEnd);
+
+			if (index >= pairCount) {
 				index = 0;
 				setReel(0, false);
-			}, 580);
-		}
-	}, 3200);
+				// Force reflow so next loop can animate again.
+				void lead.offsetHeight;
+				reels.forEach((reel) => {
+					reel.style.transition = '';
+				});
+			}
+			busy = false;
+		};
+
+		lead.addEventListener('transitionend', onEnd);
+	}
+
+	setReel(0, false);
+	window.setInterval(advance, 3400);
 }
