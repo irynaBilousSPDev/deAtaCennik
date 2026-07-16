@@ -1,5 +1,5 @@
 /**
- * Compact offer countdown + cascading word loop (bottom → top → out).
+ * Compact offer countdown + synced two-line phrase loop.
  */
 export default function initOfferStartTimer() {
 	const root = document.querySelector('.offer-start-timer[data-countdown-ts]');
@@ -13,7 +13,7 @@ export default function initOfferStartTimer() {
 	}
 
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const wordCount = Math.max(1, parseInt(root.getAttribute('data-word-count'), 10) || 4);
+	const pairCount = Math.max(1, parseInt(root.getAttribute('data-pair-count'), 10) || 4);
 	const reels = Array.from(root.querySelectorAll('.offer-start-timer__reel'));
 	const valueNodes = {
 		days: root.querySelector('[data-unit="days"]'),
@@ -55,11 +55,10 @@ export default function initOfferStartTimer() {
 	renderCountdown();
 	window.setInterval(renderCountdown, 1000);
 
-	if (!reels.length || wordCount < 2 || reduce) {
+	if (!reels.length || pairCount < 2 || reduce) {
 		return;
 	}
 
-	// Clone first word on each reel for seamless loop reset.
 	reels.forEach((reel) => {
 		const first = reel.querySelector('.offer-start-timer__word');
 		if (first) {
@@ -98,7 +97,7 @@ export default function initOfferStartTimer() {
 			}
 			lead.removeEventListener('transitionend', onEnd);
 
-			if (index >= wordCount) {
+			if (index >= pairCount) {
 				index = 0;
 				setReel(0, false);
 				void lead.offsetHeight;
@@ -113,5 +112,5 @@ export default function initOfferStartTimer() {
 	}
 
 	setReel(0, false);
-	window.setInterval(advance, 3000);
+	window.setInterval(advance, 3200);
 }

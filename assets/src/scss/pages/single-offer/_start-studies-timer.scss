@@ -10,23 +10,29 @@
   background: #f3f4f6;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
 
-  // Mobile: float over hero image (saves space above title).
+  // Mobile: top-right on hero image, inset from edges.
   .offer_header__media & {
     position: absolute;
     z-index: 4;
-    right: 12px;
-    bottom: 18%;
+    top: 20px;
+    right: 28px;
+    bottom: auto;
     margin: 0;
     background: rgba(243, 244, 246, 0.94);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
     backdrop-filter: blur(4px);
+
+    @media (max-width: 575.98px) {
+      top: 16px;
+      right: 24px;
+    }
   }
 
   &__stack {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 132px;
+    min-width: 148px;
   }
 
   &__line {
@@ -38,7 +44,7 @@
     text-align: center;
     color: rgba(22, 25, 29, 0.3);
     font-family: vars.$font-family-sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     line-height: var(--ost-line);
     letter-spacing: -0.02em;
@@ -80,6 +86,7 @@
     align-items: center;
     justify-content: center;
     height: var(--ost-line);
+    padding: 0 2px;
     line-height: 1;
     white-space: nowrap;
   }
