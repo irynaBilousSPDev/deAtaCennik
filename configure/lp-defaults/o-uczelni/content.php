@@ -12,7 +12,6 @@ return [
 		'lead' => 'Jedna z najlepszych niepublicznych szkół techniczno-artystycznych w Polsce — kampusy w Warszawie i Wrocławiu, kształcenie oparte na trzech filarach: technologii, sztuce i biznesie.',
 		'crumbs' => [
 			['label' => 'Strona główna', 'url' => '/'],
-			['label' => 'Uczelnia', 'url' => ''],
 			['label' => 'O Uczelni', 'url' => ''],
 		],
 	],

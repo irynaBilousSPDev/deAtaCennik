@@ -76,28 +76,62 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 
 	<div class="hero">
 		<div class="wrap">
-			<?php if (!empty($hero['crumbs'])) : ?>
-				<div class="crumb">
+			<?php
+			$crumbs = !empty($hero['crumbs']) && is_array($hero['crumbs']) ? $hero['crumbs'] : [];
+			if ($crumbs === []) {
+				$crumbs[] = [
+					'label' => __('Strona główna', 'akademiata'),
+					'url'   => home_url('/'),
+				];
+				$ancestors = array_reverse(get_post_ancestors(get_the_ID()));
+				foreach ($ancestors as $ancestor_id) {
+					$crumbs[] = [
+						'label' => get_the_title($ancestor_id),
+						'url'   => get_permalink($ancestor_id),
+					];
+				}
+				$crumbs[] = [
+					'label' => get_the_title(),
+					'url'   => '',
+				];
+			}
+			if ($crumbs !== []) :
+				?>
+				<nav class="crumb" aria-label="<?php esc_attr_e('Breadcrumb', 'akademiata'); ?>">
 					<?php
-					$crumb_count = count($hero['crumbs']);
-					foreach ($hero['crumbs'] as $i => $crumb) :
-						$label = $crumb['label'] ?? '';
-						$url = $crumb['url'] ?? '';
+					$visible = [];
+					foreach ($crumbs as $crumb) {
+						$label = trim((string) ($crumb['label'] ?? ''));
 						if ($label === '') {
 							continue;
 						}
-						if ($i > 0) {
-							echo '<span class="sep">/</span>';
+						$visible[] = [
+							'label' => $label,
+							'url'   => trim((string) ($crumb['url'] ?? '')),
+						];
+					}
+					$crumb_count = count($visible);
+					foreach ($visible as $i => $crumb) :
+						$is_last = ($i === $crumb_count - 1);
+						$url = $crumb['url'];
+						if ($url === '/' || $url === '#home' || strtolower($url) === 'home') {
+							$url = home_url('/');
 						}
-						if ($url !== '' && $i < $crumb_count - 1) {
-							$href = $url === '/' ? home_url('/') : $url;
-							printf('<a href="%s">%s</a>', esc_url($href), esc_html($label));
+						// First crumb with empty URL → home when label looks like home.
+						if ($i === 0 && $url === '' && preg_match('/^(strona\s*g[lł][oó]wna|home)$/iu', $crumb['label'])) {
+							$url = home_url('/');
+						}
+						if ($i > 0) {
+							echo '<span class="sep" aria-hidden="true">/</span>';
+						}
+						if (!$is_last && $url !== '') {
+							printf('<a href="%s">%s</a>', esc_url($url), esc_html($crumb['label']));
 						} else {
-							echo esc_html($label);
+							printf('<span class="current"%s>%s</span>', $is_last ? ' aria-current="page"' : '', esc_html($crumb['label']));
 						}
 					endforeach;
 					?>
-				</div>
+				</nav>
 			<?php endif; ?>
 			<h1>
 				<?php $lp_text($hero['title_before'] ?? ''); ?>
