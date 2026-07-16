@@ -22,7 +22,6 @@ $show_register_button = !empty($register_url);
 
             <?php if ($is_mobile) : ?>
                 <div class="offer_header my-3 mobile_visible">
-                    <?php get_template_part('template-parts/single-offer/start-studies-timer'); ?>
                     <!-- Breadcrumbs -->
                     <?php the_breadcrumb(); ?>
                     <div class="top_details">
@@ -130,6 +129,9 @@ $show_register_button = !empty($register_url);
                 <div class="col-lg-6 offer_header__media">
                     <?php if (!$is_mobile) : ?>
                         <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
+                    <?php endif; ?>
+                    <?php if ($is_mobile) : ?>
+                        <?php get_template_part('template-parts/single-offer/start-studies-timer'); ?>
                     <?php endif; ?>
                     <?php if (has_post_thumbnail()) : ?>
                         <?php

@@ -1,5 +1,5 @@
 /**
- * Compact offer countdown + seamless scroll-down word loop.
+ * Compact offer countdown + cascading word loop (bottom → top → out).
  */
 export default function initOfferStartTimer() {
 	const root = document.querySelector('.offer-start-timer[data-countdown-ts]');
@@ -13,7 +13,7 @@ export default function initOfferStartTimer() {
 	}
 
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const pairCount = Math.max(1, parseInt(root.getAttribute('data-pair-count'), 10) || 2);
+	const wordCount = Math.max(1, parseInt(root.getAttribute('data-word-count'), 10) || 4);
 	const reels = Array.from(root.querySelectorAll('.offer-start-timer__reel'));
 	const valueNodes = {
 		days: root.querySelector('[data-unit="days"]'),
@@ -55,11 +55,11 @@ export default function initOfferStartTimer() {
 	renderCountdown();
 	window.setInterval(renderCountdown, 1000);
 
-	if (!reels.length || pairCount < 2 || reduce) {
+	if (!reels.length || wordCount < 2 || reduce) {
 		return;
 	}
 
-	// Clone first pair at the end → seamless loop (always scrolls down).
+	// Clone first word on each reel for seamless loop reset.
 	reels.forEach((reel) => {
 		const first = reel.querySelector('.offer-start-timer__word');
 		if (first) {
@@ -69,19 +69,16 @@ export default function initOfferStartTimer() {
 
 	let index = 0;
 	let busy = false;
-	const lineH = () => {
+
+	function lineHeight() {
 		const line = root.querySelector('.offer-start-timer__line');
 		return line ? line.getBoundingClientRect().height : 16;
-	};
+	}
 
 	function setReel(indexValue, animate) {
-		const y = -(indexValue * lineH());
+		const y = -(indexValue * lineHeight());
 		reels.forEach((reel) => {
-			if (!animate) {
-				reel.style.transition = 'none';
-			} else {
-				reel.style.transition = '';
-			}
+			reel.style.transition = animate ? '' : 'none';
 			reel.style.transform = `translateY(${y}px)`;
 		});
 	}
@@ -101,10 +98,9 @@ export default function initOfferStartTimer() {
 			}
 			lead.removeEventListener('transitionend', onEnd);
 
-			if (index >= pairCount) {
+			if (index >= wordCount) {
 				index = 0;
 				setReel(0, false);
-				// Force reflow so next loop can animate again.
 				void lead.offsetHeight;
 				reels.forEach((reel) => {
 					reel.style.transition = '';
@@ -117,5 +113,5 @@ export default function initOfferStartTimer() {
 	}
 
 	setReel(0, false);
-	window.setInterval(advance, 3400);
+	window.setInterval(advance, 3000);
 }
