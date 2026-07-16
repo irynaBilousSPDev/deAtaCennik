@@ -32,9 +32,8 @@ function load_acf_components() {
 
 add_action('init', 'load_acf_components');
 
-// LP O Uczelni: defaults helpers + admin seed into ACF.
+// LP O Uczelni: defaults helpers (merge when ACF empty).
 require_once get_template_directory() . '/configure/lp-defaults/o-uczelni/fields.php';
-require_once get_template_directory() . '/configure/lp-defaults/o-uczelni/seed.php';
 
 /**
  * Button: Component is reused in sliders/offers — not rendered on single posts.
