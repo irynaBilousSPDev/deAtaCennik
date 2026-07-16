@@ -557,7 +557,7 @@ export function handleScrollButtonOffer() {
 $('#program .download_program a').attr('target', '_blank');
 
 
-export function initializeFancybox(selector = '[data-fancybox="gallery"]') {
+export function initializeFancybox(selector = '[data-fancybox]') {
     document.addEventListener("DOMContentLoaded", function () {
         Fancybox.bind(selector, {
             Thumbs: {

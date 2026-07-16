@@ -74,7 +74,21 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 
 <div class="lp-page lp-o-uczelni">
 
-	<div class="hero">
+	<?php
+	$hero_bg = akademiata_o_uczelni_image_url($hero['bg_image'] ?? null, $hero['bg_image_url'] ?? '');
+	$hero_class = 'hero' . ($hero_bg !== '' ? ' hero--has-bg' : '');
+	$hero_overlay = isset($hero['overlay_opacity']) ? (float) $hero['overlay_opacity'] : 65.0;
+	if ($hero_overlay > 1) {
+		$hero_overlay = $hero_overlay / 100;
+	}
+	$hero_overlay = max(0, min(1, $hero_overlay));
+	$hero_overlay_css = number_format($hero_overlay, 2, '.', '');
+	?>
+	<div class="<?php echo esc_attr($hero_class); ?>"<?php echo $hero_bg !== '' ? ' style="--oucz-hero-overlay:' . esc_attr($hero_overlay_css) . '"' : ''; ?>>
+		<?php if ($hero_bg !== '') : ?>
+			<div class="hero-bg" style="background-image:url('<?php echo esc_url($hero_bg); ?>')" aria-hidden="true"></div>
+			<div class="hero-overlay" aria-hidden="true"></div>
+		<?php endif; ?>
 		<div class="wrap">
 			<?php
 			$crumbs = !empty($hero['crumbs']) && is_array($hero['crumbs']) ? $hero['crumbs'] : [];
@@ -222,6 +236,14 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 				<?php endif; ?>
 			</div>
 
+			<?php
+			$logo_old_url = akademiata_o_uczelni_image_url($kim['logo_image_old'] ?? null, $kim['logo_image_old_url'] ?? '');
+			$logo_new_url = akademiata_o_uczelni_image_url($kim['logo_image_new'] ?? null, $kim['logo_image_new_url'] ?? '');
+			// Fallback: legacy single ACF image.
+			if ($logo_old_url === '' && $logo_new_url === '') {
+				$logo_old_url = akademiata_o_uczelni_image_url($kim['logo_image'] ?? null, $kim['logo_image_url'] ?? '');
+			}
+			?>
 			<div class="logo-section" id="logo-uczelni">
 				<div class="logo-text">
 					<div class="logo-hero">
@@ -231,21 +253,34 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 					</div>
 					<?php $lp_html($kim['logo_text'] ?? ''); ?>
 				</div>
-				<div class="logo-visual">
-					<figure>
-						<?php
-						$lp_img(
-							$kim['logo_image'] ?? null,
-							$kim['logo_image_url'] ?? '',
-							'',
-							$kim['logo_image_alt'] ?? ''
-						);
-						?>
+				<?php if ($logo_old_url !== '' || $logo_new_url !== '') : ?>
+					<div class="logo-visual">
+						<div class="logo-compare">
+							<?php if ($logo_old_url !== '') : ?>
+								<figure class="logo-compare__item">
+									<img src="<?php echo esc_url($logo_old_url); ?>" alt="<?php echo esc_attr($kim['logo_image_old_alt'] ?? ''); ?>" loading="lazy">
+									<?php if (!empty($kim['logo_image_old_label'])) : ?>
+										<figcaption><?php $lp_text($kim['logo_image_old_label']); ?></figcaption>
+									<?php endif; ?>
+								</figure>
+							<?php endif; ?>
+							<?php if ($logo_old_url !== '' && $logo_new_url !== '') : ?>
+								<span class="logo-compare__arrow" aria-hidden="true">→</span>
+							<?php endif; ?>
+							<?php if ($logo_new_url !== '') : ?>
+								<figure class="logo-compare__item">
+									<img src="<?php echo esc_url($logo_new_url); ?>" alt="<?php echo esc_attr($kim['logo_image_new_alt'] ?? ''); ?>" loading="lazy">
+									<?php if (!empty($kim['logo_image_new_label'])) : ?>
+										<figcaption><?php $lp_text($kim['logo_image_new_label']); ?></figcaption>
+									<?php endif; ?>
+								</figure>
+							<?php endif; ?>
+						</div>
 						<?php if (!empty($kim['logo_caption'])) : ?>
-							<figcaption><?php $lp_text($kim['logo_caption']); ?></figcaption>
+							<p class="logo-compare__note"><?php $lp_text($kim['logo_caption']); ?></p>
 						<?php endif; ?>
-					</figure>
-				</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>
@@ -536,13 +571,23 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 								<?php endif; ?>
 								<?php if (!empty($building['gallery'])) : ?>
 									<div class="infra-gallery">
-										<?php foreach ($building['gallery'] as $img) :
+										<?php
+										$gallery_id = 'oucz-infra-' . (int) $num;
+										foreach ($building['gallery'] as $img) :
 											$url = akademiata_o_uczelni_image_url($img['image'] ?? null, $img['url'] ?? '');
 											if ($url === '') {
 												continue;
 											}
+											$alt = (string) ($img['alt'] ?? '');
 											?>
-											<img src="<?php echo esc_url($url); ?>" alt="<?php echo esc_attr($img['alt'] ?? ''); ?>" loading="lazy">
+											<a
+												href="<?php echo esc_url($url); ?>"
+												class="infra-gallery__link"
+												data-fancybox="<?php echo esc_attr($gallery_id); ?>"
+												data-caption="<?php echo esc_attr($alt); ?>"
+											>
+												<img src="<?php echo esc_url($url); ?>" alt="<?php echo esc_attr($alt); ?>" loading="lazy">
+											</a>
 										<?php endforeach; ?>
 									</div>
 								<?php endif; ?>

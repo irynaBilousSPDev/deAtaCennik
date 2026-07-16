@@ -42,6 +42,37 @@
                         "new_lines": ""
                     },
                     {
+                        "key": "field_oucz_hero_bg_image",
+                        "label": "Zdjęcie w tle (opcjonalne)",
+                        "name": "bg_image",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all",
+                        "instructions": "Jeśli ustawione, hero pokazuje tło ze zdjęciem i ciemnym overlayem dla czytelności tekstu."
+                    },
+                    {
+                        "key": "field_oucz_hero_overlay_opacity",
+                        "label": "Ciemność overlay (opacity)",
+                        "name": "overlay_opacity",
+                        "type": "range",
+                        "instructions": "Siła przyciemnienia zdjęcia w tle. 0 = bez overlay, 100 = prawie czarne. Domyślnie 65.",
+                        "default_value": 65,
+                        "min": 0,
+                        "max": 100,
+                        "step": 5,
+                        "prepend": "",
+                        "append": "%",
+                        "conditional_logic": [
+                            [
+                                {
+                                    "field": "field_oucz_hero_bg_image",
+                                    "operator": "!=empty"
+                                }
+                            ]
+                        ]
+                    },
+                    {
                         "key": "field_oucz_hero_crumbs",
                         "label": "Breadcrumbs",
                         "name": "crumbs",
@@ -166,6 +197,14 @@
                         "library": "all"
                     },
                     {
+                        "key": "field_oucz_kim_badge_url",
+                        "label": "Odznaka — URL fallback",
+                        "name": "badge_url",
+                        "type": "url",
+                        "default_value": "",
+                        "instructions": "Używane gdy brak obrazu z mediów (np. plik z motywu)."
+                    },
+                    {
                         "key": "field_oucz_kim_badge_alt",
                         "label": "Alt odznaki",
                         "name": "badge_alt",
@@ -281,24 +320,72 @@
                         "default_value": ""
                     },
                     {
-                        "key": "field_oucz_kim_logo_img",
-                        "label": "Logo — obraz",
-                        "name": "logo_image",
+                        "key": "field_oucz_kim_logo_img_old",
+                        "label": "Logo dawne (WSEiZ)",
+                        "name": "logo_image_old",
                         "type": "image",
                         "return_format": "array",
                         "preview_size": "medium",
-                        "library": "all"
+                        "library": "all",
+                        "instructions": "Dawne logo Wyższej Szkoły Ekologii i Zarządzania."
                     },
                     {
-                        "key": "field_oucz_kim_logo_alt",
-                        "label": "Logo — alt",
-                        "name": "logo_image_alt",
+                        "key": "field_oucz_kim_logo_url_old",
+                        "label": "Logo dawne — URL fallback",
+                        "name": "logo_image_old_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_alt_old",
+                        "label": "Logo dawne — alt",
+                        "name": "logo_image_old_alt",
                         "type": "text",
                         "default_value": ""
                     },
                     {
+                        "key": "field_oucz_kim_logo_label_old",
+                        "label": "Logo dawne — etykieta",
+                        "name": "logo_image_old_label",
+                        "type": "text",
+                        "default_value": "WSEiZ",
+                        "instructions": "Podpis pod dawnym logo, np. WSEiZ."
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_img_new",
+                        "label": "Logo obecne (ATA)",
+                        "name": "logo_image_new",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "medium",
+                        "library": "all",
+                        "instructions": "Obecne logo Akademii Techniczno-Artystycznej."
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_url_new",
+                        "label": "Logo obecne — URL fallback",
+                        "name": "logo_image_new_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_alt_new",
+                        "label": "Logo obecne — alt",
+                        "name": "logo_image_new_alt",
+                        "type": "text",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_oucz_kim_logo_label_new",
+                        "label": "Logo obecne — etykieta",
+                        "name": "logo_image_new_label",
+                        "type": "text",
+                        "default_value": "ATA",
+                        "instructions": "Podpis pod obecnym logo, np. ATA."
+                    },
+                    {
                         "key": "field_oucz_kim_logo_cap",
-                        "label": "Logo — podpis",
+                        "label": "Logo — podpis pod porównaniem",
                         "name": "logo_caption",
                         "type": "text",
                         "default_value": ""
@@ -654,6 +741,13 @@
                         "library": "all"
                     },
                     {
+                        "key": "field_oucz_abs_badge_url",
+                        "label": "Odznaka ELA — URL fallback",
+                        "name": "badge_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
                         "key": "field_oucz_abs_badge_alt",
                         "label": "Alt odznaki",
                         "name": "badge_alt",
@@ -812,6 +906,14 @@
                                 "return_format": "array",
                                 "preview_size": "medium",
                                 "library": "all",
+                                "parent_repeater": "field_oucz_hist_steps"
+                            },
+                            {
+                                "key": "field_oucz_hist_logo_url",
+                                "label": "Logo — URL fallback",
+                                "name": "logo_url",
+                                "type": "url",
+                                "default_value": "",
                                 "parent_repeater": "field_oucz_hist_steps"
                             },
                             {

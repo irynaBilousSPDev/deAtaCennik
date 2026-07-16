@@ -10,6 +10,9 @@ return [
 		'title_before' => 'O',
 		'title_accent' => 'Uczelni',
 		'lead' => 'Jedna z najlepszych niepublicznych szkół techniczno-artystycznych w Polsce — kampusy w Warszawie i Wrocławiu, kształcenie oparte na trzech filarach: technologii, sztuce i biznesie.',
+		'bg_image' => null,
+		'bg_image_url' => '',
+		'overlay_opacity' => 65,
 		'crumbs' => [
 			['label' => 'Strona główna', 'url' => '/'],
 			['label' => 'O Uczelni', 'url' => ''],
@@ -58,8 +61,14 @@ return [
 		],
 		'logo_title' => 'Logo uczelni',
 		'logo_text' => '<p>Miś w logo Wyższej Szkoły Ekologii i Zarządzania w Warszawie nie pojawił się przypadkowo. Nasi studenci często mówią, że studiują „w Misiu". To oczywiste nawiązanie do prof. dr. hab. inż. Jana Misiaka, który w 1995 roku złożył wniosek o utworzenie WSEiZ i przez wiele lat był Rektorem Uczelni. To jednoznaczny dowód, jak wielkim szacunkiem oraz renomą cieszy się założyciel Uczelni, wręcz utożsamiany z WSEiZ. Jednocześnie dało to podwaliny pod obecność Misia w naszym logo.</p><p><strong>Dlaczego możesz polegać na Misiu?</strong> To nie tylko symbol siły i odwagi, ale również tolerancji oraz umiejętności adaptacji w każdych warunkach. To także zwierzę z wyjątkową osobowością, dlatego tak doskonale pasuje do Uczelni z Charakterem, jaką jest WSEiZ.</p><p>Poza tym nikt tak jak miś nie zdaje sobie sprawy z tego, jak wiele w życiu znaczy odpowiednio długi, zdrowy sen 🙂</p>',
-		'logo_image_url' => '', // static/img/images_about_us/logo-uczelni-wseiz-i-ata.png
-		'logo_image_alt' => 'Logo Uczelni — dawne logo WSEiZ oraz obecne logo ATA, z Misiem (niedźwiedziem) obecnym w obu',
+		'logo_image_old' => null,
+		'logo_image_old_url' => '', // static: logo-wseiz-dawne.png
+		'logo_image_old_alt' => 'Dawne logo Wyższej Szkoły Ekologii i Zarządzania w Warszawie — Miś w okręgu',
+		'logo_image_old_label' => 'WSEiZ',
+		'logo_image_new' => null,
+		'logo_image_new_url' => '', // static: logo-ata-obecne.svg
+		'logo_image_new_alt' => 'Obecne logo Akademii Techniczno-Artystycznej Nauk Stosowanych w Warszawie',
+		'logo_image_new_label' => 'ATA',
 		'logo_caption' => 'Dawne logo WSEiZ i obecne logo ATA — Miś obecny w obu.',
 	],
 	'oucz_cel_section' => [

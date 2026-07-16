@@ -55,6 +55,9 @@ body.page-template-page-o-uczelni {
 
     /* ---------- Page hero ---------- */
     .hero{position:relative;background:#000;color:#fff;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;z-index:0}
+    .hero-overlay{position:absolute;inset:0;z-index:1;background:rgba(0,0,0,var(--oucz-hero-overlay,.65));pointer-events:none}
+    .hero--has-bg{background:#0a0c0f}
     .hero .wrap{position:relative;padding:calc(var(--oucz-header-offset, 110px) + 28px) 40px 58px;z-index:2}
     .crumb{font-family:'Nunito Sans';font-size:12.5px;color:#aeb4bd;letter-spacing:.02em;margin-bottom:18px}
     .crumb a{color:#cfd4db;transition:color .15s}
@@ -64,6 +67,9 @@ body.page-template-page-o-uczelni {
     .hero h1{font-size:56px;font-weight:900;margin-bottom:16px}
     .hero h1 .accent{color:$oucz-orange}
     .hero p.lead{max-width:640px;font-size:18px;color:#d6dae0;font-weight:300}
+    .hero--has-bg .crumb{color:rgba(255,255,255,.78)}
+    .hero--has-bg .crumb a{color:rgba(255,255,255,.88)}
+    .hero--has-bg p.lead{color:rgba(255,255,255,.9);text-shadow:0 1px 12px rgba(0,0,0,.35)}
 
     /* ---------- In-page anchor nav ---------- */
     .subnav{position:sticky;top:var(--oucz-header-offset, 110px);z-index:40;background:#fff;border-bottom:1px solid $oucz-line;box-shadow:0 6px 18px -14px rgba(0,0,0,.25)}
@@ -179,9 +185,13 @@ body.page-template-page-o-uczelni {
     .logo-hero{margin-bottom:20px}
     .logo-hero h2{font-size:38px;font-weight:900;margin:0}
     .logo-text p{font-size:16px;color:#3a3f46;margin-bottom:14px;max-width:600px}
-    .logo-visual figure{margin:0;text-align:center;background:$oucz-bg-soft;border:1px solid $oucz-line;border-radius:18px;padding:34px 30px}
-    .logo-visual img{max-width:100%;width:100%;height:auto;display:block}
-    .logo-visual figcaption{margin-top:16px;font-size:13px;color:$oucz-muted;font-family:'Nunito Sans';font-weight:600}
+    .logo-visual{background:$oucz-bg-soft;border:1px solid $oucz-line;border-radius:18px;padding:28px 24px 22px}
+    .logo-compare{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+    .logo-compare__item{margin:0;flex:1 1 140px;max-width:220px;text-align:center}
+    .logo-compare__item img{max-width:100%;width:auto;height:88px;object-fit:contain;display:block;margin:0 auto}
+    .logo-compare__item figcaption{margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:$oucz-muted;font-family:'Nunito Sans'}
+    .logo-compare__arrow{flex:none;font-size:28px;font-weight:300;color:#b7bdc6;line-height:1;padding-bottom:18px}
+    .logo-compare__note{margin:18px 0 0;text-align:center;font-size:13px;color:$oucz-muted;font-family:'Nunito Sans';font-weight:600}
 
     /* ---------- Pillars ---------- */
     .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:38px}
@@ -215,7 +225,12 @@ body.page-template-page-o-uczelni {
     .infra-facts li{position:relative;padding:7px 0 7px 20px;font-size:14.5px;color:#3a3f46;border-bottom:1px solid #eef0f2}
     .infra-facts li::before{content:"";position:absolute;left:0;top:14px;width:7px;height:7px;border-radius:2px;background:$oucz-orange}
     .infra-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
-    .infra-gallery img{width:100%;height:124px;object-fit:cover;border-radius:9px;border:1px solid $oucz-line;background:#eef0f2;display:block}
+    .infra-gallery__link{position:relative;display:block;border-radius:9px;overflow:hidden;cursor:zoom-in;isolation:isolate}
+    .infra-gallery__link::after{content:"";position:absolute;inset:0;background:rgba(13,15,18,.0);transition:background .2s;pointer-events:none}
+    .infra-gallery__link:hover::after,.infra-gallery__link:focus-visible::after{background:rgba(13,15,18,.22)}
+    .infra-gallery__link:focus-visible{outline:2px solid $oucz-orange;outline-offset:2px}
+    .infra-gallery img{width:100%;height:124px;object-fit:cover;border-radius:9px;border:1px solid $oucz-line;background:#eef0f2;display:block;transition:transform .35s ease}
+    .infra-gallery__link:hover img,.infra-gallery__link:focus-visible img{transform:scale(1.04)}
 
     /* ---------- Synergy closing ---------- */
     .closing{background:$oucz-dark;color:#fff;text-align:center;padding:80px 0}
@@ -224,6 +239,46 @@ body.page-template-page-o-uczelni {
     .closing p{max-width:720px;margin:0 auto 26px;color:#c9ced5;font-size:17px}
     .btn{display:inline-block;background:$oucz-orange;color:#fff;font-family:'Nunito Sans';font-weight:800;font-size:15px;padding:14px 30px;border-radius:30px}
     .btn.ghost{background:transparent;border:1.5px solid #4a5058;color:#fff;margin-left:10px}
+
+    /* ---------- Scroll reveals ---------- */
+    .oucz-reveal{
+      opacity:0;
+      transform:translateY(22px);
+      transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1);
+      transition-delay:var(--oucz-reveal-delay,0ms);
+      will-change:opacity,transform;
+    }
+    .oucz-reveal.is-inview{opacity:1;transform:none}
+    .tl-item.oucz-reveal .tl-year{
+      opacity:0;
+      transform:translateX(-12px);
+      transition:opacity .55s ease,transform .55s ease;
+      transition-delay:calc(var(--oucz-reveal-delay,0ms) + 80ms);
+    }
+    .tl-item.oucz-reveal.is-inview .tl-year{opacity:1;transform:none}
+    .tl-item.oucz-reveal .tl-dot{
+      transform:translateX(-50%) scale(.4);
+      transition:transform .5s cubic-bezier(.34,1.56,.64,1),border-color .4s ease;
+      transition-delay:calc(var(--oucz-reveal-delay,0ms) + 40ms);
+    }
+    .tl-item.oucz-reveal.is-inview .tl-dot{transform:translateX(-50%) scale(1)}
+    .htl-step.oucz-reveal .htl-badge{
+      transform:scale(.7);
+      transition:transform .55s cubic-bezier(.34,1.56,.64,1);
+      transition-delay:calc(var(--oucz-reveal-delay,0ms) + 60ms);
+    }
+    .htl-step.oucz-reveal.is-inview .htl-badge{transform:scale(1)}
+    @media (prefers-reduced-motion:reduce){
+      .oucz-reveal,
+      .tl-item.oucz-reveal .tl-year,
+      .tl-item.oucz-reveal .tl-dot,
+      .htl-step.oucz-reveal .htl-badge{
+        opacity:1;
+        transform:none;
+        transition:none;
+      }
+      .tl-item.oucz-reveal .tl-dot{transform:translateX(-50%)}
+    }
 
   /* ---------- Responsive ---------- */
   @media (max-width: 1100px) {
@@ -303,6 +358,19 @@ body.page-template-page-o-uczelni {
 
     .logo-hero h2 {
       font-size: 32px;
+    }
+
+    .logo-compare {
+      gap: 12px;
+    }
+
+    .logo-compare__item img {
+      height: 72px;
+    }
+
+    .logo-compare__arrow {
+      font-size: 22px;
+      padding-bottom: 14px;
     }
 
     .tl {
@@ -554,6 +622,10 @@ body.page-template-page-o-uczelni {
       height: 110px;
     }
 
+    .infra-gallery__link {
+      cursor: zoom-in;
+    }
+
     .closing {
       padding: 56px 0;
     }
@@ -608,6 +680,7 @@ body.page-template-page-o-uczelni {
     .infra-gallery img {
       height: 160px;
     }
+
 
     .tl-logo {
       height: 24px;

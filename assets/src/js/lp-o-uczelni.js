@@ -179,4 +179,43 @@ export default function initLpOUczelni() {
 			});
 		}
 	}
+
+	initRevealAnimations(root, reduce);
+}
+
+/**
+ * Light scroll reveals — timeline stages, history cards, pillars.
+ */
+function initRevealAnimations(root, reduce) {
+	const targets = root.querySelectorAll(
+		'.tl-item, .htl-step, .pillar, .rank-card, .campus, .logo-compare__item'
+	);
+	if (!targets.length) {
+		return;
+	}
+
+	if (reduce || !('IntersectionObserver' in window)) {
+		targets.forEach((el) => el.classList.add('is-inview'));
+		return;
+	}
+
+	targets.forEach((el, i) => {
+		el.classList.add('oucz-reveal');
+		el.style.setProperty('--oucz-reveal-delay', `${(i % 4) * 70}ms`);
+	});
+
+	const io = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (!entry.isIntersecting) {
+					return;
+				}
+				entry.target.classList.add('is-inview');
+				io.unobserve(entry.target);
+			});
+		},
+		{ rootMargin: '0px 0px -8% 0px', threshold: 0.18 }
+	);
+
+	targets.forEach((el) => io.observe(el));
 }

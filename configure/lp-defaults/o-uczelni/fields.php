@@ -51,7 +51,9 @@ function akademiata_o_uczelni_remote_basename_map(): array {
 		'1200px-Kampinoski_okragle_podstawowe.png' => 'partner-kampinoski-park-narodowy.png',
 		'logo-ilot.png' => 'partner-ilot.png',
 		// Logo uczelni
-		'Logo_ATA__wczesniej_logo.png' => 'logo-uczelni-wseiz-i-ata.png',
+		'Logo_ATA__wczesniej_logo.png' => 'logo-ata-obecne.svg',
+		'logo.png' => 'logo-wseiz-dawne.png',
+		'logo-ata.svg' => 'logo-ata-obecne.svg',
 		// Infrastruktura — Olszewska
 		'IMG_0201.jpg' => 'infra-olszewska-01.jpg',
 		'IMG_0204.jpg' => 'infra-olszewska-02.jpg',
@@ -147,10 +149,18 @@ function akademiata_o_uczelni_resolve_static_assets(array $fields): array {
 			(string) ($kim['badge_url'] ?? ''),
 			'badge-ranking-perspektywy-2026.png'
 		);
-		$kim['logo_image_url'] = akademiata_o_uczelni_localize_url(
-			(string) ($kim['logo_image_url'] ?? ''),
-			'logo-uczelni-wseiz-i-ata.png'
+		$kim['logo_image_old_url'] = akademiata_o_uczelni_localize_url(
+			(string) ($kim['logo_image_old_url'] ?? ''),
+			'logo-wseiz-dawne.png'
 		);
+		$kim['logo_image_new_url'] = akademiata_o_uczelni_localize_url(
+			(string) ($kim['logo_image_new_url'] ?? ''),
+			'logo-ata-obecne.svg'
+		);
+		// Legacy single-image field → treat as dawne logo when new pair empty.
+		if (($kim['logo_image_old_url'] ?? '') === '' && !empty($kim['logo_image_url'])) {
+			$kim['logo_image_old_url'] = akademiata_o_uczelni_localize_url((string) $kim['logo_image_url']);
+		}
 	}
 
 	if (isset($fields['oucz_absolwenci_section']) && is_array($fields['oucz_absolwenci_section'])) {
