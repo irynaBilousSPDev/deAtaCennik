@@ -2055,7 +2055,7 @@ function akademiata_get_theme_lang_string($key) {
             ),
             'offer_start_timer_pair_1_bottom' => array(
                 'pl' => 'studiów',
-                'en' => 'of studies',
+                'en' => 'studies',
                 'uk' => 'навчання',
                 'ru' => 'обучения',
             ),
@@ -2085,7 +2085,7 @@ function akademiata_get_theme_lang_string($key) {
             ),
             'offer_start_timer_pair_4_top' => array(
                 'pl' => 'liczba miejsc',
-                'en' => 'seats are',
+                'en' => 'places are',
                 'uk' => 'місць',
                 'ru' => 'мест',
             ),
