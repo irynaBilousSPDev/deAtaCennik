@@ -61,7 +61,7 @@ Load via `get_template_part()` or `locate_template('partials/header.php', true, 
 
 ## Bachelor/master sections (dynamic loop)
 
-From `content-single-offer.php`: `section_why_study`, `section_student_testimonials`, `section_after_studies`, `section_after_graduation`, `section_for_you_if`, `section_study_program`, `section_tuition_fees`, `section_recruitment_rules` under `template-parts/single-offer/`.
+From `content-single-offer.php`: `section_why_study`, `section_student_testimonials`, `section_after_studies`, `section_after_graduation`, `section_for_you_if`, `section_study_program`, `section_tuition_fees`, `section_recruitment_rules` under `template-parts/single-offer/`. Test countdown above breadcrumbs: `start-studies-timer.php` (bachelor/master only).
 
 ## ACF in templates
 

@@ -22,6 +22,7 @@ $show_register_button = !empty($register_url);
 
             <?php if ($is_mobile) : ?>
                 <div class="offer_header my-3 mobile_visible">
+                    <?php get_template_part('template-parts/single-offer/start-studies-timer'); ?>
                     <!-- Breadcrumbs -->
                     <?php the_breadcrumb(); ?>
                     <div class="top_details">
@@ -45,6 +46,7 @@ $show_register_button = !empty($register_url);
 
                         <?php if (!$is_mobile) : ?>
                             <div class="offer_header my-3 desktop_visible">
+                                <?php get_template_part('template-parts/single-offer/start-studies-timer'); ?>
                                 <!-- Breadcrumbs -->
                                 <?php the_breadcrumb(); ?>
                                 <div class="top_details">
