@@ -47,4 +47,4 @@ Bootstrap 4 CDN, Typekit, `main.css`, jQuery, Popper, Bootstrap JS, `vendors.js`
 
 ## Legacy
 
-`templates/` at repo root is an old prototype — not used in live hierarchy. `static/` — theme binaries (images, LP video in `static/video/`; `*.mp4` gitignored, skipped by deploy — upload once via SFTP).
+`templates/` at repo root is an old prototype — not used in live hierarchy. `static/` — theme binaries (images, LP video in `static/video/`; `*.mp4` gitignored, skipped by deploy — upload once via SFTP). LP **O Uczelni** images: `static/img/images_about_us/` (via `akademiata_o_uczelni_static_url()`).

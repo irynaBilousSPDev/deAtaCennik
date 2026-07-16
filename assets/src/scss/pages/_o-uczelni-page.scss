@@ -82,6 +82,7 @@ body.page-template-page-o-uczelni {
     .eyebrow{display:flex;align-items:center;gap:12px;font-family:'Nunito Sans';font-weight:800;font-size:12.5px;letter-spacing:.14em;color:$oucz-blue;text-transform:uppercase;margin-bottom:18px}
     .eyebrow::before{content:"";width:34px;height:2px;background:$oucz-blue;display:inline-block}
     h2.title{font-size:40px;font-weight:900;margin-bottom:26px;max-width:820px}
+    h2.title.title--filary{font-size:32px}
     .lede{font-size:19px;color:#33383f;max-width:820px;font-weight:400}
     .prose p{margin-bottom:16px;font-size:16.5px;color:#3a3f46;max-width:860px}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px}
@@ -121,8 +122,6 @@ body.page-template-page-o-uczelni {
     .logo-chip:hover{box-shadow:0 12px 26px -16px rgba(0,0,0,.35);transform:translateY(-2px)}
     .logo-chip img{max-width:100%;max-height:100%;object-fit:contain;filter:grayscale(1);opacity:.72;transition:filter .25s,opacity .25s}
     .logo-chip:hover img{filter:grayscale(0);opacity:1}
-    @media(max-width:900px){.logos-row{grid-template-columns:repeat(3,1fr)}}
-    @media(max-width:560px){.logos-row{grid-template-columns:repeat(2,1fr)}}
 
     /* ---------- Stat / ranking ---------- */
     .rank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:36px}
@@ -154,12 +153,6 @@ body.page-template-page-o-uczelni {
     .tl-card p{font-size:14.5px;color:#4a5058;margin-bottom:10px}
     .tl-card p:last-child{margin-bottom:0}
     .ata-note{margin:6px 0 0 calc(var(--oucz-tl-year) + var(--oucz-tl-gap));background:#fff;border:1px solid $oucz-line;border-left:4px solid $oucz-orange;border-radius:14px;padding:24px 28px}
-    @media(max-width:760px){
-      .tl{--oucz-tl-year:72px;--oucz-tl-gap:22px}
-      .tl-year{font-size:17px;padding-top:14px}
-      .tl-year small{font-size:10px;letter-spacing:.08em}
-      .ata-note{margin-left:0}
-    }
     .ata-note-head{font-family:'Nunito Sans';font-weight:800;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:$oucz-orange;margin-bottom:10px}
     .ata-note p{font-size:16px;color:#3a3f46;margin:0}
     /* Pozioma oś przeglądowa (historia całej Uczelni) */
@@ -232,5 +225,393 @@ body.page-template-page-o-uczelni {
     .btn{display:inline-block;background:$oucz-orange;color:#fff;font-family:'Nunito Sans';font-weight:800;font-size:15px;padding:14px 30px;border-radius:30px}
     .btn.ghost{background:transparent;border:1.5px solid #4a5058;color:#fff;margin-left:10px}
 
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1100px) {
+    .coop-grid,
+    .rank-grid,
+    .pillars {
+      grid-template-columns: 1fr 1fr;
+    }
 
+    .logos-row {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .infra-gallery {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .wrap {
+      padding: 0 28px;
+    }
+
+    .hero .wrap {
+      padding-left: 28px;
+      padding-right: 28px;
+      padding-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-size: 44px;
+    }
+
+    h2.title {
+      font-size: 34px;
+    }
+
+    .grid2,
+    .campus-grid,
+    .logo-section {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    .km-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 22px;
+    }
+
+    .rank-badge,
+    .ela-badge {
+      width: 140px;
+    }
+
+    .htl {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+
+    .htl::before {
+      display: none;
+    }
+
+    .htl-badge {
+      margin: 0 0 16px;
+    }
+
+    .htl-card {
+      height: auto;
+      text-align: left;
+    }
+
+    .logo-section {
+      margin-top: 44px;
+    }
+
+    .logo-hero h2 {
+      font-size: 32px;
+    }
+
+    .tl {
+      --oucz-tl-year: 96px;
+      --oucz-tl-gap: 28px;
+    }
+
+    .ata-note {
+      margin-left: calc(var(--oucz-tl-year) + var(--oucz-tl-gap));
+    }
+
+    .coop-grid,
+    .rank-grid,
+    .pillars {
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .wrap {
+      padding: 0 20px;
+    }
+
+    .hero .wrap {
+      padding: calc(var(--oucz-header-offset, 100px) + 20px) 20px 40px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 9vw, 40px);
+      margin-bottom: 12px;
+    }
+
+    .hero p.lead {
+      font-size: 16px;
+    }
+
+    .crumb {
+      font-size: 11.5px;
+      margin-bottom: 14px;
+    }
+
+    .crumb .sep {
+      margin: 0 6px;
+    }
+
+    .subnav .wrap {
+      padding: 0 20px;
+      gap: 6px;
+      height: 52px;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .subnav a {
+      font-size: 12.5px;
+      padding: 7px 13px;
+    }
+
+    section.block {
+      padding: 52px 0;
+    }
+
+    h2.title,
+    h2.title.title--filary {
+      font-size: clamp(26px, 7vw, 32px);
+      margin-bottom: 18px;
+    }
+
+    .lede {
+      font-size: 17px;
+    }
+
+    .prose p,
+    .highlight p {
+      font-size: 15.5px;
+    }
+
+    .highlight {
+      padding: 20px 18px;
+    }
+
+    .eyebrow {
+      font-size: 11.5px;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    .campus .cap {
+      flex-wrap: wrap;
+      padding: 16px 18px;
+      gap: 8px 10px;
+    }
+
+    .campus .cap h3 {
+      font-size: 18px;
+    }
+
+    .campus .cap .tag {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    .campus ul {
+      padding: 8px 18px 18px;
+    }
+
+    .campus li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: 14.5px;
+    }
+
+    .campus li span {
+      white-space: normal;
+    }
+
+    .coop-grid,
+    .rank-grid,
+    .pillars,
+    .logos-row {
+      grid-template-columns: 1fr;
+    }
+
+    .logos-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .logo-chip {
+      height: 78px;
+      padding: 12px;
+    }
+
+    .rank-card {
+      padding: 22px 18px;
+    }
+
+    /* Timeline: year above card, rail on the left */
+    .tl {
+      --oucz-tl-year: auto;
+      --oucz-tl-gap: 10px;
+      --oucz-tl-rail: 7px;
+      padding-left: 28px;
+    }
+
+    .tl-item {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding-bottom: 22px;
+    }
+
+    .tl-year {
+      text-align: left;
+      padding-top: 0;
+      font-size: 20px;
+    }
+
+    .tl-year small {
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+    }
+
+    .tl-dot {
+      top: 6px;
+      width: 13px;
+      height: 13px;
+    }
+
+    .tl-body {
+      padding: 18px 18px;
+    }
+
+    .tl-card h3 {
+      font-size: 17px;
+    }
+
+    .ata-note {
+      margin: 4px 0 0;
+      padding: 18px;
+    }
+
+    .history-panel {
+      margin-top: 40px;
+      padding-top: 36px;
+    }
+
+    .htl-card {
+      padding: 20px 18px;
+    }
+
+    .logo-hero h2 {
+      font-size: 28px;
+    }
+
+    .logo-visual figure {
+      padding: 22px 18px;
+    }
+
+    .pillar {
+      min-height: 0;
+      padding: 26px 22px;
+    }
+
+    .pillar h3 {
+      font-size: 22px;
+    }
+
+    .pillar .num {
+      font-size: 64px;
+      right: 14px;
+      top: 4px;
+    }
+
+    .infra-item summary {
+      gap: 12px;
+      padding: 16px 16px;
+    }
+
+    .infra-num {
+      width: 32px;
+      height: 32px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
+
+    .infra-name {
+      font-size: 16px;
+    }
+
+    .infra-content {
+      padding: 0 16px 18px;
+    }
+
+    .infra-facts {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .infra-gallery {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .infra-gallery img {
+      height: 110px;
+    }
+
+    .closing {
+      padding: 56px 0;
+    }
+
+    .closing h2 {
+      font-size: clamp(26px, 7vw, 32px);
+    }
+
+    .closing p {
+      font-size: 15.5px;
+      margin-bottom: 22px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .btn.ghost {
+      margin: 12px auto 0;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .wrap,
+    .hero .wrap,
+    .subnav .wrap {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+    }
+
+    .rank-badge,
+    .ela-badge {
+      width: 118px;
+    }
+
+    .logos-row {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .infra-gallery {
+      grid-template-columns: 1fr;
+    }
+
+    .infra-gallery img {
+      height: 160px;
+    }
+
+    .tl-logo {
+      height: 24px;
+      max-width: 140px;
+    }
+  }
 }

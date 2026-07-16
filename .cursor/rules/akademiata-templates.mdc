@@ -47,7 +47,7 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 
 ### O Uczelni
 
-**O Uczelni** — `page-o-uczelni.php` (hero, subnav, kim jesteśmy + historia ATA + logo, cel, oferta WA/WR, współpraca, absolwenci ELA, historia filii Wrocław, filary, infrastruktura accordion, closing). Prefix ACF: `oucz_`. Assets: `assets/dist/img/o-uczelni/`.
+**O Uczelni** — `page-o-uczelni.php` (hero, subnav, kim jesteśmy + historia ATA + logo, cel, oferta WA/WR, współpraca, absolwenci ELA, historia filii Wrocław, filary, infrastruktura accordion, closing). Prefix ACF: `oucz_`. Images: `static/img/images_about_us/`.
 
 ## `partials/` vs `template-parts/`
 

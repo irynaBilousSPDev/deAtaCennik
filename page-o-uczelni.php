@@ -479,7 +479,7 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 				<div class="eyebrow"><?php $lp_text($filary['eyebrow']); ?></div>
 			<?php endif; ?>
 			<?php if (!empty($filary['title'])) : ?>
-				<h2 class="title" style="font-size:32px"><?php $lp_text($filary['title']); ?></h2>
+				<h2 class="title title--filary"><?php $lp_text($filary['title']); ?></h2>
 			<?php endif; ?>
 			<?php if (!empty($filary['pillars'])) : ?>
 				<div class="pillars">
