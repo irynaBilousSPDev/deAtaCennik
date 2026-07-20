@@ -46,11 +46,11 @@ $regulamin_urls_plans = apply_filters('ata_prices_regulamin_urls_plans', [
 ]);
 $regulamin_urls_promos = apply_filters('ata_prices_regulamin_urls_promos', [
 	'wwa' => [
-		'pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja', // ZARZĄDZENIE 5/2025 (ogólne)
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/DncBnzJLJ7kLWkY#pdfviewer',
 		'en' => 'https://chmurka.wseiz.pl/index.php/s/FwxKrLBGtgEPNcQ', // ZARZĄDZENIE 18/2026
 	],
 	'wro' => [
-		'pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja', // ZARZĄDZENIE 5/2025 (ogólne)
+		'pl' => 'https://chmurka.wseiz.pl/index.php/s/DncBnzJLJ7kLWkY#pdfviewer',
 		'en' => 'https://chmurka.wseiz.pl/index.php/s/tbbQ2nTs8wtzTXH', // ZARZĄDZENIE 17/2026
 	],
 ]);
