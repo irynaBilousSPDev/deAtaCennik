@@ -49,6 +49,25 @@ section {
   border: 0;
 }
 
+// Match resizeElements() — CSS first paint, JS keeps resize in sync
+.mobile_visible {
+  display: none;
+}
+
+.desktop_visible {
+  display: block;
+}
+
+@include mixins.max-ipad-pro-screen {
+  .mobile_visible {
+    display: block;
+  }
+
+  .desktop_visible {
+    display: none;
+  }
+}
+
 
 h1 {
   @include mixins.heading-style(vars.$font-size-display-sm, 1.4, vars.$weight-bold, vars.$black);
