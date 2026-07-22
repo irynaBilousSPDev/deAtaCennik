@@ -1759,6 +1759,12 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Немає результатів для цієї локації.',
                 'ru' => 'Нет результатов для этой локации.',
             ),
+            'pg_mba_teaser_price_label' => array(
+                'pl' => 'Rata za studia',
+                'en' => 'Study installment',
+                'uk' => 'Рата за навчання',
+                'ru' => 'Рассрочка за обучение',
+            ),
             'offer_toolbar_aria' => array(
                 'pl' => 'Wyszukiwanie i filtry oferty',
                 'en' => 'Offer search and filters',

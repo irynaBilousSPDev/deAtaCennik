@@ -35,10 +35,11 @@ $top_taxonomies_with_labels = [
             </div>
         <?php endif; ?>
 
-        <div class="offer_wrapper d-flex flex-column-reverse flex-lg-row">
+        <div class="offer_wrapper d-flex flex-column flex-lg-row">
             <div class="col-lg-6">
                 <div class="offer_body">
 
+                    <div class="offer_intro">
                     <?php if (!$is_mobile) : ?>
                         <div class="offer_header my-3 desktop_visible">
                             <?php the_breadcrumb(); ?>
@@ -69,7 +70,7 @@ $top_taxonomies_with_labels = [
                         <?php $price_text = akademiata_pg_mba_get_teaser_price_text($post_id); ?>
                         <?php if ($price_text !== '') : ?>
                             <div id="priseScroll" class="taxonomy_info price_from_single my-5">
-                                <?php _e('CENA', 'akademiata'); ?>:
+                                <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_teaser_price_label')); ?>:
                                 <strong>
                                     <?php _e('już od', 'akademiata'); ?>
                                     <?php echo $price_text; ?>
@@ -80,6 +81,7 @@ $top_taxonomies_with_labels = [
                             </div>
                         <?php endif; ?>
 
+                    </div>
                     </div>
                     <?php if (!empty($register_url)) : ?>
                         <a style="display: none" id="sourceLink" href="<?= esc_url($register_url); ?>" target="_blank"
