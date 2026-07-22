@@ -1,6 +1,5 @@
 <?php
 $acf_fields = get_fields();
-$is_mobile = wp_is_mobile();
 
 $hero_slider_slides = akademiata_get_hero_slider_slides($acf_fields['main_slider'] ?? []);
 akademiata_preload_main_slider_image($hero_slider_slides);
@@ -10,7 +9,7 @@ get_header();
 
 ?>
 
-<?php if (wp_is_mobile()) : ?>
+<?php // Always render — wp_is_mobile() fails under WP Rocket (desktop cache for phones). ?>
     <div class="mobile_visible">
         <section class="mobile_sub_header">
             <div class="mobile_nav_title mb-3">
@@ -29,7 +28,6 @@ get_header();
         </section>
     </div>
 
-<?php endif; ?>
 <?php
 set_query_var('hero_slider_slides', $hero_slider_slides);
 get_template_part('template-parts/front-page/hero-slider');
