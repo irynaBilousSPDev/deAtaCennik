@@ -77,6 +77,21 @@
   height: 100%;
 }
 
+.single-postgraduate,
+.single-mba {
+  .section_header .main_title {
+    margin-bottom: 2rem;
+
+    @include mixins.ipad-air-screen {
+      margin-bottom: 2.5rem;
+    }
+
+    @include mixins.md-screen {
+      margin-bottom: 3rem;
+    }
+  }
+}
+
 .offer_header {
 
   .top_details {
