@@ -77,17 +77,23 @@
   height: 100%;
 }
 
+// PG / MBA: details vertically centered between H1 and partners (partners stay at bottom)
 .single-postgraduate,
 .single-mba {
-  .section_header .main_title {
-    margin-bottom: 2rem;
+  .section_header {
+    @include mixins.ipad-pro-screen {
+      .offer_body {
+        justify-content: flex-start;
 
-    @include mixins.ipad-air-screen {
-      margin-bottom: 2.5rem;
-    }
+        .offer_details_wrapper {
+          margin-top: auto;
+          margin-bottom: auto;
+        }
 
-    @include mixins.md-screen {
-      margin-bottom: 3rem;
+        .offer_partners {
+          margin-top: 0;
+        }
+      }
     }
   }
 }

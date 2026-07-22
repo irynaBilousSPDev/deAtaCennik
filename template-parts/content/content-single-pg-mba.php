@@ -39,7 +39,6 @@ $top_taxonomies_with_labels = [
             <div class="col-lg-6">
                 <div class="offer_body">
 
-                    <div class="offer_intro">
                     <?php if (!$is_mobile) : ?>
                         <div class="offer_header my-3 desktop_visible">
                             <?php the_breadcrumb(); ?>
@@ -81,7 +80,6 @@ $top_taxonomies_with_labels = [
                             </div>
                         <?php endif; ?>
 
-                    </div>
                     </div>
                     <?php if (!empty($register_url)) : ?>
                         <a style="display: none" id="sourceLink" href="<?= esc_url($register_url); ?>" target="_blank"
