@@ -198,8 +198,8 @@ function handleToolbarChipTap(event) {
 
 function getOfferHeaderOffsetPx() {
     const header = document.querySelector('.site-header');
-    // Floor avoids a 1px hairline gap under fixed header from subpixel heights.
-    return header ? Math.floor(header.getBoundingClientRect().height) : 0;
+    // Ceil so chips never sit below the header bottom (avoids a hairline gap).
+    return header ? Math.ceil(header.getBoundingClientRect().height) : 0;
 }
 
 function scrollOfferListingToStart() {
