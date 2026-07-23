@@ -261,18 +261,18 @@ $om-filter-card-pad: 16px;
         width: 100%;
         z-index: 9000;
         margin: 0;
-        padding: 0 $om-pad-x;
-        background: transparent;
-        box-shadow: none;
+        padding: 8px $om-pad-x 10px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
         box-sizing: border-box;
         transform: translate3d(0, 0, 0);
         transition: transform 0.22s ease;
         will-change: transform;
-        pointer-events: none;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
 
         .offer-mobile-chip {
-          pointer-events: auto;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         }
 
         &.offer-mobile-chips--no-anim {
