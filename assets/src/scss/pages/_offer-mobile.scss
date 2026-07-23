@@ -255,7 +255,7 @@ $om-filter-card-pad: 16px;
 
       &--is-fixed {
         position: fixed;
-        top: calc(var(--offer-chips-fixed-top, 0px) + 6px);
+        top: calc(var(--offer-chips-fixed-top, 0px) - 1px);
         left: 0;
         right: 0;
         width: 100%;
@@ -270,6 +270,18 @@ $om-filter-card-pad: 16px;
         will-change: transform;
         -webkit-backdrop-filter: blur(8px);
         backdrop-filter: blur(8px);
+
+        // Seal subpixel gap under the fixed site header.
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: -2px;
+          height: 4px;
+          background: rgba(255, 255, 255, 0.95);
+          pointer-events: none;
+        }
 
         .offer-mobile-chip {
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
