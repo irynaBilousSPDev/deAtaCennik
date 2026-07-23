@@ -217,8 +217,9 @@ function scrollOfferListingToStart() {
     }
 
     const headerH = getOfferHeaderOffsetPx();
-    const chipsFixed = chips?.classList.contains('offer-mobile-chips--is-fixed');
-    const chipsH = chipsFixed ? chips.offsetHeight : 0;
+    const chipsPinned = chips?.classList.contains('offer-mobile-chips--is-fixed')
+        && !chips.classList.contains('offer-mobile-chips--is-hidden');
+    const chipsH = chipsPinned ? chips.offsetHeight : 0;
     const y = target.getBoundingClientRect().top + window.scrollY - headerH - chipsH - 8;
 
     window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
@@ -242,9 +243,12 @@ function initOfferMobileChipsSticky() {
     }
 
     const mobileMq = window.matchMedia(`(max-width: ${TABLET_MAX_WIDTH}px)`);
+    const DIR_DELTA = 8;
     let chipsOffsetTop = 0;
     let chipsHeight = 0;
     let scrollRaf = null;
+    let lastScrollY = window.scrollY;
+    let chipsVisible = true;
 
     const alignFixedChips = () => {
         chips.style.left = '0';
@@ -256,11 +260,27 @@ function initOfferMobileChipsSticky() {
         chips.style.width = '';
     };
 
+    const setChipsHidden = (hidden) => {
+        chips.classList.toggle('offer-mobile-chips--is-hidden', hidden);
+        chipsVisible = !hidden;
+    };
+
     const releaseFixedChips = () => {
         chips.classList.remove('offer-mobile-chips--is-fixed');
+        chips.classList.remove('offer-mobile-chips--is-hidden');
         placeholder.classList.remove('is-active');
         placeholder.style.height = '';
         clearFixedChipsPosition();
+        chipsVisible = true;
+    };
+
+    const pinFixedChips = () => {
+        if (!chips.classList.contains('offer-mobile-chips--is-fixed')) {
+            chips.classList.add('offer-mobile-chips--is-fixed');
+            placeholder.classList.add('is-active');
+            placeholder.style.height = `${chipsHeight}px`;
+        }
+        alignFixedChips();
     };
 
     const measure = () => {
@@ -274,29 +294,48 @@ function initOfferMobileChipsSticky() {
         const chipsRect = chips.getBoundingClientRect();
         chipsOffsetTop = chipsRect.top + window.scrollY;
         chipsHeight = chips.offsetHeight;
+        lastScrollY = window.scrollY;
     };
 
     const updateFixedChips = () => {
         if (!mobileMq.matches) {
             releaseFixedChips();
+            lastScrollY = window.scrollY;
             return;
         }
 
         const fixedTop = getOfferHeaderOffsetPx();
+        const scrollY = window.scrollY;
         chips.style.setProperty('--offer-chips-fixed-top', `${fixedTop}px`);
 
-        if (window.scrollY + fixedTop >= chipsOffsetTop) {
-            if (!chips.classList.contains('offer-mobile-chips--is-fixed')) {
-                chips.classList.add('offer-mobile-chips--is-fixed');
-                placeholder.classList.add('is-active');
-                placeholder.style.height = `${chipsHeight}px`;
-            }
-
-            alignFixedChips();
+        // Still in natural toolbar position — no floating bar.
+        if (scrollY + fixedTop < chipsOffsetTop) {
+            releaseFixedChips();
+            lastScrollY = scrollY;
             return;
         }
 
-        releaseFixedChips();
+        // Past toolbar: OLX-style — show on scroll up (filter/back), hide on scroll down (browse).
+        pinFixedChips();
+
+        // Keep visible while a filter UI is open.
+        if (document.body.classList.contains('filter-open')
+            || document.body.classList.contains('offer-dropdown-open')) {
+            setChipsHidden(false);
+            lastScrollY = scrollY;
+            return;
+        }
+
+        const delta = scrollY - lastScrollY;
+
+        if (Math.abs(delta) >= DIR_DELTA) {
+            if (delta > 0) {
+                setChipsHidden(true);
+            } else {
+                setChipsHidden(false);
+            }
+            lastScrollY = scrollY;
+        }
     };
 
     const onScroll = () => {
@@ -329,6 +368,7 @@ function initOfferMobileChipsSticky() {
             measure();
             updateFixedChips();
             if (event?.detail?.reset) {
+                setChipsHidden(false);
                 scrollOfferListingToStart();
             }
         }, 0);

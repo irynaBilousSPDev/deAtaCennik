@@ -265,6 +265,9 @@ $om-filter-card-pad: 16px;
         background: vars.$white;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         box-sizing: border-box;
+        transform: translate3d(0, 0, 0);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+        will-change: transform;
 
         // Seal subpixel gap under the fixed site header.
         &::before {
@@ -275,6 +278,13 @@ $om-filter-card-pad: 16px;
           top: -2px;
           height: 3px;
           background: vars.$white;
+          pointer-events: none;
+        }
+
+        // OLX-style: hide while browsing down, reveal on scroll up.
+        &.offer-mobile-chips--is-hidden {
+          transform: translate3d(0, calc(-100% - 6px), 0);
+          box-shadow: none;
           pointer-events: none;
         }
       }
