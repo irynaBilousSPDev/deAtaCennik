@@ -202,7 +202,7 @@ function getOfferHeaderOffsetPx() {
     return header ? Math.ceil(header.getBoundingClientRect().height) : 0;
 }
 
-function scrollOfferListingToStart() {
+export function scrollOfferListingToStart() {
     if (!isOfferMobileToolbarActive()) {
         return;
     }
@@ -404,6 +404,16 @@ function initOfferMobileChipsSticky() {
                 setChipsHidden(false);
                 scrollOfferListingToStart();
             }
+        }, 0);
+    });
+
+    // Favorites filter hides cards in place — jump back to listing top.
+    document.addEventListener('akademiata:offer-listing-scroll-start', () => {
+        window.setTimeout(() => {
+            setChipsHidden(false);
+            scrollOfferListingToStart();
+            measure();
+            updateFixedChips();
         }, 0);
     });
 }

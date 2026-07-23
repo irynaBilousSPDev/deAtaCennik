@@ -340,6 +340,8 @@ function toggleFavoritesFilter() {
     syncFavoritesFilterUI();
     updateAllHeartButtons();
     applyOfferCardFilters();
+    // Cards hide in place — keep viewport at listing top (same as taxonomy filters).
+    document.dispatchEvent(new CustomEvent('akademiata:offer-listing-scroll-start'));
 }
 
 function bindFavoriteHeartEvents() {
@@ -426,6 +428,7 @@ function bindFavoritesChips() {
             syncFavoritesFilterUI();
             updateAllHeartButtons();
             applyOfferCardFilters();
+            document.dispatchEvent(new CustomEvent('akademiata:offer-listing-scroll-start'));
         });
     });
 }
