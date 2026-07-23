@@ -113,6 +113,7 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 				'note' => $is_en
 					? __('The two promotions cannot be combined. The candidate chooses one. The choice must be made no later than on the day of signing the contract with the university.', 'akademiata')
 					: __('Obie promocje nie łączą się ze sobą nawzajem. Kandydat wybiera jedną. Wyboru dokonuje najpóźniej w dniu zawarcia umowy z uczelnią.', 'akademiata'),
+				'standardFeeLabel' => $is_en ? __('normally', 'akademiata') : __('standardowo', 'akademiata'),
 				'absolwent' => [
 					'name' => $is_en
 						? __('PLN 0 recruitment fee — ATA / WAB / WSEiZ / WSH graduate', 'akademiata')
@@ -367,6 +368,7 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 			<div class="ei" data-enr-item="admission">
 				<div class="en" data-enr-label="admission"><?php echo $is_en ? esc_html__('Recruitment fee', 'akademiata') : esc_html__('Opłata rekrutacyjna', 'akademiata'); ?></div>
 				<div class="ev" data-enr-value="admission">—</div>
+				<div class="ei-was" data-enr-was="admission" style="display:none"></div>
 			</div>
 
 			<div class="ei ei--promo" data-enr-item="entry">
