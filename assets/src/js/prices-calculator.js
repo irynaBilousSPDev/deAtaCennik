@@ -952,11 +952,13 @@ export default function initPricesCalculator(_$, opts = {}) {
     return k === 'wzornictwo' || k === 'design';
   }
 
-  function fillRekrPlaceholders(str, deadlines) {
+  function fillRekrPlaceholders(str, deadlines, amount) {
+    const amountTxt = fmt(Number(amount) || 0);
     return String(str || '')
       .replace(/\{regShort\}/g, deadlines.regShort)
       .replace(/\{reg\}/g, deadlines.reg)
-      .replace(/\{contract\}/g, deadlines.contract);
+      .replace(/\{contract\}/g, deadlines.contract)
+      .replace(/\{amount\}/g, amountTxt);
   }
 
   function getRekrPromoCopy(id) {
@@ -1788,6 +1790,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       const deadlines = getRekrPromoDeadlines();
       const pack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
       const tpl = document.getElementById('promo-card-template');
+      const rekrAmount = Number(item && item.rekr) || 0;
       if (rekrInner) rekrInner.innerHTML = '';
 
       rekrElig.forEach(id => {
@@ -1812,11 +1815,11 @@ export default function initPricesCalculator(_$, opts = {}) {
         const shortEl = card.querySelector('[data-promo-short]');
         if (shortEl) {
           shortEl.classList.remove('good');
-          shortEl.innerHTML = formatPromoHtml(fillRekrPlaceholders(copy.short, deadlines));
+          shortEl.innerHTML = formatPromoHtml(fillRekrPlaceholders(copy.short, deadlines, rekrAmount));
         }
 
         const tagEl = card.querySelector('[data-promo-tag]');
-        if (tagEl) tagEl.textContent = copy.tag || '';
+        if (tagEl) tagEl.textContent = fillRekrPlaceholders(copy.tag, deadlines, rekrAmount);
 
         const arr = card.querySelector('[data-promo-arr]');
         if (arr) {
@@ -1830,7 +1833,7 @@ export default function initPricesCalculator(_$, opts = {}) {
           const bodyText = body.querySelector('[data-promo-body-text]');
           if (bodyText) {
             const title = pack.conditionsTitle || (UI_LANG === 'en' ? 'Promotion terms:' : 'Warunki skorzystania z promocji:');
-            const fullRaw = fillRekrPlaceholders(copy.full, deadlines);
+            const fullRaw = fillRekrPlaceholders(copy.full, deadlines, rekrAmount);
             const steps = String(fullRaw || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
             let html = '<div class="pc-conditions-title">' + formatPromoHtml(title) + '</div>';
             if (steps.length) {

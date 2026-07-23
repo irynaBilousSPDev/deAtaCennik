@@ -118,10 +118,10 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 					'name' => $is_en
 						? __('PLN 0 recruitment fee — ATA / WAB / WSEiZ / WSH graduate', 'akademiata')
 						: __('0 zł opłaty rekrutacyjnej — Absolwent ATA / WAB / WSEiZ / WSH', 'akademiata'),
-					'tag' => $is_en ? __('−85 PLN', 'akademiata') : __('−85 zł', 'akademiata'),
+					'tag' => $is_en ? __('−{amount} PLN', 'akademiata') : __('−{amount} zł', 'akademiata'),
 					'short' => $is_en
-						? __('Registration by {regShort} · contract by {contract} · you save 85 PLN', 'akademiata')
-						: __('Rejestracja do {regShort} · umowa do {contract} · oszczędzasz 85 zł', 'akademiata'),
+						? __('Registration by {regShort} · contract by {contract} · you save {amount} PLN', 'akademiata')
+						: __('Rejestracja do {regShort} · umowa do {contract} · oszczędzasz {amount} zł', 'akademiata'),
 					'full' => $is_en
 						? __("You are a graduate of Wrocław Business Academy (WAB), Wrocław University of Business (WSH), University of Ecology and Management (WSEiZ) or Academy of Fine Arts and Technology (ATA) who completed first-cycle studies and are applying for the 1st semester of second-cycle studies in Polish.\nYou will register in the recruitment system by {reg}.\nYou will sign the fee agreement by {contract}.", 'akademiata')
 						: __("Jesteś absolwentem Wrocławskiej Akademii Biznesu (WAB), Wyższej Szkoły Handlowej (WSH), WSEiZ lub ATA, który/a ukończył/a studia I stopnia i aplikujesz na I semestr studiów II stopnia w języku polskim.\nZarejestrujesz się w systemie rekrutacyjnym do {reg}.\nPodpiszesz umowę o warunkach pobierania opłat do {contract}.", 'akademiata'),
@@ -130,7 +130,7 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 					'name' => $is_en
 						? __('PLN 0 recruitment fee — ATA language course graduate', 'akademiata')
 						: __('0 zł opłaty rekrutacyjnej — Absolwent kursu językowego ATA', 'akademiata'),
-					'tag' => $is_en ? __('−85 PLN', 'akademiata') : __('−85 zł', 'akademiata'),
+					'tag' => $is_en ? __('−{amount} PLN', 'akademiata') : __('−{amount} zł', 'akademiata'),
 					'short' => $is_en
 						? __('Registration by {regShort} · contract by {contract}', 'akademiata')
 						: __('Rejestracja do {regShort} · umowa do {contract}', 'akademiata'),
