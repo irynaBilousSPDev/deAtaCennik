@@ -126,12 +126,14 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.isEU = window.isEU !== undefined ? !!window.isEU : true;
 
   window.selP = window.selP || { jednorazowo: false };
+  window.selRekrP = window.selRekrP || null;
   window.subP = window.subP || { grupie: 200, absolwent_pl: 0.20 };
   window.expP = window.expP || {};
   window.unified = window.unified || [];
 
   window.togglePromo = togglePromo;
   window.toggleExp = toggleExp;
+  window.toggleRekrPromo = toggleRekrPromo;
   window.setSub = setSub;
   window.setCity = setCity;
   window.setLang = setLang;
@@ -905,6 +907,89 @@ export default function initPricesCalculator(_$, opts = {}) {
     return `${dd}.${mm}.${yyyy}`;
   }
 
+  // Temporary recruitment-fee promos (hardcoded; visible until end of Oct 2026).
+  const REKR_PROMO_IDS = ['absolwent', 'kurs'];
+  const REKR_PROMO_HIDE_AFTER = new Date(2026, 9, 31, 23, 59, 59);
+
+  function isRekrPromoPeriodActive() {
+    return Date.now() <= REKR_PROMO_HIDE_AFTER.getTime();
+  }
+
+  function getRekrPromoDeadlines() {
+    // Base: register by 30.08.2026, contract by 30.09.2026.
+    // After Aug 30 → extend once to 30.09 / 30.10; section hides after Oct 31.
+    const now = new Date();
+    const baseRegEnd = new Date(2026, 7, 30, 23, 59, 59);
+    if (now <= baseRegEnd) {
+      return { reg: '30.08.2026', contract: '30.09.2026', regShort: '30.08' };
+    }
+    return { reg: '30.09.2026', contract: '30.10.2026', regShort: '30.09' };
+  }
+
+  function normProgName(s) {
+    return String(s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function isInteriorArchitectureProgram(u) {
+    const k = normProgName(u && u.k);
+    return k === 'architektura wnetrz'
+      || k.indexOf('interior architecture') >= 0
+      || k === 'interior design';
+  }
+
+  function isArchitectureBachelor(u) {
+    return !!(u && Number(u.deg) === 1 && normProgName(u.k) === 'architektura');
+  }
+
+  function isDesignBachelor(u) {
+    if (!u || Number(u.deg) !== 1) return false;
+    const k = normProgName(u.k);
+    return k === 'wzornictwo' || k === 'design';
+  }
+
+  function fillRekrPlaceholders(str, deadlines) {
+    return String(str || '')
+      .replace(/\{regShort\}/g, deadlines.regShort)
+      .replace(/\{reg\}/g, deadlines.reg)
+      .replace(/\{contract\}/g, deadlines.contract);
+  }
+
+  function getRekrPromoCopy(id) {
+    const pack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
+    return (pack && pack[id]) ? pack[id] : null;
+  }
+
+  function getEligibleRekrPromoIds(u) {
+    if (!isRekrPromoPeriodActive() || !u || window.uaby) return [];
+    if (isInteriorArchitectureProgram(u)) return [];
+
+    const ids = [];
+    // Card 1: Polish study language + 2nd cycle only.
+    if (window.lang === 'pl' && Number(u.deg) === 2) ids.push('absolwent');
+    // Card 2: PL or EN; hide for Architecture I / Design I (Interior already excluded above).
+    if (!isArchitectureBachelor(u) && !isDesignBachelor(u)) ids.push('kurs');
+    return ids;
+  }
+
+  function hasSelectedRekrPromo() {
+    return !!(window.selRekrP && REKR_PROMO_IDS.indexOf(window.selRekrP) >= 0);
+  }
+
+  function clearRekrPromoSelection() {
+    window.selRekrP = null;
+  }
+
+  function toggleRekrPromo(id) {
+    if (!id || REKR_PROMO_IDS.indexOf(id) < 0) return;
+    window.selRekrP = (window.selRekrP === id) ? null : id;
+    render();
+  }
+
   // Build program list with strict lang data sourcing
   function buildUnified() {
     const lang = window.lang;
@@ -1162,6 +1247,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.city = c;
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
+    clearRekrPromoSelection();
     window.uaby = false;
     document.getElementById('uaby-row')?.classList.remove('on');
     document.getElementById('uaby-chk')?.classList.remove('on');
@@ -1177,6 +1263,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.lang = l;
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
+    clearRekrPromoSelection();
     window.plan = l === 'pl' ? 'r12' : 'rok';
     if (window.uaby && window.city === 'wro') {
       window.plan = 'rok';
@@ -1191,6 +1278,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.uaby = !window.uaby;
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
+    clearRekrPromoSelection();
     if (window.uaby && window.city === 'wro') {
       window.mode = 's';
       window.plan = window.lang === 'en' ? 'rok' : (window.plan === 'sem' ? 'sem' : 'rok');
@@ -1208,7 +1296,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
   function setMode(m) { window.mode = m; updateMB(); render(); }
   function setEU(v) { window.isEU = v; document.querySelectorAll('#eu-row .pill').forEach(b => b.classList.toggle('on', (b.getAttribute('data-val') === 'eu' || b.getAttribute('data-val') === 'true') === v)); render(); }
-  function onProgChange() { window.selP = { jednorazowo: false }; updateMB(); render(); }
+  function onProgChange() { window.selP = { jednorazowo: false }; clearRekrPromoSelection(); updateMB(); render(); }
 
   function updateMB() {
     const u = window.unified[window.progIdx], mw = document.getElementById('mode-wrap');
@@ -1658,6 +1746,95 @@ export default function initPricesCalculator(_$, opts = {}) {
       });
     } else if (ps2) ps2.style.display = 'none';
 
+    // Temporary recruitment-fee promo cards (hardcoded; independent of sheet promos).
+    const rekrSection = document.getElementById('rekr-promos');
+    const rekrInner = document.getElementById('rekr-promos-inner');
+    const rekrNote = document.getElementById('rekr-promos-note');
+    const rekrElig = getEligibleRekrPromoIds(u);
+    if (window.selRekrP && rekrElig.indexOf(window.selRekrP) < 0) clearRekrPromoSelection();
+
+    if (rekrSection && rekrElig.length && !window.uaby) {
+      rekrSection.style.display = '';
+      const deadlines = getRekrPromoDeadlines();
+      const pack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
+      const tpl = document.getElementById('promo-card-template');
+      if (rekrInner) rekrInner.innerHTML = '';
+
+      rekrElig.forEach(id => {
+        const copy = getRekrPromoCopy(id);
+        if (!copy || !rekrInner || !tpl || !('content' in tpl)) return;
+
+        const card = tpl.content.firstElementChild.cloneNode(true);
+        const isSel = window.selRekrP === id;
+        const expKey = 'rekr_' + id;
+        const isExp = !!window.expP[expKey];
+
+        card.classList.toggle('sel', !!isSel);
+        card.classList.toggle('open', !!isExp);
+        card.classList.remove('dis');
+
+        const head = card.querySelector('.pc-head');
+        if (head) head.setAttribute('onclick', `window.toggleRekrPromo('${id}')`);
+
+        const nameEl = card.querySelector('[data-promo-name]');
+        if (nameEl) nameEl.textContent = copy.name || '';
+
+        const shortEl = card.querySelector('[data-promo-short]');
+        if (shortEl) {
+          shortEl.classList.remove('good');
+          shortEl.innerHTML = formatPromoHtml(fillRekrPlaceholders(copy.short, deadlines));
+        }
+
+        const tagEl = card.querySelector('[data-promo-tag]');
+        if (tagEl) tagEl.textContent = copy.tag || '';
+
+        const arr = card.querySelector('[data-promo-arr]');
+        if (arr) {
+          arr.classList.toggle('open', !!isExp);
+          arr.setAttribute('onclick', `window.toggleExp('${expKey}',event)`);
+        }
+
+        const body = card.querySelector('[data-promo-body]');
+        setPromoCardBody(body, !!isExp);
+        if (body && isExp) {
+          const bodyText = body.querySelector('[data-promo-body-text]');
+          if (bodyText) {
+            const title = pack.conditionsTitle || (UI_LANG === 'en' ? 'Promotion terms:' : 'Warunki skorzystania z promocji:');
+            const fullRaw = fillRekrPlaceholders(copy.full, deadlines);
+            const steps = String(fullRaw || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
+            let html = '<div class="pc-conditions-title">' + formatPromoHtml(title) + '</div>';
+            if (steps.length) {
+              html += '<ol class="pc-conditions">';
+              steps.forEach(step => { html += '<li>' + formatPromoHtml(step) + '</li>'; });
+              html += '</ol>';
+            }
+            if (copy.alert) {
+              html += '<div class="pc-alert" role="alert">' + formatPromoHtml(copy.alert) + '</div>';
+            }
+            bodyText.innerHTML = html;
+          }
+          const subWrap = body.querySelector('[data-promo-subopts]');
+          if (subWrap) { subWrap.innerHTML = ''; subWrap.style.display = 'none'; }
+        } else if (body) {
+          const bodyText = body.querySelector('[data-promo-body-text]');
+          if (bodyText) bodyText.innerHTML = '';
+          const subWrap = body.querySelector('[data-promo-subopts]');
+          if (subWrap) { subWrap.innerHTML = ''; subWrap.style.display = 'none'; }
+        }
+
+        rekrInner.appendChild(card);
+      });
+
+      if (rekrNote) {
+        rekrNote.textContent = pack.note || '';
+        rekrNote.style.display = pack.note ? '' : 'none';
+      }
+    } else if (rekrSection) {
+      rekrSection.style.display = 'none';
+      if (rekrInner) rekrInner.innerHTML = '';
+      if (rekrNote) { rekrNote.textContent = ''; rekrNote.style.display = 'none'; }
+    }
+
     const ppS = getPP(window.plan, item, u), sb = document.getElementById('sum-box');
     if (ppS && sb) {
       const degL = u.deg === 1
@@ -1729,6 +1906,7 @@ export default function initPricesCalculator(_$, opts = {}) {
             <div class="ei" data-enr-item="admission">
               <div class="en" data-enr-label="admission">—</div>
               <div class="ev" data-enr-value="admission">—</div>
+              <div class="ei-was" data-enr-was="admission" style="display:none"></div>
             </div>
 
             <div class="ei ei--promo" data-enr-item="entry">
@@ -1752,17 +1930,25 @@ export default function initPricesCalculator(_$, opts = {}) {
         const admissionLbl = t('feeAdmission', 'Opłata rekrutacyjna');
         const entryLbl = t('feeEntry', 'Wpisowe');
         const totalLbl = t('feeTotal', 'Razem przy zapisie');
+        const rekrPromoOn = hasSelectedRekrPromo();
+        const baseRekr = Number(item.rekr || 0);
+        const effectiveRekr = rekrPromoOn ? 0 : baseRekr;
+        const rekrPack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
+        const standardLbl = rekrPack.standardFeeLabel || (UI_LANG === 'en' ? 'normally' : 'standardowo');
+
         if (window.lang === 'pl') {
           const promoEntry = 0;
-          const regularTotal = (item.rekr || 0) + (item.wps || 0);
-          const promoTotal = (item.rekr || 0) + promoEntry;
+          const regularTotal = baseRekr + (item.wps || 0);
+          const promoTotal = effectiveRekr + promoEntry;
           const savings = Math.max(0, regularTotal - promoTotal);
           const validTo = getEndOfCurrentMonthPL();
           // Prefer updating the static HTML skeleton (page-template-prices.php).
+          const admissionItemEl = enrItems.querySelector('[data-enr-item="admission"]');
           const admissionLabelEl = enrItems.querySelector('[data-enr-label="admission"]');
           const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
           const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
           const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
+          const admissionWasEl = enrItems.querySelector('[data-enr-was="admission"]');
           const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
           const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
           const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
@@ -1773,7 +1959,17 @@ export default function initPricesCalculator(_$, opts = {}) {
           if (entryLabelEl) entryLabelEl.textContent = entryLbl;
           if (totalLabelEl) totalLabelEl.textContent = totalLbl;
 
-          if (admissionValEl) admissionValEl.textContent = fmt(item.rekr) + cur;
+          if (admissionItemEl) admissionItemEl.classList.toggle('ei--rekr-zero', !!rekrPromoOn);
+          if (admissionValEl) admissionValEl.textContent = fmt(effectiveRekr) + cur;
+          if (admissionWasEl) {
+            if (rekrPromoOn && baseRekr > 0) {
+              admissionWasEl.textContent = standardLbl + ' ' + fmt(baseRekr) + cur;
+              admissionWasEl.style.display = '';
+            } else {
+              admissionWasEl.textContent = '';
+              admissionWasEl.style.display = 'none';
+            }
+          }
           if (entryValEl) entryValEl.textContent = fmt(promoEntry) + cur;
           if (totalValEl) totalValEl.textContent = fmt(promoTotal) + cur;
 
@@ -1793,10 +1989,12 @@ export default function initPricesCalculator(_$, opts = {}) {
           }
         } else {
           // EN: update skeleton if present (so switching back to PL works).
+          const admissionItemEl = enrItems.querySelector('[data-enr-item="admission"]');
           const admissionLabelEl = enrItems.querySelector('[data-enr-label="admission"]');
           const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
           const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
           const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
+          const admissionWasEl = enrItems.querySelector('[data-enr-was="admission"]');
           const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
           const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
           const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
@@ -1806,9 +2004,19 @@ export default function initPricesCalculator(_$, opts = {}) {
           if (entryLabelEl) entryLabelEl.textContent = entryLbl;
           if (totalLabelEl) totalLabelEl.textContent = totalLbl;
 
-          if (admissionValEl) admissionValEl.textContent = fmt(item.rekr) + cur;
+          if (admissionItemEl) admissionItemEl.classList.toggle('ei--rekr-zero', !!rekrPromoOn);
+          if (admissionValEl) admissionValEl.textContent = fmt(effectiveRekr) + cur;
+          if (admissionWasEl) {
+            if (rekrPromoOn && baseRekr > 0) {
+              admissionWasEl.textContent = standardLbl + ' ' + fmt(baseRekr) + cur;
+              admissionWasEl.style.display = '';
+            } else {
+              admissionWasEl.textContent = '';
+              admissionWasEl.style.display = 'none';
+            }
+          }
           if (entryValEl) entryValEl.textContent = fmt(item.wps) + cur;
-          if (totalValEl) totalValEl.textContent = fmt(item.rekr + item.wps) + cur;
+          if (totalValEl) totalValEl.textContent = fmt(effectiveRekr + item.wps) + cur;
 
           if (entryBadgeEl) entryBadgeEl.style.display = 'none';
           if (savingsEl) { savingsEl.textContent = ''; savingsEl.style.display = 'none'; }

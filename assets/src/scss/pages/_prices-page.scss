@@ -673,6 +673,56 @@ body.page-template-page-template-prices{
       text-align: center;
     }
 
+    .sec-title-wrap {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .sec-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #fff0e9;
+      color: #e65a1f;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: none;
+    }
+
+    .rekr-promos-section {
+      .pc-conditions-title {
+        font-weight: 800;
+        margin-bottom: 8px;
+        color: var(--text-main);
+      }
+
+      .pc-conditions {
+        margin: 0 0 12px;
+        padding-left: 1.25em;
+        color: var(--text-muted);
+
+        li {
+          margin-bottom: 6px;
+        }
+      }
+
+      .pc-alert {
+        margin-top: 4px;
+        padding: 10px 12px;
+        border-radius: var(--radius-md);
+        background: #fdecea;
+        border: 1px solid #f5c2c0;
+        color: #b42318;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+    }
+
     /* Podsumowanie (Box Premium) */
     .sum {
       border: none;
@@ -793,6 +843,27 @@ body.page-template-page-template-prices{
       .ev {
         color: #2E7D32;
       }
+    }
+
+    .ei--rekr-zero {
+      background: #EAF6EA;
+      border-color: #9BD3A4;
+
+      .ev {
+        color: #2E7D32;
+      }
+
+      .en {
+        color: #2E7D32;
+      }
+    }
+
+    .ei-was {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: line-through;
+      line-height: 1.2;
     }
 
     .ei--total {

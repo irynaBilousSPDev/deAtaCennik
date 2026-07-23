@@ -26,6 +26,14 @@ alwaysApply: false
 
 `page-template-prices.php` includes the same `calculator.php` without fixed key (full program picker).
 
+## Temporary recruitment-fee promos (hardcoded)
+
+- UI: `#rekr-promos` in `calculator.php` (above one-time enrollment fees); copy in `prices-i18n` → `rekrPromo`.
+- Logic: `prices-calculator.js` — cards `absolwent` / `kurs`; mutual exclusive; no default selection.
+- Effect: selected card sets admission fee to **0** + green tile (`.ei--rekr-zero`); does not change Excel/Apps Script.
+- Visibility: hide after **2026-10-31**; UABY off; Interior Architecture → none; Architektura I / Wzornictwo I → no `kurs`; `absolwent` only PL study language + 2nd cycle; EN study language → `kurs` only.
+- Dates in copy: base 30.08 / 30.09; after 30.08.2026 auto-extend once to 30.09 / 30.10.
+
 ## Maintenance
 
 - Calculator/script changes: update `apps-script/`, redeploy web app URL in `js-css.php` if deployment ID changes.
