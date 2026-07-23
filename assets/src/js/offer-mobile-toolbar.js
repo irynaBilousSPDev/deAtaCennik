@@ -260,14 +260,26 @@ function initOfferMobileChipsSticky() {
         chips.style.width = '';
     };
 
-    const setChipsHidden = (hidden) => {
+    const setChipsHidden = (hidden, { instant = false } = {}) => {
+        if (instant) {
+            chips.classList.add('offer-mobile-chips--no-anim');
+        }
+
         chips.classList.toggle('offer-mobile-chips--is-hidden', hidden);
         chipsVisible = !hidden;
+
+        if (instant) {
+            // Force reflow so the next show/hide can animate.
+            // eslint-disable-next-line no-unused-expressions
+            chips.offsetHeight;
+            chips.classList.remove('offer-mobile-chips--no-anim');
+        }
     };
 
     const releaseFixedChips = () => {
         chips.classList.remove('offer-mobile-chips--is-fixed');
         chips.classList.remove('offer-mobile-chips--is-hidden');
+        chips.classList.remove('offer-mobile-chips--no-anim');
         placeholder.classList.remove('is-active');
         placeholder.style.height = '';
         clearFixedChipsPosition();
@@ -285,6 +297,7 @@ function initOfferMobileChipsSticky() {
 
     const measure = () => {
         const wasFixed = chips.classList.contains('offer-mobile-chips--is-fixed');
+        const wasHidden = chips.classList.contains('offer-mobile-chips--is-hidden');
 
         if (wasFixed) {
             releaseFixedChips();
@@ -295,6 +308,14 @@ function initOfferMobileChipsSticky() {
         chipsOffsetTop = chipsRect.top + window.scrollY;
         chipsHeight = chips.offsetHeight;
         lastScrollY = window.scrollY;
+
+        // Restore pin state after remmeasure without a visible flash.
+        if (wasFixed && mobileMq.matches && window.scrollY + getOfferHeaderOffsetPx() >= chipsOffsetTop) {
+            pinFixedChips();
+            if (wasHidden) {
+                setChipsHidden(true, { instant: true });
+            }
+        }
     };
 
     const updateFixedChips = () => {
@@ -308,26 +329,38 @@ function initOfferMobileChipsSticky() {
         const scrollY = window.scrollY;
         chips.style.setProperty('--offer-chips-fixed-top', `${fixedTop}px`);
 
-        // Still in natural toolbar position — no floating bar.
-        if (scrollY + fixedTop < chipsOffsetTop) {
+        // Still in natural toolbar position — no floating chips.
+        if (scrollY + fixedTop < chipsOffsetTop + 2) {
             releaseFixedChips();
             lastScrollY = scrollY;
             return;
         }
 
-        // Past toolbar: OLX-style — show on scroll up (filter/back), hide on scroll down (browse).
-        pinFixedChips();
+        const wasPinned = chips.classList.contains('offer-mobile-chips--is-fixed');
+        const delta = scrollY - lastScrollY;
 
         // Keep visible while a filter UI is open.
         if (document.body.classList.contains('filter-open')
             || document.body.classList.contains('offer-dropdown-open')) {
+            pinFixedChips();
             setChipsHidden(false);
             lastScrollY = scrollY;
             return;
         }
 
-        const delta = scrollY - lastScrollY;
+        // First enter sticky zone: if browsing down, start hidden (no flash of fixed bar).
+        if (!wasPinned) {
+            pinFixedChips();
+            if (delta >= 0) {
+                setChipsHidden(true, { instant: true });
+            } else {
+                setChipsHidden(false, { instant: true });
+            }
+            lastScrollY = scrollY;
+            return;
+        }
 
+        // Already pinned: OLX-style show on scroll up, hide on scroll down.
         if (Math.abs(delta) >= DIR_DELTA) {
             if (delta > 0) {
                 setChipsHidden(true);
