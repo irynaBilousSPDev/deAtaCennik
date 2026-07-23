@@ -238,12 +238,34 @@ $om-filter-card-pad: 16px;
       }
     }
 
+    .offer-mobile-chips-placeholder {
+      display: none;
+
+      &.is-active {
+        display: block;
+      }
+    }
+
     .offer-mobile-chips {
       display: flex;
       flex-direction: column;
       gap: $om-chip-gap;
       margin: 0;
       padding: 0 0 10px;
+
+      &--is-fixed {
+        position: fixed;
+        top: var(--offer-chips-fixed-top, 0);
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 9000;
+        margin: 0;
+        padding: 10px $om-pad-x 12px;
+        background: vars.$white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+      }
 
       &__row {
         display: flex;

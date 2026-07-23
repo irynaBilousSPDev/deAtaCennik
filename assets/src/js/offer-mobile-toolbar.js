@@ -196,6 +196,119 @@ function handleToolbarChipTap(event) {
     openOfferDropdown(chip.dataset.tax, chip.dataset.label || '');
 }
 
+function getOfferHeaderOffsetPx() {
+    const header = document.querySelector('.site-header');
+    return header ? Math.ceil(header.getBoundingClientRect().height) : 0;
+}
+
+function initOfferMobileChipsSticky() {
+    const toolbar = document.querySelector('.offer-mobile-toolbar');
+    const chips = toolbar?.querySelector('.offer-mobile-chips');
+
+    if (!toolbar || !chips) {
+        return;
+    }
+
+    let placeholder = chips.previousElementSibling;
+
+    if (!placeholder?.classList.contains('offer-mobile-chips-placeholder')) {
+        placeholder = document.createElement('div');
+        placeholder.className = 'offer-mobile-chips-placeholder';
+        placeholder.setAttribute('aria-hidden', 'true');
+        chips.before(placeholder);
+    }
+
+    const mobileMq = window.matchMedia(`(max-width: ${TABLET_MAX_WIDTH}px)`);
+    let chipsOffsetTop = 0;
+    let chipsHeight = 0;
+    let scrollRaf = null;
+
+    const alignFixedChips = () => {
+        chips.style.left = '0';
+        chips.style.width = '100%';
+    };
+
+    const clearFixedChipsPosition = () => {
+        chips.style.left = '';
+        chips.style.width = '';
+    };
+
+    const releaseFixedChips = () => {
+        chips.classList.remove('offer-mobile-chips--is-fixed');
+        placeholder.classList.remove('is-active');
+        placeholder.style.height = '';
+        clearFixedChipsPosition();
+    };
+
+    const measure = () => {
+        const wasFixed = chips.classList.contains('offer-mobile-chips--is-fixed');
+
+        if (wasFixed) {
+            releaseFixedChips();
+        }
+
+        chips.style.setProperty('--offer-chips-fixed-top', `${getOfferHeaderOffsetPx()}px`);
+        const chipsRect = chips.getBoundingClientRect();
+        chipsOffsetTop = chipsRect.top + window.scrollY;
+        chipsHeight = chips.offsetHeight;
+    };
+
+    const updateFixedChips = () => {
+        if (!mobileMq.matches) {
+            releaseFixedChips();
+            return;
+        }
+
+        const fixedTop = getOfferHeaderOffsetPx();
+        chips.style.setProperty('--offer-chips-fixed-top', `${fixedTop}px`);
+
+        if (window.scrollY + fixedTop >= chipsOffsetTop) {
+            if (!chips.classList.contains('offer-mobile-chips--is-fixed')) {
+                chips.classList.add('offer-mobile-chips--is-fixed');
+                placeholder.classList.add('is-active');
+                placeholder.style.height = `${chipsHeight}px`;
+            }
+
+            alignFixedChips();
+            return;
+        }
+
+        releaseFixedChips();
+    };
+
+    const onScroll = () => {
+        if (scrollRaf) {
+            return;
+        }
+
+        scrollRaf = window.requestAnimationFrame(() => {
+            scrollRaf = null;
+            updateFixedChips();
+        });
+    };
+
+    measure();
+    updateFixedChips();
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        measure();
+        updateFixedChips();
+    });
+    mobileMq.addEventListener('change', () => {
+        measure();
+        updateFixedChips();
+    });
+
+    // Re-measure after layout shifts from filter/results updates.
+    document.addEventListener('akademiata:filter-results-updated', () => {
+        window.setTimeout(() => {
+            measure();
+            updateFixedChips();
+        }, 0);
+    });
+}
+
 export function initOfferMobileToolbar() {
     const toolbar = document.querySelector('.offer-mobile-toolbar');
     if (!toolbar) {
@@ -203,6 +316,7 @@ export function initOfferMobileToolbar() {
     }
 
     mountOfferDropdownPortal();
+    initOfferMobileChipsSticky();
 
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
