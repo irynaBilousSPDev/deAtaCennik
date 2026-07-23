@@ -255,16 +255,28 @@ $om-filter-card-pad: 16px;
 
       &--is-fixed {
         position: fixed;
-        top: var(--offer-chips-fixed-top, 0);
+        top: calc(var(--offer-chips-fixed-top, 0px) - 1px);
         left: 0;
         right: 0;
         width: 100%;
         z-index: 9000;
         margin: 0;
-        padding: 10px $om-pad-x 12px;
+        padding: 11px $om-pad-x 12px;
         background: vars.$white;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         box-sizing: border-box;
+
+        // Seal subpixel gap under the fixed site header.
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: -2px;
+          height: 3px;
+          background: vars.$white;
+          pointer-events: none;
+        }
       }
 
       &__row {

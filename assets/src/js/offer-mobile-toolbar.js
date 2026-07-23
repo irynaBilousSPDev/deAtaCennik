@@ -198,7 +198,30 @@ function handleToolbarChipTap(event) {
 
 function getOfferHeaderOffsetPx() {
     const header = document.querySelector('.site-header');
-    return header ? Math.ceil(header.getBoundingClientRect().height) : 0;
+    // Floor avoids a 1px hairline gap under fixed header from subpixel heights.
+    return header ? Math.floor(header.getBoundingClientRect().height) : 0;
+}
+
+function scrollOfferListingToStart() {
+    if (!isOfferMobileToolbarActive()) {
+        return;
+    }
+
+    const chips = document.querySelector('.offer-mobile-chips');
+    const results = document.querySelector('#filter-results');
+    const toolbar = document.querySelector('.offer-mobile-toolbar');
+    const target = results || toolbar;
+
+    if (!target) {
+        return;
+    }
+
+    const headerH = getOfferHeaderOffsetPx();
+    const chipsFixed = chips?.classList.contains('offer-mobile-chips--is-fixed');
+    const chipsH = chipsFixed ? chips.offsetHeight : 0;
+    const y = target.getBoundingClientRect().top + window.scrollY - headerH - chipsH - 8;
+
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
 }
 
 function initOfferMobileChipsSticky() {
@@ -300,11 +323,14 @@ function initOfferMobileChipsSticky() {
         updateFixedChips();
     });
 
-    // Re-measure after layout shifts from filter/results updates.
-    document.addEventListener('akademiata:filter-results-updated', () => {
+    // Re-measure after layout shifts; scroll to start only on filter reset (not load-more).
+    document.addEventListener('akademiata:filter-results-updated', (event) => {
         window.setTimeout(() => {
             measure();
             updateFixedChips();
+            if (event?.detail?.reset) {
+                scrollOfferListingToStart();
+            }
         }, 0);
     });
 }
@@ -331,6 +357,7 @@ export function initOfferMobileToolbar() {
         deactivateFavoritesFilter();
         document.getElementById('clear-filters')?.click();
         syncChipStates();
+        scrollOfferListingToStart();
     });
 
     clearBtn?.addEventListener('click', () => {
@@ -344,6 +371,7 @@ export function initOfferMobileToolbar() {
         applyOfferSearchQuery();
         document.getElementById('clear-filters')?.click();
         syncChipStates();
+        scrollOfferListingToStart();
     });
 
     toolbar.addEventListener('click', (event) => {

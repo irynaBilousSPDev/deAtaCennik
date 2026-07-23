@@ -986,8 +986,40 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function toggleRekrPromo(id) {
     if (!id || REKR_PROMO_IDS.indexOf(id) < 0) return;
-    window.selRekrP = (window.selRekrP === id) ? null : id;
+    const turningOn = window.selRekrP !== id;
+    window.selRekrP = turningOn ? id : null;
     render();
+    if (turningOn) {
+      window.requestAnimationFrame(() => scrollRekrEnrollmentIntoView());
+    }
+  }
+
+  function scrollRekrEnrollmentIntoView() {
+    const enr = document.getElementById('enr-box');
+    if (!enr) return;
+
+    const header = document.querySelector('.site-header');
+    const headerH = header ? header.getBoundingClientRect().height : 0;
+    const rect = enr.getBoundingClientRect();
+    // Keep page on enrollment fees (not tuition promos) after selecting a rekr promo.
+    if (rect.top < headerH + 8 || rect.top > window.innerHeight * 0.5) {
+      const y = window.scrollY + rect.top - headerH - 12;
+      window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    }
+  }
+
+  function ensurePlanCardInScroller(plansEl, sel) {
+    if (!plansEl || !sel) return;
+    const pad = 12;
+    const left = sel.offsetLeft;
+    const right = left + sel.offsetWidth;
+    const viewLeft = plansEl.scrollLeft;
+    const viewRight = viewLeft + plansEl.clientWidth;
+    if (left < viewLeft + pad) {
+      plansEl.scrollLeft = Math.max(0, left - pad);
+    } else if (right > viewRight - pad) {
+      plansEl.scrollLeft = Math.max(0, right - plansEl.clientWidth + pad);
+    }
   }
 
   // Build program list with strict lang data sourcing
@@ -1643,13 +1675,11 @@ export default function initPricesCalculator(_$, opts = {}) {
 
       plansWrap.appendChild(plansEl);
 
-      // Restore scroll, then keep selected card in view.
+      // Restore horizontal scroll only — do not use scrollIntoView (it jumps the page vertically).
       if (shouldPreserveScroll) {
         plansEl.scrollLeft = prevScrollLeft;
         const sel = plansEl.querySelector('.pc.sel');
-        if (sel && typeof sel.scrollIntoView === 'function') {
-          try { sel.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) {}
-        }
+        ensurePlanCardInScroller(plansEl, sel);
         // Sync hint label with current scroll position.
         try { window.setTimeout(() => updatePlansHint(plansEl), 0); } catch (e) {}
 

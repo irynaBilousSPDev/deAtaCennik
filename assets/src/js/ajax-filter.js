@@ -32,8 +32,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
     let prefetchTimer = null;
     let loadObserver = null;
 
-    function dispatchResultsUpdated() {
-        document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated'));
+    function dispatchResultsUpdated(detail = {}) {
+        document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated', { detail }));
     }
 
     function ensureLoadSentinel() {
@@ -133,7 +133,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
                     0,
                     false
                 );
-                dispatchResultsUpdated();
+                dispatchResultsUpdated({ reset: true });
                 if (!noMorePosts) {
                     initLoadObserver();
                     schedulePrefetch();
@@ -218,7 +218,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
                 }
 
                 if (newHtml !== '') {
-                    dispatchResultsUpdated();
+                    dispatchResultsUpdated({ append: true });
                 }
 
                 if (!noMorePosts) {
