@@ -492,7 +492,7 @@ body.page-template-page-template-prices{
       &.sel {
         border-color: var(--ata);
         background: #fff;
-        box-shadow: 0 4px 14px var(--ata-glow);
+        box-shadow: 0 1px 4px rgba(255, 109, 45, 0.12);
       }
 
       &.dis {
@@ -709,18 +709,6 @@ body.page-template-page-template-prices{
           margin-bottom: 6px;
         }
       }
-
-      .pc-alert {
-        margin-top: 4px;
-        padding: 10px 12px;
-        border-radius: var(--radius-md);
-        background: #fdecea;
-        border: 1px solid #f5c2c0;
-        color: #b42318;
-        font-size: 13px;
-        font-weight: 700;
-        line-height: 1.4;
-      }
     }
 
     /* Podsumowanie (Box Premium) */
@@ -856,14 +844,6 @@ body.page-template-page-template-prices{
       .en {
         color: #2E7D32;
       }
-    }
-
-    .ei-was {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-decoration: line-through;
-      line-height: 1.2;
     }
 
     .ei--total {

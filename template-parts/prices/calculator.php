@@ -113,7 +113,6 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 				'note' => $is_en
 					? __('The two promotions cannot be combined. The candidate chooses one. The choice must be made no later than on the day of signing the contract with the university.', 'akademiata')
 					: __('Obie promocje nie łączą się ze sobą nawzajem. Kandydat wybiera jedną. Wyboru dokonuje najpóźniej w dniu zawarcia umowy z uczelnią.', 'akademiata'),
-				'standardFeeLabel' => $is_en ? __('normally', 'akademiata') : __('standardowo', 'akademiata'),
 				'absolwent' => [
 					'name' => $is_en
 						? __('PLN 0 recruitment fee — ATA / WAB / WSEiZ / WSH graduate', 'akademiata')
@@ -125,9 +124,6 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 					'full' => $is_en
 						? __("You are a graduate of Wrocław Business Academy (WAB), Wrocław University of Business (WSH), University of Ecology and Management (WSEiZ) or Academy of Fine Arts and Technology (ATA) who completed first-cycle studies and are applying for the 1st semester of second-cycle studies in Polish.\nYou will register in the recruitment system by {reg}.\nYou will sign the fee agreement by {contract}.", 'akademiata')
 						: __("Jesteś absolwentem Wrocławskiej Akademii Biznesu (WAB), Wyższej Szkoły Handlowej (WSH), WSEiZ lub ATA, który/a ukończył/a studia I stopnia i aplikujesz na I semestr studiów II stopnia w języku polskim.\nZarejestrujesz się w systemie rekrutacyjnym do {reg}.\nPodpiszesz umowę o warunkach pobierania opłat do {contract}.", 'akademiata'),
-					'alert' => $is_en
-						? __('Does not apply to: Interior Architecture', 'akademiata')
-						: __('Nie dotyczy kierunku: Architektura Wnętrz', 'akademiata'),
 				],
 				'kurs' => [
 					'name' => $is_en
@@ -140,9 +136,6 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 					'full' => $is_en
 						? __("You have completed a preparatory language course at ATA (the course recruitment fee must already have been paid).\nYou are registering for the 1st semester of first- or second-cycle studies (Polish or English) for the 2026/2027 academic year by {reg}.\nYou will sign the fee agreement by {contract}.", 'akademiata')
 						: __("Ukończyłeś/aś przygotowawczy kurs językowy prowadzony w ATA (opłata rekrutacyjna za kurs musi być wcześniej uiszczona).\nRejestrujesz się na I semestr studiów I lub II stopnia (j. polski lub angielski) na rok ak. 2026/2027 do {reg}.\nPodpiszesz umowę o warunkach pobierania opłat do {contract}.", 'akademiata'),
-					'alert' => $is_en
-						? __('Does not apply to: Architecture (1st cycle) · Interior Architecture (1st & 2nd cycle) · Design (1st cycle)', 'akademiata')
-						: __('Nie dotyczy kierunków: Architektura I st. · Architektura Wnętrz I i II st. · Wzornictwo I st.', 'akademiata'),
 				],
 			],
 			// Temporary EN overrides for PL promos (edit here).
@@ -374,7 +367,6 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 			<div class="ei" data-enr-item="admission">
 				<div class="en" data-enr-label="admission"><?php echo $is_en ? esc_html__('Recruitment fee', 'akademiata') : esc_html__('Opłata rekrutacyjna', 'akademiata'); ?></div>
 				<div class="ev" data-enr-value="admission">—</div>
-				<div class="ei-was" data-enr-was="admission" style="display:none"></div>
 			</div>
 
 			<div class="ei ei--promo" data-enr-item="entry">

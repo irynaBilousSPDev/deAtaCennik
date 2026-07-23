@@ -1808,9 +1808,6 @@ export default function initPricesCalculator(_$, opts = {}) {
               steps.forEach(step => { html += '<li>' + formatPromoHtml(step) + '</li>'; });
               html += '</ol>';
             }
-            if (copy.alert) {
-              html += '<div class="pc-alert" role="alert">' + formatPromoHtml(copy.alert) + '</div>';
-            }
             bodyText.innerHTML = html;
           }
           const subWrap = body.querySelector('[data-promo-subopts]');
@@ -1826,8 +1823,14 @@ export default function initPricesCalculator(_$, opts = {}) {
       });
 
       if (rekrNote) {
-        rekrNote.textContent = pack.note || '';
-        rekrNote.style.display = pack.note ? '' : 'none';
+        // Note only when both cards are shown (mutual exclusivity matters).
+        if (rekrElig.length > 1 && pack.note) {
+          rekrNote.textContent = pack.note;
+          rekrNote.style.display = '';
+        } else {
+          rekrNote.textContent = '';
+          rekrNote.style.display = 'none';
+        }
       }
     } else if (rekrSection) {
       rekrSection.style.display = 'none';
@@ -1906,7 +1909,6 @@ export default function initPricesCalculator(_$, opts = {}) {
             <div class="ei" data-enr-item="admission">
               <div class="en" data-enr-label="admission">—</div>
               <div class="ev" data-enr-value="admission">—</div>
-              <div class="ei-was" data-enr-was="admission" style="display:none"></div>
             </div>
 
             <div class="ei ei--promo" data-enr-item="entry">
@@ -1933,8 +1935,6 @@ export default function initPricesCalculator(_$, opts = {}) {
         const rekrPromoOn = hasSelectedRekrPromo();
         const baseRekr = Number(item.rekr || 0);
         const effectiveRekr = rekrPromoOn ? 0 : baseRekr;
-        const rekrPack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
-        const standardLbl = rekrPack.standardFeeLabel || (UI_LANG === 'en' ? 'normally' : 'standardowo');
 
         if (window.lang === 'pl') {
           const promoEntry = 0;
@@ -1948,7 +1948,6 @@ export default function initPricesCalculator(_$, opts = {}) {
           const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
           const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
           const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
-          const admissionWasEl = enrItems.querySelector('[data-enr-was="admission"]');
           const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
           const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
           const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
@@ -1961,15 +1960,6 @@ export default function initPricesCalculator(_$, opts = {}) {
 
           if (admissionItemEl) admissionItemEl.classList.toggle('ei--rekr-zero', !!rekrPromoOn);
           if (admissionValEl) admissionValEl.textContent = fmt(effectiveRekr) + cur;
-          if (admissionWasEl) {
-            if (rekrPromoOn && baseRekr > 0) {
-              admissionWasEl.textContent = standardLbl + ' ' + fmt(baseRekr) + cur;
-              admissionWasEl.style.display = '';
-            } else {
-              admissionWasEl.textContent = '';
-              admissionWasEl.style.display = 'none';
-            }
-          }
           if (entryValEl) entryValEl.textContent = fmt(promoEntry) + cur;
           if (totalValEl) totalValEl.textContent = fmt(promoTotal) + cur;
 
@@ -1994,7 +1984,6 @@ export default function initPricesCalculator(_$, opts = {}) {
           const entryLabelEl = enrItems.querySelector('[data-enr-label="entry"]');
           const totalLabelEl = enrItems.querySelector('[data-enr-label="total"]');
           const admissionValEl = enrItems.querySelector('[data-enr-value="admission"]');
-          const admissionWasEl = enrItems.querySelector('[data-enr-was="admission"]');
           const entryValEl = enrItems.querySelector('[data-enr-value="entry"]');
           const totalValEl = enrItems.querySelector('[data-enr-value="total"]');
           const entryBadgeEl = enrItems.querySelector('[data-enr-badge="entry"]');
@@ -2006,15 +1995,6 @@ export default function initPricesCalculator(_$, opts = {}) {
 
           if (admissionItemEl) admissionItemEl.classList.toggle('ei--rekr-zero', !!rekrPromoOn);
           if (admissionValEl) admissionValEl.textContent = fmt(effectiveRekr) + cur;
-          if (admissionWasEl) {
-            if (rekrPromoOn && baseRekr > 0) {
-              admissionWasEl.textContent = standardLbl + ' ' + fmt(baseRekr) + cur;
-              admissionWasEl.style.display = '';
-            } else {
-              admissionWasEl.textContent = '';
-              admissionWasEl.style.display = 'none';
-            }
-          }
           if (entryValEl) entryValEl.textContent = fmt(item.wps) + cur;
           if (totalValEl) totalValEl.textContent = fmt(effectiveRekr + item.wps) + cur;
 
