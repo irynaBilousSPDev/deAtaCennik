@@ -277,17 +277,6 @@ if ($show_cadre_section) {
                     $has_bio = !empty(trim(wp_strip_all_tags($bio)));
 
                     $thumb_id = get_post_thumbnail_id($person_id);
-
-                    $modal_photo = get_field('cadre_modal_photo', $person_id);
-                    $modal_photo_id = 0;
-
-                    if (is_array($modal_photo) && !empty($modal_photo['ID'])) {
-                        $modal_photo_id = (int)$modal_photo['ID'];
-                    } elseif (!empty($modal_photo)) {
-                        $modal_photo_id = (int)$modal_photo;
-                    }
-
-                    $socials = get_field('cadre_socials', $person_id);
                     $modal_id = 'cadre-modal-' . get_the_ID() . '-' . $person_id;
                     ?>
                     <div class="pg-mba-cadre__card" data-cadre-open data-target="#<?php echo esc_attr($modal_id); ?>">
@@ -342,64 +331,6 @@ if ($show_cadre_section) {
 
                                     <div class="cadre-modal__content">
                                         <div class="cadre-modal__inner">
-                                            <div class="cadre-modal__photo-wrap">
-                                                <?php if ($modal_photo_id) : ?>
-                                                    <?php
-                                                    echo wp_get_attachment_image(
-                                                            $modal_photo_id,
-                                                            'full',
-                                                            false,
-                                                            [
-                                                                    'class' => 'cadre-modal__photo',
-                                                                    'loading' => 'lazy',
-                                                                    'alt' => $name,
-                                                            ]
-                                                    );
-                                                    ?>
-                                                <?php endif; ?>
-
-                                                <?php if (!empty($socials) && is_array($socials)) : ?>
-                                                    <div class="cadre-modal__icons">
-                                                        <?php foreach ($socials as $row) : ?>
-                                                            <?php
-                                                            $type = $row['type'] ?? '';
-                                                            $url = $row['url'] ?? '';
-
-                                                            if (!$url) {
-                                                                continue;
-                                                            }
-                                                            ?>
-                                                            <a
-                                                                    class="cadre-icon cadre-icon--<?php echo esc_attr($type); ?>"
-                                                                    href="<?php echo esc_url($url); ?>"
-                                                                    target="_blank"
-                                                                    rel="noopener"
-                                                                    aria-label="<?php echo esc_attr($type); ?>"
-                                                            >
-                                                                <?php
-                                                                switch ($type) {
-                                                                    case 'linkedin':
-                                                                        echo '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.11 1 2.5 1 4.98 2.12 4.98 3.5zM0 8h5v16H0V8zm7.5 0h4.7v2.2h.07c.65-1.2 2.25-2.47 4.63-2.47 4.95 0 5.87 3.26 5.87 7.5V24h-5V15.6c0-2-.03-4.57-2.78-4.57-2.78 0-3.2 2.17-3.2 4.42V24h-5V8z"/></svg>';
-                                                                        break;
-
-                                                                    case 'email':
-                                                                        echo '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M0 4v16h24V4H0zm12 9L2 6h20l-10 7z"/></svg>';
-                                                                        break;
-
-                                                                    case 'website':
-                                                                        echo '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm7.93 9h-3.18a15.7 15.7 0 00-1.38-5.01A8.03 8.03 0 0119.93 11zM12 4c1.38 1.77 2.36 4.17 2.64 7H9.36C9.64 8.17 10.62 5.77 12 4zM4.07 13h3.18c.25 1.81.8 3.53 1.63 5.01A8.03 8.03 0 014.07 13zm3.18-2H4.07a8.03 8.03 0 014.81-5.01A15.7 15.7 0 007.25 11zm4.75 9c-1.38-1.77-2.36-4.17-2.64-7h5.28c-.28 2.83-1.26 5.23-2.64 7zm3.12-1.99A15.7 15.7 0 0016.75 13h3.18a8.03 8.03 0 01-4.81 5.01z"/></svg>';
-                                                                        break;
-
-                                                                    default:
-                                                                        echo esc_html(mb_substr((string)$type, 0, 1));
-                                                                }
-                                                                ?>
-                                                            </a>
-                                                        <?php endforeach; ?>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </div>
-
                                             <div class="cadre-modal__text">
                                                 <?php if (!empty($role)) : ?>
                                                     <div class="cadre-modal__role"><?php echo esc_html($role); ?></div>
