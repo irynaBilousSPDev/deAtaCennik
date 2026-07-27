@@ -468,12 +468,7 @@ function welyo_admin_render_content_lang_panel( $lang, $label, $settings ) {
 			welyo_admin_field_text( 'text_done_scheduled', 'Sukces: oddzwonimy później', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_done_immediate', 'Sukces: oddzwaniamy teraz', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_footer', 'Stopka panelu', $settings, array( 'lang' => $lang, 'wide' => true ) );
-			welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'lang' => $lang, 'desc' => 'Opcjonalnie, jeśli nie wypełnisz tekstu poniżej.' ) );
-			welyo_admin_field_text( 'text_hours_display', 'Tekst godzin (widget)', $settings, array(
-				'lang' => $lang,
-				'type' => 'textarea',
-				'desc' => 'Np. „Poniedziałek 8:00-18:00” — osobna linia na każdy zakres.',
-			) );
+			welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'lang' => $lang, 'desc' => 'Tekst przed zakresem w widgetcie, np. „Pon–Pt, ” (dla odwiedzających).' ) );
 			welyo_admin_field_text( 'text_error_phone', 'Błąd: telefon', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_consent', 'Błąd: zgoda', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_auth', 'Błąd: logowanie Welyo', $settings, array( 'lang' => $lang, 'wide' => true ) );

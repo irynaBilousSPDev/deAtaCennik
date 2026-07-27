@@ -50,7 +50,6 @@ function welyo_lang_setting_keys() {
 		'text_call_btn', 'text_name_label', 'text_name_placeholder', 'text_phone_label',
 		'text_phone_placeholder', 'text_consent', 'text_submit', 'text_done_title',
 		'text_done_scheduled', 'text_done_immediate', 'text_footer', 'text_hours_prefix',
-		'text_hours_display',
 		'text_error_phone', 'text_error_consent', 'text_error_auth', 'text_error_campaign',
 		'text_error_welyo', 'text_error_rate', 'text_error_nonce', 'text_error_generic', 'text_sending',
 	);
@@ -156,8 +155,7 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Mamy Twój numer. Oddzwonimy najszybciej, jak to możliwe.',
 			'text_done_immediate'    => 'Mamy Twój numer. Oddzwaniamy teraz — odbierz proszę połączenie.',
 			'text_footer'            => 'Dział Rekrutacji',
-			'text_hours_prefix'      => '',
-			'text_hours_display'     => "Poniedziałek 8:00-18:00\nWtorek i środa 8:00-16:00\nCzwartek 8:00-18:00\nPiątek 8:00-16:00\nSobota 8:00-16:00",
+			'text_hours_prefix'      => 'Pon–Pt, ',
 			'text_error_phone'       => 'Podaj poprawny numer telefonu.',
 			'text_error_consent'     => 'Potrzebujemy zgody na kontakt telefoniczny.',
 			'text_error_auth'        => 'Błąd logowania do Welyo. Administrator: sprawdź login i klucz API.',
@@ -193,8 +191,7 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'We have your number. We will call you back as soon as possible.',
 			'text_done_immediate'    => 'We have your number. We are calling now — please answer.',
 			'text_footer'            => 'Admissions Office',
-			'text_hours_prefix'      => '',
-			'text_hours_display'     => "Monday 8:00-18:00\nTuesday and Wednesday 8:00-16:00\nThursday 8:00-18:00\nFriday 8:00-16:00\nSaturday 8:00-16:00",
+			'text_hours_prefix'      => 'Mon–Fri, ',
 			'text_error_phone'       => 'Please enter a valid phone number.',
 			'text_error_consent'     => 'We need your consent to contact you by phone.',
 			'text_error_auth'        => 'Welyo login error. Administrator: check login and API key.',
@@ -230,8 +227,7 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Ми отримали ваш номер. Передзвонимо якнайшвидше.',
 			'text_done_immediate'    => 'Ми отримали ваш номер. Телефонуємо зараз — будь ласка, відповідайте.',
 			'text_footer'            => 'Відділ рекрутації',
-			'text_hours_prefix'      => '',
-			'text_hours_display'     => "Понеділок 8:00-18:00\nВівторок і середа 8:00-16:00\nЧетвер 8:00-18:00\nПʼятниця 8:00-16:00\nСубота 8:00-16:00",
+			'text_hours_prefix'      => 'Пн–Пт, ',
 			'text_error_phone'       => 'Введіть правильний номер телефону.',
 			'text_error_consent'     => 'Потрібна згода на телефонний контакт.',
 			'text_error_auth'        => 'Помилка входу до Welyo. Адміністратор: перевірте логін і ключ API.',
@@ -267,8 +263,7 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Мы получили ваш номер. Перезвоним как можно скорее.',
 			'text_done_immediate'    => 'Мы получили ваш номер. Звоним сейчас — пожалуйста, ответьте.',
 			'text_footer'            => 'Отдел рекрутинга',
-			'text_hours_prefix'      => '',
-			'text_hours_display'     => "Понедельник 8:00-18:00\nВторник и среда 8:00-16:00\nЧетверг 8:00-18:00\nПятница 8:00-16:00\nСуббота 8:00-16:00",
+			'text_hours_prefix'      => 'Пн–Пт, ',
 			'text_error_phone'       => 'Введите правильный номер телефона.',
 			'text_error_consent'     => 'Нужно согласие на телефонный контакт.',
 			'text_error_auth'        => 'Ошибка входа в Welyo. Администратор: проверьте логин и ключ API.',
@@ -788,37 +783,6 @@ function welyo_workdays_array( $lang = null ) {
 	return $days;
 }
 
-/**
- * Widget hours text (editable multiline). Falls back to schedule summary.
- */
-function welyo_hours_display_text( $lang = null ) {
-	$custom = trim( (string) welyo_cfg( 'text_hours_display', $lang ) );
-	if ( $custom !== '' ) {
-		return $custom;
-	}
-	$prefix = (string) welyo_cfg( 'text_hours_prefix', $lang );
-	$lines  = array();
-	foreach ( welyo_hours_by_day( $lang ) as $dow => $row ) {
-		if ( empty( $row['open'] ) || empty( $row['close'] ) ) {
-			continue;
-		}
-		$open  = ltrim( $row['open'], '0' );
-		$close = ltrim( $row['close'], '0' );
-		if ( $open === '' || $open[0] === ':' ) {
-			$open = '0' . $open;
-		}
-		if ( $close === '' || $close[0] === ':' ) {
-			$close = '0' . $close;
-		}
-		$lines[] = $row['open'] . '–' . $row['close'];
-	}
-	if ( $lines === array() ) {
-		return $prefix;
-	}
-	// Compact single-line fallback when display text empty.
-	return $prefix . implode( ', ', array_unique( $lines ) );
-}
-
 function welyo_widget_texts( $lang = null ) {
 	if ( $lang === null ) {
 		$lang = welyo_lang_context();
@@ -903,7 +867,7 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 
 	$string_keys = array_diff(
 		welyo_lang_setting_keys(),
-		array( 'open_hour', 'close_hour', 'forminator_form_id', 'forminator_enabled', 'hours_by_day', 'text_hours_display' )
+		array( 'open_hour', 'close_hour', 'forminator_form_id', 'forminator_enabled', 'hours_by_day' )
 	);
 
 	foreach ( $string_keys as $key ) {
@@ -915,10 +879,6 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 		} else {
 			$out[ $key ] = sanitize_text_field( wp_unslash( $input[ $key ] ) );
 		}
-	}
-
-	if ( isset( $input['text_hours_display'] ) ) {
-		$out['text_hours_display'] = sanitize_textarea_field( wp_unslash( $input['text_hours_display'] ) );
 	}
 
 	if ( isset( $input['hours_by_day'] ) ) {
