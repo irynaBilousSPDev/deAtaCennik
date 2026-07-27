@@ -363,7 +363,7 @@ function welyo_admin_field_hours_by_day( $settings, $lang ) {
 		<th scope="row"><?php esc_html_e( 'Godziny pracy (wg dnia)', 'akademiata' ); ?></th>
 		<td>
 			<p class="description" style="margin-top:0;">
-				<?php esc_html_e( 'Ustaw godziny osobno dla każdego dnia. Puste pola = dzień wolny. Ten sam rozkład jest pokazywany w widgetcie (prawdziwe godziny).', 'akademiata' ); ?>
+				<?php esc_html_e( 'Ustaw godziny osobno dla każdego dnia. Puste pola = dzień wolny. W widgetcie odwiedzający widzi tylko dzisiejsze godziny, np. 8:00-16:00.', 'akademiata' ); ?>
 			</p>
 			<table class="widefat striped" style="max-width:420px;">
 				<thead>

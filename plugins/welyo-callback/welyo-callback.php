@@ -1197,7 +1197,7 @@ function welyo_render_widget() {
 .wcb-callbtn:hover{background:var(--ad);transform:translateY(-1px)}
 .wcb-callbtn svg{width:20px;height:20px}
 .wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)}
-.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft);white-space:pre-line;line-height:1.45}
+.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)}
 .wcb-field{margin-bottom:12px}
 .wcb-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
 .wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:var(--input-bg);box-sizing:border-box}
