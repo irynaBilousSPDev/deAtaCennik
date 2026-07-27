@@ -44,12 +44,13 @@ function welyo_lang_setting_keys() {
 		'forminator_field_name', 'forminator_field_phone', 'forminator_field_email',
 		'forminator_field_consent', 'forminator_field_quiz_result',
 		'phone_dial', 'phone_pretty', 'default_prefix', 'privacy_url',
-		'open_hour', 'close_hour', 'workdays',
+		'open_hour', 'close_hour', 'workdays', 'hours_by_day',
 		'text_status_open', 'text_status_closed', 'text_title_open', 'text_title_closed',
 		'text_sub_open', 'text_sub_closed', 'text_launch_open', 'text_launch_closed',
 		'text_call_btn', 'text_name_label', 'text_name_placeholder', 'text_phone_label',
 		'text_phone_placeholder', 'text_consent', 'text_submit', 'text_done_title',
 		'text_done_scheduled', 'text_done_immediate', 'text_footer', 'text_hours_prefix',
+		'text_hours_display',
 		'text_error_phone', 'text_error_consent', 'text_error_auth', 'text_error_campaign',
 		'text_error_welyo', 'text_error_rate', 'text_error_nonce', 'text_error_generic', 'text_sending',
 	);
@@ -85,6 +86,24 @@ function welyo_default_global_settings() {
 	);
 }
 
+/**
+ * Default weekly hours (1=Mon … 7=Sun). Empty open/close = closed.
+ *
+ * @return array<int, array{open:string,close:string}>
+ */
+function welyo_default_hours_by_day() {
+	// Same as previous global open 8 / close 18 / Mon–Fri (no surprise on existing sites).
+	return array(
+		1 => array( 'open' => '08:00', 'close' => '18:00' ),
+		2 => array( 'open' => '08:00', 'close' => '18:00' ),
+		3 => array( 'open' => '08:00', 'close' => '18:00' ),
+		4 => array( 'open' => '08:00', 'close' => '18:00' ),
+		5 => array( 'open' => '08:00', 'close' => '18:00' ),
+		6 => array( 'open' => '', 'close' => '' ),
+		7 => array( 'open' => '', 'close' => '' ),
+	);
+}
+
 /** Domyślne ustawienia per język (teksty, telefon, kampania). */
 function welyo_default_lang_settings( $lang ) {
 	$lang = strtolower( (string) $lang );
@@ -107,6 +126,7 @@ function welyo_default_lang_settings( $lang ) {
 		'open_hour'       => 8,
 		'close_hour'      => 18,
 		'workdays'        => '1,2,3,4,5',
+		'hours_by_day'    => welyo_default_hours_by_day(),
 		'default_prefix'  => '+48',
 	);
 
@@ -136,7 +156,8 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Mamy Twój numer. Oddzwonimy najszybciej, jak to możliwe.',
 			'text_done_immediate'    => 'Mamy Twój numer. Oddzwaniamy teraz — odbierz proszę połączenie.',
 			'text_footer'            => 'Dział Rekrutacji',
-			'text_hours_prefix'      => 'Pon–Pt, ',
+			'text_hours_prefix'      => '',
+			'text_hours_display'     => "Poniedziałek 8:00-18:00\nWtorek i środa 8:00-16:00\nCzwartek 8:00-18:00\nPiątek 8:00-16:00\nSobota 8:00-16:00",
 			'text_error_phone'       => 'Podaj poprawny numer telefonu.',
 			'text_error_consent'     => 'Potrzebujemy zgody na kontakt telefoniczny.',
 			'text_error_auth'        => 'Błąd logowania do Welyo. Administrator: sprawdź login i klucz API.',
@@ -172,7 +193,8 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'We have your number. We will call you back as soon as possible.',
 			'text_done_immediate'    => 'We have your number. We are calling now — please answer.',
 			'text_footer'            => 'Admissions Office',
-			'text_hours_prefix'      => 'Mon–Fri, ',
+			'text_hours_prefix'      => '',
+			'text_hours_display'     => "Monday 8:00-18:00\nTuesday and Wednesday 8:00-16:00\nThursday 8:00-18:00\nFriday 8:00-16:00\nSaturday 8:00-16:00",
 			'text_error_phone'       => 'Please enter a valid phone number.',
 			'text_error_consent'     => 'We need your consent to contact you by phone.',
 			'text_error_auth'        => 'Welyo login error. Administrator: check login and API key.',
@@ -208,7 +230,8 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Ми отримали ваш номер. Передзвонимо якнайшвидше.',
 			'text_done_immediate'    => 'Ми отримали ваш номер. Телефонуємо зараз — будь ласка, відповідайте.',
 			'text_footer'            => 'Відділ рекрутації',
-			'text_hours_prefix'      => 'Пн–Пт, ',
+			'text_hours_prefix'      => '',
+			'text_hours_display'     => "Понеділок 8:00-18:00\nВівторок і середа 8:00-16:00\nЧетвер 8:00-18:00\nПʼятниця 8:00-16:00\nСубота 8:00-16:00",
 			'text_error_phone'       => 'Введіть правильний номер телефону.',
 			'text_error_consent'     => 'Потрібна згода на телефонний контакт.',
 			'text_error_auth'        => 'Помилка входу до Welyo. Адміністратор: перевірте логін і ключ API.',
@@ -244,7 +267,8 @@ function welyo_default_lang_settings( $lang ) {
 			'text_done_scheduled'    => 'Мы получили ваш номер. Перезвоним как можно скорее.',
 			'text_done_immediate'    => 'Мы получили ваш номер. Звоним сейчас — пожалуйста, ответьте.',
 			'text_footer'            => 'Отдел рекрутинга',
-			'text_hours_prefix'      => 'Пн–Пт, ',
+			'text_hours_prefix'      => '',
+			'text_hours_display'     => "Понедельник 8:00-18:00\nВторник и среда 8:00-16:00\nЧетверг 8:00-18:00\nПятница 8:00-16:00\nСуббота 8:00-16:00",
 			'text_error_phone'       => 'Введите правильный номер телефона.',
 			'text_error_consent'     => 'Нужно согласие на телефонный контакт.',
 			'text_error_auth'        => 'Ошибка входа в Welyo. Администратор: проверьте логин и ключ API.',
@@ -645,14 +669,154 @@ function welyo_cfg_int( $key, $lang = null ) {
 	return (int) welyo_cfg( $key, $lang );
 }
 
-function welyo_workdays_array( $lang = null ) {
-	return array_map(
+/**
+ * Normalize "8:00" / "08:00" / "8" → "HH:MM" or ''.
+ *
+ * @param mixed $value
+ */
+function welyo_normalize_hm( $value ) {
+	$value = trim( (string) $value );
+	if ( $value === '' ) {
+		return '';
+	}
+	if ( preg_match( '/^(\d{1,2})$/', $value, $m ) ) {
+		$h = (int) $m[1];
+		if ( $h < 0 || $h > 23 ) {
+			return '';
+		}
+		return sprintf( '%02d:00', $h );
+	}
+	if ( preg_match( '/^(\d{1,2}):(\d{2})$/', $value, $m ) ) {
+		$h = (int) $m[1];
+		$min = (int) $m[2];
+		if ( $h < 0 || $h > 23 || $min < 0 || $min > 59 ) {
+			return '';
+		}
+		return sprintf( '%02d:%02d', $h, $min );
+	}
+	return '';
+}
+
+/**
+ * Minutes from midnight for HH:MM.
+ */
+function welyo_hm_to_minutes( $hm ) {
+	$hm = welyo_normalize_hm( $hm );
+	if ( $hm === '' ) {
+		return -1;
+	}
+	$parts = explode( ':', $hm );
+	return ( (int) $parts[0] * 60 ) + (int) $parts[1];
+}
+
+/**
+ * @param mixed $raw
+ * @return array<int, array{open:string,close:string}>
+ */
+function welyo_sanitize_hours_by_day( $raw ) {
+	$out = welyo_default_hours_by_day();
+	if ( ! is_array( $raw ) ) {
+		return $out;
+	}
+	for ( $d = 1; $d <= 7; $d++ ) {
+		$row = isset( $raw[ $d ] ) && is_array( $raw[ $d ] ) ? $raw[ $d ] : ( isset( $raw[ (string) $d ] ) && is_array( $raw[ (string) $d ] ) ? $raw[ (string) $d ] : null );
+		if ( ! is_array( $row ) ) {
+			continue;
+		}
+		$open  = welyo_normalize_hm( isset( $row['open'] ) ? $row['open'] : '' );
+		$close = welyo_normalize_hm( isset( $row['close'] ) ? $row['close'] : '' );
+		if ( $open === '' || $close === '' || welyo_hm_to_minutes( $close ) <= welyo_hm_to_minutes( $open ) ) {
+			$out[ $d ] = array( 'open' => '', 'close' => '' );
+		} else {
+			$out[ $d ] = array( 'open' => $open, 'close' => $close );
+		}
+	}
+	return $out;
+}
+
+/**
+ * Resolved schedule for language (saved or defaults; legacy open/close/workdays fallback).
+ *
+ * @return array<int, array{open:string,close:string}>
+ */
+function welyo_hours_by_day( $lang = null ) {
+	$raw = welyo_cfg( 'hours_by_day', $lang );
+	if ( is_array( $raw ) && $raw !== array() ) {
+		return welyo_sanitize_hours_by_day( $raw );
+	}
+
+	// Legacy: one open/close for listed workdays.
+	$open  = sprintf( '%02d:00', max( 0, min( 23, welyo_cfg_int( 'open_hour', $lang ) ) ) );
+	$close = sprintf( '%02d:00', max( 1, min( 24, welyo_cfg_int( 'close_hour', $lang ) ) ) );
+	$days  = array_map(
 		'intval',
 		array_filter(
 			array_map( 'trim', explode( ',', (string) welyo_cfg( 'workdays', $lang ) ) ),
 			'strlen'
 		)
 	);
+	$out = welyo_default_hours_by_day();
+	for ( $d = 1; $d <= 7; $d++ ) {
+		if ( in_array( $d, $days, true ) ) {
+			$out[ $d ] = array( 'open' => $open, 'close' => $close );
+		} else {
+			$out[ $d ] = array( 'open' => '', 'close' => '' );
+		}
+	}
+	return $out;
+}
+
+/**
+ * @return array{open:string,close:string}|null
+ */
+function welyo_hours_for_day( $dow, $lang = null ) {
+	$schedule = welyo_hours_by_day( $lang );
+	$dow      = (int) $dow;
+	if ( empty( $schedule[ $dow ]['open'] ) || empty( $schedule[ $dow ]['close'] ) ) {
+		return null;
+	}
+	return $schedule[ $dow ];
+}
+
+function welyo_workdays_array( $lang = null ) {
+	$days = array();
+	foreach ( welyo_hours_by_day( $lang ) as $dow => $row ) {
+		if ( ! empty( $row['open'] ) && ! empty( $row['close'] ) ) {
+			$days[] = (int) $dow;
+		}
+	}
+	return $days;
+}
+
+/**
+ * Widget hours text (editable multiline). Falls back to schedule summary.
+ */
+function welyo_hours_display_text( $lang = null ) {
+	$custom = trim( (string) welyo_cfg( 'text_hours_display', $lang ) );
+	if ( $custom !== '' ) {
+		return $custom;
+	}
+	$prefix = (string) welyo_cfg( 'text_hours_prefix', $lang );
+	$lines  = array();
+	foreach ( welyo_hours_by_day( $lang ) as $dow => $row ) {
+		if ( empty( $row['open'] ) || empty( $row['close'] ) ) {
+			continue;
+		}
+		$open  = ltrim( $row['open'], '0' );
+		$close = ltrim( $row['close'], '0' );
+		if ( $open === '' || $open[0] === ':' ) {
+			$open = '0' . $open;
+		}
+		if ( $close === '' || $close[0] === ':' ) {
+			$close = '0' . $close;
+		}
+		$lines[] = $row['open'] . '–' . $row['close'];
+	}
+	if ( $lines === array() ) {
+		return $prefix;
+	}
+	// Compact single-line fallback when display text empty.
+	return $prefix . implode( ', ', array_unique( $lines ) );
 }
 
 function welyo_widget_texts( $lang = null ) {
@@ -737,7 +901,10 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 	$defaults = welyo_default_lang_settings( $lang );
 	$out      = array();
 
-	$string_keys = array_diff( welyo_lang_setting_keys(), array( 'open_hour', 'close_hour', 'forminator_form_id', 'forminator_enabled' ) );
+	$string_keys = array_diff(
+		welyo_lang_setting_keys(),
+		array( 'open_hour', 'close_hour', 'forminator_form_id', 'forminator_enabled', 'hours_by_day', 'text_hours_display' )
+	);
 
 	foreach ( $string_keys as $key ) {
 		if ( ! isset( $input[ $key ] ) ) {
@@ -750,8 +917,36 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 		}
 	}
 
-	$out['open_hour']  = isset( $input['open_hour'] ) ? max( 0, min( 23, (int) $input['open_hour'] ) ) : (int) $current_lang['open_hour'];
-	$out['close_hour'] = isset( $input['close_hour'] ) ? max( 1, min( 24, (int) $input['close_hour'] ) ) : (int) $current_lang['close_hour'];
+	if ( isset( $input['text_hours_display'] ) ) {
+		$out['text_hours_display'] = sanitize_textarea_field( wp_unslash( $input['text_hours_display'] ) );
+	}
+
+	if ( isset( $input['hours_by_day'] ) ) {
+		$out['hours_by_day'] = welyo_sanitize_hours_by_day( wp_unslash( $input['hours_by_day'] ) );
+	} elseif ( isset( $current_lang['hours_by_day'] ) ) {
+		$out['hours_by_day'] = welyo_sanitize_hours_by_day( $current_lang['hours_by_day'] );
+	} else {
+		$out['hours_by_day'] = welyo_default_hours_by_day();
+	}
+
+	// Keep legacy open/close/workdays in sync (config.php / older code).
+	$workdays = array();
+	$open_min = null;
+	$close_max = null;
+	foreach ( $out['hours_by_day'] as $dow => $row ) {
+		if ( empty( $row['open'] ) || empty( $row['close'] ) ) {
+			continue;
+		}
+		$workdays[] = (int) $dow;
+		$o = (int) substr( $row['open'], 0, 2 );
+		$c = (int) substr( $row['close'], 0, 2 );
+		$open_min  = ( $open_min === null ) ? $o : min( $open_min, $o );
+		$close_max = ( $close_max === null ) ? $c : max( $close_max, $c );
+	}
+	$out['workdays']   = $workdays ? implode( ',', $workdays ) : '';
+	$out['open_hour']  = $open_min !== null ? $open_min : ( isset( $current_lang['open_hour'] ) ? (int) $current_lang['open_hour'] : 8 );
+	$out['close_hour'] = $close_max !== null ? $close_max : ( isset( $current_lang['close_hour'] ) ? (int) $current_lang['close_hour'] : 18 );
+
 	$out['forminator_enabled'] = ! empty( $input['forminator_enabled'] ) ? 1 : 0;
 	if ( isset( $input['forminator_form_id'] ) ) {
 		$out['forminator_form_id'] = max( 0, (int) $input['forminator_form_id'] );

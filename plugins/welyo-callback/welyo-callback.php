@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.5.6
+ * Version: 1.5.7
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -41,37 +41,47 @@ register_activation_hook( __FILE__, function () {
 
 /** Czy teraz jest w godzinach pracy (strefa czasowa WP). */
 function welyo_is_open_now( $lang = null ) {
-	$tz   = wp_timezone();
-	$now  = new DateTime( 'now', $tz );
-	$dow  = (int) $now->format( 'N' );
-	$hour = (int) $now->format( 'G' );
-	$days = welyo_workdays_array( $lang );
-	$is_workday = in_array( $dow, $days, true );
-	return $is_workday && $hour >= welyo_cfg_int( 'open_hour', $lang ) && $hour < welyo_cfg_int( 'close_hour', $lang );
+	$tz  = wp_timezone();
+	$now = new DateTime( 'now', $tz );
+	$dow = (int) $now->format( 'N' );
+	$day = welyo_hours_for_day( $dow, $lang );
+	if ( ! $day ) {
+		return false;
+	}
+	$mins  = ( (int) $now->format( 'G' ) * 60 ) + (int) $now->format( 'i' );
+	$open  = welyo_hm_to_minutes( $day['open'] );
+	$close = welyo_hm_to_minutes( $day['close'] );
+	return $open >= 0 && $close > $open && $mins >= $open && $mins < $close;
 }
 
 /** Najbliższy roboczy poranek (format YYYY-MM-DD hh:mm) — dla recall po godzinach. */
 function welyo_next_working_morning( $lang = null ) {
-	$tz   = wp_timezone();
-	$dt   = new DateTime( 'now', $tz );
-	$days = welyo_workdays_array( $lang );
+	$tz = wp_timezone();
+	$dt = new DateTime( 'now', $tz );
 
-	// jeśli dziś jeszcze przed otwarciem i dziś jest dniem roboczym → dzisiejszy poranek
 	$today_dow  = (int) $dt->format( 'N' );
-	$today_hour = (int) $dt->format( 'G' );
-	$open_hour  = welyo_cfg_int( 'open_hour', $lang );
-	if ( in_array( $today_dow, $days, true ) && $today_hour < $open_hour ) {
-		$dt->setTime( $open_hour, 5 );
-		return $dt->format( 'Y-m-d H:i' );
-	}
-
-	// w przeciwnym razie szukaj kolejnego dnia roboczego
-	for ( $i = 1; $i <= 8; $i++ ) {
-		$dt->modify( '+1 day' );
-		if ( in_array( (int) $dt->format( 'N' ), $days, true ) ) {
-			$dt->setTime( $open_hour, 5 );
+	$today_mins = ( (int) $dt->format( 'G' ) * 60 ) + (int) $dt->format( 'i' );
+	$today      = welyo_hours_for_day( $today_dow, $lang );
+	if ( $today ) {
+		$open = welyo_hm_to_minutes( $today['open'] );
+		if ( $open >= 0 && $today_mins < $open ) {
+			$parts = explode( ':', $today['open'] );
+			$dt->setTime( (int) $parts[0], isset( $parts[1] ) ? (int) $parts[1] : 0 );
+			$dt->modify( '+5 minutes' );
 			return $dt->format( 'Y-m-d H:i' );
 		}
+	}
+
+	for ( $i = 1; $i <= 8; $i++ ) {
+		$dt->modify( '+1 day' );
+		$day = welyo_hours_for_day( (int) $dt->format( 'N' ), $lang );
+		if ( ! $day ) {
+			continue;
+		}
+		$parts = explode( ':', $day['open'] );
+		$dt->setTime( (int) $parts[0], isset( $parts[1] ) ? (int) $parts[1] : 0 );
+		$dt->modify( '+5 minutes' );
+		return $dt->format( 'Y-m-d H:i' );
 	}
 	return $dt->format( 'Y-m-d H:i' );
 }
@@ -1066,15 +1076,26 @@ function welyo_render_widget() {
 	$privacy_url = esc_url( welyo_cfg( 'privacy_url', $lang ) );
 	$consent_html = str_replace( '{privacy_url}', $privacy_url, $texts['text_consent'] );
 
+	$schedule = welyo_hours_by_day( $lang );
+	$day_hours = array();
+	foreach ( $schedule as $dow => $row ) {
+		if ( empty( $row['open'] ) || empty( $row['close'] ) ) {
+			continue;
+		}
+		$day_hours[ (string) $dow ] = array(
+			'open'  => $row['open'],
+			'close' => $row['close'],
+		);
+	}
+
 	$cfg = array(
 		'lang'        => $lang,
 		'rest'        => esc_url_raw( rest_url( 'welyo/v1/callback' ) ),
 		'nonce'       => wp_create_nonce( 'wp_rest' ),
 		'phoneDial'   => welyo_cfg( 'phone_dial', $lang ),
 		'phonePretty' => welyo_cfg( 'phone_pretty', $lang ),
-		'openHour'    => welyo_cfg_int( 'open_hour', $lang ),
-		'closeHour'   => welyo_cfg_int( 'close_hour', $lang ),
-		'workdays'    => welyo_workdays_array( $lang ),
+		'dayHours'    => $day_hours,
+		'hoursText'   => welyo_hours_display_text( $lang ),
 		'privacyUrl'  => $privacy_url,
 		'texts'       => array(
 			'statusOpen'      => $texts['text_status_open'],
@@ -1176,7 +1197,7 @@ function welyo_render_widget() {
 .wcb-callbtn:hover{background:var(--ad);transform:translateY(-1px)}
 .wcb-callbtn svg{width:20px;height:20px}
 .wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)}
-.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)}
+.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft);white-space:pre-line}
 .wcb-field{margin-bottom:12px}
 .wcb-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
 .wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:var(--input-bg);box-sizing:border-box}
@@ -1219,11 +1240,22 @@ function welyo_render_widget() {
 
   document.getElementById("wcbNumber").textContent=CFG.phonePretty;
   document.getElementById("wcbCallLink").href="tel:"+CFG.phoneDial;
-  var hh=(""+CFG.openHour).padStart(2,"0")+":00–"+(""+CFG.closeHour).padStart(2,"0")+":00";
-  document.getElementById("wcbHours").textContent=(T.hoursPrefix||"")+hh;
+  document.getElementById("wcbHours").textContent=CFG.hoursText||"";
 
-  function openNow(){var n=new Date(),d=n.getDay()===0?7:n.getDay(),h=n.getHours();
-    return CFG.workdays.indexOf(d)!==-1 && h>=CFG.openHour && h<CFG.closeHour;}
+  function parseHM(s){
+    if(!s){return -1;}
+    var p=(""+s).split(":");
+    var h=parseInt(p[0],10),m=p.length>1?parseInt(p[1],10):0;
+    if(isNaN(h)||isNaN(m)){return -1;}
+    return h*60+m;
+  }
+  function openNow(){
+    var n=new Date(),d=n.getDay()===0?7:n.getDay(),mins=n.getHours()*60+n.getMinutes();
+    var day=CFG.dayHours&&CFG.dayHours[d];
+    if(!day||!day.open||!day.close){return false;}
+    var o=parseHM(day.open),c=parseHM(day.close);
+    return o>=0&&c>o&&mins>=o&&mins<c;
+  }
   function render(){
     var call=openNow();
     root.setAttribute("data-mode",call?"call":"callback");

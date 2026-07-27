@@ -326,14 +326,69 @@ function welyo_admin_render_general_lang_panel( $lang, $label, $settings ) {
 				'desc' => 'Numer widoczny w przycisku „Zadzwoń” w widgetcie.',
 			) );
 			welyo_admin_field_text( 'phone_pretty', 'Numer (wyświetlany)', $settings, array( 'lang' => $lang ) );
-			welyo_admin_field_text( 'open_hour', 'Godzina otwarcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
-			welyo_admin_field_text( 'close_hour', 'Godzina zamknięcia', $settings, array( 'lang' => $lang, 'type' => 'number' ) );
-			welyo_admin_field_text( 'workdays', 'Dni robocze', $settings, array( 'lang' => $lang, 'desc' => '1=pon … 7=niedz, np. 1,2,3,4,5' ) );
+			welyo_admin_field_hours_by_day( $settings, $lang );
 			welyo_admin_field_text( 'default_prefix', 'Prefiks numeru klienta', $settings, array( 'lang' => $lang, 'desc' => 'Np. +48 — normalizacja telefonu z formularza / quizu.' ) );
 			welyo_admin_field_text( 'privacy_url', 'URL polityki prywatności', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			?>
 		</table>
 	</div>
+	<?php
+}
+
+/**
+ * Per-day open/close hours (empty = closed).
+ *
+ * @param array  $settings
+ * @param string $lang
+ */
+function welyo_admin_field_hours_by_day( $settings, $lang ) {
+	$days = array(
+		1 => 'Poniedziałek',
+		2 => 'Wtorek',
+		3 => 'Środa',
+		4 => 'Czwartek',
+		5 => 'Piątek',
+		6 => 'Sobota',
+		7 => 'Niedziela',
+	);
+	$saved = welyo_admin_get_value( $settings, 'hours_by_day', $lang );
+	if ( is_array( $saved ) && $saved !== array() ) {
+		$schedule = welyo_sanitize_hours_by_day( $saved );
+	} else {
+		$schedule = welyo_hours_by_day( $lang );
+	}
+	$base = welyo_admin_option_name( 'hours_by_day', $lang );
+	?>
+	<tr>
+		<th scope="row"><?php esc_html_e( 'Godziny pracy (wg dnia)', 'akademiata' ); ?></th>
+		<td>
+			<p class="description" style="margin-top:0;">
+				<?php esc_html_e( 'Ustaw godziny osobno dla każdego dnia. Puste pola = dzień wolny. Format 8:00 lub 08:00.', 'akademiata' ); ?>
+			</p>
+			<table class="widefat striped" style="max-width:420px;">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Dzień', 'akademiata' ); ?></th>
+						<th><?php esc_html_e( 'Od', 'akademiata' ); ?></th>
+						<th><?php esc_html_e( 'Do', 'akademiata' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach ( $days as $dow => $label ) : ?>
+					<tr>
+						<td><?php echo esc_html( $label ); ?></td>
+						<td>
+							<input type="text" class="small-text" name="<?php echo esc_attr( $base . '[' . $dow . '][open]' ); ?>" value="<?php echo esc_attr( $schedule[ $dow ]['open'] ); ?>" placeholder="—" pattern="^$|^([01]?\d|2[0-3])(:[0-5]\d)?$" inputmode="numeric">
+						</td>
+						<td>
+							<input type="text" class="small-text" name="<?php echo esc_attr( $base . '[' . $dow . '][close]' ); ?>" value="<?php echo esc_attr( $schedule[ $dow ]['close'] ); ?>" placeholder="—" pattern="^$|^([01]?\d|2[0-3])(:[0-5]\d)?$" inputmode="numeric">
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+		</td>
+	</tr>
 	<?php
 }
 
@@ -413,7 +468,12 @@ function welyo_admin_render_content_lang_panel( $lang, $label, $settings ) {
 			welyo_admin_field_text( 'text_done_scheduled', 'Sukces: oddzwonimy później', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_done_immediate', 'Sukces: oddzwaniamy teraz', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_footer', 'Stopka panelu', $settings, array( 'lang' => $lang, 'wide' => true ) );
-			welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'lang' => $lang, 'desc' => 'Przed „08:00–18:00”' ) );
+			welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'lang' => $lang, 'desc' => 'Opcjonalnie, jeśli nie wypełnisz tekstu poniżej.' ) );
+			welyo_admin_field_text( 'text_hours_display', 'Tekst godzin (widget)', $settings, array(
+				'lang' => $lang,
+				'type' => 'textarea',
+				'desc' => 'Np. „Poniedziałek 8:00-18:00” — osobna linia na każdy zakres.',
+			) );
 			welyo_admin_field_text( 'text_error_phone', 'Błąd: telefon', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_consent', 'Błąd: zgoda', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_auth', 'Błąd: logowanie Welyo', $settings, array( 'lang' => $lang, 'wide' => true ) );
