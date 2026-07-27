@@ -363,7 +363,7 @@ function welyo_admin_field_hours_by_day( $settings, $lang ) {
 		<th scope="row"><?php esc_html_e( 'Godziny pracy (wg dnia)', 'akademiata' ); ?></th>
 		<td>
 			<p class="description" style="margin-top:0;">
-				<?php esc_html_e( 'Ustaw godziny osobno dla każdego dnia. Puste pola = dzień wolny. Format 8:00 lub 08:00.', 'akademiata' ); ?>
+				<?php esc_html_e( 'Ustaw godziny osobno dla każdego dnia. Puste pola = dzień wolny. Ten sam rozkład jest pokazywany w widgetcie (prawdziwe godziny).', 'akademiata' ); ?>
 			</p>
 			<table class="widefat striped" style="max-width:420px;">
 				<thead>
@@ -468,7 +468,6 @@ function welyo_admin_render_content_lang_panel( $lang, $label, $settings ) {
 			welyo_admin_field_text( 'text_done_scheduled', 'Sukces: oddzwonimy później', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_done_immediate', 'Sukces: oddzwaniamy teraz', $settings, array( 'lang' => $lang, 'type' => 'textarea' ) );
 			welyo_admin_field_text( 'text_footer', 'Stopka panelu', $settings, array( 'lang' => $lang, 'wide' => true ) );
-			welyo_admin_field_text( 'text_hours_prefix', 'Prefiks godzin', $settings, array( 'lang' => $lang, 'desc' => 'Tekst przed zakresem w widgetcie, np. „Pon–Pt, ” (dla odwiedzających).' ) );
 			welyo_admin_field_text( 'text_error_phone', 'Błąd: telefon', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_consent', 'Błąd: zgoda', $settings, array( 'lang' => $lang, 'wide' => true ) );
 			welyo_admin_field_text( 'text_error_auth', 'Błąd: logowanie Welyo', $settings, array( 'lang' => $lang, 'wide' => true ) );

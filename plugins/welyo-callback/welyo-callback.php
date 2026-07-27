@@ -1094,9 +1094,8 @@ function welyo_render_widget() {
 		'nonce'       => wp_create_nonce( 'wp_rest' ),
 		'phoneDial'   => welyo_cfg( 'phone_dial', $lang ),
 		'phonePretty' => welyo_cfg( 'phone_pretty', $lang ),
-		'openHour'    => welyo_cfg_int( 'open_hour', $lang ),
-		'closeHour'   => welyo_cfg_int( 'close_hour', $lang ),
 		'dayHours'    => $day_hours,
+		'hoursText'   => welyo_hours_display_text( $lang ),
 		'privacyUrl'  => $privacy_url,
 		'texts'       => array(
 			'statusOpen'      => $texts['text_status_open'],
@@ -1198,7 +1197,7 @@ function welyo_render_widget() {
 .wcb-callbtn:hover{background:var(--ad);transform:translateY(-1px)}
 .wcb-callbtn svg{width:20px;height:20px}
 .wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)}
-.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)}
+.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft);white-space:pre-line;line-height:1.45}
 .wcb-field{margin-bottom:12px}
 .wcb-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
 .wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:var(--input-bg);box-sizing:border-box}
@@ -1241,8 +1240,7 @@ function welyo_render_widget() {
 
   document.getElementById("wcbNumber").textContent=CFG.phonePretty;
   document.getElementById("wcbCallLink").href="tel:"+CFG.phoneDial;
-  var hh=(""+CFG.openHour).padStart(2,"0")+":00–"+(""+CFG.closeHour).padStart(2,"0")+":00";
-  document.getElementById("wcbHours").textContent=(T.hoursPrefix||"")+hh;
+  document.getElementById("wcbHours").textContent=CFG.hoursText||"";
 
   function parseHM(s){
     if(!s){return -1;}

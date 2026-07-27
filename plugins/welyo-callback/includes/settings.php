@@ -783,6 +783,88 @@ function welyo_workdays_array( $lang = null ) {
 	return $days;
 }
 
+/**
+ * Day names for widget hours text (1=Mon … 7=Sun).
+ *
+ * @return array<int, string>
+ */
+function welyo_day_labels( $lang = null ) {
+	$lang = $lang ? strtolower( (string) $lang ) : 'pl';
+	$packs = array(
+		'pl' => array( 1 => 'Poniedziałek', 2 => 'Wtorek', 3 => 'Środa', 4 => 'Czwartek', 5 => 'Piątek', 6 => 'Sobota', 7 => 'Niedziela' ),
+		'en' => array( 1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday' ),
+		'uk' => array( 1 => 'Понеділок', 2 => 'Вівторок', 3 => 'Середа', 4 => 'Четвер', 5 => "П'ятниця", 6 => 'Субота', 7 => 'Неділя' ),
+		'ru' => array( 1 => 'Понедельник', 2 => 'Вторник', 3 => 'Среда', 4 => 'Четверг', 5 => 'Пятница', 6 => 'Суббота', 7 => 'Воскресенье' ),
+	);
+	return isset( $packs[ $lang ] ) ? $packs[ $lang ] : $packs['pl'];
+}
+
+/**
+ * "08:00" → "8:00"
+ */
+function welyo_format_hm_display( $hm ) {
+	$hm = welyo_normalize_hm( $hm );
+	if ( $hm === '' ) {
+		return '';
+	}
+	$parts = explode( ':', $hm );
+	return ( (int) $parts[0] ) . ':' . $parts[1];
+}
+
+/**
+ * Truthful visitor hours text from per-day schedule (grouped when same hours).
+ */
+function welyo_hours_display_text( $lang = null ) {
+	if ( $lang === null ) {
+		$lang = welyo_lang_context();
+	}
+	$schedule = welyo_hours_by_day( $lang );
+	$labels   = welyo_day_labels( $lang );
+	$lines    = array();
+	$d        = 1;
+
+	while ( $d <= 7 ) {
+		$row = isset( $schedule[ $d ] ) ? $schedule[ $d ] : array( 'open' => '', 'close' => '' );
+		if ( empty( $row['open'] ) || empty( $row['close'] ) ) {
+			$d++;
+			continue;
+		}
+
+		$open  = $row['open'];
+		$close = $row['close'];
+		$start = $d;
+		$end   = $d;
+		while ( $end < 7 ) {
+			$next = isset( $schedule[ $end + 1 ] ) ? $schedule[ $end + 1 ] : array( 'open' => '', 'close' => '' );
+			if ( empty( $next['open'] ) || empty( $next['close'] ) || $next['open'] !== $open || $next['close'] !== $close ) {
+				break;
+			}
+			$end++;
+		}
+
+		$range = welyo_format_hm_display( $open ) . '-' . welyo_format_hm_display( $close );
+		if ( $start === $end ) {
+			$day_label = $labels[ $start ];
+		} elseif ( $end === $start + 1 ) {
+			$second = $labels[ $end ];
+			if ( function_exists( 'mb_strtolower' ) ) {
+				$second = mb_strtolower( $second, 'UTF-8' );
+			} else {
+				$second = strtolower( $second );
+			}
+			$joiner    = ( $lang === 'en' ) ? ' and ' : ' i ';
+			$day_label = $labels[ $start ] . $joiner . $second;
+		} else {
+			$day_label = $labels[ $start ] . '–' . $labels[ $end ];
+		}
+
+		$lines[] = $day_label . ' ' . $range;
+		$d       = $end + 1;
+	}
+
+	return implode( "\n", $lines );
+}
+
 function welyo_widget_texts( $lang = null ) {
 	if ( $lang === null ) {
 		$lang = welyo_lang_context();
