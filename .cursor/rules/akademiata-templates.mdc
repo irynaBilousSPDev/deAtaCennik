@@ -43,7 +43,7 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 
 ### Seria rekrutacji
 
-**Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ). Prefix ACF: `rekr_`. Defaults: `configure/lp-defaults/zasady-rekrutacji/` + admin seed metabox `seed.php` („Wczytaj / odśwież treść domyślną”).
+**Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ). Prefix ACF: `rekr_`. Defaults: `configure/lp-defaults/zasady-rekrutacji/` + admin seed metabox `seed.php` („Uzupełnij puste pola” = merge, bez nadpisywania; opcjonalnie pełne nadpisanie).
 
 ### O Uczelni
 
