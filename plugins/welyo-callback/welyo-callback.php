@@ -1109,7 +1109,6 @@ function welyo_render_widget() {
 			'callBtn'         => $texts['text_call_btn'],
 			'doneScheduled'   => $texts['text_done_scheduled'],
 			'doneImmediate'   => $texts['text_done_immediate'],
-			'hoursPrefix'     => $texts['text_hours_prefix'],
 			'errorPhone'      => $texts['text_error_phone'],
 			'errorConsent'    => $texts['text_error_consent'],
 			'errorAuth'       => $texts['text_error_auth'],

@@ -86,12 +86,9 @@ function welyo_default_global_settings() {
 }
 
 /**
- * Default weekly hours (1=Mon … 7=Sun). Empty open/close = closed.
- *
  * @return array<int, array{open:string,close:string}>
  */
 function welyo_default_hours_by_day() {
-	// Same as previous global open 8 / close 18 / Mon–Fri (no surprise on existing sites).
 	return array(
 		1 => array( 'open' => '08:00', 'close' => '18:00' ),
 		2 => array( 'open' => '08:00', 'close' => '18:00' ),
@@ -665,8 +662,6 @@ function welyo_cfg_int( $key, $lang = null ) {
 }
 
 /**
- * Normalize "8:00" / "08:00" / "8" → "HH:MM" or ''.
- *
  * @param mixed $value
  */
 function welyo_normalize_hm( $value ) {
@@ -692,9 +687,6 @@ function welyo_normalize_hm( $value ) {
 	return '';
 }
 
-/**
- * Minutes from midnight for HH:MM.
- */
 function welyo_hm_to_minutes( $hm ) {
 	$hm = welyo_normalize_hm( $hm );
 	if ( $hm === '' ) {
@@ -730,8 +722,6 @@ function welyo_sanitize_hours_by_day( $raw ) {
 }
 
 /**
- * Resolved schedule for language (saved or defaults; legacy open/close/workdays fallback).
- *
  * @return array<int, array{open:string,close:string}>
  */
 function welyo_hours_by_day( $lang = null ) {
@@ -740,7 +730,6 @@ function welyo_hours_by_day( $lang = null ) {
 		return welyo_sanitize_hours_by_day( $raw );
 	}
 
-	// Legacy: one open/close for listed workdays.
 	$open  = sprintf( '%02d:00', max( 0, min( 23, welyo_cfg_int( 'open_hour', $lang ) ) ) );
 	$close = sprintf( '%02d:00', max( 1, min( 24, welyo_cfg_int( 'close_hour', $lang ) ) ) );
 	$days  = array_map(
@@ -783,9 +772,6 @@ function welyo_workdays_array( $lang = null ) {
 	return $days;
 }
 
-/**
- * "08:00" → "8:00"
- */
 function welyo_format_hm_display( $hm ) {
 	$hm = welyo_normalize_hm( $hm );
 	if ( $hm === '' ) {
@@ -795,9 +781,7 @@ function welyo_format_hm_display( $hm ) {
 	return ( (int) $parts[0] ) . ':' . $parts[1];
 }
 
-/**
- * Visitor widget: today's hours only (e.g. "8:00-18:00"), no day list.
- */
+/** Dzisiejsze godziny w widgetcie, np. 8:00-16:00. */
 function welyo_hours_display_text( $lang = null ) {
 	if ( $lang === null ) {
 		$lang = welyo_lang_context();
@@ -918,7 +902,7 @@ function welyo_sanitize_lang_settings( $input, $lang, $current_lang ) {
 		$out['hours_by_day'] = welyo_default_hours_by_day();
 	}
 
-	// Keep legacy open/close/workdays in sync (config.php / older code).
+	// Keep open_hour / close_hour / workdays in sync for welyo-config.php.
 	$workdays = array();
 	$open_min = null;
 	$close_max = null;
