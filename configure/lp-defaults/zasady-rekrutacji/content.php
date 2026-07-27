@@ -152,6 +152,7 @@ return [
         'gallery_toggle_text' => 'Zobacz przykładowe portfolio',
         'gallery_toggle_url' => 'https://uczelnia.akademiata.pl/przyklady-prawidlowo-wykonanego-portfolio/',
         'gallery_link_text' => 'Sprawdź terminy oceny',
+        'gallery_link_url' => '#terminy',
         'gallery_bar_title' => 'Przykładowe prace z wcześniejszych naborów',
         'gallery_bar_text' => 'Bryły geometryczne, martwa natura i architektura. To poziom i charakter prac, jakiego oczekujemy. Kliknij dowolną pracę, aby ją powiększyć.',
         'gallery_images' => null,

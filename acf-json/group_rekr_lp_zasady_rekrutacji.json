@@ -568,6 +568,14 @@
                         "default_value": "Sprawdź terminy oceny"
                     },
                     {
+                        "key": "field_rekr_portfolio_gallery_link_url",
+                        "label": "Galeria — link",
+                        "name": "gallery_link_url",
+                        "type": "text",
+                        "default_value": "#terminy",
+                        "instructions": "URL lub kotwica, np. #terminy"
+                    },
+                    {
                         "key": "field_rekr_portfolio_gallery_bar_title",
                         "label": "Galeria — nagłówek",
                         "name": "gallery_bar_title",

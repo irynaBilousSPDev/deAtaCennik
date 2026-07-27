@@ -379,7 +379,7 @@ $lp_has_photo = static function ($image, $static_key) {
                                 );
                                 ?>
                             <?php endif; ?>
-                            <?php $lp_render_cta($portfolio['gallery_link_text'] ?? '', '#terminy', 'small'); ?>
+                            <?php $lp_render_cta($portfolio['gallery_link_text'] ?? '', $portfolio['gallery_link_url'] ?? '', 'small'); ?>
                         </div>
                     </div>
                 </div>

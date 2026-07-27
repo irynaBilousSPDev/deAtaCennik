@@ -35,6 +35,10 @@ add_action('init', 'load_acf_components');
 // LP O Uczelni: defaults helpers (merge when ACF empty).
 require_once get_template_directory() . '/configure/lp-defaults/o-uczelni/fields.php';
 
+// LP Zasady rekrutacji: defaults + admin seed into ACF.
+require_once get_template_directory() . '/configure/lp-defaults/zasady-rekrutacji/fields.php';
+require_once get_template_directory() . '/configure/lp-defaults/zasady-rekrutacji/seed.php';
+
 /**
  * Button: Component is reused in sliders/offers — not rendered on single posts.
  */
