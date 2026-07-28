@@ -1,30 +1,48 @@
 <?php
 $contact_repeater = $content['contact_repeater'] ?? [];
-$notice_title = trim((string) ($content['accordion_notice_title'] ?? ''));
-$notice_content = $content['accordion_notice_content'] ?? '';
-$has_notice = ($notice_title !== '' || !empty(trim(wp_strip_all_tags((string) $notice_content))));
 
-if (empty($contact_repeater) && !$has_notice) {
+if (empty($contact_repeater) || !is_array($contact_repeater)) {
     return;
 }
 ?>
 
-<?php if ($has_notice): ?>
-    <div class="contact_notice_box">
-        <?php if ($notice_title !== ''): ?>
-            <h3 class="contact_notice_box__title"><?php echo esc_html($notice_title); ?></h3>
-        <?php endif; ?>
+<?php foreach ($contact_repeater as $block): ?>
+    <?php
+    $notice_title = trim((string) ($block['accordion_notice_title'] ?? ''));
+    $notice_content = $block['accordion_notice_content'] ?? '';
+    $visible_from = !empty($block['accordion_notice_visible_from'])
+        ? preg_replace('/[^0-9]/', '', (string) $block['accordion_notice_visible_from'])
+        : '';
+    $visible_until = !empty($block['accordion_notice_visible_until'])
+        ? preg_replace('/[^0-9]/', '', (string) $block['accordion_notice_visible_until'])
+        : '';
+    $today = current_time('Ymd');
+    $has_notice_content = ($notice_title !== '' || !empty(trim(wp_strip_all_tags((string) $notice_content))));
+    $is_notice_visible = $has_notice_content;
 
-        <?php if (!empty(trim(wp_strip_all_tags((string) $notice_content)))): ?>
-            <div class="contact_notice_box__content">
-                <?php echo wp_kses_post($notice_content); ?>
+    if ($is_notice_visible && $visible_from !== '' && $today < $visible_from) {
+        $is_notice_visible = false;
+    }
+
+    if ($is_notice_visible && $visible_until !== '' && $today > $visible_until) {
+        $is_notice_visible = false;
+    }
+    ?>
+    <div class="contact_content">
+        <?php if ($is_notice_visible): ?>
+            <div class="contact_notice_box">
+                <?php if ($notice_title !== ''): ?>
+                    <h3 class="contact_notice_box__title"><?php echo esc_html($notice_title); ?></h3>
+                <?php endif; ?>
+
+                <?php if (!empty(trim(wp_strip_all_tags((string) $notice_content)))): ?>
+                    <div class="contact_notice_box__content">
+                        <?php echo wp_kses_post($notice_content); ?>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
-    </div>
-<?php endif; ?>
 
-<?php foreach ($contact_repeater as $block): ?>
-    <div class="contact_content">
         <div class="contact_top mb-5">
             <div class="contact_columns">
                 <div class="contact_info">

@@ -23,16 +23,55 @@ $description = get_query_var('description');
             if (!is_array($item)) continue;
 
             $item_title = $item['accordion_title'] ?? 'Sekcja';
-            $item_notice_badge = $item['accordion_notice_badge'] ?? '';
             $template_path = $item['accordion_content_template'] ?? '';
             $content_data = $item['accordion_contact_content'] ?? $item['accordion_default_content'] ?? null;
+            $item_notice_badge = '';
+
+            if (!empty($content_data['contact_repeater']) && is_array($content_data['contact_repeater'])) {
+                $today = current_time('Ymd');
+
+                foreach ($content_data['contact_repeater'] as $block) {
+                    if (!is_array($block)) {
+                        continue;
+                    }
+
+                    $candidate_badge = trim((string) ($block['accordion_notice_badge'] ?? ''));
+                    if ($candidate_badge === '') {
+                        continue;
+                    }
+
+                    $visible_from = !empty($block['accordion_notice_visible_from'])
+                        ? preg_replace('/[^0-9]/', '', (string) $block['accordion_notice_visible_from'])
+                        : '';
+                    $visible_until = !empty($block['accordion_notice_visible_until'])
+                        ? preg_replace('/[^0-9]/', '', (string) $block['accordion_notice_visible_until'])
+                        : '';
+
+                    $is_visible = true;
+
+                    if ($visible_from !== '' && $today < $visible_from) {
+                        $is_visible = false;
+                    }
+
+                    if ($visible_until !== '' && $today > $visible_until) {
+                        $is_visible = false;
+                    }
+
+                    if ($is_visible) {
+                        $item_notice_badge = $candidate_badge;
+                        break;
+                    }
+                }
+            }
             ?>
             <div class="accordion_item">
                 <div class="accordion_header">
-                    <span class="accordion_title small_title"><?php echo esc_html($item_title); ?></span>
-                    <?php if (!empty($item_notice_badge)) : ?>
-                        <span class="accordion_notice_badge"><?php echo esc_html($item_notice_badge); ?></span>
-                    <?php endif; ?>
+                    <span class="accordion_title_wrap">
+                        <span class="accordion_title small_title"><?php echo esc_html($item_title); ?></span>
+                        <?php if (!empty($item_notice_badge)) : ?>
+                            <span class="accordion_notice_badge"><?php echo esc_html($item_notice_badge); ?></span>
+                        <?php endif; ?>
+                    </span>
                     <span class="accordion_arrow">
                 <img src="<?php echo get_template_directory_uri(); ?>/static/img/arrow_down_closed_accordion.png"
                      alt="Arrow">
