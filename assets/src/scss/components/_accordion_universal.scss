@@ -45,7 +45,7 @@
 
       .accordion_content {
         max-height: 100%;
-        padding: 10px;
+        padding: 10px 0;
       }
 
       .accordion_header .accordion_arrow {
@@ -60,7 +60,7 @@
     .accordion_header {
       position: relative;
       background: #fff;
-      padding: 20px 30px;
+      padding: 20px 2rem;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -72,12 +72,14 @@
         font-weight: 900;
         position: relative;
         z-index: 5;
+        margin: 0;
+        line-height: 1.2;
       }
 
       .accordion_title_wrap {
         display: inline-flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
         flex-wrap: wrap;
         min-width: 0;
         position: relative;
