@@ -222,28 +222,43 @@
   @media (max-width: 768px) {
     .accordion_item {
       .accordion_header {
-        padding: 15px 20px;
-        flex-direction: column;
-        align-items: flex-start;
+        padding: 12px 15px;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
 
         .accordion_title {
-          margin-bottom: 8px;
+          font-size: 16px;
+          line-height: 1.4;
+          margin-bottom: 0;
+          font-weight: 600;
         }
 
         .accordion_title_wrap {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 0;
+          flex: 1 1 auto;
+          min-width: 0;
+          flex-direction: row;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 8px;
+          padding-right: 8px;
         }
 
         .accordion_notice_badge {
-          font-size: 15px;
-          margin-bottom: 8px;
+          font-size: 14px;
+          margin-bottom: 0;
         }
 
         .accordion_arrow {
+          margin-left: auto;
           align-self: center;
-          margin-left: 0;
+          flex: 0 0 auto;
+          min-width: 22px;
+
+          img {
+            width: 18px;
+            height: 7px;
+          }
         }
 
         &::before,
@@ -254,39 +269,7 @@
       }
 
       .accordion_content {
-        padding: 0 5px;
-
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    .accordion_item {
-      .accordion_header {
-        padding: 12px 15px;
-        flex-direction: row;
-        align-items: flex-end;
-
-        .accordion_title {
-          font-size: 16px;
-          line-height: 1.4;
-          margin-bottom: 0;
-          padding-right: 20px;
-          font-weight: 600;
-        }
-
-        .accordion_arrow {
-          min-width: 22px;
-
-          img {
-            width: 18px;
-            height: 7px;
-          }
-        }
-      }
-
-      .accordion_content {
-        padding: 0 5px;
+        padding: 0;
       }
     }
   }

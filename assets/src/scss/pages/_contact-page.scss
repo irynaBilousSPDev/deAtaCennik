@@ -648,7 +648,7 @@
 
 .accordion_content {
   .contact_notice_box {
-    margin: 0 0 2rem;
+    margin: 1.25rem 2rem 2rem;
     padding: 18px 22px;
     border: 1px solid #F5682C;
     border-radius: 4px;
@@ -674,7 +674,7 @@
   }
 
   .contact_content {
-    padding: 1.25rem 2rem 0;
+    padding: 0 2rem;
   }
 
   .contact_info {
@@ -706,12 +706,12 @@
 
   @media (max-width: 768px) {
     .contact_notice_box {
-      margin: 0 0 1.5rem;
+      margin: 1rem 1rem 1.5rem;
       padding: 16px 18px;
     }
 
     .contact_content {
-      padding: 1rem 1rem 0;
+      padding: 0 1rem;
     }
 
     .contact_info {
