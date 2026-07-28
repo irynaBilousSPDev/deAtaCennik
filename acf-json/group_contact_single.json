@@ -46,26 +46,6 @@
             "parent_repeater": "field_68d164c18c79b",
             "sub_fields": [
                 {
-                    "key": "field_68d19b56e94d9",
-                    "label": "Sekcja",
-                    "name": "",
-                    "aria-label": "",
-                    "type": "tab",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "wpml_cf_preferences": 3,
-                    "placement": "top",
-                    "endpoint": 0,
-                    "selected": 0,
-                    "parent_repeater": "field_68d164ca8c79c"
-                },
-                {
                     "key": "field_68d164ca8c79d",
                     "label": "accordion_title",
                     "name": "accordion_title",
@@ -93,7 +73,7 @@
                     "label": "Informacja dodatkowa",
                     "name": "",
                     "aria_label": "",
-                    "type": "message",
+                    "type": "tab",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -103,9 +83,9 @@
                         "id": ""
                     },
                     "wpml_cf_preferences": 3,
-                    "message": "<strong>Informacja dodatkowa</strong><br>Opcjonalny komunikat dla calej tej sekcji (pasek przy tytule + box w tresci).",
-                    "new_lines": "",
-                    "esc_html": 0,
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
                     "parent_repeater": "field_68d164ca8c79c"
                 },
                 {
@@ -217,6 +197,26 @@
                     "toolbar": "basic",
                     "media_upload": 0,
                     "delay": 0,
+                    "parent_repeater": "field_68d164ca8c79c"
+                },
+                {
+                    "key": "field_68d5474c_content_tab",
+                    "label": "Tresc kontaktu",
+                    "name": "",
+                    "aria_label": "",
+                    "type": "tab",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "wpml_cf_preferences": 3,
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
                     "parent_repeater": "field_68d164ca8c79c"
                 },
                 {
@@ -837,5 +837,5 @@
     "allow_ai_access": false,
     "ai_description": "",
     "acfml_field_group_mode": "localization",
-    "modified": 1785236731
+    "modified": 1785237105
 }
