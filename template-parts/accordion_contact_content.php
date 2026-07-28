@@ -1,8 +1,29 @@
 <?php
-if (empty($content['contact_repeater']) || !is_array($content['contact_repeater'])) return;
+$contact_repeater = $content['contact_repeater'] ?? [];
+$notice_title = trim((string) ($content['accordion_notice_title'] ?? ''));
+$notice_content = $content['accordion_notice_content'] ?? '';
+$has_notice = ($notice_title !== '' || !empty(trim(wp_strip_all_tags((string) $notice_content))));
+
+if (empty($contact_repeater) && !$has_notice) {
+    return;
+}
 ?>
 
-<?php foreach ($content['contact_repeater'] as $block): ?>
+<?php if ($has_notice): ?>
+    <div class="contact_notice_box">
+        <?php if ($notice_title !== ''): ?>
+            <h3 class="contact_notice_box__title"><?php echo esc_html($notice_title); ?></h3>
+        <?php endif; ?>
+
+        <?php if (!empty(trim(wp_strip_all_tags((string) $notice_content)))): ?>
+            <div class="contact_notice_box__content">
+                <?php echo wp_kses_post($notice_content); ?>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+
+<?php foreach ($contact_repeater as $block): ?>
     <div class="contact_content">
         <div class="contact_top mb-5">
             <div class="contact_columns">

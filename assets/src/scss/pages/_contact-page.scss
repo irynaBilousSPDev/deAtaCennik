@@ -647,6 +647,32 @@
 }
 
 .accordion_content {
+  .contact_notice_box {
+    margin: 2rem 2rem 2.5rem;
+    padding: 18px 22px;
+    border: 1px solid #F5682C;
+    border-radius: 4px;
+    background: #FDF4EE;
+    color: #2D1A15;
+  }
+
+  .contact_notice_box__title {
+    margin: 0 0 10px;
+    color: #F5682C;
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1.3;
+  }
+
+  .contact_notice_box__content {
+    font-size: 18px;
+    line-height: 1.45;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   .contact_content {
     padding: 0 2rem;
   }
@@ -679,6 +705,11 @@
   }
 
   @media (max-width: 768px) {
+    .contact_notice_box {
+      margin: 1.5rem 1rem 2rem;
+      padding: 16px 18px;
+    }
+
     .contact_info {
       flex-direction: column;
       align-items: center;

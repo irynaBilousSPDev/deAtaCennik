@@ -62,8 +62,9 @@
       background: #fff;
       padding: 20px 30px;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
+      gap: 16px;
       cursor: pointer;
 
 
@@ -75,6 +76,7 @@
       }
 
       .accordion_arrow {
+        margin-left: auto;
         width: 22px;
         height: 9px;
         transition: transform 0.4s ease;
@@ -84,6 +86,23 @@
           height: 100%;
           display: block;
         }
+      }
+
+      .accordion_notice_badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 28px;
+        padding: 4px 14px;
+        border-radius: 4px;
+        background: #FCEBDD;
+        color: vars.$primary;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-align: center;
+        position: relative;
+        z-index: 5;
       }
 
       &::before {
@@ -202,8 +221,14 @@
           margin-bottom: 8px;
         }
 
+        .accordion_notice_badge {
+          font-size: 15px;
+          margin-bottom: 8px;
+        }
+
         .accordion_arrow {
           align-self: center;
+          margin-left: 0;
         }
 
         &::before,

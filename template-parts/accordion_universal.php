@@ -23,12 +23,16 @@ $description = get_query_var('description');
             if (!is_array($item)) continue;
 
             $item_title = $item['accordion_title'] ?? 'Sekcja';
+            $item_notice_badge = $item['accordion_notice_badge'] ?? '';
             $template_path = $item['accordion_content_template'] ?? '';
             $content_data = $item['accordion_contact_content'] ?? $item['accordion_default_content'] ?? null;
             ?>
             <div class="accordion_item">
                 <div class="accordion_header">
                     <span class="accordion_title small_title"><?php echo esc_html($item_title); ?></span>
+                    <?php if (!empty($item_notice_badge)) : ?>
+                        <span class="accordion_notice_badge"><?php echo esc_html($item_notice_badge); ?></span>
+                    <?php endif; ?>
                     <span class="accordion_arrow">
                 <img src="<?php echo get_template_directory_uri(); ?>/static/img/arrow_down_closed_accordion.png"
                      alt="Arrow">
