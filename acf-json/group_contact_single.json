@@ -1,5 +1,4 @@
-[
-    {
+{
         "key": "group_68d401ff84af6",
         "title": "Single Contact",
         "fields": [
@@ -838,5 +837,4 @@
         "allow_ai_access": false,
         "ai_description": "",
         "acfml_field_group_mode": "localization"
-    }
-]
+}
