@@ -155,6 +155,7 @@ body.page-template-page-o-uczelni {
     .tl-card{background:#fff;border:1px solid #edeff2;border-radius:14px;overflow:hidden}
     .tl-body{padding:24px 30px}
     .tl-logo{height:80px;width:auto;max-width:320px;object-fit:contain;display:block;margin-bottom:18px;opacity:.95}
+    .tl-item:first-child .tl-logo{height:104px;max-width:380px}
     .tl-card h3{font-size:18.5px;font-weight:800;margin-bottom:8px;line-height:1.2}
     .tl-card .kicker{font-family:'Nunito Sans';font-weight:800;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:$oucz-blue;margin-bottom:6px}
     .tl-card p{font-size:14.5px;color:#4a5058;margin-bottom:10px}
@@ -530,6 +531,7 @@ body.page-template-page-o-uczelni {
     .tl-year {
       text-align: left;
       padding-top: 0;
+      padding-left: 18px;
       font-size: 20px;
     }
 
@@ -686,6 +688,11 @@ body.page-template-page-o-uczelni {
     .tl-logo {
       height: 56px;
       max-width: 240px;
+    }
+
+    .tl-item:first-child .tl-logo {
+      height: 72px;
+      max-width: 280px;
     }
   }
 }
