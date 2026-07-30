@@ -96,7 +96,7 @@ body.page-template-page-o-uczelni {
     .highlight p{margin:0;font-size:16.5px;color:#2c3138}
     .km-head{display:flex;align-items:center;justify-content:space-between;gap:44px;margin-bottom:10px}
     .km-head .title{margin-bottom:0}
-    .rank-badge{width:172px;height:auto;flex:none;display:block}
+    .rank-badge{width:250px;height:auto;flex:none;display:block}
     .ela-badge{width:150px;height:auto;flex:none;display:block}
 
     /* ---------- Offer lists ---------- */
@@ -332,7 +332,6 @@ body.page-template-page-o-uczelni {
       gap: 22px;
     }
 
-    .rank-badge,
     .ela-badge {
       width: 140px;
     }
@@ -667,7 +666,6 @@ body.page-template-page-o-uczelni {
       font-size: 30px;
     }
 
-    .rank-badge,
     .ela-badge {
       width: 118px;
     }
