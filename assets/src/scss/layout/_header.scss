@@ -26,6 +26,12 @@
       max-width: 35px;
     }
 
+    .site_navigation_wrapper .header-poland-logo {
+      width: 28px;
+      max-width: 28px;
+      max-height: 28px;
+      margin-left: 1rem;
+    }
 
     .site-branding {
       padding: 3px 0;
@@ -44,6 +50,11 @@
       max-width: 28px;
     }
 
+    .site_navigation_wrapper .header-poland-logo {
+      width: 24px;
+      max-width: 24px;
+      max-height: 24px;
+    }
 
     .site-branding {
       padding: 3px 0;
@@ -185,6 +196,19 @@ body:not(.home) {
 
   .logo_container {
     @include mixins.flexbox(row, flex-start, center);
+
+    .site-branding img {
+      margin-right: 0;
+    }
+
+    .header-poland-logo {
+      width: 36px;
+      height: auto;
+      max-width: 36px;
+      max-height: 36px;
+      margin-left: 1rem;
+      margin-right: 0;
+    }
   }
 
   @include mixins.ipad-air-screen {
