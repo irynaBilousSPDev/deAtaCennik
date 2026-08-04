@@ -17,6 +17,21 @@
                     $logo_footer = get_template_directory_uri() . '/static/img/logoFooterwhite.png';
                     $logo_alt    = __( 'Logo - Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie', 'akademiata' );
 
+                    // Appearance → Customize → Site Identity → Footer logo.
+                    if ( $current_lang !== 'en' ) {
+                        $footer_logo_id  = (int) get_theme_mod( 'akademiata_footer_logo' );
+                        $footer_logo_url = $footer_logo_id ? wp_get_attachment_image_url( $footer_logo_id, 'full' ) : '';
+
+                        if ( $footer_logo_url ) {
+                            $logo_footer = $footer_logo_url;
+
+                            $footer_logo_alt = trim( (string) get_post_meta( $footer_logo_id, '_wp_attachment_image_alt', true ) );
+                            if ( $footer_logo_alt !== '' ) {
+                                $logo_alt = $footer_logo_alt;
+                            }
+                        }
+                    }
+
                     if ( $current_lang === 'en' ) {
                         $logo_footer = get_template_directory_uri() . '/static/img/logo_ATA_248x108_white_EN_footer.png';
                         $logo_alt    = 'Logo - University of Technology and Arts, Applied Sciences in Warsaw';

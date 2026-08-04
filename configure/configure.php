@@ -102,6 +102,39 @@ function custom_setup()
 
 add_action('after_setup_theme', 'custom_setup');
 
+/**
+ * Appearance → Customize → Site Identity → Footer logo.
+ * Separate from the header custom logo (footer asset is usually white).
+ */
+function akademiata_customize_register($wp_customize)
+{
+	$wp_customize->add_setting(
+		'akademiata_footer_logo',
+		[
+			'type'              => 'theme_mod',
+			'capability'        => 'edit_theme_options',
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		]
+	);
+
+	$wp_customize->add_control(
+		new WP_Customize_Media_Control(
+			$wp_customize,
+			'akademiata_footer_logo',
+			[
+				'label'       => __('Footer logo', 'akademiata'),
+				'description' => __('Optional. When empty, the theme default footer logo is used.', 'akademiata'),
+				'section'     => 'title_tagline',
+				'mime_type'   => 'image',
+				'priority'    => 9,
+			]
+		)
+	);
+}
+
+add_action('customize_register', 'akademiata_customize_register');
+
 // remove default image sizes to avoid overcharging server - comment line if you need size
 function remove_default_image_sizes($sizes)
 {

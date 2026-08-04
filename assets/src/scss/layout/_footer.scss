@@ -17,6 +17,16 @@ footer {
 .footer_body {
   padding: 4rem 0;
 
+  .logo_footer_wrapper {
+    img {
+      max-width: 248px;
+      max-height: 108px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+  }
+
 
   .item {
     display: flex;
