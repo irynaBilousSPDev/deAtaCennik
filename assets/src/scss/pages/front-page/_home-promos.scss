@@ -14,7 +14,11 @@
   --hp-ink: #111;
   --hp-muted: rgba(17, 17, 17, 0.68);
   --hp-circle: #3a3a3a;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
+
+  @include mixins.lg-screen {
+    margin-bottom: 6rem;
+  }
 
   .home-promos__grid {
     display: flex;

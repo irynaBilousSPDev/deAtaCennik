@@ -93,7 +93,7 @@ $render_card = static function ( array $card ) use ( $arrow_label, $allowed ) {
 	<?php
 };
 ?>
-<section class="home-promos" aria-labelledby="home-promos-title">
+	<section class="home-promos" aria-labelledby="home-promos-title">
 	<div class="container">
 		<?php if ( $title !== '' ) : ?>
 			<h2 id="home-promos-title" class="small_title mb-5"><?php echo esc_html( $title ); ?></h2>
