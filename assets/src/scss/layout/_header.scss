@@ -27,9 +27,9 @@
     }
 
     .site_navigation_wrapper .header-poland-logo {
-      width: 32px;
-      max-width: 32px;
-      max-height: 32px;
+      width: auto;
+      max-width: none;
+      max-height: 36px;
       margin-left: 3rem;
     }
 
@@ -51,9 +51,9 @@
     }
 
     .site_navigation_wrapper .header-poland-logo {
-      width: 28px;
-      max-width: 28px;
-      max-height: 28px;
+      width: auto;
+      max-width: none;
+      max-height: 32px;
       margin-left: 2rem;
     }
 
@@ -203,12 +203,13 @@ body:not(.home) {
     }
 
     .header-poland-logo {
-      width: 42px;
+      width: auto;
       height: auto;
-      max-width: 42px;
-      max-height: 42px;
+      max-width: none;
+      max-height: 50px;
       margin-left: 3rem;
       margin-right: 0;
+      object-fit: contain;
     }
   }
 

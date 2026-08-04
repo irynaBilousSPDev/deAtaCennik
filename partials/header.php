@@ -81,7 +81,7 @@
                                  alt="<?php echo esc_attr( $logo_alt ); ?>">
                         </a>
                     </div><!-- .site-branding -->
-                    <img class="header-poland-logo" width="42" height="42" alt="<?php _e( 'Polska - Logo', 'akademiata' ); ?>"
+                    <img class="header-poland-logo" width="50" alt="<?php _e( 'Polska - Logo', 'akademiata' ); ?>"
                          src="<?php echo get_template_directory_uri() ?>/static/img/poland.webp">
                 </div>
 
