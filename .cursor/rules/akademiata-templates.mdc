@@ -21,7 +21,7 @@ alwaysApply: false
 `front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page-o-uczelni.php`, `page.php`.
 
 **Front page sections (order):** hero-slider → counter → main title → offers sliders → home-rankings → home-promos → our_students (YouTube) → …
-- **Front page Promocje:** ACF tab **Promocje** → `home_promos` (show, title, cards). Each card has its own `link`. Defaults in `configure/front-page-defaults/home-promos/`.
+- **Front page Promocje:** ACF group **Front: Promocje** (`acf-json/group_front_promos.json`) — Sync as its own group. Field `home_promos`; each card has `link`. Defaults in `configure/front-page-defaults/home-promos/`.
 
 ## LP landing pages
 
@@ -67,7 +67,7 @@ From `content-single-offer.php`: `section_why_study`, `section_student_testimoni
 ## ACF in templates
 
 - Top of templates: `get_fields()` → `set_query_var('acf_fields', $acf_fields)`.
-- **Front page:** `acf-json/group_front_page.json` (`Front: Page`) — tab **Rankingi** → group `home_rankings`. (Tab **Decyzja na dziś** / `decision_today` remains in ACF; section currently not included in `front-page.php`.)
+- **Front page:** `acf-json/group_front_page.json` (`Front: Page`) — tabs including **Rankingi** (`home_rankings`). Promocje = separate group `group_front_promos.json`. (Tab **Decyzja na dziś** / `decision_today` remains in ACF; section currently not included in `front-page.php`.)
 - Options pages: Theme Settings (Header, Footer, contacts) registered in `configure/configure.php`.
 - Components: `render_acf_component($type, $data)` → `acf-components/acf-{type}.php`.
 
