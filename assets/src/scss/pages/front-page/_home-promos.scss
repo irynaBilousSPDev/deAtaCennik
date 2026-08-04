@@ -2,18 +2,19 @@
 @use "../../abstracts/mixins" as mixins;
 
 .home-promos {
-  --hp-gap: 1.2rem;
-  --hp-radius: 1.4rem;
-  --hp-arrow: 3.4rem;
-  --hp-peach: #f2c48a;
-  --hp-pink: #f0b8b4;
-  --hp-lime: #d4e070;
-  --hp-sky: #b5d0ea;
-  --hp-lilac: #d0bde0;
+  --hp-gap: 1.4rem;
+  --hp-radius: 1.6rem;
+  --hp-arrow: 3.6rem;
+  --hp-peach: #f0c278;
+  --hp-pink: #f0b0ac;
+  --hp-lime: #d2e05c;
+  --hp-sky: #a8c8e8;
+  --hp-lilac: #d4c0e8;
   --hp-apricot: #f0c090;
-  --hp-ink: #111;
-  --hp-muted: rgba(17, 17, 17, 0.68);
-  --hp-circle: #3a3a3a;
+  --hp-ink: #1a1a1a;
+  --hp-muted: rgba(26, 26, 26, 0.62);
+  --hp-soft: rgba(26, 26, 26, 0.78);
+  --hp-circle: #2f2f2f;
   margin-bottom: 5rem;
 
   @include mixins.lg-screen {
@@ -48,7 +49,7 @@
       color: var(--hp-ink);
       text-decoration: none;
       transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
 
       .home-promo__arrow {
         background-color: vars.$primary;
@@ -69,12 +70,12 @@
   .home-promo--apricot { --hp-card-bg: var(--hp-apricot); }
 
   .home-promo--media {
-    min-height: 34rem;
+    min-height: 36rem;
 
     .home-promo__media {
       position: relative;
       flex: 1 1 auto;
-      min-height: 18rem;
+      min-height: 20rem;
       overflow: hidden;
 
       img {
@@ -88,46 +89,47 @@
 
     .home-promo__body {
       flex: 0 0 auto;
+      background: var(--hp-card-bg, var(--hp-peach));
     }
   }
 
   .home-promo--solid {
     flex: 0 0 auto;
-    min-height: 0;
-    padding: 1.5rem 1.6rem 4.6rem;
+    min-height: 18rem;
+    padding: 1.8rem 1.8rem 5rem;
     justify-content: flex-start;
   }
 
   .home-promo__badge {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
+    top: 1.2rem;
+    left: 1.2rem;
     z-index: 1;
     display: inline-block;
-    padding: 0.4rem 0.9rem;
-    border-radius: 0.6rem;
-    font-size: 1.15rem;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 1.2rem;
     line-height: 1.25;
     font-weight: vars.$weight-semi-regular;
     color: var(--hp-ink);
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.92);
   }
 
   .home-promo--peach .home-promo__badge { background: #f5e06a; }
   .home-promo--sky .home-promo__badge { background: #c8dff2; }
-  .home-promo--lilac .home-promo__badge { background: #ddd0eb; }
+  .home-promo--lilac .home-promo__badge { background: #e2d4f0; }
 
   .home-promo__eyebrow {
     display: block;
-    margin-bottom: 1.1rem;
-    font-size: 1.2rem;
+    margin-bottom: 1.4rem;
+    font-size: 1.25rem;
     line-height: 1.3;
-    font-weight: vars.$weight-regular;
-    color: var(--hp-muted);
+    font-weight: vars.$weight-semi-regular;
+    color: var(--hp-ink);
   }
 
   .home-promo__body {
-    padding: 1.4rem 1.6rem 4.6rem;
+    padding: 1.6rem 1.8rem 5rem;
   }
 
   .home-promo--solid .home-promo__body {
@@ -138,7 +140,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   .home-promo__headline,
@@ -149,10 +151,11 @@
   }
 
   .home-promo__headline {
-    font-size: 1.75rem;
-    line-height: 1.22;
+    font-size: 2rem;
+    line-height: 1.2;
     font-weight: vars.$weight-medium;
     color: var(--hp-ink);
+    max-width: 22ch;
 
     strong {
       font-weight: vars.$weight-bold;
@@ -161,10 +164,13 @@
 
   .home-promo__value {
     flex-shrink: 0;
-    font-size: 1.75rem;
-    line-height: 1.22;
+    margin-top: 0.1rem;
+    font-size: 2.1rem;
+    line-height: 1.15;
+    font-weight: vars.$weight-bold;
     text-align: right;
     white-space: nowrap;
+    color: var(--hp-ink);
 
     strong {
       font-weight: vars.$weight-bold;
@@ -172,24 +178,25 @@
   }
 
   .home-promo__text {
-    margin-top: 0.65rem;
-    font-size: 1.3rem;
+    margin-top: 0.85rem;
+    font-size: 1.35rem;
     line-height: 1.35;
-    color: var(--hp-muted);
-    max-width: 34rem;
+    color: var(--hp-soft);
+    max-width: 32rem;
   }
 
   .home-promo__meta {
-    margin-top: 0.85rem;
-    font-size: 1.2rem;
+    margin-top: 1.1rem;
+    font-size: 1.3rem;
     line-height: 1.35;
-    color: var(--hp-muted);
+    font-weight: vars.$weight-semi-regular;
+    color: var(--hp-ink);
   }
 
   .home-promo__arrow {
     position: absolute;
-    right: 1.2rem;
-    bottom: 1.2rem;
+    right: 1.4rem;
+    bottom: 1.4rem;
     width: var(--hp-arrow);
     height: var(--hp-arrow);
     border-radius: 50%;
@@ -201,11 +208,11 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 0.8rem;
-      height: 0.8rem;
+      width: 0.85rem;
+      height: 0.85rem;
       border-right: 2px solid #fff;
       border-bottom: 2px solid #fff;
-      transform: translate(-55%, -50%) rotate(-45deg);
+      transform: translate(-60%, -50%) rotate(-45deg);
     }
   }
 
@@ -222,66 +229,95 @@
 
     .home-promo--media {
       flex: 1 1 auto;
-      min-height: 42rem;
+      min-height: 44rem;
+    }
+
+    .home-promo--solid {
+      min-height: 20rem;
     }
   }
 
   @media (min-width: 1100px) {
-    --hp-gap: 1.4rem;
+    --hp-gap: 1.6rem;
 
     .home-promos__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .home-promo--media {
-      min-height: 48rem;
+      min-height: 52rem;
 
       .home-promo__media {
-        min-height: 24rem;
+        min-height: 28rem;
       }
     }
 
     .home-promo--solid {
-      padding: 1.6rem 1.7rem 4.8rem;
+      min-height: 22rem;
+      padding: 2rem 2rem 5.2rem;
     }
 
     .home-promo__body {
-      padding: 1.5rem 1.7rem 4.8rem;
+      padding: 1.8rem 2rem 5.2rem;
     }
 
-    .home-promo__headline,
+    .home-promo__eyebrow {
+      font-size: 1.3rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .home-promo__headline {
+      font-size: 2.2rem;
+    }
+
     .home-promo__value {
-      font-size: 1.9rem;
+      font-size: 2.3rem;
     }
 
     .home-promo__text {
+      font-size: 1.4rem;
+    }
+
+    .home-promo__meta {
       font-size: 1.35rem;
     }
   }
 
   @media (min-width: 1400px) {
     .home-promo--media {
-      min-height: 52rem;
+      min-height: 56rem;
     }
 
-    .home-promo__headline,
+    .home-promo__headline {
+      font-size: 2.35rem;
+    }
+
     .home-promo__value {
-      font-size: 2rem;
+      font-size: 2.45rem;
     }
   }
 
   @include mixins.max-sm-screen {
     .home-promo--media {
-      min-height: 32rem;
+      min-height: 34rem;
 
       .home-promo__media {
-        min-height: 20rem;
+        min-height: 22rem;
       }
+    }
+
+    .home-promo--solid {
+      min-height: 16rem;
+      padding: 1.5rem 1.5rem 4.6rem;
+    }
+
+    .home-promo__body {
+      padding: 1.4rem 1.5rem 4.6rem;
     }
 
     .home-promo__headline,
     .home-promo__value {
-      font-size: 1.6rem;
+      font-size: 1.75rem;
     }
 
     .home-promo__row {

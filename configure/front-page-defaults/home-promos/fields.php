@@ -14,11 +14,11 @@ function akademiata_home_promos_defaults(): array {
  */
 function akademiata_home_promos_color_map(): array {
 	return [
-		'peach'   => '#f2c48a',
-		'pink'    => '#f0b8b4',
-		'lime'    => '#d4e070',
-		'sky'     => '#b5d0ea',
-		'lilac'   => '#d0bde0',
+		'peach'   => '#f0c278',
+		'pink'    => '#f0b0ac',
+		'lime'    => '#d2e05c',
+		'sky'     => '#a8c8e8',
+		'lilac'   => '#d4c0e8',
 		'apricot' => '#f0c090',
 	];
 }
