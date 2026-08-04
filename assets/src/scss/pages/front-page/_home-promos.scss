@@ -1,20 +1,20 @@
 @use "../../abstracts/variables" as vars;
 @use "../../abstracts/mixins" as mixins;
 
+// Pixel values from design cards (~394×480 media / ~394×174 solid).
 .home-promos {
-  --hp-gap: 1.4rem;
+  --hp-gap: 2rem;
   --hp-radius: 1.6rem;
-  --hp-arrow: 3.6rem;
-  --hp-peach: #f0c278;
-  --hp-pink: #f0b0ac;
-  --hp-lime: #d2e05c;
-  --hp-sky: #a8c8e8;
-  --hp-lilac: #d4c0e8;
-  --hp-apricot: #f0c090;
-  --hp-ink: #1a1a1a;
-  --hp-muted: rgba(26, 26, 26, 0.62);
-  --hp-soft: rgba(26, 26, 26, 0.78);
-  --hp-circle: #2f2f2f;
+  --hp-arrow: 2.5rem;
+  --hp-peach: #ffc862;
+  --hp-pink: #fd9ea7;
+  --hp-lime: #c5e84a;
+  --hp-sky: #82b2e6;
+  --hp-lilac: #bf9bff;
+  --hp-apricot: #ffc862;
+  --hp-ink: #2f2f2f;
+  --hp-muted: rgba(47, 47, 47, 0.78);
+  --hp-circle: #4a4848;
   margin-bottom: 5rem;
 
   @include mixins.lg-screen {
@@ -49,10 +49,10 @@
       color: var(--hp-ink);
       text-decoration: none;
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 
       .home-promo__arrow {
-        background-color: vars.$primary;
+        background-image: url("../../../static/img/home-promos/promo-arrow-hover.png");
       }
     }
 
@@ -69,13 +69,16 @@
   .home-promo--lilac { --hp-card-bg: var(--hp-lilac); }
   .home-promo--apricot { --hp-card-bg: var(--hp-apricot); }
 
+  // Media : solid ≈ 480 : 174
   .home-promo--media {
+    flex: 2.76 1 0;
     min-height: 36rem;
 
     .home-promo__media {
       position: relative;
-      flex: 1 1 auto;
-      min-height: 20rem;
+      // Image : body ≈ 345 : 135
+      flex: 2.55 1 0;
+      min-height: 0;
       overflow: hidden;
 
       img {
@@ -88,48 +91,60 @@
     }
 
     .home-promo__body {
-      flex: 0 0 auto;
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       background: var(--hp-card-bg, var(--hp-peach));
     }
   }
 
   .home-promo--solid {
-    flex: 0 0 auto;
-    min-height: 18rem;
-    padding: 1.8rem 1.8rem 5rem;
+    flex: 1 1 0;
+    min-height: 15.5rem;
+    padding: 1.8rem 2rem 4.4rem;
     justify-content: flex-start;
   }
 
   .home-promo__badge {
     position: absolute;
-    top: 1.2rem;
-    left: 1.2rem;
+    top: 1.4rem;
+    left: 1.4rem;
     z-index: 1;
     display: inline-block;
-    padding: 0.45rem 1rem;
+    padding: 0.45rem 1.1rem;
     border-radius: 999px;
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     line-height: 1.25;
     font-weight: vars.$weight-semi-regular;
     color: var(--hp-ink);
     background: rgba(255, 255, 255, 0.92);
   }
 
-  .home-promo--peach .home-promo__badge { background: #f5e06a; }
-  .home-promo--sky .home-promo__badge { background: #c8dff2; }
-  .home-promo--lilac .home-promo__badge { background: #e2d4f0; }
+  .home-promo--peach .home-promo__badge {
+    background: #ffc862;
+  }
+
+  .home-promo--sky .home-promo__badge {
+    background: #b7d4f0;
+  }
+
+  .home-promo--lilac .home-promo__badge {
+    background: rgba(255, 255, 255, 0.78);
+  }
 
   .home-promo__eyebrow {
     display: block;
-    margin-bottom: 1.4rem;
-    font-size: 1.25rem;
+    margin-bottom: 0.85rem;
+    font-size: 1.3rem;
     line-height: 1.3;
     font-weight: vars.$weight-semi-regular;
     color: var(--hp-ink);
   }
 
   .home-promo__body {
-    padding: 1.6rem 1.8rem 5rem;
+    padding: 1.8rem 2rem 4.4rem;
   }
 
   .home-promo--solid .home-promo__body {
@@ -140,7 +155,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1.2rem;
+    gap: 1rem;
   }
 
   .home-promo__headline,
@@ -153,9 +168,8 @@
   .home-promo__headline {
     font-size: 2rem;
     line-height: 1.2;
-    font-weight: vars.$weight-medium;
+    font-weight: vars.$weight-regular;
     color: var(--hp-ink);
-    max-width: 22ch;
 
     strong {
       font-weight: vars.$weight-bold;
@@ -164,13 +178,10 @@
 
   .home-promo__value {
     flex-shrink: 0;
-    margin-top: 0.1rem;
-    font-size: 2.1rem;
-    line-height: 1.15;
-    font-weight: vars.$weight-bold;
+    font-size: 2rem;
+    line-height: 1.2;
     text-align: right;
     white-space: nowrap;
-    color: var(--hp-ink);
 
     strong {
       font-weight: vars.$weight-bold;
@@ -178,15 +189,15 @@
   }
 
   .home-promo__text {
-    margin-top: 0.85rem;
-    font-size: 1.35rem;
+    margin-top: 0.7rem;
+    font-size: 1.4rem;
     line-height: 1.35;
-    color: var(--hp-soft);
-    max-width: 32rem;
+    color: var(--hp-ink);
   }
 
   .home-promo__meta {
-    margin-top: 1.1rem;
+    margin-top: auto;
+    padding-top: 1.2rem;
     font-size: 1.3rem;
     line-height: 1.35;
     font-weight: vars.$weight-semi-regular;
@@ -195,24 +206,27 @@
 
   .home-promo__arrow {
     position: absolute;
-    right: 1.4rem;
-    bottom: 1.4rem;
+    right: 1.6rem;
+    bottom: 1.5rem;
     width: var(--hp-arrow);
     height: var(--hp-arrow);
     border-radius: 50%;
-    background-color: var(--hp-circle);
-    transition: background-color 0.2s ease;
+    background-color: transparent;
+    background-image: url("../../../static/img/home-promos/promo-arrow.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: background-image 0.15s ease;
+  }
 
-    &::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0.85rem;
-      height: 0.85rem;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      transform: translate(-60%, -50%) rotate(-45deg);
+  @include mixins.max-sm-screen {
+    .home-promo--media {
+      min-height: 42rem;
+    }
+
+    .home-promo__headline,
+    .home-promo__value {
+      font-size: 1.85rem;
     }
   }
 
@@ -224,108 +238,56 @@
     }
 
     .home-promos__col {
-      min-height: 100%;
+      min-height: 0;
     }
 
     .home-promo--media {
-      flex: 1 1 auto;
-      min-height: 44rem;
-    }
-
-    .home-promo--solid {
-      min-height: 20rem;
+      min-height: 0;
     }
   }
 
   @media (min-width: 1100px) {
-    --hp-gap: 1.6rem;
+    --hp-gap: 2.2rem;
+    --hp-radius: 1.6rem;
+    --hp-arrow: 3rem;
 
     .home-promos__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .home-promo--media {
-      min-height: 52rem;
-
-      .home-promo__media {
-        min-height: 28rem;
-      }
-    }
-
     .home-promo--solid {
-      min-height: 22rem;
-      padding: 2rem 2rem 5.2rem;
+      min-height: 0;
+      padding: 2rem 2.2rem 5rem;
     }
 
     .home-promo__body {
-      padding: 1.8rem 2rem 5.2rem;
-    }
-
-    .home-promo__eyebrow {
-      font-size: 1.3rem;
-      margin-bottom: 1.6rem;
-    }
-
-    .home-promo__headline {
-      font-size: 2.2rem;
-    }
-
-    .home-promo__value {
-      font-size: 2.3rem;
-    }
-
-    .home-promo__text {
-      font-size: 1.4rem;
-    }
-
-    .home-promo__meta {
-      font-size: 1.35rem;
-    }
-  }
-
-  @media (min-width: 1400px) {
-    .home-promo--media {
-      min-height: 56rem;
-    }
-
-    .home-promo__headline {
-      font-size: 2.35rem;
-    }
-
-    .home-promo__value {
-      font-size: 2.45rem;
-    }
-  }
-
-  @include mixins.max-sm-screen {
-    .home-promo--media {
-      min-height: 34rem;
-
-      .home-promo__media {
-        min-height: 22rem;
-      }
-    }
-
-    .home-promo--solid {
-      min-height: 16rem;
-      padding: 1.5rem 1.5rem 4.6rem;
-    }
-
-    .home-promo__body {
-      padding: 1.4rem 1.5rem 4.6rem;
+      padding: 2rem 2.2rem 5rem;
     }
 
     .home-promo__headline,
     .home-promo__value {
-      font-size: 1.75rem;
+      font-size: 2.2rem;
     }
 
-    .home-promo__row {
-      flex-wrap: wrap;
+    .home-promo__text {
+      font-size: 1.45rem;
     }
 
+    .home-promo__meta,
+    .home-promo__eyebrow {
+      font-size: 1.35rem;
+    }
+
+    .home-promo__arrow {
+      right: 1.8rem;
+      bottom: 1.6rem;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .home-promo__headline,
     .home-promo__value {
-      white-space: normal;
+      font-size: 2.4rem;
     }
   }
 }
