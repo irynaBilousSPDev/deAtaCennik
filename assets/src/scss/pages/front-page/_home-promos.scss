@@ -1,18 +1,20 @@
 @use "../../abstracts/variables" as vars;
 @use "../../abstracts/mixins" as mixins;
 
-// Bento from design: media ~394×480, solid ~394×174, gap ~20px, radius ~16px.
+// Design cards: media ~394×480, solid ~394×174, gap ~20px, radius ~16px, pad ~26px.
 .home-promos {
   --hp-gap: 2rem;
   --hp-radius: 1.6rem;
-  --hp-arrow: 2.5rem;
+  --hp-arrow: 2.6rem;
+  --hp-pad-x: 2.6rem;
+  --hp-pad-y: 2.2rem;
   --hp-peach: #ffc862;
   --hp-pink: #fd9ea7;
   --hp-lime: #c5e84a;
   --hp-sky: #82b2e6;
   --hp-lilac: #bf9bff;
   --hp-apricot: #ffc862;
-  --hp-ink: #2f2f2f;
+  --hp-ink: #333333;
   --hp-circle: #4a4848;
   margin-bottom: 5rem;
 
@@ -45,7 +47,7 @@
       box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 
       .home-promo__arrow {
-        background-image: url("../../../static/img/home-promos/promo-arrow-hover.png");
+        background-color: vars.$primary;
       }
     }
 
@@ -68,14 +70,14 @@
     .home-promo__media {
       position: relative;
       flex: 1 1 auto;
-      min-height: 24rem;
+      min-height: 26rem;
       overflow: hidden;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center top;
+        object-position: center center;
         display: block;
       }
     }
@@ -87,19 +89,19 @@
   }
 
   .home-promo--solid {
-    min-height: 15.5rem;
-    padding: 1.8rem 2rem 4.6rem;
+    min-height: 16rem;
+    padding: var(--hp-pad-y) var(--hp-pad-x) 4.8rem;
     justify-content: flex-start;
   }
 
   .home-promo__badge {
     position: absolute;
-    top: 1.4rem;
-    left: 1.4rem;
+    top: 1.6rem;
+    left: 1.6rem;
     z-index: 1;
     display: inline-block;
-    padding: 0.45rem 1.1rem;
-    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.8rem;
     font-size: 1.25rem;
     line-height: 1.25;
     font-weight: vars.$weight-semi-regular;
@@ -116,20 +118,20 @@
   }
 
   .home-promo--lilac .home-promo__badge {
-    background: rgba(255, 255, 255, 0.78);
+    background: rgba(255, 255, 255, 0.82);
   }
 
   .home-promo__eyebrow {
     display: block;
-    margin-bottom: 0.85rem;
+    margin-bottom: 1rem;
     font-size: 1.3rem;
     line-height: 1.3;
-    font-weight: vars.$weight-semi-regular;
+    font-weight: vars.$weight-bold;
     color: var(--hp-ink);
   }
 
   .home-promo__body {
-    padding: 1.8rem 2rem 4.6rem;
+    padding: var(--hp-pad-y) var(--hp-pad-x) 4.8rem;
   }
 
   .home-promo--solid .home-promo__body {
@@ -140,7 +142,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   .home-promo__headline,
@@ -151,7 +153,7 @@
   }
 
   .home-promo__headline {
-    font-size: 2rem;
+    font-size: 2.1rem;
     line-height: 1.2;
     font-weight: vars.$weight-regular;
     color: var(--hp-ink);
@@ -163,7 +165,7 @@
 
   .home-promo__value {
     flex-shrink: 0;
-    font-size: 2rem;
+    font-size: 2.1rem;
     line-height: 1.2;
     text-align: right;
     white-space: nowrap;
@@ -174,36 +176,43 @@
   }
 
   .home-promo__text {
-    margin-top: 0.7rem;
+    margin-top: 0.6rem;
     font-size: 1.4rem;
     line-height: 1.35;
+    font-weight: vars.$weight-regular;
     color: var(--hp-ink);
   }
 
   .home-promo__meta {
-    margin-top: 1.2rem;
-    font-size: 1.3rem;
+    margin-top: 1.4rem;
+    padding-right: 4.5rem;
+    font-size: 1.35rem;
     line-height: 1.35;
-    font-weight: vars.$weight-semi-regular;
+    font-weight: vars.$weight-bold;
     color: var(--hp-ink);
   }
 
   .home-promo__arrow {
     position: absolute;
-    right: 1.6rem;
-    bottom: 1.5rem;
+    right: 1.8rem;
+    bottom: 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: var(--hp-arrow);
     height: var(--hp-arrow);
     border-radius: 50%;
-    background-color: transparent;
-    background-image: url("../../../static/img/home-promos/promo-arrow.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    transition: background-image 0.15s ease;
+    background-color: var(--hp-circle);
+    color: #fff;
+    transition: background-color 0.2s ease;
+
+    svg {
+      display: block;
+      width: 52%;
+      height: 52%;
+    }
   }
 
-  // Tablet: 2-col bento
   @media (min-width: 768px) {
     .home-promos__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -234,13 +243,11 @@
     }
   }
 
-  // Desktop: 3-col bento matching mock
-  //   a b c
-  //   a d c
-  //   e d f
   @media (min-width: 1100px) {
     --hp-gap: 2rem;
     --hp-arrow: 3rem;
+    --hp-pad-x: 2.8rem;
+    --hp-pad-y: 2.4rem;
 
     .home-promos__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -256,22 +263,21 @@
       min-height: 48rem;
 
       .home-promo__media {
-        flex: 1 1 auto;
-        min-height: 28rem;
+        min-height: 30rem;
       }
     }
 
     .home-promo--solid {
-      padding: 2rem 2.2rem 5rem;
+      padding-bottom: 5.2rem;
     }
 
     .home-promo__body {
-      padding: 2rem 2.2rem 5rem;
+      padding-bottom: 5.2rem;
     }
 
     .home-promo__headline,
     .home-promo__value {
-      font-size: 2.2rem;
+      font-size: 2.3rem;
     }
 
     .home-promo__text {
@@ -280,12 +286,12 @@
 
     .home-promo__meta,
     .home-promo__eyebrow {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
     }
 
     .home-promo__arrow {
-      right: 1.8rem;
-      bottom: 1.6rem;
+      right: 2rem;
+      bottom: 1.8rem;
     }
   }
 
@@ -296,7 +302,7 @@
 
     .home-promo__headline,
     .home-promo__value {
-      font-size: 2.4rem;
+      font-size: 2.5rem;
     }
   }
 }

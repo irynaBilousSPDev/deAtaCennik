@@ -95,7 +95,12 @@ $allowed     = akademiata_home_promos_allowed_tags();
 						<?php endif; ?>
 					</div>
 
-					<span class="home-promo__arrow" aria-hidden="true"></span>
+					<span class="home-promo__arrow" aria-hidden="true">
+						<svg viewBox="0 0 24 24" focusable="false">
+							<path d="M4 12h12.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+							<path d="M12.5 6.5 19 12l-6.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</span>
 					<span class="sr-only"><?php echo esc_html( $arrow_label ); ?></span>
 				</a>
 			<?php endforeach; ?>
