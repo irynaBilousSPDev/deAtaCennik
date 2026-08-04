@@ -20,7 +20,8 @@ alwaysApply: false
 
 `front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page-o-uczelni.php`, `page.php`.
 
-**Front page sections (order):** hero-slider → counter → main title → offers sliders → home-rankings → …
+**Front page sections (order):** hero-slider → counter → main title → offers sliders → home-rankings → home-promos → our_students (YouTube) → …
+- **Front page Promocje:** ACF tab **Promocje** → group `home_promos` (`acf-json/group_front_page.json`); defaults `configure/front-page-defaults/home-promos/`. Cards: image, color presets / custom, texts. Empty ACF → theme defaults + `static/img/home-promos/`.
 
 ## LP landing pages
 
@@ -54,7 +55,7 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 | Folder | Use for |
 |--------|---------|
 | `partials/` | Site chrome, cards, filters, offer nav — `header.php`, `footer.php`, `card_post*.php`, `nav_single_offer.php`, `filter_side.php` |
-| `template-parts/` | Content shells and sections — `content/*`, `single-offer/section_*.php`, `prices/calculator.php`, `front-page/hero-slider.php`, `front-page/home-rankings.php` |
+| `template-parts/` | Content shells and sections — `content/*`, `single-offer/section_*.php`, `prices/calculator.php`, `front-page/hero-slider.php`, `front-page/home-rankings.php`, `front-page/home-promos.php` |
 | `template-parts/.../partials/` | Feature-scoped fragments (e.g. `pg-mba/partials/`) |
 
 Load via `get_template_part()` or `locate_template('partials/header.php', true, true)`.

@@ -597,6 +597,268 @@
                 ]
             },
             {
+                "key": "field_home_promos_tab",
+                "label": "Promocje",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "top",
+                "endpoint": 0,
+                "selected": 0,
+                "wpml_cf_preferences": 3
+            },
+            {
+                "key": "field_home_promos",
+                "label": "Promocje",
+                "name": "home_promos",
+                "aria-label": "",
+                "type": "group",
+                "instructions": "Sekcja przed filmikami. Puste pola = wartości domyślne z motywu.",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "layout": "block",
+                "wpml_cf_preferences": 3,
+                "sub_fields": [
+                    {
+                        "key": "field_home_promos_show",
+                        "label": "Pokaż sekcję",
+                        "name": "show",
+                        "type": "true_false",
+                        "default_value": 1,
+                        "ui": 1,
+                        "ui_on_text": "Tak",
+                        "ui_off_text": "Nie",
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_home_promos_title",
+                        "label": "Tytuł sekcji",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "Promocje",
+                        "wpml_cf_preferences": 2
+                    },
+                    {
+                        "key": "field_home_promos_link",
+                        "label": "Link kart (URL)",
+                        "name": "link",
+                        "type": "url",
+                        "instructions": "Domyślnie: /kalkulator-czesnego/",
+                        "wpml_cf_preferences": 3
+                    },
+                    {
+                        "key": "field_home_promos_cards",
+                        "label": "Karty",
+                        "name": "cards",
+                        "type": "repeater",
+                        "layout": "block",
+                        "min": 0,
+                        "max": 6,
+                        "button_label": "Dodaj kartę",
+                        "collapsed": "field_home_promos_card_headline",
+                        "wpml_cf_preferences": 3,
+                        "sub_fields": [
+                            {
+                                "key": "field_home_promos_card_layout",
+                                "label": "Typ karty",
+                                "name": "layout",
+                                "type": "select",
+                                "choices": {
+                                    "media": "Ze zdjęciem",
+                                    "solid": "Tylko tekst"
+                                },
+                                "default_value": "solid",
+                                "return_format": "value",
+                                "wrapper": {
+                                    "width": "25",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_area",
+                                "label": "Pozycja w siatce",
+                                "name": "area",
+                                "type": "select",
+                                "choices": {
+                                    "a": "A — lewa wysoka",
+                                    "b": "B — środek góra",
+                                    "c": "C — prawa wysoka",
+                                    "d": "D — środek dół",
+                                    "e": "E — lewa dół",
+                                    "f": "F — prawa dół"
+                                },
+                                "default_value": "a",
+                                "return_format": "value",
+                                "wrapper": {
+                                    "width": "25",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_color",
+                                "label": "Kolor tła",
+                                "name": "color",
+                                "type": "select",
+                                "choices": {
+                                    "peach": "Brzoskwiniowy",
+                                    "pink": "Różowy",
+                                    "lime": "Limonkowy",
+                                    "sky": "Błękitny",
+                                    "lilac": "Liliowy",
+                                    "apricot": "Morelowy",
+                                    "custom": "Własny kolor"
+                                },
+                                "default_value": "peach",
+                                "return_format": "value",
+                                "wrapper": {
+                                    "width": "25",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_color_custom",
+                                "label": "Własny kolor",
+                                "name": "color_custom",
+                                "type": "color_picker",
+                                "enable_opacity": 0,
+                                "return_format": "string",
+                                "wrapper": {
+                                    "width": "25",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_home_promos_card_color",
+                                            "operator": "==",
+                                            "value": "custom"
+                                        }
+                                    ]
+                                ],
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_image",
+                                "label": "Zdjęcie",
+                                "name": "image",
+                                "type": "image",
+                                "return_format": "array",
+                                "preview_size": "medium",
+                                "library": "all",
+                                "instructions": "Dla kart ze zdjęciem. Puste = obraz z motywu.",
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_home_promos_card_layout",
+                                            "operator": "==",
+                                            "value": "media"
+                                        }
+                                    ]
+                                ],
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_badge",
+                                "label": "Badge / eyebrow",
+                                "name": "badge",
+                                "type": "text",
+                                "instructions": "Na zdjęciu = badge; na karcie tekstowej = mały nagłówek u góry.",
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_promos_card_badge_bg",
+                                "label": "Kolor badge",
+                                "name": "badge_bg",
+                                "type": "color_picker",
+                                "enable_opacity": 0,
+                                "return_format": "string",
+                                "instructions": "Opcjonalnie — tło badge na zdjęciu.",
+                                "conditional_logic": [
+                                    [
+                                        {
+                                            "field": "field_home_promos_card_layout",
+                                            "operator": "==",
+                                            "value": "media"
+                                        }
+                                    ]
+                                ],
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_headline",
+                                "label": "Nagłówek",
+                                "name": "headline",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "instructions": "Można użyć <strong>…</strong>",
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_promos_card_value",
+                                "label": "Wartość (prawa strona)",
+                                "name": "value",
+                                "type": "text",
+                                "instructions": "Np. −400 zł, −30%",
+                                "wrapper": {
+                                    "width": "40",
+                                    "class": "",
+                                    "id": ""
+                                },
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_promos_card_text",
+                                "label": "Opis",
+                                "name": "text",
+                                "type": "textarea",
+                                "rows": 2,
+                                "new_lines": "",
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_promos_card_meta",
+                                "label": "Meta / termin",
+                                "name": "meta",
+                                "type": "text",
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 2
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
                 "key": "field_67bc47646a8e9",
                 "label": "Our Students",
                 "name": "",
@@ -1023,6 +1285,7 @@
         "display_title": "",
         "allow_ai_access": false,
         "ai_description": "",
-        "acfml_field_group_mode": "localization"
+        "acfml_field_group_mode": "localization",
+        "modified": 1754307000
     }
 ]
