@@ -12,30 +12,9 @@
             <div class="row">
                 <div class="order-1 col-md-6 col-xl-4 item d-flex align-items-center align-items-md-start ">
                     <?php
-                    $current_lang = apply_filters( 'wpml_current_language', null );
-
-                    $logo_footer = get_template_directory_uri() . '/static/img/logoFooterwhite.png';
-                    $logo_alt    = __( 'Logo - Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie', 'akademiata' );
-
-                    // Appearance → Customize → Site Identity → Footer logo.
-                    if ( $current_lang !== 'en' ) {
-                        $footer_logo_id  = (int) get_theme_mod( 'akademiata_footer_logo' );
-                        $footer_logo_url = $footer_logo_id ? wp_get_attachment_image_url( $footer_logo_id, 'full' ) : '';
-
-                        if ( $footer_logo_url ) {
-                            $logo_footer = $footer_logo_url;
-
-                            $footer_logo_alt = trim( (string) get_post_meta( $footer_logo_id, '_wp_attachment_image_alt', true ) );
-                            if ( $footer_logo_alt !== '' ) {
-                                $logo_alt = $footer_logo_alt;
-                            }
-                        }
-                    }
-
-                    if ( $current_lang === 'en' ) {
-                        $logo_footer = get_template_directory_uri() . '/static/img/logo_ATA_248x108_white_EN_footer.png';
-                        $logo_alt    = 'Logo - University of Technology and Arts, Applied Sciences in Warsaw';
-                    }
+                    $footer_logo = akademiata_get_footer_logo();
+                    $logo_footer = $footer_logo['url'];
+                    $logo_alt    = $footer_logo['alt'];
                     ?>
                     <div class="logo_footer_wrapper">
                         <a title="<?php _e('Logo - Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie', 'akademiata'); ?>"

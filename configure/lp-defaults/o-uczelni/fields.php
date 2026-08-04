@@ -98,30 +98,9 @@ function akademiata_o_uczelni_remote_basename_map(): array {
  * Same logo as site header (`partials/header.php`).
  */
 function akademiata_o_uczelni_header_logo_url(): string {
-	$current_lang = apply_filters( 'wpml_current_language', null );
+	$logo = akademiata_get_header_logo();
 
-	if ( $current_lang === 'en' ) {
-		$rel = 'static/img/logo_ATA_EN_271x56_general_header.png';
-		$path = get_template_directory() . '/' . $rel;
-
-		return is_readable( $path ) ? get_template_directory_uri() . '/' . $rel : '';
-	}
-
-	$custom_logo_id = (int) get_theme_mod( 'custom_logo' );
-	if ( $custom_logo_id ) {
-		$custom_logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
-		if ( $custom_logo_url ) {
-			return $custom_logo_url;
-		}
-	}
-
-	$rel = 'static/img/ATA_logo_main.webp';
-	$path = get_template_directory() . '/' . $rel;
-	if ( ! is_readable( $path ) ) {
-		return '';
-	}
-
-	return get_template_directory_uri() . '/' . $rel;
+	return (string) ( $logo['url'] ?? '' );
 }
 
 function akademiata_o_uczelni_localize_url(string $url = '', string $theme_key = ''): string {

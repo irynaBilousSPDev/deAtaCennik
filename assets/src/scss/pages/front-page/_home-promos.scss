@@ -1,7 +1,7 @@
 @use "../../abstracts/variables" as vars;
 @use "../../abstracts/mixins" as mixins;
 
-// Pixel values from design cards (~394×480 media / ~394×174 solid).
+// Bento from design: media ~394×480, solid ~394×174, gap ~20px, radius ~16px.
 .home-promos {
   --hp-gap: 2rem;
   --hp-radius: 1.6rem;
@@ -13,7 +13,6 @@
   --hp-lilac: #bf9bff;
   --hp-apricot: #ffc862;
   --hp-ink: #2f2f2f;
-  --hp-muted: rgba(47, 47, 47, 0.78);
   --hp-circle: #4a4848;
   margin-bottom: 5rem;
 
@@ -22,15 +21,9 @@
   }
 
   .home-promos__grid {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: var(--hp-gap);
-  }
-
-  .home-promos__col {
-    display: flex;
-    flex-direction: column;
-    gap: var(--hp-gap);
+    grid-template-columns: 1fr;
   }
 
   .home-promo {
@@ -69,16 +62,13 @@
   .home-promo--lilac { --hp-card-bg: var(--hp-lilac); }
   .home-promo--apricot { --hp-card-bg: var(--hp-apricot); }
 
-  // Media : solid ≈ 480 : 174
   .home-promo--media {
-    flex: 2.76 1 0;
-    min-height: 36rem;
+    min-height: 42rem;
 
     .home-promo__media {
       position: relative;
-      // Image : body ≈ 345 : 135
-      flex: 2.55 1 0;
-      min-height: 0;
+      flex: 1 1 auto;
+      min-height: 24rem;
       overflow: hidden;
 
       img {
@@ -91,19 +81,14 @@
     }
 
     .home-promo__body {
-      flex: 1 1 0;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
+      flex: 0 0 auto;
       background: var(--hp-card-bg, var(--hp-peach));
     }
   }
 
   .home-promo--solid {
-    flex: 1 1 0;
     min-height: 15.5rem;
-    padding: 1.8rem 2rem 4.4rem;
+    padding: 1.8rem 2rem 4.6rem;
     justify-content: flex-start;
   }
 
@@ -144,7 +129,7 @@
   }
 
   .home-promo__body {
-    padding: 1.8rem 2rem 4.4rem;
+    padding: 1.8rem 2rem 4.6rem;
   }
 
   .home-promo--solid .home-promo__body {
@@ -196,8 +181,7 @@
   }
 
   .home-promo__meta {
-    margin-top: auto;
-    padding-top: 1.2rem;
+    margin-top: 1.2rem;
     font-size: 1.3rem;
     line-height: 1.35;
     font-weight: vars.$weight-semi-regular;
@@ -219,44 +203,65 @@
     transition: background-image 0.15s ease;
   }
 
-  @include mixins.max-sm-screen {
-    .home-promo--media {
-      min-height: 42rem;
-    }
-
-    .home-promo__headline,
-    .home-promo__value {
-      font-size: 1.85rem;
-    }
-  }
-
+  // Tablet: 2-col bento
   @media (min-width: 768px) {
     .home-promos__grid {
-      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: stretch;
+      grid-template-areas:
+        "a b"
+        "a d"
+        "c d"
+        "e f";
     }
 
-    .home-promos__col {
-      min-height: 0;
-    }
+    .home-promo--area-a { grid-area: a; }
+    .home-promo--area-b { grid-area: b; }
+    .home-promo--area-c { grid-area: c; }
+    .home-promo--area-d { grid-area: d; }
+    .home-promo--area-e { grid-area: e; }
+    .home-promo--area-f { grid-area: f; }
 
     .home-promo--media {
-      min-height: 0;
-    }
-  }
+      min-height: 100%;
 
-  @media (min-width: 1100px) {
-    --hp-gap: 2.2rem;
-    --hp-radius: 1.6rem;
-    --hp-arrow: 3rem;
-
-    .home-promos__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      .home-promo__media {
+        min-height: 22rem;
+      }
     }
 
     .home-promo--solid {
       min-height: 0;
+    }
+  }
+
+  // Desktop: 3-col bento matching mock
+  //   a b c
+  //   a d c
+  //   e d f
+  @media (min-width: 1100px) {
+    --hp-gap: 2rem;
+    --hp-arrow: 3rem;
+
+    .home-promos__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        "a b c"
+        "a d c"
+        "e d f";
+      align-items: stretch;
+    }
+
+    .home-promo--media {
+      min-height: 48rem;
+
+      .home-promo__media {
+        flex: 1 1 auto;
+        min-height: 28rem;
+      }
+    }
+
+    .home-promo--solid {
       padding: 2rem 2.2rem 5rem;
     }
 
@@ -285,6 +290,10 @@
   }
 
   @media (min-width: 1400px) {
+    .home-promo--media {
+      min-height: 52rem;
+    }
+
     .home-promo__headline,
     .home-promo__value {
       font-size: 2.4rem;

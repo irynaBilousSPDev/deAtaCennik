@@ -47,30 +47,9 @@
             <div class="site_navigation_wrapper">
                 <div class="logo_container">
 					<?php
-					$current_lang = apply_filters( 'wpml_current_language', null );
-
-					$logo_header = get_template_directory_uri() . '/static/img/ATA_logo_main.webp';
-					$logo_alt    = __( 'Logo - Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie', 'akademiata' );
-
-					// Appearance → Customize → Site Identity → Logo (fallback = theme webp).
-					if ( $current_lang !== 'en' ) {
-						$custom_logo_id  = (int) get_theme_mod( 'custom_logo' );
-						$custom_logo_url = $custom_logo_id ? wp_get_attachment_image_url( $custom_logo_id, 'full' ) : '';
-
-						if ( $custom_logo_url ) {
-							$logo_header = $custom_logo_url;
-
-							$custom_logo_alt = trim( (string) get_post_meta( $custom_logo_id, '_wp_attachment_image_alt', true ) );
-							if ( $custom_logo_alt !== '' ) {
-								$logo_alt = $custom_logo_alt;
-							}
-						}
-					}
-
-					if ( $current_lang === 'en' ) {
-						$logo_header = get_template_directory_uri() . '/static/img/logo_ATA_EN_271x56_general_header.png';
-						$logo_alt    = 'Logo - University of Technology and Arts, Applied Sciences in Warsaw';
-					}
+					$header_logo = akademiata_get_header_logo();
+					$logo_header = $header_logo['url'];
+					$logo_alt    = $header_logo['alt'];
 					?>
                     <div class="site-branding">
                         <a title="<?php _e( 'Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie', 'akademiata' ); ?>"
