@@ -621,7 +621,7 @@
                 "name": "home_promos",
                 "aria-label": "",
                 "type": "group",
-                "instructions": "Sekcja przed filmikami. Puste pola = wartości domyślne z motywu.",
+                "instructions": "",
                 "required": 0,
                 "conditional_logic": 0,
                 "wrapper": {
@@ -650,14 +650,6 @@
                         "type": "text",
                         "default_value": "Promocje",
                         "wpml_cf_preferences": 2
-                    },
-                    {
-                        "key": "field_home_promos_link",
-                        "label": "Link kart (URL)",
-                        "name": "link",
-                        "type": "url",
-                        "instructions": "Domyślnie: /kalkulator-czesnego/",
-                        "wpml_cf_preferences": 3
                     },
                     {
                         "key": "field_home_promos_cards",
@@ -769,7 +761,7 @@
                                 "return_format": "array",
                                 "preview_size": "medium",
                                 "library": "all",
-                                "instructions": "Dla kart ze zdjęciem. Puste = obraz z motywu.",
+                                "instructions": "",
                                 "conditional_logic": [
                                     [
                                         {
@@ -787,7 +779,7 @@
                                 "label": "Badge / eyebrow",
                                 "name": "badge",
                                 "type": "text",
-                                "instructions": "Na zdjęciu = badge; na karcie tekstowej = mały nagłówek u góry.",
+                                "instructions": "",
                                 "parent_repeater": "field_home_promos_cards",
                                 "wpml_cf_preferences": 2
                             },
@@ -798,7 +790,7 @@
                                 "type": "color_picker",
                                 "enable_opacity": 0,
                                 "return_format": "string",
-                                "instructions": "Opcjonalnie — tło badge na zdjęciu.",
+                                "instructions": "",
                                 "conditional_logic": [
                                     [
                                         {
@@ -818,7 +810,7 @@
                                 "type": "textarea",
                                 "rows": 2,
                                 "new_lines": "",
-                                "instructions": "Można użyć <strong>…</strong>",
+                                "instructions": "",
                                 "parent_repeater": "field_home_promos_cards",
                                 "wpml_cf_preferences": 2
                             },
@@ -827,7 +819,7 @@
                                 "label": "Wartość (prawa strona)",
                                 "name": "value",
                                 "type": "text",
-                                "instructions": "Np. −400 zł, −30%",
+                                "instructions": "",
                                 "wrapper": {
                                     "width": "40",
                                     "class": "",
@@ -855,36 +847,18 @@
                                 "wpml_cf_preferences": 2
                             },
                             {
-                                "key": "field_home_promos_card_promo_id",
-                                "label": "ID promocji (kalkulator)",
-                                "name": "promo_id",
-                                "type": "select",
-                                "instructions": "Po kliknięciu otworzy kalkulator z już zaznaczoną promocją. rekr:* = promocje wpisowego/rekrutacji.",
-                                "choices": {
-                                    "": "— tylko strona kalkulatora —",
-                                    "jednorazowo": "jednorazowo — Płatność z góry",
-                                    "szybki": "szybki — Szybki Start (−1000 zł)",
-                                    "grupie": "grupie — W Grupie Taniej",
-                                    "techart": "techart — Absolwent tech./art.",
-                                    "przejscie": "przejscie — Przejście do ATA",
-                                    "absolwent_pl": "absolwent_pl — Absolwent kontynuuje",
-                                    "rekr:kurs": "rekr:kurs — Wpisowe / kurs (rekrutacja)",
-                                    "rekr:absolwent": "rekr:absolwent — Absolwent (rekrutacja)"
-                                },
-                                "default_value": "",
-                                "return_format": "value",
-                                "allow_null": 1,
-                                "parent_repeater": "field_home_promos_cards",
-                                "wpml_cf_preferences": 3
-                            },
-                            {
                                 "key": "field_home_promos_card_link",
-                                "label": "Własny URL (opcjonalnie)",
+                                "label": "Link",
                                 "name": "link",
-                                "type": "url",
-                                "instructions": "Nadpisuje link z ID promocji, jeśli wypełnione.",
+                                "type": "text",
+                                "instructions": "",
                                 "parent_repeater": "field_home_promos_cards",
-                                "wpml_cf_preferences": 3
+                                "wpml_cf_preferences": 3,
+                                "wrapper": {
+                                    "width": "100",
+                                    "class": "",
+                                    "id": ""
+                                }
                             }
                         ]
                     }
@@ -1318,6 +1292,6 @@
         "allow_ai_access": false,
         "ai_description": "",
         "acfml_field_group_mode": "localization",
-        "modified": 1754307000
+        "modified": 1785845685
     }
 ]

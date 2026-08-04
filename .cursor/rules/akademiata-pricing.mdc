@@ -37,9 +37,7 @@ alwaysApply: false
 
 ## Homepage → calculator deep links
 
-- Cards: `home_promos` → `promo_id` builds `/kalkulator-czesnego/?promo={id}#promos` (or `?rekr={id}#rekr-promos`).
-- JS: `applyDeepLinkPromoOnce()` in `prices-calculator.js` selects promo once after JSON load and scrolls to the section.
-- Examples: `?promo=jednorazowo`, `?promo=grupie&sub=400`, `?rekr=kurs`.
+- Cards: `home_promos` → each card has `link` (e.g. `/kalkulator-czesnego/?promo=szybki`). Calculator JS reads `?promo=` / `?rekr=` / `&sub=` and selects + scrolls after load.
 
 ## Maintenance
 

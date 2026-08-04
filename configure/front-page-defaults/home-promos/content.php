@@ -1,15 +1,8 @@
 <?php
-/**
- * Homepage Promocje — default cards (static fallbacks).
- *
- * promo_id → calculator deep link (?promo=… / ?rekr=…)
- *
- * @return array<string, mixed>
- */
+
 return [
 	'show'  => true,
 	'title' => 'Promocje',
-	'link'  => '',
 	'cards' => [
 		[
 			'layout'       => 'media',
@@ -24,8 +17,7 @@ return [
 			'value'        => '',
 			'text'         => 'Zniżka proporcjonalnie w obu semestrach roku akademickiego 2026/2027',
 			'meta'         => 'Rejestracja do 30.08 · umowa do 30.09.2026',
-			'promo_id'     => 'szybki',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?promo=szybki',
 		],
 		[
 			'layout'       => 'solid',
@@ -40,8 +32,7 @@ return [
 			'value'        => '−5% / −10%',
 			'text'         => 'Semestr z góry −5% · rok z góry −10%',
 			'meta'         => 'Termin: do 10 września',
-			'promo_id'     => 'jednorazowo',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?promo=jednorazowo',
 		],
 		[
 			'layout'       => 'media',
@@ -56,8 +47,7 @@ return [
 			'value'        => '− 1 200 zł',
 			'text'         => 'Tegoroczny maturzysta · profil na świadectwie',
 			'meta'         => '',
-			'promo_id'     => 'techart',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?promo=techart',
 		],
 		[
 			'layout'       => 'media',
@@ -72,8 +62,7 @@ return [
 			'value'        => '−400 zł',
 			'text'         => 'Zniżka proporcjonalnie w obu semestrach roku akademickiego 2026/2027',
 			'meta'         => 'Grupy 5+ osób · 2–4 osoby −200 zł · do 30.09',
-			'promo_id'     => 'grupie',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?promo=grupie&sub=400',
 		],
 		[
 			'layout'       => 'solid',
@@ -88,8 +77,7 @@ return [
 			'value'        => '',
 			'text'         => 'zamiast 490 zł · przy zapisie do 30.10.2026',
 			'meta'         => '',
-			'promo_id'     => 'rekr:kurs',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?rekr=kurs',
 		],
 		[
 			'layout'       => 'solid',
@@ -104,8 +92,7 @@ return [
 			'value'        => '−30%',
 			'text'         => 'Przeniesienie z innej uczelni · semestr startu',
 			'meta'         => '',
-			'promo_id'     => 'przejscie',
-			'link'         => '',
+			'link'         => '/kalkulator-czesnego/?promo=przejscie',
 		],
 	],
 ];

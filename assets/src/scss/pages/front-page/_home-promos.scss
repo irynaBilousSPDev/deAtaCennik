@@ -16,16 +16,6 @@
   --hp-circle: #3a3a3a;
   margin-bottom: 3rem;
 
-  .home-promos__title {
-    margin: 0 0 1.8rem;
-    @include mixins.heading-style(vars.$font-size-lg, 1.1, vars.$weight-bold, vars.$black);
-
-    @include mixins.lg-screen {
-      margin-bottom: 2.2rem;
-      font-size: 2.4rem;
-    }
-  }
-
   .home-promos__grid {
     display: flex;
     flex-direction: column;

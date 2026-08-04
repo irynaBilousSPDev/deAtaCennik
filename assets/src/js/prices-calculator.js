@@ -148,52 +148,148 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.render = render;
 
   let isUIBound = false;
-  let deepLinkPromoApplied = false;
+  let deepLinkPending = null;
+  let deepLinkDone = false;
 
-  /**
-   * Homepage promo cards → /kalkulator-czesnego/?promo=ID or ?rekr=ID[&sub=…]
-   * Applied once after prices JSON loads.
-   */
-  function applyDeepLinkPromoOnce() {
-    if (deepLinkPromoApplied) return;
-    deepLinkPromoApplied = true;
-
+  function readDeepLinkPending() {
+    if (deepLinkPending || deepLinkDone) return deepLinkPending;
     let params;
     try {
       params = new URLSearchParams(window.location.search || '');
     } catch (e) {
-      return;
+      return null;
     }
+    const promo = (params.get('promo') || '').trim();
+    const rekr = (params.get('rekr') || '').trim();
+    const sub = (params.get('sub') || '').trim();
+    if (!promo && !rekr) return null;
+    deepLinkPending = { promo: promo, rekr: rekr, sub: sub };
+    return deepLinkPending;
+  }
 
-    const promoId = (params.get('promo') || '').trim();
-    const rekrId = (params.get('rekr') || '').trim();
-    const subRaw = (params.get('sub') || '').trim();
-    if (!promoId && !rekrId) return;
+  function ensureContextForDeepLink() {
+    const pending = readDeepLinkPending();
+    if (!pending || deepLinkDone) return false;
+    let filtersChanged = false;
 
-    if (promoId) {
-      const exists = Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === promoId);
-      if (exists) {
-        window.selP = { jednorazowo: false };
-        window.selP[promoId] = true;
-        window.expP[promoId] = true;
-        if (subRaw !== '' && window.subP && Object.prototype.hasOwnProperty.call(window.subP, promoId)) {
-          const num = Number(subRaw);
-          window.subP[promoId] = Number.isFinite(num) && String(num) === subRaw ? num : subRaw;
+    if (pending.promo) {
+      const pr = (window.PROMOS || []).find(p => p && p.id === pending.promo);
+      if (pr) {
+        if (pr.lng && pr.lng !== window.lang) {
+          window.lang = pr.lng;
+          window.plan = pr.lng === 'pl' ? 'r12' : 'rok';
+          document.querySelectorAll('#lang-row .seg-btn').forEach(b => {
+            b.classList.toggle('on', b.getAttribute('data-val') === pr.lng);
+          });
+          filtersChanged = true;
+        }
+        if (pr.cty && pr.cty !== 'both' && pr.cty !== window.city) {
+          window.city = pr.cty;
+          window.uaby = false;
+          document.getElementById('uaby-row')?.classList.remove('on');
+          document.getElementById('uaby-chk')?.classList.remove('on');
+          document.querySelectorAll('#city-row .seg-btn').forEach(b => {
+            b.classList.toggle('on', b.getAttribute('data-val') === pr.cty);
+          });
+          const uWrap = document.getElementById('uaby-wrap');
+          if (uWrap) uWrap.style.display = pr.cty === 'wro' ? 'block' : 'none';
+          filtersChanged = true;
         }
       }
     }
 
-    if (rekrId && ['absolwent', 'kurs'].indexOf(rekrId) >= 0) {
-      window.selRekrP = rekrId;
+    if (pending.rekr === 'absolwent' && window.lang !== 'pl') {
+      window.lang = 'pl';
+      window.plan = 'r12';
+      document.querySelectorAll('#lang-row .seg-btn').forEach(b => {
+        b.classList.toggle('on', b.getAttribute('data-val') === 'pl');
+      });
+      filtersChanged = true;
     }
 
-    const scrollTarget = rekrId ? 'rekr-promos' : 'promos';
-    window.setTimeout(() => {
-      const el = document.getElementById(scrollTarget);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return filtersChanged;
+  }
+
+  function ensureProgramForDeepLink() {
+    const pending = readDeepLinkPending();
+    if (!pending || deepLinkDone || !Array.isArray(window.unified) || !window.unified.length) return;
+
+    if (pending.promo) {
+      const pr = (window.PROMOS || []).find(p => p && p.id === pending.promo);
+      if (pr && pr.deg) {
+        const wantDeg = Number(pr.deg);
+        const cur = window.unified[window.progIdx];
+        if (!cur || Number(cur.deg) !== wantDeg) {
+          const idx = window.unified.findIndex(x => Number(x.deg) === wantDeg);
+          if (idx >= 0) window.progIdx = idx;
+        }
       }
-    }, 120);
+    }
+
+    if (pending.rekr === 'absolwent') {
+      const idx = window.unified.findIndex(u => Number(u.deg) === 2 && !isInteriorArchitectureProgram(u));
+      if (idx >= 0) window.progIdx = idx;
+    } else if (pending.rekr === 'kurs') {
+      const idx = window.unified.findIndex(u =>
+        !isInteriorArchitectureProgram(u) && !isArchitectureBachelor(u) && !isDesignBachelor(u)
+      );
+      if (idx >= 0) window.progIdx = idx;
+    }
+  }
+
+  function applyDeepLinkSelection() {
+    const pending = readDeepLinkPending();
+    if (!pending) return false;
+
+    if (pending.promo) {
+      const exists = Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === pending.promo);
+      if (exists) {
+        window.selP = { jednorazowo: false };
+        window.selP[pending.promo] = true;
+        window.expP = window.expP || {};
+        window.expP[pending.promo] = true;
+        if (pending.sub !== '' && window.subP && Object.prototype.hasOwnProperty.call(window.subP, pending.promo)) {
+          const num = Number(pending.sub);
+          window.subP[pending.promo] = Number.isFinite(num) && String(num) === pending.sub ? num : pending.sub;
+        }
+      }
+    }
+
+    if (pending.rekr && ['absolwent', 'kurs'].indexOf(pending.rekr) >= 0) {
+      window.selRekrP = pending.rekr;
+    }
+
+    return true;
+  }
+
+  function scrollToDeepLinkTarget(retriesLeft) {
+    const pending = deepLinkPending;
+    if (!pending || deepLinkDone) return;
+
+    const targetId = pending.rekr ? 'rekr-promos' : 'promos';
+    const el = document.getElementById(targetId) || (pending.promo ? document.getElementById('promos-section') : null);
+    const visible = !!(el && getComputedStyle(el).display !== 'none' && el.getClientRects().length);
+    const hasSel = !!(el && el.querySelector && el.querySelector('.promo-card.sel'));
+    const needSel = !!(pending.promo && !pending.rekr);
+
+    if (!visible || (needSel && !hasSel)) {
+      if (retriesLeft > 0) {
+        window.setTimeout(() => scrollToDeepLinkTarget(retriesLeft - 1), 250);
+      }
+      return;
+    }
+
+    deepLinkDone = true;
+    const header = document.querySelector('.site-header');
+    const offset = (header ? header.offsetHeight : 0) + 16;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  }
+
+  function honorDeepLinkAfterRender() {
+    if (deepLinkDone) return;
+    if (!readDeepLinkPending()) return;
+    window.setTimeout(() => scrollToDeepLinkTarget(24), 100);
   }
 
   // Apply fetched data
@@ -239,9 +335,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       // (Otherwise the page can keep the default "wwa" visibility state.)
       syncVisibility();
     }
-    applyDeepLinkPromoOnce();
     render();
     setLoading(false);
+    honorDeepLinkAfterRender();
   }
 
   function parseFixedKey(key) {
@@ -1378,7 +1474,15 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
   function setMode(m) { window.mode = m; updateMB(); render(); }
   function setEU(v) { window.isEU = v; document.querySelectorAll('#eu-row .pill').forEach(b => b.classList.toggle('on', (b.getAttribute('data-val') === 'eu' || b.getAttribute('data-val') === 'true') === v)); render(); }
-  function onProgChange() { window.selP = { jednorazowo: false }; clearRekrPromoSelection(); updateMB(); render(); }
+  function onProgChange() {
+    // Program <select> rebuild can fire change during deep-link load — keep pending promo.
+    if (!(deepLinkPending && !deepLinkDone)) {
+      window.selP = { jednorazowo: false };
+      clearRekrPromoSelection();
+    }
+    updateMB();
+    render();
+  }
 
   function updateMB() {
     const u = window.unified[window.progIdx], mw = document.getElementById('mode-wrap');
@@ -1553,7 +1657,14 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function render() {
     updateRegulaminLink();
+    if (!deepLinkDone && readDeepLinkPending() && ensureContextForDeepLink()) {
+      // City/lang adjusted for promo eligibility — rebuild list below.
+    }
     window.unified = buildUnified();
+    if (!deepLinkDone && readDeepLinkPending()) {
+      ensureProgramForDeepLink();
+      applyDeepLinkSelection();
+    }
     const progCount = document.getElementById('prog-count');
     if (progCount) {
       const numEl = progCount.querySelector('[data-prog-count-num]');
@@ -1831,7 +1942,10 @@ export default function initPricesCalculator(_$, opts = {}) {
     const rekrInner = document.getElementById('rekr-promos-inner');
     const rekrNote = document.getElementById('rekr-promos-note');
     const rekrElig = getEligibleRekrPromoIds(u);
-    if (window.selRekrP && rekrElig.indexOf(window.selRekrP) < 0) clearRekrPromoSelection();
+    if (window.selRekrP && rekrElig.indexOf(window.selRekrP) < 0) {
+      const keepDeep = deepLinkPending && !deepLinkDone && deepLinkPending.rekr === window.selRekrP;
+      if (!keepDeep) clearRekrPromoSelection();
+    }
 
     if (rekrSection && rekrElig.length && !window.uaby) {
       rekrSection.style.display = '';
@@ -2107,5 +2221,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         }
       }
     }
+
+    honorDeepLinkAfterRender();
   }
 }

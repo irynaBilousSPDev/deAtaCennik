@@ -1,9 +1,4 @@
 <?php
-/**
- * Homepage — Promocje (bento cards).
- *
- * @package akademiata
- */
 
 require_once get_template_directory() . '/configure/front-page-defaults/home-promos/fields.php';
 
@@ -19,11 +14,6 @@ if ( $cards === [] ) {
 	return;
 }
 
-$promo_url = trim( (string) ( $section['link'] ?? '' ) );
-if ( $promo_url === '' ) {
-	$promo_url = home_url( '/kalkulator-czesnego/' );
-}
-
 $title       = trim( (string) ( $section['title'] ?? '' ) );
 $arrow_label = __( 'Zniżki i promocje', 'akademiata' );
 $allowed     = akademiata_home_promos_allowed_tags();
@@ -32,7 +22,7 @@ $columns     = akademiata_home_promos_columns( $cards );
 /**
  * @param array<string, mixed> $card
  */
-$render_card = static function ( array $card ) use ( $promo_url, $arrow_label, $allowed ) {
+$render_card = static function ( array $card ) use ( $arrow_label, $allowed ) {
 	$layout   = ( ( $card['layout'] ?? '' ) === 'solid' ) ? 'solid' : 'media';
 	$area     = preg_replace( '/[^a-f]/', '', (string) ( $card['area'] ?? 'a' ) ) ?: 'a';
 	$color    = (string) ( $card['color'] ?? 'peach' );
@@ -44,7 +34,7 @@ $render_card = static function ( array $card ) use ( $promo_url, $arrow_label, $
 	$value    = trim( (string) ( $card['value'] ?? '' ) );
 	$text     = trim( (string) ( $card['text'] ?? '' ) );
 	$meta     = trim( (string) ( $card['meta'] ?? '' ) );
-	$card_url = akademiata_home_promos_card_url( $card, $promo_url );
+	$card_url = akademiata_home_promos_card_url( $card );
 
 	if ( $layout === 'media' && $img_url === '' && $headline === '' ) {
 		return;
@@ -106,7 +96,7 @@ $render_card = static function ( array $card ) use ( $promo_url, $arrow_label, $
 <section class="home-promos" aria-labelledby="home-promos-title">
 	<div class="container">
 		<?php if ( $title !== '' ) : ?>
-			<h2 id="home-promos-title" class="home-promos__title"><?php echo esc_html( $title ); ?></h2>
+			<h2 id="home-promos-title" class="small_title mb-5"><?php echo esc_html( $title ); ?></h2>
 		<?php endif; ?>
 
 		<div class="home-promos__grid">
