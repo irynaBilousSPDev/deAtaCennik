@@ -110,3 +110,66 @@ function akademiata_acf_json_load_paths(array $paths): array {
 
 add_filter('acf/settings/save_json', 'akademiata_acf_json_save_path');
 add_filter('acf/settings/load_json', 'akademiata_acf_json_load_paths');
+
+/**
+ * Large Front: Page ACF forms (slider + promos) need more than default 1000.
+ */
+function akademiata_acf_raise_input_vars(): void {
+	if ( ! is_admin() ) {
+		return;
+	}
+	$current = (int) ini_get( 'max_input_vars' );
+	if ( $current > 0 && $current < 5000 ) {
+		@ini_set( 'max_input_vars', '5000' );
+	}
+}
+add_action( 'admin_init', 'akademiata_acf_raise_input_vars', 1 );
+
+/**
+ * Orphan "Front: Promocje" (same home_promos name) overwrites cards on save — hide + trash.
+ */
+function akademiata_acf_is_orphan_front_promos_group( $group ): bool {
+	if ( ! is_array( $group ) ) {
+		return false;
+	}
+	$key   = (string) ( $group['key'] ?? '' );
+	$title = (string) ( $group['title'] ?? '' );
+
+	return $key === 'group_front_promos' || $title === 'Front: Promocje';
+}
+
+function akademiata_acf_hide_orphan_front_promos( $field_groups ) {
+	if ( ! is_array( $field_groups ) ) {
+		return $field_groups;
+	}
+
+	return array_values(
+		array_filter(
+			$field_groups,
+			static function ( $group ) {
+				return ! akademiata_acf_is_orphan_front_promos_group( $group );
+			}
+		)
+	);
+}
+add_filter( 'acf/load_field_groups', 'akademiata_acf_hide_orphan_front_promos', 20 );
+
+function akademiata_acf_trash_orphan_front_promos_group(): void {
+	if ( ! is_admin() || ! current_user_can( 'manage_options' ) || ! function_exists( 'acf_get_field_group' ) ) {
+		return;
+	}
+	if ( get_option( 'akademiata_trashed_front_promos_group' ) ) {
+		return;
+	}
+
+	$group = acf_get_field_group( 'group_front_promos' );
+	if ( ! is_array( $group ) || empty( $group['ID'] ) ) {
+		// Mark done even if already gone — avoid repeat lookups.
+		update_option( 'akademiata_trashed_front_promos_group', 1, false );
+		return;
+	}
+
+	wp_trash_post( (int) $group['ID'] );
+	update_option( 'akademiata_trashed_front_promos_group', 1, false );
+}
+add_action( 'admin_init', 'akademiata_acf_trash_orphan_front_promos_group', 5 );

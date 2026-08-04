@@ -21,7 +21,7 @@ alwaysApply: false
 `front-page.php`, `page-template-offer.php`, `page-template-prices.php`, `page-template-faq.php`, `page-template-contact.php`, `page-template-cadre.php`, `page-template-quiz.php`, `page-template-ranking-ela.php`, `page-template-aktualnosci-archive.php`, `page-template-open-day.php`, `page-template-thank-you.php`, `page-kreowanie-przestrzeni.php`, `page-porownanie-kierunkow.php`, `page-portfolio-sprawdzian.php`, `page-projekty-i-pracownie.php`, `page-katalog-kierunkow.php`, `page-studiuj-to-co-cie-kreci.php`, `page-zasady-rekrutacji.php`, `page-rankingi.php`, `page-o-uczelni.php`, `page.php`.
 
 **Front page sections (order):** hero-slider → counter → main title → offers sliders → home-rankings → home-promos → our_students (YouTube) → …
-- **Front page Promocje:** ACF tab **Promocje** in **Front: Page** (`home_promos` — show, title, cards with per-card `link`). Frontend fallback defaults in `configure/front-page-defaults/home-promos/` when ACF empty.
+- **Front page Promocje:** tab **Promocje** inside **Front: Page** only (`home_promos`). Do not use a separate field group — an orphan “Front: Promocje” group overwrites cards on save (theme trashes/hides it).
 
 ## LP landing pages
 
