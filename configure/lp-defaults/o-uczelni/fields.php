@@ -95,9 +95,18 @@ function akademiata_o_uczelni_remote_basename_map(): array {
  * Prefer local static file for known remote uploads / theme_key.
  */
 /**
- * Same file as site header (`partials/header.php`).
+ * Same logo as site header (`partials/header.php`).
  */
 function akademiata_o_uczelni_header_logo_url(): string {
+	$current_lang = apply_filters( 'wpml_current_language', null );
+
+	if ( $current_lang === 'en' ) {
+		$rel = 'static/img/logo_ATA_EN_271x56_general_header.png';
+		$path = get_template_directory() . '/' . $rel;
+
+		return is_readable( $path ) ? get_template_directory_uri() . '/' . $rel : '';
+	}
+
 	$custom_logo_id = (int) get_theme_mod( 'custom_logo' );
 	if ( $custom_logo_id ) {
 		$custom_logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
@@ -108,7 +117,7 @@ function akademiata_o_uczelni_header_logo_url(): string {
 
 	$rel = 'static/img/ATA_logo_main.webp';
 	$path = get_template_directory() . '/' . $rel;
-	if (!is_readable($path)) {
+	if ( ! is_readable( $path ) ) {
 		return '';
 	}
 
@@ -172,12 +181,9 @@ function akademiata_o_uczelni_resolve_static_assets(array $fields): array {
 			(string) ($kim['logo_image_old_url'] ?? ''),
 			'logo-wseiz-dawne.png'
 		);
-		$logo_new = trim((string) ($kim['logo_image_new_url'] ?? ''));
-		if ($logo_new === '' || strpos($logo_new, 'logo-ata-obecne') !== false) {
-			$kim['logo_image_new_url'] = akademiata_o_uczelni_header_logo_url();
-		} else {
-			$kim['logo_image_new_url'] = akademiata_o_uczelni_localize_url($logo_new);
-		}
+		// Current mark always mirrors the site header logo (Customizer or theme fallback).
+		$kim['logo_image_new'] = null;
+		$kim['logo_image_new_url'] = akademiata_o_uczelni_header_logo_url();
 		// Legacy single-image field → treat as dawne logo when new pair empty.
 		if (($kim['logo_image_old_url'] ?? '') === '' && !empty($kim['logo_image_url'])) {
 			$kim['logo_image_old_url'] = akademiata_o_uczelni_localize_url((string) $kim['logo_image_url']);

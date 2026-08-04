@@ -238,7 +238,7 @@ $lp_img = static function ($image, $fallback_url, $class, $alt) {
 
 			<?php
 			$logo_old_url = akademiata_o_uczelni_image_url($kim['logo_image_old'] ?? null, $kim['logo_image_old_url'] ?? '');
-			$logo_new_url = akademiata_o_uczelni_image_url($kim['logo_image_new'] ?? null, $kim['logo_image_new_url'] ?? '');
+			$logo_new_url = akademiata_o_uczelni_header_logo_url();
 			// Fallback: legacy single ACF image.
 			if ($logo_old_url === '' && $logo_new_url === '') {
 				$logo_old_url = akademiata_o_uczelni_image_url($kim['logo_image'] ?? null, $kim['logo_image_url'] ?? '');
