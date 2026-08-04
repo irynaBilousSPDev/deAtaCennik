@@ -103,7 +103,7 @@ function custom_setup()
 add_action('after_setup_theme', 'custom_setup');
 
 /**
- * WPML language codes for per-language logos (excludes default language).
+ * WPML language codes (excl. default) — legacy per-lang logo theme_mods.
  *
  * @return array<int, string>
  */
@@ -111,7 +111,8 @@ function akademiata_logo_extra_lang_codes(): array {
 	$default = akademiata_normalize_theme_lang_code(
 		(string) apply_filters( 'wpml_default_language', null )
 	);
-	$codes   = [];
+	$preferred = [ 'en', 'uk', 'ru' ];
+	$codes     = [];
 
 	$languages = apply_filters( 'wpml_active_languages', null, [ 'skip_missing' => 0 ] );
 	if ( is_array( $languages ) && $languages !== [] ) {
@@ -124,7 +125,7 @@ function akademiata_logo_extra_lang_codes(): array {
 	}
 
 	if ( $codes === [] ) {
-		foreach ( [ 'en', 'uk', 'ru' ] as $code ) {
+		foreach ( $preferred as $code ) {
 			if ( $code !== $default ) {
 				$codes[] = $code;
 			}
@@ -194,6 +195,9 @@ function akademiata_footer_logo_fallback_rel( string $lang ): string {
 }
 
 /**
+ * Header logo for current (or given) WPML language.
+ * Prefer Customizer Logo after switching language in the WPML admin bar.
+ *
  * @return array{url: string, alt: string}
  */
 function akademiata_get_header_logo( ?string $lang = null ): array {
@@ -208,28 +212,29 @@ function akademiata_get_header_logo( ?string $lang = null ): array {
 	$alt_en = 'Logo - University of Technology and Arts, Applied Sciences in Warsaw';
 	$alt    = ( $lang === 'en' ) ? $alt_en : $alt_pl;
 
+	// Legacy: separate theme_mod per language (if previously set).
 	if ( $lang !== $default ) {
-		$from_lang = akademiata_logo_from_attachment(
+		$legacy = akademiata_logo_from_attachment(
 			(int) get_theme_mod( 'akademiata_header_logo_' . $lang ),
 			$alt
 		);
-		if ( $from_lang['url'] !== '' ) {
+		if ( $legacy['url'] !== '' ) {
 			return [
-				'url' => $from_lang['url'],
-				'alt' => $from_lang['alt'],
+				'url' => $legacy['url'],
+				'alt' => $legacy['alt'],
 			];
 		}
 	}
 
-	$from_default = akademiata_logo_from_attachment( (int) get_theme_mod( 'custom_logo' ), $alt );
-	if ( $lang === $default && $from_default['url'] !== '' ) {
+	// WPML: custom_logo is per-language via wpml-config + admin language switcher.
+	$from_custom = akademiata_logo_from_attachment( (int) get_theme_mod( 'custom_logo' ), $alt );
+	if ( $from_custom['url'] !== '' ) {
 		return [
-			'url' => $from_default['url'],
-			'alt' => $from_default['alt'],
+			'url' => $from_custom['url'],
+			'alt' => $from_custom['alt'],
 		];
 	}
 
-	// Non-default lang with no own upload: keep language-specific static file (not PL custom logo).
 	$rel  = akademiata_header_logo_fallback_rel( $lang );
 	$path = get_template_directory() . '/' . $rel;
 
@@ -240,6 +245,8 @@ function akademiata_get_header_logo( ?string $lang = null ): array {
 }
 
 /**
+ * Footer logo for current (or given) WPML language.
+ *
  * @return array{url: string, alt: string}
  */
 function akademiata_get_footer_logo( ?string $lang = null ): array {
@@ -255,23 +262,23 @@ function akademiata_get_footer_logo( ?string $lang = null ): array {
 	$alt    = ( $lang === 'en' ) ? $alt_en : $alt_pl;
 
 	if ( $lang !== $default ) {
-		$from_lang = akademiata_logo_from_attachment(
+		$legacy = akademiata_logo_from_attachment(
 			(int) get_theme_mod( 'akademiata_footer_logo_' . $lang ),
 			$alt
 		);
-		if ( $from_lang['url'] !== '' ) {
+		if ( $legacy['url'] !== '' ) {
 			return [
-				'url' => $from_lang['url'],
-				'alt' => $from_lang['alt'],
+				'url' => $legacy['url'],
+				'alt' => $legacy['alt'],
 			];
 		}
 	}
 
-	$from_default = akademiata_logo_from_attachment( (int) get_theme_mod( 'akademiata_footer_logo' ), $alt );
-	if ( $lang === $default && $from_default['url'] !== '' ) {
+	$from_custom = akademiata_logo_from_attachment( (int) get_theme_mod( 'akademiata_footer_logo' ), $alt );
+	if ( $from_custom['url'] !== '' ) {
 		return [
-			'url' => $from_default['url'],
-			'alt' => $from_default['alt'],
+			'url' => $from_custom['url'],
+			'alt' => $from_custom['alt'],
 		];
 	}
 
@@ -285,14 +292,13 @@ function akademiata_get_footer_logo( ?string $lang = null ): array {
 }
 
 /**
- * Appearance → Customize → Site Identity — logos per WPML language.
+ * Appearance → Customize → Site Identity — logo + footer logo (WPML per language).
  */
 function akademiata_customize_register( $wp_customize ) {
 	if ( $wp_customize->get_control( 'custom_logo' ) ) {
-		$wp_customize->get_control( 'custom_logo' )->description = __(
-			'Header logo for the default language (PL). Other languages: fields below.',
-			'akademiata'
-		);
+		$control = $wp_customize->get_control( 'custom_logo' );
+		$control->label       = __( 'Logo nagłówka', 'akademiata' );
+		$control->description = __( 'Przełącz język w pasku WPML (np. Angielski), ustaw logo, Opublikuj. Potem wróć na Polski dla wersji PL.', 'akademiata' );
 	}
 
 	$wp_customize->add_setting(
@@ -302,6 +308,7 @@ function akademiata_customize_register( $wp_customize ) {
 			'capability'        => 'edit_theme_options',
 			'sanitize_callback' => 'absint',
 			'transport'         => 'refresh',
+			'default'           => 0,
 		]
 	);
 
@@ -310,69 +317,14 @@ function akademiata_customize_register( $wp_customize ) {
 			$wp_customize,
 			'akademiata_footer_logo',
 			[
-				'label'       => __( 'Footer logo (PL / default)', 'akademiata' ),
-				'description' => __( 'Optional. When empty, the theme default footer logo is used.', 'akademiata' ),
+				'label'       => __( 'Logo stopki', 'akademiata' ),
+				'description' => __( 'Tak samo: przełącz język WPML, ustaw logo stopki, Opublikuj. Puste = plik domyślny z motywu.', 'akademiata' ),
 				'section'     => 'title_tagline',
 				'mime_type'   => 'image',
 				'priority'    => 9,
 			]
 		)
 	);
-
-	$priority = 10;
-	foreach ( akademiata_logo_extra_lang_codes() as $code ) {
-		$label = strtoupper( $code );
-
-		$header_setting = 'akademiata_header_logo_' . $code;
-		$wp_customize->add_setting(
-			$header_setting,
-			[
-				'type'              => 'theme_mod',
-				'capability'        => 'edit_theme_options',
-				'sanitize_callback' => 'absint',
-				'transport'         => 'refresh',
-			]
-		);
-		$wp_customize->add_control(
-			new WP_Customize_Media_Control(
-				$wp_customize,
-				$header_setting,
-				[
-					/* translators: %s: language code, e.g. EN */
-					'label'       => sprintf( __( 'Header logo (%s)', 'akademiata' ), $label ),
-					'description' => __( 'Optional. When empty, the theme default for this language is used.', 'akademiata' ),
-					'section'     => 'title_tagline',
-					'mime_type'   => 'image',
-					'priority'    => $priority++,
-				]
-			)
-		);
-
-		$footer_setting = 'akademiata_footer_logo_' . $code;
-		$wp_customize->add_setting(
-			$footer_setting,
-			[
-				'type'              => 'theme_mod',
-				'capability'        => 'edit_theme_options',
-				'sanitize_callback' => 'absint',
-				'transport'         => 'refresh',
-			]
-		);
-		$wp_customize->add_control(
-			new WP_Customize_Media_Control(
-				$wp_customize,
-				$footer_setting,
-				[
-					/* translators: %s: language code, e.g. EN */
-					'label'       => sprintf( __( 'Footer logo (%s)', 'akademiata' ), $label ),
-					'description' => __( 'Optional. When empty, the theme default for this language is used.', 'akademiata' ),
-					'section'     => 'title_tagline',
-					'mime_type'   => 'image',
-					'priority'    => $priority++,
-				]
-			)
-		);
-	}
 }
 
 add_action( 'customize_register', 'akademiata_customize_register' );

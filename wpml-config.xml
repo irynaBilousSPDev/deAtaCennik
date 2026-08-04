@@ -6,4 +6,16 @@
     <custom-fields>
         <custom-field action="copy">_akademiata_news_city_slug</custom-field>
     </custom-fields>
+
+    <!--
+      Logo via WPML admin language switcher (top bar: Polski / Angielski / …):
+      switch language → Appearance → Customize → Logo / Footer logo → Publish.
+      theme_mods option key = theme_mods_{stylesheet folder}.
+    -->
+    <admin-texts>
+        <key name="theme_mods_akademiata">
+            <key name="custom_logo" type="post-ids" sub-type="attachment" />
+            <key name="akademiata_footer_logo" type="post-ids" sub-type="attachment" />
+        </key>
+    </admin-texts>
 </wpml-config>
