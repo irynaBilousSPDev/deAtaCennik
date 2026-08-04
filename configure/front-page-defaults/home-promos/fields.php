@@ -120,14 +120,51 @@ function akademiata_home_promos_allowed_tags(): array {
 }
 
 /**
+ * Ensure each card has a unique grid slot (a–f). Duplicate/default "a" used to hide siblings.
+ *
+ * @param array<int, array<string, mixed>> $cards
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_home_promos_normalize_card_areas( array $cards ): array {
+	$letters = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+	$used    = [];
+	$out     = [];
+
+	foreach ( array_values( $cards ) as $i => $card ) {
+		if ( ! is_array( $card ) ) {
+			continue;
+		}
+
+		$area = preg_replace( '/[^a-f]/', '', (string) ( $card['area'] ?? '' ) );
+		if ( $area === '' || isset( $used[ $area ] ) ) {
+			$area = $letters[ $i ] ?? '';
+		}
+		if ( $area === '' || isset( $used[ $area ] ) ) {
+			$area = 'z' . $i;
+		}
+
+		$used[ $area ] = true;
+		$card['area']  = $area;
+		$out[]         = $card;
+	}
+
+	return $out;
+}
+
+/**
  * @param array<int, array<string, mixed>> $cards
  * @return array<int, array<int, array<string, mixed>>>
  */
 function akademiata_home_promos_columns( array $cards ): array {
+	$cards = akademiata_home_promos_normalize_card_areas( $cards );
+	if ( $cards === [] ) {
+		return [];
+	}
+
 	$by_area = [];
 	foreach ( $cards as $card ) {
-		$area = preg_replace( '/[^a-f]/', '', (string) ( $card['area'] ?? '' ) );
-		if ( $area === '' ) {
+		$area = (string) ( $card['area'] ?? '' );
+		if ( $area === '' || isset( $by_area[ $area ] ) ) {
 			continue;
 		}
 		$by_area[ $area ] = $card;
@@ -152,8 +189,8 @@ function akademiata_home_promos_columns( array $cards ): array {
 		}
 	}
 
-	if ( $columns === [] ) {
-		return [ array_values( $cards ) ];
+	if ( count( $by_area ) < count( $cards ) || $columns === [] ) {
+		return [ $cards ];
 	}
 
 	return $columns;

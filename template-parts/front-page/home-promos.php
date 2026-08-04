@@ -36,7 +36,7 @@ $render_card = static function ( array $card ) use ( $arrow_label, $allowed ) {
 	$meta     = trim( (string) ( $card['meta'] ?? '' ) );
 	$card_url = akademiata_home_promos_card_url( $card );
 
-	if ( $layout === 'media' && $img_url === '' && $headline === '' ) {
+	if ( $layout === 'media' && $img_url === '' && $headline === '' && $text === '' && $value === '' ) {
 		return;
 	}
 

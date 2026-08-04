@@ -670,7 +670,7 @@
                                 "e": "E — lewa dół",
                                 "f": "F — prawa dół"
                             },
-                            "default_value": "a",
+                            "default_value": "",
                             "return_format": "value",
                             "wrapper": {
                                 "width": "25",
@@ -678,7 +678,9 @@
                                 "id": ""
                             },
                             "parent_repeater": "field_68f0hp000005",
-                            "wpml_cf_preferences": 3
+                            "wpml_cf_preferences": 3,
+                            "instructions": "",
+                            "allow_null": 1
                         },
                         {
                             "key": "field_68f0hp000008",
@@ -1244,5 +1246,5 @@
     "allow_ai_access": false,
     "ai_description": "",
     "acfml_field_group_mode": "localization",
-    "modified": 1785847210
+    "modified": 1785848323
 }
