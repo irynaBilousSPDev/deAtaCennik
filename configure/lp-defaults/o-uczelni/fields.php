@@ -98,7 +98,15 @@ function akademiata_o_uczelni_remote_basename_map(): array {
  * Same file as site header (`partials/header.php`).
  */
 function akademiata_o_uczelni_header_logo_url(): string {
-	$rel = 'static/img/ATA_logo_main.webp';
+	$custom_logo_id = (int) get_theme_mod( 'custom_logo' );
+	if ( $custom_logo_id ) {
+		$custom_logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
+		if ( $custom_logo_url ) {
+			return $custom_logo_url;
+		}
+	}
+
+	$rel = 'static/img/ATA_logo_main.png';
 	$path = get_template_directory() . '/' . $rel;
 	if (!is_readable($path)) {
 		return '';
