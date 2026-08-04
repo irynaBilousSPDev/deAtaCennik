@@ -54,8 +54,8 @@ if (!empty($main_title)) : ?>
         <div class="container">
             <div class="title_wrapper">
                 <img width="34" height="34"
-                     src="<?php echo get_template_directory_uri() ?>/static/img/small_logo_ATA.webp"
-                     alt="<?php _e('small logo AT', 'akademiata'); ?>">
+                     src="<?php echo get_template_directory_uri() ?>/static/img/ATA_logo_mini.png"
+                     alt="<?php _e('small logo ATA', 'akademiata'); ?>">
                 <h2><?php echo $main_title; ?></h2>
             </div>
         </div>
