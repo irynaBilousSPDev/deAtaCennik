@@ -21,6 +21,8 @@ include('configure/ajax_filters.php');
 
 include('configure/configure.php');
 
+include('configure/front-page-defaults/home-promos/fields.php');
+
 include('configure/youtube-api.php');
 
 include('configure/offer-daily-interest.php');

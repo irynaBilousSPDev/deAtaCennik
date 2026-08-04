@@ -2,6 +2,8 @@
 /**
  * Homepage Promocje — default cards (static fallbacks).
  *
+ * promo_id → calculator deep link (?promo=… / ?rekr=…)
+ *
  * @return array<string, mixed>
  */
 return [
@@ -22,6 +24,8 @@ return [
 			'value'        => '',
 			'text'         => 'Zniżka proporcjonalnie w obu semestrach roku akademickiego 2026/2027',
 			'meta'         => 'Rejestracja do 30.08 · umowa do 30.09.2026',
+			'promo_id'     => 'szybki',
+			'link'         => '',
 		],
 		[
 			'layout'       => 'solid',
@@ -36,6 +40,8 @@ return [
 			'value'        => '−5% / −10%',
 			'text'         => 'Semestr z góry −5% · rok z góry −10%',
 			'meta'         => 'Termin: do 10 września',
+			'promo_id'     => 'jednorazowo',
+			'link'         => '',
 		],
 		[
 			'layout'       => 'media',
@@ -50,6 +56,8 @@ return [
 			'value'        => '− 1 200 zł',
 			'text'         => 'Tegoroczny maturzysta · profil na świadectwie',
 			'meta'         => '',
+			'promo_id'     => 'techart',
+			'link'         => '',
 		],
 		[
 			'layout'       => 'media',
@@ -64,6 +72,8 @@ return [
 			'value'        => '−400 zł',
 			'text'         => 'Zniżka proporcjonalnie w obu semestrach roku akademickiego 2026/2027',
 			'meta'         => 'Grupy 5+ osób · 2–4 osoby −200 zł · do 30.09',
+			'promo_id'     => 'grupie',
+			'link'         => '',
 		],
 		[
 			'layout'       => 'solid',
@@ -78,6 +88,8 @@ return [
 			'value'        => '',
 			'text'         => 'zamiast 490 zł · przy zapisie do 30.10.2026',
 			'meta'         => '',
+			'promo_id'     => 'rekr:kurs',
+			'link'         => '',
 		],
 		[
 			'layout'       => 'solid',
@@ -92,6 +104,8 @@ return [
 			'value'        => '−30%',
 			'text'         => 'Przeniesienie z innej uczelni · semestr startu',
 			'meta'         => '',
+			'promo_id'     => 'przejscie',
+			'link'         => '',
 		],
 	],
 ];

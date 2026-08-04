@@ -853,6 +853,38 @@
                                 "type": "text",
                                 "parent_repeater": "field_home_promos_cards",
                                 "wpml_cf_preferences": 2
+                            },
+                            {
+                                "key": "field_home_promos_card_promo_id",
+                                "label": "ID promocji (kalkulator)",
+                                "name": "promo_id",
+                                "type": "select",
+                                "instructions": "Po kliknięciu otworzy kalkulator z już zaznaczoną promocją. rekr:* = promocje wpisowego/rekrutacji.",
+                                "choices": {
+                                    "": "— tylko strona kalkulatora —",
+                                    "jednorazowo": "jednorazowo — Płatność z góry",
+                                    "szybki": "szybki — Szybki Start (−1000 zł)",
+                                    "grupie": "grupie — W Grupie Taniej",
+                                    "techart": "techart — Absolwent tech./art.",
+                                    "przejscie": "przejscie — Przejście do ATA",
+                                    "absolwent_pl": "absolwent_pl — Absolwent kontynuuje",
+                                    "rekr:kurs": "rekr:kurs — Wpisowe / kurs (rekrutacja)",
+                                    "rekr:absolwent": "rekr:absolwent — Absolwent (rekrutacja)"
+                                },
+                                "default_value": "",
+                                "return_format": "value",
+                                "allow_null": 1,
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
+                            },
+                            {
+                                "key": "field_home_promos_card_link",
+                                "label": "Własny URL (opcjonalnie)",
+                                "name": "link",
+                                "type": "url",
+                                "instructions": "Nadpisuje link z ID promocji, jeśli wypełnione.",
+                                "parent_repeater": "field_home_promos_cards",
+                                "wpml_cf_preferences": 3
                             }
                         ]
                     }

@@ -3,38 +3,45 @@
 
 .home-promos {
   --hp-gap: 1.2rem;
-  --hp-radius: 1.2rem;
-  --hp-arrow: 3.6rem;
+  --hp-radius: 1.4rem;
+  --hp-arrow: 3.4rem;
   --hp-peach: #f2c48a;
   --hp-pink: #f0b8b4;
   --hp-lime: #d4e070;
   --hp-sky: #b5d0ea;
   --hp-lilac: #d0bde0;
   --hp-apricot: #f0c090;
-  --hp-ink: #1a1a1a;
-  --hp-muted: rgba(26, 26, 26, 0.72);
+  --hp-ink: #111;
+  --hp-muted: rgba(17, 17, 17, 0.68);
   --hp-circle: #3a3a3a;
+  margin-bottom: 3rem;
 
   .home-promos__title {
-    margin: 0 0 2rem;
-    @include mixins.heading-style(vars.$font-size-lg, 1.15, vars.$weight-bold, vars.$black);
+    margin: 0 0 1.8rem;
+    @include mixins.heading-style(vars.$font-size-lg, 1.1, vars.$weight-bold, vars.$black);
 
     @include mixins.lg-screen {
-      font-size: vars.$font-size-xl;
+      margin-bottom: 2.2rem;
+      font-size: 2.4rem;
     }
   }
 
   .home-promos__grid {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--hp-gap);
-    grid-template-columns: 1fr;
+  }
+
+  .home-promos__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--hp-gap);
   }
 
   .home-promo {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 14rem;
     border-radius: var(--hp-radius);
     overflow: hidden;
     color: var(--hp-ink);
@@ -47,7 +54,7 @@
       color: var(--hp-ink);
       text-decoration: none;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 
       .home-promo__arrow {
         background-color: vars.$primary;
@@ -60,41 +67,27 @@
     }
   }
 
-  .home-promo--peach {
-    --hp-card-bg: var(--hp-peach);
-  }
-
-  .home-promo--pink {
-    --hp-card-bg: var(--hp-pink);
-  }
-
-  .home-promo--lime {
-    --hp-card-bg: var(--hp-lime);
-  }
-
-  .home-promo--sky {
-    --hp-card-bg: var(--hp-sky);
-  }
-
-  .home-promo--lilac {
-    --hp-card-bg: var(--hp-lilac);
-  }
-
-  .home-promo--apricot {
-    --hp-card-bg: var(--hp-apricot);
-  }
+  .home-promo--peach { --hp-card-bg: var(--hp-peach); }
+  .home-promo--pink { --hp-card-bg: var(--hp-pink); }
+  .home-promo--lime { --hp-card-bg: var(--hp-lime); }
+  .home-promo--sky { --hp-card-bg: var(--hp-sky); }
+  .home-promo--lilac { --hp-card-bg: var(--hp-lilac); }
+  .home-promo--apricot { --hp-card-bg: var(--hp-apricot); }
 
   .home-promo--media {
+    min-height: 34rem;
+
     .home-promo__media {
       position: relative;
       flex: 1 1 auto;
-      min-height: 16rem;
+      min-height: 18rem;
       overflow: hidden;
 
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center top;
         display: block;
       }
     }
@@ -105,7 +98,9 @@
   }
 
   .home-promo--solid {
-    padding: 1.4rem 1.6rem 4.8rem;
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 1.5rem 1.6rem 4.6rem;
     justify-content: flex-start;
   }
 
@@ -115,30 +110,22 @@
     left: 1rem;
     z-index: 1;
     display: inline-block;
-    padding: 0.35rem 0.85rem;
-    border-radius: 999px;
-    font-size: 1.1rem;
-    line-height: 1.3;
+    padding: 0.4rem 0.9rem;
+    border-radius: 0.6rem;
+    font-size: 1.15rem;
+    line-height: 1.25;
     font-weight: vars.$weight-semi-regular;
     color: var(--hp-ink);
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.95);
   }
 
-  .home-promo--peach .home-promo__badge {
-    background: #f5e06a;
-  }
-
-  .home-promo--sky .home-promo__badge {
-    background: #c8dff2;
-  }
-
-  .home-promo--lilac .home-promo__badge {
-    background: #ddd0eb;
-  }
+  .home-promo--peach .home-promo__badge { background: #f5e06a; }
+  .home-promo--sky .home-promo__badge { background: #c8dff2; }
+  .home-promo--lilac .home-promo__badge { background: #ddd0eb; }
 
   .home-promo__eyebrow {
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
     font-size: 1.2rem;
     line-height: 1.3;
     font-weight: vars.$weight-regular;
@@ -146,7 +133,7 @@
   }
 
   .home-promo__body {
-    padding: 1.4rem 1.6rem 4.8rem;
+    padding: 1.4rem 1.6rem 4.6rem;
   }
 
   .home-promo--solid .home-promo__body {
@@ -168,8 +155,8 @@
   }
 
   .home-promo__headline {
-    font-size: 1.7rem;
-    line-height: 1.25;
+    font-size: 1.75rem;
+    line-height: 1.22;
     font-weight: vars.$weight-medium;
     color: var(--hp-ink);
 
@@ -180,8 +167,8 @@
 
   .home-promo__value {
     flex-shrink: 0;
-    font-size: 1.7rem;
-    line-height: 1.25;
+    font-size: 1.75rem;
+    line-height: 1.22;
     text-align: right;
     white-space: nowrap;
 
@@ -191,10 +178,11 @@
   }
 
   .home-promo__text {
-    margin-top: 0.7rem;
+    margin-top: 0.65rem;
     font-size: 1.3rem;
     line-height: 1.35;
     color: var(--hp-muted);
+    max-width: 34rem;
   }
 
   .home-promo__meta {
@@ -219,82 +207,57 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 0.85rem;
-      height: 0.85rem;
+      width: 0.8rem;
+      height: 0.8rem;
       border-right: 2px solid #fff;
       border-bottom: 2px solid #fff;
-      transform: translate(-60%, -50%) rotate(-45deg);
+      transform: translate(-55%, -50%) rotate(-45deg);
     }
   }
 
-  @include mixins.max-sm-screen {
-    .home-promo__headline,
-    .home-promo__value {
-      font-size: 1.55rem;
-    }
-
-    .home-promo--media .home-promo__media {
-      min-height: 18rem;
-    }
-  }
-
-  // Tablet: 2 columns
   @media (min-width: 768px) {
     .home-promos__grid {
+      display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-template-areas:
-        "a b"
-        "a d"
-        "c d"
-        "e f";
-    }
-
-    .home-promo--area-a { grid-area: a; }
-    .home-promo--area-b { grid-area: b; }
-    .home-promo--area-c { grid-area: c; }
-    .home-promo--area-d { grid-area: d; }
-    .home-promo--area-e { grid-area: e; }
-    .home-promo--area-f { grid-area: f; }
-
-    .home-promo--media .home-promo__media {
-      min-height: 18rem;
-    }
-  }
-
-  // Desktop: 3-column bento matching mock
-  @media (min-width: 1100px) {
-    --hp-gap: 1.4rem;
-    --hp-radius: 1.4rem;
-
-    .home-promos__title {
-      margin-bottom: 2.4rem;
-      font-size: 2.4rem;
-    }
-
-    .home-promos__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: minmax(14rem, auto) minmax(18rem, 1fr) minmax(14rem, auto);
-      grid-template-areas:
-        "a b c"
-        "a d c"
-        "e d f";
       align-items: stretch;
     }
 
-    .home-promo--media .home-promo__media {
-      min-height: 0;
-      flex: 1 1 auto;
+    .home-promos__col {
+      min-height: 100%;
     }
 
-    .home-promo--area-a,
-    .home-promo--area-c,
-    .home-promo--area-d {
-      min-height: 100%;
+    .home-promo--media {
+      flex: 1 1 auto;
+      min-height: 42rem;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    --hp-gap: 1.4rem;
+
+    .home-promos__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .home-promo--media {
+      min-height: 48rem;
+
+      .home-promo__media {
+        min-height: 24rem;
+      }
+    }
+
+    .home-promo--solid {
+      padding: 1.6rem 1.7rem 4.8rem;
+    }
+
+    .home-promo__body {
+      padding: 1.5rem 1.7rem 4.8rem;
     }
 
     .home-promo__headline,
     .home-promo__value {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
     }
 
     .home-promo__text {
@@ -303,24 +266,36 @@
   }
 
   @media (min-width: 1400px) {
+    .home-promo--media {
+      min-height: 52rem;
+    }
+
     .home-promo__headline,
     .home-promo__value {
       font-size: 2rem;
     }
+  }
 
-    .home-promo__body,
-    .home-promo--solid {
-      padding-left: 1.8rem;
-      padding-right: 1.8rem;
+  @include mixins.max-sm-screen {
+    .home-promo--media {
+      min-height: 32rem;
+
+      .home-promo__media {
+        min-height: 20rem;
+      }
     }
 
-    .home-promo--solid {
-      padding-top: 1.6rem;
-      padding-bottom: 5.2rem;
+    .home-promo__headline,
+    .home-promo__value {
+      font-size: 1.6rem;
     }
 
-    .home-promo__body {
-      padding-bottom: 5.2rem;
+    .home-promo__row {
+      flex-wrap: wrap;
+    }
+
+    .home-promo__value {
+      white-space: normal;
     }
   }
 }

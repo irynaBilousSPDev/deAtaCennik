@@ -148,6 +148,53 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.render = render;
 
   let isUIBound = false;
+  let deepLinkPromoApplied = false;
+
+  /**
+   * Homepage promo cards → /kalkulator-czesnego/?promo=ID or ?rekr=ID[&sub=…]
+   * Applied once after prices JSON loads.
+   */
+  function applyDeepLinkPromoOnce() {
+    if (deepLinkPromoApplied) return;
+    deepLinkPromoApplied = true;
+
+    let params;
+    try {
+      params = new URLSearchParams(window.location.search || '');
+    } catch (e) {
+      return;
+    }
+
+    const promoId = (params.get('promo') || '').trim();
+    const rekrId = (params.get('rekr') || '').trim();
+    const subRaw = (params.get('sub') || '').trim();
+    if (!promoId && !rekrId) return;
+
+    if (promoId) {
+      const exists = Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === promoId);
+      if (exists) {
+        window.selP = { jednorazowo: false };
+        window.selP[promoId] = true;
+        window.expP[promoId] = true;
+        if (subRaw !== '' && window.subP && Object.prototype.hasOwnProperty.call(window.subP, promoId)) {
+          const num = Number(subRaw);
+          window.subP[promoId] = Number.isFinite(num) && String(num) === subRaw ? num : subRaw;
+        }
+      }
+    }
+
+    if (rekrId && ['absolwent', 'kurs'].indexOf(rekrId) >= 0) {
+      window.selRekrP = rekrId;
+    }
+
+    const scrollTarget = rekrId ? 'rekr-promos' : 'promos';
+    window.setTimeout(() => {
+      const el = document.getElementById(scrollTarget);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 120);
+  }
 
   // Apply fetched data
   function applyData(data) {
@@ -192,6 +239,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       // (Otherwise the page can keep the default "wwa" visibility state.)
       syncVisibility();
     }
+    applyDeepLinkPromoOnce();
     render();
     setLoading(false);
   }
