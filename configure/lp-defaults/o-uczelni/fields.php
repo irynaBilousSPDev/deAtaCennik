@@ -106,7 +106,7 @@ function akademiata_o_uczelni_header_logo_url(): string {
 		}
 	}
 
-	$rel = 'static/img/ATA_logo_main.png';
+	$rel = 'static/img/ATA_logo_main.webp';
 	$path = get_template_directory() . '/' . $rel;
 	if (!is_readable($path)) {
 		return '';

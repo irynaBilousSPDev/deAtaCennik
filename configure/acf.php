@@ -110,9 +110,3 @@ function akademiata_acf_json_load_paths(array $paths): array {
 
 add_filter('acf/settings/save_json', 'akademiata_acf_json_save_path');
 add_filter('acf/settings/load_json', 'akademiata_acf_json_load_paths');
-?>
-
-
-
-
-

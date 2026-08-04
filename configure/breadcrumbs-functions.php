@@ -172,6 +172,3 @@ function the_breadcrumb()
         echo '</div>';
     }
 }
-
-
-?>
