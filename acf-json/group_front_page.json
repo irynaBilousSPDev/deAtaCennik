@@ -583,7 +583,7 @@
             ]
         },
         {
-            "key": "field_home_promos_tab",
+            "key": "field_68f0hp000001",
             "label": "Promocje",
             "name": "",
             "type": "tab",
@@ -592,7 +592,7 @@
             "wpml_cf_preferences": 3
         },
         {
-            "key": "field_home_promos",
+            "key": "field_68f0hp000002",
             "label": "Promocje",
             "name": "home_promos",
             "aria-label": "",
@@ -608,7 +608,7 @@
             "wpml_cf_preferences": 3,
             "sub_fields": [
                 {
-                    "key": "field_home_promos_show",
+                    "key": "field_68f0hp000003",
                     "label": "Pokaż sekcję",
                     "name": "show",
                     "type": "true_false",
@@ -619,7 +619,7 @@
                     "wpml_cf_preferences": 3
                 },
                 {
-                    "key": "field_home_promos_title",
+                    "key": "field_68f0hp000004",
                     "label": "Tytuł sekcji",
                     "name": "title",
                     "type": "text",
@@ -627,7 +627,7 @@
                     "wpml_cf_preferences": 2
                 },
                 {
-                    "key": "field_home_promos_cards",
+                    "key": "field_68f0hp000005",
                     "label": "Karty",
                     "name": "cards",
                     "type": "repeater",
@@ -635,11 +635,11 @@
                     "min": 0,
                     "max": 6,
                     "button_label": "Dodaj kartę",
-                    "collapsed": "field_home_promos_card_headline",
+                    "collapsed": "field_68f0hp00000d",
                     "wpml_cf_preferences": 3,
                     "sub_fields": [
                         {
-                            "key": "field_home_promos_card_layout",
+                            "key": "field_68f0hp000006",
                             "label": "Typ karty",
                             "name": "layout",
                             "type": "select",
@@ -654,11 +654,11 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_area",
+                            "key": "field_68f0hp000007",
                             "label": "Pozycja w siatce",
                             "name": "area",
                             "type": "select",
@@ -677,11 +677,11 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_color",
+                            "key": "field_68f0hp000008",
                             "label": "Kolor tła",
                             "name": "color",
                             "type": "select",
@@ -701,11 +701,11 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_color_custom",
+                            "key": "field_68f0hp000009",
                             "label": "Własny kolor",
                             "name": "color_custom",
                             "type": "color_picker",
@@ -719,17 +719,17 @@
                             "conditional_logic": [
                                 [
                                     {
-                                        "field": "field_home_promos_card_color",
+                                        "field": "field_68f0hp000008",
                                         "operator": "==",
                                         "value": "custom"
                                     }
                                 ]
                             ],
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_image",
+                            "key": "field_68f0hp00000a",
                             "label": "Zdjęcie",
                             "name": "image",
                             "type": "image",
@@ -739,25 +739,25 @@
                             "conditional_logic": [
                                 [
                                     {
-                                        "field": "field_home_promos_card_layout",
+                                        "field": "field_68f0hp000006",
                                         "operator": "==",
                                         "value": "media"
                                     }
                                 ]
                             ],
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_badge",
+                            "key": "field_68f0hp00000b",
                             "label": "Badge / eyebrow",
                             "name": "badge",
                             "type": "text",
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 2
                         },
                         {
-                            "key": "field_home_promos_card_badge_bg",
+                            "key": "field_68f0hp00000c",
                             "label": "Kolor badge",
                             "name": "badge_bg",
                             "type": "color_picker",
@@ -766,27 +766,27 @@
                             "conditional_logic": [
                                 [
                                     {
-                                        "field": "field_home_promos_card_layout",
+                                        "field": "field_68f0hp000006",
                                         "operator": "==",
                                         "value": "media"
                                     }
                                 ]
                             ],
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3
                         },
                         {
-                            "key": "field_home_promos_card_headline",
+                            "key": "field_68f0hp00000d",
                             "label": "Nagłówek",
                             "name": "headline",
                             "type": "textarea",
                             "rows": 2,
                             "new_lines": "",
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 2
                         },
                         {
-                            "key": "field_home_promos_card_value",
+                            "key": "field_68f0hp00000e",
                             "label": "Wartość (prawa strona)",
                             "name": "value",
                             "type": "text",
@@ -795,33 +795,33 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 2
                         },
                         {
-                            "key": "field_home_promos_card_text",
+                            "key": "field_68f0hp00000f",
                             "label": "Opis",
                             "name": "text",
                             "type": "textarea",
                             "rows": 2,
                             "new_lines": "",
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 2
                         },
                         {
-                            "key": "field_home_promos_card_meta",
+                            "key": "field_68f0hp000010",
                             "label": "Meta / termin",
                             "name": "meta",
                             "type": "text",
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 2
                         },
                         {
-                            "key": "field_home_promos_card_link",
+                            "key": "field_68f0hp000011",
                             "label": "Link",
                             "name": "link",
                             "type": "text",
-                            "parent_repeater": "field_home_promos_cards",
+                            "parent_repeater": "field_68f0hp000005",
                             "wpml_cf_preferences": 3,
                             "wrapper": {
                                 "width": "100",
@@ -829,7 +829,8 @@
                                 "id": ""
                             }
                         }
-                    ]
+                    ],
+                    "rows_per_page": 20
                 }
             ]
         },
@@ -1243,5 +1244,5 @@
     "allow_ai_access": false,
     "ai_description": "",
     "acfml_field_group_mode": "localization",
-    "modified": 1785846455
+    "modified": 1785847210
 }
