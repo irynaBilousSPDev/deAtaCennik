@@ -1187,8 +1187,8 @@ function welyo_render_widget() {
 .wcb-dot{width:8px;height:8px;border-radius:50%;flex:none}
 .wcb-root[data-mode="call"] .wcb-dot{background:var(--dot-open);box-shadow:0 0 0 4px var(--dot-open-glow)}
 .wcb-root[data-mode="callback"] .wcb-dot{background:var(--dot-closed);box-shadow:0 0 0 4px var(--dot-closed-glow)}
-.wcb-title{font-size:19px;font-weight:800;line-height:1.2;margin:12px 0 4px}
-.wcb-sub{font-size:13.5px;line-height:1.55;opacity:.88;margin:0}
+.wcb-title{font-size:19px;font-weight:800;line-height:1.2;margin:12px 0 4px;color:var(--launcher-text)}
+.wcb-sub{font-size:13.5px;line-height:1.55;opacity:.88;margin:0;color:var(--launcher-text)}
 .wcb-close{position:absolute;top:14px;right:14px;width:30px;height:30px;border:0;border-radius:50%;background:rgba(255,255,255,.14);color:var(--launcher-text);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center}
 .wcb-close:hover{background:rgba(255,255,255,.26)}
 .wcb-body{padding:18px 20px 20px}
