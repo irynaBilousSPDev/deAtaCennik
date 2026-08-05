@@ -74,13 +74,13 @@ if (!empty($post_types)) : ?>
 <?php endif; ?>
 
 <?php
-set_query_var('home_rankings', $acf_fields['home_rankings'] ?? null);
-get_template_part('template-parts/front-page/home-rankings');
+set_query_var('home_promos', $acf_fields['home_promos'] ?? null);
+get_template_part('template-parts/front-page/home-promos');
 ?>
 
 <?php
-set_query_var('home_promos', $acf_fields['home_promos'] ?? null);
-get_template_part('template-parts/front-page/home-promos');
+set_query_var('home_rankings', $acf_fields['home_rankings'] ?? null);
+get_template_part('template-parts/front-page/home-rankings');
 ?>
 
 <?php $our_students = $acf_fields['our_students'];
