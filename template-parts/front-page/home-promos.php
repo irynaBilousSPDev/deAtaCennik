@@ -15,8 +15,13 @@ if ( $cards === [] ) {
 	return;
 }
 
-$title       = trim( (string) ( $section['title'] ?? '' ) );
-$arrow_label = __( 'Zniżki i promocje', 'akademiata' );
+$title = trim( (string) ( $section['title'] ?? '' ) );
+$lang  = function_exists( 'akademiata_normalize_theme_lang_code' )
+	? akademiata_normalize_theme_lang_code( apply_filters( 'wpml_current_language', 'pl' ) )
+	: 'pl';
+$arrow_label = ( $lang === 'en' )
+	? 'Discounts and promotions'
+	: __( 'Zniżki i promocje', 'akademiata' );
 $allowed     = akademiata_home_promos_allowed_tags();
 ?>
 <section class="home-promos" aria-labelledby="home-promos-title">
