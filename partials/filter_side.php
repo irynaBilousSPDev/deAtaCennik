@@ -46,10 +46,10 @@
                 <div class="accordion-content">
                     <div class="labels_list">
                         <?php
-                        $selected_terms = isset($_GET[$taxonomy]) ? (array)$_GET[$taxonomy] : [];
+                        $selected_terms = akademiata_get_selected_filter_terms_from_request($taxonomy);
 
                         foreach ($terms as $term) :
-                            $checked = in_array($term->slug, $selected_terms) ? 'checked' : '';
+                            $checked = in_array($term->slug, $selected_terms, true) ? 'checked' : '';
                             ?>
                             <label>
                                 <input type="checkbox"

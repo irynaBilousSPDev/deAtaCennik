@@ -43,6 +43,71 @@ function akademiata_get_post_types_for_offer_filter_action($filter_action) {
 }
 
 /**
+ * Parse QUERY_STRING keeping duplicate keys (e.g. program=a&program=b).
+ * PHP $_GET keeps only the last value for repeated keys without [].
+ *
+ * @param string[] $allowed_keys Taxonomy / filter keys to collect.
+ * @return array<string, string[]>
+ */
+function akademiata_parse_query_string_multi(array $allowed_keys) {
+    $result       = array();
+    $query_string = isset($_SERVER['QUERY_STRING']) ? (string) $_SERVER['QUERY_STRING'] : '';
+
+    if ($query_string === '' || empty($allowed_keys)) {
+        return $result;
+    }
+
+    $allowed = array_fill_keys($allowed_keys, true);
+
+    foreach (explode('&', $query_string) as $pair) {
+        if ($pair === '') {
+            continue;
+        }
+
+        $parts   = explode('=', $pair, 2);
+        $raw_key = rawurldecode(str_replace('+', ' ', $parts[0]));
+        $key     = preg_replace('/\[\]$/', '', $raw_key);
+
+        if ($key === '' || !isset($allowed[ $key ]) || !isset($parts[1])) {
+            continue;
+        }
+
+        $value = rawurldecode(str_replace('+', ' ', $parts[1]));
+        if ($value === '') {
+            continue;
+        }
+
+        $result[ $key ][] = $value;
+    }
+
+    return $result;
+}
+
+/**
+ * Selected filter term slugs for one taxonomy from the current request URL.
+ *
+ * @param string   $taxonomy
+ * @param string[] $allowed_keys Optional allow-list (defaults to bachelor/master listing taxonomies).
+ * @return string[]
+ */
+function akademiata_get_selected_filter_terms_from_request($taxonomy, array $allowed_keys = array()) {
+    if (empty($allowed_keys)) {
+        $allowed_keys = akademiata_get_offer_listing_taxonomies();
+    }
+
+    static $cache = array();
+    $cache_key    = implode('|', $allowed_keys);
+
+    if (!isset($cache[ $cache_key ])) {
+        $cache[ $cache_key ] = akademiata_parse_query_string_multi($allowed_keys);
+    }
+
+    return isset($cache[ $cache_key ][ $taxonomy ])
+        ? $cache[ $cache_key ][ $taxonomy ]
+        : array();
+}
+
+/**
  * @param array<string, mixed>|null $raw Optional raw request data.
  * @return array<string, string[]>
  */
@@ -53,7 +118,8 @@ function akademiata_parse_offer_filter_form_data($raw = null) {
         parse_str(wp_unslash($_POST['form_data']), $form_data);
         $form_data = is_array($form_data) ? $form_data : array();
     } else {
-        $form_data = !empty($_GET) ? wp_unslash($_GET) : array();
+        // Prefer QUERY_STRING so repeated keys survive (unlike $_GET).
+        $form_data = akademiata_parse_query_string_multi(akademiata_get_offer_listing_taxonomies());
     }
 
     $parsed = array();
@@ -215,8 +281,8 @@ function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies) {
     $form_data = array();
     if (!empty($_POST['form_data'])) {
         parse_str(wp_unslash($_POST['form_data']), $form_data);
-    } elseif (!empty($_GET)) {
-        $form_data = wp_unslash($_GET);
+    } else {
+        $form_data = akademiata_parse_query_string_multi($taxonomies);
     }
 
     $tax_query = array('relation' => 'AND');

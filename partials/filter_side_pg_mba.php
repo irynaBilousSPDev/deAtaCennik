@@ -31,7 +31,10 @@ if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
                 <div class="accordion-content" style="display: block">
                     <div class="labels_list">
                         <?php
-                        $selected_terms = isset($_GET[ $taxonomy ]) ? (array) $_GET[ $taxonomy ] : array();
+                        $selected_terms = akademiata_get_selected_filter_terms_from_request(
+                            $taxonomy,
+                            array_keys($taxonomies)
+                        );
 
                         foreach ($terms as $term) :
                             $checked = in_array($term->slug, $selected_terms, true) ? 'checked' : '';
