@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Welyo Callback (Zadzwoń / Oddzwonimy)
  * Description: Widget kontaktu dla rekrutacji. W godzinach pracy "Zadzwoń", po godzinach "Zostaw numer — oddzwonimy". Lead trafia bezpiecznie do Welyo przez serwer (klucz API nie wychodzi do przeglądarki). Shortcode: [welyo_callback]
- * Version: 1.5.7
+ * Version: 1.5.8
  * Author: —
  * License: GPL-2.0-or-later
  */
@@ -1195,8 +1195,8 @@ function welyo_render_widget() {
 .wcb-callbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;text-decoration:none;background:var(--a);color:var(--launcher-text);padding:15px;border-radius:13px;font-weight:800;font-size:16px;transition:background .18s,transform .18s}
 .wcb-callbtn:hover{background:var(--ad);transform:translateY(-1px)}
 .wcb-callbtn svg{width:20px;height:20px}
-.wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)}
-.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)}
+.wcb-number{text-align:center;margin:12px 0 0;font-size:15px;font-weight:700;color:var(--ink)!important}
+.wcb-hours{text-align:center;margin:4px 0 0;font-size:12.5px;color:var(--soft)!important}
 .wcb-field{margin-bottom:12px}
 .wcb-field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
 .wcb-field input{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;color:var(--ink);background:var(--input-bg);box-sizing:border-box}
