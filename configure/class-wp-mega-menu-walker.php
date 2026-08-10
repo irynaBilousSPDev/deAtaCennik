@@ -133,7 +133,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     /**
      * Whether a specialty belongs in a mobile Oferta column.
      * Cities: campus offers + stacjonarne I/II (+ exams).
-     * Online: niestacjonarne I/II + online-tagged PG/MBA/courses.
+     * Online: Studia I/II (niestacjonarne) + online-tagged PG/MBA/courses.
      *
      * @param int    $post_id
      * @param string $post_type
@@ -287,16 +287,15 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      *
      * @param object      $item
      * @param string|null $city_slug
-     * @param string|null $force_title Override visible title (Online I/II label).
      * @return string
      */
-    private function render_offer_child_item($item, $city_slug = null, $force_title = null) {
+    private function render_offer_child_item($item, $city_slug = null) {
         $post_type = $this->resolve_offer_submenu_post_type($item);
 
         $attributes = $this->link_attributes($item);
         $subs       = $post_type ? $this->get_offer_submenu_links($post_type, $city_slug) : array();
         $has_sub    = $subs !== array();
-        $title      = $force_title !== null && $force_title !== '' ? $force_title : (string) $item->title;
+        $title      = (string) $item->title;
 
         // Filtered columns: skip CPT parents with no matching specialties.
         if (
@@ -340,85 +339,6 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * Online list: I/II as one “Niestacjonarne…” row, then online PG/MBA/courses.
-     *
-     * @param array<int, object> $children
-     * @return string
-     */
-    private function render_online_offer_list($children) {
-        $degree_items = array();
-        $other_items  = array();
-
-        foreach ($children as $child) {
-            $post_type = $this->resolve_offer_submenu_post_type($child);
-            if (in_array($post_type, array('bachelor', 'master'), true)) {
-                $degree_items[] = $child;
-            } else {
-                $other_items[] = $child;
-            }
-        }
-
-        $html = '';
-
-        if ($degree_items !== array()) {
-            $label = __('Niestacjonarne sobotnio-niedzielne', 'akademiata');
-            $subs  = array();
-            $seen  = array();
-
-            foreach ($degree_items as $item) {
-                $post_type = $this->resolve_offer_submenu_post_type($item);
-                foreach ($this->get_offer_submenu_links($post_type, 'online') as $sub) {
-                    if (isset($seen[ $sub['id'] ])) {
-                        continue;
-                    }
-                    $seen[ $sub['id'] ] = true;
-                    $subs[]             = $sub;
-                }
-            }
-
-            usort(
-                $subs,
-                static function ($a, $b) {
-                    return strcasecmp((string) $a['title'], (string) $b['title']);
-                }
-            );
-
-            if ($subs !== array()) {
-                $link_item  = $degree_items[0];
-                $attributes = $this->link_attributes($link_item);
-
-                $html .= '<li class="mega-menu-item has-mega-sub">';
-                $html .= '<div class="mega-menu-item__row">';
-                $html .= '<a' . $attributes . '>' . esc_html($label) . '</a>';
-                $html .= '<button type="button" class="mega-menu-sub-toggle" aria-expanded="false" aria-label="'
-                    . esc_attr(sprintf(__('Pokaż listę: %s', 'akademiata'), $label))
-                    . '"><span aria-hidden="true"></span></button>';
-                $html .= '</div>';
-                $html .= '<ul class="mega-menu-sub" hidden>';
-                foreach ($subs as $sub) {
-                    $html .= '<li>';
-                    $html .= '<a class="mega-menu-sub__link" href="' . esc_url($sub['url']) . '">';
-                    $html .= '<span class="mega-menu-sub__thumb' . (empty($sub['thumb']) ? ' is-empty' : '') . '">';
-                    if (!empty($sub['thumb'])) {
-                        $html .= '<img src="' . esc_url($sub['thumb']) . '" alt="" loading="lazy" decoding="async" width="48" height="48">';
-                    }
-                    $html .= '</span>';
-                    $html .= '<span class="mega-menu-sub__label">' . esc_html($sub['title']) . '</span>';
-                    $html .= '</a>';
-                    $html .= '</li>';
-                }
-                $html .= '</ul></li>';
-            }
-        }
-
-        foreach ($other_items as $child) {
-            $html .= $this->render_offer_child_item($child, 'online');
-        }
-
-        return $html;
-    }
-
-    /**
      * @param string      $classes
      * @param string      $title
      * @param string      $desc
@@ -438,12 +358,8 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         $html .= '<span class="mega_menu_title-arr" aria-hidden="true"></span>';
         $html .= '</button>';
         $html .= '<ul class="mega-column__list">';
-        if ($city_slug === 'online') {
-            $html .= $this->render_online_offer_list($children);
-        } else {
-            foreach ($children as $child) {
-                $html .= $this->render_offer_child_item($child, $city_slug);
-            }
+        foreach ($children as $child) {
+            $html .= $this->render_offer_child_item($child, $city_slug);
         }
         $html .= '</ul></div>';
 
