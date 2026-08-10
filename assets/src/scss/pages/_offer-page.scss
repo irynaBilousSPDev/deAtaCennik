@@ -1159,17 +1159,6 @@
   padding: 0;
 }
 
-// Ranking is a direct child of the card wrapper
-.card_post_wrapper {
-  position: relative;
-
-  > .ranking_icon--overlay {
-    // Desktop: align with padded image corner
-    top: 18px;
-    left: 18px;
-  }
-}
-
 .city_block {
   position: absolute;
   right: 0;

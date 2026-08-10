@@ -421,14 +421,32 @@ header {
   left: 0;
   width: 100%;
   height: calc(100vh - var(--header-height, 80px));
+  height: calc(100dvh - var(--header-height, 80px));
   background: white;
   color: black;
   z-index: 1031;
+  overflow-x: hidden;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 20px 0;
 
   .container {
-    height: 100%;
+    height: auto;
+    min-height: 100%;
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  &__nav {
+    flex: 1 0 auto;
+  }
+
+  &__footer {
+    display: none;
   }
 
   &.open {
@@ -699,22 +717,31 @@ header {
 @media (max-width: 991px) {
   .mega-menu {
     padding: 16px 0 0;
-    background: #f7f7f7;
+    background: #fff;
 
     .container {
       padding-left: 1.6rem !important;
       padding-right: 1.6rem !important;
       max-width: none;
+      height: auto;
+      min-height: 100%;
     }
 
-    > .container > .d-flex {
+    &__inner {
       min-height: 100%;
+      justify-content: flex-start;
+      padding-bottom: 0;
+    }
+
+    &__nav {
+      flex: 0 0 auto;
+      padding-bottom: 8px;
     }
 
     .mega-menu-columns {
       flex-direction: column;
       gap: 12px;
-      padding-bottom: 16px;
+      padding-bottom: 8px;
     }
 
     // —— Shared mobile accordion ——
@@ -776,7 +803,7 @@ header {
     }
 
     .mega-column__list > .mega-menu-item {
-      padding: 12px 0;
+      padding: 10px 0;
 
       > a {
         display: block;
@@ -784,6 +811,20 @@ header {
         font-weight: vars.$weight-medium;
         color: #1a1a1a;
         line-height: 1.3;
+      }
+
+      // Parent row (degree / MBA / courses)
+      &.has-mega-sub {
+        padding-bottom: 10px;
+
+        > .mega-menu-item__row > a {
+          font-weight: vars.$weight-bold;
+          color: #111;
+        }
+
+        &.is-open {
+          padding-bottom: 4px;
+        }
       }
     }
 
@@ -813,22 +854,26 @@ header {
       }
     }
 
-    .mega-menu-sub {
-      display: block;
-      margin: 12px 0 4px;
-      padding: 0;
-      padding-inline-start: 0;
-    }
-
     .mega-menu-sub[hidden] {
       display: none !important;
     }
 
-    // Nested specialty tree: indent via link padding, not UA list padding
+    // Nested specialties — clear tree under parent (not same column as parents)
     .mega-menu-item.has-mega-sub > .mega-menu-sub {
-      margin-top: 10px;
-      padding-left: 0;
-      padding-inline-start: 0;
+      display: block;
+      margin: 6px 0 14px;
+      padding: 8px 0 4px 16px;
+      padding-inline-start: 16px;
+      border-left: 2px solid #e4e4e4;
+      list-style: none;
+
+      > li {
+        margin-bottom: 10px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
 
     .mega-menu-sub__link {
@@ -836,51 +881,69 @@ header {
     }
 
     .mega-menu-sub__thumb {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 8px;
     }
 
     .mega-menu-sub__label {
-      font-size: 1.45rem;
+      font-size: 1.4rem;
+      font-weight: vars.$weight-regular;
+      color: #333;
     }
 
-    // —— Oferta: white card (mockup) ——
+    // —— Oferta: title outside, grey list card (mockup) ——
     .mega-column--offer {
-      margin: 0 0 4px;
-      padding: 4px 16px 12px;
-      border: 1px solid #e6e6e6;
-      border-radius: 16px;
-      background: #fff;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      margin: 0 0 8px;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
 
       > .mega_menu_title {
-        padding: 14px 0 10px;
+        padding: 12px 4px 12px 0;
 
         .mega_menu_title-arr {
-          border-radius: 8px; // square toggle in Oferta card
+          border-radius: 8px;
         }
       }
 
       &.is-open > .mega_menu_title {
-        padding-bottom: 6px;
+        padding-bottom: 10px;
       }
 
       .mega-column__list {
-        padding: 4px 0 8px;
+        display: none;
+        margin: 0;
+        padding: 8px 14px 12px;
+        border: 1px solid #e6e6e6;
+        border-radius: 16px;
+        background: #f3f3f3;
+      }
+
+      &.is-open > .mega-column__list {
+        display: block;
       }
 
       .mega-column__list > .mega-menu-item {
-        padding: 10px 0;
+        padding: 11px 0;
+
+        &.has-mega-sub.is-open {
+          padding-bottom: 2px;
+        }
       }
 
       .mega-menu-sub-toggle {
-        border-radius: 8px; // square like mockup
+        border-radius: 8px;
       }
 
-      .mega-menu-sub {
-        padding-left: 0;
-        padding-inline-start: 0;
+      .mega-menu-item.has-mega-sub > .mega-menu-sub {
+        margin: 8px 0 12px;
+        padding: 6px 0 2px 14px;
+        padding-inline-start: 14px;
+        border-left-color: #ddd;
+        background: transparent;
       }
     }
 
@@ -910,14 +973,24 @@ header {
       .mega-column__list > .mega-menu-item {
         padding: 8px 0;
       }
+
+      // Nested WP children under Kandydat etc.
+      .mega-menu-item .mega-menu-sub,
+      .mega-column__list .mega-menu-sub {
+        margin: 6px 0 10px;
+        padding: 4px 0 4px 16px;
+        padding-inline-start: 16px;
+        border-left: 2px solid #e8e8e8;
+      }
     }
 
-    // Bottom tagline bar (mockup)
-    .description.mobile_visible {
+    // Bottom tagline — after menu, fully scrollable (not clipped)
+    .mega-menu__footer.description.mobile_visible {
       display: block !important;
+      flex: 0 0 auto;
       width: calc(100% + 3.2rem);
-      margin: auto -1.6rem 0 !important;
-      padding: 14px 1.6rem !important;
+      margin: 20px -1.6rem 0 !important;
+      padding: 16px 1.6rem calc(16px + env(safe-area-inset-bottom, 0px)) !important;
       background: #1a1a1a;
       color: #fff;
       font-size: 1.15rem;

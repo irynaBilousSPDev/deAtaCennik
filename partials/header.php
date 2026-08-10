@@ -179,8 +179,8 @@
     <!-- Mega Menu -->
     <div id="megaMenu" class="mega-menu">
         <div class="container">
-            <div class="d-flex flex-column justify-content-between h-100">
-                <div>
+            <div class="mega-menu__inner">
+                <div class="mega-menu__nav">
 					<?php
 					wp_nav_menu( [
 						'theme_location' => 'mega-menu',
@@ -191,11 +191,10 @@
 					?>
                 </div>
 
-                <div class="description my-5 text-center mobile_visible py-5">
+                <div class="mega-menu__footer description mobile_visible">
 					<?php echo wp_kses_post( __( '<strong>od 1995 do 2024 r. </strong> jako <strong> Wyższa Szkoła Ekologii i Zarządzania w
                             Warszawie </strong>', 'akademiata' ) ); ?>
                 </div>
-
             </div>
         </div>
     </div>
