@@ -206,8 +206,7 @@ function openOfferDropdown(taxonomy, label) {
 
             selectBtn.appendChild(content);
 
-            // Discount tag only when selected (unselected = title + short).
-            if (input.checked && tagText) {
+            if (tagText) {
                 const tag = document.createElement('span');
                 tag.className = 'offer-mobile-dropdown__option-tag';
                 tag.textContent = tagText;
@@ -216,7 +215,7 @@ function openOfferDropdown(taxonomy, label) {
 
             head.appendChild(selectBtn);
 
-            if (input.checked && fullHtml) {
+            if (fullHtml) {
                 const arrBtn = document.createElement('button');
                 arrBtn.type = 'button';
                 arrBtn.className = 'offer-mobile-dropdown__promo-arr';

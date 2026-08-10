@@ -48,16 +48,6 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                     <?php echo esc_html($label); ?>
                     <?php echo $chip_chevron; ?>
                 </button>
-                <?php if ($taxonomy === 'city' && $has_promo_filter) : ?>
-                    <button type="button"
-                            class="offer-mobile-chip offer-mobile-chip--dropdown offer-mobile-chip--promotions"
-                            data-tax="promotions"
-                            data-label="<?php echo esc_attr($promotions_label); ?>">
-                        <?php echo akademiata_get_promotions_filter_badge_html(); ?>
-                        <?php echo esc_html($promotions_label); ?>
-                        <?php echo $chip_chevron; ?>
-                    </button>
-                <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <div class="offer-mobile-chips__row">
@@ -68,6 +58,16 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                 <?php echo esc_html($quick_chips['language']); ?>
                 <?php echo $chip_chevron; ?>
             </button>
+            <?php if ($has_promo_filter) : ?>
+                <button type="button"
+                        class="offer-mobile-chip offer-mobile-chip--dropdown offer-mobile-chip--promotions"
+                        data-tax="promotions"
+                        data-label="<?php echo esc_attr($promotions_label); ?>">
+                    <?php echo akademiata_get_promotions_filter_badge_html(); ?>
+                    <?php echo esc_html($promotions_label); ?>
+                    <?php echo $chip_chevron; ?>
+                </button>
+            <?php endif; ?>
             <button type="button"
                     class="offer-mobile-chip offer-mobile-chip--more"
                     data-tax="more">

@@ -1249,6 +1249,10 @@ $om-filter-card-pad: 16px;
       gap: 10px;
     }
 
+    &__title-dynamic {
+      margin-right: 1rem;
+    }
+
     &__title-badge {
       display: inline-flex;
       align-items: center;

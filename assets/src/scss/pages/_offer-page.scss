@@ -326,7 +326,7 @@
 }
 
 .filter-promo-cards {
-  gap: 8px;
+  gap: 0;
   width: 100%;
   max-width: 100%;
 }
@@ -335,7 +335,7 @@
   display: block;
   width: 100%;
   max-width: 100%;
-  margin-bottom: 0 !important;
+  margin-bottom: 1rem !important;
   cursor: pointer;
   box-sizing: border-box;
   outline: none;
@@ -352,38 +352,38 @@
     pointer-events: none;
   }
 
+  // Match plain taxonomy checkboxes — no card chrome.
   &__surface {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 10px;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    padding: 10px 12px;
-    border: 1px solid #e6e6e6;
-    border-radius: 10px;
-    background: vars.$white;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
     box-shadow: none;
-    transition: border-color 0.15s ease, background 0.15s ease;
   }
 
   &:hover &__surface {
-    border-color: #cfcfcf;
+    border: none;
+    background: transparent;
   }
 
-  // Selected = checkbox only; no orange “focus” card chrome.
   &__input:checked + &__surface {
-    border-color: #e6e6e6;
-    background: vars.$white;
+    border: none;
+    background: transparent;
     box-shadow: none;
   }
 
   &__chk {
-    width: 18px;
-    height: 18px;
-    margin-top: 2px;
+    width: 20px;
+    height: 20px;
+    margin-top: 0;
     border-radius: 4px;
-    border: 2px solid #bdbdbd;
+    border: 2px solid vars.$black;
     background: vars.$white;
     flex-shrink: 0;
     display: flex;
@@ -393,21 +393,20 @@
   }
 
   &:hover &__chk {
-    border-color: vars.$primary;
+    border-color: vars.$black;
   }
 
   &__input:checked + &__surface &__chk {
-    background: vars.$primary;
-    border-color: vars.$primary;
+    background: vars.$white;
+    border-color: vars.$black;
 
     &::after {
       content: '';
       display: block;
-      width: 4px;
-      height: 8px;
-      border: 2px solid vars.$white;
-      border-top: none;
-      border-left: none;
+      width: 7px;
+      height: 12px;
+      border: solid vars.$black;
+      border-width: 0 3px 3px 0;
       transform: rotate(45deg) translate(-1px, -1px);
     }
   }
@@ -415,61 +414,47 @@
   &__info {
     flex: 1 1 auto;
     min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+    display: block;
   }
 
   &__name {
     display: block;
-    font-size: 1.35rem;
-    font-weight: vars.$weight-bold;
-    line-height: 1.3;
-    color: #333;
+    font-size: vars.$font-size-default;
+    font-weight: vars.$weight-semi-regular;
+    line-height: 24px;
+    color: vars.$black;
     word-break: break-word;
   }
 
-  &__short {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin: 0;
-    font-size: 1.2rem;
-    font-weight: vars.$weight-regular;
-    line-height: 1.35;
-    color: #666;
-  }
-
+  &__short,
   &__tag {
     display: none;
   }
 
   &.is-disabled {
     cursor: not-allowed;
+    opacity: 0.42;
 
     .filter-promo-card__surface {
-      opacity: 0.42;
-      background: #f7f7f7;
       pointer-events: none;
     }
   }
 }
 
 .offer-promo-info {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin: 0 0 1.25rem;
+  align-items: start;
 
   &.is-empty {
     display: none;
   }
 
   &__item {
-    flex: 1 1 calc(33.333% - 10px);
-    min-width: min(100%, 220px);
-    max-width: 100%;
+    min-width: 0;
+    width: 100%;
     border: 1px solid #d8efdf;
     border-radius: 100px;
     background: #f3fbf6;
@@ -479,10 +464,6 @@
     &.is-open,
     &.offer-promo-info__item--no-body {
       border-radius: 14px;
-    }
-
-    &.is-open {
-      flex: 1 1 100%;
     }
   }
 
@@ -537,13 +518,13 @@
 
   &__item.is-open &__name {
     white-space: normal;
-    font-size: 1.4rem;
+    font-size: 1.35rem;
   }
 
   &__short {
     display: none;
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: vars.$weight-medium;
     line-height: 1.4;
     color: #00a651;
@@ -555,6 +536,7 @@
 
   &__tag {
     flex-shrink: 0;
+    max-width: 40%;
     font-size: 1.1rem;
     font-weight: vars.$weight-bold;
     color: vars.$primary;
@@ -563,6 +545,8 @@
     border-radius: 100px;
     line-height: 1.3;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__arr {
@@ -585,9 +569,10 @@
 
   &__body {
     padding: 0 14px 14px;
-    font-size: 1.3rem;
-    line-height: 1.55;
+    font-size: 1.25rem;
+    line-height: 1.5;
     color: #355243;
+    word-break: break-word;
 
     strong {
       color: #1f3d2a;
@@ -597,14 +582,14 @@
 }
 
 @include mixins.max-ipad-pro-screen {
-  .offer-promo-info__item {
-    flex: 1 1 calc(50% - 10px);
+  .offer-promo-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 560px) {
-  .offer-promo-info__item {
-    flex: 1 1 100%;
+  .offer-promo-info {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
