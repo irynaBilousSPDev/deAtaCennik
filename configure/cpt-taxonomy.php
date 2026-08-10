@@ -347,7 +347,8 @@ function wpdocs_create_study_taxonomies()
         'labels' => $labels,
         'show_ui' => true,
         'show_admin_column' => true,
-        'query_var' => true,
+        // Prefer public ?promo= for listing filter; keep query_var off so WP never steals ?promotions=.
+        'query_var' => false,
         'rewrite' => array(
             'slug' => 'promocje',
         ),

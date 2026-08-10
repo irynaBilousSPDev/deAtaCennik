@@ -102,6 +102,11 @@ function akademiata_get_selected_filter_terms_from_request($taxonomy, array $all
         $cache[ $cache_key ] = akademiata_parse_query_string_multi($allowed_keys);
     }
 
+    // Promo filter: public URL key is `promo`; form / legacy use `promotions`.
+    if ($taxonomy === 'promotions') {
+        return akademiata_parse_selected_promotion_ids($cache[ $cache_key ]);
+    }
+
     return isset($cache[ $cache_key ][ $taxonomy ])
         ? $cache[ $cache_key ][ $taxonomy ]
         : array();

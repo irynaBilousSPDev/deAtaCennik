@@ -49,6 +49,12 @@ $om-filter-card-pad: 16px;
 }
 
 @include mixins.max-ipad-pro-screen {
+  #offer-promo-info {
+    display: none !important;
+  }
+}
+
+@include mixins.max-ipad-pro-screen {
   .page-template-page-offer,
   .page-template-page-offer .page_offer {
     background-color: vars.$white;
@@ -1311,11 +1317,12 @@ $om-filter-card-pad: 16px;
       touch-action: manipulation;
 
       &--promo {
-        align-items: flex-start;
+        display: block;
+        align-items: stretch;
         border: 1.5px solid #eee;
         border-radius: 12px;
         margin: 0 12px 10px;
-        padding: 12px 14px;
+        padding: 0;
         width: auto;
         border-bottom: 1.5px solid #eee;
 
@@ -1327,6 +1334,10 @@ $om-filter-card-pad: 16px;
           &::after {
             display: none;
           }
+        }
+
+        &.is-open {
+          border-color: vars.$primary;
         }
 
         &.is-disabled {
@@ -1375,6 +1386,7 @@ $om-filter-card-pad: 16px;
         border-radius: 100px;
         white-space: nowrap;
         line-height: 1.2;
+        flex-shrink: 0;
       }
 
       &-status {
@@ -1384,11 +1396,6 @@ $om-filter-card-pad: 16px;
         border-radius: 100px;
         line-height: 1.3;
         white-space: nowrap;
-
-        &.is-active {
-          color: #00a651;
-          background: #eaf8ef;
-        }
 
         &.is-unavailable {
           color: #777;
@@ -1404,7 +1411,8 @@ $om-filter-card-pad: 16px;
       &-short {
         font-size: 1.3rem;
         line-height: 1.35;
-        color: #666;
+        color: #00a651;
+        font-weight: vars.$weight-medium;
       }
 
       &:last-child {
@@ -1420,6 +1428,61 @@ $om-filter-card-pad: 16px;
           font-size: 1.6rem;
           line-height: 1;
         }
+      }
+    }
+
+    &__promo-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 14px;
+    }
+
+    &__promo-select {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      text-align: left;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    &__promo-arr {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: #888;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 0.25s ease, color 0.2s ease;
+    }
+
+    &__option--promo.is-open &__promo-arr {
+      transform: rotate(180deg);
+      color: vars.$primary;
+    }
+
+    &__promo-body {
+      padding: 0 14px 14px;
+      font-size: 1.3rem;
+      line-height: 1.55;
+      color: #555;
+
+      strong {
+        color: #222;
+        font-weight: vars.$weight-bold;
       }
     }
   }

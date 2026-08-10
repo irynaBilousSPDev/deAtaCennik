@@ -145,28 +145,29 @@ function openOfferDropdown(taxonomy, label) {
 
     inputs.forEach((input) => {
         const sourceLabel = input.closest('label');
-        const option = document.createElement('button');
-
-        option.type = 'button';
-        option.className = 'offer-mobile-dropdown__option';
-        if (taxonomy === 'promotions') {
-            option.classList.add('offer-mobile-dropdown__option--promo');
-        }
-        option.dataset.value = input.value;
-        option.classList.toggle('is-selected', input.checked);
-        option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
 
         if (taxonomy === 'promotions' && sourceLabel) {
             const isDisabled = sourceLabel.classList.contains('is-disabled');
             const nameEl = sourceLabel.querySelector('.filter-promo-card__name');
             const shortText = (input.getAttribute('data-promo-short') || '').trim();
-            const tagEl = sourceLabel.querySelector('.filter-promo-card__tag');
-            const activeLabel = (window.akademiataOffer && akademiataOffer.promoActive) || 'Aktywna';
+            const fullHtml = (input.getAttribute('data-promo-full') || '').trim();
+            const tagText = (input.getAttribute('data-promo-tag') || '').trim();
             const unavailableLabel = (window.akademiataOffer && akademiataOffer.promoUnavailable) || 'Niedostępna';
+            const expandLabel = (window.akademiataOffer && akademiataOffer.promoExpand) || 'Pokaż szczegóły promocji';
 
-            if (isDisabled) {
-                option.classList.add('is-disabled');
-            }
+            const card = document.createElement('div');
+            card.className = 'offer-mobile-dropdown__option offer-mobile-dropdown__option--promo';
+            card.dataset.value = input.value;
+            card.classList.toggle('is-selected', input.checked);
+            card.classList.toggle('is-disabled', isDisabled);
+            card.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
+
+            const head = document.createElement('div');
+            head.className = 'offer-mobile-dropdown__promo-head';
+
+            const selectBtn = document.createElement('button');
+            selectBtn.type = 'button';
+            selectBtn.className = 'offer-mobile-dropdown__promo-select';
 
             const content = document.createElement('span');
             content.className = 'offer-mobile-dropdown__option-content offer-mobile-dropdown__option-content--promo';
@@ -179,12 +180,7 @@ function openOfferDropdown(taxonomy, label) {
             name.textContent = nameEl?.textContent.trim() || input.value;
             nameRow.appendChild(name);
 
-            if (input.checked) {
-                const status = document.createElement('span');
-                status.className = 'offer-mobile-dropdown__option-status is-active';
-                status.textContent = activeLabel;
-                nameRow.appendChild(status);
-            } else if (isDisabled) {
+            if (isDisabled && !input.checked) {
                 const status = document.createElement('span');
                 status.className = 'offer-mobile-dropdown__option-status is-unavailable';
                 status.textContent = unavailableLabel;
@@ -193,52 +189,85 @@ function openOfferDropdown(taxonomy, label) {
 
             content.appendChild(nameRow);
 
-            // Mobile list stays compact — details live in offer-promo-info after selection.
-            if (shortText && input.checked) {
+            if (input.checked && shortText) {
                 const short = document.createElement('span');
                 short.className = 'offer-mobile-dropdown__option-short';
                 short.textContent = shortText;
                 content.appendChild(short);
             }
 
-            option.appendChild(content);
+            selectBtn.appendChild(content);
 
-            const meta = document.createElement('span');
-            meta.className = 'offer-mobile-dropdown__option-meta';
-
-            if (tagEl && tagEl.textContent.trim()) {
+            if (tagText) {
                 const tag = document.createElement('span');
                 tag.className = 'offer-mobile-dropdown__option-tag';
-                tag.textContent = tagEl.textContent.trim();
-                meta.appendChild(tag);
+                tag.textContent = tagText;
+                selectBtn.appendChild(tag);
             }
 
-            if (meta.childNodes.length) {
-                option.appendChild(meta);
+            head.appendChild(selectBtn);
+
+            if (input.checked && fullHtml) {
+                const arrBtn = document.createElement('button');
+                arrBtn.type = 'button';
+                arrBtn.className = 'offer-mobile-dropdown__promo-arr';
+                arrBtn.setAttribute('aria-expanded', 'false');
+                arrBtn.setAttribute('aria-label', expandLabel);
+                arrBtn.textContent = '▾';
+                head.appendChild(arrBtn);
+
+                const body = document.createElement('div');
+                body.className = 'offer-mobile-dropdown__promo-body';
+                body.hidden = true;
+                body.innerHTML = fullHtml;
+
+                arrBtn.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const willOpen = body.hidden;
+                    body.hidden = !willOpen;
+                    card.classList.toggle('is-open', willOpen);
+                    arrBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                });
+
+                card.appendChild(head);
+                card.appendChild(body);
+            } else {
+                card.appendChild(head);
             }
-        } else {
-            option.textContent = sourceLabel?.textContent.trim() || input.value;
-        }
 
-        option.addEventListener('click', () => {
-            if (taxonomy === 'promotions' && !input.checked && sourceLabel?.closest('.filter-promo-card')?.classList.contains('is-disabled')) {
-                return;
-            }
+            selectBtn.addEventListener('click', () => {
+                if (!input.checked && isDisabled) {
+                    return;
+                }
 
-            input.checked = !input.checked;
-            triggerFilterChange(input);
-            syncChipStates();
-
-            // Rebuild promo options so Active / Unavailable badges stay in sync with sw rules.
-            if (taxonomy === 'promotions') {
+                input.checked = !input.checked;
+                triggerFilterChange(input);
+                syncChipStates();
                 window.setTimeout(() => {
                     openOfferDropdown('promotions', label || '');
                 }, 0);
-                return;
-            }
+            });
 
+            list.appendChild(card);
+            return;
+        }
+
+        const option = document.createElement('button');
+
+        option.type = 'button';
+        option.className = 'offer-mobile-dropdown__option';
+        option.dataset.value = input.value;
+        option.classList.toggle('is-selected', input.checked);
+        option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
+        option.textContent = sourceLabel?.textContent.trim() || input.value;
+
+        option.addEventListener('click', () => {
+            input.checked = !input.checked;
             option.classList.toggle('is-selected', input.checked);
             option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
+            triggerFilterChange(input);
+            syncChipStates();
         });
 
         list.appendChild(option);

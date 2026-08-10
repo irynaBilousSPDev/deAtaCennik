@@ -13,11 +13,11 @@ include('configure/wpml-news-date-switcher.php');
 
 include('configure/offer-pricing.php');
 
+include('configure/offer-promotions-filter.php');
+
 // ajax filter
 
 include('configure/ajax_filters.php');
-
-include('configure/offer-promotions-filter.php');
 
 // CONFIG
 

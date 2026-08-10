@@ -497,7 +497,11 @@ import { initOfferViewToggle } from './offer-view-toggle';
     function updateBrowserUrl() {
         const params = new URLSearchParams();
         form.find('input[type="checkbox"]:checked').each(function () {
-            const name = $(this).attr('name').replace('[]', '');
+            let name = $(this).attr('name').replace('[]', '');
+            // Public listing links use ?promo= (same as calculator; avoids WP taxonomy clash).
+            if (name === 'promotions') {
+                name = 'promo';
+            }
             params.append(name, $(this).val());
         });
         const query = params.toString();
@@ -509,9 +513,14 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     function initializeFiltersFromURL() {
         const urlParams = new URLSearchParams(window.location.search);
+        let hasPromoInUrl = false;
 
         urlParams.forEach((value, key) => {
-            const checkbox = form.find(`input[name="${key}[]"][value="${value}"]`);
+            const formKey = (key === 'promo') ? 'promotions' : key;
+            if (formKey === 'promotions') {
+                hasPromoInUrl = true;
+            }
+            const checkbox = form.find(`input[name="${formKey}[]"][value="${value}"]`);
             if (checkbox.length) {
                 checkbox.prop('checked', true);
                 addTag(getCheckboxTagLabel(checkbox), value);
@@ -524,7 +533,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         sanitizePromoSelectionFromUrl();
 
-        if (filterResults.children('.card_post_item').length === 0) {
+        // Always refresh when promo deep-link is present (SSR may have been wrong before query_var fix).
+        if (hasPromoInUrl || filterResults.children('.card_post_item').length === 0) {
             triggerFilterUpdate();
         } else {
             dispatchResultsUpdated();

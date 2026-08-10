@@ -16,7 +16,7 @@ function akademiata_get_prices_google_api_url() {
  * @return string[]
  */
 function akademiata_get_offer_listing_filter_keys() {
-    return array_merge(akademiata_get_offer_listing_taxonomies(), array('promotions'));
+    return array_merge(akademiata_get_offer_listing_taxonomies(), array('promotions', 'promo'));
 }
 
 /**
@@ -68,7 +68,11 @@ function akademiata_get_calculator_promos() {
         }
     }
 
-    set_transient($transient_key, $promos, 6 * HOUR_IN_SECONDS);
+    // Do not cache empty payloads — remote can fail briefly.
+    if ($promos !== array()) {
+        set_transient($transient_key, $promos, 6 * HOUR_IN_SECONDS);
+    }
+
     $runtime_cache = $promos;
 
     return $runtime_cache;
@@ -217,14 +221,31 @@ function akademiata_get_listing_promos_for_filter($filter_action) {
  * @param array<string, mixed> $form_data
  * @return string[]
  */
+/**
+ * @param array<string, mixed> $form_data
+ * @return string[]
+ */
 function akademiata_parse_selected_promotion_ids(array $form_data) {
-    if (empty($form_data['promotions'])) {
+    $raw = array();
+
+    // Public URL param is `promo` (avoids WP taxonomy query_var conflict with `promotions`).
+    // Form checkboxes still use promotions[].
+    foreach (array('promo', 'promotions') as $key) {
+        if (empty($form_data[ $key ])) {
+            continue;
+        }
+        $raw = array_merge($raw, (array) $form_data[ $key ]);
+    }
+
+    if ($raw === array()) {
         return array();
     }
 
     return array_values(
-        array_filter(
-            array_map('sanitize_title', (array) $form_data['promotions'])
+        array_unique(
+            array_filter(
+                array_map('sanitize_title', $raw)
+            )
         )
     );
 }
@@ -541,7 +562,6 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         akademiata_get_offer_listing_filter_keys()
     );
 
-    $active_label = akademiata_get_theme_lang_string('offer_promo_active');
     ?>
     <div class="taxonomy_group taxonomy_group--promotions mb-3">
         <h2 class="filter_accordion_header filter_accordion_header--promotions" data-tax="promotions">
@@ -559,10 +579,13 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                     $promo_short  = isset($promo['short'])
                         ? akademiata_get_promo_short_plain_text($promo['short'], 160)
                         : '';
-                    $promo_full   = isset($promo['full'])
-                        ? akademiata_format_promo_display_html($promo['full'])
-                        : '';
                     $promo_tag    = isset($promo['tag']) ? trim((string) $promo['tag']) : '';
+                    $promo_full   = isset($promo['full'])
+                        ? akademiata_strip_promo_tag_from_full(
+                            akademiata_format_promo_display_html($promo['full']),
+                            $promo_tag
+                        )
+                        : '';
                     $promo_stack  = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
                     $checked      = in_array($promo_id, $selected, true) ? 'checked' : '';
                     ?>
@@ -588,7 +611,6 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                                     <?php endif; ?>
                                 </span>
                             </span>
-                            <span class="filter-promo-card__status"><?php echo esc_html($active_label); ?></span>
                         </span>
                     </label>
                 <?php endforeach; ?>
@@ -596,6 +618,46 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         </div>
     </div>
     <?php
+}
+
+/**
+ * Strip tag/discount duplicate lines from promo full HTML.
+ *
+ * @param string $full_html
+ * @param string $tag
+ * @return string
+ */
+function akademiata_strip_promo_tag_from_full($full_html, $tag) {
+    $html = (string) $full_html;
+    $tag  = trim(wp_strip_all_tags((string) $tag));
+
+    if ($html === '' || $tag === '') {
+        return $html;
+    }
+
+    $normalized_tag = preg_replace('/\s+/u', ' ', $tag);
+    $parts          = preg_split('/(?:<br\s*\/?>|\n)+/iu', $html);
+    $kept           = array();
+
+    foreach ((array) $parts as $part) {
+        $plain = trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags($part)));
+        if ($plain === '' || $plain === $normalized_tag) {
+            continue;
+        }
+
+        $plain_len = function_exists('mb_strlen') ? mb_strlen($plain) : strlen($plain);
+        $tag_len   = function_exists('mb_strlen') ? mb_strlen($normalized_tag) : strlen($normalized_tag);
+        $pos       = function_exists('mb_stripos')
+            ? mb_stripos($plain, $normalized_tag)
+            : stripos($plain, $normalized_tag);
+
+        if ($pos !== false && $plain_len <= $tag_len + 8) {
+            continue;
+        }
+        $kept[] = $part;
+    }
+
+    return akademiata_sanitize_promo_short_html(implode('<br>', $kept));
 }
 
 /**
@@ -619,12 +681,15 @@ function akademiata_render_offer_promo_info_panel() {
         if ($promo_id === '' || !in_array($promo_id, $selected, true)) {
             continue;
         }
+        $tag  = isset($promo['tag']) ? trim((string) $promo['tag']) : '';
+        $full = isset($promo['full']) ? akademiata_format_promo_display_html($promo['full']) : '';
+        $full = akademiata_strip_promo_tag_from_full($full, $tag);
         $items[] = array(
             'id'    => $promo_id,
             'name'  => isset($promo['name']) ? (string) $promo['name'] : $promo_id,
             'short' => isset($promo['short']) ? akademiata_get_promo_short_plain_text($promo['short'], 180) : '',
-            'full'  => isset($promo['full']) ? akademiata_format_promo_display_html($promo['full']) : '',
-            'tag'   => isset($promo['tag']) ? trim((string) $promo['tag']) : '',
+            'full'  => $full,
+            'tag'   => $tag,
         );
     }
 
