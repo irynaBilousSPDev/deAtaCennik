@@ -119,8 +119,16 @@ function openOfferDropdown(taxonomy, label) {
     }
 
     const resolvedLabel = label || taxonomy;
+    title.replaceChildren();
     if (taxonomy === 'promotions') {
-        title.innerHTML = `<span class="offer-mobile-dropdown__title-badge" aria-hidden="true">%</span>${resolvedLabel}`;
+        const badge = document.createElement('span');
+        badge.className = 'offer-mobile-dropdown__title-badge';
+        badge.setAttribute('aria-hidden', 'true');
+        badge.textContent = '%';
+        const text = document.createElement('span');
+        text.className = 'offer-mobile-dropdown__title-text';
+        text.textContent = resolvedLabel;
+        title.append(badge, text);
     } else {
         title.textContent = resolvedLabel;
     }
@@ -189,7 +197,7 @@ function openOfferDropdown(taxonomy, label) {
 
             content.appendChild(nameRow);
 
-            if (input.checked && shortText) {
+            if (shortText) {
                 const short = document.createElement('span');
                 short.className = 'offer-mobile-dropdown__option-short';
                 short.textContent = shortText;
@@ -198,7 +206,8 @@ function openOfferDropdown(taxonomy, label) {
 
             selectBtn.appendChild(content);
 
-            if (tagText) {
+            // Discount tag only when selected (unselected = title + short).
+            if (input.checked && tagText) {
                 const tag = document.createElement('span');
                 tag.className = 'offer-mobile-dropdown__option-tag';
                 tag.textContent = tagText;

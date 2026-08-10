@@ -604,12 +604,13 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                         <span class="filter-promo-card__surface">
                             <span class="filter-promo-card__chk" aria-hidden="true"></span>
                             <span class="filter-promo-card__info">
-                                <span class="filter-promo-card__name-row">
-                                    <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
-                                    <?php if ($promo_tag !== '') : ?>
-                                        <span class="filter-promo-card__tag"><?php echo esc_html($promo_tag); ?></span>
-                                    <?php endif; ?>
-                                </span>
+                                <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
+                                <?php if ($promo_short !== '') : ?>
+                                    <span class="filter-promo-card__short"><?php echo esc_html($promo_short); ?></span>
+                                <?php endif; ?>
+                                <?php if ($promo_tag !== '') : ?>
+                                    <span class="filter-promo-card__tag"><?php echo esc_html($promo_tag); ?></span>
+                                <?php endif; ?>
                             </span>
                         </span>
                     </label>
