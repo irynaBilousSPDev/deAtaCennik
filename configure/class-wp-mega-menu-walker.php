@@ -1,7 +1,7 @@
 <?php
 /**
  * Mega menu walker — columns + CPT specialty sublists (mobile accordion).
- * On mobile, Oferta is split into Warszawa / Wrocław (online offers in both).
+ * On mobile, Oferta is split into Warszawa / Wrocław / Online.
  */
 class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     private $depth0_open = false;
@@ -96,13 +96,13 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * Whether a specialty belongs in a city menu column.
-     * Online (PG/MBA/courses) appears in both cities for now.
+     * Whether a specialty belongs in a mobile Oferta column.
+     * Online-tagged offers → Online column only (not in city columns).
      * Bachelor/master without city → Warszawa.
      *
      * @param int    $post_id
      * @param string $post_type
-     * @param string $city_slug warszawa|wroclaw
+     * @param string $city_slug warszawa|wroclaw|online
      * @return bool
      */
     private function post_matches_city($post_id, $post_type, $city_slug) {
@@ -112,10 +112,18 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             $terms = array();
         }
 
+        $is_online = in_array('online', $terms, true);
+
+        if ($city_slug === 'online') {
+            return $is_online;
+        }
+
+        // City columns: campus only — never mix in online offers.
+        if ($is_online) {
+            return false;
+        }
+
         if ($tax === 'city_pg_mba') {
-            if (in_array('online', $terms, true)) {
-                return true;
-            }
             return in_array($city_slug, $terms, true);
         }
 
@@ -128,7 +136,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /**
      * @param string      $post_type
-     * @param string|null $city_slug warszawa|wroclaw|null (all)
+     * @param string|null $city_slug warszawa|wroclaw|online|null (all)
      * @return array<int, array{title:string,url:string,thumb:string,id:int}>
      */
     private function get_offer_submenu_links($post_type, $city_slug = null) {
@@ -226,6 +234,11 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         $subs       = $post_type ? $this->get_offer_submenu_links($post_type, $city_slug) : array();
         $has_sub    = $subs !== array();
 
+        // Online column: skip CPT parents with no online specialties.
+        if ($city_slug === 'online' && $post_type && !$has_sub) {
+            return '';
+        }
+
         $html = '<li class="mega-menu-item' . ($has_sub ? ' has-mega-sub' : '') . '">';
 
         if ($has_sub) {
@@ -288,7 +301,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * Desktop: one Oferta. Mobile: Oferta Warszawa + Oferta Wrocław.
+     * Desktop: one Oferta. Mobile: Oferta Warszawa + Wrocław + Online.
      *
      * @param object             $column_item
      * @param array<int, object> $children
@@ -309,7 +322,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         $html .= $this->render_offer_column(
             'mega-column mega-column--offer mega-column--offer-city',
             sprintf(
-                /* translators: %s: city name */
+                /* translators: %s: menu column title (e.g. Oferta) */
                 __('%s Warszawa', 'akademiata'),
                 $base
             ),
@@ -321,13 +334,25 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         $html .= $this->render_offer_column(
             'mega-column mega-column--offer mega-column--offer-city',
             sprintf(
-                /* translators: %s: city name */
+                /* translators: %s: menu column title (e.g. Oferta) */
                 __('%s Wrocław', 'akademiata'),
                 $base
             ),
             $desc,
             $children,
             'wroclaw'
+        );
+
+        $html .= $this->render_offer_column(
+            'mega-column mega-column--offer mega-column--offer-city',
+            sprintf(
+                /* translators: %s: menu column title (e.g. Oferta) */
+                __('%s Online', 'akademiata'),
+                $base
+            ),
+            $desc,
+            $children,
+            'online'
         );
 
         return $html;
