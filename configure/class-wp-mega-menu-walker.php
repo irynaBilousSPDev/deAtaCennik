@@ -303,13 +303,13 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * @return string
      */
     private function render_offer_columns($column_item, $children) {
-        $desc = $this->column_description($column_item);
         $base = (string) $column_item->title;
 
+        // Desktop + city columns: no subtitle. Online only.
         $html  = $this->render_offer_column(
             'mega-column mega-column--offer mega-column--offer-desktop',
             $base,
-            $desc,
+            '',
             $children,
             null
         );
@@ -321,7 +321,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 __('%s Warszawa', 'akademiata'),
                 $base
             ),
-            $desc,
+            '',
             $children,
             'warszawa'
         );
@@ -333,7 +333,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 __('%s Wrocław', 'akademiata'),
                 $base
             ),
-            $desc,
+            '',
             $children,
             'wroclaw'
         );
