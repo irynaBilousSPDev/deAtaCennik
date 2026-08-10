@@ -47,7 +47,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * @return string|null bachelor|master|postgraduate|mba|courses
      */
     private function resolve_offer_submenu_post_type($item) {
-        $offer_types = array('bachelor', 'master', 'postgraduate', 'mba', 'courses');
+        $offer_types = array('bachelor', 'master', 'postgraduate', 'mba', 'courses', 'exams');
 
         if (!empty($item->type) && $item->type === 'post_type_archive' && !empty($item->object)) {
             $object = (string) $item->object;
@@ -67,6 +67,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             'postgraduate' => array('studia-podyplomowe', 'postgraduate', 'post-graduate'),
             'mba'          => array('studia-mba', '/mba/', '/mba'),
             'courses'      => array('/kursy', '/courses'),
+            'exams'        => array('/egzaminy', '/exams'),
         );
 
         foreach ($patterns as $post_type => $needles) {
@@ -84,16 +85,23 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * City taxonomy for a CPT.
      *
      * @param string $post_type
-     * @return string city|city_pg_mba
+     * @return string city|city_pg_mba|exam_city
      */
     private function city_taxonomy_for_post_type($post_type) {
-        return in_array($post_type, array('bachelor', 'master'), true) ? 'city' : 'city_pg_mba';
+        if (in_array($post_type, array('bachelor', 'master'), true)) {
+            return 'city';
+        }
+        if ($post_type === 'exams') {
+            return 'exam_city';
+        }
+        return 'city_pg_mba';
     }
 
     /**
      * Whether a specialty belongs in a mobile Oferta column.
      * Online-tagged PG/MBA/courses → Online only.
      * Bachelor/master → Online weekend list only (not in city tabs).
+     * Exams → city tabs by exam_city (not Online).
      *
      * @param int    $post_id
      * @param string $post_type
@@ -103,6 +111,18 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     private function post_matches_city($post_id, $post_type, $city_slug) {
         if (in_array($post_type, array('bachelor', 'master'), true)) {
             return $city_slug === 'online';
+        }
+
+        // Exams are campus-only (Warszawa / Wrocław).
+        if ($post_type === 'exams') {
+            if ($city_slug === 'online') {
+                return false;
+            }
+            $terms = wp_get_post_terms($post_id, 'exam_city', array('fields' => 'slugs'));
+            if (is_wp_error($terms) || !is_array($terms)) {
+                $terms = array();
+            }
+            return in_array($city_slug, $terms, true);
         }
 
         $tax   = $this->city_taxonomy_for_post_type($post_type);
