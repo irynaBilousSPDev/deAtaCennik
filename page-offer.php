@@ -29,8 +29,10 @@ get_header();
 
         <?php get_template_part('partials/offer-mobile-toolbar'); ?>
 
-        <?php get_template_part('partials/tags_container'); ?>
-        <?php akademiata_render_offer_promo_info_panel(); ?>
+        <div class="offer-listing-selection">
+            <?php get_template_part('partials/tags_container'); ?>
+            <?php akademiata_render_offer_promo_info_panel(); ?>
+        </div>
 
         <div id="ajax-loader" style="display: none;">
             <div class="spinner"></div>

@@ -615,50 +615,25 @@ $om-filter-card-pad: 16px;
           }
 
           .city_block {
-            position: absolute;
-            top: 0 !important;
-            right: 0 !important;
-            left: auto !important;
-            bottom: auto;
-            z-index: 4;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            max-width: calc(100% - 8px);
-            padding: 4px 8px !important;
-            margin: 0;
-            border: 1px solid #c8c8c8;
-            border-radius: 0 0 0 6px;
-            background-color: #f3f3f3;
-            box-shadow: none;
-
-            span {
-              font-size: 1.1rem;
-              font-weight: vars.$weight-bold;
-              color: #000;
-              line-height: 1.2;
-            }
-
-            .location_icon {
-              width: 10px;
-              height: auto;
-              flex-shrink: 0;
-              display: block;
-            }
-
-            &--inline {
+            &--overlay {
               display: none !important;
+            }
+
+            // Keep generic .city_block rules from colliding with body inline chip
+            &--inline {
+              display: none; // overridden in .card_post_body below
             }
           }
 
           .ranking_icon {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0 !important;
+            left: 0 !important;
             z-index: 3;
-            max-width: 42px !important;
+            max-width: 52px !important;
             width: auto;
             height: auto;
+            margin: 0;
             pointer-events: none;
           }
 
@@ -671,6 +646,41 @@ $om-filter-card-pad: 16px;
             font-size: 1rem !important;
             line-height: 1.1;
             max-width: 80px;
+          }
+        }
+
+        .card_post_body {
+          .city_block--inline {
+            position: static !important;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 5px;
+            max-width: 100%;
+            margin: 0 0 6px;
+            padding: 3px 8px !important;
+            border: none;
+            border-radius: 100px;
+            background: #f3f3f3;
+            box-shadow: none;
+            top: auto !important;
+            right: auto !important;
+            left: auto !important;
+            bottom: auto !important;
+
+            span {
+              font-size: 1.15rem;
+              font-weight: vars.$weight-bold;
+              color: #000;
+              line-height: 1.2;
+              white-space: nowrap;
+            }
+
+            .location_icon {
+              width: 10px;
+              height: auto;
+              flex-shrink: 0;
+              display: block;
+            }
           }
         }
       }
@@ -707,7 +717,10 @@ $om-filter-card-pad: 16px;
           }
 
           .ranking_icon {
-            max-width: 44px !important;
+            top: 0 !important;
+            left: 0 !important;
+            max-width: 56px !important;
+            margin: 0;
           }
         }
 
@@ -778,14 +791,11 @@ $om-filter-card-pad: 16px;
             min-height: 100%;
           }
 
-          .city_block--overlay {
-            display: none !important;
-          }
-
           .ranking_icon {
-            max-width: 32px !important;
-            top: 4px;
-            left: 4px;
+            top: 0 !important;
+            left: 0 !important;
+            max-width: 52px !important;
+            margin: 0;
           }
 
           .offer-favorite-btn {
@@ -803,42 +813,6 @@ $om-filter-card-pad: 16px;
           flex-direction: column;
           justify-content: space-between;
           padding: $om-card-pad 12px $om-card-pad 12px !important;
-
-          .city_block--inline {
-            position: static !important;
-            display: inline-flex !important;
-            align-items: center;
-            gap: 5px;
-            max-width: 100%;
-            margin: 0 0 6px;
-            padding: 3px 8px !important;
-            border: none;
-            border-radius: 100px;
-            background: #f3f3f3;
-            box-shadow: none;
-            top: auto !important;
-            right: auto !important;
-            left: auto !important;
-            bottom: auto !important;
-
-            span {
-              font-size: 1.15rem;
-              font-weight: vars.$weight-bold;
-              color: #000;
-              line-height: 1.2;
-              max-width: none;
-              overflow: visible;
-              text-overflow: unset;
-              white-space: nowrap;
-            }
-
-            .location_icon {
-              width: 10px;
-              height: auto;
-              flex-shrink: 0;
-              display: block;
-            }
-          }
 
           h2 {
             font-size: 1.6rem;
@@ -1410,8 +1384,8 @@ $om-filter-card-pad: 16px;
         box-shadow: none;
 
         &.is-selected {
-          border-color: #eee;
-          background: vars.$white;
+          border-color: vars.$primary;
+          background: #fffaf7;
           color: vars.$black;
           box-shadow: none;
 
@@ -1425,6 +1399,21 @@ $om-filter-card-pad: 16px;
 
           .offer-mobile-dropdown__option-short {
             color: #00a651;
+          }
+
+          .offer-mobile-dropdown__promo-chk {
+            background: vars.$primary;
+            border-color: vars.$primary;
+
+            &::after {
+              content: '';
+              display: block;
+              width: 5px;
+              height: 9px;
+              border: solid vars.$white;
+              border-width: 0 2px 2px 0;
+              transform: rotate(45deg);
+            }
           }
         }
 
@@ -1552,6 +1541,20 @@ $om-filter-card-pad: 16px;
         outline: none;
         box-shadow: none;
       }
+    }
+
+    &__promo-chk {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      border: 2px solid vars.$primary;
+      border-radius: 4px;
+      background: vars.$white;
+      box-sizing: border-box;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     &__promo-arr {

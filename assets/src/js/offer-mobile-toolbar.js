@@ -177,6 +177,11 @@ function openOfferDropdown(taxonomy, label) {
             selectBtn.type = 'button';
             selectBtn.className = 'offer-mobile-dropdown__promo-select';
 
+            const chk = document.createElement('span');
+            chk.className = 'offer-mobile-dropdown__promo-chk';
+            chk.setAttribute('aria-hidden', 'true');
+            selectBtn.appendChild(chk);
+
             const content = document.createElement('span');
             content.className = 'offer-mobile-dropdown__option-content offer-mobile-dropdown__option-content--promo';
 

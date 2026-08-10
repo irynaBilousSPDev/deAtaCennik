@@ -345,7 +345,7 @@
   flex-wrap: wrap;
   gap: 10px;
   margin: 0 0 1.25rem;
-  align-items: stretch;
+  align-items: flex-start;
 
   &.is-empty {
     display: none;
@@ -612,6 +612,18 @@
 }
 
 // ===== TAGS =====
+.offer-listing-selection {
+  margin-bottom: 1.25rem;
+
+  .tags_container {
+    margin-bottom: 10px;
+  }
+
+  #offer-promo-info {
+    margin-bottom: 0;
+  }
+}
+
 .tags_container {
   display: none;
   margin-bottom: 20px;

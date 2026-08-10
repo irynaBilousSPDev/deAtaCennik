@@ -348,6 +348,18 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     let openPromoInfoIds = {};
 
+    function placePromoInfoAfterTags() {
+        // Desktop: keep promo details immediately under the active filter tags.
+        if (window.matchMedia('(max-width: 990px)').matches) {
+            return;
+        }
+        const $tags = $('.offer_content #tags-container, .offer-listing-selection #tags-container').first();
+        const $promo = $('#offer-promo-info');
+        if ($tags.length && $promo.length && !$tags.next().is($promo)) {
+            $promo.insertAfter($tags);
+        }
+    }
+
     function updatePromoInfoPanel() {
         const $panel = $('#offer-promo-info');
         if (!$panel.length) {
@@ -364,6 +376,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         if (!selected.length) {
             openPromoInfoIds = {};
             $panel.addClass('is-empty');
+            placePromoInfoAfterTags();
             return;
         }
 
@@ -431,6 +444,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         });
 
         $panel.removeClass('is-empty');
+        placePromoInfoAfterTags();
     }
 
     function updatePromoStackStates() {
