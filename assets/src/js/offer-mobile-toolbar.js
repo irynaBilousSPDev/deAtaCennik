@@ -159,7 +159,7 @@ function openOfferDropdown(taxonomy, label) {
         if (taxonomy === 'promotions' && sourceLabel) {
             const isDisabled = sourceLabel.classList.contains('is-disabled');
             const nameEl = sourceLabel.querySelector('.filter-promo-card__name');
-            const shortEl = sourceLabel.querySelector('.filter-promo-card__short');
+            const shortText = (input.getAttribute('data-promo-short') || '').trim();
             const tagEl = sourceLabel.querySelector('.filter-promo-card__tag');
             const activeLabel = (window.akademiataOffer && akademiataOffer.promoActive) || 'Aktywna';
             const unavailableLabel = (window.akademiataOffer && akademiataOffer.promoUnavailable) || 'Niedostępna';
@@ -193,10 +193,11 @@ function openOfferDropdown(taxonomy, label) {
 
             content.appendChild(nameRow);
 
-            if (shortEl && shortEl.textContent.trim()) {
+            // Mobile list stays compact — details live in offer-promo-info after selection.
+            if (shortText && input.checked) {
                 const short = document.createElement('span');
                 short.className = 'offer-mobile-dropdown__option-short';
-                short.textContent = shortEl.textContent.trim();
+                short.textContent = shortText;
                 content.appendChild(short);
             }
 

@@ -1939,6 +1939,12 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Недоступна',
                 'ru' => 'Недоступна',
             ),
+            'offer_promo_expand' => array(
+                'pl' => 'Pokaż szczegóły promocji',
+                'en' => 'Show promotion details',
+                'uk' => 'Показати деталі акції',
+                'ru' => 'Показать детали акции',
+            ),
             'offer_card_degree' => array(
                 'pl' => 'Rodzaj studiów',
                 'en' => 'Type of studies',

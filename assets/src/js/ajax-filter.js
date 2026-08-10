@@ -346,39 +346,85 @@ import { initOfferViewToggle } from './offer-view-toggle';
         });
     }
 
+    let openPromoInfoIds = {};
+
     function updatePromoInfoPanel() {
         const $panel = $('#offer-promo-info');
         if (!$panel.length) {
             return;
         }
 
+        $panel.find('.offer-promo-info__item.is-open').each(function () {
+            openPromoInfoIds[$(this).attr('data-promo-id')] = true;
+        });
+
         $panel.empty();
 
         const selected = form.find('input[name="promotions[]"]:checked').toArray();
         if (!selected.length) {
+            openPromoInfoIds = {};
             $panel.addClass('is-empty');
             return;
         }
 
+        const expandLabel = (window.akademiataOffer && akademiataOffer.promoExpand) || 'Pokaż szczegóły promocji';
+
         selected.forEach((input) => {
             const $input = $(input);
-            const name = ($input.attr('data-promo-name') || $input.attr('data-tag-label') || $input.val() || '').trim();
+            const promoId = $input.val();
+            const name = ($input.attr('data-promo-name') || $input.attr('data-tag-label') || promoId || '').trim();
             const short = ($input.attr('data-promo-short') || '').trim();
+            const full = ($input.attr('data-promo-full') || '').trim();
             const tag = ($input.attr('data-promo-tag') || '').trim();
+            const hasFull = full !== '';
+            const isOpen = !!(hasFull && openPromoInfoIds[promoId]);
 
             const $item = $('<div>')
                 .addClass('offer-promo-info__item')
-                .attr('data-promo-id', $input.val());
+                .attr('data-promo-id', promoId);
 
-            const $head = $('<div>').addClass('offer-promo-info__head');
-            $head.append($('<strong>').addClass('offer-promo-info__name').text(name));
-            if (tag) {
-                $head.append($('<span>').addClass('offer-promo-info__tag').text(tag));
+            if (!hasFull) {
+                $item.addClass('offer-promo-info__item--no-body');
             }
-            $item.append($head);
+            if (isOpen) {
+                $item.addClass('is-open');
+            }
 
+            const $toggle = $('<button>')
+                .attr({
+                    type: 'button',
+                    class: 'offer-promo-info__toggle',
+                    'aria-expanded': isOpen ? 'true' : 'false',
+                    'aria-label': expandLabel,
+                });
+
+            if (!hasFull) {
+                $toggle.prop('disabled', true);
+            }
+
+            const $main = $('<span>').addClass('offer-promo-info__main');
+            $main.append($('<strong>').addClass('offer-promo-info__name').text(name));
             if (short) {
-                $item.append($('<p>').addClass('offer-promo-info__short').text(short));
+                $main.append($('<span>').addClass('offer-promo-info__short').text(short));
+            }
+            $toggle.append($main);
+
+            if (tag) {
+                $toggle.append($('<span>').addClass('offer-promo-info__tag').text(tag));
+            }
+
+            if (hasFull) {
+                $toggle.append($('<span>').addClass('offer-promo-info__arr').attr('aria-hidden', 'true').text('▾'));
+            }
+
+            $item.append($toggle);
+
+            if (hasFull) {
+                const $body = $('<div>').addClass('offer-promo-info__body').html(full);
+                if (!isOpen) {
+                    $body.attr('hidden', true);
+                }
+                $item.append($body);
             }
 
             $panel.append($item);
@@ -489,6 +535,30 @@ import { initOfferViewToggle } from './offer-view-toggle';
             }
         }
     }
+
+    $(document).on('click', '#offer-promo-info .offer-promo-info__toggle', function (event) {
+        event.preventDefault();
+        const $btn = $(this);
+        if ($btn.prop('disabled')) {
+            return;
+        }
+
+        const $item = $btn.closest('.offer-promo-info__item');
+        const $body = $item.find('.offer-promo-info__body');
+        const willOpen = !$item.hasClass('is-open');
+        const promoId = $item.attr('data-promo-id');
+
+        $item.toggleClass('is-open', willOpen);
+        $btn.attr('aria-expanded', willOpen ? 'true' : 'false');
+
+        if (willOpen) {
+            $body.removeAttr('hidden');
+            openPromoInfoIds[promoId] = true;
+        } else {
+            $body.attr('hidden', true);
+            delete openPromoInfoIds[promoId];
+        }
+    });
 
     form.on('change', 'input[type="checkbox"]', function () {
         const checkbox = $(this);
