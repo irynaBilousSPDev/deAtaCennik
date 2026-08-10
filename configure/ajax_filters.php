@@ -92,7 +92,7 @@ function akademiata_parse_query_string_multi(array $allowed_keys) {
  */
 function akademiata_get_selected_filter_terms_from_request($taxonomy, array $allowed_keys = array()) {
     if (empty($allowed_keys)) {
-        $allowed_keys = akademiata_get_offer_listing_taxonomies();
+        $allowed_keys = akademiata_get_offer_listing_filter_keys();
     }
 
     static $cache = array();
@@ -119,7 +119,7 @@ function akademiata_parse_offer_filter_form_data($raw = null) {
         $form_data = is_array($form_data) ? $form_data : array();
     } else {
         // Prefer QUERY_STRING so repeated keys survive (unlike $_GET).
-        $form_data = akademiata_parse_query_string_multi(akademiata_get_offer_listing_taxonomies());
+        $form_data = akademiata_parse_query_string_multi(akademiata_get_offer_listing_filter_keys());
     }
 
     $parsed = array();
@@ -138,6 +138,11 @@ function akademiata_parse_offer_filter_form_data($raw = null) {
         if (!empty($terms)) {
             $parsed[ $taxonomy ] = $terms;
         }
+    }
+
+    $promo_ids = akademiata_parse_selected_promotion_ids(is_array($form_data) ? $form_data : array());
+    if ($promo_ids !== array()) {
+        $parsed['promotions'] = $promo_ids;
     }
 
     return $parsed;
@@ -166,17 +171,36 @@ function akademiata_get_offer_listing_query_args($filter_action, array $form_dat
         'lang'           => apply_filters('wpml_current_language', null),
     );
 
+    $promo_ids = !empty($form_data['promotions']) ? (array) $form_data['promotions'] : array();
+    $base_form = $form_data;
+    unset($base_form['promotions']);
+
+    if ($promo_ids !== array()) {
+        $eligible_ids = akademiata_filter_offer_ids_by_promotions(
+            akademiata_get_offer_listing_candidate_ids($filter_action, $base_form),
+            $promo_ids
+        );
+
+        if ($eligible_ids === array()) {
+            $args['post__in'] = array(0);
+        } else {
+            $args['post__in'] = $eligible_ids;
+        }
+
+        return $args;
+    }
+
     $tax_query = array('relation' => 'AND');
 
     foreach (akademiata_get_offer_listing_taxonomies() as $taxonomy) {
-        if (empty($form_data[ $taxonomy ])) {
+        if (empty($base_form[ $taxonomy ])) {
             continue;
         }
 
         $tax_query[] = array(
             'taxonomy' => $taxonomy,
             'field'    => 'slug',
-            'terms'    => $form_data[ $taxonomy ],
+            'terms'    => $base_form[ $taxonomy ],
             'operator' => 'IN',
         );
     }

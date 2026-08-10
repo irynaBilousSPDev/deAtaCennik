@@ -355,6 +355,27 @@
         align-items: center;
         cursor: pointer;
 
+        &.filter-promo-label {
+          align-items: flex-start;
+
+          .filter-promo-label__content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            flex: 1;
+            min-width: 0;
+          }
+
+          .filter-promo-label__name {
+            line-height: 1.35;
+          }
+
+          .filter-promo-label__short {
+            @include mixins.font-style(0.875rem, 1.35, vars.$weight-regular);
+            color: vars.$color-gray;
+          }
+        }
+
         input[type="checkbox"] {
           appearance: none;
           -webkit-appearance: none;

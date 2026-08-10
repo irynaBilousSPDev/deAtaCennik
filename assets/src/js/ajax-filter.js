@@ -284,6 +284,20 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
     }
 
+    function getCheckboxTagLabel(checkbox) {
+        const custom = checkbox.attr('data-tag-label');
+        if (custom) {
+            return custom.trim();
+        }
+
+        const nameEl = checkbox.closest('label').find('.filter-promo-label__name').first();
+        if (nameEl.length) {
+            return nameEl.text().trim();
+        }
+
+        return checkbox.closest('label').text().trim();
+    }
+
     function removeTag(tagValue) {
         $('.selected_tags_container').find(`[data-value="${tagValue}"]`).remove();
 
@@ -312,8 +326,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
             const checkbox = form.find(`input[name="${key}[]"][value="${value}"]`);
             if (checkbox.length) {
                 checkbox.prop('checked', true);
-                const label = checkbox.closest('label').text().trim();
-                addTag(label, value);
+                addTag(getCheckboxTagLabel(checkbox), value);
             }
         });
 
@@ -335,7 +348,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     form.on('change', 'input[type="checkbox"]', function () {
         const checkbox = $(this);
-        const label = checkbox.closest('label').text().trim();
+        const label = getCheckboxTagLabel(checkbox);
         const tagValue = checkbox.val();
 
         if (checkbox.is(':checked')) {

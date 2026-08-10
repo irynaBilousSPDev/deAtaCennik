@@ -17,6 +17,8 @@ include('configure/offer-pricing.php');
 
 include('configure/ajax_filters.php');
 
+include('configure/offer-promotions-filter.php');
+
 // CONFIG
 
 include('configure/configure.php');

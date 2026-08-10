@@ -1921,6 +1921,12 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Форма навчання',
                 'ru' => 'Форма обучения',
             ),
+            'offer_filter_promotions' => array(
+                'pl' => 'Promocje',
+                'en' => 'Promotions',
+                'uk' => 'Акції',
+                'ru' => 'Акции',
+            ),
             'offer_card_degree' => array(
                 'pl' => 'Rodzaj studiów',
                 'en' => 'Type of studies',
