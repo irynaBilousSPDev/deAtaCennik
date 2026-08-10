@@ -627,15 +627,14 @@ $om-filter-card-pad: 16px;
           }
 
           .ranking_icon {
-            position: absolute;
-            top: 0 !important;
-            left: 0 !important;
-            z-index: 3;
-            max-width: 52px !important;
-            width: auto;
-            height: auto;
-            margin: 0;
-            pointer-events: none;
+            // Default mobile (list / 1-col): ranking in body, not on photo
+            &--overlay {
+              display: none !important;
+            }
+
+            &--inline {
+              display: none; // shown in .card_post_body below
+            }
           }
 
           .label-new,
@@ -651,6 +650,17 @@ $om-filter-card-pad: 16px;
         }
 
         .card_post_body {
+          .ranking_icon--inline {
+            position: static !important;
+            display: block !important;
+            max-width: 88px !important;
+            width: auto;
+            height: auto;
+            margin: 0 0 8px auto;
+            object-fit: contain;
+            pointer-events: none;
+          }
+
           .city_block--inline {
             position: static !important;
             display: inline-flex !important;
@@ -694,7 +704,21 @@ $om-filter-card-pad: 16px;
           padding: 0 !important;
         }
 
-        // 2 cards / row: city on photo next to heart
+        // 2 cards / row: ranking + city on photo
+        .card_post_image .ranking_icon--overlay {
+          display: block !important;
+          position: absolute;
+          top: 0 !important;
+          left: 0 !important;
+          z-index: 3;
+          max-width: 56px !important;
+          margin: 0;
+        }
+
+        .card_post_body .ranking_icon--inline {
+          display: none !important;
+        }
+
         .card_post_image .city_block--overlay {
           display: inline-flex !important;
           top: auto !important;
@@ -726,9 +750,14 @@ $om-filter-card-pad: 16px;
             max-width: 100% !important;
           }
 
-          // 1 card / row: city before title again
+          // 1 card / row: ranking + city in body again
+          .card_post_image .ranking_icon--overlay,
           .card_post_image .city_block--overlay {
             display: none !important;
+          }
+
+          .card_post_body .ranking_icon--inline {
+            display: block !important;
           }
 
           .card_post_body .city_block--inline {
@@ -752,7 +781,7 @@ $om-filter-card-pad: 16px;
             min-height: 0 !important;
           }
 
-          .ranking_icon {
+          .ranking_icon--overlay {
             top: 0 !important;
             left: 0 !important;
             max-width: 56px !important;
@@ -827,11 +856,8 @@ $om-filter-card-pad: 16px;
             min-height: 100%;
           }
 
-          .ranking_icon {
-            top: 0 !important;
-            left: 0 !important;
-            max-width: 52px !important;
-            margin: 0;
+          .ranking_icon--overlay {
+            display: none !important;
           }
 
           .offer-favorite-btn {
@@ -853,6 +879,12 @@ $om-filter-card-pad: 16px;
           flex-direction: column;
           justify-content: space-between;
           padding: $om-card-pad 12px $om-card-pad 12px !important;
+
+          .ranking_icon--inline {
+            display: block !important;
+            max-width: 96px !important;
+            margin: 0 0 8px auto;
+          }
 
           .city_block--inline {
             display: inline-flex !important;

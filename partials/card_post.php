@@ -21,13 +21,13 @@
             }
 
             // Show ranking icon only if neither label is selected
-            if (
+            $show_ranking_icon = (
                 empty($etykieta_studia) ||
-                (!in_array('coming_soon_icon', (array)$etykieta_studia) && !in_array('new_icon', (array)$etykieta_studia))
-            ) {
-                if (!empty($ranking_icon_url)) {
-                    echo '<img class="ranking_icon" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')) . '">';
-                }
+                (!in_array('coming_soon_icon', (array) $etykieta_studia) && !in_array('new_icon', (array) $etykieta_studia))
+            ) && !empty($ranking_icon_url);
+
+            if ($show_ranking_icon) {
+                echo '<img class="ranking_icon ranking_icon--overlay" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')) . '">';
             }
 
             ?>
@@ -83,6 +83,12 @@
         ?>
         <div class="card_post_body">
             <div>
+                <?php if (!empty($show_ranking_icon)) : ?>
+                    <img class="ranking_icon ranking_icon--inline"
+                         src="<?php echo esc_url($ranking_icon_url); ?>"
+                         alt=""
+                         aria-hidden="true">
+                <?php endif; ?>
                 <?php if ($city_name) : ?>
                     <div class="city_block city_block--inline">
                         <img class="location_icon"
