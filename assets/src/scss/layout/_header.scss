@@ -753,32 +753,51 @@ header {
 
 @media (max-width: 991px) {
   .mega-menu {
-    padding: 16px 0 0;
+    display: none;
+    padding: 0;
     background: #fff;
+    overflow: hidden; // nav scrolls; black footer stays at bottom
+
+    &.open {
+      display: flex !important;
+      flex-direction: column;
+    }
 
     .container {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      height: 100%;
+      max-height: 100%;
       padding-left: 1.6rem !important;
       padding-right: 1.6rem !important;
       max-width: none;
-      height: auto;
-      min-height: 100%;
     }
 
     &__inner {
-      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+      min-height: 0;
+      height: 100%;
       justify-content: flex-start;
       padding-bottom: 0;
     }
 
     &__nav {
-      flex: 0 0 auto;
-      padding-bottom: 8px;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px 0 16px;
     }
 
     .mega-menu-columns {
       flex-direction: column;
-      gap: 12px;
-      padding-bottom: 8px;
+      gap: 0;
+      padding-bottom: 4px;
     }
 
     // —— Shared mobile accordion ——
@@ -810,21 +829,30 @@ header {
 
     .mega_menu_title {
       margin: 0;
-      padding: 16px 0;
+      padding: 18px 0;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
-      align-items: center;
+      align-items: flex-start;
 
       &-text {
         font-size: 1.8rem;
         font-weight: vars.$weight-bold;
-        line-height: 1.2;
+        line-height: 1.25;
         color: #111;
+      }
+
+      &-desc {
+        margin-top: 4px;
+        font-size: 1.3rem;
+        font-weight: vars.$weight-regular;
+        line-height: 1.35;
+        color: #8a8a8a;
       }
 
       &-arr {
         display: inline-block;
-        margin-top: 0;
+        margin-top: 2px;
+        flex-shrink: 0;
       }
     }
 
@@ -993,10 +1021,10 @@ header {
       }
     }
 
-    // —— Other columns: list rows + circular toggles ——
+    // —— Other columns: dividers + circular toggles (mockup) ——
     .mega-column:not(.mega-column--offer) {
       margin: 0;
-      padding: 0 4px;
+      padding: 0;
       border-bottom: 1px solid #e8e8e8;
       background: transparent;
 
@@ -1012,36 +1040,50 @@ header {
         }
       }
 
+      &.is-open > .mega_menu_title {
+        padding-bottom: 10px;
+      }
+
       .mega-column__list {
-        padding: 0 0 12px;
+        padding: 0 0 14px;
       }
 
+      // Child links under Kandydat / Student… — lighter than section titles
       .mega-column__list > .mega-menu-item {
-        padding: 8px 0;
+        padding: 9px 0;
+
+        > a {
+          font-size: 1.5rem;
+          font-weight: vars.$weight-regular;
+          color: #222;
+          line-height: 1.35;
+        }
       }
 
-      // Nested WP children under Kandydat etc.
       .mega-menu-item .mega-menu-sub,
       .mega-column__list .mega-menu-sub {
-        margin: 6px 0 10px;
-        padding: 4px 0 4px 12px;
-        padding-inline-start: 12px;
+        margin: 4px 0 8px;
+        padding: 0;
+        padding-inline-start: 0;
         border-left: none;
       }
     }
 
-    // Bottom tagline — after menu, fully scrollable (not clipped)
+    // Black bar pinned to bottom of open menu panel
     .mega-menu__footer.description.mobile_visible {
       display: block !important;
       flex: 0 0 auto;
+      position: relative;
+      z-index: 2;
       width: calc(100% + 3.2rem);
-      margin: 20px -1.6rem 0 !important;
-      padding: 16px 1.6rem calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+      margin: 0 -1.6rem 0 !important;
+      padding: 14px 1.6rem calc(14px + env(safe-area-inset-bottom, 0px)) !important;
       background: #1a1a1a;
       color: #fff;
       font-size: 1.15rem;
       line-height: 1.35;
       text-align: center;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
 
       strong {
         color: #fff;

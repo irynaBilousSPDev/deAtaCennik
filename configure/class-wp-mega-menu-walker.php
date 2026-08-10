@@ -17,6 +17,25 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /**
      * @param object $item
+     * @return string
+     */
+    private function column_description($item) {
+        $desc = !empty($item->description) ? trim(wp_strip_all_tags((string) $item->description)) : '';
+        if ($desc !== '') {
+            return $desc;
+        }
+
+        // Mockup fallback when WP description is empty
+        $title = isset($item->title) ? mb_strtolower((string) $item->title) : '';
+        if ($title !== '' && (strpos($title, 'kandydat') !== false || strpos($title, 'candidate') !== false)) {
+            return __('Rekrutacja, wymagane dokumenty, terminy.', 'akademiata');
+        }
+
+        return '';
+    }
+
+    /**
+     * @param object $item
      * @return bool
      */
     private function is_offer_column($item) {
@@ -276,7 +295,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * @return string
      */
     private function render_offer_columns($column_item, $children) {
-        $desc = !empty($column_item->description) ? trim(wp_strip_all_tags((string) $column_item->description)) : '';
+        $desc = $this->column_description($column_item);
         $base = (string) $column_item->title;
 
         $html  = $this->render_offer_column(
@@ -342,7 +361,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 return;
             }
 
-            $desc = !empty($item->description) ? trim(wp_strip_all_tags((string) $item->description)) : '';
+            $desc = $this->column_description($item);
 
             $output .= '<div class="mega-column">';
             $output .= '<button type="button" class="mega_menu_title" aria-expanded="false">';
