@@ -1,9 +1,22 @@
 <?php
 /**
- * Mega menu walker — columns + optional CPT specialty sublists under Oferta.
+ * Mega menu walker — columns + CPT specialty sublists (mobile accordion).
  */
 class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     private $depth0_open = false;
+
+    /**
+     * @param object $item
+     * @return bool
+     */
+    private function is_offer_column($item) {
+        $title = isset($item->title) ? mb_strtolower((string) $item->title) : '';
+        if ($title === '') {
+            return false;
+        }
+
+        return (strpos($title, 'oferta') !== false || strpos($title, 'offer') !== false);
+    }
 
     /**
      * Map a depth-1 menu item to a CPT that should get an auto submenu.
@@ -46,8 +59,6 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * Published offer specialties for mobile mega submenu (title, url, thumb).
-     *
      * @param string $post_type
      * @return array<int, array{title:string,url:string,thumb:string}>
      */
@@ -107,9 +118,18 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     public function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
         if ($depth === 0) {
-            $output .= '<div class="mega-column">';
+            $is_offer = $this->is_offer_column($item);
+            $classes  = 'mega-column' . ($is_offer ? ' mega-column--offer' : '');
+            $desc     = !empty($item->description) ? trim(wp_strip_all_tags((string) $item->description)) : '';
+
+            $output .= '<div class="' . esc_attr($classes) . '">';
             $output .= '<button type="button" class="mega_menu_title" aria-expanded="false">';
+            $output .= '<span class="mega_menu_title-main">';
             $output .= '<span class="mega_menu_title-text">' . esc_html($item->title) . '</span>';
+            if ($desc !== '') {
+                $output .= '<span class="mega_menu_title-desc">' . esc_html($desc) . '</span>';
+            }
+            $output .= '</span>';
             $output .= '<span class="mega_menu_title-arr" aria-hidden="true"></span>';
             $output .= '</button>';
             $output .= '<ul class="mega-column__list">';

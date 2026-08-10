@@ -1,42 +1,35 @@
 <div class="card_post_item" data-post-id="<?php echo esc_attr((string) $post->ID); ?>" data-post-type="<?php echo esc_attr(get_post_type($post)); ?>">
 
     <div class="card_post_wrapper">
+        <?php
+        $terms_by_tax = akademiata_get_offer_terms($post->ID);
+        $city_terms = !empty($terms_by_tax['city']) ? $terms_by_tax['city'] : array();
+        $ranking_icon_url = akademiata_get_offer_ranking_icon_url($post->ID);
+        $etykieta_studia = get_field('etykieta_studia', get_the_ID());
+
+        $show_ranking_icon = (
+            empty($etykieta_studia) ||
+            (!in_array('coming_soon_icon', (array) $etykieta_studia) && !in_array('new_icon', (array) $etykieta_studia))
+        ) && !empty($ranking_icon_url);
+
+        // On wrapper so list view can pin to card top-right (flush), not over the photo.
+        if ($show_ranking_icon) {
+            echo '<img class="ranking_icon ranking_icon--overlay" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')) . '">';
+        }
+        ?>
         <div class="card_post_image">
             <?php
-            $terms_by_tax = akademiata_get_offer_terms($post->ID);
-            $city_terms = !empty($terms_by_tax['city']) ? $terms_by_tax['city'] : array();
-            $ranking_icon_url = akademiata_get_offer_ranking_icon_url($post->ID);
-
-            //            etykieta_studia
-            $etykieta_studia = get_field('etykieta_studia', get_the_ID());
-
-            // Show "wkrótce" label
-            if (!empty($etykieta_studia) && in_array('coming_soon_icon', (array)$etykieta_studia)) {
+            if (!empty($etykieta_studia) && in_array('coming_soon_icon', (array) $etykieta_studia)) {
                 echo '<span class="label-coming-soon">' . esc_html(akademiata_get_theme_lang_string('offer_label_coming_soon')) . '</span>';
             }
 
-            // Show "nowość" label
-            if (!empty($etykieta_studia) && in_array('new_icon', (array)$etykieta_studia)) {
+            if (!empty($etykieta_studia) && in_array('new_icon', (array) $etykieta_studia)) {
                 echo '<span class="label-new">' . esc_html(akademiata_get_theme_lang_string('offer_label_new')) . '</span>';
             }
 
-            // Show ranking icon only if neither label is selected
-            $show_ranking_icon = (
-                empty($etykieta_studia) ||
-                (!in_array('coming_soon_icon', (array) $etykieta_studia) && !in_array('new_icon', (array) $etykieta_studia))
-            ) && !empty($ranking_icon_url);
-
-            if ($show_ranking_icon) {
-                echo '<img class="ranking_icon ranking_icon--overlay" src="' . esc_url($ranking_icon_url) . '" alt="' . esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')) . '">';
-            }
-
-            ?>
-
-            <?php
             $city_name = '';
-
             if (!is_wp_error($city_terms) && !empty($city_terms)) {
-                $city_name = esc_html($city_terms[0]->name); // Get first city name
+                $city_name = esc_html($city_terms[0]->name);
             }
             if ($city_name) : ?>
                 <div class="city_block city_block--overlay">
