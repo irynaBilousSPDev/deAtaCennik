@@ -1113,11 +1113,7 @@ $om-filter-card-pad: 16px;
               padding: 2px $om-filter-card-pad $om-filter-card-pad;
 
               &.filter-promo-cards {
-                gap: 10px;
-              }
-
-              .filter-promo-card input[type="checkbox"] {
-                display: none !important;
+                gap: 16px;
               }
 
               label {

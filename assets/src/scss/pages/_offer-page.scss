@@ -331,113 +331,12 @@
   max-width: 100%;
 }
 
+// Same layout as other taxonomy checkboxes (no custom card / fake checkbox).
 .filter-promo-card {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin-bottom: 1rem !important;
-  cursor: pointer;
-  box-sizing: border-box;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-
-  &:focus,
-  &:focus-visible {
-    outline: none;
-  }
-
-  &__input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  // Match plain taxonomy checkboxes — no card chrome.
-  &__surface {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &:hover &__surface {
-    border: none;
-    background: transparent;
-  }
-
-  &__input:checked + &__surface {
-    border: none;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  &__chk {
-    width: 20px;
-    height: 20px;
-    margin-top: 0;
-    border-radius: 4px;
-    border: 2px solid vars.$black;
-    background: vars.$white;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s ease;
-  }
-
-  &:hover &__chk {
-    border-color: vars.$black;
-  }
-
-  &__input:checked + &__surface &__chk {
-    background: vars.$white;
-    border-color: vars.$black;
-
-    &::after {
-      content: '';
-      display: block;
-      width: 7px;
-      height: 12px;
-      border: solid vars.$black;
-      border-width: 0 3px 3px 0;
-      transform: rotate(45deg) translate(-1px, -1px);
-    }
-  }
-
-  &__info {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: block;
-  }
-
-  &__name {
-    display: block;
-    font-size: vars.$font-size-default;
-    font-weight: vars.$weight-semi-regular;
-    line-height: 24px;
-    color: vars.$black;
-    word-break: break-word;
-  }
-
-  &__short,
-  &__tag {
-    display: none;
-  }
-
   &.is-disabled {
     cursor: not-allowed;
     opacity: 0.42;
-
-    .filter-promo-card__surface {
-      pointer-events: none;
-    }
+    pointer-events: none;
   }
 }
 
@@ -682,13 +581,9 @@
           }
         }
 
-        // Promo cards use custom checkbox — skip default label styles.
-        .filter-promo-card {
-          align-items: stretch;
-
-          input[type="checkbox"] {
-            display: none;
-          }
+        // Promo filters use the same checkbox label layout as other taxonomies.
+        &.filter-promo-card {
+          align-items: center;
         }
 
         input[type="checkbox"] {
