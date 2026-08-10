@@ -28,9 +28,10 @@
 
     .site_navigation_wrapper .logo_container .header-poland-logo {
       width: auto;
-      max-width: 26px;
-      max-height: 26px;
-      margin-left: 1.2rem;
+      max-width: none;
+      // Match main logo height (~46px max), stay clearly readable
+      max-height: 40px;
+      margin-left: 1.6rem;
     }
 
     .site-branding {
@@ -52,9 +53,9 @@
 
     .site_navigation_wrapper .logo_container .header-poland-logo {
       width: auto;
-      max-width: 22px;
-      max-height: 22px;
-      margin-left: 0.8rem;
+      max-width: none;
+      max-height: 34px;
+      margin-left: 1.2rem;
     }
 
     .site-branding {

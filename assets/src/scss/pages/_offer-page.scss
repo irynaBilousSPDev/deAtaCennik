@@ -1033,6 +1033,11 @@
     font-weight: bold;
     line-height: 1.2;
   }
+
+  // Mobile list only — shown above title in _offer-mobile.scss
+  &--inline {
+    display: none !important;
+  }
 }
 
 .product_slide {

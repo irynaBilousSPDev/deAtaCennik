@@ -39,7 +39,7 @@
                 $city_name = esc_html($city_terms[0]->name); // Get first city name
             }
             if ($city_name) : ?>
-                <div class="city_block">
+                <div class="city_block city_block--overlay">
                     <img class="location_icon"
                          src="<?php echo esc_url(get_template_directory_uri() . '/static/img/icon_location.png'); ?>"
                          alt="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_location_icon_alt')); ?>">
@@ -83,6 +83,15 @@
         ?>
         <div class="card_post_body">
             <div>
+                <?php if ($city_name) : ?>
+                    <div class="city_block city_block--inline">
+                        <img class="location_icon"
+                             src="<?php echo esc_url(get_template_directory_uri() . '/static/img/icon_location.png'); ?>"
+                             alt=""
+                             aria-hidden="true">
+                        <span><?php echo $city_name; ?></span>
+                    </div>
+                <?php endif; ?>
                 <h2><a title="<?php the_title(); ?>" href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
                 <div class="card_properties_wrapper">
                     <div class="row">
