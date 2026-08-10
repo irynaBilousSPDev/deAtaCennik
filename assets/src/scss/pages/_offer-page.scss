@@ -461,17 +461,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: auto;
-    height: auto;
+    align-self: center;
+    min-width: 22px;
+    min-height: 22px;
     margin: 0;
     padding: 0;
     border: none;
     border-radius: 0;
     background: transparent;
-    color: #555;
-    font-size: 1.5rem;
+    color: #222;
+    font-size: 2rem;
+    font-weight: vars.$weight-bold;
     line-height: 1;
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: color 0.15s ease;
   }
 
   &__toggle:hover &__arr,
@@ -480,10 +482,9 @@
   }
 
   &__item.is-open &__arr {
-    transform: rotate(180deg);
-    border: none;
-    background: transparent;
-    color: #555;
+    align-self: flex-start;
+    margin-top: 2px;
+    color: #222;
   }
 
   &__remove {

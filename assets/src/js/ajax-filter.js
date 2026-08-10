@@ -452,7 +452,12 @@ import { initOfferViewToggle } from './offer-view-toggle';
             }
 
             if (hasFull) {
-                $toggle.append($('<span>').addClass('offer-promo-info__arr').attr('aria-hidden', 'true').text('▾'));
+                $toggle.append(
+                    $('<span>')
+                        .addClass('offer-promo-info__arr')
+                        .attr('aria-hidden', 'true')
+                        .text(isOpen ? '▴' : '▾')
+                );
             }
 
             const $remove = $('<button>')
@@ -625,6 +630,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         $item.toggleClass('is-open', willOpen);
         $btn.attr('aria-expanded', willOpen ? 'true' : 'false');
+        $item.find('.offer-promo-info__arr').text(willOpen ? '▴' : '▾');
 
         if (willOpen) {
             $body.removeAttr('hidden');
