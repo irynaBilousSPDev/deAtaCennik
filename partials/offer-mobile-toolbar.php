@@ -4,6 +4,9 @@
  */
 
 $current_page_slug = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+$offer_filter_action = akademiata_get_offer_filter_action();
+$has_promo_filter    = !empty(akademiata_get_listing_promos_for_filter($offer_filter_action));
+$promotions_label    = akademiata_get_theme_lang_string('offer_filter_promotions');
 $quick_chips       = [
     'degree'   => akademiata_get_theme_lang_string('offer_chip_degree'),
     'city'     => akademiata_get_theme_lang_string('offer_chip_city'),
@@ -45,6 +48,16 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                     <?php echo esc_html($label); ?>
                     <?php echo $chip_chevron; ?>
                 </button>
+                <?php if ($taxonomy === 'city' && $has_promo_filter) : ?>
+                    <button type="button"
+                            class="offer-mobile-chip offer-mobile-chip--dropdown offer-mobile-chip--promotions"
+                            data-tax="promotions"
+                            data-label="<?php echo esc_attr($promotions_label); ?>">
+                        <?php echo akademiata_get_promotions_filter_badge_html(); ?>
+                        <?php echo esc_html($promotions_label); ?>
+                        <?php echo $chip_chevron; ?>
+                    </button>
+                <?php endif; ?>
             <?php endforeach; ?>
         </div>
         <div class="offer-mobile-chips__row">

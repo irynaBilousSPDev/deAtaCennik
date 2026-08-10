@@ -277,6 +277,88 @@ function akademiata_get_offer_listing_candidate_ids($filter_action, array $form_
 }
 
 /**
+ * @param array<string, mixed> $promo
+ * @return string[]
+ */
+function akademiata_get_promo_stack_ids(array $promo) {
+    if (empty($promo['sw']) || !is_array($promo['sw'])) {
+        return array();
+    }
+
+    return array_values(
+        array_filter(
+            array_map('strval', $promo['sw']),
+            function ($id) {
+                return $id !== '' && $id !== '—' && $id !== '-';
+            }
+        )
+    );
+}
+
+/**
+ * Mirror prices-calculator.js canSel() for one promo vs already selected IDs.
+ *
+ * @param array<string, mixed> $promo
+ * @param string[]             $selected_ids Other selected promo IDs (excluding $promo itself).
+ * @return bool
+ */
+function akademiata_promo_can_select_with_ids(array $promo, array $selected_ids) {
+    $sw = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
+
+    foreach ($selected_ids as $oid) {
+        $oid = (string) $oid;
+        if ($oid === '') {
+            continue;
+        }
+        if (!in_array($oid, $sw, true)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * @param array<int, array<string, mixed>> $selected_promos
+ * @return bool
+ */
+function akademiata_selected_promos_are_stackable(array $selected_promos) {
+    if (count($selected_promos) <= 1) {
+        return true;
+    }
+
+    $ids = array();
+    foreach ($selected_promos as $promo) {
+        if (empty($promo['id'])) {
+            continue;
+        }
+        $ids[] = (string) $promo['id'];
+    }
+
+    foreach ($selected_promos as $promo) {
+        if (empty($promo['id'])) {
+            continue;
+        }
+
+        $pid    = (string) $promo['id'];
+        $others = array_values(
+            array_filter(
+                $ids,
+                function ($id) use ($pid) {
+                    return $id !== $pid;
+                }
+            )
+        );
+
+        if (!akademiata_promo_can_select_with_ids($promo, $others)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
  * @param int[]     $post_ids
  * @param string[]  $promo_ids
  * @return int[]
@@ -304,14 +386,24 @@ function akademiata_filter_offer_ids_by_promotions(array $post_ids, array $promo
         return array();
     }
 
+    if (!akademiata_selected_promos_are_stackable($selected_promos)) {
+        return array();
+    }
+
     $eligible = array();
 
     foreach ($post_ids as $post_id) {
+        $matches_all = true;
+
         foreach ($selected_promos as $promo) {
-            if (akademiata_offer_matches_calculator_promo($post_id, $promo)) {
-                $eligible[] = (int) $post_id;
+            if (!akademiata_offer_matches_calculator_promo($post_id, $promo)) {
+                $matches_all = false;
                 break;
             }
+        }
+
+        if ($matches_all) {
+            $eligible[] = (int) $post_id;
         }
     }
 
@@ -337,6 +429,75 @@ function akademiata_sanitize_promo_short_html($html) {
 }
 
 /**
+ * Plain one-line promo short for filter cards.
+ *
+ * @param string $html
+ * @param int    $max
+ * @return string
+ */
+function akademiata_get_promo_short_plain_text($html, $max = 72) {
+    $text = wp_strip_all_tags((string) $html);
+    $text = preg_replace('/\s+/u', ' ', trim($text));
+
+    if ($text === '') {
+        return '';
+    }
+
+    if (function_exists('mb_strlen') && mb_strlen($text) > $max) {
+        return rtrim(mb_substr($text, 0, $max - 1)) . '…';
+    }
+
+    if (strlen($text) > $max) {
+        return rtrim(substr($text, 0, $max - 1)) . '…';
+    }
+
+    return $text;
+}
+
+/**
+ * Count eligible offers per promo for the current listing context.
+ *
+ * @param string               $filter_action
+ * @param array<string, mixed> $base_form_data Taxonomy filters without promotions.
+ * @return array<string, int>
+ */
+function akademiata_get_promotion_filter_counts($filter_action, array $base_form_data = array()) {
+    $candidate_ids = akademiata_get_offer_listing_candidate_ids($filter_action, $base_form_data);
+    $promos        = akademiata_get_listing_promos_for_filter($filter_action);
+    $counts        = array();
+
+    foreach ($promos as $promo) {
+        if (empty($promo['id'])) {
+            continue;
+        }
+
+        $promo_id = (string) $promo['id'];
+        $counts[ $promo_id ] = 0;
+    }
+
+    foreach ($candidate_ids as $post_id) {
+        foreach ($promos as $promo) {
+            if (empty($promo['id'])) {
+                continue;
+            }
+
+            if (akademiata_offer_matches_calculator_promo($post_id, $promo)) {
+                $counts[ (string) $promo['id'] ]++;
+            }
+        }
+    }
+
+    return $counts;
+}
+
+/**
+ * @return string HTML (escaped inner text only in caller).
+ */
+function akademiata_get_promotions_filter_badge_html() {
+    return '<span class="filter-promotions-badge" aria-hidden="true">%</span>';
+}
+
+/**
  * Render promotions filter group (after Miasto in filter sidebar).
  *
  * @param string|null $filter_action
@@ -356,31 +517,52 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         'promotions',
         akademiata_get_offer_listing_filter_keys()
     );
+
+    $base_form = akademiata_parse_offer_filter_form_data();
+    unset($base_form['promotions']);
+    $promo_counts = akademiata_get_promotion_filter_counts($filter_action, $base_form);
     ?>
     <div class="taxonomy_group taxonomy_group--promotions mb-3">
-        <h2 class="filter_accordion_header" data-tax="promotions">
-            <?php echo esc_html(akademiata_get_theme_lang_string('offer_filter_promotions')); ?>
+        <h2 class="filter_accordion_header filter_accordion_header--promotions" data-tax="promotions">
+            <span class="filter_accordion_header__label">
+                <?php echo akademiata_get_promotions_filter_badge_html(); ?>
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_filter_promotions')); ?>
+            </span>
             <div class="arrow-open-close" aria-hidden="true"></div>
         </h2>
         <div class="accordion-content">
-            <div class="labels_list">
+            <div class="labels_list filter-promo-cards">
                 <?php foreach ($promos as $promo) :
-                    $promo_id   = sanitize_title((string) $promo['id']);
-                    $promo_name = isset($promo['name']) ? (string) $promo['name'] : $promo_id;
-                    $promo_short = isset($promo['short']) ? akademiata_sanitize_promo_short_html($promo['short']) : '';
-                    $checked    = in_array($promo_id, $selected, true) ? 'checked' : '';
+                    $promo_id    = sanitize_title((string) $promo['id']);
+                    $promo_name  = isset($promo['name']) ? (string) $promo['name'] : $promo_id;
+                    $promo_short = isset($promo['short'])
+                        ? akademiata_get_promo_short_plain_text($promo['short'])
+                        : '';
+                    $promo_tag   = isset($promo['tag']) ? trim((string) $promo['tag']) : '';
+                    $promo_count = isset($promo_counts[ $promo_id ]) ? (int) $promo_counts[ $promo_id ] : 0;
+                    $promo_stack = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
+                    $checked     = in_array($promo_id, $selected, true) ? 'checked' : '';
                     ?>
-                    <label class="filter-promo-label">
+                    <label class="filter-promo-card">
                         <input type="checkbox"
+                               class="filter-promo-card__input"
                                name="promotions[]"
                                value="<?php echo esc_attr($promo_id); ?>"
                                data-tag-label="<?php echo esc_attr($promo_name); ?>"
+                               data-promo-stack="<?php echo esc_attr(wp_json_encode($promo_stack)); ?>"
                             <?php echo $checked; ?>>
-                        <span class="filter-promo-label__content">
-                            <span class="filter-promo-label__name"><?php echo esc_html($promo_name); ?></span>
-                            <?php if ($promo_short !== '') : ?>
-                                <span class="filter-promo-label__short"><?php echo $promo_short; ?></span>
+                        <span class="filter-promo-card__surface">
+                            <span class="filter-promo-card__chk" aria-hidden="true"></span>
+                            <span class="filter-promo-card__info">
+                                <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
+                                <?php if ($promo_short !== '') : ?>
+                                    <span class="filter-promo-card__short"><?php echo esc_html($promo_short); ?></span>
+                                <?php endif; ?>
+                            </span>
+                            <?php if ($promo_tag !== '') : ?>
+                                <span class="filter-promo-card__tag"><?php echo esc_html($promo_tag); ?></span>
                             <?php endif; ?>
+                            <span class="filter-promo-card__count"><?php echo esc_html((string) $promo_count); ?></span>
                         </span>
                     </label>
                 <?php endforeach; ?>

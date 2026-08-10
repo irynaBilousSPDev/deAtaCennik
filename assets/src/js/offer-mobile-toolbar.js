@@ -106,6 +106,7 @@ function closeOfferDropdown() {
     }
 
     root.classList.remove('is-open');
+    root.classList.remove('offer-mobile-dropdown--promotions');
     root.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('offer-dropdown-open');
 }
@@ -118,8 +119,13 @@ function openOfferDropdown(taxonomy, label) {
     }
 
     const resolvedLabel = label || taxonomy;
-    title.textContent = resolvedLabel;
+    if (taxonomy === 'promotions') {
+        title.innerHTML = `<span class="offer-mobile-dropdown__title-badge" aria-hidden="true">%</span>${resolvedLabel}`;
+    } else {
+        title.textContent = resolvedLabel;
+    }
     list.innerHTML = '';
+    root.classList.toggle('offer-mobile-dropdown--promotions', taxonomy === 'promotions');
 
     root.classList.add('is-open');
     root.setAttribute('aria-hidden', 'false');
@@ -143,12 +149,64 @@ function openOfferDropdown(taxonomy, label) {
 
         option.type = 'button';
         option.className = 'offer-mobile-dropdown__option';
+        if (taxonomy === 'promotions') {
+            option.classList.add('offer-mobile-dropdown__option--promo');
+        }
         option.dataset.value = input.value;
-        option.textContent = sourceLabel?.textContent.trim() || input.value;
         option.classList.toggle('is-selected', input.checked);
         option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
 
+        if (taxonomy === 'promotions' && sourceLabel) {
+            const nameEl = sourceLabel.querySelector('.filter-promo-card__name');
+            const shortEl = sourceLabel.querySelector('.filter-promo-card__short');
+            const tagEl = sourceLabel.querySelector('.filter-promo-card__tag');
+            const countEl = sourceLabel.querySelector('.filter-promo-card__count');
+            const content = document.createElement('span');
+            content.className = 'offer-mobile-dropdown__option-content offer-mobile-dropdown__option-content--promo';
+
+            const name = document.createElement('span');
+            name.className = 'offer-mobile-dropdown__option-name';
+            name.textContent = nameEl?.textContent.trim() || input.value;
+            content.appendChild(name);
+
+            if (shortEl && shortEl.textContent.trim()) {
+                const short = document.createElement('span');
+                short.className = 'offer-mobile-dropdown__option-short';
+                short.textContent = shortEl.textContent.trim();
+                content.appendChild(short);
+            }
+
+            option.appendChild(content);
+
+            const meta = document.createElement('span');
+            meta.className = 'offer-mobile-dropdown__option-meta';
+
+            if (tagEl && tagEl.textContent.trim()) {
+                const tag = document.createElement('span');
+                tag.className = 'offer-mobile-dropdown__option-tag';
+                tag.textContent = tagEl.textContent.trim();
+                meta.appendChild(tag);
+            }
+
+            if (countEl && countEl.textContent.trim()) {
+                const count = document.createElement('span');
+                count.className = 'offer-mobile-dropdown__option-count';
+                count.textContent = countEl.textContent.trim();
+                meta.appendChild(count);
+            }
+
+            if (meta.childNodes.length) {
+                option.appendChild(meta);
+            }
+        } else {
+            option.textContent = sourceLabel?.textContent.trim() || input.value;
+        }
+
         option.addEventListener('click', () => {
+            if (taxonomy === 'promotions' && !input.checked && sourceLabel?.closest('.filter-promo-card')?.classList.contains('is-disabled')) {
+                return;
+            }
+
             input.checked = !input.checked;
             option.classList.toggle('is-selected', input.checked);
             option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');

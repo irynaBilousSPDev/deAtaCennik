@@ -290,12 +290,111 @@ import { initOfferViewToggle } from './offer-view-toggle';
             return custom.trim();
         }
 
-        const nameEl = checkbox.closest('label').find('.filter-promo-label__name').first();
+        const nameEl = checkbox.closest('label').find('.filter-promo-card__name, .filter-promo-label__name').first();
         if (nameEl.length) {
             return nameEl.text().trim();
         }
 
         return checkbox.closest('label').text().trim();
+    }
+
+    function getPromoStack(input) {
+        const cached = input.data('promoStack');
+        if (Array.isArray(cached)) {
+            return cached;
+        }
+
+        const raw = input.attr('data-promo-stack');
+        if (!raw) {
+            return [];
+        }
+
+        try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+                input.data('promoStack', parsed);
+                return parsed;
+            }
+        } catch (error) {
+            return [];
+        }
+
+        return [];
+    }
+
+    function reconcilePromoSelection(changedInput) {
+        const $changed = $(changedInput);
+        if ($changed.attr('name') !== 'promotions[]' || !$changed.is(':checked')) {
+            return;
+        }
+
+        const promoId = $changed.val();
+        const stack = getPromoStack($changed);
+
+        form.find('input[name="promotions[]"]:checked').each(function () {
+            const $other = $(this);
+            const otherId = $other.val();
+
+            if (otherId === promoId) {
+                return;
+            }
+
+            if (stack.indexOf(otherId) < 0) {
+                $other.prop('checked', false);
+                removeTag(otherId);
+            }
+        });
+    }
+
+    function updatePromoStackStates() {
+        const checkedIds = [];
+
+        form.find('input[name="promotions[]"]:checked').each(function () {
+            checkedIds.push($(this).val());
+        });
+
+        form.find('input[name="promotions[]"]').each(function () {
+            const $input = $(this);
+            const stack = getPromoStack($input);
+            let canSelect = true;
+
+            if (!$input.is(':checked')) {
+                checkedIds.forEach((oid) => {
+                    if (stack.indexOf(oid) < 0) {
+                        canSelect = false;
+                    }
+                });
+            }
+
+            $input.closest('.filter-promo-card').toggleClass('is-disabled', !canSelect && !$input.is(':checked'));
+        });
+    }
+
+    function sanitizePromoSelectionFromUrl() {
+        const checked = form.find('input[name="promotions[]"]:checked').toArray();
+
+        if (checked.length <= 1) {
+            updatePromoStackStates();
+            return;
+        }
+
+        const keptIds = [];
+
+        checked.forEach((input) => {
+            const $input = $(input);
+            const stack = getPromoStack($input);
+            const canKeep = keptIds.every((oid) => stack.indexOf(oid) >= 0);
+
+            if (canKeep) {
+                keptIds.push($input.val());
+                return;
+            }
+
+            $input.prop('checked', false);
+            removeTag($input.val());
+        });
+
+        updatePromoStackStates();
     }
 
     function removeTag(tagValue) {
@@ -334,6 +433,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
             $('#tags-container').hide();
         }
 
+        sanitizePromoSelectionFromUrl();
+
         if (filterResults.children('.card_post_item').length === 0) {
             triggerFilterUpdate();
         } else {
@@ -348,6 +449,18 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     form.on('change', 'input[type="checkbox"]', function () {
         const checkbox = $(this);
+
+        if (checkbox.attr('name') === 'promotions[]') {
+            if (checkbox.is(':checked')) {
+                if (checkbox.closest('.filter-promo-card').hasClass('is-disabled')) {
+                    checkbox.prop('checked', false);
+                    return;
+                }
+                reconcilePromoSelection(checkbox);
+            }
+            updatePromoStackStates();
+        }
+
         const label = getCheckboxTagLabel(checkbox);
         const tagValue = checkbox.val();
 
@@ -367,6 +480,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         form.find(`input[value="${tagValue}"]`).prop('checked', false);
         removeTag(tagValue);
+        updatePromoStackStates();
 
         debouncedFilterUpdate();
         updateBrowserUrl();
@@ -376,6 +490,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         form.find('input[type="checkbox"]').prop('checked', false);
         $('.selected_tags_container').empty();
         $('#tags-container').hide();
+        updatePromoStackStates();
         debouncedFilterUpdate();
         updateBrowserUrl();
     });
@@ -384,11 +499,13 @@ import { initOfferViewToggle } from './offer-view-toggle';
         form.find('input[type="checkbox"]').prop('checked', false);
         $('.selected_tags_container').empty();
         $('#tags-container').hide();
+        updatePromoStackStates();
         debouncedFilterUpdate();
         updateBrowserUrl();
     });
 
     initializeFiltersFromURL();
+    updatePromoStackStates();
     initOfferViewToggle();
 
 })(jQuery);
