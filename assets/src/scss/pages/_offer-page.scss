@@ -458,32 +458,32 @@
 
   &__arr {
     flex-shrink: 0;
-    width: 26px;
-    height: 26px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #d0d0d0;
-    border-radius: 50%;
-    background: #f7f7f7;
-    color: #333;
-    font-size: 1.35rem;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #555;
+    font-size: 1.5rem;
     line-height: 1;
-    transition: transform 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
   }
 
   &__toggle:hover &__arr,
   &__toggle:focus-visible &__arr {
-    border-color: vars.$primary;
-    background: #fff5f0;
     color: vars.$primary;
   }
 
   &__item.is-open &__arr {
     transform: rotate(180deg);
-    border-color: vars.$primary;
-    background: #fff5f0;
-    color: vars.$primary;
+    border: none;
+    background: transparent;
+    color: #555;
   }
 
   &__remove {
@@ -673,16 +673,16 @@
   padding: 0;
   border: none;
   background: transparent;
+  box-shadow: none;
 
-  // One compact filter bar when taxonomy tags and/or promo chips are active
   &:has(#tags-container[style*="block"]),
   &:has(#tags-container[style*="flex"]),
   &:has(#offer-promo-info:not(.is-empty)) {
-    padding: 10px 14px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 12px;
-    background: vars.$white;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
   }
 
   &:not(:has(#tags-container[style*="block"])):not(:has(#tags-container[style*="flex"])):has(#offer-promo-info.is-empty) {
@@ -697,18 +697,20 @@
 
   .filter_tags_wrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     flex-wrap: wrap;
 
     h3 {
       margin: 0;
+      padding-top: 6px;
       color: #333;
       @include mixins.font-style(1.35rem, 1.2, vars.$weight-bold);
     }
 
     .button_clear_filters {
       margin: 0 0 0 auto;
+      padding-top: 6px;
       color: #555;
       text-decoration: underline;
       text-underline-offset: 2px;
