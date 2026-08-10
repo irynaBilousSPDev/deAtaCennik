@@ -450,31 +450,122 @@ header {
     @media (min-width: 991px) and (max-width: 1180px) {
       min-width: 170px;
     }
+  }
 
-    .mega_menu_title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
+  .mega_menu_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.25;
+    text-align: left;
+    cursor: default;
+
+    &-arr {
+      display: none;
+      flex-shrink: 0;
+      width: 0.55em;
+      height: 0.55em;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform 0.2s ease;
     }
+  }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+  .mega-column__list,
+  .mega-column > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 
-      li {
-        margin-bottom: 8px;
+    > .mega-menu-item,
+    > li {
+      margin-bottom: 8px;
 
-        a {
-          font-size: 16px;
-          color: black;
-          text-decoration: none;
+      > a {
+        font-size: 16px;
+        color: black;
+        text-decoration: none;
 
-          &:hover {
-            text-decoration: underline;
-          }
+        &:hover {
+          text-decoration: underline;
         }
       }
+    }
+  }
+
+  .mega-menu-item__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    > a {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
+      color: black;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .mega-menu-sub-toggle {
+    display: none;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .mega-menu-sub {
+    list-style: none;
+    margin: 8px 0 4px;
+    padding: 0 0 0 12px;
+    border-left: 2px solid #eee;
+
+    li {
+      margin-bottom: 6px;
+
+      a {
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // Desktop: CPT deep lists only on mobile accordion
+  @media (min-width: 992px) {
+    .mega-menu-sub {
+      display: none;
+    }
+
+    .mega-menu-sub-toggle {
+      display: none !important;
     }
   }
 }
@@ -493,6 +584,79 @@ header {
   .mega-menu {
     .mega-column {
       flex: 1 1 45%;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .mega-menu {
+    padding: 12px 0 24px;
+
+    .container {
+      padding-left: 1.2rem !important;
+      padding-right: 1.2rem !important;
+      max-width: none;
+    }
+
+    .mega-menu-columns {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .mega-column {
+      flex: 1 1 100%;
+      min-width: 0;
+      padding: 0;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &__list {
+        display: none;
+        padding: 0 0 12px;
+      }
+
+      &.is-open > .mega-column__list {
+        display: block;
+      }
+    }
+
+    .mega_menu_title {
+      margin: 0;
+      padding: 14px 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+
+      &-arr {
+        display: inline-block;
+        margin-right: 4px;
+      }
+    }
+
+    .mega-column.is-open .mega_menu_title-arr {
+      transform: rotate(225deg);
+      margin-top: 4px;
+    }
+
+    .mega-menu-sub-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mega-menu-item.has-mega-sub.is-open .mega-menu-sub-toggle span {
+      display: inline-block;
+      transform: rotate(180deg);
+    }
+
+    .mega-menu-sub {
+      display: block;
+    }
+
+    .mega-menu-sub[hidden] {
+      display: none !important;
     }
   }
 }

@@ -49,6 +49,7 @@ $om-filter-card-pad: 16px;
 }
 
 @include mixins.max-ipad-pro-screen {
+  .offer-listing-selection,
   #offer-promo-info {
     display: none !important;
   }
@@ -615,29 +616,13 @@ $om-filter-card-pad: 16px;
           }
 
           .city_block {
+            // Default mobile (list / 1-col): city before title, not on photo
             &--overlay {
-              display: inline-flex !important;
-              top: auto !important;
-              right: auto !important;
-              left: 6px;
-              bottom: 6px;
-              z-index: 5;
-              max-width: calc(100% - 48px);
-              padding: 5px 10px !important;
-              border-radius: 100px;
-              background: rgba(255, 255, 255, 0.92);
-              box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
-
-              span {
-                font-size: 1.15rem;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-              }
+              display: none !important;
             }
 
             &--inline {
-              display: none !important;
+              display: none; // shown in .card_post_body below
             }
           }
 
@@ -667,7 +652,36 @@ $om-filter-card-pad: 16px;
 
         .card_post_body {
           .city_block--inline {
-            display: none !important;
+            position: static !important;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 5px;
+            max-width: 100%;
+            margin: 0 0 6px;
+            padding: 3px 8px !important;
+            border: none;
+            border-radius: 100px;
+            background: #f3f3f3;
+            box-shadow: none;
+            top: auto !important;
+            right: auto !important;
+            left: auto !important;
+            bottom: auto !important;
+
+            span {
+              font-size: 1.15rem;
+              font-weight: vars.$weight-bold;
+              color: #000;
+              line-height: 1.2;
+              white-space: nowrap;
+            }
+
+            .location_icon {
+              width: 10px;
+              height: auto;
+              flex-shrink: 0;
+              display: block;
+            }
           }
         }
       }
@@ -680,10 +694,45 @@ $om-filter-card-pad: 16px;
           padding: 0 !important;
         }
 
+        // 2 cards / row: city on photo next to heart
+        .card_post_image .city_block--overlay {
+          display: inline-flex !important;
+          top: auto !important;
+          right: auto !important;
+          left: 6px;
+          bottom: 6px;
+          z-index: 5;
+          max-width: calc(100% - 48px);
+          padding: 5px 10px !important;
+          border-radius: 100px;
+          background: rgba(255, 255, 255, 0.92);
+          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+
+          span {
+            font-size: 1.15rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+
+        .card_post_body .city_block--inline {
+          display: none !important;
+        }
+
         @include offer-narrow-phone-screen {
           .card_post_item {
             width: 100% !important;
             max-width: 100% !important;
+          }
+
+          // 1 card / row: city before title again
+          .card_post_image .city_block--overlay {
+            display: none !important;
+          }
+
+          .card_post_body .city_block--inline {
+            display: inline-flex !important;
           }
         }
 
@@ -791,6 +840,10 @@ $om-filter-card-pad: 16px;
             right: 6px;
             bottom: 6px;
           }
+
+          .city_block--overlay {
+            display: none !important;
+          }
         }
 
         .card_post_body {
@@ -800,6 +853,10 @@ $om-filter-card-pad: 16px;
           flex-direction: column;
           justify-content: space-between;
           padding: $om-card-pad 12px $om-card-pad 12px !important;
+
+          .city_block--inline {
+            display: inline-flex !important;
+          }
 
           h2 {
             font-size: 1.6rem;
@@ -1284,9 +1341,10 @@ $om-filter-card-pad: 16px;
       width: 22px;
       height: 22px;
       margin-right: 1rem;
+      border: 1px solid #d8efdf;
       border-radius: 50%;
-      background: vars.$primary;
-      color: vars.$white;
+      background: #fff;
+      color: vars.$primary;
       font-size: 1.2rem;
       font-weight: vars.$weight-bold;
       line-height: 1;

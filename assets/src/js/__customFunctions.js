@@ -23,7 +23,24 @@ export function initMegaMenu(toggleSelector, menuSelector) {
 
     if (!$toggles.length || !$menu.length) return;
 
+    const mobileMq = window.matchMedia('(max-width: 991px)');
+
+    function isMobileMega() {
+        return mobileMq.matches;
+    }
+
+    function collapseMobileAccordion() {
+        $menu.find('.mega-column').removeClass('is-open');
+        $menu.find('.mega_menu_title').attr('aria-expanded', 'false');
+        $menu.find('.mega-menu-item.has-mega-sub').removeClass('is-open');
+        $menu.find('.mega-menu-sub-toggle').attr('aria-expanded', 'false');
+        $menu.find('.mega-menu-sub').attr('hidden', true);
+    }
+
     function openMenu() {
+        if (isMobileMega()) {
+            collapseMobileAccordion();
+        }
         $menu.addClass('open');
         $toggles.find('.menu-icon').addClass('open');
         $toggles.find('.menu-toggle-label').text('×');
@@ -38,6 +55,7 @@ export function initMegaMenu(toggleSelector, menuSelector) {
         $menu.removeClass('open');
         $toggles.find('.menu-icon').removeClass('open');
         $toggles.find('.menu-toggle-label').text('Menu');
+        collapseMobileAccordion();
 
         if ($siteNav.length) $siteNav.show();
         if ($menuOffer.length) $menuOffer.show();
@@ -51,6 +69,37 @@ export function initMegaMenu(toggleSelector, menuSelector) {
             closeMenu();
         } else {
             openMenu();
+        }
+    });
+
+    // Mobile: expand/collapse mega columns
+    $menu.on('click', '.mega_menu_title', function (e) {
+        if (!isMobileMega()) {
+            return;
+        }
+        e.preventDefault();
+        const $column = jQuery(this).closest('.mega-column');
+        const willOpen = !$column.hasClass('is-open');
+        $column.toggleClass('is-open', willOpen);
+        jQuery(this).attr('aria-expanded', willOpen ? 'true' : 'false');
+    });
+
+    // Mobile: expand/collapse CPT specialty lists under Oferta
+    $menu.on('click', '.mega-menu-sub-toggle', function (e) {
+        if (!isMobileMega()) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        const $item = jQuery(this).closest('.mega-menu-item');
+        const $sub = $item.find('> .mega-menu-sub');
+        const willOpen = !$item.hasClass('is-open');
+        $item.toggleClass('is-open', willOpen);
+        jQuery(this).attr('aria-expanded', willOpen ? 'true' : 'false');
+        if (willOpen) {
+            $sub.removeAttr('hidden');
+        } else {
+            $sub.attr('hidden', true);
         }
     });
 }
