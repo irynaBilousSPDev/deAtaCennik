@@ -282,6 +282,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         if ($('.selected_tags_container .filter-tag').length > 0) {
             $('#tags-container').show();
         }
+        syncDesktopFilterBarVisibility();
     }
 
     function getCheckboxTagLabel(checkbox) {
@@ -341,22 +342,42 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
             if (stack.indexOf(otherId) < 0) {
                 $other.prop('checked', false);
-                removeTag(otherId);
             }
         });
     }
 
     let openPromoInfoIds = {};
 
-    function placePromoInfoAfterTags() {
-        // Desktop: keep promo details immediately under the active filter tags.
+    function placePromoInfoInFilterBar() {
+        // Desktop: promo chips live in the same Filtry row as taxonomy tags.
         if (window.matchMedia('(max-width: 990px)').matches) {
             return;
         }
-        const $tags = $('.offer_content #tags-container, .offer-listing-selection #tags-container').first();
+        const $wrap = $('.offer-listing-selection .filter_tags_wrapper').first();
         const $promo = $('#offer-promo-info');
-        if ($tags.length && $promo.length && !$tags.next().is($promo)) {
-            $promo.insertAfter($tags);
+        const $clear = $wrap.find('.button_clear_filters').first();
+        if (!$wrap.length || !$promo.length) {
+            return;
+        }
+        if ($clear.length) {
+            $promo.insertBefore($clear);
+        } else if (!$promo.parent().is($wrap)) {
+            $wrap.append($promo);
+        }
+    }
+
+    function syncDesktopFilterBarVisibility() {
+        const $bar = $('.offer-listing-selection #tags-container').first();
+        if (!$bar.length) {
+            return;
+        }
+        const hasTags = $bar.find('.selected_tags_container .filter-tag').length > 0;
+        const hasPromos = !$('#offer-promo-info').hasClass('is-empty');
+        if (hasTags || hasPromos) {
+            $bar.show();
+        } else if (!hasTags) {
+            // Keep sidebar tags container behavior separate — only hide when this bar has nothing.
+            $bar.hide();
         }
     }
 
@@ -376,11 +397,15 @@ import { initOfferViewToggle } from './offer-view-toggle';
         if (!selected.length) {
             openPromoInfoIds = {};
             $panel.addClass('is-empty');
-            placePromoInfoAfterTags();
+            placePromoInfoInFilterBar();
+            syncDesktopFilterBarVisibility();
             return;
         }
 
         const expandLabel = (window.akademiataOffer && akademiataOffer.promoExpand) || 'Pokaż szczegóły promocji';
+        const removeLabel = (window.akademiataOffer && akademiataOffer.promoRemove)
+            || (window.akademiataOffer && akademiataOffer.clearFilters)
+            || 'Usuń promocję';
 
         selected.forEach((input) => {
             const $input = $(input);
@@ -430,7 +455,16 @@ import { initOfferViewToggle } from './offer-view-toggle';
                 $toggle.append($('<span>').addClass('offer-promo-info__arr').attr('aria-hidden', 'true').text('▾'));
             }
 
+            const $remove = $('<button>')
+                .attr({
+                    type: 'button',
+                    class: 'offer-promo-info__remove',
+                    'aria-label': `${removeLabel}: ${name}`,
+                })
+                .text('✕');
+
             $item.append($toggle);
+            $item.append($remove);
 
             if (hasFull) {
                 const $body = $('<div>').addClass('offer-promo-info__body').html(full);
@@ -444,7 +478,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
         });
 
         $panel.removeClass('is-empty');
-        placePromoInfoAfterTags();
+        placePromoInfoInFilterBar();
+        syncDesktopFilterBarVisibility();
     }
 
     function updatePromoStackStates() {
@@ -504,7 +539,14 @@ import { initOfferViewToggle } from './offer-view-toggle';
         $('.selected_tags_container').find(`[data-value="${tagValue}"]`).remove();
 
         if ($('.selected_tags_container .filter-tag').length === 0) {
-            $('#tags-container').hide();
+            // Don't hide the whole bar if expandable promo chips are still active.
+            syncDesktopFilterBarVisibility();
+            if ($('.offer-listing-selection #offer-promo-info').hasClass('is-empty')
+                && $('.selected_tags_container .filter-tag').length === 0) {
+                $('#tags-container').hide();
+            }
+        } else {
+            syncDesktopFilterBarVisibility();
         }
     }
 
@@ -537,7 +579,10 @@ import { initOfferViewToggle } from './offer-view-toggle';
             const checkbox = form.find(`input[name="${formKey}[]"][value="${value}"]`);
             if (checkbox.length) {
                 checkbox.prop('checked', true);
-                addTag(getCheckboxTagLabel(checkbox), value);
+                // Promotions only appear in #offer-promo-info (expandable), not as Filtry pills.
+                if (formKey !== 'promotions') {
+                    addTag(getCheckboxTagLabel(checkbox), value);
+                }
             }
         });
 
@@ -546,6 +591,12 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
 
         sanitizePromoSelectionFromUrl();
+
+        // Drop any leftover promo pills from older UI (promos only use expandable chips).
+        form.find('input[name="promotions[]"]').each(function () {
+            $('.selected_tags_container').find(`[data-value="${$(this).val()}"]`).remove();
+        });
+        syncDesktopFilterBarVisibility();
 
         // Always refresh when promo deep-link is present (SSR may have been wrong before query_var fix).
         if (hasPromoInUrl || filterResults.children('.card_post_item').length === 0) {
@@ -584,6 +635,22 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
     });
 
+    $(document).on('click', '#offer-promo-info .offer-promo-info__remove', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        const promoId = $(this).closest('.offer-promo-info__item').attr('data-promo-id');
+        if (!promoId) {
+            return;
+        }
+        const $input = form.find(`input[name="promotions[]"][value="${promoId}"]`);
+        if ($input.length) {
+            $input.prop('checked', false);
+        }
+        updatePromoStackStates();
+        triggerFilterUpdate();
+        updateBrowserUrl();
+    });
+
     form.on('change', 'input[type="checkbox"]', function () {
         const checkbox = $(this);
 
@@ -596,6 +663,9 @@ import { initOfferViewToggle } from './offer-view-toggle';
                 reconcilePromoSelection(checkbox);
             }
             updatePromoStackStates();
+            triggerFilterUpdate();
+            updateBrowserUrl();
+            return;
         }
 
         const label = getCheckboxTagLabel(checkbox);
