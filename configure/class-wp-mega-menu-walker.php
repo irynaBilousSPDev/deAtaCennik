@@ -175,17 +175,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 $hay = remove_accents($hay);
             }
 
-            // Campus first — includes “Stacjonarne sobotnio-niedzielne”.
-            if (
-                strpos($hay, 'stacjonarn') !== false
-                || strpos($hay, 'dzienn') !== false
-                || strpos($hay, 'full-time') !== false
-                || strpos($hay, 'full_time') !== false
-            ) {
-                $has_full = true;
-                continue;
-            }
-
+            // Niestacjonarne BEFORE stacjonarne — “niestacjonarne” contains “stacjonarn”.
             if (
                 strpos($hay, 'niestacjonarn') !== false
                 || strpos($hay, 'zaoczn') !== false
@@ -193,6 +183,16 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 || strpos($hay, 'part_time') !== false
             ) {
                 $has_part = true;
+                continue;
+            }
+
+            if (
+                strpos($hay, 'stacjonarn') !== false
+                || strpos($hay, 'dzienn') !== false
+                || strpos($hay, 'full-time') !== false
+                || strpos($hay, 'full_time') !== false
+            ) {
+                $has_full = true;
             }
         }
 
