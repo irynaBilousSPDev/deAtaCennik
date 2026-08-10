@@ -98,6 +98,62 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
+     * Canonical location key from slug or label (WPML-safe).
+     *
+     * @param string $text
+     * @return string warszawa|wroclaw|online|''
+     */
+    private function normalize_location_key($text) {
+        $s = mb_strtolower(trim((string) $text));
+        if ($s === '') {
+            return '';
+        }
+        if (function_exists('remove_accents')) {
+            $s = remove_accents($s);
+        }
+        $s = str_replace(array(' ', '_'), '-', $s);
+
+        if (preg_match('/wroclaw|breslau/', $s)) {
+            return 'wroclaw';
+        }
+        if (preg_match('/warszaw|warsaw/', $s)) {
+            return 'warszawa';
+        }
+        if (preg_match('/online|zdaln|remote/', $s)) {
+            return 'online';
+        }
+
+        return '';
+    }
+
+    /**
+     * Location keys assigned to a post for a city-like taxonomy.
+     *
+     * @param int    $post_id
+     * @param string $taxonomy
+     * @return string[] warszawa|wroclaw|online
+     */
+    private function post_location_keys($post_id, $taxonomy) {
+        $terms = wp_get_post_terms($post_id, $taxonomy, array('fields' => 'all'));
+        if (is_wp_error($terms) || !is_array($terms) || $terms === array()) {
+            return array();
+        }
+
+        $keys = array();
+        foreach ($terms as $term) {
+            $key = $this->normalize_location_key($term->slug);
+            if ($key === '') {
+                $key = $this->normalize_location_key($term->name);
+            }
+            if ($key !== '') {
+                $keys[ $key ] = true;
+            }
+        }
+
+        return array_keys($keys);
+    }
+
+    /**
      * Study mode flags for bachelor/master (taxonomy `mode`).
      * “Stacjonarne sobotnio-niedzielne” = campus (full), not Online.
      * Online I/II = explicitly niestacjonarne / zaoczne only.
@@ -115,6 +171,9 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
         foreach ($terms as $term) {
             $hay = mb_strtolower((string) $term->slug . ' ' . (string) $term->name);
+            if (function_exists('remove_accents')) {
+                $hay = remove_accents($hay);
+            }
 
             // Campus first — includes “Stacjonarne sobotnio-niedzielne”.
             if (
@@ -151,58 +210,100 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * @return bool
      */
     private function post_matches_city($post_id, $post_type, $city_slug) {
+        $want = $this->normalize_location_key($city_slug);
+        if ($want === '') {
+            return false;
+        }
+
         if (in_array($post_type, array('bachelor', 'master'), true)) {
             list($has_full, $has_part) = $this->bachelor_master_mode_flags($post_id);
 
-            if ($city_slug === 'online') {
-                // Strict: only specialties that actually have niestacjonarne.
+            if ($want === 'online') {
                 return $has_part;
             }
 
-            // City tabs: skip niestacjonarne-only; keep stacjonarne / both / untagged.
+            // City tabs: campus modes only (stacjonarne / both / untagged).
             if ($has_part && !$has_full) {
                 return false;
             }
 
-            $terms = wp_get_post_terms($post_id, 'city', array('fields' => 'slugs'));
-            if (is_wp_error($terms) || !is_array($terms)) {
-                $terms = array();
+            $keys = $this->post_location_keys($post_id, 'city');
+            if ($keys === array()) {
+                // Same default as akademiata_get_offer_city_slug().
+                return $want === 'warszawa';
             }
-            if ($terms === array()) {
-                return $city_slug === 'warszawa';
-            }
-            return in_array($city_slug, $terms, true);
+            return in_array($want, $keys, true);
         }
 
-        // Exams are campus-only (Warszawa / Wrocław).
         if ($post_type === 'exams') {
-            if ($city_slug === 'online') {
+            if ($want === 'online') {
                 return false;
             }
-            $terms = wp_get_post_terms($post_id, 'exam_city', array('fields' => 'slugs'));
-            if (is_wp_error($terms) || !is_array($terms)) {
-                $terms = array();
-            }
-            return in_array($city_slug, $terms, true);
+            return in_array($want, $this->post_location_keys($post_id, 'exam_city'), true);
         }
 
-        $tax   = $this->city_taxonomy_for_post_type($post_type);
-        $terms = wp_get_post_terms($post_id, $tax, array('fields' => 'slugs'));
-        if (is_wp_error($terms) || !is_array($terms)) {
-            $terms = array();
-        }
+        $keys      = $this->post_location_keys($post_id, $this->city_taxonomy_for_post_type($post_type));
+        $is_online = in_array('online', $keys, true);
 
-        $is_online = in_array('online', $terms, true);
-
-        if ($city_slug === 'online') {
+        if ($want === 'online') {
             return $is_online;
         }
 
+        // Campus columns: never mix in online-tagged PG/MBA/courses.
         if ($is_online) {
             return false;
         }
 
-        return in_array($city_slug, $terms, true);
+        return in_array($want, $keys, true);
+    }
+
+    /**
+     * Stable menu order for Oferta groups.
+     *
+     * @param array<int, object> $children
+     * @return array<int, object>
+     */
+    private function sort_offer_children($children) {
+        $order = array(
+            'bachelor'     => 10,
+            'master'       => 20,
+            'postgraduate' => 30,
+            'mba'          => 40,
+            'courses'      => 50,
+            'exams'        => 60,
+        );
+
+        $indexed = array();
+        foreach (array_values($children) as $i => $child) {
+            $pt = $this->resolve_offer_submenu_post_type($child);
+            $indexed[] = array(
+                'item'  => $child,
+                'order' => ($pt && isset($order[ $pt ])) ? $order[ $pt ] : 100,
+                'title' => isset($child->title) ? mb_strtolower((string) $child->title) : '',
+                'idx'   => $i,
+            );
+        }
+
+        usort(
+            $indexed,
+            static function ($a, $b) {
+                if ($a['order'] !== $b['order']) {
+                    return $a['order'] - $b['order'];
+                }
+                $cmp = strcasecmp($a['title'], $b['title']);
+                if ($cmp !== 0) {
+                    return $cmp;
+                }
+                return $a['idx'] - $b['idx'];
+            }
+        );
+
+        return array_map(
+            static function ($row) {
+                return $row['item'];
+            },
+            $indexed
+        );
     }
 
     /**
@@ -264,6 +365,13 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             }
             $links = $filtered;
         }
+
+        usort(
+            $links,
+            static function ($a, $b) {
+                return strcasecmp((string) $a['title'], (string) $b['title']);
+            }
+        );
 
         $cache[ $cache_key ] = $links;
 
@@ -368,7 +476,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         $html .= '<span class="mega_menu_title-arr" aria-hidden="true"></span>';
         $html .= '</button>';
         $html .= '<ul class="mega-column__list">';
-        foreach ($children as $child) {
+        foreach ($this->sort_offer_children($children) as $child) {
             $html .= $this->render_offer_child_item($child, $city_slug);
         }
         $html .= '</ul></div>';
