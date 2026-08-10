@@ -98,10 +98,42 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
+     * Study mode flags for bachelor/master (taxonomy `mode`).
+     *
+     * @param int $post_id
+     * @return array{0:bool,1:bool} [has_full_time, has_part_time]
+     */
+    private function bachelor_master_mode_flags($post_id) {
+        $has_full = false;
+        $has_part = false;
+        $terms    = wp_get_post_terms($post_id, 'mode', array('fields' => 'all'));
+        if (is_wp_error($terms) || !is_array($terms)) {
+            return array(false, false);
+        }
+
+        foreach ($terms as $term) {
+            $hay = mb_strtolower((string) $term->slug . ' ' . (string) $term->name);
+            if (
+                strpos($hay, 'niestacjonarn') !== false
+                || strpos($hay, 'zaoczn') !== false
+                || strpos($hay, 'sobotnio') !== false
+            ) {
+                $has_part = true;
+            } elseif (
+                strpos($hay, 'stacjonarn') !== false
+                || strpos($hay, 'dzienn') !== false
+            ) {
+                $has_full = true;
+            }
+        }
+
+        return array($has_full, $has_part);
+    }
+
+    /**
      * Whether a specialty belongs in a mobile Oferta column.
-     * Online-tagged PG/MBA/courses → Online only.
-     * Bachelor/master → Online weekend list only (not in city tabs).
-     * Exams → city tabs by exam_city (not Online).
+     * Cities: campus offers + stacjonarne I/II (+ exams).
+     * Online: niestacjonarne I/II + online-tagged PG/MBA/courses.
      *
      * @param int    $post_id
      * @param string $post_type
@@ -110,7 +142,26 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      */
     private function post_matches_city($post_id, $post_type, $city_slug) {
         if (in_array($post_type, array('bachelor', 'master'), true)) {
-            return $city_slug === 'online';
+            list($has_full, $has_part) = $this->bachelor_master_mode_flags($post_id);
+
+            if ($city_slug === 'online') {
+                // Part-time tagged, or no mode set yet (still show under weekend row).
+                return $has_part || (!$has_full && !$has_part);
+            }
+
+            // City tabs: stacjonarne (or unspecified). Skip part-time-only.
+            if ($has_part && !$has_full) {
+                return false;
+            }
+
+            $terms = wp_get_post_terms($post_id, 'city', array('fields' => 'slugs'));
+            if (is_wp_error($terms) || !is_array($terms)) {
+                $terms = array();
+            }
+            if ($terms === array()) {
+                return $city_slug === 'warszawa';
+            }
+            return in_array($city_slug, $terms, true);
         }
 
         // Exams are campus-only (Warszawa / Wrocław).
@@ -242,21 +293,17 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     private function render_offer_child_item($item, $city_slug = null, $force_title = null) {
         $post_type = $this->resolve_offer_submenu_post_type($item);
 
-        // City tabs: Studia I/II live only under Oferta Online.
-        if (
-            in_array($city_slug, array('warszawa', 'wroclaw'), true)
-            && in_array($post_type, array('bachelor', 'master'), true)
-        ) {
-            return '';
-        }
-
         $attributes = $this->link_attributes($item);
         $subs       = $post_type ? $this->get_offer_submenu_links($post_type, $city_slug) : array();
         $has_sub    = $subs !== array();
         $title      = $force_title !== null && $force_title !== '' ? $force_title : (string) $item->title;
 
-        // Online column: skip CPT parents with no matching specialties.
-        if ($city_slug === 'online' && $post_type && !$has_sub) {
+        // Filtered columns: skip CPT parents with no matching specialties.
+        if (
+            $post_type
+            && !$has_sub
+            && in_array($city_slug, array('warszawa', 'wroclaw', 'online'), true)
+        ) {
             return '';
         }
 
