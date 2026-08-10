@@ -350,7 +350,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 __('%s Online', 'akademiata'),
                 $base
             ),
-            $desc,
+            __('Niestacjonarne sobotnio-niedzielne', 'akademiata'),
             $children,
             'online'
         );
