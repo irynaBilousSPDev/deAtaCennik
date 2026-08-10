@@ -344,8 +344,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 0 0 1.25rem;
-  align-items: flex-start;
+  margin: 0;
+  // Equal height while all closed; don't stretch neighbors when one opens
+  align-items: stretch;
+
+  &:has(.offer-promo-info__item.is-open) {
+    align-items: flex-start;
+  }
 
   &.is-empty {
     display: none;
@@ -357,9 +362,11 @@
     width: calc(33.333% - 7px);
     max-width: calc(33.333% - 7px);
     min-width: 0;
+    display: flex;
+    flex-direction: column;
     border: 1px solid #d8efdf;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.72);
     overflow: hidden;
     box-shadow: none;
   }
@@ -370,6 +377,7 @@
     align-items: flex-start;
     gap: 8px 10px;
     width: 100%;
+    flex: 1 1 auto;
     margin: 0;
     padding: 12px 14px;
     border: none;
@@ -400,25 +408,44 @@
   }
 
   &__name {
-    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     font-size: 1.35rem;
     font-weight: vars.$weight-bold;
     color: #1f3d2a;
     line-height: 1.3;
-    white-space: normal;
-    overflow: visible;
-    text-overflow: unset;
+    min-height: calc(1.35rem * 1.3 * 2);
     word-break: break-word;
   }
 
-  &__short {
+  &__item.is-open &__name {
     display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    min-height: 0;
+  }
+
+  &__short {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     margin: 0;
     font-size: 12px;
     font-weight: 600;
     line-height: 1.2;
+    min-height: calc(12px * 1.2 * 2);
     color: #00a651;
     word-break: break-word;
+  }
+
+  &__item.is-open &__short {
+    display: block;
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    min-height: 0;
   }
 
   &__tag {
@@ -614,13 +641,67 @@
 // ===== TAGS =====
 .offer-listing-selection {
   margin-bottom: 1.25rem;
+  padding: 14px 16px 16px;
+  border: 1px solid #d8efdf;
+  border-radius: 14px;
+  background: rgba(243, 251, 246, 0.55);
+
+  // Hide empty chrome when no tags and no promo details
+  &:not(:has(#tags-container[style*="block"])):not(:has(#tags-container[style*="flex"])):has(#offer-promo-info.is-empty) {
+    display: none;
+  }
 
   .tags_container {
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  // jQuery .show() sets inline display — then divide from promo cards
+  .tags_container[style*="block"],
+  .tags_container[style*="flex"] {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #d8efdf;
+  }
+
+  .filter_tags_wrapper {
+    align-items: center;
+    gap: 8px 10px;
+    flex-wrap: wrap;
+
+    h3 {
+      margin: 0 4px 0 0;
+      color: #1f3d2a;
+      @include mixins.font-style(1.4rem, 1.2, vars.$weight-bold);
+    }
+
+    .button_clear_filters {
+      margin: 0 0 0 auto;
+      color: #355243;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      @include mixins.font-style(1.3rem, 1.2, vars.$weight-regular);
+    }
+  }
+
+  .selected_tags_container {
+    gap: 6px;
+    flex: 1 1 auto;
+
+    .filter-tag {
+      margin: 0;
+      padding: 5px 12px;
+      border: 1px solid #c5ddd0;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #1f3d2a;
+      @include mixins.font-style(1.25rem, 1.3, vars.$weight-medium);
+    }
   }
 
   #offer-promo-info {
-    margin-bottom: 0;
+    margin: 0;
   }
 }
 
@@ -1033,7 +1114,6 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  //border-radius: 0 0 0 6px;
 
   .location_icon {
     width: 11px;
@@ -1042,7 +1122,6 @@
     display: block;
   }
 
-  // Optional: city name text
   span {
     font-size: 14px;
     color: #000;
@@ -1050,9 +1129,31 @@
     line-height: 1.2;
   }
 
-  // Mobile list only — shown above title in _offer-mobile.scss
+  // Body duplicate — mobile may show this; desktop hides
   &--inline {
     display: none !important;
+  }
+}
+
+// Offer cards: city on photo, bottom-left, same row as heart
+.card_post_image .city_block--overlay {
+  top: auto;
+  right: auto;
+  left: 8px;
+  bottom: 8px;
+  z-index: 5;
+  max-width: calc(100% - 56px);
+  padding: 7px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.18);
+
+  span {
+    font-size: 1.3rem;
+    font-weight: vars.$weight-bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 

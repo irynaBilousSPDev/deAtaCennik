@@ -11,7 +11,7 @@ alwaysApply: false
 - **UI:** `.kalkulator-wse` in `template-parts/prices/calculator.php`.
 - **Wiring:** `section_tuition_fees.php` → `bachelor-master/section-tuition-calculator.php` (needs post meta `logical_sync_key`).
 - **Data:** `akademiataPrices.googleApiUrl` (Apps Script); JS `assets/src/js/prices-calculator.js` (bundled in `main.js`); optional fallback `prices.json`.
-- **Offer listing promos filter:** virtual filter from same `PROMOS` JSON — `configure/offer-promotions-filter.php`; sidebar group under Miasto on `page-offer.php`; public URL `?promo=` (alias of form `promotions[]`; taxonomy `promotions` has `query_var => false` so WP does not steal the param).
+- **Offer listing promos filter:** virtual filter from same `PROMOS` JSON — `configure/offer-promotions-filter.php`; sidebar group under Miasto on `page-offer.php`; public URL `?promo=` (alias of form `promotions[]`; taxonomy `promotions` has `query_var => false` so WP does not steal the param). Load order for PROMOS: transient → `prices.json` → short Google fetch (avoid blocking AJAX). Matching uses bulk language/city term load, not per-post queries.
 - **Header teaser:** link “SPRAWDŹ CENNIK” to `#tuition_fees` when `logical_sync_key` is set (no CPT price row).
 
 ## Postgraduate / MBA

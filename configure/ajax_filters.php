@@ -183,7 +183,8 @@ function akademiata_get_offer_listing_query_args($filter_action, array $form_dat
     if ($promo_ids !== array()) {
         $eligible_ids = akademiata_filter_offer_ids_by_promotions(
             akademiata_get_offer_listing_candidate_ids($filter_action, $base_form),
-            $promo_ids
+            $promo_ids,
+            $filter_action
         );
 
         if ($eligible_ids === array()) {

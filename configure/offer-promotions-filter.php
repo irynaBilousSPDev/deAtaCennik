@@ -20,7 +20,57 @@ function akademiata_get_offer_listing_filter_keys() {
 }
 
 /**
- * Load calculator PROMOS array (transient + Google URL / prices.json fallback).
+ * PROMOS from theme prices.json (fast local fallback).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_load_promos_from_prices_json() {
+    $path = get_template_directory() . '/prices.json';
+    if (!is_readable($path)) {
+        return array();
+    }
+
+    $json = json_decode((string) file_get_contents($path), true);
+    if (!empty($json['PROMOS']) && is_array($json['PROMOS'])) {
+        return $json['PROMOS'];
+    }
+
+    return array();
+}
+
+/**
+ * PROMOS from Google Apps Script (short timeout — never block listing filters for 15s).
+ *
+ * @param int $timeout_seconds
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_load_promos_from_google($timeout_seconds = 3) {
+    $url = akademiata_get_prices_google_api_url();
+    if ($url === '') {
+        return array();
+    }
+
+    $response = wp_remote_get(
+        $url,
+        array(
+            'timeout' => max(1, (int) $timeout_seconds),
+        )
+    );
+
+    if (is_wp_error($response) || (int) wp_remote_retrieve_response_code($response) !== 200) {
+        return array();
+    }
+
+    $body = json_decode((string) wp_remote_retrieve_body($response), true);
+    if (!empty($body['PROMOS']) && is_array($body['PROMOS'])) {
+        return $body['PROMOS'];
+    }
+
+    return array();
+}
+
+/**
+ * Load calculator PROMOS (transient → local prices.json → short Google fetch).
  *
  * @return array<int, array<string, mixed>>
  */
@@ -34,38 +84,16 @@ function akademiata_get_calculator_promos() {
     $transient_key = 'akademiata_calculator_promos_v1';
     $cached        = get_transient($transient_key);
 
-    if (is_array($cached)) {
+    if (is_array($cached) && $cached !== array()) {
         $runtime_cache = $cached;
         return $runtime_cache;
     }
 
-    $promos = array();
-    $url    = akademiata_get_prices_google_api_url();
-
-    if ($url !== '') {
-        $response = wp_remote_get(
-            $url,
-            array(
-                'timeout' => 15,
-            )
-        );
-
-        if (!is_wp_error($response) && (int) wp_remote_retrieve_response_code($response) === 200) {
-            $body = json_decode((string) wp_remote_retrieve_body($response), true);
-            if (!empty($body['PROMOS']) && is_array($body['PROMOS'])) {
-                $promos = $body['PROMOS'];
-            }
-        }
-    }
+    // Prefer local JSON first so AJAX filters never wait on a cold Google request.
+    $promos = akademiata_load_promos_from_prices_json();
 
     if ($promos === array()) {
-        $path = get_template_directory() . '/prices.json';
-        if (is_readable($path)) {
-            $json = json_decode((string) file_get_contents($path), true);
-            if (!empty($json['PROMOS']) && is_array($json['PROMOS'])) {
-                $promos = $json['PROMOS'];
-            }
-        }
+        $promos = akademiata_load_promos_from_google(3);
     }
 
     // Do not cache empty payloads — remote can fail briefly.
@@ -79,15 +107,15 @@ function akademiata_get_calculator_promos() {
 }
 
 /**
- * Map offer language taxonomy to calculator study language (pl|en).
- *
- * @param int $post_id
+ * @param WP_Term[] $terms
  * @return string pl|en
  */
-function akademiata_get_offer_study_language_code($post_id) {
-    $terms = akademiata_get_offer_terms($post_id, 'language');
-
+function akademiata_study_language_code_from_terms(array $terms) {
     foreach ($terms as $term) {
+        if (!is_object($term)) {
+            continue;
+        }
+
         $slug = strtolower((string) $term->slug);
         $name = strtolower((string) $term->name);
 
@@ -105,25 +133,160 @@ function akademiata_get_offer_study_language_code($post_id) {
 }
 
 /**
+ * @param WP_Term[] $terms
+ * @return string wwa|wro|uni
+ */
+function akademiata_city_code_from_terms(array $terms) {
+    if ($terms === array()) {
+        return 'uni';
+    }
+
+    $city_name = strtolower((string) $terms[0]->name);
+
+    if (strpos($city_name, 'warszawa') !== false) {
+        return 'wwa';
+    }
+
+    if (strpos($city_name, 'wroc') !== false) {
+        return 'wro';
+    }
+
+    return 'uni';
+}
+
+/**
+ * Map offer language taxonomy to calculator study language (pl|en).
+ *
+ * @param int $post_id
+ * @return string pl|en
+ */
+function akademiata_get_offer_study_language_code($post_id) {
+    return akademiata_study_language_code_from_terms(akademiata_get_offer_terms($post_id, 'language'));
+}
+
+/**
  * @param int $post_id
  * @return string wwa|wro|uni
  */
 function akademiata_get_offer_city_code($post_id) {
-    $terms = akademiata_get_offer_terms($post_id, 'city');
+    return akademiata_city_code_from_terms(akademiata_get_offer_terms($post_id, 'city'));
+}
 
-    if (!empty($terms)) {
-        $city_name = strtolower((string) $terms[0]->name);
+/**
+ * @return array<int, array{lng:string,cty:string,deg:int}>
+ */
+function &akademiata_offer_promo_match_context_store() {
+    static $cache = array();
+    return $cache;
+}
 
-        if (strpos($city_name, 'warszawa') !== false) {
-            return 'wwa';
-        }
+/**
+ * Bulk-load lng/city/deg for promo matching (avoids N+1 term queries).
+ *
+ * @param int[]  $post_ids
+ * @param string $filter_action filter_bachelor|filter_master|filter_posts|''
+ */
+function akademiata_prime_offer_promo_match_contexts(array $post_ids, $filter_action = '') {
+    $cache   = &akademiata_offer_promo_match_context_store();
+    $missing = array();
 
-        if (strpos($city_name, 'wroc') !== false) {
-            return 'wro';
+    foreach ($post_ids as $post_id) {
+        $post_id = (int) $post_id;
+        if ($post_id > 0 && !isset($cache[ $post_id ])) {
+            $missing[] = $post_id;
         }
     }
 
-    return 'uni';
+    if ($missing === array()) {
+        return;
+    }
+
+    $deg_fixed = null;
+    if ($filter_action === 'filter_bachelor') {
+        $deg_fixed = 1;
+    } elseif ($filter_action === 'filter_master') {
+        $deg_fixed = 2;
+    }
+
+    $types = array();
+    if ($deg_fixed === null) {
+        global $wpdb;
+        $placeholders = implode(',', array_fill(0, count($missing), '%d'));
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders built from count only.
+        $sql = $wpdb->prepare(
+            "SELECT ID, post_type FROM {$wpdb->posts} WHERE ID IN ($placeholders)",
+            $missing
+        );
+        foreach ((array) $wpdb->get_results($sql) as $row) {
+            $types[ (int) $row->ID ] = (string) $row->post_type;
+        }
+    }
+
+    $terms_by_post = array();
+    $terms         = wp_get_object_terms(
+        $missing,
+        array('language', 'city'),
+        array(
+            'fields'                 => 'all_with_object_id',
+            'update_term_meta_cache' => false,
+        )
+    );
+
+    if (!is_wp_error($terms) && is_array($terms)) {
+        foreach ($terms as $term) {
+            $oid = isset($term->object_id) ? (int) $term->object_id : 0;
+            if ($oid <= 0) {
+                continue;
+            }
+            $terms_by_post[ $oid ][ $term->taxonomy ][] = $term;
+        }
+    }
+
+    foreach ($missing as $post_id) {
+        $lang_terms = isset($terms_by_post[ $post_id ]['language'])
+            ? $terms_by_post[ $post_id ]['language']
+            : array();
+        $city_terms = isset($terms_by_post[ $post_id ]['city'])
+            ? $terms_by_post[ $post_id ]['city']
+            : array();
+
+        if ($deg_fixed !== null) {
+            $deg = $deg_fixed;
+        } else {
+            $pt  = isset($types[ $post_id ]) ? $types[ $post_id ] : '';
+            $deg = ($pt === 'bachelor') ? 1 : (($pt === 'master') ? 2 : 0);
+        }
+
+        $cache[ $post_id ] = array(
+            'lng' => akademiata_study_language_code_from_terms($lang_terms),
+            'cty' => akademiata_city_code_from_terms($city_terms),
+            'deg' => $deg,
+        );
+    }
+}
+
+/**
+ * @param int    $post_id
+ * @param string $filter_action
+ * @return array{lng:string,cty:string,deg:int}
+ */
+function akademiata_get_offer_promo_match_context($post_id, $filter_action = '') {
+    $post_id = (int) $post_id;
+    $cache   = &akademiata_offer_promo_match_context_store();
+
+    if (!isset($cache[ $post_id ])) {
+        akademiata_prime_offer_promo_match_contexts(array( $post_id ), $filter_action);
+    }
+
+    if (isset($cache[ $post_id ])) {
+        return $cache[ $post_id ];
+    }
+
+    return array(
+        'lng' => 'pl',
+        'cty' => 'uni',
+        'deg' => 0,
+    );
 }
 
 /**
@@ -147,33 +310,44 @@ function akademiata_get_offer_degree_level($post_id) {
 /**
  * Same eligibility rules as prices-calculator.js getElig().
  *
- * @param int                $post_id
- * @param array<string,mixed> $promo
+ * @param array{lng:string,cty:string,deg:int} $ctx
+ * @param array<string,mixed>                  $promo
  * @return bool
  */
-function akademiata_offer_matches_calculator_promo($post_id, array $promo) {
-    $study_lng = akademiata_get_offer_study_language_code($post_id);
+function akademiata_offer_context_matches_calculator_promo(array $ctx, array $promo) {
     $promo_lng = isset($promo['lng']) ? strtolower((string) $promo['lng']) : 'pl';
 
-    if ($promo_lng !== $study_lng) {
+    if ($promo_lng !== $ctx['lng']) {
         return false;
     }
 
-    $deg       = akademiata_get_offer_degree_level($post_id);
     $promo_deg = isset($promo['deg']) ? (int) $promo['deg'] : 0;
 
-    if ($promo_deg !== 0 && $promo_deg !== $deg) {
+    if ($promo_deg !== 0 && $promo_deg !== (int) $ctx['deg']) {
         return false;
     }
 
-    $city      = akademiata_get_offer_city_code($post_id);
     $promo_cty = isset($promo['cty']) ? strtolower((string) $promo['cty']) : 'both';
 
-    if ($promo_cty !== 'both' && $promo_cty !== $city) {
+    if ($promo_cty !== 'both' && $promo_cty !== $ctx['cty']) {
         return false;
     }
 
     return true;
+}
+
+/**
+ * Same eligibility rules as prices-calculator.js getElig().
+ *
+ * @param int                 $post_id
+ * @param array<string,mixed> $promo
+ * @return bool
+ */
+function akademiata_offer_matches_calculator_promo($post_id, array $promo) {
+    return akademiata_offer_context_matches_calculator_promo(
+        akademiata_get_offer_promo_match_context((int) $post_id),
+        $promo
+    );
 }
 
 /**
@@ -221,10 +395,6 @@ function akademiata_get_listing_promos_for_filter($filter_action) {
  * @param array<string, mixed> $form_data
  * @return string[]
  */
-/**
- * @param array<string, mixed> $form_data
- * @return string[]
- */
 function akademiata_parse_selected_promotion_ids(array $form_data) {
     $raw = array();
 
@@ -267,7 +437,7 @@ function akademiata_get_offer_listing_candidate_ids($filter_action, array $form_
         'order'                  => 'ASC',
         'no_found_rows'          => true,
         'update_post_meta_cache' => false,
-        'update_post_term_cache' => true,
+        'update_post_term_cache' => false,
         'lang'                   => apply_filters('wpml_current_language', null),
     );
 
@@ -380,19 +550,27 @@ function akademiata_selected_promos_are_stackable(array $selected_promos) {
 }
 
 /**
- * @param int[]     $post_ids
- * @param string[]  $promo_ids
+ * @param int[]  $post_ids
+ * @param string[] $promo_ids
+ * @param string $filter_action filter_bachelor|filter_master|filter_posts|''
  * @return int[]
  */
-function akademiata_filter_offer_ids_by_promotions(array $post_ids, array $promo_ids) {
+function akademiata_filter_offer_ids_by_promotions(array $post_ids, array $promo_ids, $filter_action = '') {
     if ($post_ids === array() || $promo_ids === array()) {
         return array();
     }
 
     $promos_by_id = array();
     foreach (akademiata_get_calculator_promos() as $promo) {
-        if (!empty($promo['id'])) {
-            $promos_by_id[ (string) $promo['id'] ] = $promo;
+        if (empty($promo['id']) || !is_array($promo)) {
+            continue;
+        }
+
+        $raw  = (string) $promo['id'];
+        $slug = sanitize_title($raw);
+        $promos_by_id[ $raw ] = $promo;
+        if ($slug !== '' && $slug !== $raw) {
+            $promos_by_id[ $slug ] = $promo;
         }
     }
 
@@ -411,20 +589,30 @@ function akademiata_filter_offer_ids_by_promotions(array $post_ids, array $promo
         return array();
     }
 
+    akademiata_prime_offer_promo_match_contexts($post_ids, $filter_action);
+    $cache    = &akademiata_offer_promo_match_context_store();
     $eligible = array();
 
     foreach ($post_ids as $post_id) {
-        $matches_all = true;
+        $post_id = (int) $post_id;
+        $ctx     = isset($cache[ $post_id ])
+            ? $cache[ $post_id ]
+            : array(
+                'lng' => 'pl',
+                'cty' => 'uni',
+                'deg' => 0,
+            );
 
+        $matches_all = true;
         foreach ($selected_promos as $promo) {
-            if (!akademiata_offer_matches_calculator_promo($post_id, $promo)) {
+            if (!akademiata_offer_context_matches_calculator_promo($ctx, $promo)) {
                 $matches_all = false;
                 break;
             }
         }
 
         if ($matches_all) {
-            $eligible[] = (int) $post_id;
+            $eligible[] = $post_id;
         }
     }
 
@@ -519,13 +707,25 @@ function akademiata_get_promotion_filter_counts($filter_action, array $base_form
         $counts[ $promo_id ] = 0;
     }
 
+    akademiata_prime_offer_promo_match_contexts($candidate_ids, $filter_action);
+    $cache = &akademiata_offer_promo_match_context_store();
+
     foreach ($candidate_ids as $post_id) {
+        $post_id = (int) $post_id;
+        $ctx     = isset($cache[ $post_id ])
+            ? $cache[ $post_id ]
+            : array(
+                'lng' => 'pl',
+                'cty' => 'uni',
+                'deg' => 0,
+            );
+
         foreach ($promos as $promo) {
             if (empty($promo['id'])) {
                 continue;
             }
 
-            if (akademiata_offer_matches_calculator_promo($post_id, $promo)) {
+            if (akademiata_offer_context_matches_calculator_promo($ctx, $promo)) {
                 $counts[ (string) $promo['id'] ]++;
             }
         }
