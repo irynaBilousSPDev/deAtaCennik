@@ -366,6 +366,18 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus,
+  &:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(vars.$primary, 0.55) !important;
+    outline-offset: 2px;
+  }
 
   .menu-icon {
     display: flex;
@@ -453,6 +465,26 @@ header {
     display: block;
   }
 
+  // Kill UA/Bootstrap thick black focus rings on accordion controls
+  button,
+  .mega_menu_title,
+  .mega-menu-sub-toggle {
+    -webkit-tap-highlight-color: transparent;
+    appearance: none;
+
+    &:focus,
+    &:active {
+      outline: none !important;
+      box-shadow: none !important;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(vars.$primary, 0.55) !important;
+      outline-offset: 2px;
+      box-shadow: none !important;
+    }
+  }
+
   .mega-menu-columns {
     display: flex;
     flex-wrap: wrap;
@@ -480,6 +512,11 @@ header {
 
     @media (min-width: 991px) and (max-width: 1180px) {
       min-width: 170px;
+    }
+
+    // Mobile city split of Oferta — hidden on desktop
+    &--offer-city {
+      display: none !important;
     }
   }
 
@@ -760,6 +797,15 @@ header {
       &.is-open > .mega-column__list {
         display: block;
       }
+
+      // Desktop Oferta hidden on mobile; city columns shown
+      &--offer-desktop {
+        display: none !important;
+      }
+
+      &--offer-city {
+        display: block !important;
+      }
     }
 
     .mega_menu_title {
@@ -858,13 +904,13 @@ header {
       display: none !important;
     }
 
-    // Nested specialties — clear tree under parent (not same column as parents)
+    // Nested specialties — indent under parent (no harsh border; match mockup)
     .mega-menu-item.has-mega-sub > .mega-menu-sub {
       display: block;
-      margin: 6px 0 14px;
-      padding: 8px 0 4px 16px;
-      padding-inline-start: 16px;
-      border-left: 2px solid #e4e4e4;
+      margin: 4px 0 12px;
+      padding: 6px 0 2px 12px;
+      padding-inline-start: 12px;
+      border-left: none;
       list-style: none;
 
       > li {
@@ -939,10 +985,10 @@ header {
       }
 
       .mega-menu-item.has-mega-sub > .mega-menu-sub {
-        margin: 8px 0 12px;
-        padding: 6px 0 2px 14px;
-        padding-inline-start: 14px;
-        border-left-color: #ddd;
+        margin: 6px 0 10px;
+        padding: 4px 0 2px 8px;
+        padding-inline-start: 8px;
+        border-left: none;
         background: transparent;
       }
     }
@@ -978,9 +1024,9 @@ header {
       .mega-menu-item .mega-menu-sub,
       .mega-column__list .mega-menu-sub {
         margin: 6px 0 10px;
-        padding: 4px 0 4px 16px;
-        padding-inline-start: 16px;
-        border-left: 2px solid #e8e8e8;
+        padding: 4px 0 4px 12px;
+        padding-inline-start: 12px;
+        border-left: none;
       }
     }
 

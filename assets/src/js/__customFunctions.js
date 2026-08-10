@@ -82,6 +82,7 @@ export function initMegaMenu(toggleSelector, menuSelector) {
         const willOpen = !$column.hasClass('is-open');
         $column.toggleClass('is-open', willOpen);
         jQuery(this).attr('aria-expanded', willOpen ? 'true' : 'false');
+        this.blur();
     });
 
     // Mobile: expand/collapse CPT specialty lists under Oferta
@@ -101,6 +102,7 @@ export function initMegaMenu(toggleSelector, menuSelector) {
         } else {
             $sub.attr('hidden', true);
         }
+        this.blur();
     });
 }
 
