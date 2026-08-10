@@ -201,8 +201,8 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /**
      * Whether a specialty belongs in a mobile Oferta column.
-     * Cities: campus I/II for that city + campus PG/MBA/courses + exams.
-     * Online: only I/II with niestacjonarne + PG/MBA/courses tagged online.
+     * Same groups everywhere (I/II, PG, MBA, courses, exams):
+     * Warszawa / Wrocław = that campus only; Online = online / niestacjonarne.
      *
      * @param int    $post_id
      * @param string $post_type
@@ -216,20 +216,16 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         }
 
         if (in_array($post_type, array('bachelor', 'master'), true)) {
-            list($has_full, $has_part) = $this->bachelor_master_mode_flags($post_id);
-
             if ($want === 'online') {
+                // Online column: only niestacjonarne I/II.
+                list($has_full, $has_part) = $this->bachelor_master_mode_flags($post_id);
+                unset($has_full);
                 return $has_part;
             }
 
-            // City tabs: campus modes only (stacjonarne / both / untagged).
-            if ($has_part && !$has_full) {
-                return false;
-            }
-
+            // City columns: all I/II for that city (any mode).
             $keys = $this->post_location_keys($post_id, 'city');
             if ($keys === array()) {
-                // Same default as akademiata_get_offer_city_slug().
                 return $want === 'warszawa';
             }
             return in_array($want, $keys, true);
@@ -242,6 +238,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             return in_array($want, $this->post_location_keys($post_id, 'exam_city'), true);
         }
 
+        // PG / MBA / courses — city_pg_mba (warszawa | wroclaw | online).
         $keys      = $this->post_location_keys($post_id, $this->city_taxonomy_for_post_type($post_type));
         $is_online = in_array('online', $keys, true);
 
@@ -249,7 +246,6 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             return $is_online;
         }
 
-        // Campus columns: never mix in online-tagged PG/MBA/courses.
         if ($is_online) {
             return false;
         }
