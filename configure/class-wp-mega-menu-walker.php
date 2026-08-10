@@ -99,6 +99,8 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /**
      * Study mode flags for bachelor/master (taxonomy `mode`).
+     * “Stacjonarne sobotnio-niedzielne” = campus (full), not Online.
+     * Online I/II = explicitly niestacjonarne / zaoczne only.
      *
      * @param int $post_id
      * @return array{0:bool,1:bool} [has_full_time, has_part_time]
@@ -113,17 +115,25 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
         foreach ($terms as $term) {
             $hay = mb_strtolower((string) $term->slug . ' ' . (string) $term->name);
+
+            // Campus first — includes “Stacjonarne sobotnio-niedzielne”.
+            if (
+                strpos($hay, 'stacjonarn') !== false
+                || strpos($hay, 'dzienn') !== false
+                || strpos($hay, 'full-time') !== false
+                || strpos($hay, 'full_time') !== false
+            ) {
+                $has_full = true;
+                continue;
+            }
+
             if (
                 strpos($hay, 'niestacjonarn') !== false
                 || strpos($hay, 'zaoczn') !== false
-                || strpos($hay, 'sobotnio') !== false
+                || strpos($hay, 'part-time') !== false
+                || strpos($hay, 'part_time') !== false
             ) {
                 $has_part = true;
-            } elseif (
-                strpos($hay, 'stacjonarn') !== false
-                || strpos($hay, 'dzienn') !== false
-            ) {
-                $has_full = true;
             }
         }
 
@@ -132,8 +142,8 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /**
      * Whether a specialty belongs in a mobile Oferta column.
-     * Cities: campus offers + stacjonarne I/II (+ exams).
-     * Online: Studia I/II (niestacjonarne) + online-tagged PG/MBA/courses.
+     * Cities: campus I/II for that city + campus PG/MBA/courses + exams.
+     * Online: only I/II with niestacjonarne + PG/MBA/courses tagged online.
      *
      * @param int    $post_id
      * @param string $post_type
@@ -145,11 +155,11 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             list($has_full, $has_part) = $this->bachelor_master_mode_flags($post_id);
 
             if ($city_slug === 'online') {
-                // Part-time tagged, or no mode set yet (still show under weekend row).
-                return $has_part || (!$has_full && !$has_part);
+                // Strict: only specialties that actually have niestacjonarne.
+                return $has_part;
             }
 
-            // City tabs: stacjonarne (or unspecified). Skip part-time-only.
+            // City tabs: skip niestacjonarne-only; keep stacjonarne / both / untagged.
             if ($has_part && !$has_full) {
                 return false;
             }
