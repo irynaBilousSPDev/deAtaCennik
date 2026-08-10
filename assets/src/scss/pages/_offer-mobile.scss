@@ -652,7 +652,7 @@ $om-filter-card-pad: 16px;
             top: 0;
             left: 0;
             z-index: 3;
-            max-width: 46px !important;
+            max-width: 42px !important;
             width: auto;
             height: auto;
             pointer-events: none;
@@ -732,7 +732,7 @@ $om-filter-card-pad: 16px;
         }
       }
 
-      // List — horizontal card
+        // List — horizontal card (larger thumb so badges don’t smother the photo)
       #filter-results.filter-results--list {
         padding-left: $om-pad-x;
         padding-right: $om-pad-x;
@@ -748,24 +748,61 @@ $om-filter-card-pad: 16px;
           flex-direction: row;
           align-items: stretch;
           padding: $om-card-pad !important;
-          gap: 10px;
+          gap: 12px;
         }
 
         .card_post_image {
-          flex: 0 0 120px;
-          width: 120px;
-          aspect-ratio: auto;
+          flex: 0 0 clamp(148px, 40%, 176px);
+          width: clamp(148px, 40%, 176px);
+          max-width: 48%;
+          aspect-ratio: 1;
+          align-self: flex-start;
           border-radius: 10px;
 
           .image_bg {
             height: 100% !important;
-            min-height: 120px !important;
+            min-height: 0 !important;
             background-position: center;
             border-radius: 10px;
           }
 
+          .city_block {
+            top: auto !important;
+            right: auto !important;
+            left: 6px !important;
+            bottom: 6px;
+            max-width: calc(100% - 44px);
+            padding: 3px 7px !important;
+            gap: 4px;
+            border-radius: 100px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+
+            span {
+              font-size: 1rem;
+              max-width: 9ch;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            .location_icon {
+              width: 9px;
+            }
+          }
+
           .ranking_icon {
-            max-width: 40px !important;
+            max-width: 36px !important;
+            top: 4px;
+            left: 4px;
+          }
+
+          .offer-favorite-btn {
+            width: 30px;
+            height: 30px;
+            right: 6px;
+            bottom: 6px;
           }
         }
 
