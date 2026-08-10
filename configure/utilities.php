@@ -1927,6 +1927,18 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Акції',
                 'ru' => 'Акции',
             ),
+            'offer_promo_active' => array(
+                'pl' => 'Aktywna',
+                'en' => 'Active',
+                'uk' => 'Активна',
+                'ru' => 'Активна',
+            ),
+            'offer_promo_unavailable' => array(
+                'pl' => 'Niedostępna',
+                'en' => 'Unavailable',
+                'uk' => 'Недоступна',
+                'ru' => 'Недоступна',
+            ),
             'offer_card_degree' => array(
                 'pl' => 'Rodzaj studiów',
                 'en' => 'Type of studies',

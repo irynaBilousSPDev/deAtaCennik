@@ -518,9 +518,7 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         akademiata_get_offer_listing_filter_keys()
     );
 
-    $base_form = akademiata_parse_offer_filter_form_data();
-    unset($base_form['promotions']);
-    $promo_counts = akademiata_get_promotion_filter_counts($filter_action, $base_form);
+    $active_label = akademiata_get_theme_lang_string('offer_promo_active');
     ?>
     <div class="taxonomy_group taxonomy_group--promotions mb-3">
         <h2 class="filter_accordion_header filter_accordion_header--promotions" data-tax="promotions">
@@ -533,15 +531,14 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         <div class="accordion-content">
             <div class="labels_list filter-promo-cards">
                 <?php foreach ($promos as $promo) :
-                    $promo_id    = sanitize_title((string) $promo['id']);
-                    $promo_name  = isset($promo['name']) ? (string) $promo['name'] : $promo_id;
-                    $promo_short = isset($promo['short'])
-                        ? akademiata_get_promo_short_plain_text($promo['short'])
+                    $promo_id     = sanitize_title((string) $promo['id']);
+                    $promo_name   = isset($promo['name']) ? (string) $promo['name'] : $promo_id;
+                    $promo_short  = isset($promo['short'])
+                        ? akademiata_get_promo_short_plain_text($promo['short'], 90)
                         : '';
-                    $promo_tag   = isset($promo['tag']) ? trim((string) $promo['tag']) : '';
-                    $promo_count = isset($promo_counts[ $promo_id ]) ? (int) $promo_counts[ $promo_id ] : 0;
-                    $promo_stack = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
-                    $checked     = in_array($promo_id, $selected, true) ? 'checked' : '';
+                    $promo_tag    = isset($promo['tag']) ? trim((string) $promo['tag']) : '';
+                    $promo_stack  = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
+                    $checked      = in_array($promo_id, $selected, true) ? 'checked' : '';
                     ?>
                     <label class="filter-promo-card">
                         <input type="checkbox"
@@ -549,25 +546,79 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                                name="promotions[]"
                                value="<?php echo esc_attr($promo_id); ?>"
                                data-tag-label="<?php echo esc_attr($promo_name); ?>"
+                               data-promo-name="<?php echo esc_attr($promo_name); ?>"
+                               data-promo-short="<?php echo esc_attr($promo_short); ?>"
+                               data-promo-tag="<?php echo esc_attr($promo_tag); ?>"
                                data-promo-stack="<?php echo esc_attr(wp_json_encode($promo_stack)); ?>"
                             <?php echo $checked; ?>>
                         <span class="filter-promo-card__surface">
                             <span class="filter-promo-card__chk" aria-hidden="true"></span>
                             <span class="filter-promo-card__info">
-                                <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
+                                <span class="filter-promo-card__name-row">
+                                    <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
+                                    <?php if ($promo_tag !== '') : ?>
+                                        <span class="filter-promo-card__tag"><?php echo esc_html($promo_tag); ?></span>
+                                    <?php endif; ?>
+                                </span>
                                 <?php if ($promo_short !== '') : ?>
                                     <span class="filter-promo-card__short"><?php echo esc_html($promo_short); ?></span>
                                 <?php endif; ?>
                             </span>
-                            <?php if ($promo_tag !== '') : ?>
-                                <span class="filter-promo-card__tag"><?php echo esc_html($promo_tag); ?></span>
-                            <?php endif; ?>
-                            <span class="filter-promo-card__count"><?php echo esc_html((string) $promo_count); ?></span>
+                            <span class="filter-promo-card__status"><?php echo esc_html($active_label); ?></span>
                         </span>
                     </label>
                 <?php endforeach; ?>
             </div>
         </div>
+    </div>
+    <?php
+}
+
+/**
+ * Empty promo info panel (filled by JS / SSR selected state).
+ */
+function akademiata_render_offer_promo_info_panel() {
+    $filter_action = akademiata_get_offer_filter_action();
+    $promos        = akademiata_get_listing_promos_for_filter($filter_action);
+    if ($promos === array()) {
+        return;
+    }
+
+    $selected = akademiata_get_selected_filter_terms_from_request(
+        'promotions',
+        akademiata_get_offer_listing_filter_keys()
+    );
+
+    $items = array();
+    foreach ($promos as $promo) {
+        $promo_id = sanitize_title((string) ($promo['id'] ?? ''));
+        if ($promo_id === '' || !in_array($promo_id, $selected, true)) {
+            continue;
+        }
+        $items[] = array(
+            'id'    => $promo_id,
+            'name'  => isset($promo['name']) ? (string) $promo['name'] : $promo_id,
+            'short' => isset($promo['short']) ? akademiata_get_promo_short_plain_text($promo['short'], 160) : '',
+            'tag'   => isset($promo['tag']) ? trim((string) $promo['tag']) : '',
+        );
+    }
+
+    $hidden = empty($items) ? ' is-empty' : '';
+    ?>
+    <div id="offer-promo-info" class="offer-promo-info<?php echo esc_attr($hidden); ?>" aria-live="polite">
+        <?php foreach ($items as $item) : ?>
+            <div class="offer-promo-info__item" data-promo-id="<?php echo esc_attr($item['id']); ?>">
+                <div class="offer-promo-info__head">
+                    <strong class="offer-promo-info__name"><?php echo esc_html($item['name']); ?></strong>
+                    <?php if ($item['tag'] !== '') : ?>
+                        <span class="offer-promo-info__tag"><?php echo esc_html($item['tag']); ?></span>
+                    <?php endif; ?>
+                </div>
+                <?php if ($item['short'] !== '') : ?>
+                    <p class="offer-promo-info__short"><?php echo esc_html($item['short']); ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
     </div>
     <?php
 }

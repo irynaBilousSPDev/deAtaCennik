@@ -66,6 +66,8 @@ function akademiata_enqueue_scripts()
 
     if (is_page_template('page-offer.php')) {
         $offer_localize['filterNoOptions'] = akademiata_get_theme_lang_string('offer_filter_no_options');
+        $offer_localize['promoActive'] = akademiata_get_theme_lang_string('offer_promo_active');
+        $offer_localize['promoUnavailable'] = akademiata_get_theme_lang_string('offer_promo_unavailable');
     }
 
     wp_localize_script('name-main-js', 'akademiataOffer', $offer_localize);

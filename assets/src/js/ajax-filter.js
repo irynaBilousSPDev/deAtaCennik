@@ -346,6 +346,47 @@ import { initOfferViewToggle } from './offer-view-toggle';
         });
     }
 
+    function updatePromoInfoPanel() {
+        const $panel = $('#offer-promo-info');
+        if (!$panel.length) {
+            return;
+        }
+
+        $panel.empty();
+
+        const selected = form.find('input[name="promotions[]"]:checked').toArray();
+        if (!selected.length) {
+            $panel.addClass('is-empty');
+            return;
+        }
+
+        selected.forEach((input) => {
+            const $input = $(input);
+            const name = ($input.attr('data-promo-name') || $input.attr('data-tag-label') || $input.val() || '').trim();
+            const short = ($input.attr('data-promo-short') || '').trim();
+            const tag = ($input.attr('data-promo-tag') || '').trim();
+
+            const $item = $('<div>')
+                .addClass('offer-promo-info__item')
+                .attr('data-promo-id', $input.val());
+
+            const $head = $('<div>').addClass('offer-promo-info__head');
+            $head.append($('<strong>').addClass('offer-promo-info__name').text(name));
+            if (tag) {
+                $head.append($('<span>').addClass('offer-promo-info__tag').text(tag));
+            }
+            $item.append($head);
+
+            if (short) {
+                $item.append($('<p>').addClass('offer-promo-info__short').text(short));
+            }
+
+            $panel.append($item);
+        });
+
+        $panel.removeClass('is-empty');
+    }
+
     function updatePromoStackStates() {
         const checkedIds = [];
 
@@ -368,6 +409,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
             $input.closest('.filter-promo-card').toggleClass('is-disabled', !canSelect && !$input.is(':checked'));
         });
+
+        updatePromoInfoPanel();
     }
 
     function sanitizePromoSelectionFromUrl() {

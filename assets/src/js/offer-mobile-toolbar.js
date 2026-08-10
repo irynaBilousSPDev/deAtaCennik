@@ -157,17 +157,41 @@ function openOfferDropdown(taxonomy, label) {
         option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
 
         if (taxonomy === 'promotions' && sourceLabel) {
+            const isDisabled = sourceLabel.classList.contains('is-disabled');
             const nameEl = sourceLabel.querySelector('.filter-promo-card__name');
             const shortEl = sourceLabel.querySelector('.filter-promo-card__short');
             const tagEl = sourceLabel.querySelector('.filter-promo-card__tag');
-            const countEl = sourceLabel.querySelector('.filter-promo-card__count');
+            const activeLabel = (window.akademiataOffer && akademiataOffer.promoActive) || 'Aktywna';
+            const unavailableLabel = (window.akademiataOffer && akademiataOffer.promoUnavailable) || 'Niedostępna';
+
+            if (isDisabled) {
+                option.classList.add('is-disabled');
+            }
+
             const content = document.createElement('span');
             content.className = 'offer-mobile-dropdown__option-content offer-mobile-dropdown__option-content--promo';
+
+            const nameRow = document.createElement('span');
+            nameRow.className = 'offer-mobile-dropdown__option-name-row';
 
             const name = document.createElement('span');
             name.className = 'offer-mobile-dropdown__option-name';
             name.textContent = nameEl?.textContent.trim() || input.value;
-            content.appendChild(name);
+            nameRow.appendChild(name);
+
+            if (input.checked) {
+                const status = document.createElement('span');
+                status.className = 'offer-mobile-dropdown__option-status is-active';
+                status.textContent = activeLabel;
+                nameRow.appendChild(status);
+            } else if (isDisabled) {
+                const status = document.createElement('span');
+                status.className = 'offer-mobile-dropdown__option-status is-unavailable';
+                status.textContent = unavailableLabel;
+                nameRow.appendChild(status);
+            }
+
+            content.appendChild(nameRow);
 
             if (shortEl && shortEl.textContent.trim()) {
                 const short = document.createElement('span');
@@ -188,13 +212,6 @@ function openOfferDropdown(taxonomy, label) {
                 meta.appendChild(tag);
             }
 
-            if (countEl && countEl.textContent.trim()) {
-                const count = document.createElement('span');
-                count.className = 'offer-mobile-dropdown__option-count';
-                count.textContent = countEl.textContent.trim();
-                meta.appendChild(count);
-            }
-
             if (meta.childNodes.length) {
                 option.appendChild(meta);
             }
@@ -208,10 +225,19 @@ function openOfferDropdown(taxonomy, label) {
             }
 
             input.checked = !input.checked;
-            option.classList.toggle('is-selected', input.checked);
-            option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
             triggerFilterChange(input);
             syncChipStates();
+
+            // Rebuild promo options so Active / Unavailable badges stay in sync with sw rules.
+            if (taxonomy === 'promotions') {
+                window.setTimeout(() => {
+                    openOfferDropdown('promotions', label || '');
+                }, 0);
+                return;
+            }
+
+            option.classList.toggle('is-selected', input.checked);
+            option.setAttribute('aria-pressed', input.checked ? 'true' : 'false');
         });
 
         list.appendChild(option);
