@@ -627,13 +627,23 @@ $om-filter-card-pad: 16px;
           }
 
           .ranking_icon {
-            // Default mobile (list / 1-col): ranking in body, not on photo
+            // List / 1-col: keep badge on photo, top-right (same as left, mirrored)
             &--overlay {
-              display: none !important;
+              display: block !important;
+              position: absolute;
+              top: 0 !important;
+              left: auto !important;
+              right: 0 !important;
+              z-index: 3;
+              max-width: 52px !important;
+              width: auto;
+              height: auto;
+              margin: 0;
+              pointer-events: none;
             }
 
             &--inline {
-              display: none; // shown in .card_post_body below
+              display: none !important;
             }
           }
 
@@ -651,14 +661,7 @@ $om-filter-card-pad: 16px;
 
         .card_post_body {
           .ranking_icon--inline {
-            position: static !important;
-            display: block !important;
-            max-width: 88px !important;
-            width: auto;
-            height: auto;
-            margin: 0 0 8px auto;
-            object-fit: contain;
-            pointer-events: none;
+            display: none !important;
           }
 
           .city_block--inline {
@@ -750,14 +753,21 @@ $om-filter-card-pad: 16px;
             max-width: 100% !important;
           }
 
-          // 1 card / row: ranking + city in body again
-          .card_post_image .ranking_icon--overlay,
+          // 1 card / row: city before title; ranking stays on photo (top-right)
           .card_post_image .city_block--overlay {
             display: none !important;
           }
 
-          .card_post_body .ranking_icon--inline {
+          .card_post_image .ranking_icon--overlay {
             display: block !important;
+            top: 0 !important;
+            left: auto !important;
+            right: 0 !important;
+            max-width: 52px !important;
+          }
+
+          .card_post_body .ranking_icon--inline {
+            display: none !important;
           }
 
           .card_post_body .city_block--inline {
@@ -779,13 +789,6 @@ $om-filter-card-pad: 16px;
           .image_bg {
             height: 100% !important;
             min-height: 0 !important;
-          }
-
-          .ranking_icon--overlay {
-            top: 0 !important;
-            left: 0 !important;
-            max-width: 56px !important;
-            margin: 0;
           }
         }
 
@@ -857,7 +860,12 @@ $om-filter-card-pad: 16px;
           }
 
           .ranking_icon--overlay {
-            display: none !important;
+            display: block !important;
+            top: 0 !important;
+            left: auto !important;
+            right: 0 !important;
+            max-width: 72px !important;
+            z-index: 3;
           }
 
           .offer-favorite-btn {
@@ -881,9 +889,7 @@ $om-filter-card-pad: 16px;
           padding: $om-card-pad 12px $om-card-pad 12px !important;
 
           .ranking_icon--inline {
-            display: block !important;
-            max-width: 96px !important;
-            margin: 0 0 8px auto;
+            display: none !important;
           }
 
           .city_block--inline {

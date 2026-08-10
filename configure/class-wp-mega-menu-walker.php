@@ -1,6 +1,6 @@
 <?php
 /**
- * Mega menu walker — columns + optional CPT sublists under Oferta (PG / MBA / courses).
+ * Mega menu walker — columns + optional CPT specialty sublists under Oferta.
  */
 class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     private $depth0_open = false;
@@ -9,12 +9,14 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
      * Map a depth-1 menu item to a CPT that should get an auto submenu.
      *
      * @param object $item
-     * @return string|null postgraduate|mba|courses
+     * @return string|null bachelor|master|postgraduate|mba|courses
      */
     private function resolve_offer_submenu_post_type($item) {
+        $offer_types = array('bachelor', 'master', 'postgraduate', 'mba', 'courses');
+
         if (!empty($item->type) && $item->type === 'post_type_archive' && !empty($item->object)) {
             $object = (string) $item->object;
-            if (in_array($object, array('postgraduate', 'mba', 'courses'), true)) {
+            if (in_array($object, $offer_types, true)) {
                 return $object;
             }
         }
@@ -25,6 +27,8 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         }
 
         $patterns = array(
+            'bachelor'     => array('studia-1-stopnia', '/bachelor'),
+            'master'       => array('studia-2-stopnia', '/master'),
             'postgraduate' => array('studia-podyplomowe', 'postgraduate', 'post-graduate'),
             'mba'          => array('studia-mba', '/mba/', '/mba'),
             'courses'      => array('/kursy', '/courses'),
@@ -42,10 +46,10 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
     }
 
     /**
-     * Published offer titles for mobile mega submenu.
+     * Published offer specialties for mobile mega submenu (title, url, thumb).
      *
      * @param string $post_type
-     * @return array<int, array{title:string,url:string}>
+     * @return array<int, array{title:string,url:string,thumb:string}>
      */
     private function get_offer_submenu_links($post_type) {
         static $cache = array();
@@ -62,7 +66,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
                 'orderby'                => 'title',
                 'order'                  => 'ASC',
                 'no_found_rows'          => true,
-                'update_post_meta_cache' => false,
+                'update_post_meta_cache' => true,
                 'update_post_term_cache' => false,
                 'lang'                   => apply_filters('wpml_current_language', null),
             )
@@ -70,9 +74,16 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
 
         $links = array();
         foreach ($query->posts as $post) {
+            $thumb = '';
+            $thumb_id = get_post_thumbnail_id($post);
+            if ($thumb_id) {
+                $thumb = (string) wp_get_attachment_image_url($thumb_id, 'thumbnail');
+            }
+
             $links[] = array(
                 'title' => get_the_title($post),
                 'url'   => get_permalink($post),
+                'thumb' => $thumb,
             );
         }
         wp_reset_postdata();
@@ -98,7 +109,7 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
         if ($depth === 0) {
             $output .= '<div class="mega-column">';
             $output .= '<button type="button" class="mega_menu_title" aria-expanded="false">';
-            $output .= esc_html($item->title);
+            $output .= '<span class="mega_menu_title-text">' . esc_html($item->title) . '</span>';
             $output .= '<span class="mega_menu_title-arr" aria-hidden="true"></span>';
             $output .= '</button>';
             $output .= '<ul class="mega-column__list">';
@@ -132,11 +143,20 @@ class WP_Mega_Menu_Walker extends Walker_Nav_Menu {
             $output .= '<a' . $attributes . '>' . esc_html($item->title) . '</a>';
             $output .= '<button type="button" class="mega-menu-sub-toggle" aria-expanded="false" aria-label="'
                 . esc_attr(sprintf(__('Pokaż listę: %s', 'akademiata'), $item->title))
-                . '"><span aria-hidden="true">▾</span></button>';
+                . '"><span aria-hidden="true"></span></button>';
             $output .= '</div>';
             $output .= '<ul class="mega-menu-sub" hidden>';
             foreach ($subs as $sub) {
-                $output .= '<li><a href="' . esc_url($sub['url']) . '">' . esc_html($sub['title']) . '</a></li>';
+                $output .= '<li>';
+                $output .= '<a class="mega-menu-sub__link" href="' . esc_url($sub['url']) . '">';
+                $output .= '<span class="mega-menu-sub__thumb' . (empty($sub['thumb']) ? ' is-empty' : '') . '">';
+                if (!empty($sub['thumb'])) {
+                    $output .= '<img src="' . esc_url($sub['thumb']) . '" alt="" loading="lazy" decoding="async" width="48" height="48">';
+                }
+                $output .= '</span>';
+                $output .= '<span class="mega-menu-sub__label">' . esc_html($sub['title']) . '</span>';
+                $output .= '</a>';
+                $output .= '</li>';
             }
             $output .= '</ul>';
         } else {

@@ -83,12 +83,6 @@
         ?>
         <div class="card_post_body">
             <div>
-                <?php if (!empty($show_ranking_icon)) : ?>
-                    <img class="ranking_icon ranking_icon--inline"
-                         src="<?php echo esc_url($ranking_icon_url); ?>"
-                         alt=""
-                         aria-hidden="true">
-                <?php endif; ?>
                 <?php if ($city_name) : ?>
                     <div class="city_block city_block--inline">
                         <img class="location_icon"

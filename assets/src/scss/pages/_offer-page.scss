@@ -717,9 +717,9 @@
 
     h3 {
       margin: 0;
-      padding-top: 6px;
-      color: #333;
-      @include mixins.font-style(1.35rem, 1.2, vars.$weight-bold);
+      padding-top: 4px;
+      color: #000;
+      @include mixins.font-style(vars.$font-size-m, 1.2, vars.$weight-bold);
     }
 
     .button_clear_filters {
@@ -1154,11 +1154,6 @@
   height: auto;
   object-fit: contain;
   pointer-events: none;
-
-  // Body duplicate — mobile list only
-  &--inline {
-    display: none !important;
-  }
 }
 
 .city_block {
