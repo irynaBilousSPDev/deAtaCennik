@@ -751,23 +751,31 @@ $om-filter-card-pad: 16px;
           display: flex;
           flex-direction: row;
           align-items: stretch;
-          padding: $om-card-pad !important;
-          gap: 12px;
+          padding: 0 !important;
+          gap: 0;
+          overflow: hidden;
         }
 
         .card_post_image {
           flex: 0 0 clamp(148px, 40%, 176px);
           width: clamp(148px, 40%, 176px);
           max-width: 48%;
-          aspect-ratio: 1;
-          align-self: flex-start;
-          border-radius: 10px;
+          align-self: stretch;
+          aspect-ratio: auto;
+          border-radius: 0;
+          min-height: 100%;
 
           .image_bg {
             height: 100% !important;
-            min-height: 0 !important;
+            min-height: 100% !important;
             background-position: center;
-            border-radius: 10px;
+            border-radius: 0;
+          }
+
+          > a {
+            display: block;
+            height: 100%;
+            min-height: 100%;
           }
 
           .city_block--overlay {
@@ -794,7 +802,7 @@ $om-filter-card-pad: 16px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          padding: 0 !important;
+          padding: $om-card-pad 12px $om-card-pad 12px !important;
 
           .city_block--inline {
             position: static !important;

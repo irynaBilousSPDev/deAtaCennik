@@ -352,12 +352,14 @@
   }
 
   &__item {
-    flex: 1 1 300px;
-    min-width: min(100%, 280px);
-    max-width: 100%;
+    // Desktop: never wider than ~1/3, even for a single selected promo
+    flex: 0 1 calc(33.333% - 7px);
+    width: calc(33.333% - 7px);
+    max-width: calc(33.333% - 7px);
+    min-width: 0;
     border: 1px solid #d8efdf;
     border-radius: 14px;
-    background: #f3fbf6;
+    background: rgba(255, 255, 255, 0.65);
     overflow: hidden;
     box-shadow: none;
   }
@@ -412,9 +414,9 @@
   &__short {
     display: block;
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: vars.$weight-medium;
-    line-height: 1.4;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
     color: #00a651;
     word-break: break-word;
   }
@@ -467,10 +469,12 @@
   }
 }
 
+// Stacked (one under another): full width
 @include mixins.max-ipad-pro-screen {
   .offer-promo-info__item {
-    flex-basis: 100%;
-    min-width: 0;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
