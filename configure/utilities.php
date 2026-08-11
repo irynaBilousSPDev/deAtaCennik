@@ -2411,7 +2411,107 @@ function akademiata_get_default_news_city_slug() {
 }
 
 /**
+ * Normalize news_city meta to "", "warszawa", "wroclaw", or "warszawa,wroclaw".
+ *
+ * @param mixed $value Raw meta / CSV.
+ * @return string
+ */
+function akademiata_normalize_news_city_slugs_meta($value) {
+    $parts = preg_split('/[\s,]+/', (string) $value, -1, PREG_SPLIT_NO_EMPTY);
+    if (!is_array($parts) || $parts === array()) {
+        return '';
+    }
+
+    $found = array();
+    foreach ($parts as $part) {
+        $slug = sanitize_title($part);
+        if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
+            $found[ $slug ] = true;
+        }
+    }
+
+    $ordered = array();
+    foreach (array('warszawa', 'wroclaw') as $slug) {
+        if (!empty($found[ $slug ])) {
+            $ordered[] = $slug;
+        }
+    }
+
+    return implode(',', $ordered);
+}
+
+/**
+ * Saved news_city slugs from meta (0–2). Empty array = no explicit city.
+ *
+ * @param int $post_id Post ID.
+ * @return string[]
+ */
+function akademiata_get_saved_news_city_slugs($post_id = 0) {
+    $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+    if ($post_id <= 0) {
+        return array();
+    }
+
+    $normalized = akademiata_normalize_news_city_slugs_meta(
+        get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true)
+    );
+    if ($normalized === '') {
+        return array();
+    }
+
+    return explode(',', $normalized);
+}
+
+/**
+ * All assigned news_city slugs on a wpis (taxonomy + meta). Empty assignment → [].
+ *
+ * @param int $post_id Post ID.
+ * @return string[]
+ */
+function akademiata_get_post_news_city_slugs($post_id = 0) {
+    $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
+    if ($post_id <= 0) {
+        return array();
+    }
+
+    $found = array();
+    $terms = get_the_terms($post_id, 'news_city');
+    if (!empty($terms) && !is_wp_error($terms)) {
+        foreach ($terms as $term) {
+            $slug = sanitize_title((string) $term->slug);
+            if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
+                $found[ $slug ] = true;
+            }
+        }
+    }
+
+    foreach (akademiata_get_saved_news_city_slugs($post_id) as $slug) {
+        $found[ $slug ] = true;
+    }
+
+    $ordered = array();
+    foreach (array('warszawa', 'wroclaw') as $slug) {
+        if (!empty($found[ $slug ])) {
+            $ordered[] = $slug;
+        }
+    }
+
+    return $ordered;
+}
+
+/**
+ * Whether a wpis is tagged with both Warszawa and Wrocław.
+ *
+ * @param int $post_id Post ID.
+ * @return bool
+ */
+function akademiata_post_has_multiple_news_cities($post_id = 0) {
+    return count(akademiata_get_post_news_city_slugs($post_id)) >= 2;
+}
+
+/**
  * Assigned news_city term on a wpis (empty if editor left Miasto unchecked).
+ * When two cities are set, returns the first (warszawa preferred).
  *
  * @param int $post_id Post ID.
  * @return WP_Term|null
@@ -2422,18 +2522,12 @@ function akademiata_get_post_news_city_term($post_id = 0) {
         return null;
     }
 
-    $terms = get_the_terms($post_id, 'news_city');
-    if (!empty($terms) && !is_wp_error($terms)) {
-        return $terms[0];
+    $slugs = akademiata_get_post_news_city_slugs($post_id);
+    if ($slugs === array()) {
+        return null;
     }
 
-    $slug = get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true);
-    $slug = sanitize_title((string) $slug);
-    if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
-        return akademiata_get_news_city_term_by_slug($slug);
-    }
-
-    return null;
+    return akademiata_get_news_city_term_by_slug($slugs[0]);
 }
 
 /**
@@ -2576,11 +2670,11 @@ function akademiata_filter_posts_where_by_news_city($where, $query) {
     $meta_key  = AKADEMIATA_NEWS_CITY_META_KEY;
 
     if ($city_slug === akademiata_get_default_news_city_slug()) {
-        $wroclaw_term = akademiata_get_news_city_term_by_slug('wroclaw');
-        $exclude      = array();
+        $warsaw_term = akademiata_get_news_city_term_by_slug('warszawa');
+        $parts       = array();
 
-        if ($wroclaw_term) {
-            $exclude[] = $wpdb->prepare(
+        if ($warsaw_term) {
+            $parts[] = $wpdb->prepare(
                 "EXISTS (
                     SELECT 1 FROM {$wpdb->term_relationships} tr
                     INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
@@ -2588,24 +2682,46 @@ function akademiata_filter_posts_where_by_news_city($where, $query) {
                     AND tt.taxonomy = 'news_city'
                     AND tt.term_id = %d
                 )",
-                (int) $wroclaw_term->term_id
+                (int) $warsaw_term->term_id
             );
         }
 
-        $exclude[] = $wpdb->prepare(
+        // Meta: single "warszawa" or CSV including warszawa (dual-city).
+        $parts[] = $wpdb->prepare(
             "EXISTS (
                 SELECT 1 FROM {$wpdb->postmeta} pm
                 WHERE pm.post_id = {$wpdb->posts}.ID
                 AND pm.meta_key = %s
-                AND pm.meta_value = %s
+                AND (
+                    pm.meta_value = %s
+                    OR FIND_IN_SET(%s, REPLACE(pm.meta_value, ' ', '')) > 0
+                )
             )",
             $meta_key,
-            'wroclaw'
+            'warszawa',
+            'warszawa'
         );
 
-        if (!empty($exclude)) {
-            $where .= ' AND NOT (' . implode(' OR ', $exclude) . ')';
-        }
+        // Empty Miasto (no terms + empty/missing meta) ≈ Warszawa.
+        $parts[] = $wpdb->prepare(
+            "(
+                NOT EXISTS (
+                    SELECT 1 FROM {$wpdb->term_relationships} tr
+                    INNER JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                    WHERE tr.object_id = {$wpdb->posts}.ID
+                    AND tt.taxonomy = 'news_city'
+                )
+                AND NOT EXISTS (
+                    SELECT 1 FROM {$wpdb->postmeta} pm
+                    WHERE pm.post_id = {$wpdb->posts}.ID
+                    AND pm.meta_key = %s
+                    AND pm.meta_value <> ''
+                )
+            )",
+            $meta_key
+        );
+
+        $where .= ' AND (' . implode(' OR ', $parts) . ')';
 
         return $where;
     }
@@ -2631,9 +2747,13 @@ function akademiata_filter_posts_where_by_news_city($where, $query) {
             SELECT 1 FROM {$wpdb->postmeta} pm
             WHERE pm.post_id = {$wpdb->posts}.ID
             AND pm.meta_key = %s
-            AND pm.meta_value = %s
+            AND (
+                pm.meta_value = %s
+                OR FIND_IN_SET(%s, REPLACE(pm.meta_value, ' ', '')) > 0
+            )
         )",
         $meta_key,
+        $city_slug,
         $city_slug
     );
 
@@ -2751,9 +2871,6 @@ function akademiata_resolve_news_city_term_ids_for_post(array $term_ids, $post_i
     }
 
     $slugs = array_values(array_unique($slugs));
-    if (count($slugs) > 1) {
-        $slugs = array_slice($slugs, -1);
-    }
 
     $resolved = array();
     foreach ($slugs as $slug) {
@@ -2810,8 +2927,7 @@ function akademiata_register_news_city_post_meta() {
                 return current_user_can('edit_posts');
             },
             'sanitize_callback' => static function ($value) {
-                $slug = sanitize_title((string) $value);
-                return in_array($slug, array('warszawa', 'wroclaw'), true) ? $slug : '';
+                return akademiata_normalize_news_city_slugs_meta($value);
             },
         )
     );
@@ -2821,19 +2937,17 @@ add_action('init', 'akademiata_register_news_city_post_meta', 15);
 
 /**
  * @param int $post_id Post ID.
- * @return string Empty, warszawa, or wroclaw (stored value only).
+ * @return string Empty, warszawa, wroclaw, or first dual-city slug (BC).
  */
 function akademiata_get_saved_news_city_slug($post_id = 0) {
+    $slugs = akademiata_get_saved_news_city_slugs($post_id);
+    if ($slugs !== array()) {
+        return $slugs[0];
+    }
+
     $post_id = $post_id ? (int) $post_id : (int) get_the_ID();
     if ($post_id <= 0) {
         return '';
-    }
-
-    $slug = get_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, true);
-    $slug = sanitize_title((string) $slug);
-
-    if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
-        return $slug;
     }
 
     $terms = get_the_terms($post_id, 'news_city');
@@ -2849,6 +2963,7 @@ function akademiata_get_saved_news_city_slug($post_id = 0) {
 
 /**
  * Save news_city from checkbox term IDs (exact IDs from the metabox).
+ * Supports one or both of Warszawa / Wrocław.
  *
  * @param int   $post_id Post ID.
  * @param int[] $raw_ids Term IDs from tax_input checkboxes.
@@ -2859,9 +2974,8 @@ function akademiata_save_post_news_city_from_term_ids($post_id, array $raw_ids) 
         return;
     }
 
-    $raw_ids  = array_values(array_filter(array_map('intval', $raw_ids)));
-    $slug     = '';
-    $save_ids = array();
+    $raw_ids = array_values(array_filter(array_map('intval', $raw_ids)));
+    $slugs   = array();
 
     foreach ($raw_ids as $term_id) {
         $term = get_term((int) $term_id, 'news_city');
@@ -2871,26 +2985,33 @@ function akademiata_save_post_news_city_from_term_ids($post_id, array $raw_ids) 
 
         $candidate = sanitize_title($term->slug);
         if (in_array($candidate, array('warszawa', 'wroclaw'), true)) {
-            $slug = $candidate;
-            break;
+            $slugs[ $candidate ] = true;
         }
     }
 
-    if ($slug !== '') {
-        $term = get_term_by('slug', $slug, 'news_city');
-        if ($term && !is_wp_error($term)) {
-            $save_ids = array((int) $term->term_id);
-        } else {
-            $slug = '';
+    $ordered = array();
+    foreach (array('warszawa', 'wroclaw') as $slug) {
+        if (!empty($slugs[ $slug ])) {
+            $ordered[] = $slug;
         }
     }
 
-    if ($slug === '') {
+    $meta = implode(',', $ordered);
+    if ($meta === '') {
         delete_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY);
     } else {
-        update_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, $slug);
+        update_post_meta($post_id, AKADEMIATA_NEWS_CITY_META_KEY, $meta);
     }
 
+    $raw_for_resolve = array();
+    foreach ($ordered as $slug) {
+        $term = get_term_by('slug', $slug, 'news_city');
+        if ($term && !is_wp_error($term)) {
+            $raw_for_resolve[] = (int) $term->term_id;
+        }
+    }
+
+    $save_ids = akademiata_resolve_news_city_term_ids_for_post($raw_for_resolve, $post_id);
     akademiata_set_post_news_city_terms($post_id, $save_ids);
 }
 

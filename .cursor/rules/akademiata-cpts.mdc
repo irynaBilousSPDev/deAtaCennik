@@ -45,7 +45,7 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 
 | Taxonomy | On wpisy | Notes |
 |----------|----------|--------|
-| `news_city` | Miasto (Warszawa, Wrocław) | Auto-created slugs `warszawa`, `wroclaw` on `init`. **Empty = Warszawa** (display + `?miasto=warszawa` filter) |
+| `news_city` | Miasto (Warszawa, Wrocław) | Auto-created slugs `warszawa`, `wroclaw` on `init`. **Empty = Warszawa** (display + `?miasto=warszawa` filter). **Both cities allowed** — same wpis in both archives; card location hidden when dual-tagged |
 | `program` | Kierunki (same terms as offers) | Shown on `taxonomy-program.php` when tagged |
 | `degree` | Stopień (optional) | **Unchecked = oba** (I + II); filters related news per section |
 

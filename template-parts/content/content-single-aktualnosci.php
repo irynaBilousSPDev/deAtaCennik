@@ -38,9 +38,11 @@
                     <h1 class="entry-title"><?php the_title(); ?></h1>
                     <div class="entry-meta-row mb-3">
                         <span class="date"><?php echo get_the_date('d.m.Y'); ?></span>
-                        <span class="entry-meta-news">
-                            <?php echo esc_html(sprintf(akademiata_get_theme_lang_string('news_active_filter'), akademiata_get_post_news_city_label())); ?>
-                        </span>
+                        <?php if (!function_exists('akademiata_post_has_multiple_news_cities') || !akademiata_post_has_multiple_news_cities(get_the_ID())) : ?>
+                            <span class="entry-meta-news">
+                                <?php echo esc_html(sprintf(akademiata_get_theme_lang_string('news_active_filter'), akademiata_get_post_news_city_label())); ?>
+                            </span>
+                        <?php endif; ?>
                     </div>
                 </header>
 
