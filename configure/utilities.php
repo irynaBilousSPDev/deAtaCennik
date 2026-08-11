@@ -2475,7 +2475,27 @@ function akademiata_get_post_news_city_slugs($post_id = 0) {
     }
 
     $found = array();
-    $terms = get_the_terms($post_id, 'news_city');
+
+    // Avoid admin get_the_terms / wp_get_object_terms filters (recursion on posts list).
+    $had_get_the_terms = remove_filter('get_the_terms', 'akademiata_news_city_admin_get_the_terms', 20);
+    $had_object_terms  = remove_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20);
+
+    $terms = wp_get_object_terms(
+        $post_id,
+        'news_city',
+        array(
+            'fields'                 => 'all',
+            'update_term_meta_cache' => false,
+        )
+    );
+
+    if ($had_get_the_terms) {
+        add_filter('get_the_terms', 'akademiata_news_city_admin_get_the_terms', 20, 3);
+    }
+    if ($had_object_terms) {
+        add_filter('wp_get_object_terms', 'akademiata_news_city_admin_object_terms', 20, 4);
+    }
+
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
             $slug = sanitize_title((string) $term->slug);

@@ -213,26 +213,26 @@ function akademiata_news_city_admin_terms_for_post($post_id, $terms) {
         $terms = array();
     }
 
-    $slugs = function_exists('akademiata_get_post_news_city_slugs')
-        ? akademiata_get_post_news_city_slugs($post_id)
+    // Meta only here — do not call akademiata_get_post_news_city_slugs() (recursion via get_the_terms).
+    $slugs = function_exists('akademiata_get_saved_news_city_slugs')
+        ? akademiata_get_saved_news_city_slugs($post_id)
         : array();
 
-    if ($slugs === array() && !empty($terms)) {
-        foreach ((array) $terms as $first) {
-            if (is_object($first) && isset($first->slug)) {
-                $slug = sanitize_title($first->slug);
-            } elseif (is_numeric($first)) {
-                $term = get_term((int) $first, 'news_city');
-                $slug = ($term && !is_wp_error($term)) ? sanitize_title($term->slug) : '';
-            } else {
-                $slug = '';
-            }
-            if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
-                $slugs[] = $slug;
-            }
+    foreach ((array) $terms as $item) {
+        if (is_object($item) && isset($item->slug)) {
+            $slug = sanitize_title($item->slug);
+        } elseif (is_numeric($item)) {
+            $term = get_term((int) $item, 'news_city');
+            $slug = ($term && !is_wp_error($term)) ? sanitize_title($term->slug) : '';
+        } else {
+            $slug = '';
         }
-        $slugs = array_values(array_unique($slugs));
+        if (in_array($slug, array('warszawa', 'wroclaw'), true)) {
+            $slugs[] = $slug;
+        }
     }
+
+    $slugs = array_values(array_unique($slugs));
 
     $out = array();
     foreach (array('warszawa', 'wroclaw') as $slug) {
