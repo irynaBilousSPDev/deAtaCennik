@@ -173,8 +173,9 @@ function akademiata_promo_is_expired($promo) {
 }
 
 /**
- * Load calculator PROMOS (transient → Google Apps Script → local prices.json fallback).
- * Filters out expired promotions based on `expires` field.
+ * Load calculator PROMOS (Google Apps Script = source of truth, short cache).
+ * Falls back to local prices.json only when Google is unreachable.
+ * Filters out expired promotions automatically.
  *
  * @return array<int, array<string, mixed>>
  */
@@ -185,7 +186,7 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    $transient_key = 'akademiata_calculator_promos_v4';
+    $transient_key = 'akademiata_calculator_promos_v5';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && $cached !== array()) {
@@ -193,7 +194,7 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    // Same source order as prices-calculator.js: Excel via Apps Script first.
+    // Google (Excel) is the only live source; prices.json is emergency fallback.
     $promos = akademiata_load_promos_from_google(5);
 
     if ($promos === array()) {
@@ -205,9 +206,9 @@ function akademiata_get_calculator_promos() {
         return !akademiata_promo_is_expired($promo);
     }));
 
-    // Do not cache empty payloads — remote can fail briefly.
+    // Short cache (15 min) so Excel changes propagate quickly.
     if ($promos !== array()) {
-        set_transient($transient_key, $promos, 6 * HOUR_IN_SECONDS);
+        set_transient($transient_key, $promos, 15 * MINUTE_IN_SECONDS);
     }
 
     $runtime_cache = $promos;
