@@ -70,7 +70,7 @@ function akademiata_load_promos_from_google($timeout_seconds = 3) {
 }
 
 /**
- * Load calculator PROMOS (transient → local prices.json → short Google fetch).
+ * Load calculator PROMOS (transient → Google Apps Script → local prices.json fallback).
  *
  * @return array<int, array<string, mixed>>
  */
@@ -81,7 +81,7 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    $transient_key = 'akademiata_calculator_promos_v1';
+    $transient_key = 'akademiata_calculator_promos_v2';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && $cached !== array()) {
@@ -89,11 +89,11 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    // Prefer local JSON first so AJAX filters never wait on a cold Google request.
-    $promos = akademiata_load_promos_from_prices_json();
+    // Same source order as prices-calculator.js: Excel via Apps Script first.
+    $promos = akademiata_load_promos_from_google(5);
 
     if ($promos === array()) {
-        $promos = akademiata_load_promos_from_google(3);
+        $promos = akademiata_load_promos_from_prices_json();
     }
 
     // Do not cache empty payloads — remote can fail briefly.
