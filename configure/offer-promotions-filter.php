@@ -70,43 +70,106 @@ function akademiata_load_promos_from_google($timeout_seconds = 3) {
 }
 
 /**
- * Parse expiry date from promo (DD.MM.YYYY or YYYY-MM-DD).
+ * Extract the latest deadline date from promo short/full text.
+ * Looks for DD.MM.YYYY patterns, returns the latest one found.
  *
  * @param array<string,mixed> $promo
- * @return int|null Unix timestamp end-of-day, or null if no expiry.
+ * @return int|null Unix timestamp end-of-day, or null if no date found.
  */
-function akademiata_parse_promo_expires($promo) {
-    if (empty($promo['expires'])) {
+function akademiata_extract_promo_deadline($promo) {
+    $text = '';
+    if (!empty($promo['short'])) {
+        $text .= ' ' . wp_strip_all_tags((string) $promo['short']);
+    }
+    if (!empty($promo['full'])) {
+        $text .= ' ' . wp_strip_all_tags((string) $promo['full']);
+    }
+
+    if (!preg_match_all('/(\d{1,2})\.(\d{1,2})\.(\d{4})/', $text, $matches, PREG_SET_ORDER)) {
         return null;
     }
 
-    $raw = trim((string) $promo['expires']);
-
-    // YYYY-MM-DD
-    if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $raw, $m)) {
-        return mktime(23, 59, 59, (int) $m[2], (int) $m[3], (int) $m[1]);
+    $latest = null;
+    foreach ($matches as $m) {
+        $day   = (int) $m[1];
+        $month = (int) $m[2];
+        $year  = (int) $m[3];
+        if ($year < 2024 || $year > 2030 || $month < 1 || $month > 12 || $day < 1 || $day > 31) {
+            continue;
+        }
+        $ts = mktime(23, 59, 59, $month, $day, $year);
+        if ($ts !== false && ($latest === null || $ts > $latest)) {
+            $latest = $ts;
+        }
     }
 
-    // DD.MM.YYYY
-    if (preg_match('/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $raw, $m)) {
-        return mktime(23, 59, 59, (int) $m[2], (int) $m[1], (int) $m[3]);
-    }
-
-    return null;
+    return $latest;
 }
 
 /**
- * Check if promo has expired.
+ * Apply end-of-month extension rule: if deadline is end of month,
+ * extend to end of next month, but never past 31 October of that year.
+ *
+ * @param int $deadline_ts
+ * @return int Extended timestamp.
+ */
+function akademiata_extend_promo_deadline($deadline_ts) {
+    $day       = (int) date('j', $deadline_ts);
+    $month     = (int) date('n', $deadline_ts);
+    $year      = (int) date('Y', $deadline_ts);
+    $last_day  = (int) date('t', $deadline_ts);
+
+    if ($day < $last_day - 1) {
+        return $deadline_ts;
+    }
+
+    // Extend to end of next month.
+    $next_month = $month + 1;
+    $next_year  = $year;
+    if ($next_month > 12) {
+        $next_month = 1;
+        $next_year++;
+    }
+
+    $extended = mktime(23, 59, 59, $next_month + 1, 0, $next_year);
+
+    // Cap at 31 October same year.
+    $cap = mktime(23, 59, 59, 10, 31, $year);
+    if ($extended > $cap) {
+        $extended = $cap;
+    }
+
+    return $extended;
+}
+
+/**
+ * Check if promo has expired based on dates in its text.
  *
  * @param array<string,mixed> $promo
  * @return bool
  */
 function akademiata_promo_is_expired($promo) {
-    $expires = akademiata_parse_promo_expires($promo);
-    if ($expires === null) {
+    // Explicit expires field takes priority (future-proof).
+    if (!empty($promo['expires'])) {
+        $raw = trim((string) $promo['expires']);
+        $ts  = null;
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $raw, $m)) {
+            $ts = mktime(23, 59, 59, (int) $m[2], (int) $m[3], (int) $m[1]);
+        } elseif (preg_match('/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $raw, $m)) {
+            $ts = mktime(23, 59, 59, (int) $m[2], (int) $m[1], (int) $m[3]);
+        }
+        if ($ts !== null) {
+            return time() > $ts;
+        }
+    }
+
+    $deadline = akademiata_extract_promo_deadline($promo);
+    if ($deadline === null) {
         return false;
     }
-    return time() > $expires;
+
+    $effective = akademiata_extend_promo_deadline($deadline);
+    return time() > $effective;
 }
 
 /**
@@ -122,7 +185,7 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    $transient_key = 'akademiata_calculator_promos_v3';
+    $transient_key = 'akademiata_calculator_promos_v4';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && $cached !== array()) {

@@ -123,6 +123,40 @@ export default function initPricesCalculator(_$, opts = {}) {
     return null;
   }
 
+  function extractPromoDeadline(promo) {
+    const text = [promo.short, promo.full].filter(Boolean).join(' ')
+      .replace(/<[^>]+>/g, '');
+    const re = /(\d{1,2})\.(\d{1,2})\.(\d{4})/g;
+    let m, latest = null;
+    while ((m = re.exec(text)) !== null) {
+      const d = new Date(+m[3], +m[2] - 1, +m[1], 23, 59, 59);
+      if (d.getFullYear() >= 2024 && d.getFullYear() <= 2030) {
+        const ts = d.getTime();
+        if (latest === null || ts > latest) latest = ts;
+      }
+    }
+    return latest;
+  }
+
+  function extendPromoDeadline(ts) {
+    const d = new Date(ts);
+    const lastDay = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+    if (d.getDate() < lastDay - 1) return ts;
+    const ext = new Date(d.getFullYear(), d.getMonth() + 2, 0, 23, 59, 59);
+    const cap = new Date(d.getFullYear(), 9, 31, 23, 59, 59);
+    return Math.min(ext.getTime(), cap.getTime());
+  }
+
+  function isPromoExpired(promo) {
+    if (promo.expires) {
+      const ts = parsePromoExpires(promo.expires);
+      if (ts !== null) return Date.now() > ts;
+    }
+    const deadline = extractPromoDeadline(promo);
+    if (deadline === null) return false;
+    return Date.now() > extendPromoDeadline(deadline);
+  }
+
   window.BASE = window.BASE || 'https://smartapply.akademiata.pl/pl/apply/';
   window.BASE_EN = window.BASE_EN || 'https://smartapply.akademiata.pl/en/apply/';
 
@@ -310,11 +344,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.RAW = data.RAW || window.RAW;
     window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
     window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
-    window.PROMOS = (data.PROMOS || []).filter(p => {
-      if (!p || !p.expires) return true;
-      const ts = parsePromoExpires(p.expires);
-      return ts === null || Date.now() <= ts;
-    });
+    window.PROMOS = (data.PROMOS || []).filter(p => p && !isPromoExpired(p));
     window.BASE = data.BASE || window.BASE;
     window.BASE_EN = data.BASE_EN || window.BASE_EN;
 
