@@ -40,6 +40,13 @@ alwaysApply: false
 
 - Cards: `home_promos` → each card has `link` (e.g. `/kalkulator-czesnego/?promo=szybki`). Calculator JS reads `?promo=` / `?rekr=` / `&sub=` and selects + scrolls after load.
 
+## Promo expiry
+
+- Apps Script exports optional `expires` field (column M in 🏷️ Promocje tab): `YYYY-MM-DD` or `DD.MM.YYYY`.
+- PHP: `akademiata_promo_is_expired()` filters in `akademiata_get_calculator_promos()` (transient `v3`).
+- JS: `parsePromoExpires()` filters in `applyData()` before rendering.
+- `prices.json` fallback: add `"expires"` manually when updating the local copy.
+
 ## Maintenance
 
 - Calculator/script changes: update `apps-script/`, redeploy web app URL in `js-css.php` if deployment ID changes.

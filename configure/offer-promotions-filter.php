@@ -70,7 +70,48 @@ function akademiata_load_promos_from_google($timeout_seconds = 3) {
 }
 
 /**
+ * Parse expiry date from promo (DD.MM.YYYY or YYYY-MM-DD).
+ *
+ * @param array<string,mixed> $promo
+ * @return int|null Unix timestamp end-of-day, or null if no expiry.
+ */
+function akademiata_parse_promo_expires($promo) {
+    if (empty($promo['expires'])) {
+        return null;
+    }
+
+    $raw = trim((string) $promo['expires']);
+
+    // YYYY-MM-DD
+    if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $raw, $m)) {
+        return mktime(23, 59, 59, (int) $m[2], (int) $m[3], (int) $m[1]);
+    }
+
+    // DD.MM.YYYY
+    if (preg_match('/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $raw, $m)) {
+        return mktime(23, 59, 59, (int) $m[2], (int) $m[1], (int) $m[3]);
+    }
+
+    return null;
+}
+
+/**
+ * Check if promo has expired.
+ *
+ * @param array<string,mixed> $promo
+ * @return bool
+ */
+function akademiata_promo_is_expired($promo) {
+    $expires = akademiata_parse_promo_expires($promo);
+    if ($expires === null) {
+        return false;
+    }
+    return time() > $expires;
+}
+
+/**
  * Load calculator PROMOS (transient → Google Apps Script → local prices.json fallback).
+ * Filters out expired promotions based on `expires` field.
  *
  * @return array<int, array<string, mixed>>
  */
@@ -81,7 +122,7 @@ function akademiata_get_calculator_promos() {
         return $runtime_cache;
     }
 
-    $transient_key = 'akademiata_calculator_promos_v2';
+    $transient_key = 'akademiata_calculator_promos_v3';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && $cached !== array()) {
@@ -95,6 +136,11 @@ function akademiata_get_calculator_promos() {
     if ($promos === array()) {
         $promos = akademiata_load_promos_from_prices_json();
     }
+
+    // Filter expired promos.
+    $promos = array_values(array_filter($promos, function ($promo) {
+        return !akademiata_promo_is_expired($promo);
+    }));
 
     // Do not cache empty payloads — remote can fail briefly.
     if ($promos !== array()) {

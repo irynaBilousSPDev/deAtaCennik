@@ -495,6 +495,12 @@ function generateJSON() {
         disc: { t: tRabatu, v: val }
       };
  
+      // Column M (index 12): optional expiry date (YYYY-MM-DD or DD.MM.YYYY).
+      const expiresRaw = rowsPRO[i].length > 12 ? clean(rowsPRO[i][12]) : "";
+      if (expiresRaw) {
+        promo.expires = expiresRaw;
+      }
+
       if (promoId === "grupie") {
         promo.so = [{ v: 200, l: "2–4 osoby (−200 zł)" }, { v: 400, l: "5+ osób (−400 zł)" }];
       } else if (promoId === "absolwent_pl") {
@@ -502,7 +508,7 @@ function generateJSON() {
       } else if (promoId === "earlybirds") {
         promo.needRok = true;
       }
- 
+
       data.PROMOS.push(promo);
     }
   }

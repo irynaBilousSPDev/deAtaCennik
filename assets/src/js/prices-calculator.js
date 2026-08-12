@@ -114,6 +114,15 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.UABY_ROWS = window.UABY_ROWS || [];
   window.PROMOS = window.PROMOS || [];
 
+  function parsePromoExpires(raw) {
+    if (!raw) return null;
+    const iso = String(raw).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (iso) return new Date(+iso[1], +iso[2] - 1, +iso[3], 23, 59, 59).getTime();
+    const dmy = String(raw).match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+    if (dmy) return new Date(+dmy[3], +dmy[2] - 1, +dmy[1], 23, 59, 59).getTime();
+    return null;
+  }
+
   window.BASE = window.BASE || 'https://smartapply.akademiata.pl/pl/apply/';
   window.BASE_EN = window.BASE_EN || 'https://smartapply.akademiata.pl/en/apply/';
 
@@ -301,7 +310,11 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.RAW = data.RAW || window.RAW;
     window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
     window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
-    window.PROMOS = data.PROMOS || [];
+    window.PROMOS = (data.PROMOS || []).filter(p => {
+      if (!p || !p.expires) return true;
+      const ts = parsePromoExpires(p.expires);
+      return ts === null || Date.now() <= ts;
+    });
     window.BASE = data.BASE || window.BASE;
     window.BASE_EN = data.BASE_EN || window.BASE_EN;
 

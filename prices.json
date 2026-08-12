@@ -4693,6 +4693,7 @@
       "cty": "both",
       "name": "Szybki Start",
       "tag": "−1 000 zł",
+      "expires": "2026-07-31",
       "short": "Rejestracja do 30.06.2026 i podpisanie umowy do 31.07.2026.",
       "full": "Zarejestruj się do 30.06.2026 i podpisz umowę do 31.07.2026.\nZniżka 1 000 zł rozliczona proporcjonalnie w obu semestrach. \nŁączy się z „W Grupie Taniej\" i rabatem za płatność z góry.",
       "sw": [
@@ -4805,6 +4806,7 @@
       "cty": "both",
       "name": "Early Birds",
       "tag": "−10%",
+      "expires": "2026-05-15",
       "short": "EU/CIS – rejestracja do 15.05.2026 + opłata roczna z góry.",
       "full": "For EU/CIS applicants: register by 15.05.2026 and pay full year upfront. 10% off for 2026/2027.\n Requires annual payment plan. Cannot be combined with \"Graduate Continues\".",
       "sw": [
