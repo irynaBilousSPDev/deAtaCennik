@@ -555,17 +555,98 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
     }
 
-    function updateBrowserUrl() {
-        const params = new URLSearchParams();
-        form.find('input[type="checkbox"]:checked').each(function () {
-            let name = $(this).attr('name').replace('[]', '');
-            // Public listing links use ?promo= (same as calculator; avoids WP taxonomy clash).
+    function getFilterUrlKeysSorted() {
+        // Longest first — same rule as PHP akademiata_parse_query_string_multi.
+        const keys = [];
+        const seen = {};
+        form.find('input[type="checkbox"][name$="[]"]').each(function () {
+            let name = ($(this).attr('name') || '').replace('[]', '');
             if (name === 'promotions') {
                 name = 'promo';
             }
-            params.append(name, $(this).val());
+            if (name && !seen[name]) {
+                seen[name] = true;
+                keys.push(name);
+            }
         });
-        const query = params.toString();
+        keys.sort((a, b) => b.length - a.length);
+        return keys;
+    }
+
+    function buildCampaignSafeFilterQuery() {
+        const tokens = [];
+        form.find('input[type="checkbox"]:checked').each(function () {
+            let name = ($(this).attr('name') || '').replace('[]', '');
+            if (name === 'promotions') {
+                name = 'promo';
+            }
+            const value = $(this).val();
+            if (name && value) {
+                tokens.push(`${name}-${value}`);
+            }
+        });
+        return tokens.join(',');
+    }
+
+    function parseCampaignSafeFilterTokens(queryString) {
+        const selected = {};
+        const keys = getFilterUrlKeysSorted();
+        if (!queryString) {
+            return selected;
+        }
+
+        queryString.split('&').forEach((pair) => {
+            if (!pair) {
+                return;
+            }
+            if (pair.indexOf('=') !== -1) {
+                const parts = pair.split('=');
+                let key = decodeURIComponent((parts[0] || '').replace(/\+/g, ' ')).replace(/\[\]$/, '');
+                const value = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
+                if (key === 'promotions') {
+                    key = 'promo';
+                }
+                if (!key || !value) {
+                    return;
+                }
+                if (!selected[key]) {
+                    selected[key] = [];
+                }
+                selected[key].push(value);
+                return;
+            }
+
+            decodeURIComponent(pair.replace(/\+/g, ' ')).split(',').forEach((token) => {
+                token = token.trim();
+                if (!token) {
+                    return;
+                }
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    const prefix = `${key}-`;
+                    if (token.indexOf(prefix) !== 0) {
+                        continue;
+                    }
+                    const value = token.slice(prefix.length);
+                    if (!value) {
+                        break;
+                    }
+                    if (!selected[key]) {
+                        selected[key] = [];
+                    }
+                    selected[key].push(value);
+                    break;
+                }
+            });
+        });
+
+        return selected;
+    }
+
+    function updateBrowserUrl() {
+        // Campaign-safe: no "=" so ad tools do not truncate after the first equals.
+        // Legacy ?key=value links still work (PHP + initializeFiltersFromURL).
+        const query = buildCampaignSafeFilterQuery();
         const newUrl = query
             ? `${window.location.pathname}?${query}`
             : window.location.pathname;
@@ -573,22 +654,23 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function initializeFiltersFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
+        const selected = parseCampaignSafeFilterTokens(window.location.search.replace(/^\?/, ''));
         let hasPromoInUrl = false;
 
-        urlParams.forEach((value, key) => {
+        Object.keys(selected).forEach((key) => {
             const formKey = (key === 'promo') ? 'promotions' : key;
             if (formKey === 'promotions') {
                 hasPromoInUrl = true;
             }
-            const checkbox = form.find(`input[name="${formKey}[]"][value="${value}"]`);
-            if (checkbox.length) {
-                checkbox.prop('checked', true);
-                // Promotions only appear in #offer-promo-info (expandable), not as Filtry pills.
-                if (formKey !== 'promotions') {
-                    addTag(getCheckboxTagLabel(checkbox), value);
+            (selected[key] || []).forEach((value) => {
+                const checkbox = form.find(`input[name="${formKey}[]"][value="${value}"]`);
+                if (checkbox.length) {
+                    checkbox.prop('checked', true);
+                    if (formKey !== 'promotions') {
+                        addTag(getCheckboxTagLabel(checkbox), value);
+                    }
                 }
-            }
+            });
         });
 
         if ($('.selected_tags_container .filter-tag').length === 0) {

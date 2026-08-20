@@ -11,7 +11,7 @@ alwaysApply: false
 - **UI:** `.kalkulator-wse` in `template-parts/prices/calculator.php`.
 - **Wiring:** `section_tuition_fees.php` → `bachelor-master/section-tuition-calculator.php` (needs post meta `logical_sync_key`).
 - **Data:** `akademiataPrices.googleApiUrl` (Apps Script); JS `assets/src/js/prices-calculator.js` (bundled in `main.js`); optional fallback `prices.json`.
-- **Offer listing promos filter:** virtual filter from same `PROMOS` JSON — `configure/offer-promotions-filter.php`; sidebar group under Miasto on `page-offer.php`; public URL `?promo=` (alias of form `promotions[]`; taxonomy `promotions` has `query_var => false` so WP does not steal the param). Load order for PROMOS: **15-min transient cache → Google Apps Script (Excel) → `prices.json` emergency fallback**. Matching uses bulk language/city term load, not per-post queries.
+- **Offer listing promos filter:** virtual filter from same `PROMOS` JSON — `configure/offer-promotions-filter.php`; sidebar group under Miasto on `page-offer.php`. **Public filter URLs:** campaign-safe `?degree-…,promo-szybki,program-…` (no `=`; comma tokens `key-value`). **Legacy still works forever:** `?degree=…&promo=…`. Parser: `akademiata_parse_query_string_multi()` in `configure/ajax_filters.php`; JS builders in `ajax-filter.js` / `ajax-filter-pg-mba.js`. Taxonomy `promotions` has `query_var => false` so WP does not steal the param. Load order for PROMOS: **15-min transient cache → Google Apps Script (Excel) → `prices.json` emergency fallback**. Matching uses bulk language/city term load, not per-post queries.
 - **Header teaser:** link “SPRAWDŹ CENNIK” to `#tuition_fees` when `logical_sync_key` is set (no CPT price row).
 
 ## Postgraduate / MBA
