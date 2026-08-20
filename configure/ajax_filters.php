@@ -46,13 +46,6 @@ function akademiata_get_post_types_for_offer_filter_action($filter_action) {
  * Parse QUERY_STRING keeping duplicate keys (e.g. program=a&program=b).
  * PHP $_GET keeps only the last value for repeated keys without [].
  *
- * Supports two public formats (both kept forever):
- * - Legacy: ?degree=studia-2-stopnia&promo=szybki
- * - Campaign-safe (no "="): ?degree-studia-2-stopnia,promo-szybki
- *
- * Segments with "=" use legacy key=value. Segments without "=" use comma tokens key-value.
- * UTM params with "=" can coexist: ?degree-x,promo-y&utm_source=fb
- *
  * @param string[] $allowed_keys Taxonomy / filter keys to collect.
  * @return array<string, string[]>
  */
@@ -65,62 +58,26 @@ function akademiata_parse_query_string_multi(array $allowed_keys) {
     }
 
     $allowed = array_fill_keys($allowed_keys, true);
-    // Longest keys first so "promotions" wins over "promo", "city_pg_mba" over "city".
-    $keys_by_len = $allowed_keys;
-    usort(
-        $keys_by_len,
-        static function ($a, $b) {
-            return strlen((string) $b) - strlen((string) $a);
-        }
-    );
 
     foreach (explode('&', $query_string) as $pair) {
         if ($pair === '') {
             continue;
         }
 
-        // Legacy: key=value or key[]=value
-        if (strpos($pair, '=') !== false) {
-            $parts   = explode('=', $pair, 2);
-            $raw_key = rawurldecode(str_replace('+', ' ', $parts[0]));
-            $key     = preg_replace('/\[\]$/', '', $raw_key);
+        $parts   = explode('=', $pair, 2);
+        $raw_key = rawurldecode(str_replace('+', ' ', $parts[0]));
+        $key     = preg_replace('/\[\]$/', '', $raw_key);
 
-            if ($key === '' || !isset($allowed[ $key ]) || !isset($parts[1])) {
-                continue;
-            }
-
-            $value = rawurldecode(str_replace('+', ' ', $parts[1]));
-            if ($value === '') {
-                continue;
-            }
-
-            $result[ $key ][] = $value;
+        if ($key === '' || !isset($allowed[ $key ]) || !isset($parts[1])) {
             continue;
         }
 
-        // Campaign-safe: degree-studia-2-stopnia,promo-szybki (no "=")
-        $segment = rawurldecode(str_replace('+', ' ', $pair));
-        foreach (explode(',', $segment) as $token) {
-            $token = trim($token);
-            if ($token === '') {
-                continue;
-            }
-
-            foreach ($keys_by_len as $key) {
-                $prefix = $key . '-';
-                if (strpos($token, $prefix) !== 0) {
-                    continue;
-                }
-
-                $value = substr($token, strlen($prefix));
-                if ($value === '') {
-                    break;
-                }
-
-                $result[ $key ][] = $value;
-                break;
-            }
+        $value = rawurldecode(str_replace('+', ' ', $parts[1]));
+        if ($value === '') {
+            continue;
         }
+
+        $result[ $key ][] = $value;
     }
 
     return $result;

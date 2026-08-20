@@ -99,86 +99,15 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
     }
 
-    function getFilterUrlKeysSorted() {
-        const keys = [];
-        const seen = {};
-        form.find('input[type="checkbox"][name$="[]"]').each(function () {
-            const name = ($(this).attr('name') || '').replace('[]', '');
-            if (name && !seen[name]) {
-                seen[name] = true;
-                keys.push(name);
-            }
-        });
-        keys.sort((a, b) => b.length - a.length);
-        return keys;
-    }
-
-    function buildCampaignSafeFilterQuery() {
-        const tokens = [];
-        form.find('input[type="checkbox"]:checked').each(function () {
-            const name = ($(this).attr('name') || '').replace('[]', '');
-            const value = $(this).val();
-            if (name && value) {
-                tokens.push(`${name}-${value}`);
-            }
-        });
-        return tokens.join(',');
-    }
-
-    function parseCampaignSafeFilterTokens(queryString) {
-        const selected = {};
-        const keys = getFilterUrlKeysSorted();
-        if (!queryString) {
-            return selected;
-        }
-
-        queryString.split('&').forEach((pair) => {
-            if (!pair) {
-                return;
-            }
-            if (pair.indexOf('=') !== -1) {
-                const parts = pair.split('=');
-                const key = decodeURIComponent((parts[0] || '').replace(/\+/g, ' ')).replace(/\[\]$/, '');
-                const value = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
-                if (!key || !value) {
-                    return;
-                }
-                if (!selected[key]) {
-                    selected[key] = [];
-                }
-                selected[key].push(value);
-                return;
-            }
-
-            decodeURIComponent(pair.replace(/\+/g, ' ')).split(',').forEach((token) => {
-                token = token.trim();
-                if (!token) {
-                    return;
-                }
-                for (let i = 0; i < keys.length; i++) {
-                    const key = keys[i];
-                    const prefix = `${key}-`;
-                    if (token.indexOf(prefix) !== 0) {
-                        continue;
-                    }
-                    const value = token.slice(prefix.length);
-                    if (!value) {
-                        break;
-                    }
-                    if (!selected[key]) {
-                        selected[key] = [];
-                    }
-                    selected[key].push(value);
-                    break;
-                }
-            });
-        });
-
-        return selected;
-    }
-
     function updateBrowserUrl() {
-        const query = buildCampaignSafeFilterQuery();
+        const params = new URLSearchParams();
+
+        form.find('input[type="checkbox"]:checked').each(function () {
+            const name = $(this).attr('name').replace('[]', '');
+            params.append(name, $(this).val());
+        });
+
+        const query = params.toString();
         const newUrl = query
             ? `${window.location.pathname}?${query}`
             : window.location.pathname;
@@ -195,19 +124,17 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function initializeFiltersFromURL() {
-        const selected = parseCampaignSafeFilterTokens(window.location.search.replace(/^\?/, ''));
+        const urlParams = new URLSearchParams(window.location.search);
         let hasFilters = false;
 
-        Object.keys(selected).forEach((key) => {
-            (selected[key] || []).forEach((value) => {
-                const checkbox = form.find(`input[name="${key}[]"][value="${value}"]`);
-                if (checkbox.length) {
-                    checkbox.prop('checked', true);
-                    const label = checkbox.closest('label').text().trim();
-                    addTag(label, value);
-                    hasFilters = true;
-                }
-            });
+        urlParams.forEach((value, key) => {
+            const checkbox = form.find(`input[name="${key}[]"][value="${value}"]`);
+            if (checkbox.length) {
+                checkbox.prop('checked', true);
+                const label = checkbox.closest('label').text().trim();
+                addTag(label, value);
+                hasFilters = true;
+            }
         });
 
         triggerFilterUpdate();
