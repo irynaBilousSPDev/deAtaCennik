@@ -49,9 +49,81 @@ $om-filter-card-pad: 16px;
 }
 
 @include mixins.max-ipad-pro-screen {
-  .offer-listing-selection,
+  // Compact selected-filter pills under toolbar (desktop "Filtry:" bar, mobile-sized).
+  // Full promo expand panel stays desktop-only — mobile uses chips + dropdown.
   #offer-promo-info {
     display: none !important;
+  }
+
+  .offer-listing-selection {
+    display: block;
+    margin: 0 0 12px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+
+    &:not(:has(#tags-container[style*="block"])):not(:has(#tags-container[style*="flex"])) {
+      display: none;
+    }
+
+    .tags_container,
+    #tags-container {
+      display: none; // JS toggles via .show() / inline style when tags exist
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .filter_tags_wrapper {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 8px;
+      min-width: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      h3 {
+        display: none; // save horizontal space — pills speak for themselves
+      }
+
+      .button_clear_filters {
+        display: none; // already in .offer-mobile-actions
+      }
+    }
+
+    .selected_tags_container {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+
+      .filter-tag {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        box-sizing: border-box;
+        height: 32px;
+        min-height: 32px;
+        margin: 0;
+        padding: 0 10px;
+        border: 1px solid $om-border;
+        border-radius: 100px;
+        background: #f5f5f5;
+        color: #222;
+        font-size: 1.2rem;
+        font-weight: vars.$weight-medium;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
@@ -200,7 +272,10 @@ $om-filter-card-pad: 16px;
       }
     }
 
-    #tags-container {
+    // Listing tags are shown compact under toolbar (.offer-listing-selection).
+    // Sidebar duplicate stays hidden (see .filter_col rules below).
+    .filter_col #tags-container,
+    .filter_col .tags_container {
       display: none !important;
     }
 
