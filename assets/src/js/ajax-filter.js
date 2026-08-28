@@ -285,6 +285,52 @@ import { initOfferViewToggle } from './offer-view-toggle';
         syncDesktopFilterBarVisibility();
     }
 
+    function isMobileOfferListing() {
+        return window.matchMedia('(max-width: 990px)').matches
+            && document.querySelector('.page-template-page-offer .offer-mobile-toolbar');
+    }
+
+    function syncMobilePromoTags() {
+        if (!isMobileOfferListing()) {
+            return;
+        }
+
+        const $container = $('.offer-mobile-toolbar .selected_tags_container').first();
+        if (!$container.length) {
+            return;
+        }
+
+        const promoInputs = form.find('input[name="promotions[]"]');
+        const promoIds = promoInputs.map(function () {
+            return $(this).val();
+        }).get();
+        const checkedIds = new Set(
+            promoInputs.filter(':checked').map(function () {
+                return $(this).val();
+            }).get()
+        );
+
+        $container.find('.filter-tag').each(function () {
+            const val = $(this).attr('data-value');
+            if (promoIds.includes(val) && !checkedIds.has(val)) {
+                $(this).remove();
+            }
+        });
+
+        promoInputs.filter(':checked').each(function () {
+            const $input = $(this);
+            addTag(getCheckboxTagLabel($input), $input.val());
+        });
+
+        if ($container.find('.filter-tag').length === 0) {
+            $('#tags-container').hide();
+        } else {
+            $('#tags-container').show();
+        }
+
+        syncDesktopFilterBarVisibility();
+    }
+
     function getCheckboxTagLabel(checkbox) {
         const custom = checkbox.attr('data-tag-label');
         if (custom) {
@@ -511,6 +557,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         });
 
         updatePromoInfoPanel();
+        syncMobilePromoTags();
     }
 
     function sanitizePromoSelectionFromUrl() {
@@ -597,10 +644,14 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         sanitizePromoSelectionFromUrl();
 
-        // Drop any leftover promo pills from older UI (promos only use expandable chips).
-        form.find('input[name="promotions[]"]').each(function () {
-            $('.selected_tags_container').find(`[data-value="${$(this).val()}"]`).remove();
-        });
+        if (isMobileOfferListing()) {
+            syncMobilePromoTags();
+        } else {
+            // Desktop promos use expandable #offer-promo-info chips, not Filtry pills.
+            form.find('input[name="promotions[]"]').each(function () {
+                $('.selected_tags_container').find(`[data-value="${$(this).val()}"]`).remove();
+            });
+        }
         syncDesktopFilterBarVisibility();
 
         // Always refresh when promo deep-link is present (SSR may have been wrong before query_var fix).
