@@ -70,17 +70,10 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
     </div>
 
     <div class="offer-mobile-actions">
-        <div class="offer-mobile-actions__start">
-            <button type="button"
-                    class="offer-mobile-clear"
-                    id="offer-mobile-clear-filters"
-                    hidden>
-                <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
-                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
-                </svg>
-                <?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?>
-            </button>
+        <div class="offer-mobile-actions__left">
+            <?php get_template_part('partials/offer-view-toggle'); ?>
+        </div>
+        <div class="offer-mobile-actions__end">
             <div class="offer-mobile-search" id="offer-mobile-search-panel" hidden>
                 <label class="offer-mobile-search__label">
                     <span class="visually-hidden"><?php echo esc_html(akademiata_get_theme_lang_string('offer_search_label')); ?></span>
@@ -91,18 +84,25 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
                            inputmode="search">
                 </label>
             </div>
-        </div>
-        <div class="offer-mobile-tool-group">
-            <?php get_template_part('partials/offer-view-toggle'); ?>
             <button type="button"
-                    class="offer-mobile-tool-group__btn offer-mobile-search-toggle"
+                    class="offer-mobile-search-toggle"
                     aria-expanded="false"
                     aria-controls="offer-mobile-search-panel"
                     aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_label')); ?>">
-                <svg class="offer-mobile-tool-group__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <svg class="offer-mobile-search-toggle__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
                     <path d="M20 20l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
+            </button>
+            <button type="button"
+                    class="offer-mobile-clear"
+                    id="offer-mobile-clear-filters"
+                    hidden>
+                <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
+                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
+                </svg>
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?>
             </button>
         </div>
     </div>

@@ -287,7 +287,7 @@ $om-filter-card-pad: 16px;
     }
 
     .offer-mobile-search {
-      flex: 1;
+      flex: 1 1 auto;
       min-width: 0;
       overflow: hidden;
       max-width: 0;
@@ -295,7 +295,7 @@ $om-filter-card-pad: 16px;
       transition: max-width 0.25s ease, opacity 0.2s ease;
 
       &.is-open {
-        max-width: 100%;
+        max-width: 220px;
         opacity: 1;
       }
 
@@ -328,61 +328,49 @@ $om-filter-card-pad: 16px;
     .offer-mobile-actions {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 12px;
       padding-top: 4px;
 
-      &__start {
+      &__left {
+        flex-shrink: 0;
+      }
+
+      &__end {
         flex: 1;
         min-width: 0;
         display: flex;
         align-items: center;
+        justify-content: flex-end;
         gap: 8px;
       }
     }
 
-    .offer-mobile-tool-group {
+    .offer-mobile-search-toggle {
       display: inline-flex;
       flex-shrink: 0;
-      align-items: stretch;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
       border: 1px solid #e0e0e0;
       border-radius: 6px;
-      overflow: hidden;
       background: vars.$white;
+      color: #b0b0b0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.15s ease, border-color 0.15s ease;
 
-      .offer-view-toggle {
-        display: inline-flex;
-        border: none;
-        border-radius: 0;
-        overflow: visible;
-        box-shadow: none;
+      &:hover {
+        color: vars.$primary;
       }
 
-      &__btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        padding: 0;
-        border: none;
-        border-left: 1px solid #e0e0e0;
-        background: vars.$white;
-        color: #b0b0b0;
-        cursor: pointer;
-        touch-action: manipulation;
-        -webkit-tap-highlight-color: transparent;
-        transition: color 0.15s ease, background-color 0.15s ease;
-
-        &:hover {
-          color: vars.$primary;
-        }
-
-        &.is-active {
-          color: vars.$primary;
-          box-shadow: inset 0 0 0 1px vars.$primary;
-          z-index: 1;
-        }
+      &.is-active {
+        color: vars.$primary;
+        border-color: vars.$primary;
+        box-shadow: inset 0 0 0 1px vars.$primary;
       }
 
       &__icon {

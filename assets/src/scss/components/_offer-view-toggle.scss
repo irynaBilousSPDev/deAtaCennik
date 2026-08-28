@@ -6,21 +6,21 @@
 }
 
 @include mixins.max-ipad-pro-screen {
-  // Offer page — view toggle inside mobile tool group (grid | list | search)
-  .page-template-page-offer .offer-mobile-tool-group .offer-view-toggle {
+  // Offer page — view toggle on the left of mobile actions row
+  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle {
     display: inline-flex;
     align-items: stretch;
     gap: 0;
     margin: 0;
     padding: 0;
-    border: none;
-    border-radius: 0;
-    overflow: visible;
-    background: transparent;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: vars.$white;
     box-shadow: none;
   }
 
-  .page-template-page-offer .offer-mobile-tool-group .offer-view-toggle__btn {
+  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -49,7 +49,7 @@
     }
   }
 
-  .page-template-page-offer .offer-mobile-tool-group .offer-view-toggle__icon {
+  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle__icon {
     display: block;
     width: 18px;
     height: 18px;
