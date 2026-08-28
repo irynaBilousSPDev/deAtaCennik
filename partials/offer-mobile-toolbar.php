@@ -82,11 +82,23 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
             <div class="offer-mobile-search" id="offer-mobile-search-panel" hidden>
                 <label class="offer-mobile-search__label">
                     <span class="visually-hidden"><?php echo esc_html(akademiata_get_theme_lang_string('offer_search_label')); ?></span>
+                    <svg class="offer-mobile-search__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M20 20l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
                     <input type="search"
                            class="offer-mobile-search__input"
                            placeholder="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_placeholder')); ?>"
                            autocomplete="off"
                            inputmode="search">
+                    <button type="button"
+                            class="offer-mobile-search__clear"
+                            aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_clear')); ?>"
+                            hidden>
+                        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+                        </svg>
+                    </button>
                 </label>
             </div>
             <button type="button"

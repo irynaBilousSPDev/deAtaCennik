@@ -95,9 +95,20 @@ function syncActionsBar(hasTaxonomyFilters = false) {
     }
 }
 
+function syncSearchFieldState(toolbar) {
+    const searchPanel = toolbar.querySelector('#offer-mobile-search-panel');
+    const searchClear = toolbar.querySelector('.offer-mobile-search__clear');
+    const isOpen = searchPanel?.classList.contains('is-open');
+
+    if (searchClear) {
+        searchClear.hidden = !isOpen;
+    }
+}
+
 function setOfferMobileSearchOpen(toolbar, isOpen) {
     const searchPanel = toolbar.querySelector('#offer-mobile-search-panel');
     const searchToggle = toolbar.querySelector('.offer-mobile-search-toggle');
+    const searchEnd = toolbar.querySelector('.offer-mobile-actions__end');
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
 
     if (!searchPanel || !searchToggle) {
@@ -106,14 +117,18 @@ function setOfferMobileSearchOpen(toolbar, isOpen) {
 
     searchPanel.classList.toggle('is-open', isOpen);
     searchToggle.classList.toggle('is-active', isOpen);
+    searchToggle.hidden = isOpen;
+    searchEnd?.classList.toggle('is-search-open', isOpen);
     searchToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 
     if (isOpen) {
         searchPanel.removeAttribute('hidden');
+        syncSearchFieldState(toolbar);
         window.setTimeout(() => searchInput?.focus(), 50);
         return;
     }
 
+    searchToggle.hidden = false;
     if (!searchInput?.value.trim()) {
         searchPanel.setAttribute('hidden', '');
     }
@@ -600,13 +615,26 @@ export function initOfferMobileToolbar() {
     initOfferMobileChipsSticky();
 
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
+    const searchClear = toolbar.querySelector('.offer-mobile-search__clear');
     const searchToggle = toolbar.querySelector('.offer-mobile-search-toggle');
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
     const clearBtn = document.getElementById('offer-mobile-clear-filters');
     const filterForm = getFilterForm();
     const { backdrop, close } = getDropdownElements();
 
-    searchInput?.addEventListener('input', applyOfferSearchQuery);
+    searchInput?.addEventListener('input', () => {
+        syncSearchFieldState(toolbar);
+        applyOfferSearchQuery();
+    });
+
+    searchClear?.addEventListener('click', () => {
+        if (searchInput) {
+            searchInput.value = '';
+        }
+        applyOfferSearchQuery();
+        syncSearchFieldState(toolbar);
+        closeOfferMobileSearch(toolbar);
+    });
 
     searchToggle?.addEventListener('click', () => {
         const isOpen = searchToggle.classList.contains('is-active');
@@ -633,6 +661,7 @@ export function initOfferMobileToolbar() {
             searchInput.value = '';
         }
 
+        syncSearchFieldState(toolbar);
         applyOfferSearchQuery();
         closeOfferMobileSearch(toolbar);
         document.getElementById('clear-filters')?.click();

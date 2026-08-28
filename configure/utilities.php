@@ -1783,6 +1783,12 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'Шукати спеціалізацію або ключове слово…',
                 'ru' => 'Искать специализацию или ключевое слово…',
             ),
+            'offer_search_clear' => array(
+                'pl' => 'Wyczyść wyszukiwanie',
+                'en' => 'Clear search',
+                'uk' => 'Очистити пошук',
+                'ru' => 'Очистить поиск',
+            ),
             'offer_quick_filters_aria' => array(
                 'pl' => 'Szybkie filtry',
                 'en' => 'Quick filters',
