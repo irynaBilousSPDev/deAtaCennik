@@ -6,53 +6,7 @@
 }
 
 @include mixins.max-ipad-pro-screen {
-  // Offer page — separate rounded buttons (grid | list), screenshot match
-  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    overflow: visible;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #e8e8e8;
-    border-radius: 8px;
-    background: vars.$white;
-    color: #666;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    transition: border-color 0.15s ease, color 0.15s ease;
-
-    &.is-active {
-      border-color: vars.$primary;
-      color: vars.$primary;
-      box-shadow: none;
-    }
-  }
-
-  .page-template-page-offer .offer-mobile-actions__left .offer-view-toggle__icon {
-    display: block;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-  }
-
-  // PG/MBA filter pages
-  .offer-mobile-actions .offer-view-toggle {
+  body:not(.page-template-page-offer) .offer-mobile-actions .offer-view-toggle {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -63,7 +17,7 @@
     box-shadow: none;
   }
 
-  .offer-view-toggle__btn {
+  body:not(.page-template-page-offer) .offer-view-toggle__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -86,7 +40,7 @@
     }
   }
 
-  .offer-view-toggle__icon {
+  body:not(.page-template-page-offer) .offer-view-toggle__icon {
     display: block;
     width: 18px;
     height: 18px;
