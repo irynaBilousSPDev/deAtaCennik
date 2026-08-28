@@ -41,7 +41,19 @@ $om-filter-card-pad: 16px;
   }
 }
 
-.offer-mobile-toolbar,
+.offer-mobile-toolbar {
+  @include mixins.ipad-pro-screen {
+    display: block;
+    padding: 0;
+    background: transparent;
+
+    .offer-mobile-chips,
+    .offer-mobile-actions {
+      display: none !important;
+    }
+  }
+}
+
 .offer-mobile-dropdown {
   @include mixins.ipad-pro-screen {
     display: none;
@@ -55,9 +67,9 @@ $om-filter-card-pad: 16px;
     display: none !important;
   }
 
-  .offer-listing-selection {
+  .offer-mobile-toolbar .offer-listing-selection {
     display: block;
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     padding: 0;
     border: none;
     background: transparent;
@@ -90,11 +102,11 @@ $om-filter-card-pad: 16px;
       }
 
       h3 {
-        display: none; // save horizontal space — pills speak for themselves
+        display: none;
       }
 
       .button_clear_filters {
-        display: none; // already in .offer-mobile-actions
+        display: none;
       }
     }
 
@@ -272,7 +284,7 @@ $om-filter-card-pad: 16px;
       }
     }
 
-    // Listing tags are shown compact under toolbar (.offer-listing-selection).
+    // Listing tags live under chips inside .offer-mobile-toolbar.
     // Sidebar duplicate stays hidden (see .filter_col rules below).
     .filter_col #tags-container,
     .filter_col .tags_container {
@@ -330,7 +342,8 @@ $om-filter-card-pad: 16px;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 4px;
+      min-height: 36px;
+      padding-top: 2px;
 
       &__left {
         flex-shrink: 0;
@@ -342,7 +355,7 @@ $om-filter-card-pad: 16px;
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 8px;
+        gap: 10px;
       }
     }
 
@@ -351,17 +364,17 @@ $om-filter-card-pad: 16px;
       flex-shrink: 0;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       padding: 0;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      background: vars.$white;
-      color: #b0b0b0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: #666;
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      transition: color 0.15s ease, border-color 0.15s ease;
+      transition: color 0.15s ease;
 
       &:hover {
         color: vars.$primary;
@@ -369,14 +382,12 @@ $om-filter-card-pad: 16px;
 
       &.is-active {
         color: vars.$primary;
-        border-color: vars.$primary;
-        box-shadow: inset 0 0 0 1px vars.$primary;
       }
 
       &__icon {
         display: block;
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         pointer-events: none;
       }
     }

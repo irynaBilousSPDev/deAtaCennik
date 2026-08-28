@@ -69,6 +69,11 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
         </div>
     </div>
 
+    <div class="offer-listing-selection">
+        <?php get_template_part('partials/tags_container'); ?>
+        <?php akademiata_render_offer_promo_info_panel(); ?>
+    </div>
+
     <div class="offer-mobile-actions">
         <div class="offer-mobile-actions__left">
             <?php get_template_part('partials/offer-view-toggle'); ?>

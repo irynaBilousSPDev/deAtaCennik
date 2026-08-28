@@ -87,7 +87,7 @@ function syncActionsBar(hasTaxonomyFilters = false) {
     }
 
     if (!hasFilters) {
-        hasFilters = document.querySelectorAll('.offer-listing-selection .filter-tag').length > 0;
+        hasFilters = document.querySelectorAll('.offer-mobile-toolbar .filter-tag').length > 0;
     }
 
     if (clearBtn) {
