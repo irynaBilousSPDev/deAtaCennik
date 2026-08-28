@@ -91,17 +91,11 @@ $om-filter-card-pad: 16px;
 
     .filter_tags_wrapper {
       display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
+      flex-direction: column;
+      align-items: stretch;
       gap: 8px;
       min-width: 0;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
+      overflow: visible;
 
       h3 {
         display: none;
@@ -118,6 +112,17 @@ $om-filter-card-pad: 16px;
       align-items: center;
       gap: 6px;
       min-width: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &:not(:has(.filter-tag)) {
+        display: none;
+      }
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .filter-tag {
         flex-shrink: 0;
@@ -140,7 +145,10 @@ $om-filter-card-pad: 16px;
     }
 
     #offer-promo-info {
-      display: contents;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
 
       &.is-empty {
         display: none;
@@ -148,30 +156,49 @@ $om-filter-card-pad: 16px;
     }
 
     .offer-promo-info__item {
+      position: relative;
       flex-shrink: 0;
-      max-width: min(280px, 78vw);
-      min-height: 32px;
-      height: 32px;
-      border-radius: 100px;
-      box-shadow: none;
+      width: 100%;
+      max-width: 100%;
+      min-height: 40px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      overflow: visible;
 
       &:not(.is-open) {
-        height: 32px;
-        min-height: 32px;
+        min-height: 40px;
+        border-radius: 100px;
       }
 
       &.is-open {
-        max-width: min(300px, 88vw);
-        border-radius: 12px;
+        z-index: 2;
       }
     }
 
     .offer-promo-info__toggle {
-      padding: 0 2px 0 10px;
+      padding: 8px 4px 8px 12px;
+      align-items: flex-start;
+    }
+
+    .offer-promo-info__item:not(.is-open) .offer-promo-info__toggle {
+      align-items: center;
+      padding: 0 4px 0 12px;
+      min-height: 40px;
     }
 
     .offer-promo-info__name {
       font-size: 1.2rem;
+    }
+
+    .offer-promo-info__short {
+      display: none;
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+
+    .offer-promo-info__item.is-open .offer-promo-info__short {
+      display: block;
     }
 
     .offer-promo-info__tag {
@@ -179,10 +206,15 @@ $om-filter-card-pad: 16px;
       padding: 1px 6px;
     }
 
+    .offer-promo-info__body {
+      padding: 0 12px 12px;
+      font-size: 1.2rem;
+    }
+
     .offer-promo-info__remove {
-      width: 24px;
-      height: 24px;
-      font-size: 1.1rem;
+      width: 28px;
+      height: 28px;
+      font-size: 1.2rem;
     }
   }
 }

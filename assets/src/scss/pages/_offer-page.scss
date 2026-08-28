@@ -541,10 +541,11 @@
   }
 }
 
-// Mobile: listing selection hidden — keep promo items full width if ever shown
+// Mobile: promo chips stack below taxonomy tags in toolbar
 @include mixins.max-ipad-pro-screen {
-  .offer-promo-info__item {
+  .offer-mobile-toolbar .offer-promo-info__item {
     max-width: 100%;
+    overflow: visible;
   }
 }
 

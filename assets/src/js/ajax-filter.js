@@ -668,6 +668,11 @@ import { initOfferViewToggle } from './offer-view-toggle';
         if (willOpen) {
             $body.removeAttr('hidden');
             openPromoInfoIds[promoId] = true;
+            if (window.matchMedia('(max-width: 990px)').matches) {
+                window.requestAnimationFrame(() => {
+                    $item[0]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                });
+            }
         } else {
             $body.attr('hidden', true);
             delete openPromoInfoIds[promoId];
