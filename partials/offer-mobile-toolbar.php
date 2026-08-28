@@ -16,19 +16,6 @@ $quick_chips       = [
 $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M7 10l5 5 5-5z"/></svg>';
 ?>
 <div class="offer-mobile-toolbar" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_toolbar_aria')); ?>">
-    <label class="offer-mobile-search">
-        <span class="visually-hidden"><?php echo esc_html(akademiata_get_theme_lang_string('offer_search_label')); ?></span>
-        <svg class="offer-mobile-search__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
-            <path d="M20 20l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-        <input type="search"
-               class="offer-mobile-search__input"
-               placeholder="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_placeholder')); ?>"
-               autocomplete="off"
-               inputmode="search">
-    </label>
-
     <div class="offer-mobile-chips" role="toolbar" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_quick_filters_aria')); ?>">
         <div class="offer-mobile-chips__row">
             <button type="button" class="offer-mobile-chip is-active" data-tax="all">
@@ -83,13 +70,40 @@ $chip_chevron = '<svg class="offer-mobile-chip__chevron" width="10" height="10" 
     </div>
 
     <div class="offer-mobile-actions">
-        <?php get_template_part('partials/offer-view-toggle'); ?>
-        <button type="button" class="offer-mobile-clear" id="offer-mobile-clear-filters">
-            <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
-                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
-            </svg>
-            <?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?>
-        </button>
+        <div class="offer-mobile-actions__start">
+            <button type="button"
+                    class="offer-mobile-clear"
+                    id="offer-mobile-clear-filters"
+                    hidden>
+                <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="none" stroke="currentColor" stroke-width="2" d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66"/>
+                    <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M20 4v5h-5M4 20v-5h5"/>
+                </svg>
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?>
+            </button>
+            <div class="offer-mobile-search" id="offer-mobile-search-panel" hidden>
+                <label class="offer-mobile-search__label">
+                    <span class="visually-hidden"><?php echo esc_html(akademiata_get_theme_lang_string('offer_search_label')); ?></span>
+                    <input type="search"
+                           class="offer-mobile-search__input"
+                           placeholder="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_placeholder')); ?>"
+                           autocomplete="off"
+                           inputmode="search">
+                </label>
+            </div>
+        </div>
+        <div class="offer-mobile-tool-group">
+            <?php get_template_part('partials/offer-view-toggle'); ?>
+            <button type="button"
+                    class="offer-mobile-tool-group__btn offer-mobile-search-toggle"
+                    aria-expanded="false"
+                    aria-controls="offer-mobile-search-panel"
+                    aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_search_label')); ?>">
+                <svg class="offer-mobile-tool-group__icon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M20 20l-4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
     </div>
 </div>

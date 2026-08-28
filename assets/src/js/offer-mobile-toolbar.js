@@ -57,25 +57,70 @@ function getTaxonomyInputs(taxonomy) {
 function syncChipStates() {
     const form = getFilterForm();
     const allChip = document.querySelector('.offer-mobile-chip[data-tax="all"]');
+    let hasAnyFilter = false;
 
-    if (!form || !allChip) {
+    if (form && allChip) {
+        document.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
+            const tax = chip.dataset.tax;
+            const checkedCount = getTaxonomyInputs(tax).filter((input) => input.checked).length;
+            const hasFilter = checkedCount > 0;
+
+            chip.classList.toggle('has-filter', hasFilter);
+            if (hasFilter) {
+                hasAnyFilter = true;
+            }
+        });
+
+        allChip.classList.toggle('is-active', !hasAnyFilter && !isFavoritesFilterActive());
+    }
+
+    syncActionsBar(hasAnyFilter);
+}
+
+function syncActionsBar(hasTaxonomyFilters = false) {
+    const clearBtn = document.getElementById('offer-mobile-clear-filters');
+    const form = getFilterForm();
+    let hasFilters = hasTaxonomyFilters || isFavoritesFilterActive();
+
+    if (!hasFilters && form) {
+        hasFilters = form.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+    }
+
+    if (!hasFilters) {
+        hasFilters = document.querySelectorAll('.offer-listing-selection .filter-tag').length > 0;
+    }
+
+    if (clearBtn) {
+        clearBtn.hidden = !hasFilters;
+    }
+}
+
+function setOfferMobileSearchOpen(toolbar, isOpen) {
+    const searchPanel = toolbar.querySelector('#offer-mobile-search-panel');
+    const searchToggle = toolbar.querySelector('.offer-mobile-search-toggle');
+    const searchInput = toolbar.querySelector('.offer-mobile-search__input');
+
+    if (!searchPanel || !searchToggle) {
         return;
     }
 
-    let hasAnyFilter = false;
+    searchPanel.classList.toggle('is-open', isOpen);
+    searchToggle.classList.toggle('is-active', isOpen);
+    searchToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
 
-    document.querySelectorAll('.offer-mobile-chip--dropdown').forEach((chip) => {
-        const tax = chip.dataset.tax;
-        const checkedCount = getTaxonomyInputs(tax).filter((input) => input.checked).length;
-        const hasFilter = checkedCount > 0;
+    if (isOpen) {
+        searchPanel.removeAttribute('hidden');
+        window.setTimeout(() => searchInput?.focus(), 50);
+        return;
+    }
 
-        chip.classList.toggle('has-filter', hasFilter);
-        if (hasFilter) {
-            hasAnyFilter = true;
-        }
-    });
+    if (!searchInput?.value.trim()) {
+        searchPanel.setAttribute('hidden', '');
+    }
+}
 
-    allChip.classList.toggle('is-active', !hasAnyFilter && !isFavoritesFilterActive());
+function closeOfferMobileSearch(toolbar) {
+    setOfferMobileSearchOpen(toolbar, false);
 }
 
 function getDropdownElements() {
@@ -555,12 +600,22 @@ export function initOfferMobileToolbar() {
     initOfferMobileChipsSticky();
 
     const searchInput = toolbar.querySelector('.offer-mobile-search__input');
+    const searchToggle = toolbar.querySelector('.offer-mobile-search-toggle');
     const allChip = toolbar.querySelector('.offer-mobile-chip[data-tax="all"]');
     const clearBtn = document.getElementById('offer-mobile-clear-filters');
     const filterForm = getFilterForm();
     const { backdrop, close } = getDropdownElements();
 
     searchInput?.addEventListener('input', applyOfferSearchQuery);
+
+    searchToggle?.addEventListener('click', () => {
+        const isOpen = searchToggle.classList.contains('is-active');
+        setOfferMobileSearchOpen(toolbar, !isOpen);
+    });
+
+    if (searchInput?.value.trim()) {
+        setOfferMobileSearchOpen(toolbar, true);
+    }
 
     allChip?.addEventListener('click', () => {
         closeOfferDropdown();
@@ -579,13 +634,14 @@ export function initOfferMobileToolbar() {
         }
 
         applyOfferSearchQuery();
+        closeOfferMobileSearch(toolbar);
         document.getElementById('clear-filters')?.click();
         syncChipStates();
         scrollOfferListingToStart();
     });
 
     toolbar.addEventListener('click', (event) => {
-        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip')) {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip, .offer-mobile-search-toggle, .offer-mobile-search')) {
             return;
         }
         if (Date.now() - lastChipTouchAt < 400) {
@@ -595,7 +651,7 @@ export function initOfferMobileToolbar() {
     });
 
     toolbar.addEventListener('touchend', (event) => {
-        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip')) {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-favorites-chip, .offer-mobile-search-toggle, .offer-mobile-search')) {
             return;
         }
         const chip = event.target.closest('.offer-mobile-chip--dropdown, .offer-mobile-chip--more');
@@ -612,6 +668,7 @@ export function initOfferMobileToolbar() {
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
             closeOfferDropdown();
+            closeOfferMobileSearch(toolbar);
         }
     });
 
@@ -630,6 +687,10 @@ export function initOfferMobileToolbar() {
     document.addEventListener('akademiata:filter-results-updated', () => {
         applyOfferSearchQuery();
         syncChipStates();
+    });
+
+    document.addEventListener('akademiata:offer-listing-scroll-start', () => {
+        window.setTimeout(syncChipStates, 0);
     });
 
     syncChipStates();
