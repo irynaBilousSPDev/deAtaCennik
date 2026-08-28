@@ -69,12 +69,6 @@ $om-filter-card-pad: 16px;
 }
 
 @include mixins.max-ipad-pro-screen {
-  // Compact selected-filter pills under toolbar (desktop "Filtry:" bar, mobile-sized).
-  // Full promo expand panel stays desktop-only — mobile uses chips + dropdown.
-  #offer-promo-info {
-    display: none !important;
-  }
-
   .offer-mobile-toolbar .offer-listing-selection {
     display: block;
     margin: 0 0 10px;
@@ -83,7 +77,7 @@ $om-filter-card-pad: 16px;
     background: transparent;
     box-shadow: none;
 
-    &:not(:has(#tags-container[style*="block"])):not(:has(#tags-container[style*="flex"])) {
+    &:not(:has(#tags-container[style*="block"])):not(:has(#tags-container[style*="flex"])):not(:has(#offer-promo-info:not(.is-empty))) {
       display: none;
     }
 
@@ -143,6 +137,52 @@ $om-filter-card-pad: 16px;
         line-height: 1.2;
         white-space: nowrap;
       }
+    }
+
+    #offer-promo-info {
+      display: contents;
+
+      &.is-empty {
+        display: none;
+      }
+    }
+
+    .offer-promo-info__item {
+      flex-shrink: 0;
+      max-width: min(280px, 78vw);
+      min-height: 32px;
+      height: 32px;
+      border-radius: 100px;
+      box-shadow: none;
+
+      &:not(.is-open) {
+        height: 32px;
+        min-height: 32px;
+      }
+
+      &.is-open {
+        max-width: min(300px, 88vw);
+        border-radius: 12px;
+      }
+    }
+
+    .offer-promo-info__toggle {
+      padding: 0 2px 0 10px;
+    }
+
+    .offer-promo-info__name {
+      font-size: 1.2rem;
+    }
+
+    .offer-promo-info__tag {
+      font-size: 1rem;
+      padding: 1px 6px;
+    }
+
+    .offer-promo-info__remove {
+      width: 24px;
+      height: 24px;
+      font-size: 1.1rem;
     }
   }
 }

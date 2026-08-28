@@ -295,39 +295,19 @@ import { initOfferViewToggle } from './offer-view-toggle';
             return;
         }
 
-        const $container = $('.offer-mobile-toolbar .selected_tags_container').first();
-        if (!$container.length) {
-            return;
-        }
-
-        const promoInputs = form.find('input[name="promotions[]"]');
-        const promoIds = promoInputs.map(function () {
+        const promoIds = form.find('input[name="promotions[]"]').map(function () {
             return $(this).val();
         }).get();
-        const checkedIds = new Set(
-            promoInputs.filter(':checked').map(function () {
-                return $(this).val();
-            }).get()
-        );
 
-        $container.find('.filter-tag').each(function () {
+        // Promos use expandable #offer-promo-info chips (name + short + tag), not plain filter-tags.
+        $('.offer-mobile-toolbar .selected_tags_container .filter-tag').each(function () {
             const val = $(this).attr('data-value');
-            if (promoIds.includes(val) && !checkedIds.has(val)) {
+            if (promoIds.includes(val)) {
                 $(this).remove();
             }
         });
 
-        promoInputs.filter(':checked').each(function () {
-            const $input = $(this);
-            addTag(getCheckboxTagLabel($input), $input.val());
-        });
-
-        if ($container.find('.filter-tag').length === 0) {
-            $('#tags-container').hide();
-        } else {
-            $('#tags-container').show();
-        }
-
+        placePromoInfoInFilterBar();
         syncDesktopFilterBarVisibility();
     }
 
@@ -395,11 +375,13 @@ import { initOfferViewToggle } from './offer-view-toggle';
     let openPromoInfoIds = {};
 
     function placePromoInfoInFilterBar() {
-        // Desktop: promo chips live in the same Filtry row as taxonomy tags.
-        if (window.matchMedia('(max-width: 990px)').matches) {
-            return;
+        const isMobile = window.matchMedia('(max-width: 990px)').matches;
+        let $wrap = isMobile
+            ? $('.offer-mobile-toolbar .filter_tags_wrapper').first()
+            : $('.offer-listing-selection .filter_tags_wrapper').first();
+        if (!$wrap.length) {
+            $wrap = $('.offer-listing-selection .filter_tags_wrapper').first();
         }
-        const $wrap = $('.offer-listing-selection .filter_tags_wrapper').first();
         const $promo = $('#offer-promo-info');
         const $clear = $wrap.find('.button_clear_filters').first();
         if (!$wrap.length || !$promo.length) {
