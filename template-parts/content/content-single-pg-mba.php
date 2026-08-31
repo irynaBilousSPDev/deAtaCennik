@@ -453,7 +453,9 @@ if ($post_type === 'postgraduate' && has_term($wroclaw_slug, 'city_pg_mba', $pos
 
 } elseif (in_array($post_type, ['mba', 'postgraduate'], true) && has_term($warszawa_slug, 'city_pg_mba', $post_id)) {
     $options_post_id = 'contact_warsaw';
-} elseif (in_array($post_type, ['mba', 'postgraduate'], true) && has_term($online_slug, 'city_pg_mba', $post_id)) {
+} elseif ($post_type === 'mba' && has_term($online_slug, 'city_pg_mba', $post_id)) {
+    $options_post_id = 'contact_mba';
+} elseif ($post_type === 'postgraduate' && has_term($online_slug, 'city_pg_mba', $post_id)) {
     $options_post_id = 'contact_postgraduate';
 }
 //        else {
