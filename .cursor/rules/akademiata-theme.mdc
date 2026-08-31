@@ -47,7 +47,7 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 - Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`. **AI crawlers (prod only):** `configure/ai-crawler-hints.php` → `/pricing-for-ai.txt`, head links to `prices.json`.
 - YouTube: `configure/youtube-api.php` (Theme Settings → YouTube API, encrypted key) + REST `/wp-json/akademiata/v1/youtube` + `__YouTubeSlider.js`. Legacy `youtube-proxy.php` delegates to same handler. Optional `YOUTUBE_API_KEY` in `wp-config.php`.
 - **Offer daily interest:** `configure/offer-daily-interest.php` — Theme Settings → **Licznik zainteresowania** (enable/disable, optional `active_from` date, default on). Singles bachelor/master with `register_url`. Daily reset at midnight; one-time prod launch date in code until first live day.
-- **Offer JSON-LD:** `configure/offer-schema.php` — `Course` schema on singles bachelor/master/postgraduate/mba (`wp_head`); bachelor/master prices from `prices.json` + `logical_sync_key`, PG/MBA from ACF teaser.
+- **Offer JSON-LD:** `configure/offer-schema.php` — `EducationalOccupationalProgram` on singles bachelor/master/postgraduate/mba (`wp_head`); bachelor/master prices from `prices.json` + `logical_sync_key`, PG/MBA from ACF teaser.
 - **Site daily visitors:** `configure/site-daily-visitors.php` — same global toggle as offer interest counter; unique visitors across whole site per day (min 2 on prod). **REST + JS** (`siteDailyVisitors.js`) so WP Rocket page cache stays valid; filters `rocket_cache_reject_uri` + `rocket_delay_js_exclusions`. (Homepage **Decyzja na dziś** display removed from `front-page.php` for now.)
 
 ## Cursor rules

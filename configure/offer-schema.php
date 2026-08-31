@@ -1,6 +1,6 @@
 <?php
 /**
- * JSON-LD Course schema for offer singles (bachelor, master, postgraduate, mba).
+ * JSON-LD EducationalOccupationalProgram schema for offer singles (bachelor, master, postgraduate, mba).
  *
  * @package akademiata
  */
@@ -555,10 +555,120 @@ function akademiata_schema_offer_description($post_id) {
 }
 
 /**
+ * @param WP_Term[] $terms
+ * @return string fullTime|partTime|online|blendedLearning
+ */
+function akademiata_schema_educational_program_mode(array $terms) {
+    foreach ($terms as $term) {
+        $hay = strtolower($term->slug . ' ' . $term->name);
+        if (
+            strpos($hay, 'online') !== false
+            || strpos($hay, 'niestacjonarn') !== false
+            || strpos($hay, 'zaoczn') !== false
+            || strpos($hay, 'sobot') !== false
+        ) {
+            return 'blendedLearning';
+        }
+        if (strpos($hay, 'stacjonarn') !== false) {
+            return 'fullTime';
+        }
+    }
+
+    return 'fullTime';
+}
+
+/**
+ * @param string     $post_type
+ * @param WP_Term[]  $degree_terms
+ * @return string
+ */
+function akademiata_schema_program_type_label($post_type, array $degree_terms = array()) {
+    if ($post_type === 'bachelor') {
+        return __('Bachelor degree program', 'akademiata');
+    }
+    if ($post_type === 'master') {
+        return __('Master degree program', 'akademiata');
+    }
+    if ($post_type === 'mba') {
+        return 'MBA';
+    }
+    if ($post_type === 'postgraduate') {
+        return __('Postgraduate program', 'akademiata');
+    }
+
+    if (!empty($degree_terms)) {
+        return (string) $degree_terms[0]->name;
+    }
+
+    return '';
+}
+
+/**
+ * @param string[] $module_titles
+ * @return array<int, array<string, string>>
+ */
+function akademiata_schema_program_modules(array $module_titles) {
+    $modules = array();
+
+    foreach ($module_titles as $title) {
+        $title = trim((string) $title);
+        if ($title === '') {
+            continue;
+        }
+        $modules[] = array(
+            '@type' => 'Course',
+            'name'  => $title,
+        );
+    }
+
+    return $modules;
+}
+
+/**
+ * @param string $city_name
+ * @return array<string, mixed>
+ */
+function akademiata_schema_place_from_city($city_name) {
+    $city_name = trim((string) $city_name);
+    if ($city_name === '') {
+        return array();
+    }
+
+    return array(
+        '@type'   => 'Place',
+        'name'    => $city_name,
+        'address' => array(
+            '@type'           => 'PostalAddress',
+            'addressLocality' => $city_name,
+            'addressCountry'  => 'PL',
+        ),
+    );
+}
+
+/**
+ * @param array<int, array<string, mixed>> $offers
+ * @param array<string, mixed>              $place
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_offers_with_location(array $offers, array $place) {
+    if ($place === array()) {
+        return $offers;
+    }
+
+    foreach ($offers as $index => $offer) {
+        if (is_array($offer)) {
+            $offers[ $index ]['availableAtOrFrom'] = $place;
+        }
+    }
+
+    return $offers;
+}
+
+/**
  * @param int $post_id
  * @return array<string, mixed>|null
  */
-function akademiata_build_offer_course_schema($post_id) {
+function akademiata_build_offer_program_schema($post_id) {
     $post_id   = (int) $post_id;
     $post_type = get_post_type($post_id);
 
@@ -577,14 +687,13 @@ function akademiata_build_offer_course_schema($post_id) {
     }
 
     $schema = array(
-        '@context'            => 'https://schema.org',
-        '@type'               => 'Course',
-        '@id'                 => $permalink . '#course',
-        'name'                => $title,
-        'url'                 => $permalink,
-        'provider'            => akademiata_get_schema_provider(),
-        'isAccessibleForFree' => false,
-        'identifier'          => (string) $post_id,
+        '@context'    => 'https://schema.org',
+        '@type'       => 'EducationalOccupationalProgram',
+        '@id'         => $permalink . '#program',
+        'name'        => $title,
+        'url'         => $permalink,
+        'provider'    => akademiata_get_schema_provider(),
+        'identifier'  => (string) $post_id,
     );
 
     $description = akademiata_schema_build_description($post_id, $post_type);
@@ -602,22 +711,22 @@ function akademiata_build_offer_course_schema($post_id) {
         $schema['keywords'] = implode(', ', $keywords);
     }
 
-    $teaches = akademiata_schema_collect_teaches($post_id, $post_type);
-    if ($teaches !== array()) {
-        $schema['teaches'] = $teaches;
+    $modules = akademiata_schema_program_modules(akademiata_schema_collect_teaches($post_id, $post_type));
+    if ($modules !== array()) {
+        $schema['hasCourse'] = count($modules) === 1 ? $modules[0] : $modules;
     }
 
     $prerequisites = akademiata_schema_collect_prerequisites($post_id);
     if ($prerequisites !== array()) {
-        $schema['coursePrerequisites'] = $prerequisites;
+        $schema['programPrerequisites'] = $prerequisites;
     }
 
     $program_pdf = akademiata_schema_study_program_pdf_url($post_id);
     if ($program_pdf !== '') {
         $schema['workFeatured'] = array(
-            '@type'      => 'CreativeWork',
-            'name'       => __('Study program (PDF)', 'akademiata'),
-            'url'        => $program_pdf,
+            '@type'          => 'CreativeWork',
+            'name'           => __('Study program (PDF)', 'akademiata'),
+            'url'            => $program_pdf,
             'encodingFormat' => 'application/pdf',
         );
     }
@@ -629,6 +738,7 @@ function akademiata_build_offer_course_schema($post_id) {
 
     $register_url = trim((string) get_field('register_url', $post_id));
     $offer_url    = $register_url;
+    $campus_place = array();
 
     if (in_array($post_type, array('bachelor', 'master'), true)) {
         $city_terms     = akademiata_schema_get_terms($post_id, 'city');
@@ -647,26 +757,22 @@ function akademiata_build_offer_course_schema($post_id) {
             $schema['availableLanguage'] = $language_names;
         }
 
-        if (!empty($program_terms)) {
-            $schema['about'] = $program_terms[0]->name;
-        }
+        $schema['programType'] = akademiata_schema_program_type_label($post_type, $degree_terms);
+        $schema['educationalProgramMode'] = akademiata_schema_educational_program_mode($mode_terms);
 
-        if (!empty($degree_terms)) {
-            $schema['educationalLevel'] = $degree_terms[0]->name;
-            $schema['learningResourceType'] = $degree_terms[0]->name;
+        if (!empty($program_terms)) {
+            $schema['occupationalCategory'] = $program_terms[0]->name;
         }
 
         if (!empty($title_terms)) {
             $schema['educationalCredentialAwarded'] = $title_terms[0]->name;
         }
 
-        if (!empty($duration_terms)) {
-            $duration_text = akademiata_schema_term_names($post_id, 'duration');
-            $duration_text = $duration_text[0] ?? '';
-            $duration_iso  = akademiata_schema_parse_duration_iso($duration_text);
-            if ($duration_iso !== '') {
-                $schema['timeRequired'] = $duration_iso;
-            }
+        $duration_text = akademiata_schema_term_names($post_id, 'duration');
+        $duration_text = $duration_text[0] ?? '';
+        $duration_iso  = akademiata_schema_parse_duration_iso($duration_text);
+        if ($duration_iso !== '') {
+            $schema['timeToComplete'] = $duration_iso;
         }
 
         $ects = akademiata_schema_get_ects_credits($post_id);
@@ -674,28 +780,13 @@ function akademiata_build_offer_course_schema($post_id) {
             $schema['numberOfCredits'] = $ects;
         }
 
-        $course_instance = array(
-            '@type'      => 'CourseInstance',
-            'courseMode' => akademiata_schema_course_mode_from_terms($mode_terms),
-        );
-
         if (!empty($city_terms)) {
-            $course_instance['location'] = array(
-                '@type'   => 'Place',
-                'name'    => $city_terms[0]->name,
-                'address' => array(
-                    '@type'           => 'PostalAddress',
-                    'addressLocality' => $city_terms[0]->name,
-                    'addressCountry'  => 'PL',
-                ),
-            );
+            $campus_place = akademiata_schema_place_from_city($city_terms[0]->name);
         }
-
-        $schema['hasCourseInstance'] = $course_instance;
 
         $logical_sync_key = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
         if ($logical_sync_key !== '') {
-            $schema['courseCode'] = $logical_sync_key;
+            $schema['sku'] = $logical_sync_key;
         }
 
         if ($offer_url === '' && $logical_sync_key !== '') {
@@ -704,8 +795,8 @@ function akademiata_build_offer_course_schema($post_id) {
 
         $price_row = $logical_sync_key !== '' ? akademiata_find_bachelor_master_price_row($logical_sync_key) : null;
         if (is_array($price_row)) {
-            if (!empty($price_row['k']) && empty($schema['about'])) {
-                $schema['about'] = (string) $price_row['k'];
+            if (!empty($price_row['k']) && empty($schema['occupationalCategory'])) {
+                $schema['occupationalCategory'] = (string) $price_row['k'];
             }
             if (!empty($price_row['s'])) {
                 $schema['alternativeHeadline'] = (string) $price_row['s'];
@@ -720,6 +811,7 @@ function akademiata_build_offer_course_schema($post_id) {
                 $register_url,
                 $lang_code
             );
+            $offers = akademiata_schema_offers_with_location($offers, $campus_place);
             if ($offers !== array()) {
                 $schema['offers'] = count($offers) === 1 ? $offers[0] : $offers;
             }
@@ -737,14 +829,12 @@ function akademiata_build_offer_course_schema($post_id) {
             $schema['inLanguage']        = (stripos($language_names[0], 'ang') !== false) ? 'en' : 'pl';
         }
 
-        if (!empty($type_terms)) {
-            $schema['about'] = $type_terms[0]->name;
-        }
+        $schema['programType'] = akademiata_schema_program_type_label($post_type);
+        $schema['educationalProgramMode'] = akademiata_schema_educational_program_mode($mode_terms);
 
-        $schema['educationalLevel'] = ($post_type === 'mba')
-            ? __('MBA', 'akademiata')
-            : __('Postgraduate studies', 'akademiata');
-        $schema['learningResourceType'] = $schema['educationalLevel'];
+        if (!empty($type_terms)) {
+            $schema['occupationalCategory'] = $type_terms[0]->name;
+        }
 
         if (!empty($diploma_terms)) {
             $schema['educationalCredentialAwarded'] = $diploma_terms[0]->name;
@@ -753,45 +843,29 @@ function akademiata_build_offer_course_schema($post_id) {
         if (!empty($duration_terms)) {
             $duration_iso = akademiata_schema_parse_duration_iso($duration_terms[0]->name);
             if ($duration_iso !== '') {
-                $schema['timeRequired'] = $duration_iso;
+                $schema['timeToComplete'] = $duration_iso;
             }
         }
 
-        $course_instance = array(
-            '@type'      => 'CourseInstance',
-            'courseMode' => akademiata_schema_course_mode_from_terms($mode_terms),
-        );
-
         if (!empty($city_terms)) {
-            $course_instance['location'] = array(
-                '@type'   => 'Place',
-                'name'    => $city_terms[0]->name,
-                'address' => array(
-                    '@type'           => 'PostalAddress',
-                    'addressLocality' => $city_terms[0]->name,
-                    'addressCountry'  => 'PL',
-                ),
-            );
+            $campus_place = akademiata_schema_place_from_city($city_terms[0]->name);
         }
-
-        $instructors = akademiata_schema_pg_mba_instructors($post_id);
-        if ($instructors !== array()) {
-            $course_instance['instructor'] = count($instructors) === 1 ? $instructors[0] : $instructors;
-        }
-
-        $schema['hasCourseInstance'] = $course_instance;
 
         if (function_exists('akademiata_pg_mba_get_teaser_price_text')) {
             $parsed = akademiata_schema_parse_price_text(akademiata_pg_mba_get_teaser_price_text($post_id));
             if (is_array($parsed)) {
-                $schema['offers'] = array(
-                    '@type'         => 'Offer',
-                    'name'          => __('Monthly tuition (8 installments)', 'akademiata'),
-                    'url'           => $offer_url !== '' ? $offer_url : $permalink,
-                    'price'         => $parsed['price'],
-                    'priceCurrency' => $parsed['currency'],
-                    'availability'  => $register_url !== '' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+                $offers = array(
+                    array(
+                        '@type'         => 'Offer',
+                        'name'          => __('Monthly tuition (8 installments)', 'akademiata'),
+                        'url'           => $offer_url !== '' ? $offer_url : $permalink,
+                        'price'         => $parsed['price'],
+                        'priceCurrency' => $parsed['currency'],
+                        'availability'  => $register_url !== '' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+                    ),
                 );
+                $offers = akademiata_schema_offers_with_location($offers, $campus_place);
+                $schema['offers'] = $offers[0];
             }
         }
     }
@@ -817,7 +891,7 @@ function akademiata_build_offer_course_schema($post_id) {
     return $schema;
 }
 
-function akademiata_should_output_offer_course_schema() {
+function akademiata_should_output_offer_program_schema() {
     if (is_admin()) {
         return false;
     }
@@ -825,12 +899,12 @@ function akademiata_should_output_offer_course_schema() {
     return is_singular(array('bachelor', 'master', 'postgraduate', 'mba'));
 }
 
-function akademiata_output_offer_course_schema() {
-    if (!akademiata_should_output_offer_course_schema()) {
+function akademiata_output_offer_program_schema() {
+    if (!akademiata_should_output_offer_program_schema()) {
         return;
     }
 
-    $schema = akademiata_build_offer_course_schema((int) get_queried_object_id());
+    $schema = akademiata_build_offer_program_schema((int) get_queried_object_id());
     if (!is_array($schema) || $schema === array()) {
         return;
     }
@@ -838,4 +912,14 @@ function akademiata_output_offer_course_schema() {
     echo '<script type="application/ld+json">' . wp_json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "</script>\n";
 }
 
-add_action('wp_head', 'akademiata_output_offer_course_schema', 20);
+add_action('wp_head', 'akademiata_output_offer_program_schema', 20);
+
+/** @deprecated Use akademiata_build_offer_program_schema() */
+function akademiata_build_offer_course_schema($post_id) {
+    return akademiata_build_offer_program_schema($post_id);
+}
+
+/** @deprecated Use akademiata_output_offer_program_schema() */
+function akademiata_output_offer_course_schema() {
+    akademiata_output_offer_program_schema();
+}
