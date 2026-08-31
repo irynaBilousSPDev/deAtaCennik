@@ -127,12 +127,12 @@
                 </div>
             </div>
             <div class="buttons_wrapper">
-                <a class="button-primary mb-3" style="min-width: 140px" href="<?php the_permalink(); ?>"><?php echo esc_html(akademiata_get_theme_lang_string('offer_card_details')); ?></a>
+                <a class="button-primary" href="<?php the_permalink(); ?>"><?php echo esc_html(akademiata_get_theme_lang_string('offer_card_details')); ?></a>
                 <?php
                 $register_url = get_field('register_url') ?: home_url();
                 ?>
                 <div class="button-sing_up_wrapper">
-                    <a class="button-sing_up mb-3" style="width: 100%"
+                    <a class="button-sing_up"
                        href="<?php echo esc_url($register_url); ?>">
                         <?php echo esc_html(akademiata_get_theme_lang_string('offer_card_register')); ?>
                     </a>

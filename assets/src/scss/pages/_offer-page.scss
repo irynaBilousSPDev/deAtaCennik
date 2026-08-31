@@ -898,6 +898,40 @@
 
 // Laptop 3-column listings — compact scale until large desktop (1921px+).
 @include mixins.ipad-pro-screen {
+  .offer_wrapper--offer-page #filter-results,
+  .offer_wrapper--pg-mba #filter-results,
+  .studia_cards {
+    .buttons_wrapper {
+      flex-wrap: nowrap;
+      align-items: stretch;
+
+      > a,
+      > .button-sing_up_wrapper,
+      > .btn_ended_container {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+
+      .button-sing_up_wrapper {
+        min-width: 0;
+        display: block;
+      }
+
+      .mb-3 {
+        margin-bottom: 0;
+      }
+
+      .button-primary,
+      .button-sing_up {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        margin: 0;
+        white-space: nowrap;
+      }
+    }
+  }
+
   @media (max-width: 1920px) {
     .offer_wrapper--offer-page #filter-results,
     .offer_wrapper--pg-mba #filter-results,
