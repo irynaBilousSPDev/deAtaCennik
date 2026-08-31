@@ -209,6 +209,13 @@
     @content;
   }
 }
+
+// Laptop viewport with sidebar + 3 listing cards (not large desktop monitors).
+@mixin listing-laptop-screen {
+  @media (min-width: 991px) and (max-width: 1680px) {
+    @content;
+  }
+}
 @mixin max-ipad-air-screen {
   @media (max-width: 767px) {
     @content;

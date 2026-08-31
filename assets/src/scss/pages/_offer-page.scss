@@ -896,47 +896,29 @@
   }
 }
 
-// Laptop 3-column listings — compact scale until large desktop (1921px+).
-@include mixins.ipad-pro-screen {
+// Laptop 3-column listings — compact cards + side-by-side buttons only (991–1680px).
+@include mixins.listing-laptop-screen {
   .offer_wrapper--offer-page #filter-results,
   .offer_wrapper--pg-mba #filter-results,
   .studia_cards {
-    .buttons_wrapper {
-      flex-wrap: nowrap;
-      align-items: stretch;
-
-      > a,
-      > .button-sing_up_wrapper,
-      > .btn_ended_container {
-        flex: 1 1 0;
-        min-width: 0;
-      }
-
-      .button-sing_up_wrapper {
-        min-width: 0;
-        display: block;
-      }
-
-      .mb-3 {
-        margin-bottom: 0;
-      }
-
-      .button-primary,
-      .button-sing_up {
-        width: 100%;
-        max-width: none;
-        min-width: 0;
-        margin: 0;
-        white-space: nowrap;
-      }
-    }
+    @include mixins.listing-card-compact-laptop;
   }
+}
 
-  @media (max-width: 1920px) {
-    .offer_wrapper--offer-page #filter-results,
-    .offer_wrapper--pg-mba #filter-results,
-    .studia_cards {
-      @include mixins.listing-card-compact-laptop;
+// Large desktop — restore pre-compact listing shell.
+@include mixins.xxl-screen {
+  .offer_wrapper--offer-page,
+  .offer_wrapper--pg-mba {
+    #filter-results {
+      padding: 2rem 0;
+
+      .card_post_wrapper {
+        padding: 18px;
+      }
+
+      .card_post_body {
+        padding: 18px;
+      }
     }
   }
 }
