@@ -220,3 +220,19 @@
   }
 }
 
+// Listing cards (offer, PG/MBA, courses) — 3 per row from laptop width (991px+).
+@mixin listing-card-grid-width {
+  width: 100%;
+
+  @include ipad-mini-screen {
+    width: 50%;
+  }
+
+  @include ipad-pro-screen {
+    width: 33.3333%;
+  }
+
+  @include four-k-screen {
+    width: 20%;
+  }
+}

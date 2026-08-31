@@ -801,22 +801,9 @@
 // ===== CARD ITEMS =====
 .card_post_item {
   margin-bottom: 38px;
-  width: 100%;
   padding: 1rem;
+  @include mixins.listing-card-grid-width;
 
-  @include mixins.ipad-mini-screen {
-    width: 50%;
-  }
-  @include mixins.ipad-screen {
-    width: 50%;
-  }
-  @include mixins.lg-screen {
-    width: 33.3333%;
-  }
-
-  @include mixins.four-k-screen {
-    width: 20%;
-  }
   @include mixins.max-sm-screen {
     padding: 1rem 0.5rem;
   }

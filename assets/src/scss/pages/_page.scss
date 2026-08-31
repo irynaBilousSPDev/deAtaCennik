@@ -145,33 +145,11 @@
   }
 }
 
-// PG/MBA AJAX filter — same card grid breakpoints as bachelor/master offer page
+// PG/MBA AJAX filter — same card grid as bachelor/master offer page
 .page_offer--pg-mba {
   .offer_wrapper--pg-mba #filter-results {
     .card_post_item.pg_mba_card {
       max-width: none;
-      width: 100%;
-      padding: 1rem;
-
-      @include mixins.max-sm-screen {
-        padding: 1rem 0.5rem;
-      }
-
-      @include mixins.ipad-mini-screen {
-        width: 50%;
-      }
-
-      @include mixins.ipad-screen {
-        width: 50%;
-      }
-
-      @include mixins.lg-screen {
-        width: 33.3333%;
-      }
-
-      @include mixins.four-k-screen {
-        width: 20%;
-      }
     }
   }
 }
@@ -279,8 +257,13 @@
   }
 }
 
-.studia_cards .pg_mba_card {
-  max-width: 420px;
+.studia_cards {
+  .card_post_item,
+  .pg_mba_card,
+  .course-card {
+    max-width: none;
+    @include mixins.listing-card-grid-width;
+  }
 }
 
 .price_from_single {
