@@ -11,49 +11,63 @@
  * @param array<string, mixed>|null $price_row
  */
 function akademiata_schema_degree_auto_description($post_id, $post_type, $price_row = null) {
-    $title = get_the_title($post_id);
+    $title = akademiata_schema_clean_text(get_the_title($post_id));
     if ($title === '') {
         return '';
     }
 
-    $fragments = array();
-    $degree    = akademiata_schema_join_term_names($post_id, 'degree');
-    if ($degree !== '') {
-        $fragments[] = $title . ' — ' . $degree;
-    } else {
-        $fragments[] = $title;
-    }
-
-    $city = akademiata_schema_join_term_names($post_id, 'city');
-    if ($city !== '') {
-        $fragments[] = __('City:', 'akademiata') . ' ' . $city;
-    }
-
+    $degree   = akademiata_schema_join_term_names($post_id, 'degree');
+    $city     = akademiata_schema_join_term_names($post_id, 'city');
     $language = akademiata_schema_join_term_names($post_id, 'language');
+    $mode     = akademiata_schema_join_term_names($post_id, 'mode');
+
+    $intro = $title;
+    if ($degree !== '') {
+        $intro .= ' — ' . mb_strtolower($degree);
+    }
+    if ($city !== '') {
+        $intro .= ' w ' . $city;
+    }
     if ($language !== '') {
-        $fragments[] = __('Language of instruction:', 'akademiata') . ' ' . $language;
+        $intro .= ', język: ' . $language;
     }
-
-    $mode = akademiata_schema_join_term_names($post_id, 'mode');
     if ($mode !== '') {
-        $fragments[] = __('Study mode:', 'akademiata') . ' ' . $mode;
+        $intro .= ', forma: ' . $mode;
+    }
+    $intro .= '.';
+
+    $body_parts = array();
+    $why_study  = get_field('why_study', $post_id);
+    if (is_array($why_study)) {
+        foreach ($why_study['why_study_cards'] ?? array() as $card) {
+            if (!is_array($card)) {
+                continue;
+            }
+            $summary = akademiata_schema_robot_summary($card['title'] ?? '', $card['content'] ?? '', 22);
+            if ($summary !== '') {
+                $body_parts[] = $summary;
+            }
+        }
     }
 
-    $intro = implode('. ', $fragments);
-
-    $why_study = get_field('why_study', $post_id);
-    $body      = '';
-    if (is_array($why_study) && !empty($why_study['why_study_cards'][0]['content'])) {
-        $body = (string) $why_study['why_study_cards'][0]['content'];
+    $after = get_field('after_studies', $post_id);
+    if (is_array($after)) {
+        foreach ($after['image_content_slider'] ?? array() as $slide) {
+            if (!is_array($slide)) {
+                continue;
+            }
+            $label = akademiata_schema_clean_text($slide['title'] ?? '');
+            if ($label !== '') {
+                $body_parts[] = $label;
+            }
+        }
     }
 
-    if (is_array($price_row) && !empty($price_row['k']) && empty($body)) {
-        $body = sprintf(
-            /* translators: %s: field of study name */
-            __('Field of study: %s at ATA.', 'akademiata'),
-            (string) $price_row['k']
-        );
+    if ($body_parts === array() && is_array($price_row) && !empty($price_row['k'])) {
+        $body_parts[] = (string) $price_row['k'];
     }
+
+    $body = implode(' ', array_slice($body_parts, 0, 4));
 
     return akademiata_schema_robot_summary($intro, $body, 55);
 }
@@ -65,13 +79,13 @@ function akademiata_schema_degree_study_parameters_text($post_id, $price_row = n
     $parts = array();
 
     $map = array(
-        __('City', 'akademiata')                 => akademiata_schema_join_term_names($post_id, 'city'),
-        __('Field of study', 'akademiata')       => akademiata_schema_join_term_names($post_id, 'program'),
-        __('Type of studies', 'akademiata')      => akademiata_schema_join_term_names($post_id, 'degree'),
-        __('Degree awarded', 'akademiata')       => akademiata_schema_join_term_names($post_id, 'obtained_title'),
-        __('Duration', 'akademiata')             => akademiata_schema_join_term_names($post_id, 'duration'),
-        __('Language of instruction', 'akademiata') => akademiata_schema_join_term_names($post_id, 'language'),
-        __('Study mode', 'akademiata')           => akademiata_schema_join_term_names($post_id, 'mode'),
+        __('Miasto', 'akademiata')            => akademiata_schema_join_term_names($post_id, 'city'),
+        __('Kierunek studiów', 'akademiata')  => akademiata_schema_join_term_names($post_id, 'program'),
+        __('Rodzaj studiów', 'akademiata')    => akademiata_schema_join_term_names($post_id, 'degree'),
+        __('Uzyskany tytuł', 'akademiata')    => akademiata_schema_join_term_names($post_id, 'obtained_title'),
+        __('Czas trwania', 'akademiata')      => akademiata_schema_join_term_names($post_id, 'duration'),
+        __('Język studiów', 'akademiata')     => akademiata_schema_join_term_names($post_id, 'language'),
+        __('Forma studiów', 'akademiata')     => akademiata_schema_join_term_names($post_id, 'mode'),
     );
 
     foreach ($map as $label => $value) {
@@ -82,23 +96,15 @@ function akademiata_schema_degree_study_parameters_text($post_id, $price_row = n
 
     $ects = akademiata_schema_get_ects_credits($post_id);
     if ($ects !== null) {
-        $parts[] = 'ECTS: ' . $ects;
+        $parts[] = 'Punkty ECTS: ' . $ects;
     }
 
-    if (is_array($price_row)) {
-        if (!empty($price_row['r12'])) {
-            $parts[] = sprintf(
-                /* translators: %s: monthly price in PLN */
-                __('Tuition from %s PLN/month (12 installments)', 'akademiata'),
-                (string) $price_row['r12']
-            );
-        } elseif (!empty($price_row['r10'])) {
-            $parts[] = sprintf(
-                /* translators: %s: monthly price in PLN */
-                __('Tuition from %s PLN/month (10 installments)', 'akademiata'),
-                (string) $price_row['r10']
-            );
-        }
+    if (is_array($price_row) && !empty($price_row['r12'])) {
+        $parts[] = sprintf(
+            /* translators: %s: monthly price in PLN */
+            __('Cena: już od %s zł miesięcznie', 'akademiata'),
+            (string) $price_row['r12']
+        );
     }
 
     return implode('. ', $parts);
@@ -119,9 +125,9 @@ function akademiata_schema_degree_occupational_categories($post_id) {
         if (!is_array($slide)) {
             continue;
         }
-        $summary = akademiata_schema_robot_summary($slide['title'] ?? '', $slide['content'] ?? '', 12);
-        if ($summary !== '') {
-            $categories[] = $summary;
+        $title = akademiata_schema_clean_text($slide['title'] ?? '');
+        if ($title !== '') {
+            $categories[] = mb_strtolower($title);
         }
     }
 
@@ -131,39 +137,71 @@ function akademiata_schema_degree_occupational_categories($post_id) {
 /**
  * @return array<string, mixed>|null
  */
-function akademiata_schema_degree_ranking_subject($post_id) {
-    if (!function_exists('akademiata_get_offer_ranking_icon_url')) {
+function akademiata_schema_degree_perspektywy_subject($post_id) {
+    if (!function_exists('akademiata_get_ranking_perspektywy_lang_string')) {
         return null;
     }
 
-    $icon_url = akademiata_get_offer_ranking_icon_url($post_id);
-    if ($icon_url === '') {
+    $variant = function_exists('akademiata_get_ranking_perspektywy_badge_variant')
+        ? akademiata_get_ranking_perspektywy_badge_variant($post_id)
+        : 'warszawa';
+
+    $lines = array_filter(array_map('trim', explode(
+        "\n",
+        akademiata_get_ranking_perspektywy_lang_string('tooltip_short', $variant)
+    )));
+
+    $headline = function_exists('akademiata_get_theme_lang_string')
+        ? trim(akademiata_get_theme_lang_string('offer_ranking_perspektywy_headline') . ' ' . akademiata_get_ranking_perspektywy_lang_string('subline', $variant))
+        : '';
+
+    $description = $lines !== array() ? implode(' ', $lines) : $headline;
+    if ($description === '') {
         return null;
     }
 
-    $description = '';
-    if (function_exists('akademiata_get_ranking_perspektywy_lang_string')) {
-        $variant = function_exists('akademiata_get_ranking_perspektywy_badge_variant')
-            ? akademiata_get_ranking_perspektywy_badge_variant($post_id)
-            : 'both';
-        $lines = array_filter(array_map('trim', explode(
-            "\n",
-            akademiata_get_ranking_perspektywy_lang_string('tooltip_short', $variant)
-        )));
-        if ($lines !== array()) {
-            $description = implode(' ', $lines);
+    return akademiata_schema_creative_work(__('Ranking Perspektywy', 'akademiata'), $description);
+}
+
+/**
+ * @return array<string, mixed>|null
+ */
+function akademiata_schema_degree_ela_subject($post_id) {
+    $candidates = array();
+
+    if (function_exists('get_field')) {
+        $icon = get_field('ranking_icon', $post_id);
+        if (is_array($icon) && !empty($icon['alt'])) {
+            $candidates[] = (string) $icon['alt'];
+        }
+
+        $partners = get_field('offer_partners', $post_id);
+        if (is_array($partners)) {
+            foreach ($partners['partners_logo'] ?? array() as $logo_row) {
+                if (!is_array($logo_row) || empty($logo_row['image']['alt'])) {
+                    continue;
+                }
+                $candidates[] = (string) $logo_row['image']['alt'];
+            }
         }
     }
 
-    if ($description === '') {
-        $description = sprintf(
-            /* translators: %s: program title */
-            __('Ranking distinction for the %s program at ATA.', 'akademiata'),
-            get_the_title($post_id)
-        );
+    foreach ($candidates as $text) {
+        $clean = akademiata_schema_clean_text($text);
+        if ($clean !== '' && preg_match('/\bela\b/iu', $clean)) {
+            return akademiata_schema_creative_work(__('Wyróżnienie ELA', 'akademiata'), $clean);
+        }
     }
 
-    return akademiata_schema_creative_work(__('Ranking distinction', 'akademiata'), $description);
+    return null;
+}
+
+/**
+ * @deprecated Use akademiata_schema_degree_perspektywy_subject()
+ * @return array<string, mixed>|null
+ */
+function akademiata_schema_degree_ranking_subject($post_id) {
+    return akademiata_schema_degree_perspektywy_subject($post_id);
 }
 
 /**
@@ -182,27 +220,64 @@ function akademiata_schema_degree_subjects_subject($post_id) {
         }
         $content = trim(wp_strip_all_tags((string) ($item['content'] ?? '')));
         if ($content !== '') {
-            $chunks[] = $content;
+            $chunks = array_merge($chunks, preg_split('/[;\n\r]+/u', $content) ?: array());
             continue;
         }
-        $title = trim(wp_strip_all_tags((string) ($item['title'] ?? '')));
+        $title = akademiata_schema_clean_text($item['title'] ?? '');
         if ($title !== '') {
             $chunks[] = $title;
         }
     }
 
+    $chunks = array_values(array_filter(array_map('akademiata_schema_clean_text', $chunks)));
     if ($chunks === array()) {
         return null;
     }
 
-    $section_title = trim((string) ($subjects['title'] ?? ''));
+    $section_title = akademiata_schema_clean_text($subjects['title'] ?? '');
     if ($section_title === '') {
-        $section_title = __('Course subjects', 'akademiata');
+        $section_title = __('Przedmioty kierunkowe', 'akademiata');
     }
 
-    $description = akademiata_schema_trim_text(implode('; ', $chunks), 120);
+    return akademiata_schema_creative_work($section_title, implode('; ', $chunks));
+}
 
-    return akademiata_schema_creative_work($section_title, $description);
+/**
+ * @return string
+ */
+function akademiata_schema_degree_recruitment_step_text($index, array $step) {
+    $text = trim(wp_strip_all_tags((string) ($step['text'] ?? '')));
+    if ($text !== '') {
+        return $text;
+    }
+    if ((int) $index === 0) {
+        return __('Kliknij przycisk', 'akademiata');
+    }
+    if ((int) $index === 1) {
+        return __('Wypełnij formularz', 'akademiata');
+    }
+    if ((int) $index === 2) {
+        return __('Studiuj', 'akademiata');
+    }
+
+    return '';
+}
+
+/**
+ * @return string
+ */
+function akademiata_schema_degree_program_prerequisites($post_id, $post_type) {
+    if ($post_type === 'master') {
+        return __(
+            'Wymagane dokumenty: wygenerowany uczelniany kwestionariusz z internetowego systemu rekrutacyjnego, dyplom ukończenia studiów wyższych (oryginał do wglądu i kserokopia), dowód osobisty, jedno aktualne i podpisane zdjęcie oraz potwierdzenie uiszczenia opłat związanych z procesem rekrutacji.',
+            'akademiata'
+        );
+    }
+
+    return __(
+        'Wymagane dokumenty: wygenerowany uczelniany kwestionariusz z internetowego systemu rekrutacyjnego, oryginał i kserokopia świadectwa dojrzałości, dowód osobisty, jedno aktualne i podpisane zdjęcie o parametrach dowodu osobistego oraz potwierdzenie uiszczenia opłat związanych z procesem rekrutacji.',
+        'akademiata'
+    );
 }
 
 /**
@@ -214,12 +289,139 @@ function akademiata_schema_degree_collect_subject_of($post_id, $post_type, $pric
 
     $parameters = akademiata_schema_degree_study_parameters_text($post_id, $price_row);
     if ($parameters !== '') {
-        $items[] = akademiata_schema_creative_work(__('Study parameters', 'akademiata'), $parameters);
+        $items[] = akademiata_schema_creative_work(__('Parametry studiów', 'akademiata'), $parameters);
     }
 
-    $ranking = akademiata_schema_degree_ranking_subject($post_id);
-    if (is_array($ranking)) {
-        $items[] = $ranking;
+    $perspektywy = akademiata_schema_degree_perspektywy_subject($post_id);
+    if (is_array($perspektywy)) {
+        $items[] = $perspektywy;
+    }
+
+    $ela = akademiata_schema_degree_ela_subject($post_id);
+    if (is_array($ela)) {
+        $items[] = $ela;
+    }
+
+    $why_study = get_field('why_study', $post_id);
+    if (is_array($why_study)) {
+        $section = akademiata_schema_clean_text($why_study['title'] ?? '');
+        if ($section === '') {
+            $section = __('Dlaczego warto studiować w ATA', 'akademiata');
+        }
+
+        $card_summaries = array();
+        foreach ($why_study['why_study_cards'] ?? array() as $card) {
+            if (!is_array($card)) {
+                continue;
+            }
+            $card_title = akademiata_schema_clean_text($card['title'] ?? '');
+            $summary    = akademiata_schema_robot_summary($card_title, $card['content'] ?? '', 40);
+            if ($summary === '') {
+                continue;
+            }
+            $card_summaries[] = $summary;
+            $items[] = akademiata_schema_creative_work($card_title, $summary);
+        }
+
+        if ($card_summaries !== array()) {
+            $items[] = akademiata_schema_creative_work(
+                $section,
+                implode(' ', array_slice($card_summaries, 0, 4))
+            );
+        }
+    }
+
+    $after_studies = get_field('after_studies', $post_id);
+    if (is_array($after_studies)) {
+        $section = akademiata_schema_clean_text($after_studies['title'] ?? '');
+        if ($section === '') {
+            $section = __('Co możesz robić po tych studiach?', 'akademiata');
+        }
+
+        $career_bits = array();
+        foreach ($after_studies['image_content_slider'] ?? array() as $slide) {
+            if (!is_array($slide)) {
+                continue;
+            }
+            $summary = akademiata_schema_robot_summary($slide['title'] ?? '', $slide['content'] ?? '', 18);
+            if ($summary !== '') {
+                $career_bits[] = $summary;
+            }
+        }
+
+        if ($career_bits !== array()) {
+            $items[] = akademiata_schema_creative_work($section, implode(' ', $career_bits));
+        }
+    }
+
+    $program_for_you = get_field('program_for_you', $post_id);
+    if (is_array($program_for_you)) {
+        $section = akademiata_schema_clean_text($program_for_you['title'] ?? '');
+        if ($section === '') {
+            $section = __('Ten program jest dla Ciebie, jeśli', 'akademiata');
+        }
+
+        $bits = array();
+        foreach ($program_for_you['cards'] ?? array() as $card) {
+            if (!is_array($card)) {
+                continue;
+            }
+            $summary = akademiata_schema_robot_summary($card['title'] ?? '', $card['content'] ?? '', 22);
+            if ($summary !== '') {
+                $bits[] = $summary;
+            }
+        }
+
+        if ($bits !== array()) {
+            $items[] = akademiata_schema_creative_work($section, implode(' ', $bits));
+        }
+    }
+
+    if ($program_pdf !== '' || get_field('study_program', $post_id)) {
+        $study_program = get_field('study_program', $post_id);
+        $percent_parts = array();
+        $course_name   = is_array($price_row) && !empty($price_row['k'])
+            ? (string) $price_row['k']
+            : akademiata_schema_clean_text(get_the_title($post_id));
+
+        if (is_array($study_program)) {
+            foreach ($study_program['program_percentages'] ?? array() as $row) {
+                if (!is_array($row) || empty($row['percent'])) {
+                    continue;
+                }
+                $label = akademiata_schema_clean_text($row['title'] ?? '');
+                $percent_parts[] = ($label !== '' ? $label . ': ' : '') . trim((string) $row['percent']);
+            }
+        }
+
+        $description_parts = array();
+        if ($percent_parts !== array()) {
+            $description_parts[] = implode(', ', $percent_parts);
+        }
+        $ects = akademiata_schema_get_ects_credits($post_id);
+        if ($ects !== null) {
+            $description_parts[] = 'ECTS: ' . $ects;
+        }
+        $duration = akademiata_schema_join_term_names($post_id, 'duration');
+        if ($duration !== '') {
+            $description_parts[] = __('Czas trwania', 'akademiata') . ': ' . $duration;
+        }
+        $title_awarded = akademiata_schema_join_term_names($post_id, 'obtained_title');
+        if ($title_awarded !== '') {
+            $description_parts[] = __('Uzyskany tytuł zawodowy', 'akademiata') . ': ' . $title_awarded;
+        }
+        if ($course_name !== '') {
+            $description_parts[] = __('Kierunek studiów', 'akademiata') . ': ' . $course_name;
+        }
+        if ($description_parts === array()) {
+            $description_parts[] = __('Pobierz pełny program studiów (PDF).', 'akademiata');
+        }
+
+        $items[] = akademiata_schema_creative_work(
+            __('Program i struktura studiów', 'akademiata'),
+            implode('. ', $description_parts),
+            $program_pdf
+        );
     }
 
     if (is_array($price_row)) {
@@ -229,7 +431,7 @@ function akademiata_schema_degree_collect_subject_of($post_id, $post_type, $pric
             $items[] = akademiata_schema_creative_work(
                 sprintf(
                     /* translators: %s: field of study name */
-                    __('Specializations in %s', 'akademiata'),
+                    __('Specjalności na kierunku %s', 'akademiata'),
                     $course
                 ),
                 implode('; ', wp_list_pluck($specializations, 'name'))
@@ -248,212 +450,105 @@ function akademiata_schema_degree_collect_subject_of($post_id, $post_type, $pric
         $items[] = $subjects_block;
     }
 
-    if ($program_pdf !== '') {
-        $study_program = get_field('study_program', $post_id);
-        $percent_parts = array();
-        if (is_array($study_program)) {
-            foreach ($study_program['program_percentages'] ?? array() as $row) {
-                if (!is_array($row) || empty($row['percent'])) {
-                    continue;
-                }
-                $label = trim((string) ($row['title'] ?? ''));
-                $percent_parts[] = ($label !== '' ? $label . ': ' : '') . trim((string) $row['percent']);
-            }
-        }
-        $description = $percent_parts !== array()
-            ? implode(', ', $percent_parts)
-            : __('Download the full study program (PDF).', 'akademiata');
-        $items[] = akademiata_schema_creative_work(
-            __('Program and structure of studies', 'akademiata'),
-            $description,
-            $program_pdf
-        );
-    }
-
     $tuition = get_field('tuition_fees', $post_id);
     if (is_array($tuition)) {
         $tuition_text = akademiata_schema_robot_summary(
-            (string) ($tuition['sub_title'] ?? __('Tuition fees', 'akademiata')),
+            (string) ($tuition['sub_title'] ?? __('Opłaty za studia', 'akademiata')),
             (string) ($tuition['title'] ?? ''),
             35
         );
         if ($tuition_text !== '') {
-            $items[] = akademiata_schema_creative_work(__('Tuition fees', 'akademiata'), $tuition_text);
+            $items[] = akademiata_schema_creative_work(__('Opłaty za studia', 'akademiata'), $tuition_text);
         }
     }
 
-    $items = array_merge($items, akademiata_schema_degree_collect_has_parts($post_id));
+    $city_slug = function_exists('akademiata_get_offer_city_slug')
+        ? akademiata_get_offer_city_slug($post_id)
+        : 'warszawa';
+    $lang_code = function_exists('akademiata_get_offer_study_language_code')
+        ? akademiata_get_offer_study_language_code($post_id)
+        : 'pl';
 
-    return $items;
-}
+    $regulamin_plans = apply_filters('ata_prices_regulamin_urls_plans', array(
+        'wwa' => array('pl' => 'https://chmurka.wseiz.pl/index.php/s/LgF9TpCerLtGHb2'),
+        'wro' => array('pl' => 'https://chmurka.wseiz.pl/index.php/s/LgF9TpCerLtGHb2'),
+    ));
+    $regulamin_promos = apply_filters('ata_prices_regulamin_urls_promos', array(
+        'wwa' => array('pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja'),
+        'wro' => array('pl' => 'https://chmurka.wseiz.pl/index.php/s/XnXZQCNepLerqja'),
+    ));
 
-/**
- * @return array<int, array<string, mixed>>
- */
-function akademiata_schema_degree_collect_has_parts($post_id) {
-    $parts = array();
+    $city_key = ($city_slug === 'wroclaw') ? 'wro' : 'wwa';
+    $plans_url = $regulamin_plans[ $city_key ][ $lang_code ] ?? $regulamin_plans[ $city_key ]['pl'] ?? '';
+    $promos_url = $regulamin_promos[ $city_key ][ $lang_code ] ?? $regulamin_promos[ $city_key ]['pl'] ?? '';
 
-    $why_study = get_field('why_study', $post_id);
-    if (is_array($why_study)) {
-        $section = trim((string) ($why_study['title'] ?? ''));
-        if ($section === '') {
-            $section = __('Dlaczego warto studiować w ATA', 'akademiata');
-        }
-        foreach ($why_study['why_study_cards'] ?? array() as $card) {
-            if (!is_array($card)) {
-                continue;
-            }
-            akademiata_schema_push_has_part($parts, $section, $card['title'] ?? '', $card['content'] ?? '');
-        }
+    if ($plans_url !== '') {
+        $items[] = akademiata_schema_creative_work(__('Regulamin opłat', 'akademiata'), __('Regulamin opłat za studia', 'akademiata'), $plans_url);
     }
-
-    $after_studies = get_field('after_studies', $post_id);
-    if (is_array($after_studies)) {
-        $section = trim((string) ($after_studies['title'] ?? ''));
-        if ($section === '') {
-            $section = __('Co możesz robić po tych studiach?', 'akademiata');
-        }
-        $intro = akademiata_schema_robot_summary(
-            (string) ($after_studies['sub_title'] ?? ''),
-            '',
-            30
-        );
-        if ($intro !== '') {
-            $parts[] = array(
-                '@type'       => 'CreativeWork',
-                'name'        => $section,
-                'description' => $intro,
-            );
-        }
-        foreach ($after_studies['image_content_slider'] ?? array() as $slide) {
-            if (!is_array($slide)) {
-                continue;
-            }
-            akademiata_schema_push_has_part($parts, $section, $slide['title'] ?? '', $slide['content'] ?? '');
-        }
-    }
-
-    $program_for_you = get_field('program_for_you', $post_id);
-    if (is_array($program_for_you)) {
-        $section = trim((string) ($program_for_you['title'] ?? ''));
-        if ($section === '') {
-            $section = __('Ten program jest dla Ciebie, jeśli:', 'akademiata');
-        }
-        foreach ($program_for_you['cards'] ?? array() as $card) {
-            if (!is_array($card)) {
-                continue;
-            }
-            akademiata_schema_push_has_part($parts, $section, $card['title'] ?? '', $card['content'] ?? '');
-        }
-    }
-
-    $study_program = get_field('study_program', $post_id);
-    if (is_array($study_program)) {
-        $section = trim((string) ($study_program['title'] ?? ''));
-        if ($section === '') {
-            $section = __('Program i struktura studiów', 'akademiata');
-        }
-        $intro = akademiata_schema_robot_summary(
-            (string) ($study_program['sub_title'] ?? ''),
-            '',
-            30
-        );
-        if ($intro !== '') {
-            $parts[] = array(
-                '@type'       => 'CreativeWork',
-                'name'        => $section,
-                'description' => $intro,
-            );
-        }
-        foreach ($study_program['program_percentages'] ?? array() as $item) {
-            if (!is_array($item)) {
-                continue;
-            }
-            $percent = trim((string) ($item['percent'] ?? ''));
-            if ($percent === '') {
-                continue;
-            }
-            akademiata_schema_push_has_part(
-                $parts,
-                $section,
-                (string) ($item['title'] ?? ''),
-                $percent,
-                20
-            );
-        }
-    }
-
-    $subjects_study = get_field('subjects_study', $post_id);
-    if (is_array($subjects_study)) {
-        $section = trim((string) ($subjects_study['title'] ?? ''));
-        if ($section === '') {
-            $section = __('Przedmioty / moduły', 'akademiata');
-        }
-        foreach ($subjects_study['subjects_study_accordion'] ?? array() as $item) {
-            if (!is_array($item)) {
-                continue;
-            }
-            akademiata_schema_push_has_part($parts, $section, $item['title'] ?? '', $item['content'] ?? '');
-        }
+    if ($promos_url !== '') {
+        $items[] = akademiata_schema_creative_work(__('Regulamin zniżek i promocji', 'akademiata'), __('Regulamin zniżek i promocji', 'akademiata'), $promos_url);
     }
 
     $recruitment = get_field('recruitment_rules', $post_id);
     if (is_array($recruitment)) {
-        $section = trim((string) ($recruitment['title'] ?? ''));
+        $section = akademiata_schema_clean_text($recruitment['title'] ?? '');
         if ($section === '') {
             $section = __('Zasady rekrutacji', 'akademiata');
         }
-        $intro = akademiata_schema_robot_summary(
-            (string) ($recruitment['sub_title'] ?? ''),
-            '',
-            30
-        );
-        if ($intro !== '') {
-            $parts[] = array(
-                '@type'       => 'CreativeWork',
-                'name'        => $section,
-                'description' => $intro,
-            );
-        }
+
+        $steps = array();
         foreach ($recruitment['steps'] ?? array() as $index => $step) {
             if (!is_array($step)) {
                 continue;
             }
-            $text = trim(wp_strip_all_tags((string) ($step['text'] ?? '')));
-            if ($text === '' && (int) $index === 0) {
-                $text = __('Kliknij przycisk', 'akademiata');
-            } elseif ($text === '' && (int) $index === 1) {
-                $text = __('Wypełnij formularz', 'akademiata');
-            }
-            if ($text !== '') {
-                akademiata_schema_push_has_part($parts, $section, (string) ((int) $index + 1), $text, 25);
+            $step_text = akademiata_schema_degree_recruitment_step_text($index, $step);
+            if ($step_text !== '') {
+                $steps[] = $step_text;
             }
         }
+
+        $register_url = trim((string) get_field('register_url', $post_id));
+        $description  = $steps !== array()
+            ? sprintf(
+                /* translators: %s: comma-separated recruitment steps */
+                __('Proces rekrutacji: %s.', 'akademiata'),
+                implode(', ', $steps)
+            )
+            : __('Proces rekrutacji online w systemie Smart Apply.', 'akademiata');
+
+        $items[] = akademiata_schema_creative_work(
+            $section,
+            $description,
+            $register_url !== '' ? $register_url : ''
+        );
+    }
+
+    $documents = akademiata_schema_degree_program_prerequisites($post_id, $post_type);
+    if ($documents !== '') {
+        $items[] = akademiata_schema_creative_work(__('Wymagane dokumenty', 'akademiata'), $documents);
     }
 
     $last_step = (string) get_field('last_step', $post_id);
     if ($last_step === 'portfolio') {
         $portfolio = get_field('portfolio', $post_id);
         if (is_array($portfolio)) {
-            $section = trim((string) ($portfolio['title_section'] ?? ''));
+            $section = akademiata_schema_clean_text($portfolio['title_section'] ?? '');
             if ($section === '') {
                 $section = __('Portfolio', 'akademiata');
             }
-            akademiata_schema_push_has_part($parts, $section, $portfolio['title'] ?? '', $portfolio['description'] ?? '');
-            foreach ($portfolio['portfolio_works'] ?? array() as $work) {
-                if (!is_array($work)) {
-                    continue;
-                }
-                akademiata_schema_push_has_part($parts, $section, '', $work['details'] ?? '', 35);
-            }
-            if (!empty($portfolio['portfolio_works_description'])) {
-                akademiata_schema_push_has_part($parts, $section, '', $portfolio['portfolio_works_description'], 35);
+            $body = akademiata_schema_robot_summary(
+                $portfolio['title'] ?? '',
+                $portfolio['description'] ?? '',
+                45
+            );
+            if ($body !== '') {
+                $items[] = akademiata_schema_creative_work($section, $body);
             }
         }
     } elseif ($last_step === 'exam') {
         $exam = get_field('exam', $post_id);
         if (is_array($exam)) {
-            $section = trim((string) ($exam['title'] ?? ''));
+            $section = akademiata_schema_clean_text($exam['title'] ?? '');
             if ($section === '') {
                 $section = __('Egzamin', 'akademiata');
             }
@@ -462,18 +557,19 @@ function akademiata_schema_degree_collect_has_parts($post_id) {
                 (string) ($exam['content'] ?? '') . "\n\n" .
                 (string) ($exam['details'] ?? '')
             ));
-            akademiata_schema_push_has_part($parts, $section, $section, $body, 40);
-
-            $kurs = $exam['kurs'] ?? null;
-            if (is_array($kurs)) {
-                $kurs_section = trim((string) ($kurs['title'] ?? ''));
-                if ($kurs_section === '') {
-                    $kurs_section = __('Kurs przygotowawczy', 'akademiata');
-                }
-                akademiata_schema_push_has_part($parts, $kurs_section, $kurs_section, $kurs['content'] ?? '', 40);
+            if ($body !== '') {
+                $items[] = akademiata_schema_creative_work($section, akademiata_schema_trim_text($body, 55));
             }
         }
     }
 
-    return $parts;
+    return $items;
+}
+
+/**
+ * @return array<int, array<string, mixed>>
+ * @deprecated Merged into akademiata_schema_degree_collect_subject_of().
+ */
+function akademiata_schema_degree_collect_has_parts($post_id) {
+    return array();
 }

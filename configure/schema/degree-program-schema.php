@@ -28,6 +28,7 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
 
     $permalink = $base['permalink'];
     $title     = $base['title'];
+    $clean_title = akademiata_schema_clean_text($title);
 
     $logical_sync_key = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
     $price_row        = $logical_sync_key !== '' ? akademiata_find_bachelor_master_price_row($logical_sync_key) : null;
@@ -38,7 +39,7 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
         '@type'            => 'EducationalOccupationalProgram',
         '@id'              => $permalink . '#program',
         'mainEntityOfPage' => $permalink,
-        'name'             => $title,
+        'name'             => $clean_title !== '' ? $clean_title : $title,
         'url'              => $permalink,
         'provider'         => akademiata_get_schema_provider(),
         'identifier'       => (string) $post_id,
@@ -60,7 +61,7 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
     } elseif (is_array($price_row) && !empty($price_row['k'])) {
         $schema['alternateName'] = sprintf(
             /* translators: %s: field of study */
-            __('Field of study: %s', 'akademiata'),
+            __('Kierunek: %s', 'akademiata'),
             (string) $price_row['k']
         );
     }
@@ -93,7 +94,7 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
     if ($program_pdf !== '') {
         $schema['workFeatured'] = array(
             '@type'          => 'CreativeWork',
-            'name'           => __('Study program (PDF)', 'akademiata'),
+            'name'           => __('Program studiów (PDF)', 'akademiata'),
             'url'            => $program_pdf,
             'encodingFormat' => 'application/pdf',
         );
@@ -101,7 +102,7 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
 
     $schema['audience'] = array(
         '@type'        => 'EducationalAudience',
-        'audienceType' => __('Prospective students', 'akademiata'),
+        'audienceType' => __('Kandydaci na studia', 'akademiata'),
     );
 
     $register_url = trim((string) get_field('register_url', $post_id));
@@ -191,4 +192,4 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
 
     return akademiata_schema_append_register_action($schema, $apply_url);
 }
-
+

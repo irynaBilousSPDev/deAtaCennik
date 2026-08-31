@@ -210,6 +210,12 @@ function akademiata_get_schema_provider() {
     );
 }
 
+function akademiata_schema_clean_text($text) {
+    $text = html_entity_decode((string) $text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+    return trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags($text)));
+}
+
 function akademiata_schema_trim_text($text, $words = 55) {
     $text = trim(wp_strip_all_tags((string) $text));
     return $text === '' ? '' : wp_trim_words($text, $words, '…');
@@ -436,7 +442,7 @@ function akademiata_schema_append_register_action(array $schema, $register_url, 
         $schema['potentialAction'] = array(
             '@type'  => 'ApplyAction',
             'target' => $register_target,
-            'name'   => __('Apply', 'akademiata'),
+            'name'   => __('Zapisz się', 'akademiata'),
         );
     }
 
@@ -532,70 +538,96 @@ function akademiata_schema_get_ects_credits($post_id) {
     return $ects > 0 ? $ects : null;
 }
 
+function akademiata_schema_get_bachelor_master_display_entry_fee(array $price_row, $lang_code) {
+    $base_wps = isset($price_row['wps']) ? (float) $price_row['wps'] : 0.0;
+    if ($base_wps <= 0) {
+        return 0.0;
+    }
+
+    // PL singles calculator shows promotional 0 PLN entry fee (see prices-calculator.js).
+    if ($lang_code === 'pl') {
+        return 0.0;
+    }
+
+    return $base_wps;
+}
+
 function akademiata_schema_build_bachelor_master_offers($price_row, $offer_url, $register_url, $lang_code, $permalink = '') {
     $currency     = ($lang_code === 'en') ? 'EUR' : 'PLN';
     $availability = $register_url !== '' ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
     $base_url     = $offer_url !== '' ? $offer_url : $permalink;
     $offers       = array();
 
-    $one_time_fees = array(
-        'rekr' => array(
-            'name'     => __('Recruitment fee', 'akademiata'),
-            'category' => __('One-time enrollment fee', 'akademiata'),
-        ),
-        'wps'  => array(
-            'name'     => __('Entry fee', 'akademiata'),
-            'category' => __('One-time enrollment fee', 'akademiata'),
-        ),
-    );
-
-    foreach ($one_time_fees as $key => $meta) {
-        if (!isset($price_row[ $key ]) || $price_row[ $key ] === '' || $price_row[ $key ] === null) {
-            continue;
-        }
-        $price = (float) $price_row[ $key ];
-        if ($key === 'wps' && $price <= 0) {
-            continue;
-        }
+    if (!empty($price_row['rekr'])) {
+        $rekr = (float) $price_row['rekr'];
         $offers[] = array(
             '@type'              => 'Offer',
-            'name'               => $meta['name'],
-            'category'           => $meta['category'],
+            'name'               => __('Opłata rekrutacyjna', 'akademiata'),
+            'category'           => __('Opłata jednorazowa przy zapisie', 'akademiata'),
             'url'                => $base_url,
-            'description'        => $meta['name'],
+            'description'        => __('Opłata rekrutacyjna', 'akademiata'),
             'availability'       => $availability,
             'priceSpecification' => array(
                 '@type'         => 'PriceSpecification',
-                'price'         => $price,
+                'price'         => $rekr,
+                'priceCurrency' => $currency,
+            ),
+        );
+    }
+
+    $base_wps    = isset($price_row['wps']) ? (float) $price_row['wps'] : 0.0;
+    $display_wps = akademiata_schema_get_bachelor_master_display_entry_fee($price_row, $lang_code);
+    if ($base_wps > 0 || $display_wps > 0) {
+        $wps_description = __('Wpisowe', 'akademiata');
+        if ($lang_code === 'pl' && $base_wps > 0 && $display_wps <= 0) {
+            $wps_description = sprintf(
+                /* translators: %s: standard entry fee in PLN */
+                __('Wpisowe 0 zł (promocja; standardowo %s PLN)', 'akademiata'),
+                (string) (int) $base_wps
+            );
+        }
+        $offers[] = array(
+            '@type'              => 'Offer',
+            'name'               => __('Wpisowe', 'akademiata'),
+            'category'           => __('Opłata jednorazowa przy zapisie', 'akademiata'),
+            'url'                => $base_url,
+            'description'        => $wps_description,
+            'availability'       => $availability,
+            'priceSpecification' => array(
+                '@type'         => 'PriceSpecification',
+                'price'         => $display_wps,
                 'priceCurrency' => $currency,
             ),
         );
     }
 
     $installments = array(
-        'r12' => 12,
-        'r10' => 10,
+        'r12' => array(
+            'count' => 12,
+            'label' => __('Czesne — 12 rat miesięcznych', 'akademiata'),
+            'unit'  => __('miesiąc', 'akademiata'),
+        ),
+        'r10' => array(
+            'count' => 10,
+            'label' => __('Czesne — 10 rat miesięcznych', 'akademiata'),
+            'unit'  => __('miesiąc', 'akademiata'),
+        ),
     );
 
-    foreach ($installments as $key => $count) {
+    foreach ($installments as $key => $meta) {
         if (empty($price_row[ $key ])) {
             continue;
         }
         $price = (float) $price_row[ $key ];
-        $label = sprintf(
-            /* translators: %d: number of monthly installments */
-            __('Tuition — %d monthly installments', 'akademiata'),
-            $count
-        );
         $offers[] = array(
             '@type'              => 'Offer',
-            'name'               => $label,
-            'category'           => __('Tuition', 'akademiata'),
+            'name'               => $meta['label'],
+            'category'           => __('Czesne', 'akademiata'),
             'url'                => $base_url,
             'description'        => sprintf(
                 /* translators: 1: installment count, 2: price, 3: currency */
-                __('%1$d monthly installments of %2$s %3$s', 'akademiata'),
-                $count,
+                __('%1$d rat miesięcznych po %2$s %3$s', 'akademiata'),
+                $meta['count'],
                 $price,
                 $currency
             ),
@@ -604,7 +636,49 @@ function akademiata_schema_build_bachelor_master_offers($price_row, $offer_url, 
                 '@type'         => 'UnitPriceSpecification',
                 'price'         => $price,
                 'priceCurrency' => $currency,
-                'unitText'      => __('month', 'akademiata'),
+                'unitText'      => $meta['unit'],
+            ),
+        );
+    }
+
+    $r12 = !empty($price_row['r12']) ? (float) $price_row['r12'] : 0.0;
+    if ($r12 > 0) {
+        $annual_total = (int) round($r12 * 12);
+        $semester     = (int) round($annual_total / 2);
+
+        $offers[] = array(
+            '@type'              => 'Offer',
+            'name'               => __('Czesne — semestr z góry', 'akademiata'),
+            'category'           => __('Czesne', 'akademiata'),
+            'url'                => $base_url,
+            'description'        => sprintf(
+                /* translators: %s: semester price in PLN */
+                __('Cena bazowa za semestr z góry: %s PLN', 'akademiata'),
+                $semester
+            ),
+            'availability'       => $availability,
+            'priceSpecification' => array(
+                '@type'         => 'PriceSpecification',
+                'price'         => $semester,
+                'priceCurrency' => $currency,
+            ),
+        );
+
+        $offers[] = array(
+            '@type'              => 'Offer',
+            'name'               => __('Czesne — rok z góry', 'akademiata'),
+            'category'           => __('Czesne', 'akademiata'),
+            'url'                => $base_url,
+            'description'        => sprintf(
+                /* translators: %s: annual price in PLN */
+                __('Cena bazowa za rok z góry: %s PLN', 'akademiata'),
+                $annual_total
+            ),
+            'availability'       => $availability,
+            'priceSpecification' => array(
+                '@type'         => 'PriceSpecification',
+                'price'         => $annual_total,
+                'priceCurrency' => $currency,
             ),
         );
     }
