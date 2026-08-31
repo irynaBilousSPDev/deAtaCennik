@@ -171,25 +171,61 @@ function akademiata_schema_degree_ela_subject($post_id) {
 
     if (function_exists('get_field')) {
         $icon = get_field('ranking_icon', $post_id);
-        if (is_array($icon) && !empty($icon['alt'])) {
-            $candidates[] = (string) $icon['alt'];
+        if (is_array($icon)) {
+            if (!empty($icon['alt'])) {
+                $candidates[] = (string) $icon['alt'];
+            }
+            if (!empty($icon['url'])) {
+                $candidates[] = (string) $icon['url'];
+            }
+        }
+
+        if (function_exists('akademiata_get_offer_ranking_icon_url')) {
+            $icon_url = trim((string) akademiata_get_offer_ranking_icon_url($post_id));
+            if ($icon_url !== '') {
+                $candidates[] = $icon_url;
+            }
         }
 
         $partners = get_field('offer_partners', $post_id);
         if (is_array($partners)) {
             foreach ($partners['partners_logo'] ?? array() as $logo_row) {
-                if (!is_array($logo_row) || empty($logo_row['image']['alt'])) {
+                if (!is_array($logo_row) || empty($logo_row['image']) || !is_array($logo_row['image'])) {
                     continue;
                 }
-                $candidates[] = (string) $logo_row['image']['alt'];
+                $image = $logo_row['image'];
+                if (!empty($image['alt'])) {
+                    $candidates[] = (string) $image['alt'];
+                }
+                if (!empty($image['title'])) {
+                    $candidates[] = (string) $image['title'];
+                }
+                if (!empty($image['caption'])) {
+                    $candidates[] = (string) $image['caption'];
+                }
+                if (!empty($image['url'])) {
+                    $candidates[] = (string) $image['url'];
+                }
             }
         }
     }
 
     foreach ($candidates as $text) {
         $clean = akademiata_schema_clean_text($text);
-        if ($clean !== '' && preg_match('/\bela\b/iu', $clean)) {
+        if ($clean === '') {
+            continue;
+        }
+        if (preg_match('/\bela\b/iu', $clean)) {
+            if (preg_match('/\.(jpe?g|png|gif|webp|svg)(?:\?|$)/iu', $clean)) {
+                continue;
+            }
             return akademiata_schema_creative_work(__('Wyróżnienie ELA', 'akademiata'), $clean);
+        }
+        if (preg_match('/(?:^|[\/_-])ela(?:[\/_.-]|$)/iu', $clean)) {
+            return akademiata_schema_creative_work(
+                __('Wyróżnienie ELA', 'akademiata'),
+                __('Kierunek wyróżniony w rankingu ELA.', 'akademiata')
+            );
         }
     }
 

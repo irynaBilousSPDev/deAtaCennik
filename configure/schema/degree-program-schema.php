@@ -81,9 +81,9 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
         $schema['hasCourse'] = count($modules) === 1 ? $modules[0] : $modules;
     }
 
-    $prerequisites = akademiata_schema_collect_prerequisites($post_id);
-    if ($prerequisites !== array()) {
-        $schema['programPrerequisites'] = count($prerequisites) === 1 ? $prerequisites[0] : $prerequisites;
+    $documents_prereq = akademiata_schema_degree_program_prerequisites($post_id, $post_type);
+    if ($documents_prereq !== '') {
+        $schema['programPrerequisites'] = $documents_prereq;
     }
 
     $subject_of = akademiata_schema_degree_collect_subject_of($post_id, $post_type, $price_row, $program_pdf);

@@ -17,6 +17,31 @@ function akademiata_schema_output_json_ld($schema) {
 }
 
 /**
+ * @param array<int, array<string, mixed>> $nodes
+ */
+function akademiata_schema_output_json_ld_graph(array $nodes) {
+    $nodes = array_values(array_filter($nodes, 'is_array'));
+    if ($nodes === array()) {
+        return;
+    }
+
+    if (count($nodes) === 1) {
+        akademiata_schema_output_json_ld($nodes[0]);
+        return;
+    }
+
+    foreach ($nodes as &$node) {
+        unset($node['@context']);
+    }
+    unset($node);
+
+    akademiata_schema_output_json_ld(array(
+        '@context' => 'https://schema.org',
+        '@graph'   => $nodes,
+    ));
+}
+
+/**
  * @param int $post_id
  * @return array{permalink: string, title: string}|null
  */
@@ -202,11 +227,17 @@ function akademiata_schema_parse_price_text($text) {
 }
 
 function akademiata_get_schema_provider() {
+    return akademiata_get_schema_organization();
+}
+
+function akademiata_get_schema_organization() {
+    $home = untrailingslashit(home_url());
+
     return array(
         '@type' => 'CollegeOrUniversity',
-        '@id'   => home_url('/') . '#organization',
+        '@id'   => $home . '/#organization',
         'name'  => 'Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie',
-        'url'   => home_url('/'),
+        'url'   => $home,
     );
 }
 
