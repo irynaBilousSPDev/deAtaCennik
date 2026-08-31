@@ -1,0 +1,107 @@
+---
+description: JSON-LD schema for WordPress pages and page templates — keep in sync with templates and ACF
+globs:
+  - configure/schema/page*.php
+  - configure/schema/lp-schema-helpers.php
+  - page*.php
+  - configure/lp-defaults/**/*
+---
+
+# Page JSON-LD schema
+
+Theme outputs structured data for **every published page** (except front page → homepage graph; aktualności → news schema).
+
+## Architecture
+
+| File | Role |
+|------|------|
+| `configure/schema/page-schema.php` | Router: `akademiata_output_page_schema()` → template-specific builder |
+| `configure/schema/page-schema-helpers.php` | LP template registry, FAQ query, offer listing, katalog ItemList |
+| `configure/schema/lp-schema-helpers.php` | Generic ACF section → `subjectOf` (full coverage, not trimmed) |
+| `configure/schema/page-special-schema.php` | Non-LP templates: FAQ, contact, offer, cadre, prices, open day, ranking ELA, quiz, thank-you |
+| `configure/schema/site-schema.php` | Dispatcher (priority 19); pages at priority after homepage/news |
+
+Load order: `schema.php` requires helpers **before** `page-schema.php`.
+
+## When schema updates
+
+- **No theme-side cache** — builders call `get_fields()` / `get_field()` on each request.
+- **After saving a page in WP admin**, JSON-LD reflects new ACF on next uncached HTML response.
+- **Prod:** clear **WP Rocket** if page HTML is cached (dev has no page cache plugin).
+- **New page:** assign a registered template → schema applies automatically (no deploy step beyond theme code).
+
+## Template registry (must stay complete)
+
+### LP templates (`akademiata_schema_lp_page_templates()`)
+
+Use the same `configure/lp-defaults/{slug}/fields.php` merge as the page template.
+
+| Template file | Fields helper |
+|---------------|---------------|
+| `page-o-uczelni.php` | `akademiata_o_uczelni_fields` → **AboutPage** + full `subjectOf` |
+| `page-rankingi.php` | `akademiata_rankingi_fields` |
+| `page-zasady-rekrutacji.php` | `akademiata_zasady_rekrutacji_fields` + FAQ `@graph` |
+| `page-katalog-kierunkow.php` | `akademiata_katalog_kierunkow_fields` + `mainEntity` ItemList |
+| `page-porownanie-kierunkow.php` | `akademiata_porownanie_kierunkow_fields` |
+| `page-studiuj-to-co-cie-kreci.php` | `akademiata_studiuj_to_co_cie_kreci_fields` |
+| `page-projekty-i-pracownie.php` | `akademiata_projekty_i_pracownie_fields` |
+| `page-kreowanie-przestrzeni.php` | `akademiata_kreowanie_przestrzeni_fields` |
+| `page-portfolio-sprawdzian.php` | `akademiata_portfolio_sprawdzian_fields` |
+
+### Special templates (`akademiata_schema_special_page_builders()`)
+
+| Template | Schema type | Notes |
+|----------|-------------|-------|
+| `page-faq.php` | **FAQPage** + `subjectOf` | CPT `faq` + `faq_topics` |
+| `page-contact.php` | **ContactPage** | `contact_header`, CPT `contact` |
+| `page-offer.php` | **CollectionPage** | `akademiata_get_offer_listing_query_args()` |
+| `page-cadre.php` | WebPage | Flexible `page_sections` → `cadre_section` |
+| `page-template-prices.php` | WebPage | Calculator; links to `prices.json` in `subjectOf` |
+| `page-template-open-day.php` | WebPage + **Event** `@graph` | ACF open day fields |
+| `page-ranking-ela.php` | WebPage | ACF sections on page (not lp-defaults) |
+| `page-quiz.php` | WebPage | `main_title` + shortcode quiz |
+| `page-template-thank-you.php` | WebPage (minimal) | Post content / CF7 thank-you |
+
+### Already handled elsewhere
+
+| Template | Handler |
+|----------|---------|
+| `front-page.php` | `homepage-schema.php` |
+| `page-aktualnosci.php` | `news-schema.php` → CollectionPage |
+| `page.php` (default) | `akademiata_build_default_page_schema()` |
+
+## Adding a new page template — checklist
+
+1. Create `page-{slug}.php` with `Template Name:` comment.
+2. If LP with defaults: add `configure/lp-defaults/{slug}/content.php` + `fields.php` + `acf-json/group_*.json`.
+3. Register in **`akademiata_schema_lp_page_templates()`** OR **`akademiata_schema_special_page_builders()`**.
+4. Implement builder in `page-special-schema.php` or rely on generic LP collector.
+5. Section keys in `content.php` should use repeaters (`items`, `steps`, `cards`, `stats`, `courses`, `buildings`, …) — generic collector maps them to `subjectOf`.
+6. If section has FAQ repeater (`*_faq_section.items` with `question`/`answer`), FAQPage node is emitted automatically.
+7. Add filter hook `akademiata_schema_page_{slug}_subject_of` if custom tweaks needed.
+8. Update **`readme.md`** § JSON-LD pages table.
+9. Update this file's registry table.
+
+## Changing LP ACF sections
+
+When you add/rename/remove a section in `configure/lp-defaults/*/content.php`:
+
+1. Update the page template PHP if layout changed.
+2. Generic collector picks up new sections if they follow existing keys (`title`, `lead`, `items`, `cards`, …).
+3. For novel repeater shapes, extend `akademiata_schema_lp_collect_from_section()` in `lp-schema-helpers.php`.
+4. Do **not** duplicate field names in schema — always call the same `*_fields(get_fields())` helper as the template.
+
+## Optional manual SEO
+
+Pages can use ACF `schema_seo_description` (via `akademiata_schema_get_manual_description()`) for `WebPage.description` override.
+
+## Filters
+
+- Per-LP: `akademiata_schema_page_{name}_subject_of` (registered in LP template map).
+- Homepage: `akademiata_schema_homepage_subject_of`.
+
+## Do not
+
+- Pull MBA/PG prices from `prices.json` on page schema (only bachelor/master calculator page references it).
+- Cache schema in transients (file mtime pattern is for `prices.json` on offer CPTs only).
+- Register page schema at priority 20 (CPT offer modules use 20).
