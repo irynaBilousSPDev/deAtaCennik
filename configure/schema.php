@@ -5,7 +5,7 @@
  * @package akademiata
  */
 
-$schema_dir = __DIR__;
+$schema_dir = __DIR__ . '/schema';
 
 require $schema_dir . '/schema-helpers.php';
 require $schema_dir . '/pg-mba-schema-helpers.php';
