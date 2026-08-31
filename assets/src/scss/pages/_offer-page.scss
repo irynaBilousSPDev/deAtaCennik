@@ -188,11 +188,10 @@
 
     // Results grid — gray container + legacy white cards (desktop only)
     #filter-results {
-      padding: 2rem 0;
+      padding: 1.5rem 0;
       background-color: vars.$background-gray;
 
       .card_post_wrapper {
-        padding: 18px;
         background-color: vars.$white;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         border: none;
@@ -200,17 +199,33 @@
       }
 
       .card_post_image {
-        min-height: 256px;
         border-bottom: 2px solid vars.$primary;
-
-        .image_bg {
-          height: 256px;
-          min-height: 256px;
-        }
       }
 
       .card_post_body {
-        padding: 18px;
+        height: auto;
+      }
+    }
+  }
+
+  // PG/MBA filter archive — same desktop card shell as /oferta/
+  .offer_wrapper--pg-mba {
+    #filter-results {
+      padding: 1.5rem 0;
+      background-color: vars.$background-gray;
+
+      .card_post_wrapper {
+        background-color: vars.$white;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        border: none;
+        border-radius: 0;
+      }
+
+      .card_post_image {
+        border-bottom: 2px solid vars.$primary;
+      }
+
+      .card_post_body {
         height: auto;
       }
     }
@@ -878,6 +893,17 @@
 
   h3 {
     @include mixins.font-style(vars.$font-size-default, 19px, vars.$weight-bold);
+  }
+}
+
+// Laptop 3-column listings — compact scale until large desktop (1921px+).
+@include mixins.ipad-pro-screen {
+  @media (max-width: 1920px) {
+    .offer_wrapper--offer-page #filter-results,
+    .offer_wrapper--pg-mba #filter-results,
+    .studia_cards {
+      @include mixins.listing-card-compact-laptop;
+    }
   }
 }
 

@@ -236,3 +236,72 @@
     width: 20%;
   }
 }
+
+// Tighter listing cards on laptop 3-column grids (sidebar + 3 cards per row).
+@mixin listing-card-compact-laptop {
+  .card_post_item {
+    margin-bottom: 24px;
+    padding: 0.65rem;
+  }
+
+  .card_post_wrapper {
+    padding: 12px;
+  }
+
+  .card_post_image {
+    min-height: 176px;
+
+    .image_bg {
+      height: 176px;
+      min-height: 176px;
+    }
+  }
+
+  .card_post_body {
+    padding: 10px 12px;
+
+    h2 {
+      font-size: vars.$font-size-lg;
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+  }
+
+  .card_properties_wrapper {
+    margin: 0.45rem 0 0.6rem;
+  }
+
+  .card_property {
+    margin-bottom: 0.4rem;
+
+    .sub_title {
+      font-size: vars.$font-size-little;
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-size: vars.$font-size-s;
+      line-height: 1.35;
+    }
+  }
+
+  .buttons_wrapper {
+    gap: 0.5rem;
+
+    .button-primary,
+    .button-sing_up {
+      font-size: vars.$font-size-s-medium;
+      padding: 0.55rem 0.85rem;
+    }
+  }
+
+  .card_post_image .city_block--overlay {
+    padding: 5px 10px;
+    left: 6px;
+    bottom: 6px;
+
+    span {
+      font-size: 1.15rem;
+    }
+  }
+}
