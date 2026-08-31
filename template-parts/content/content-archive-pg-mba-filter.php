@@ -17,6 +17,12 @@ if (!$filter_title) {
 
 $mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
 $page_description  = get_query_var('pg_mba_filter_content');
+
+$pg_mba_form_data     = akademiata_parse_pg_mba_filter_form_data();
+$pg_mba_initial_query = new WP_Query(
+    akademiata_get_pg_mba_listing_query_args($post_type, $pg_mba_form_data)
+);
+$pg_mba_initial_count = (int) $pg_mba_initial_query->post_count;
 ?>
 <div class="offer_wrapper offer_wrapper--pg-mba">
     <div class="offer_content">
@@ -49,9 +55,22 @@ $page_description  = get_query_var('pg_mba_filter_content');
         </div>
 
         <?php get_template_part('partials/offer-view-toggle'); ?>
-        <div id="filter-results" class="row filter-results--grid"></div>
+        <div id="filter-results"
+             class="row filter-results--grid"
+             data-initial-count="<?php echo esc_attr((string) $pg_mba_initial_count); ?>">
+            <?php
+            if ($pg_mba_initial_query->have_posts()) :
+                while ($pg_mba_initial_query->have_posts()) :
+                    $pg_mba_initial_query->the_post();
+                    get_template_part('partials/card_post_pg_mba');
+                endwhile;
+                wp_reset_postdata();
+            endif;
+            ?>
+        </div>
 
-        <div id="no-results-message" style="display: none; text-align: center; margin: 2rem 0;">
+        <div id="no-results-message"
+             style="<?php echo $pg_mba_initial_count === 0 ? 'text-align: center; margin: 2rem 0;' : 'display: none; text-align: center; margin: 2rem 0;'; ?>">
             <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_no_filter_results')); ?>
         </div>
     </div>

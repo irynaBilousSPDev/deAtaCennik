@@ -1,11 +1,11 @@
 <?php
 
 function akademiata_offer_listing_initial_count() {
-    return 24;
+    return -1;
 }
 
 function akademiata_offer_listing_load_more_count() {
-    return 18;
+    return -1;
 }
 
 /**
@@ -161,15 +161,17 @@ function akademiata_parse_offer_filter_form_data($raw = null) {
  * @return array<string, mixed>
  */
 function akademiata_get_offer_listing_query_args($filter_action, array $form_data = array(), $offset = 0, $limit = 0) {
-    if ($limit <= 0) {
+    if ($limit === 0) {
         $limit = akademiata_offer_listing_initial_count();
     }
+
+    $load_all = ((int) $limit) < 0;
 
     $args = array(
         'post_type'      => akademiata_get_post_types_for_offer_filter_action($filter_action),
         'post_status'    => 'publish',
-        'posts_per_page' => $limit,
-        'offset'         => max(0, (int) $offset),
+        'posts_per_page' => $load_all ? -1 : (int) $limit,
+        'offset'         => $load_all ? 0 : max(0, (int) $offset),
         'order'          => 'ASC',
         'orderby'        => 'title',
         'no_found_rows'  => true,
@@ -248,7 +250,8 @@ function akademiata_run_offer_listing_ajax($filter_action) {
     }
 
     $offset    = isset($_POST['offset']) ? max(0, (int) $_POST['offset']) : 0;
-    $limit     = isset($_POST['limit']) ? max(1, (int) $_POST['limit']) : akademiata_offer_listing_initial_count();
+    $limit     = isset($_POST['limit']) ? (int) $_POST['limit'] : akademiata_offer_listing_initial_count();
+    $load_all  = $limit < 0;
     $form_data = akademiata_parse_offer_filter_form_data();
 
     $query = new WP_Query(
@@ -261,7 +264,7 @@ function akademiata_run_offer_listing_ajax($filter_action) {
         array(
             'html'        => akademiata_render_offer_listing_cards($query),
             'count'       => $count,
-            'has_more'    => $count >= $limit,
+            'has_more'    => $load_all ? false : ( $count >= max(1, $limit) ),
             'next_offset' => $offset + $count,
             'offset'      => $offset,
         )
@@ -292,30 +295,30 @@ add_action('wp_ajax_filter_master', 'filter_master_ajax');
 add_action('wp_ajax_nopriv_filter_master', 'filter_master_ajax');
 
 /**
- * PG/MBA archive filter — all matching posts, card_post_pg_mba template.
- *
- * @param string|string[] $post_type postgraduate|mba
- * @param string[]        $taxonomies Taxonomy slugs.
+ * @return string[]
  */
-function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies) {
-    $args = array(
-        'post_type'      => $post_type,
-        'post_status'    => 'publish',
-        'posts_per_page' => -1,
-        'order'          => 'ASC',
-        'orderby'        => 'title',
-        'no_found_rows'  => true,
-        'lang'           => apply_filters('wpml_current_language', null),
-    );
+function akademiata_get_pg_mba_listing_taxonomy_keys() {
+    return array_keys(akademiata_get_pg_mba_filter_taxonomies());
+}
 
-    $form_data = array();
-    if (!empty($_POST['form_data'])) {
+/**
+ * @param array<string, mixed>|null $raw
+ * @return array<string, string[]>
+ */
+function akademiata_parse_pg_mba_filter_form_data($raw = null) {
+    $taxonomies = akademiata_get_pg_mba_listing_taxonomy_keys();
+
+    if ($raw !== null) {
+        $form_data = is_array($raw) ? $raw : array();
+    } elseif (!empty($_POST['form_data'])) {
         parse_str(wp_unslash($_POST['form_data']), $form_data);
+        $form_data = is_array($form_data) ? $form_data : array();
     } else {
         $form_data = akademiata_parse_query_string_multi($taxonomies);
     }
 
-    $tax_query = array('relation' => 'AND');
+    $parsed = array();
+
     foreach ($taxonomies as $taxonomy) {
         if (empty($form_data[ $taxonomy ])) {
             continue;
@@ -327,14 +330,41 @@ function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies) {
             )
         );
 
-        if (empty($terms)) {
+        if (!empty($terms)) {
+            $parsed[ $taxonomy ] = $terms;
+        }
+    }
+
+    return $parsed;
+}
+
+/**
+ * @param string               $post_type postgraduate|mba
+ * @param array<string, mixed> $form_data Parsed taxonomy filters.
+ * @return array<string, mixed>
+ */
+function akademiata_get_pg_mba_listing_query_args($post_type, array $form_data = array()) {
+    $args = array(
+        'post_type'      => $post_type,
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'order'          => 'ASC',
+        'orderby'        => 'title',
+        'no_found_rows'  => true,
+        'lang'           => apply_filters('wpml_current_language', null),
+    );
+
+    $tax_query = array('relation' => 'AND');
+
+    foreach (akademiata_get_pg_mba_listing_taxonomy_keys() as $taxonomy) {
+        if (empty($form_data[ $taxonomy ])) {
             continue;
         }
 
         $tax_query[] = array(
             'taxonomy' => $taxonomy,
             'field'    => 'slug',
-            'terms'    => $terms,
+            'terms'    => $form_data[ $taxonomy ],
             'operator' => 'IN',
         );
     }
@@ -343,8 +373,14 @@ function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies) {
         $args['tax_query'] = $tax_query;
     }
 
-    $query = new WP_Query($args);
+    return $args;
+}
 
+/**
+ * @param WP_Query $query
+ * @return string
+ */
+function akademiata_render_pg_mba_listing_cards(WP_Query $query) {
     ob_start();
 
     if ($query->have_posts()) {
@@ -356,29 +392,40 @@ function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies) {
 
     wp_reset_postdata();
 
+    return ob_get_clean();
+}
+
+/**
+ * PG/MBA archive filter — all matching posts, card_post_pg_mba template.
+ *
+ * @param string       $post_type postgraduate|mba
+ * @param string[]|null $taxonomies Deprecated; keys come from akademiata_get_pg_mba_listing_taxonomy_keys().
+ */
+function filter_pg_mba_posts_by_taxonomies($post_type, array $taxonomies = null) {
+    unset($taxonomies);
+
+    $form_data = akademiata_parse_pg_mba_filter_form_data();
+    $query     = new WP_Query(
+        akademiata_get_pg_mba_listing_query_args($post_type, $form_data)
+    );
+
     wp_send_json_success(
         array(
-            'html'  => ob_get_clean(),
-            'count' => $query->post_count,
+            'html'  => akademiata_render_pg_mba_listing_cards($query),
+            'count' => (int) $query->post_count,
         )
     );
 }
 
 function filter_postgraduate_ajax() {
-    filter_pg_mba_posts_by_taxonomies(
-        'postgraduate',
-        array_keys(akademiata_get_pg_mba_filter_taxonomies())
-    );
+    filter_pg_mba_posts_by_taxonomies('postgraduate');
 }
 
 add_action('wp_ajax_filter_postgraduate', 'filter_postgraduate_ajax');
 add_action('wp_ajax_nopriv_filter_postgraduate', 'filter_postgraduate_ajax');
 
 function filter_mba_ajax() {
-    filter_pg_mba_posts_by_taxonomies(
-        'mba',
-        array_keys(akademiata_get_pg_mba_filter_taxonomies())
-    );
+    filter_pg_mba_posts_by_taxonomies('mba');
 }
 
 add_action('wp_ajax_filter_mba', 'filter_mba_ajax');

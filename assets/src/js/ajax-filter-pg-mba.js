@@ -137,10 +137,22 @@ import { initOfferViewToggle } from './offer-view-toggle';
             }
         });
 
-        triggerFilterUpdate();
-
-        if (!hasFilters && $('.selected_tags_container .filter-tag').length === 0) {
+        if ($('.selected_tags_container .filter-tag').length > 0) {
+            $('#tags-container').show();
+        } else if (!hasFilters) {
             $('#tags-container').hide();
+        }
+
+        const cardCount = filterResults.children('.pg_mba_card').length;
+
+        if (cardCount === 0) {
+            $('#no-results-message').show();
+        } else {
+            $('#no-results-message').hide();
+        }
+
+        if (cardCount > 0) {
+            document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated', { detail: { reset: true } }));
         }
     }
 

@@ -8,8 +8,10 @@ import { initOfferViewToggle } from './offer-view-toggle';
     const ajaxUrl = ajax_filter_params.ajax_url;
     const currentLang = ajax_filter_params.lang;
     const filterAction = ajax_filter_params.filter_action || 'filter_posts';
-    const initialLimit = parseInt(ajax_filter_params.initial_limit, 10) || 24;
-    const loadMoreLimit = parseInt(ajax_filter_params.load_more_limit, 10) || 18;
+    const initialLimit = parseInt(ajax_filter_params.initial_limit, 10);
+    const loadAllResults = Number.isNaN(initialLimit) || initialLimit < 0;
+    const requestLimit = loadAllResults ? -1 : (initialLimit || 24);
+    const loadMoreLimit = loadAllResults ? -1 : (parseInt(ajax_filter_params.load_more_limit, 10) || 18);
 
     const form = $('#ajax-filter-form');
     const filterResults = $('#filter-results');
@@ -19,12 +21,8 @@ import { initOfferViewToggle } from './offer-view-toggle';
         return;
     }
 
-    let offset = parseInt(filterResults.data('next-offset'), 10);
-    if (Number.isNaN(offset)) {
-        offset = filterResults.children('.card_post_item').length || initialLimit;
-    }
-
-    let noMorePosts = filterResults.data('has-more') === 0 || filterResults.data('has-more') === '0';
+    let offset = filterResults.children('.card_post_item').length;
+    let noMorePosts = loadAllResults;
     let loading = false;
     let currentAjax = null;
     let activeRequestId = 0;
@@ -112,7 +110,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
                 action: filterAction,
                 lang: currentLang,
                 offset: 0,
-                limit: initialLimit,
+                limit: requestLimit,
                 form_data: form.serialize(),
             },
             success(response) {
@@ -122,22 +120,23 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
                 if (!response.success || !response.data || response.data.html === undefined) {
                     noMorePosts = true;
+                    setLoadSentinelVisible(false);
                     return;
                 }
 
                 const newHtml = response.data.html.trim();
                 filterResults.html(newHtml);
-                applyPaginationState(
-                    response.data.count ?? (newHtml ? initialLimit : 0),
-                    initialLimit,
-                    0,
-                    false
-                );
-                dispatchResultsUpdated({ reset: true });
-                if (!noMorePosts) {
-                    initLoadObserver();
-                    schedulePrefetch();
+                offset = filterResults.children('.card_post_item').length;
+                noMorePosts = loadAllResults || !response.data.has_more;
+                setLoadSentinelVisible(false);
+
+                if (newHtml === '') {
+                    $('#no-results-message').fadeIn(200);
+                } else {
+                    $('#no-results-message').hide();
                 }
+
+                dispatchResultsUpdated({ reset: true });
             },
             error(jqXHR, textStatus) {
                 if (textStatus === 'abort' || thisRequestId !== activeRequestId) {
@@ -159,6 +158,10 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function loadMorePosts(options = {}) {
+        if (loadAllResults) {
+            return;
+        }
+
         const background = options.background === true;
 
         if (loading || noMorePosts) {
@@ -240,7 +243,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function initLoadObserver() {
-        if (!('IntersectionObserver' in window)) {
+        if (loadAllResults || !('IntersectionObserver' in window)) {
             return;
         }
 
@@ -636,16 +639,13 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
         syncDesktopFilterBarVisibility();
 
-        // Always refresh when promo deep-link is present (SSR may have been wrong before query_var fix).
-        if (hasPromoInUrl || filterResults.children('.card_post_item').length === 0) {
+        noMorePosts = loadAllResults;
+        setLoadSentinelVisible(false);
+
+        if (!loadAllResults && (hasPromoInUrl || filterResults.children('.card_post_item').length === 0)) {
             triggerFilterUpdate();
-        } else {
+        } else if (filterResults.children('.card_post_item').length > 0) {
             dispatchResultsUpdated();
-            if (!noMorePosts) {
-                setLoadSentinelVisible(true);
-                initLoadObserver();
-                schedulePrefetch();
-            }
         }
     }
 

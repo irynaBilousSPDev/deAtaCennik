@@ -2,13 +2,11 @@
 /* Template Name: Offer */
 
 $offer_filter_action = akademiata_get_offer_filter_action();
-$offer_initial_limit = akademiata_offer_listing_initial_count();
 $offer_form_data     = akademiata_parse_offer_filter_form_data();
 $offer_initial_query = new WP_Query(
-    akademiata_get_offer_listing_query_args($offer_filter_action, $offer_form_data, 0, $offer_initial_limit)
+    akademiata_get_offer_listing_query_args($offer_filter_action, $offer_form_data)
 );
 $offer_initial_count = (int) $offer_initial_query->post_count;
-$offer_has_more      = $offer_initial_count >= $offer_initial_limit;
 
 get_header();
 ?>
@@ -35,9 +33,7 @@ get_header();
         <!-- Filtered Results -->
         <div id="filter-results"
              class="row filter-results--grid"
-             data-initial-count="<?php echo esc_attr((string) $offer_initial_count); ?>"
-             data-next-offset="<?php echo esc_attr((string) $offer_initial_count); ?>"
-             data-has-more="<?php echo $offer_has_more ? '1' : '0'; ?>">
+             data-initial-count="<?php echo esc_attr((string) $offer_initial_count); ?>">
             <?php
             if ($offer_initial_query->have_posts()) :
                 while ($offer_initial_query->have_posts()) :
@@ -48,9 +44,6 @@ get_header();
             endif;
             ?>
         </div>
-        <?php if ($offer_has_more) : ?>
-            <div id="filter-load-sentinel" class="filter-load-sentinel" aria-hidden="true"></div>
-        <?php endif; ?>
         <div id="no-results-message"
              style="<?php echo $offer_initial_count === 0 ? 'text-align: center; margin: 2rem 0;' : 'display: none; text-align: center; margin: 2rem 0;'; ?>">
             <?php echo esc_html(akademiata_get_theme_lang_string('offer_no_results')); ?>
