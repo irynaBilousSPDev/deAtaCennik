@@ -903,6 +903,46 @@
   .studia_cards {
     @include mixins.listing-card-compact-laptop;
   }
+
+  .offer_wrapper--offer-page .offer_page_header {
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.25rem;
+    padding-top: 16px;
+
+    h1 {
+      flex: 1 1 160px;
+    }
+
+    .ranking-badge-tooltip--offer-header {
+      flex: 0 1 220px;
+      max-width: min(220px, 36%);
+      gap: 4px;
+
+      .ranking-badge-tooltip__image {
+        max-width: 220px;
+        max-height: 58px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+      }
+
+      .ranking-badge-tooltip__fallback {
+        max-width: 200px;
+        font-size: 11px;
+        line-height: 1.25;
+      }
+
+      .ranking-badge-tooltip__trigger {
+        font-size: 11px;
+      }
+
+      .ranking-badge-tooltip__icon {
+        width: 14px;
+        height: 14px;
+        font-size: 9px;
+      }
+    }
+  }
 }
 
 // Large desktop — restore pre-compact listing shell.
