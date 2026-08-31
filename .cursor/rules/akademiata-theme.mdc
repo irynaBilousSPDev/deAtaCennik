@@ -12,7 +12,7 @@ alwaysApply: true
 
 ## `functions.php` load order
 
-`cpt-taxonomy.php` → `utilities.php` → `offer-pricing.php` → `ajax_filters.php` → `configure.php` → `youtube-api.php` → `offer-daily-interest.php` → `offer-start-timer.php` → `site-daily-visitors.php` → `js-css.php` → `shortcodes.php` → `breadcrumbs-functions.php` → `duplicate-cpt-posts.php` → `acf.php` → `load-cpt-slider.php` → `class-wp-mega-menu-walker.php` → `generate_keys_bch_mst.php` → `admin.php` (admin only). `wpml-string.php` is commented out.
+`cpt-taxonomy.php` → `utilities.php` → `offer-pricing.php` → `ai-crawler-hints.php` → `ajax_filters.php` → `configure.php` → `youtube-api.php` → `offer-daily-interest.php` → `offer-start-timer.php` → `site-daily-visitors.php` → `js-css.php` → `shortcodes.php` → `breadcrumbs-functions.php` → `duplicate-cpt-posts.php` → `acf.php` → `load-cpt-slider.php` → `class-wp-mega-menu-walker.php` → `generate_keys_bch_mst.php` → `admin.php` (admin only). `wpml-string.php` is commented out.
 
 ## Build
 
@@ -44,7 +44,7 @@ Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{m
 
 ## External data
 
-- Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`.
+- Prices JSON: Google Apps Script (`configure/js-css.php` → `googleApiUrl`), docs in `apps-script/README.md`, fallback `prices.json`. **AI crawlers (prod only):** `configure/ai-crawler-hints.php` → `/pricing-for-ai.txt`, head links to `prices.json`.
 - YouTube: `configure/youtube-api.php` (Theme Settings → YouTube API, encrypted key) + REST `/wp-json/akademiata/v1/youtube` + `__YouTubeSlider.js`. Legacy `youtube-proxy.php` delegates to same handler. Optional `YOUTUBE_API_KEY` in `wp-config.php`.
 - **Offer daily interest:** `configure/offer-daily-interest.php` — Theme Settings → **Licznik zainteresowania** (enable/disable, optional `active_from` date, default on). Singles bachelor/master with `register_url`. Daily reset at midnight; one-time prod launch date in code until first live day.
 - **Site daily visitors:** `configure/site-daily-visitors.php` — same global toggle as offer interest counter; unique visitors across whole site per day (min 2 on prod). **REST + JS** (`siteDailyVisitors.js`) so WP Rocket page cache stays valid; filters `rocket_cache_reject_uri` + `rocket_delay_js_exclusions`. (Homepage **Decyzja na dziś** display removed from `front-page.php` for now.)

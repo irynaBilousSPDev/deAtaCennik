@@ -13,6 +13,8 @@ include('configure/wpml-news-date-switcher.php');
 
 include('configure/offer-pricing.php');
 
+include('configure/ai-crawler-hints.php');
+
 include('configure/offer-promotions-filter.php');
 
 // ajax filter
