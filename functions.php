@@ -17,7 +17,7 @@ include('configure/ai-crawler-hints.php');
 
 include('configure/offer-promotions-filter.php');
 
-include('configure/offer-schema.php');
+include('configure/schema.php');
 
 // ajax filter
 
