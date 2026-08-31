@@ -124,6 +124,24 @@ function akademiata_get_schema_homepage_organization(array $acf_fields = array()
         $org['hasOfferCatalog'] = $catalog;
     }
 
+    $recruitment_points = akademiata_schema_welyo_recruitment_contact_points();
+    if ($recruitment_points !== array()) {
+        $existing = array();
+        if (!empty($org['telephone']) || !empty($org['email'])) {
+            $existing[] = array(
+                '@type'       => 'ContactPoint',
+                'contactType' => 'customer service',
+                'telephone'   => $org['telephone'] ?? '',
+                'email'       => $org['email'] ?? '',
+                'name'        => __('Sekretariat / rekrutacja (dane główne)', 'akademiata'),
+            );
+        }
+        $org['contactPoint'] = array_values(array_filter(array_merge($existing, $recruitment_points)));
+        if (count($org['contactPoint']) === 1) {
+            $org['contactPoint'] = $org['contactPoint'][0];
+        }
+    }
+
     return $org;
 }
 
@@ -667,6 +685,11 @@ function akademiata_schema_collect_homepage_subject_of(array $acf_fields) {
             $contact['email']
         )
     );
+
+    $welyo = akademiata_schema_welyo_recruitment_subject_of();
+    if (is_array($welyo)) {
+        $items[] = $welyo;
+    }
 
     return apply_filters('akademiata_schema_homepage_subject_of', $items, $acf_fields);
 }

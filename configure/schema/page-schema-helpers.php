@@ -292,9 +292,13 @@ function akademiata_schema_push_accordion_rows(array &$parts, array $accordion_r
  * @param int $post_id
  * @return array<int, array<string, mixed>>
  */
-function akademiata_schema_collect_offer_listing_posts($post_id, $limit = 48) {
+function akademiata_schema_collect_offer_listing_posts($post_id, $limit = -1) {
     if (!function_exists('akademiata_get_offer_filter_action') || !function_exists('akademiata_get_offer_listing_query_args')) {
         return array();
+    }
+
+    if ($limit === 0 && function_exists('akademiata_offer_listing_initial_count')) {
+        $limit = akademiata_offer_listing_initial_count();
     }
 
     $query = new WP_Query(
@@ -302,7 +306,7 @@ function akademiata_schema_collect_offer_listing_posts($post_id, $limit = 48) {
             akademiata_get_offer_filter_action(),
             akademiata_parse_offer_filter_form_data(),
             0,
-            max(1, (int) $limit)
+            (int) $limit
         )
     );
 

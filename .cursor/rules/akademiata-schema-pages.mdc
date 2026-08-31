@@ -53,8 +53,8 @@ Use the same `configure/lp-defaults/{slug}/fields.php` merge as the page templat
 | Template | Schema type | Notes |
 |----------|-------------|-------|
 | `page-faq.php` | **FAQPage** + `subjectOf` | CPT `faq` + `faq_topics` |
-| `page-contact.php` | **ContactPage** | `contact_header`, CPT `contact` |
-| `page-offer.php` | **CollectionPage** | `akademiata_get_offer_listing_query_args()` |
+| `page-contact.php` | **ContactPage** | `contact_header`, CPT `contact`, Welyo recruitment ContactPoint |
+| `page-offer.php` | **CollectionPage** | Full bachelor/master list (`limit -1`, same as page query) |
 | `page-cadre.php` | WebPage | Flexible `page_sections` → `cadre_section` |
 | `page-template-prices.php` | WebPage | Calculator; links to `prices.json` in `subjectOf` |
 | `page-template-open-day.php` | WebPage + **Event** `@graph` | ACF open day fields |

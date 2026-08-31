@@ -100,7 +100,7 @@ Structured data for search engines and AI crawlers is generated **by the theme**
 | **Exams** (single) | `Event` | Dates, location, organizer |
 | **Landing pages** (O Uczelni, Rankingi, Rekrutacja, Katalog… — 9 LP templates) | `WebPage` / `AboutPage` + **`subjectOf`** | Full ACF sections via same `configure/lp-defaults/*/fields.php` merge as the template; FAQ sections also emit `FAQPage` in `@graph` |
 | **FAQ page** | `FAQPage` | Q&A from CPT `faq` + `faq_topics` |
-| **Contact** | `ContactPage` | Header repeater + contact CPT accordions |
+| **Contact** | `ContactPage` | Header repeater + contact CPT + Welyo recruitment ContactPoint (call / callback + hours) |
 | **Offer listing** (`page-offer.php`) | `CollectionPage` | `ItemList` of bachelor/master URLs (initial query) |
 | **Katalog kierunków** | `WebPage` + `ItemList` | LP sections + linked programs |
 | **Prices calculator** | `WebPage` | Calculator hint + link to `prices.json` in `subjectOf` |
@@ -122,6 +122,7 @@ Registry and checklist for **new page templates**: `.cursor/rules/akademiata-sch
 | MBA / PG — ceny i zniżki | ACF on the offer (`payments`, `discounts_accordion`) | `offers`, `subjectOf` |
 | Homepage, LP, pages | ACF / `lp-defaults` merge | `subjectOf`, descriptions |
 | Optional SEO blurb | ACF **`schema_seo_description`** | Overrides auto `description` when set |
+| Recruitment widget (Welyo) | Plugin settings (`phone_*`, `hours_by_day`, texts) | Homepage Organization + Contact page: ContactPoint + subjectOf (call during hours / leave number for callback) |
 
 After uploading a new **`prices.json`**: deploy theme file, then **clear WP Rocket on prod** so offer HTML/JSON-LD refreshes. Schema reads `prices.json` on each request (re-checks file mtime; no WP transient).
 

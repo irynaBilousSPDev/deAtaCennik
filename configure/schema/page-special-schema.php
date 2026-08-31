@@ -99,6 +99,23 @@ function akademiata_build_contact_page_schema($post_id) {
         $schema['mainEntity'] = count($contact_points) === 1 ? $contact_points[0] : $contact_points;
     }
 
+    $welyo_points = akademiata_schema_welyo_recruitment_contact_points();
+    if ($welyo_points !== array()) {
+        $existing = array();
+        if (!empty($schema['mainEntity'])) {
+            $existing = isset($schema['mainEntity']['@type'])
+                ? array($schema['mainEntity'])
+                : (is_array($schema['mainEntity']) ? $schema['mainEntity'] : array());
+        }
+        $merged = array_values(array_merge($existing, $welyo_points));
+        $schema['mainEntity'] = count($merged) === 1 ? $merged[0] : $merged;
+    }
+
+    $welyo_subject = akademiata_schema_welyo_recruitment_subject_of();
+    if (is_array($welyo_subject)) {
+        $parts[] = $welyo_subject;
+    }
+
     $acc_title = trim(wp_strip_all_tags((string) get_field('accordion_main_title', $post_id)));
     $acc_desc  = trim(wp_strip_all_tags((string) get_field('accordion_main_description', $post_id)));
     if ($acc_title !== '' || $acc_desc !== '') {
@@ -153,7 +170,8 @@ function akademiata_build_offer_listing_page_schema($post_id) {
         return null;
     }
 
-    $posts = akademiata_schema_collect_offer_listing_posts($post_id, 48);
+    // Same as page-offer.php listing: akademiata_offer_listing_initial_count() is -1 (all).
+    $posts = akademiata_schema_collect_offer_listing_posts($post_id, -1);
     $list  = akademiata_schema_build_item_list(
         $posts,
         $base['title'],

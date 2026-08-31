@@ -271,11 +271,242 @@ function akademiata_get_schema_provider() {
 function akademiata_get_schema_organization() {
     $home = untrailingslashit(home_url());
 
-    return array(
+    $org = array(
         '@type' => 'CollegeOrUniversity',
         '@id'   => $home . '/#organization',
         'name'  => 'Akademia Techniczno-Artystyczna Nauk Stosowanych w Warszawie',
         'url'   => $home,
+    );
+
+    $recruitment = akademiata_schema_welyo_recruitment_contact_points();
+    if ($recruitment !== array()) {
+        $org['contactPoint'] = count($recruitment) === 1 ? $recruitment[0] : $recruitment;
+    }
+
+    return $org;
+}
+
+/**
+ * Recruitment phone widget (Welyo) — call during hours or leave number for callback.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_welyo_recruitment_contact_points() {
+    if (!function_exists('welyo_cfg')) {
+        return array();
+    }
+
+    $lang = function_exists('welyo_get_current_language')
+        ? welyo_get_current_language()
+        : (function_exists('akademiata_schema_current_language_code') ? akademiata_schema_current_language_code() : 'pl');
+
+    if (function_exists('welyo_lang_context')) {
+        welyo_lang_context($lang);
+    }
+
+    $phone_dial   = trim((string) welyo_cfg('phone_dial', $lang));
+    $phone_pretty = trim((string) welyo_cfg('phone_pretty', $lang));
+    if ($phone_dial === '' && $phone_pretty === '') {
+        return array();
+    }
+
+    $texts  = function_exists('welyo_widget_texts') ? welyo_widget_texts($lang) : array();
+    $footer = akademiata_schema_clean_text($texts['text_footer'] ?? __('Dział Rekrutacji', 'akademiata'));
+    $hours  = akademiata_schema_welyo_hours_summary($lang);
+
+    $open_blurb = akademiata_schema_clean_text($texts['text_sub_open'] ?? '');
+    if ($open_blurb === '') {
+        $open_blurb = __('W godzinach pracy możesz zadzwonić do działu rekrutacji.', 'akademiata');
+    }
+
+    $closed_blurb = akademiata_schema_clean_text($texts['text_sub_closed'] ?? '');
+    if ($closed_blurb === '') {
+        $closed_blurb = __('Po godzinach zostaw numer — oddzwonimy tak szybko, jak to możliwe.', 'akademiata');
+    }
+
+    $description = trim(
+        $open_blurb . ' ' . $closed_blurb
+        . ($hours !== '' ? ' ' . sprintf(
+            /* translators: %s: opening hours summary */
+            __('Godziny kontaktu telefonicznego: %s.', 'akademiata'),
+            $hours
+        ) : '')
+    );
+
+    $point = array(
+        '@type'             => 'ContactPoint',
+        'contactType'       => 'Admissions',
+        'name'              => $footer !== '' ? $footer : __('Dział Rekrutacji', 'akademiata'),
+        'telephone'         => $phone_dial !== '' ? $phone_dial : $phone_pretty,
+        'availableLanguage' => array($lang),
+        'description'       => $description,
+    );
+
+    if ($phone_pretty !== '' && $phone_pretty !== $point['telephone']) {
+        $point['alternateName'] = $phone_pretty;
+    }
+
+    $opening = akademiata_schema_welyo_opening_hours_specs($lang);
+    if ($opening !== array()) {
+        $point['hoursAvailable'] = count($opening) === 1 ? $opening[0] : $opening;
+    }
+
+    $contact_url = '';
+    if (function_exists('akademiata_schema_page_url_by_slug')) {
+        $contact_url = akademiata_schema_page_url_by_slug('kontakt');
+    }
+    if ($contact_url !== '') {
+        $point['url'] = $contact_url;
+    }
+
+    return apply_filters('akademiata_schema_welyo_recruitment_contact_points', array($point), $lang);
+}
+
+/**
+ * Human-readable weekly phone hours from Welyo settings.
+ */
+function akademiata_schema_welyo_hours_summary($lang = null) {
+    if (!function_exists('welyo_hours_by_day')) {
+        return function_exists('welyo_hours_display_text') ? (string) welyo_hours_display_text($lang) : '';
+    }
+
+    $schedule = welyo_hours_by_day($lang);
+    if (!is_array($schedule) || $schedule === array()) {
+        return '';
+    }
+
+    $day_names = array(
+        1 => __('poniedziałek', 'akademiata'),
+        2 => __('wtorek', 'akademiata'),
+        3 => __('środa', 'akademiata'),
+        4 => __('czwartek', 'akademiata'),
+        5 => __('piątek', 'akademiata'),
+        6 => __('sobota', 'akademiata'),
+        7 => __('niedziela', 'akademiata'),
+    );
+
+    $chunks = array();
+    foreach ($schedule as $dow => $row) {
+        if (!is_array($row) || empty($row['open']) || empty($row['close'])) {
+            continue;
+        }
+        $dow = (int) $dow;
+        $label = $day_names[ $dow ] ?? (string) $dow;
+        $open  = function_exists('welyo_format_hm_display') ? welyo_format_hm_display($row['open']) : $row['open'];
+        $close = function_exists('welyo_format_hm_display') ? welyo_format_hm_display($row['close']) : $row['close'];
+        $chunks[] = $label . ' ' . $open . '–' . $close;
+    }
+
+    return implode('; ', $chunks);
+}
+
+/**
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_welyo_opening_hours_specs($lang = null) {
+    if (!function_exists('welyo_hours_by_day')) {
+        return array();
+    }
+
+    $schedule = welyo_hours_by_day($lang);
+    if (!is_array($schedule) || $schedule === array()) {
+        return array();
+    }
+
+    $map = array(
+        1 => 'https://schema.org/Monday',
+        2 => 'https://schema.org/Tuesday',
+        3 => 'https://schema.org/Wednesday',
+        4 => 'https://schema.org/Thursday',
+        5 => 'https://schema.org/Friday',
+        6 => 'https://schema.org/Saturday',
+        7 => 'https://schema.org/Sunday',
+    );
+
+    $groups = array();
+    foreach ($schedule as $dow => $row) {
+        if (!is_array($row) || empty($row['open']) || empty($row['close'])) {
+            continue;
+        }
+        $open  = akademiata_schema_normalize_hm((string) $row['open']);
+        $close = akademiata_schema_normalize_hm((string) $row['close']);
+        if ($open === '' || $close === '') {
+            continue;
+        }
+        $key = $open . '|' . $close;
+        if (!isset($groups[ $key ])) {
+            $groups[ $key ] = array(
+                'opens'  => $open,
+                'closes' => $close,
+                'days'   => array(),
+            );
+        }
+        if (isset($map[ (int) $dow ])) {
+            $groups[ $key ]['days'][] = $map[ (int) $dow ];
+        }
+    }
+
+    $specs = array();
+    foreach ($groups as $group) {
+        if ($group['days'] === array()) {
+            continue;
+        }
+        $specs[] = array(
+            '@type'     => 'OpeningHoursSpecification',
+            'dayOfWeek' => count($group['days']) === 1 ? $group['days'][0] : $group['days'],
+            'opens'     => $group['opens'],
+            'closes'    => $group['closes'],
+        );
+    }
+
+    return $specs;
+}
+
+/**
+ * Normalize "8:00" / "08:00" → "08:00".
+ */
+function akademiata_schema_normalize_hm($hm) {
+    $hm = trim((string) $hm);
+    if (!preg_match('/^(\d{1,2}):(\d{2})$/', $hm, $m)) {
+        return '';
+    }
+
+    return sprintf('%02d:%02d', (int) $m[1], (int) $m[2]);
+}
+
+/**
+ * CreativeWork blurb for subjectOf (homepage / contact).
+ *
+ * @return array<string, mixed>|null
+ */
+function akademiata_schema_welyo_recruitment_subject_of() {
+    $points = akademiata_schema_welyo_recruitment_contact_points();
+    if ($points === array()) {
+        return null;
+    }
+
+    $point = $points[0];
+    $phone = $point['alternateName'] ?? $point['telephone'] ?? '';
+    $name  = (string) ($point['name'] ?? __('Dział Rekrutacji', 'akademiata'));
+
+    $lead = __('Na stronie dostępny jest widget kontaktu z działem rekrutacji: w godzinach pracy możesz zadzwonić; poza godzinami zostaw numer — oddzwonimy. Godziny mogą się różnić w zależności od dnia tygodnia.', 'akademiata');
+    if ($phone !== '') {
+        $lead = trim(
+            sprintf(
+                /* translators: %s: phone number */
+                __('Infolinia rekrutacji: %s.', 'akademiata'),
+                $phone
+            ) . ' ' . $lead
+        );
+    }
+
+    $detail = (string) ($point['description'] ?? '');
+    $desc   = trim($lead . ($detail !== '' ? ' ' . $detail : ''));
+
+    return akademiata_schema_creative_work(
+        __('Gdzie napisać / zadzwonić?', 'akademiata') . ' — ' . $name,
+        $desc,
+        $point['url'] ?? ''
     );
 }
 
