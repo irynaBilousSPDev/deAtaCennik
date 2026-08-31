@@ -498,6 +498,11 @@ function akademiata_schema_degree_collect_subject_of($post_id, $post_type, $pric
         }
     }
 
+    $promo_items = akademiata_schema_degree_collect_promos_subject_of($post_id);
+    if ($promo_items !== array()) {
+        $items = array_merge($items, $promo_items);
+    }
+
     $city_slug = function_exists('akademiata_get_offer_city_slug')
         ? akademiata_get_offer_city_slug($post_id)
         : 'warszawa';
@@ -598,6 +603,221 @@ function akademiata_schema_degree_collect_subject_of($post_id, $post_type, $pric
             }
         }
     }
+
+    return $items;
+}
+
+/**
+ * PROMOS from prices.json eligible for this offer (schema — no Google/transient cache).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_get_degree_eligible_promos($post_id) {
+    if (!function_exists('akademiata_offer_matches_calculator_promo')) {
+        return array();
+    }
+
+    $promos = array();
+    foreach (akademiata_schema_get_promos_from_prices_json() as $promo) {
+        if (!is_array($promo)) {
+            continue;
+        }
+        if (akademiata_offer_matches_calculator_promo((int) $post_id, $promo)) {
+            $promos[] = $promo;
+        }
+    }
+
+    return apply_filters('akademiata_schema_degree_eligible_promos', $promos, (int) $post_id);
+}
+
+/**
+ * @param array<string, mixed> $promo
+ */
+function akademiata_schema_promo_expires_iso(array $promo) {
+    if (!empty($promo['expires'])) {
+        $raw = trim((string) $promo['expires']);
+        $ts  = null;
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $raw, $m)) {
+            $ts = mktime(23, 59, 59, (int) $m[2], (int) $m[3], (int) $m[1]);
+        } elseif (preg_match('/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/', $raw, $m)) {
+            $ts = mktime(23, 59, 59, (int) $m[2], (int) $m[1], (int) $m[3]);
+        }
+        if ($ts !== null) {
+            return gmdate('c', $ts);
+        }
+    }
+
+    if (!function_exists('akademiata_extract_promo_deadline')) {
+        return '';
+    }
+
+    $deadline = akademiata_extract_promo_deadline($promo);
+    if ($deadline === null) {
+        return '';
+    }
+
+    if (function_exists('akademiata_extend_promo_deadline')) {
+        $deadline = akademiata_extend_promo_deadline($deadline);
+    }
+
+    return gmdate('c', $deadline);
+}
+
+/**
+ * @param array<string, mixed> $promo
+ * @return array<string, mixed>
+ */
+function akademiata_schema_promo_creative_work_meta(array $promo) {
+    $meta = array(
+        'dateModified' => gmdate('c'),
+    );
+
+    $promo_id = trim((string) ($promo['id'] ?? ''));
+    if ($promo_id !== '') {
+        $meta['identifier'] = $promo_id;
+    }
+
+    $expires = akademiata_schema_promo_expires_iso($promo);
+    if ($expires !== '') {
+        $meta['expires'] = $expires;
+    }
+
+    return $meta;
+}
+
+/**
+ * @param array<string, mixed> $promo
+ * @param array<string, string> $promo_names id => name
+ */
+function akademiata_schema_promo_robot_description(array $promo, array $promo_names = array()) {
+    $parts = array();
+
+    $tag = akademiata_schema_clean_text($promo['tag'] ?? '');
+    if ($tag !== '') {
+        $parts[] = $tag;
+    }
+
+    if (function_exists('akademiata_get_promo_short_plain_text') && !empty($promo['short'])) {
+        $short = akademiata_get_promo_short_plain_text($promo['short'], 500);
+        if ($short !== '') {
+            $parts[] = $short;
+        }
+    }
+
+    if (!empty($promo['full'])) {
+        $full = akademiata_schema_clean_text($promo['full']);
+        if ($full !== '') {
+            $parts[] = $full;
+        }
+    }
+
+    if (!empty($promo['so']) && is_array($promo['so'])) {
+        $options = array();
+        foreach ($promo['so'] as $opt) {
+            if (!is_array($opt)) {
+                continue;
+            }
+            $label = akademiata_schema_clean_text($opt['l'] ?? '');
+            if ($label !== '') {
+                $options[] = $label;
+            }
+        }
+        if ($options !== array()) {
+            $parts[] = implode('; ', $options);
+        }
+    }
+
+    if (!empty($promo['sw']) && is_array($promo['sw'])) {
+        $stack = array();
+        foreach ($promo['sw'] as $stack_id) {
+            $stack_id = trim((string) $stack_id);
+            if ($stack_id === '') {
+                continue;
+            }
+            $stack[] = $promo_names[ $stack_id ] ?? $stack_id;
+        }
+        if ($stack !== array()) {
+            $parts[] = sprintf(
+                /* translators: %s: comma-separated promotion names */
+                __('Łączy się z: %s', 'akademiata'),
+                implode(', ', $stack)
+            );
+        }
+    }
+
+    return implode('. ', array_filter($parts));
+}
+
+/**
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_degree_collect_promos_subject_of($post_id) {
+    $promos = akademiata_schema_get_degree_eligible_promos($post_id);
+    if ($promos === array()) {
+        return array();
+    }
+
+    $items     = array();
+    $summaries = array();
+    $names_by_id = array();
+
+    foreach ($promos as $promo) {
+        $promo_id = trim((string) ($promo['id'] ?? ''));
+        $name     = akademiata_schema_clean_text($promo['name'] ?? '');
+        if ($promo_id !== '' && $name !== '') {
+            $names_by_id[ $promo_id ] = $name;
+        }
+    }
+
+    foreach ($promos as $promo) {
+        $name = akademiata_schema_clean_text($promo['name'] ?? '');
+        if ($name === '') {
+            continue;
+        }
+
+        $tag = akademiata_schema_clean_text($promo['tag'] ?? '');
+        $summaries[] = $tag !== '' ? $name . ' (' . $tag . ')' : $name;
+
+        $description = akademiata_schema_promo_robot_description($promo, $names_by_id);
+        if ($description !== '') {
+            $items[] = akademiata_schema_creative_work(
+                $name,
+                $description,
+                '',
+                akademiata_schema_promo_creative_work_meta($promo)
+            );
+        }
+    }
+
+    if ($summaries === array()) {
+        return array();
+    }
+
+    $overview = implode('; ', $summaries);
+    $updated  = function_exists('akademiata_get_prices_json_updated_iso')
+        ? akademiata_get_prices_json_updated_iso()
+        : '';
+    $overview .= '. ' . __(
+        'Źródło promocji: plik prices.json w motywie (jak ceny bazowe). Po aktualizacji pliku wyczyść cache strony (WP Rocket), aby JSON-LD odświeżył się na ofertach.',
+        'akademiata'
+    );
+    if ($updated !== '') {
+        $overview .= ' prices.json: ' . $updated;
+    }
+
+    array_unshift(
+        $items,
+        akademiata_schema_creative_work(
+            __('Zniżki i promocje', 'akademiata'),
+            $overview,
+            function_exists('akademiata_get_prices_json_public_url')
+                ? akademiata_get_prices_json_public_url()
+                : '',
+            array(
+                'dateModified' => $updated !== '' ? $updated : gmdate('c'),
+            )
+        )
+    );
 
     return $items;
 }

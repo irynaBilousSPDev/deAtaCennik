@@ -233,6 +233,20 @@ Output can be saved as `prices.json` in the theme folder for offline/fallback us
 
 ---
 
+## JSON-LD schema (bachelor / master offers)
+
+Tuition **and** `PROMOS` in offer JSON-LD come from **`prices.json`** in the theme (not the live Google URL).
+
+When you update `prices.json` on the server (SFTP / deploy):
+
+1. Upload `wp-content/themes/akademiata/prices.json`.
+2. **Clear WP Rocket cache** (whole site or at least offer singles) — HTML embeds JSON-LD; PHP reads the file fresh, but page cache may still serve old schema.
+3. Optional check: view source on one offer → search for `"Zniżki i promocje"` in `application/ld+json`.
+
+Regenerate locally: `python prices_generate_json.py ... --out prices.json` (includes `PROMOS` tab).
+
+---
+
 ## Related theme files
 
 - `assets/src/js/prices-calculator.js` – calculator logic

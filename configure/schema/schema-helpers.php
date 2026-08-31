@@ -64,32 +64,70 @@ function akademiata_schema_published_post_base($post_id) {
 }
 
 /**
- * @return array<string, mixed>|null
+ * @return array{data: array<string, mixed>|null, mtime: int}
  */
-function &akademiata_prices_json_schema_cache() {
-    static $cache = null;
-    return $cache;
+function &akademiata_prices_json_schema_cache_state() {
+    static $state = array(
+        'data'  => null,
+        'mtime' => 0,
+    );
+    return $state;
 }
 
 /**
+ * Drop in-request prices.json cache (call after replacing theme/prices.json on disk).
+ */
+function akademiata_schema_reset_prices_json_cache() {
+    $state         = &akademiata_prices_json_schema_cache_state();
+    $state['data']  = null;
+    $state['mtime'] = 0;
+}
+
+/**
+ * prices.json for JSON-LD — re-reads when file mtime changes (no WP transient).
+ *
  * @return array<string, mixed>|null
  */
 function akademiata_get_prices_json_for_schema() {
-    $cache = &akademiata_prices_json_schema_cache();
-    if ($cache !== null) {
-        return $cache;
-    }
-
     $path = get_template_directory() . '/prices.json';
     if (!is_readable($path)) {
-        $cache = null;
+        akademiata_schema_reset_prices_json_cache();
         return null;
     }
 
-    $decoded = json_decode((string) file_get_contents($path), true);
-    $cache   = is_array($decoded) ? $decoded : null;
+    $mtime = (int) filemtime($path);
+    $state = &akademiata_prices_json_schema_cache_state();
 
-    return $cache;
+    if ($state['data'] !== null && $state['mtime'] === $mtime) {
+        return $state['data'];
+    }
+
+    $decoded = json_decode((string) file_get_contents($path), true);
+    $state['data']  = is_array($decoded) ? $decoded : null;
+    $state['mtime'] = $mtime;
+
+    return $state['data'];
+}
+
+/**
+ * PROMOS from theme prices.json for schema (same file as tuition rows; not calculator transient).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_schema_get_promos_from_prices_json() {
+    $json = akademiata_get_prices_json_for_schema();
+    if (!is_array($json) || empty($json['PROMOS']) || !is_array($json['PROMOS'])) {
+        return array();
+    }
+
+    $promos = array_values(array_filter($json['PROMOS'], 'is_array'));
+    if (!function_exists('akademiata_promo_is_expired')) {
+        return $promos;
+    }
+
+    return array_values(array_filter($promos, function ($promo) {
+        return !akademiata_promo_is_expired($promo);
+    }));
 }
 
 /**
@@ -483,7 +521,7 @@ function akademiata_schema_append_register_action(array $schema, $register_url, 
 /**
  * @return array<string, mixed>
  */
-function akademiata_schema_creative_work($name, $description, $url = '') {
+function akademiata_schema_creative_work($name, $description, $url = '', array $extra = array()) {
     $item = array(
         '@type'       => 'CreativeWork',
         'name'        => (string) $name,
@@ -491,6 +529,12 @@ function akademiata_schema_creative_work($name, $description, $url = '') {
     );
     if ($url !== '') {
         $item['url'] = $url;
+    }
+
+    foreach (array('identifier', 'expires', 'dateModified') as $key) {
+        if (!empty($extra[ $key ])) {
+            $item[ $key ] = (string) $extra[ $key ];
+        }
     }
 
     return $item;

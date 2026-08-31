@@ -1,4 +1,6 @@
 {
+  "BASE": "https://smartapply.akademiata.pl/pl/apply/",
+  "BASE_EN": "https://smartapply.akademiata.pl/en/apply/",
   "SA": {
     "1_wwa_architektura": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64",
     "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53",
@@ -128,1091 +130,1091 @@
     {
       "lang": "pl",
       "key": "1_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64",
       "city": "wwa",
       "deg": 1,
       "k": "Architektura",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-64"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53",
       "city": "wwa",
       "deg": 1,
       "k": "Architektura Krajobrazu",
-      "s": "Projektowanie krajobrazu wielofunkcyjnego",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-wielofunkcyjnego-53"
+      "s": "Projektowanie krajobrazu wielofunkcyjnego"
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16",
       "city": "wwa",
       "deg": 1,
       "k": "Architektura Krajobrazu",
-      "s": "Projektowanie krajobrazu o funkcji rekreacyjnej",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej-16"
+      "s": "Projektowanie krajobrazu o funkcji rekreacyjnej"
     },
     {
       "lang": "pl",
       "key": "1_wwa_architektura-krajobrazu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-krajobrazu-17",
       "city": "wwa",
       "deg": 1,
       "k": "Architektura Krajobrazu",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-krajobrazu-17"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-18",
       "city": "wwa",
       "deg": 1,
       "k": "Architektura Wnętrz",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-18"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_konstrukcje-budowlane",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/konstrukcje-budowlane-59",
       "city": "wwa",
       "deg": 1,
       "k": "Budownictwo",
-      "s": "Konstrukcje budowlane",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/konstrukcje-budowlane-59"
+      "s": "Konstrukcje budowlane"
     },
     {
       "lang": "pl",
       "key": "1_wwa_energooszczedne-technologie-w-budownictwie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58",
       "city": "wwa",
       "deg": 1,
       "k": "Budownictwo",
-      "s": "Energooszczędne technologie w budownictwie",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/energooszczedne-technologie-w-budownictwie-58"
+      "s": "Energooszczędne technologie w budownictwie"
     },
     {
       "lang": "pl",
       "key": "1_wwa_budownictwo-kolejowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-kolejowe-51",
       "city": "wwa",
       "deg": 1,
       "k": "Budownictwo",
-      "s": "Budownictwo kolejowe",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-kolejowe-51"
+      "s": "Budownictwo kolejowe"
     },
     {
       "lang": "pl",
       "key": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej-207",
       "city": "wwa",
       "deg": 1,
       "k": "Budownictwo",
-      "s": "Inżynieria i bezpieczeństwo obiektów infrastruktury krytycznej",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej-207"
+      "s": "Inżynieria i bezpieczeństwo obiektów infrastruktury krytycznej"
     },
     {
       "lang": "pl",
       "key": "1_wwa_budownictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-52",
       "city": "wwa",
       "deg": 1,
       "k": "Budownictwo",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budownictwo-52"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_sztuczna-inteligencja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-26",
       "city": "wwa",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Sztuczna inteligencja",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-26"
+      "s": "Sztuczna inteligencja"
     },
     {
       "lang": "pl",
       "key": "1_wwa_programowanie-aplikacji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-aplikacji-28",
       "city": "wwa",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Programowanie aplikacji",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-aplikacji-28"
+      "s": "Programowanie aplikacji"
     },
     {
       "lang": "pl",
       "key": "1_wwa_cyberbezpieczenstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/cyberbezpieczenstwo-27",
       "city": "wwa",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Cyberbezpieczeństwo",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/cyberbezpieczenstwo-27"
+      "s": "Cyberbezpieczeństwo"
     },
     {
       "lang": "pl",
       "key": "1_wwa_animacja-3d",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/animacja-3d-10",
       "city": "wwa",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Animacja 3D",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/animacja-3d-10"
+      "s": "Animacja 3D"
     },
     {
       "lang": "pl",
       "key": "1_wwa_informatyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-29",
       "city": "wwa",
       "deg": 1,
       "k": "Informatyka",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-29"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-urzadzen-poligraficznych-201",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanika i budowa maszyn",
-      "s": "Budowa i serwisowanie urządzeń poligraficznych",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-urzadzen-poligraficznych-201"
+      "s": "Budowa i serwisowanie urządzeń poligraficznych"
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanika i budowa maszyn",
-      "s": "Projektowanie i sterowanie komputerowe",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-sterowanie-komputerowe-56"
+      "s": "Projektowanie i sterowanie komputerowe"
     },
     {
       "lang": "pl",
       "key": "1_wwa_budowa-i-serwisowanie-samochodow",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-samochodow-55",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanika i budowa maszyn",
-      "s": "Budowa i serwisowanie samochodów",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/budowa-i-serwisowanie-samochodow-55"
+      "s": "Budowa i serwisowanie samochodów"
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-i-produkcja-dronow",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-produkcja-dronow-203",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanika i budowa maszyn",
-      "s": "Projektowanie i produkcja dronów",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-i-produkcja-dronow-203"
+      "s": "Projektowanie i produkcja dronów"
     },
     {
       "lang": "pl",
       "key": "1_wwa_mechanika-i-budowa-maszyn",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/mechanika-i-budowa-maszyn-57",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanika i budowa maszyn",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/mechanika-i-budowa-maszyn-57"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_zrownowazony-rozwoj",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zrownowazony-rozwoj-22",
       "city": "wwa",
       "deg": 1,
       "k": "Ochrona środowiska",
-      "s": "Zrównoważony rozwój",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zrownowazony-rozwoj-22"
+      "s": "Zrównoważony rozwój"
     },
     {
       "lang": "pl",
       "key": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23",
       "city": "wwa",
       "deg": 1,
       "k": "Ochrona środowiska",
-      "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa-23"
+      "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa"
     },
     {
       "lang": "pl",
       "key": "1_wwa_efektywnosc-energetyczna",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/efektywnosc-energetyczna-24",
       "city": "wwa",
       "deg": 1,
       "k": "Ochrona środowiska",
-      "s": "Efektywność energetyczna",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/efektywnosc-energetyczna-24"
+      "s": "Efektywność energetyczna"
     },
     {
       "lang": "pl",
       "key": "1_wwa_ochrona-srodowiska",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ochrona-srodowiska-25",
       "city": "wwa",
       "deg": 1,
       "k": "Ochrona środowiska",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ochrona-srodowiska-25"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-produktu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-produktu-14",
       "city": "wwa",
       "deg": 1,
       "k": "Wzornictwo",
-      "s": "Projektowanie produktu",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-produktu-14"
+      "s": "Projektowanie produktu"
     },
     {
       "lang": "pl",
       "key": "1_wwa_projektowanie-interakcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-interakcji-13",
       "city": "wwa",
       "deg": 1,
       "k": "Wzornictwo",
-      "s": "Projektowanie interakcji",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-interakcji-13"
+      "s": "Projektowanie interakcji"
     },
     {
       "lang": "pl",
       "key": "1_wwa_wzornictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wzornictwo-15",
       "city": "wwa",
       "deg": 1,
       "k": "Wzornictwo",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wzornictwo-15"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Zarządzanie w lotnictwie cywilnym",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-w-lotnictwie-cywilnym-33"
+      "s": "Zarządzanie w lotnictwie cywilnym"
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Zarządzanie placówkami ochrony zdrowia",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-placowkami-ochrony-zdrowia-31"
+      "s": "Zarządzanie placówkami ochrony zdrowia"
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Zarządzanie logistyką i łańcuchem dostaw",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw-32"
+      "s": "Zarządzanie logistyką i łańcuchem dostaw"
     },
     {
       "lang": "pl",
       "key": "1_wwa_wellness-i-spa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wellness-i-spa-34",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Wellness i SPA",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/wellness-i-spa-34"
+      "s": "Wellness i SPA"
     },
     {
       "lang": "pl",
       "key": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Sztuczna inteligencja w zarządzaniu",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sztuczna-inteligencja-w-zarzadzaniu-42"
+      "s": "Sztuczna inteligencja w zarządzaniu"
     },
     {
       "lang": "pl",
       "key": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Organizacja eventów, koncertów i imprez sportowych",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych-46"
+      "s": "Organizacja eventów, koncertów i imprez sportowych"
     },
     {
       "lang": "pl",
       "key": "1_wwa_content-management-i-wizualizacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/content-management-i-wizualizacja-30",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Content management i wizualizacja",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/content-management-i-wizualizacja-30"
+      "s": "Content management i wizualizacja"
     },
     {
       "lang": "pl",
       "key": "1_wwa_biznes-miedzynarodowy",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/biznes-miedzynarodowy-47",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Biznes międzynarodowy",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/biznes-miedzynarodowy-47"
+      "s": "Biznes międzynarodowy"
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-48",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-48"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie-produkcja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-produkcja-43",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "Zarządzanie produkcją",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-produkcja-43"
+      "s": "Zarządzanie produkcją"
     },
     {
       "lang": "pl",
       "key": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "Logistyka przedsiębiorstwa produkcyjnego",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-przedsiebiorstwa-produkcyjnego-44"
+      "s": "Logistyka przedsiębiorstwa produkcyjnego"
     },
     {
       "lang": "pl",
       "key": "1_wwa_zarzadzanie-i-inzynieria-produkcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45",
       "city": "wwa",
       "deg": 1,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-i-inzynieria-produkcji-45"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_architektura-wroclaw",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-78",
       "city": "wro",
       "deg": 1,
       "k": "Architektura",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-78"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-77",
       "city": "wro",
       "deg": 1,
       "k": "Architektura Wnętrz",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/architektura-wnetrz-77"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_rachunkowosc-i-podatki",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/rachunkowosc-i-podatki-124",
       "city": "wro",
       "deg": 1,
       "k": "Finanse i rachunkowość",
-      "s": "Rachunkowość i podatki",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/rachunkowosc-i-podatki-124"
+      "s": "Rachunkowość i podatki"
     },
     {
       "lang": "pl",
       "key": "1_wro_fintech",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/fintech-125",
       "city": "wro",
       "deg": 1,
       "k": "Finanse i rachunkowość",
-      "s": "Fintech",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/fintech-125"
+      "s": "Fintech"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-finanse-i-rachunkowosc",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/finanse-i-rachunkowosc-72",
       "city": "wro",
       "deg": 1,
       "k": "Finanse i rachunkowość",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/finanse-i-rachunkowosc-72"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_programowanie-gier",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-gier-117",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Programowanie gier",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/programowanie-gier-117"
+      "s": "Programowanie gier"
     },
     {
       "lang": "pl",
       "key": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-sieci-i-cyberbezpieczenstwo-116",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Inżynieria sieci i cyberbezpieczeństwo",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-sieci-i-cyberbezpieczenstwo-116"
+      "s": "Inżynieria sieci i cyberbezpieczeństwo"
     },
     {
       "lang": "pl",
       "key": "1_wro_inzynieria-oprogramowania",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-oprogramowania-115",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Inżynieria oprogramowania",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/inzynieria-oprogramowania-115"
+      "s": "Inżynieria oprogramowania"
     },
     {
       "lang": "pl",
       "key": "1_wro_chmura-obliczeniowa-i-serwery",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/chmura-obliczeniowa-i-serwery-118",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "Chmura obliczeniowa i serwery",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/chmura-obliczeniowa-i-serwery-118"
+      "s": "Chmura obliczeniowa i serwery"
     },
     {
       "lang": "pl",
       "key": "1_wro_ai-i-automatyzacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ai-i-automatyzacja-119",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "AI i automatyzacja",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/ai-i-automatyzacja-119"
+      "s": "AI i automatyzacja"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-informatyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-75",
       "city": "wro",
       "deg": 1,
       "k": "Informatyka",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/informatyka-75"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_visual-storytelling-i-content-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/visual-storytelling-i-content-marketing-126",
       "city": "wro",
       "deg": 1,
       "k": "Komunikacja cyfrowa i media",
-      "s": "Visual Storytelling i Content Marketing",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/visual-storytelling-i-content-marketing-126"
+      "s": "Visual Storytelling i Content Marketing"
     },
     {
       "lang": "pl",
       "key": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki-127",
       "city": "wro",
       "deg": 1,
       "k": "Komunikacja cyfrowa i media",
-      "s": "Digital PR i zarządzanie komunikacją marki",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki-127"
+      "s": "Digital PR i zarządzanie komunikacją marki"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-komunikacja-cyfrowa-i-media",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/komunikacja-cyfrowa-i-media-74",
       "city": "wro",
       "deg": 1,
       "k": "Komunikacja cyfrowa i media",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/komunikacja-cyfrowa-i-media-74"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_projektowanie-procesow-logistycznych",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-procesow-logistycznych-120",
       "city": "wro",
       "deg": 1,
       "k": "Logistyka",
-      "s": "Projektowanie procesów logistycznych",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/projektowanie-procesow-logistycznych-120"
+      "s": "Projektowanie procesów logistycznych"
     },
     {
       "lang": "pl",
       "key": "1_wro_menedzer-logistyki-i-transportu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-logistyki-i-transportu-121",
       "city": "wro",
       "deg": 1,
       "k": "Logistyka",
-      "s": "Menedżer logistyki i transportu",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-logistyki-i-transportu-121"
+      "s": "Menedżer logistyki i transportu"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-logistyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-76",
       "city": "wro",
       "deg": 1,
       "k": "Logistyka",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/logistyka-76"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_menedzer-sprzedazy",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-sprzedazy-123",
       "city": "wro",
       "deg": 1,
       "k": "Sprzedaż i marketing",
-      "s": "Menedżer sprzedaży",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/menedzer-sprzedazy-123"
+      "s": "Menedżer sprzedaży"
     },
     {
       "lang": "pl",
       "key": "1_wro_digital-marketing-z-ai",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-marketing-z-ai-122",
       "city": "wro",
       "deg": 1,
       "k": "Sprzedaż i marketing",
-      "s": "Digital marketing z AI",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/digital-marketing-z-ai-122"
+      "s": "Digital marketing z AI"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-sprzedaz-i-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sprzedaz-i-marketing-71",
       "city": "wro",
       "deg": 1,
       "k": "Sprzedaż i marketing",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/sprzedaz-i-marketing-71"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_organizacja-eventow",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-164",
       "city": "wro",
       "deg": 1,
       "k": "Turystyka i rekreacja",
-      "s": "Organizacja eventów",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/organizacja-eventow-164"
+      "s": "Organizacja eventów"
     },
     {
       "lang": "pl",
       "key": "1_wro_miedzynarodowy-biznes-turystyczny",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/miedzynarodowy-biznes-turystyczny-163",
       "city": "wro",
       "deg": 1,
       "k": "Turystyka i rekreacja",
-      "s": "Międzynarodowy biznes turystyczny",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/miedzynarodowy-biznes-turystyczny-163"
+      "s": "Międzynarodowy biznes turystyczny"
     },
     {
       "lang": "pl",
       "key": "1_wro_hotelarstwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/hotelarstwo-162",
       "city": "wro",
       "deg": 1,
       "k": "Turystyka i rekreacja",
-      "s": "Hotelarstwo",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/hotelarstwo-162"
+      "s": "Hotelarstwo"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-turystyka-i-rekreacja",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/turystyka-i-rekreacja-73",
       "city": "wro",
       "deg": 1,
       "k": "Turystyka i rekreacja",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/turystyka-i-rekreacja-73"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "1_wro_zarzadzanie-zasobami-ludzkimi",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-zasobami-ludzkimi-112",
       "city": "wro",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Zarządzanie zasobami ludzkimi",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-zasobami-ludzkimi-112"
+      "s": "Zarządzanie zasobami ludzkimi"
     },
     {
       "lang": "pl",
       "key": "1_wro_zarzadzanie-przedsiebiorstwem",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-przedsiebiorstwem-111",
       "city": "wro",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "Zarządzanie przedsiębiorstwem",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-przedsiebiorstwem-111"
+      "s": "Zarządzanie przedsiębiorstwem"
     },
     {
       "lang": "pl",
       "key": "1_wro_wroclaw-zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-68",
       "city": "wro",
       "deg": 1,
       "k": "Zarządzanie",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-i-stopnia/zarzadzanie-68"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wwa_architecture",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/architecture-78",
       "city": "wwa",
       "deg": 1,
       "k": "Architecture",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/architecture-78"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wwa_railway-construction",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-kolejowe-51",
       "city": "wwa",
       "deg": 1,
       "k": "Civil Engineering",
-      "s": "Railway Construction",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-kolejowe-51"
+      "s": "Railway Construction"
     },
     {
       "lang": "en",
       "key": "1_wwa_energy-saving-technologies-in-civil-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/energooszczedne-technologie-w-budownictwie-58",
       "city": "wwa",
       "deg": 1,
       "k": "Civil Engineering",
-      "s": "Energy-Saving Technologies In Civil Engineering",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/energooszczedne-technologie-w-budownictwie-58"
+      "s": "Energy-Saving Technologies In Civil Engineering"
     },
     {
       "lang": "en",
       "key": "1_wwa_building-structures",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/konstrukcje-budowlane-59",
       "city": "wwa",
       "deg": 1,
       "k": "Civil Engineering",
-      "s": "Building Structures",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/konstrukcje-budowlane-59"
+      "s": "Building Structures"
     },
     {
       "lang": "en",
       "key": "1_wwa_civil-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-52",
       "city": "wwa",
       "deg": 1,
       "k": "Civil Engineering",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/budownictwo-52"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wwa_cybersecurity",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/cybersecurity-27",
       "city": "wwa",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "Cybersecurity",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/cybersecurity-27"
+      "s": "Cybersecurity"
     },
     {
       "lang": "en",
       "key": "1_wwa_artificial-intelligence",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-26",
       "city": "wwa",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "Artificial Intelligence",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-26"
+      "s": "Artificial Intelligence"
     },
     {
       "lang": "en",
       "key": "1_wwa_applications-programming",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/application-programming-28",
       "city": "wwa",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "Applications Programming",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/application-programming-28"
+      "s": "Applications Programming"
     },
     {
       "lang": "en",
       "key": "1_wwa_3d-animation",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/3d-animation-10",
       "city": "wwa",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "3D Animation",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/3d-animation-10"
+      "s": "3D Animation"
     },
     {
       "lang": "en",
       "key": "1_wwa_computer-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
       "city": "wwa",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wwa_wellness-and-spa",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/wellness-spa-34",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Wellness and SPA",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/wellness-spa-34"
+      "s": "Wellness and SPA"
     },
     {
       "lang": "en",
       "key": "1_wwa_sport-concert-and-civil-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/the-organization-of-events-concerts-and-sports-events-46",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Sport, Concert and Event Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/the-organization-of-events-concerts-and-sports-events-46"
+      "s": "Sport, Concert and Event Management"
     },
     {
       "lang": "en",
       "key": "1_wwa_logistics-and-supply-chain-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/logistics-and-supply-chain-management-32",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Logistics and Supply Chain Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/logistics-and-supply-chain-management-32"
+      "s": "Logistics and Supply Chain Management"
     },
     {
       "lang": "en",
       "key": "1_wwa_international-business",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/international-business-47",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "International Business",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/international-business-47"
+      "s": "International Business"
     },
     {
       "lang": "en",
       "key": "1_wwa_content-management-and-visualization",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/content-management-and-visualization-30",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Content Management and Visualization",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/content-management-and-visualization-30"
+      "s": "Content Management and Visualization"
     },
     {
       "lang": "en",
       "key": "1_wwa_civil-aviation-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-in-civil-aviation-33",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Civil Aviation Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-in-civil-aviation-33"
+      "s": "Civil Aviation Management"
     },
     {
       "lang": "en",
       "key": "1_wwa_artificial-intelligence-in-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-in-management-42",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "Artificial Intelligence in Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/artificial-intelligence-in-management-42"
+      "s": "Artificial Intelligence in Management"
     },
     {
       "lang": "en",
       "key": "1_wwa_management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
       "city": "wwa",
       "deg": 1,
       "k": "Management",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wwa_construction-and-maintenance-of-vehicles",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/construction-and-maintenance-of-vehicles-55",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanical Engineering",
-      "s": "Construction and Maintenance of Vehicles",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/construction-and-maintenance-of-vehicles-55"
+      "s": "Construction and Maintenance of Vehicles"
     },
     {
       "lang": "en",
       "key": "1_wwa_computer-aided-design-and-control",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/projektowanie-i-sterowanie-komputerowe-56",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanical Engineering",
-      "s": "Computer Aided Design and Control",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/projektowanie-i-sterowanie-komputerowe-56"
+      "s": "Computer Aided Design and Control"
     },
     {
       "lang": "en",
       "key": "1_wwa_mechanical-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/mechanika-i-budowa-maszyn-57",
       "city": "wwa",
       "deg": 1,
       "k": "Mechanical Engineering",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/mechanika-i-budowa-maszyn-57"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wro_inzynieria-oprogramowania",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-oprogramowania-115",
       "city": "wro",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "Software engineering",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-oprogramowania-115"
+      "s": "Software engineering"
     },
     {
       "lang": "en",
       "key": "1_wro_wroclaw-computer-networks-and-cybersecurity",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-sieci-i-cyberbezpieczenstwo-116",
       "city": "wro",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "Computer networks and cybersecurity",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/inzynieria-sieci-i-cyberbezpieczenstwo-116"
+      "s": "Computer networks and cybersecurity"
     },
     {
       "lang": "en",
       "key": "1_wro_wroclaw-computer-engineering",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75",
       "city": "wro",
       "deg": 1,
       "k": "Computer Engineering",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/computer-engineering-75"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "1_wro_wroclaw-digital-marketing-with-ai",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/digital-marketing-with-ai-106",
       "city": "wro",
       "deg": 1,
       "k": "Management",
-      "s": "Digital Marketing",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/digital-marketing-with-ai-106"
+      "s": "Digital Marketing"
     },
     {
       "lang": "en",
       "key": "1_wro_business-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/zarzadzanie-przedsiebiorstwem-111",
       "city": "wro",
       "deg": 1,
       "k": "Management",
-      "s": "Business management",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/zarzadzanie-przedsiebiorstwem-111"
+      "s": "Business management"
     },
     {
       "lang": "en",
       "key": "1_wro_wroclaw-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68",
       "city": "wro",
       "deg": 1,
       "k": "Management",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/bachelor/management-68"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-9",
       "city": "wwa",
       "deg": 2,
       "k": "Architektura",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-9"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_architektura-krajobrazu",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-krajobrazu-11",
       "city": "wwa",
       "deg": 2,
       "k": "Architektura Krajobrazu",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-krajobrazu-11"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_architektura-wnetrz",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-wnetrz-12",
       "city": "wwa",
       "deg": 2,
       "k": "Architektura Wnętrz",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/architektura-wnetrz-12"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_konstrukcje-budowlane",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/konstrukcje-budowlane-i-inzynierskie-54",
       "city": "wwa",
       "deg": 2,
       "k": "Budownictwo",
-      "s": "Konstrukcje budowlane i inżynierskie",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/konstrukcje-budowlane-i-inzynierskie-54"
+      "s": "Konstrukcje budowlane i inżynierskie"
     },
     {
       "lang": "pl",
       "key": "2_wwa_budownictwo-kolejowe",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-kolejowe-50",
       "city": "wwa",
       "deg": 2,
       "k": "Budownictwo",
-      "s": "Budownictwo kolejowe",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-kolejowe-50"
+      "s": "Budownictwo kolejowe"
     },
     {
       "lang": "pl",
       "key": "2_wwa_budownictwo",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-49",
       "city": "wwa",
       "deg": 2,
       "k": "Budownictwo",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/budownictwo-49"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/odnawialne-zrodla-energii-i-gospodarka-odpadowa-20",
       "city": "wwa",
       "deg": 2,
       "k": "Ochrona środowiska",
-      "s": "Odnawialne źródła energii i gospodarka odpadowa",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/odnawialne-zrodla-energii-i-gospodarka-odpadowa-20"
+      "s": "Odnawialne źródła energii i gospodarka odpadowa"
     },
     {
       "lang": "pl",
       "key": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19",
       "city": "wwa",
       "deg": 2,
       "k": "Ochrona środowiska",
-      "s": "Menedżer środowiska w przedsiębiorstwie",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/menedzer-srodowiska-w-przedsiebiorstwie-19"
+      "s": "Menedżer środowiska w przedsiębiorstwie"
     },
     {
       "lang": "pl",
       "key": "2_wwa_ochrona-srodowiska",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/ochrona-srodowiska-21",
       "city": "wwa",
       "deg": 2,
       "k": "Ochrona środowiska",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/ochrona-srodowiska-21"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie-zrownowazonym-rozwojem",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Zarządzanie zrównoważonym rozwojem",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-zrownowazonym-rozwojem-35"
+      "s": "Zarządzanie zrównoważonym rozwojem"
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie-projektami",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-projektami-37",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Zarządzanie projektami",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-projektami-37"
+      "s": "Zarządzanie projektami"
     },
     {
       "lang": "pl",
       "key": "2_wwa_marketing-i-pr",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/marketing-i-pr-36",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Marketing i PR",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/marketing-i-pr-36"
+      "s": "Marketing i PR"
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-40",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-40"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie-transportem-i-logistyka",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "Zarządzanie transportem i logistyka",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-transportem-i-logistyka-39"
+      "s": "Zarządzanie transportem i logistyka"
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "Zarządzanie przedsiębiorstwem produkcyjnym",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym-38"
+      "s": "Zarządzanie przedsiębiorstwem produkcyjnym"
     },
     {
       "lang": "pl",
       "key": "2_wwa_zarzadzanie-i-inzynieria-produkcji",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41",
       "city": "wwa",
       "deg": 2,
       "k": "Zarządzanie i inżynieria produkcji",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-i-inzynieria-produkcji-41"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
       "city": "wro",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Strategiczne zarządzanie kapitałem ludzkim",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim-114"
+      "s": "Strategiczne zarządzanie kapitałem ludzkim"
     },
     {
       "lang": "pl",
       "key": "2_wro_nowoczesny-e-marketing",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/nowoczesny-e-marketing-113",
       "city": "wro",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Nowoczesny e-marketing",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/nowoczesny-e-marketing-113"
+      "s": "Nowoczesny e-marketing"
     },
     {
       "lang": "pl",
       "key": "2_wro_wroclaw-zarzadzanie",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-80",
       "city": "wro",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-80"
+      "s": ""
     },
     {
       "lang": "pl",
       "key": "2_wro_zarzadzanie-w-biznesie-turystycznym",
+      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-w-biznesie-turystycznym-169",
       "city": "wro",
       "deg": 2,
       "k": "Zarządzanie",
-      "s": "Zarządzanie w biznesie turystycznym",
-      "url": "https://smartapply.akademiata.pl/pl/apply/studia-ii-stopnia/zarzadzanie-w-biznesie-turystycznym-169"
+      "s": "Zarządzanie w biznesie turystycznym"
     },
     {
       "lang": "en",
       "key": "2_wwa_architektura",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/architecture-9",
       "city": "wwa",
       "deg": 2,
       "k": "Architecture",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/architecture-9"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "2_wwa_sustainable-development-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/sustainable-development-management-35",
       "city": "wwa",
       "deg": 2,
       "k": "Management",
-      "s": "Sustainable Development Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/sustainable-development-management-35"
+      "s": "Sustainable Development Management"
     },
     {
       "lang": "en",
       "key": "2_wwa_project-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/project-management-37",
       "city": "wwa",
       "deg": 2,
       "k": "Management",
-      "s": "Project Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/project-management-37"
+      "s": "Project Management"
     },
     {
       "lang": "en",
       "key": "2_wwa_marketing-and-public-relations",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/marketing-pr-36",
       "city": "wwa",
       "deg": 2,
       "k": "Management",
-      "s": "Marketing and Public Relations",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/marketing-pr-36"
+      "s": "Marketing and Public Relations"
     },
     {
       "lang": "en",
       "key": "2_wwa_management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/management-40",
       "city": "wwa",
       "deg": 2,
       "k": "Management",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/management-40"
+      "s": ""
     },
     {
       "lang": "en",
       "key": "2_wro_wroclaw-strategic-human-capital-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/strategiczne-zarzadzanie-kapitalem-ludzkim-114",
       "city": "wro",
       "deg": 2,
       "k": "Management",
-      "s": "Strategic Human Capital Management",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/strategiczne-zarzadzanie-kapitalem-ludzkim-114"
+      "s": "Strategic Human Capital Management"
     },
     {
       "lang": "en",
       "key": "2_wro_wroclaw-brand-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/brand-manager-109",
       "city": "wro",
       "deg": 2,
       "k": "Management",
-      "s": "Brand Manager",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/brand-manager-109"
+      "s": "Brand Manager"
     },
     {
       "lang": "en",
       "key": "2_wro_wroclaw-management",
+      "url": "https://smartapply.akademiata.pl/en/apply/master/management-80",
       "city": "wro",
       "deg": 2,
       "k": "Management",
-      "s": "",
-      "url": "https://smartapply.akademiata.pl/en/apply/master/management-80"
+      "s": ""
     }
   ],
   "RAW": {
@@ -1221,36 +1223,39 @@
         "s": [
           {
             "k": "Architektura",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1520,
             "r12": 1300,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura/",
-            "ak": "1_wwa_architektura"
+            "ps": "architektura",
+            "ak": "1_wwa_architektura",
+            "lk": ""
           },
           {
             "k": "Architektura Wnętrz",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1390,
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/",
-            "ak": "1_wwa_architektura-wnetrz"
+            "ps": "architektura-wnetrz",
+            "ak": "1_wwa_architektura-wnetrz",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1290,
             "r12": 1090,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budownictwo/",
-            "ak": "1_wwa_budownictwo"
+            "ps": "budownictwo",
+            "ak": "1_wwa_budownictwo",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -1260,8 +1265,9 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/",
-            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie"
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -1271,8 +1277,9 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/",
-            "ak": "1_wwa_konstrukcje-budowlane"
+            "ps": "konstrukcje-budowlane",
+            "ak": "1_wwa_konstrukcje-budowlane",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -1282,8 +1289,9 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/",
-            "ak": "1_wwa_budownictwo-kolejowe"
+            "ps": "budownictwo-kolejowe",
+            "ak": "1_wwa_budownictwo-kolejowe",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -1293,19 +1301,21 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej/",
-            "ak": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej"
+            "ps": "inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej",
+            "ak": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej",
+            "lk": ""
           },
           {
             "k": "Wzornictwo",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1310,
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wzornictwo/",
-            "ak": "1_wwa_wzornictwo"
+            "ps": "wzornictwo",
+            "ak": "1_wwa_wzornictwo",
+            "lk": ""
           },
           {
             "k": "Wzornictwo",
@@ -1315,8 +1325,9 @@
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/",
-            "ak": "1_wwa_projektowanie-produktu"
+            "ps": "projektowanie-produktu",
+            "ak": "1_wwa_projektowanie-produktu",
+            "lk": ""
           },
           {
             "k": "Wzornictwo",
@@ -1326,19 +1337,21 @@
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-interakcji/",
-            "ak": "1_wwa_projektowanie-interakcji"
+            "ps": "projektowanie-interakcji",
+            "ak": "1_wwa_projektowanie-interakcji",
+            "lk": ""
           },
           {
             "k": "Informatyka",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1000,
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/informatyka/",
-            "ak": "1_wwa_informatyka"
+            "ps": "informatyka",
+            "ak": "1_wwa_informatyka",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -1348,8 +1361,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/",
-            "ak": "1_wwa_cyberbezpieczenstwo"
+            "ps": "cyberbezpieczenstwo",
+            "ak": "1_wwa_cyberbezpieczenstwo",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -1359,8 +1373,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/",
-            "ak": "1_wwa_programowanie-aplikacji"
+            "ps": "programowanie-aplikacji",
+            "ak": "1_wwa_programowanie-aplikacji",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -1370,8 +1385,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/",
-            "ak": "1_wwa_sztuczna-inteligencja"
+            "ps": "sztuczna-inteligencja",
+            "ak": "1_wwa_sztuczna-inteligencja",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -1381,19 +1397,21 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/",
-            "ak": "1_wwa_animacja-3d"
+            "ps": "animacja-3d",
+            "ak": "1_wwa_animacja-3d",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1160,
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie/",
-            "ak": "1_wwa_zarzadzanie"
+            "ps": "zarzadzanie",
+            "ak": "1_wwa_zarzadzanie",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1403,8 +1421,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/",
-            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu"
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1414,8 +1433,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/",
-            "ak": "1_wwa_biznes-miedzynarodowy"
+            "ps": "biznes-miedzynarodowy",
+            "ak": "1_wwa_biznes-miedzynarodowy",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1425,8 +1445,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/",
-            "ak": "1_wwa_content-management-i-wizualizacja"
+            "ps": "content-management-i-wizualizacja",
+            "ak": "1_wwa_content-management-i-wizualizacja",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1436,8 +1457,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/",
-            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw"
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1447,8 +1469,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/",
-            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych"
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1458,8 +1481,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/",
-            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym"
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1469,8 +1493,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/",
-            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia"
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -1480,19 +1505,21 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/",
-            "ak": "1_wwa_wellness-i-spa"
+            "ps": "wellness-i-spa",
+            "ak": "1_wwa_wellness-i-spa",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1000,
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/mechanika-i-budowa-maszyn/",
-            "ak": "1_wwa_mechanika-i-budowa-maszyn"
+            "ps": "mechanika-i-budowa-maszyn",
+            "ak": "1_wwa_mechanika-i-budowa-maszyn",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -1502,8 +1529,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/",
-            "ak": "1_wwa_budowa-i-serwisowanie-samochodow"
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "1_wwa_budowa-i-serwisowanie-samochodow",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -1513,8 +1541,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/",
-            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe"
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -1524,8 +1553,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-urzadzen-poligraficznych/",
-            "ak": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych"
+            "ps": "budowa-i-serwisowanie-urzadzen-poligraficznych",
+            "ak": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -1535,19 +1565,21 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-produkcja-dronow/",
-            "ak": "1_wwa_projektowanie-i-produkcja-dronow"
+            "ps": "projektowanie-i-produkcja-dronow",
+            "ak": "1_wwa_projektowanie-i-produkcja-dronow",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1000,
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/ochrona-srodowiska/",
-            "ak": "1_wwa_ochrona-srodowiska"
+            "ps": "ochrona-srodowiska",
+            "ak": "1_wwa_ochrona-srodowiska",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -1557,8 +1589,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/",
-            "ak": "1_wwa_efektywnosc-energetyczna"
+            "ps": "efektywnosc-energetyczna",
+            "ak": "1_wwa_efektywnosc-energetyczna",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -1568,8 +1601,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/",
-            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa"
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -1579,19 +1613,21 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/",
-            "ak": "1_wwa_zrownowazony-rozwoj"
+            "ps": "zrownowazony-rozwoj",
+            "ak": "1_wwa_zrownowazony-rozwoj",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1000,
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-i-inzynieria-produkcji/",
-            "ak": "1_wwa_zarzadzanie-i-inzynieria-produkcji"
+            "ps": "zarzadzanie-i-inzynieria-produkcji",
+            "ak": "1_wwa_zarzadzanie-i-inzynieria-produkcji",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -1601,8 +1637,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/",
-            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego"
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -1612,538 +1649,35 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/",
-            "ak": "1_wwa_zarzadzanie-produkcja"
+            "ps": "zarzadzanie-produkcja",
+            "ak": "1_wwa_zarzadzanie-produkcja",
+            "lk": ""
           },
           {
             "k": "Architektura",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1520,
             "r12": 1300,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/architektura/",
-            "ak": "2_wwa_architektura"
-          },
-          {
-            "k": "Architektura Krajobrazu",
-            "s": null,
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-krajobrazu/",
-            "ak": "1_wwa_architektura-krajobrazu"
-          },
-          {
-            "k": "Architektura Krajobrazu",
-            "s": "Projektowanie krajobrazu o funkcji rekreacyjnej",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej/",
-            "ak": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej"
-          },
-          {
-            "k": "Architektura Krajobrazu",
-            "s": "Projektowanie krajobrazu wielofunkcyjnego",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-wielofunkcyjnego/",
-            "ak": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego"
-          },
-          {
-            "k": "Architektura Wnętrz",
-            "s": null,
-            "deg": 1,
-            "r10": 1390,
-            "r12": 1190,
-            "rekr": 150,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/",
-            "ak": "1_wwa_architektura-wnetrz"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Energooszczędne technologie w budownictwie",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/",
-            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Konstrukcje budowlane",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/",
-            "ak": "1_wwa_konstrukcje-budowlane"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Budownictwo kolejowe",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/",
-            "ak": "1_wwa_budownictwo-kolejowe"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Inżynieria i bezpieczeństwo obiektów infrastruktury krytycznej",
-            "deg": 1,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej/",
-            "ak": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej"
-          },
-          {
-            "k": "Wzornictwo",
-            "s": "Projektowanie produktu",
-            "deg": 1,
-            "r10": 1390,
-            "r12": 1190,
-            "rekr": 150,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/",
-            "ak": "1_wwa_projektowanie-produktu"
-          },
-          {
-            "k": "Wzornictwo",
-            "s": "Projektowanie interakcji",
-            "deg": 1,
-            "r10": 1390,
-            "r12": 1190,
-            "rekr": 150,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-interakcji/",
-            "ak": "1_wwa_projektowanie-interakcji"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Cyberbezpieczeństwo",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/",
-            "ak": "1_wwa_cyberbezpieczenstwo"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Programowanie aplikacji",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/",
-            "ak": "1_wwa_programowanie-aplikacji"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Sztuczna inteligencja",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/",
-            "ak": "1_wwa_sztuczna-inteligencja"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Animacja 3D",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/",
-            "ak": "1_wwa_animacja-3d"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Sztuczna inteligencja w zarządzaniu",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/",
-            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Biznes międzynarodowy",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/",
-            "ak": "1_wwa_biznes-miedzynarodowy"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Content management i wizualizacja",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/",
-            "ak": "1_wwa_content-management-i-wizualizacja"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie logistyką i łańcuchem dostaw",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/",
-            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Organizacja eventów, koncertów i imprez sportowych",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/",
-            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie w lotnictwie cywilnym",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/",
-            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie placówkami ochrony zdrowia",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/",
-            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Wellness i SPA",
-            "deg": 1,
-            "r10": 1120,
-            "r12": 950,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/",
-            "ak": "1_wwa_wellness-i-spa"
-          },
-          {
-            "k": "Mechanika i budowa maszyn",
-            "s": "Budowa i serwisowanie samochodów",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/",
-            "ak": "1_wwa_budowa-i-serwisowanie-samochodow"
-          },
-          {
-            "k": "Mechanika i budowa maszyn",
-            "s": "Projektowanie i sterowanie komputerowe",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/",
-            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe"
-          },
-          {
-            "k": "Mechanika i budowa maszyn",
-            "s": "Budowa i serwisowanie urządzeń poligraficznych",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-urzadzen-poligraficznych/",
-            "ak": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych"
-          },
-          {
-            "k": "Mechanika i budowa maszyn",
-            "s": "Projektowanie i produkcja dronów",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-produkcja-dronow/",
-            "ak": "1_wwa_projektowanie-i-produkcja-dronow"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": "Efektywność energetyczna",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/",
-            "ak": "1_wwa_efektywnosc-energetyczna"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": "Odnawialne źródła energii, gospodarka wodna i odpadowa",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/",
-            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": "Zrównoważony rozwój",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/",
-            "ak": "1_wwa_zrownowazony-rozwoj"
-          },
-          {
-            "k": "Zarządzanie i inżynieria produkcji",
-            "s": "Logistyka przedsiębiorstwa produkcyjnego",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/",
-            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego"
-          },
-          {
-            "k": "Zarządzanie i inżynieria produkcji",
-            "s": "Zarządzanie produkcją",
-            "deg": 1,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/",
-            "ak": "1_wwa_zarzadzanie-produkcja"
-          },
-          {
-            "k": "Architektura Krajobrazu",
-            "s": null,
-            "deg": 2,
-            "r10": 1000,
-            "r12": 890,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/architektura-krajobrazu/",
-            "ak": "2_wwa_architektura-krajobrazu"
-          },
-          {
-            "k": "Architektura Wnętrz",
-            "s": null,
-            "deg": 2,
-            "r10": 1510,
-            "r12": 1290,
-            "rekr": 150,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/architektura-wnetrz/",
-            "ak": "2_wwa_architektura-wnetrz"
-          },
-          {
-            "k": "Budownictwo",
-            "s": null,
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/budownictwo/",
-            "ak": "2_wwa_budownictwo"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Budownictwo kolejowe",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/budownictwo-kolejowe/",
-            "ak": "2_wwa_budownictwo-kolejowe"
-          },
-          {
-            "k": "Budownictwo",
-            "s": "Konstrukcje budowlane i inżynierskie",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/konstrukcje-budowlane/",
-            "ak": "2_wwa_konstrukcje-budowlane"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": null,
-            "deg": 2,
-            "r10": 1270,
-            "r12": 1090,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/",
-            "ak": "2_wwa_zarzadzanie"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie zrównoważonym rozwojem",
-            "deg": 2,
-            "r10": 1270,
-            "r12": 1090,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-zrownowazonym-rozwojem/",
-            "ak": "2_wwa_zarzadzanie-zrownowazonym-rozwojem"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Marketing i PR",
-            "deg": 2,
-            "r10": 1270,
-            "r12": 1090,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/marketing-i-pr/",
-            "ak": "2_wwa_marketing-i-pr"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie projektami",
-            "deg": 2,
-            "r10": 1270,
-            "r12": 1090,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-projektami/",
-            "ak": "2_wwa_zarzadzanie-projektami"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": null,
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/ochrona-srodowiska/",
-            "ak": "2_wwa_ochrona-srodowiska"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": "Menedżer środowiska w przedsiębiorstwie",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/menedzer-srodowiska-w-przedsiebiorstwie/",
-            "ak": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa"
-          },
-          {
-            "k": "Ochrona środowiska",
-            "s": "Odnawialne źródła energii i gospodarka odpadowa",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/",
-            "ak": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie"
-          },
-          {
-            "k": "Zarządzanie i inżynieria produkcji",
-            "s": null,
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-i-inzynieria-produkcji/",
-            "ak": "2_wwa_zarzadzanie-i-inzynieria-produkcji"
-          },
-          {
-            "k": "Zarządzanie i inżynieria produkcji",
-            "s": "Zarządzanie przedsiębiorstwem produkcyjnym",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym/",
-            "ak": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym"
-          },
-          {
-            "k": "Zarządzanie i inżynieria produkcji",
-            "s": "Zarządzanie transportem i logistyka",
-            "deg": 2,
-            "r10": 1160,
-            "r12": 990,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-transportem-i-logistyka/",
-            "ak": "2_wwa_zarzadzanie-transportem-i-logistyka"
+            "ps": "architektura",
+            "ak": "2_wwa_architektura",
+            "lk": ""
           }
         ],
         "n": [
           {
             "k": "Architektura Krajobrazu",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1160,
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-krajobrazu/",
-            "ak": "1_wwa_architektura-krajobrazu"
+            "ps": "architektura-krajobrazu",
+            "ak": "1_wwa_architektura-krajobrazu",
+            "lk": ""
           },
           {
             "k": "Architektura Krajobrazu",
@@ -2153,8 +1687,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-o-funkcji-rekreacyjnej/",
-            "ak": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej"
+            "ps": "projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+            "ak": "1_wwa_projektowanie-krajobrazu-o-funkcji-rekreacyjnej",
+            "lk": ""
           },
           {
             "k": "Architektura Krajobrazu",
@@ -2164,19 +1699,21 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-krajobrazu-wielofunkcyjnego/",
-            "ak": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego"
+            "ps": "projektowanie-krajobrazu-wielofunkcyjnego",
+            "ak": "1_wwa_projektowanie-krajobrazu-wielofunkcyjnego",
+            "lk": ""
           },
           {
             "k": "Architektura Wnętrz",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1390,
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-wnetrz/",
-            "ak": "1_wwa_architektura-wnetrz"
+            "ps": "architektura-wnetrz",
+            "ak": "1_wwa_architektura-wnetrz",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2186,8 +1723,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/energooszczedne-technologie-w-budownictwie/",
-            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie"
+            "ps": "energooszczedne-technologie-w-budownictwie",
+            "ak": "1_wwa_energooszczedne-technologie-w-budownictwie",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2197,8 +1735,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/konstrukcje-budowlane/",
-            "ak": "1_wwa_konstrukcje-budowlane"
+            "ps": "konstrukcje-budowlane",
+            "ak": "1_wwa_konstrukcje-budowlane",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2208,8 +1747,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budownictwo-kolejowe/",
-            "ak": "1_wwa_budownictwo-kolejowe"
+            "ps": "budownictwo-kolejowe",
+            "ak": "1_wwa_budownictwo-kolejowe",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2219,8 +1759,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej/",
-            "ak": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej"
+            "ps": "inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej",
+            "ak": "1_wwa_inzynieria-i-bezpieczenstwo-obiektow-infrastruktury-krytycznej",
+            "lk": ""
           },
           {
             "k": "Wzornictwo",
@@ -2230,8 +1771,9 @@
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-produktu/",
-            "ak": "1_wwa_projektowanie-produktu"
+            "ps": "projektowanie-produktu",
+            "ak": "1_wwa_projektowanie-produktu",
+            "lk": ""
           },
           {
             "k": "Wzornictwo",
@@ -2241,8 +1783,9 @@
             "r12": 1190,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-interakcji/",
-            "ak": "1_wwa_projektowanie-interakcji"
+            "ps": "projektowanie-interakcji",
+            "ak": "1_wwa_projektowanie-interakcji",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2252,8 +1795,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/cyberbezpieczenstwo/",
-            "ak": "1_wwa_cyberbezpieczenstwo"
+            "ps": "cyberbezpieczenstwo",
+            "ak": "1_wwa_cyberbezpieczenstwo",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2263,8 +1807,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/programowanie-aplikacji/",
-            "ak": "1_wwa_programowanie-aplikacji"
+            "ps": "programowanie-aplikacji",
+            "ak": "1_wwa_programowanie-aplikacji",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2274,8 +1819,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja/",
-            "ak": "1_wwa_sztuczna-inteligencja"
+            "ps": "sztuczna-inteligencja",
+            "ak": "1_wwa_sztuczna-inteligencja",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2285,8 +1831,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/animacja-3d/",
-            "ak": "1_wwa_animacja-3d"
+            "ps": "animacja-3d",
+            "ak": "1_wwa_animacja-3d",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2296,8 +1843,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sztuczna-inteligencja-w-zarzadzaniu/",
-            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu"
+            "ps": "sztuczna-inteligencja-w-zarzadzaniu",
+            "ak": "1_wwa_sztuczna-inteligencja-w-zarzadzaniu",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2307,8 +1855,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/biznes-miedzynarodowy/",
-            "ak": "1_wwa_biznes-miedzynarodowy"
+            "ps": "biznes-miedzynarodowy",
+            "ak": "1_wwa_biznes-miedzynarodowy",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2318,8 +1867,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/content-management-i-wizualizacja/",
-            "ak": "1_wwa_content-management-i-wizualizacja"
+            "ps": "content-management-i-wizualizacja",
+            "ak": "1_wwa_content-management-i-wizualizacja",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2329,8 +1879,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-logistyka-i-lancuchem-dostaw/",
-            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw"
+            "ps": "zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "ak": "1_wwa_zarzadzanie-logistyka-i-lancuchem-dostaw",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2340,8 +1891,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow-koncertow-i-imprez-sportowych/",
-            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych"
+            "ps": "organizacja-eventow-koncertow-i-imprez-sportowych",
+            "ak": "1_wwa_organizacja-eventow-koncertow-i-imprez-sportowych",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2351,8 +1903,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-w-lotnictwie-cywilnym/",
-            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym"
+            "ps": "zarzadzanie-w-lotnictwie-cywilnym",
+            "ak": "1_wwa_zarzadzanie-w-lotnictwie-cywilnym",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2362,8 +1915,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-placowkami-ochrony-zdrowia/",
-            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia"
+            "ps": "zarzadzanie-placowkami-ochrony-zdrowia",
+            "ak": "1_wwa_zarzadzanie-placowkami-ochrony-zdrowia",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2373,8 +1927,9 @@
             "r12": 950,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wellness-i-spa/",
-            "ak": "1_wwa_wellness-i-spa"
+            "ps": "wellness-i-spa",
+            "ak": "1_wwa_wellness-i-spa",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -2384,8 +1939,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-samochodow/",
-            "ak": "1_wwa_budowa-i-serwisowanie-samochodow"
+            "ps": "budowa-i-serwisowanie-samochodow",
+            "ak": "1_wwa_budowa-i-serwisowanie-samochodow",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -2395,8 +1951,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-sterowanie-komputerowe/",
-            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe"
+            "ps": "projektowanie-i-sterowanie-komputerowe",
+            "ak": "1_wwa_projektowanie-i-sterowanie-komputerowe",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -2406,8 +1963,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/budowa-i-serwisowanie-urzadzen-poligraficznych/",
-            "ak": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych"
+            "ps": "budowa-i-serwisowanie-urzadzen-poligraficznych",
+            "ak": "1_wwa_budowa-i-serwisowanie-urzadzen-poligraficznych",
+            "lk": ""
           },
           {
             "k": "Mechanika i budowa maszyn",
@@ -2417,8 +1975,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-i-produkcja-dronow/",
-            "ak": "1_wwa_projektowanie-i-produkcja-dronow"
+            "ps": "projektowanie-i-produkcja-dronow",
+            "ak": "1_wwa_projektowanie-i-produkcja-dronow",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -2428,8 +1987,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/efektywnosc-energetyczna/",
-            "ak": "1_wwa_efektywnosc-energetyczna"
+            "ps": "efektywnosc-energetyczna",
+            "ak": "1_wwa_efektywnosc-energetyczna",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -2439,8 +1999,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/",
-            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa"
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "1_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -2450,8 +2011,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zrownowazony-rozwoj/",
-            "ak": "1_wwa_zrownowazony-rozwoj"
+            "ps": "zrownowazony-rozwoj",
+            "ak": "1_wwa_zrownowazony-rozwoj",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -2461,8 +2023,9 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/logistyka-przedsiebiorstwa-produkcyjnego/",
-            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego"
+            "ps": "logistyka-przedsiebiorstwa-produkcyjnego",
+            "ak": "1_wwa_logistyka-przedsiebiorstwa-produkcyjnego",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -2472,41 +2035,45 @@
             "r12": 890,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-produkcja/",
-            "ak": "1_wwa_zarzadzanie-produkcja"
+            "ps": "zarzadzanie-produkcja",
+            "ak": "1_wwa_zarzadzanie-produkcja",
+            "lk": ""
           },
           {
             "k": "Architektura Krajobrazu",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1000,
             "r12": 890,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/architektura-krajobrazu/",
-            "ak": "2_wwa_architektura-krajobrazu"
+            "ps": "architektura-krajobrazu",
+            "ak": "2_wwa_architektura-krajobrazu",
+            "lk": ""
           },
           {
             "k": "Architektura Wnętrz",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1510,
             "r12": 1290,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/architektura-wnetrz/",
-            "ak": "2_wwa_architektura-wnetrz"
+            "ps": "architektura-wnetrz",
+            "ak": "2_wwa_architektura-wnetrz",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1160,
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/budownictwo/",
-            "ak": "2_wwa_budownictwo"
+            "ps": "budownictwo",
+            "ak": "2_wwa_budownictwo",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2516,8 +2083,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/budownictwo-kolejowe/",
-            "ak": "2_wwa_budownictwo-kolejowe"
+            "ps": "budownictwo-kolejowe",
+            "ak": "2_wwa_budownictwo-kolejowe",
+            "lk": ""
           },
           {
             "k": "Budownictwo",
@@ -2527,19 +2095,21 @@
             "r12": 990,
             "rekr": 85,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/konstrukcje-budowlane/",
-            "ak": "2_wwa_konstrukcje-budowlane"
+            "ps": "konstrukcje-budowlane",
+            "ak": "2_wwa_konstrukcje-budowlane",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1270,
             "r12": 1090,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie/",
-            "ak": "2_wwa_zarzadzanie"
+            "ps": "zarzadzanie",
+            "ak": "2_wwa_zarzadzanie",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2549,8 +2119,9 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-zrownowazonym-rozwojem/",
-            "ak": "2_wwa_zarzadzanie-zrownowazonym-rozwojem"
+            "ps": "zarzadzanie-zrownowazonym-rozwojem",
+            "ak": "2_wwa_zarzadzanie-zrownowazonym-rozwojem",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2560,8 +2131,9 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/marketing-i-pr/",
-            "ak": "2_wwa_marketing-i-pr"
+            "ps": "marketing-i-pr",
+            "ak": "2_wwa_marketing-i-pr",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -2571,19 +2143,21 @@
             "r12": 1090,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-projektami/",
-            "ak": "2_wwa_zarzadzanie-projektami"
+            "ps": "zarzadzanie-projektami",
+            "ak": "2_wwa_zarzadzanie-projektami",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1160,
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/ochrona-srodowiska/",
-            "ak": "2_wwa_ochrona-srodowiska"
+            "ps": "ochrona-srodowiska",
+            "ak": "2_wwa_ochrona-srodowiska",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -2593,8 +2167,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/menedzer-srodowiska-w-przedsiebiorstwie/",
-            "ak": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa"
+            "ps": "menedzer-srodowiska-w-przedsiebiorstwie",
+            "ak": "2_wwa_odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "lk": ""
           },
           {
             "k": "Ochrona środowiska",
@@ -2604,19 +2179,21 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa/",
-            "ak": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie"
+            "ps": "odnawialne-zrodla-energii-gospodarka-wodna-i-odpadowa",
+            "ak": "2_wwa_menedzer-srodowiska-w-przedsiebiorstwie",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
-            "s": null,
+            "s": "—",
             "deg": 2,
             "r10": 1160,
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-i-inzynieria-produkcji/",
-            "ak": "2_wwa_zarzadzanie-i-inzynieria-produkcji"
+            "ps": "zarzadzanie-i-inzynieria-produkcji",
+            "ak": "2_wwa_zarzadzanie-i-inzynieria-produkcji",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -2626,8 +2203,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-przedsiebiorstwem-produkcyjnym/",
-            "ak": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym"
+            "ps": "zarzadzanie-przedsiebiorstwem-produkcyjnym",
+            "ak": "2_wwa_zarzadzanie-przedsiebiorstwem-produkcyjnym",
+            "lk": ""
           },
           {
             "k": "Zarządzanie i inżynieria produkcji",
@@ -2637,8 +2215,9 @@
             "r12": 990,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-transportem-i-logistyka/",
-            "ak": "2_wwa_zarzadzanie-transportem-i-logistyka"
+            "ps": "zarzadzanie-transportem-i-logistyka",
+            "ak": "2_wwa_zarzadzanie-transportem-i-logistyka",
+            "lk": ""
           }
         ]
       },
@@ -2646,36 +2225,39 @@
         "s": [
           {
             "k": "Architektura",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 1030,
             "r12": 875,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/architektura-wroclaw/",
-            "ak": "1_wro_architektura-wroclaw"
+            "ps": "architektura-wroclaw",
+            "ak": "1_wro_architektura-wroclaw",
+            "lk": ""
           },
           {
             "k": "Architektura Wnętrz",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 840,
             "r12": 710,
             "rekr": 150,
             "wps": 690,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-architektura-wnetrz/",
-            "ak": "1_wro_wroclaw-architektura-wnetrz"
+            "ps": "wroclaw-architektura-wnetrz",
+            "ak": "1_wro_wroclaw-architektura-wnetrz",
+            "lk": ""
           },
           {
             "k": "Informatyka",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 840,
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-informatyka/",
-            "ak": "1_wro_wroclaw-informatyka"
+            "ps": "wroclaw-informatyka",
+            "ak": "1_wro_wroclaw-informatyka",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2685,8 +2267,9 @@
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/inzynieria-oprogramowania/",
-            "ak": "1_wro_inzynieria-oprogramowania"
+            "ps": "inzynieria-oprogramowania",
+            "ak": "1_wro_inzynieria-oprogramowania",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -2696,283 +2279,21 @@
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/inzynieria-sieci-i-cyberbezpieczenstwo/",
-            "ak": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo"
+            "ps": "inzynieria-sieci-i-cyberbezpieczenstwo",
+            "ak": "1_wro_inzynieria-sieci-i-cyberbezpieczenstwo",
+            "lk": ""
           },
           {
             "k": "Finanse i rachunkowość",
-            "s": null,
+            "s": "—",
             "deg": 1,
             "r10": 680,
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-finanse-i-rachunkowosc/",
-            "ak": "1_wro_wroclaw-finanse-i-rachunkowosc"
-          },
-          {
-            "k": "Finanse i rachunkowość",
-            "s": "Rachunkowość i podatki",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/rachunkowosc-i-podatki/",
-            "ak": "1_wro_rachunkowosc-i-podatki"
-          },
-          {
-            "k": "Finanse i rachunkowość",
-            "s": "Fintech",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/fintech/",
-            "ak": "1_wro_fintech"
-          },
-          {
-            "k": "Logistyka",
-            "s": null,
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-logistyka/",
-            "ak": "1_wro_wroclaw-logistyka"
-          },
-          {
-            "k": "Logistyka",
-            "s": "Projektowanie procesów logistycznych",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-procesow-logistycznych/",
-            "ak": "1_wro_projektowanie-procesow-logistycznych"
-          },
-          {
-            "k": "Logistyka",
-            "s": "Menedżer logistyki i transportu",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/menedzer-logistyki-i-transportu/",
-            "ak": "1_wro_menedzer-logistyki-i-transportu"
-          },
-          {
-            "k": "Sprzedaż i marketing",
-            "s": null,
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/",
-            "ak": "1_wro_wroclaw-sprzedaz-i-marketing"
-          },
-          {
-            "k": "Sprzedaż i marketing",
-            "s": "Digital marketing z AI",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/",
-            "ak": "1_wro_digital-marketing-z-ai"
-          },
-          {
-            "k": "Sprzedaż i marketing",
-            "s": "Menedżer sprzedaży",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/sprzedaz-i-marketing/",
-            "ak": "1_wro_menedzer-sprzedazy"
-          },
-          {
-            "k": "Komunikacja cyfrowa i media",
-            "s": null,
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-komunikacja-cyfrowa-i-media/",
-            "ak": "1_wro_wroclaw-komunikacja-cyfrowa-i-media"
-          },
-          {
-            "k": "Komunikacja cyfrowa i media",
-            "s": "Visual Storytelling i Content Marketing",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/visual-storytelling-i-content-marketing/",
-            "ak": "1_wro_visual-storytelling-i-content-marketing"
-          },
-          {
-            "k": "Komunikacja cyfrowa i media",
-            "s": "Digital PR i zarządzanie komunikacją marki",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki/",
-            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
-          },
-          {
-            "k": "Turystyka i rekreacja",
-            "s": null,
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-turystyka-i-rekreacja/",
-            "ak": "1_wro_wroclaw-turystyka-i-rekreacja"
-          },
-          {
-            "k": "Turystyka i rekreacja",
-            "s": "Hotelarstwo",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/hotelarstwo/",
-            "ak": "1_wro_hotelarstwo"
-          },
-          {
-            "k": "Turystyka i rekreacja",
-            "s": "Międzynarodowy biznes turystyczny",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/miedzynarodowy-biznes-turystyczny/",
-            "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
-          },
-          {
-            "k": "Turystyka i rekreacja",
-            "s": "Organizacja eventów",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow/",
-            "ak": "1_wro_organizacja-eventow"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": null,
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/wroclaw-zarzadzanie/",
-            "ak": "1_wro_wroclaw-zarzadzanie"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie przedsiębiorstwem",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-przedsiebiorstwem/",
-            "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Zarządzanie zasobami ludzkimi",
-            "deg": 1,
-            "r10": 680,
-            "r12": 575,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-zasobami-ludzkimi/",
-            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": null,
-            "deg": 2,
-            "r10": 735,
-            "r12": 625,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/wroclaw-zarzadzanie/",
-            "ak": "2_wro_wroclaw-zarzadzanie"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Nowoczesny e-marketing",
-            "deg": 2,
-            "r10": 735,
-            "r12": 625,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/nowoczesny-e-marketing/",
-            "ak": "2_wro_nowoczesny-e-marketing"
-          },
-          {
-            "k": "Zarządzanie",
-            "s": "Strategiczne zarządzanie kapitałem ludzkim",
-            "deg": 2,
-            "r10": 735,
-            "r12": 625,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim/",
-            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Programowanie gier",
-            "deg": 1,
-            "r10": 840,
-            "r12": 710,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/programowanie-gier/",
-            "ak": "1_wro_programowanie-gier"
-          },
-          {
-            "k": "Informatyka",
-            "s": "Chmura obliczeniowa i serwery",
-            "deg": 1,
-            "r10": 840,
-            "r12": 710,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/chmura-obliczeniowa-i-serwery/",
-            "ak": "1_wro_chmura-obliczeniowa-i-serwery"
-          },
-          {
-            "k": "Informatyka",
-            "s": "AI i automatyzacja",
-            "deg": 1,
-            "r10": 840,
-            "r12": 710,
-            "rekr": 85,
-            "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/ai-i-automatyzacja/",
-            "ak": "1_wro_ai-i-automatyzacja"
+            "ps": "wroclaw-finanse-i-rachunkowosc",
+            "ak": "1_wro_wroclaw-finanse-i-rachunkowosc",
+            "lk": ""
           },
           {
             "k": "Finanse i rachunkowość",
@@ -2982,8 +2303,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/rachunkowosc-i-podatki/",
-            "ak": "1_wro_rachunkowosc-i-podatki"
+            "ps": "rachunkowosc-i-podatki",
+            "ak": "1_wro_rachunkowosc-i-podatki",
+            "lk": ""
           },
           {
             "k": "Finanse i rachunkowość",
@@ -2993,8 +2315,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/fintech/",
-            "ak": "1_wro_fintech"
+            "ps": "fintech",
+            "ak": "1_wro_fintech",
+            "lk": ""
+          },
+          {
+            "k": "Logistyka",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-logistyka",
+            "ak": "1_wro_wroclaw-logistyka",
+            "lk": ""
           },
           {
             "k": "Logistyka",
@@ -3004,8 +2339,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-procesow-logistycznych/",
-            "ak": "1_wro_projektowanie-procesow-logistycznych"
+            "ps": "projektowanie-procesow-logistycznych",
+            "ak": "1_wro_projektowanie-procesow-logistycznych",
+            "lk": ""
           },
           {
             "k": "Logistyka",
@@ -3015,8 +2351,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/menedzer-logistyki-i-transportu/",
-            "ak": "1_wro_menedzer-logistyki-i-transportu"
+            "ps": "menedzer-logistyki-i-transportu",
+            "ak": "1_wro_menedzer-logistyki-i-transportu",
+            "lk": ""
+          },
+          {
+            "k": "Sprzedaż i marketing",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_wroclaw-sprzedaz-i-marketing",
+            "lk": ""
           },
           {
             "k": "Sprzedaż i marketing",
@@ -3026,8 +2375,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/digital-marketing-z-ai/",
-            "ak": "1_wro_digital-marketing-z-ai"
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_digital-marketing-z-ai",
+            "lk": ""
           },
           {
             "k": "Sprzedaż i marketing",
@@ -3037,8 +2387,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/menedzer-sprzedazy/",
-            "ak": "1_wro_menedzer-sprzedazy"
+            "ps": "sprzedaz-i-marketing",
+            "ak": "1_wro_menedzer-sprzedazy",
+            "lk": ""
+          },
+          {
+            "k": "Komunikacja cyfrowa i media",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-komunikacja-cyfrowa-i-media",
+            "ak": "1_wro_wroclaw-komunikacja-cyfrowa-i-media",
+            "lk": ""
           },
           {
             "k": "Komunikacja cyfrowa i media",
@@ -3048,8 +2411,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/visual-storytelling-i-content-marketing/",
-            "ak": "1_wro_visual-storytelling-i-content-marketing"
+            "ps": "visual-storytelling-i-content-marketing",
+            "ak": "1_wro_visual-storytelling-i-content-marketing",
+            "lk": ""
           },
           {
             "k": "Komunikacja cyfrowa i media",
@@ -3059,8 +2423,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki/",
-            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+            "ps": "digital-pr-i-zarzadzanie-komunikacja-marki",
+            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+            "lk": ""
+          },
+          {
+            "k": "Turystyka i rekreacja",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-turystyka-i-rekreacja",
+            "ak": "1_wro_wroclaw-turystyka-i-rekreacja",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3070,8 +2447,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/hotelarstwo/",
-            "ak": "1_wro_hotelarstwo"
+            "ps": "hotelarstwo",
+            "ak": "1_wro_hotelarstwo",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3081,8 +2459,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/miedzynarodowy-biznes-turystyczny/",
-            "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+            "ps": "miedzynarodowy-biznes-turystyczny",
+            "ak": "1_wro_miedzynarodowy-biznes-turystyczny",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3092,8 +2471,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow/",
-            "ak": "1_wro_organizacja-eventow"
+            "ps": "organizacja-eventow",
+            "ak": "1_wro_organizacja-eventow",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
+            "s": "—",
+            "deg": 1,
+            "r10": 680,
+            "r12": 575,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "wroclaw-zarzadzanie",
+            "ak": "1_wro_wroclaw-zarzadzanie",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3103,8 +2495,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-przedsiebiorstwem/",
-            "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+            "ps": "zarzadzanie-przedsiebiorstwem",
+            "ak": "1_wro_zarzadzanie-przedsiebiorstwem",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3114,19 +2507,21 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-zasobami-ludzkimi/",
-            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+            "ps": "zarzadzanie-zasobami-ludzkimi",
+            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
-            "s": "Zarządzanie w biznesie turystycznym",
+            "s": "—",
             "deg": 2,
             "r10": 735,
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-w-biznesie-turystycznym/",
-            "ak": "2_wro_zarzadzanie-w-biznesie-turystycznym"
+            "ps": "wroclaw-zarzadzanie",
+            "ak": "2_wro_wroclaw-zarzadzanie",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3136,8 +2531,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/nowoczesny-e-marketing/",
-            "ak": "2_wro_nowoczesny-e-marketing"
+            "ps": "nowoczesny-e-marketing",
+            "ak": "2_wro_nowoczesny-e-marketing",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3147,8 +2543,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim/",
-            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+            "ps": "strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3158,8 +2555,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-w-biznesie-turystycznym/",
-            "ak": "2_wro_zarzadzanie-w-biznesie-turystycznym"
+            "ps": "zarzadzanie-w-biznesie-turystycznym",
+            "ak": "2_wro_zarzadzanie-w-biznesie-turystycznym",
+            "lk": ""
           }
         ],
         "n": [
@@ -3171,8 +2569,9 @@
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/programowanie-gier/",
-            "ak": "1_wro_programowanie-gier"
+            "ps": "programowanie-gier",
+            "ak": "1_wro_programowanie-gier",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -3182,8 +2581,9 @@
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/chmura-obliczeniowa-i-serwery/",
-            "ak": "1_wro_chmura-obliczeniowa-i-serwery"
+            "ps": "chmura-obliczeniowa-i-serwery",
+            "ak": "1_wro_chmura-obliczeniowa-i-serwery",
+            "lk": ""
           },
           {
             "k": "Informatyka",
@@ -3193,8 +2593,9 @@
             "r12": 710,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/ai-i-automatyzacja/",
-            "ak": "1_wro_ai-i-automatyzacja"
+            "ps": "ai-i-automatyzacja",
+            "ak": "1_wro_ai-i-automatyzacja",
+            "lk": ""
           },
           {
             "k": "Finanse i rachunkowość",
@@ -3204,8 +2605,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/rachunkowosc-i-podatki/",
-            "ak": "1_wro_rachunkowosc-i-podatki"
+            "ps": "rachunkowosc-i-podatki",
+            "ak": "1_wro_rachunkowosc-i-podatki",
+            "lk": ""
           },
           {
             "k": "Finanse i rachunkowość",
@@ -3215,8 +2617,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/fintech/",
-            "ak": "1_wro_fintech"
+            "ps": "fintech",
+            "ak": "1_wro_fintech",
+            "lk": ""
           },
           {
             "k": "Logistyka",
@@ -3226,8 +2629,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/projektowanie-procesow-logistycznych/",
-            "ak": "1_wro_projektowanie-procesow-logistycznych"
+            "ps": "projektowanie-procesow-logistycznych",
+            "ak": "1_wro_projektowanie-procesow-logistycznych",
+            "lk": ""
           },
           {
             "k": "Logistyka",
@@ -3237,8 +2641,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/menedzer-logistyki-i-transportu/",
-            "ak": "1_wro_menedzer-logistyki-i-transportu"
+            "ps": "menedzer-logistyki-i-transportu",
+            "ak": "1_wro_menedzer-logistyki-i-transportu",
+            "lk": ""
           },
           {
             "k": "Sprzedaż i marketing",
@@ -3248,8 +2653,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/digital-marketing-z-ai/",
-            "ak": "1_wro_digital-marketing-z-ai"
+            "ps": "digital-marketing-z-ai",
+            "ak": "1_wro_digital-marketing-z-ai",
+            "lk": ""
           },
           {
             "k": "Sprzedaż i marketing",
@@ -3259,8 +2665,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/menedzer-sprzedazy/",
-            "ak": "1_wro_menedzer-sprzedazy"
+            "ps": "menedzer-sprzedazy",
+            "ak": "1_wro_menedzer-sprzedazy",
+            "lk": ""
           },
           {
             "k": "Komunikacja cyfrowa i media",
@@ -3270,8 +2677,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/visual-storytelling-i-content-marketing/",
-            "ak": "1_wro_visual-storytelling-i-content-marketing"
+            "ps": "visual-storytelling-i-content-marketing",
+            "ak": "1_wro_visual-storytelling-i-content-marketing",
+            "lk": ""
           },
           {
             "k": "Komunikacja cyfrowa i media",
@@ -3281,8 +2689,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/digital-pr-i-zarzadzanie-komunikacja-marki/",
-            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki"
+            "ps": "digital-pr-i-zarzadzanie-komunikacja-marki",
+            "ak": "1_wro_digital-pr-i-zarzadzanie-komunikacja-marki",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3292,8 +2701,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/hotelarstwo/",
-            "ak": "1_wro_hotelarstwo"
+            "ps": "hotelarstwo",
+            "ak": "1_wro_hotelarstwo",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3303,8 +2713,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/miedzynarodowy-biznes-turystyczny/",
-            "ak": "1_wro_miedzynarodowy-biznes-turystyczny"
+            "ps": "miedzynarodowy-biznes-turystyczny",
+            "ak": "1_wro_miedzynarodowy-biznes-turystyczny",
+            "lk": ""
           },
           {
             "k": "Turystyka i rekreacja",
@@ -3314,8 +2725,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/organizacja-eventow/",
-            "ak": "1_wro_organizacja-eventow"
+            "ps": "organizacja-eventow",
+            "ak": "1_wro_organizacja-eventow",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3325,8 +2737,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-przedsiebiorstwem/",
-            "ak": "1_wro_zarzadzanie-przedsiebiorstwem"
+            "ps": "zarzadzanie-przedsiebiorstwem",
+            "ak": "1_wro_zarzadzanie-przedsiebiorstwem",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3336,8 +2749,9 @@
             "r12": 575,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-1-stopnia/zarzadzanie-zasobami-ludzkimi/",
-            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi"
+            "ps": "zarzadzanie-zasobami-ludzkimi",
+            "ak": "1_wro_zarzadzanie-zasobami-ludzkimi",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3347,8 +2761,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/nowoczesny-e-marketing/",
-            "ak": "2_wro_nowoczesny-e-marketing"
+            "ps": "nowoczesny-e-marketing",
+            "ak": "2_wro_nowoczesny-e-marketing",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3358,8 +2773,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/strategiczne-zarzadzanie-kapitalem-ludzkim/",
-            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim"
+            "ps": "strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "ak": "2_wro_strategiczne-zarzadzanie-kapitalem-ludzkim",
+            "lk": ""
           },
           {
             "k": "Zarządzanie",
@@ -3369,8 +2785,9 @@
             "r12": 625,
             "rekr": 85,
             "wps": 490,
-            "ps": "https://akademiata.pl/oferta/studia-2-stopnia/zarzadzanie-w-biznesie-turystycznym/",
-            "ak": "2_wro_zarzadzanie-w-biznesie-turystycznym"
+            "ps": "zarzadzanie-w-biznesie-turystycznym",
+            "ak": "2_wro_zarzadzanie-w-biznesie-turystycznym",
+            "lk": ""
           }
         ]
       }
@@ -3379,7 +2796,7 @@
       "wwa": [
         {
           "k": "Architecture",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 3600,
@@ -3391,12 +2808,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/architecture/",
-          "ak": "1_wwa_architecture"
+          "ps": "architecture",
+          "ak": "1_wwa_architecture",
+          "lk": ""
         },
         {
           "k": "Civil Engineering",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 3000,
@@ -3408,8 +2826,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/civil-engineering/",
-          "ak": "1_wwa_civil-engineering"
+          "ps": "civil-engineering",
+          "ak": "1_wwa_civil-engineering",
+          "lk": ""
         },
         {
           "k": "Civil Engineering",
@@ -3425,8 +2844,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/building-structures/",
-          "ak": "1_wwa_building-structures"
+          "ps": "building-structures",
+          "ak": "1_wwa_building-structures",
+          "lk": ""
         },
         {
           "k": "Civil Engineering",
@@ -3442,8 +2862,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/energy-saving-technologies-in-civil-engineering/",
-          "ak": "1_wwa_energy-saving-technologies-in-civil-engineering"
+          "ps": "energy-saving-technologies-in-civil-engineering",
+          "ak": "1_wwa_energy-saving-technologies-in-civil-engineering",
+          "lk": ""
         },
         {
           "k": "Civil Engineering",
@@ -3459,12 +2880,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/railway-construction/",
-          "ak": "1_wwa_railway-construction"
+          "ps": "railway-construction",
+          "ak": "1_wwa_railway-construction",
+          "lk": ""
         },
         {
           "k": "Management",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 2900,
@@ -3476,8 +2898,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/management/",
-          "ak": "1_wwa_management"
+          "ps": "management",
+          "ak": "1_wwa_management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3493,8 +2916,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/artificial-intelligence-in-management/",
-          "ak": "1_wwa_artificial-intelligence-in-management"
+          "ps": "artificial-intelligence-in-management",
+          "ak": "1_wwa_artificial-intelligence-in-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3510,8 +2934,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/civil-aviation-management/",
-          "ak": "1_wwa_civil-aviation-management"
+          "ps": "civil-aviation-management",
+          "ak": "1_wwa_civil-aviation-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3527,8 +2952,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/content-management-and-visualization/",
-          "ak": "1_wwa_content-management-and-visualization"
+          "ps": "content-management-and-visualization",
+          "ak": "1_wwa_content-management-and-visualization",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3544,8 +2970,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/international-business/",
-          "ak": "1_wwa_international-business"
+          "ps": "international-business",
+          "ak": "1_wwa_international-business",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3561,8 +2988,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/logistics-and-supply-chain-management/",
-          "ak": "1_wwa_logistics-and-supply-chain-management"
+          "ps": "logistics-and-supply-chain-management",
+          "ak": "1_wwa_logistics-and-supply-chain-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3578,8 +3006,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/sport-concert-and-civil-management/",
-          "ak": "1_wwa_sport-concert-and-civil-management"
+          "ps": "sport-concert-and-civil-management",
+          "ak": "1_wwa_sport-concert-and-civil-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3595,12 +3024,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wellness-and-spa/",
-          "ak": "1_wwa_wellness-and-spa"
+          "ps": "wellness-and-spa",
+          "ak": "1_wwa_wellness-and-spa",
+          "lk": ""
         },
         {
           "k": "Mechanical Engineering",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 3300,
@@ -3612,8 +3042,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/mechanical-engineering/",
-          "ak": "1_wwa_mechanical-engineering"
+          "ps": "mechanical-engineering",
+          "ak": "1_wwa_mechanical-engineering",
+          "lk": ""
         },
         {
           "k": "Mechanical Engineering",
@@ -3629,8 +3060,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/construction-and-maintenance-of-vehicles/",
-          "ak": "1_wwa_construction-and-maintenance-of-vehicles"
+          "ps": "construction-and-maintenance-of-vehicles",
+          "ak": "1_wwa_construction-and-maintenance-of-vehicles",
+          "lk": ""
         },
         {
           "k": "Mechanical Engineering",
@@ -3646,12 +3078,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/computer-aided-design-and-control/",
-          "ak": "1_wwa_computer-aided-design-and-control"
+          "ps": "computer-aided-design-and-control",
+          "ak": "1_wwa_computer-aided-design-and-control",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 2900,
@@ -3663,8 +3096,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/computer-engineering/",
-          "ak": "1_wwa_computer-engineering"
+          "ps": "computer-engineering",
+          "ak": "1_wwa_computer-engineering",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3680,8 +3114,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/3d-animation/",
-          "ak": "1_wwa_3d-animation"
+          "ps": "3d-animation",
+          "ak": "1_wwa_3d-animation",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3697,8 +3132,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/applications-programming/",
-          "ak": "1_wwa_applications-programming"
+          "ps": "applications-programming",
+          "ak": "1_wwa_applications-programming",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3714,8 +3150,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/artificial-intelligence/",
-          "ak": "1_wwa_artificial-intelligence"
+          "ps": "artificial-intelligence",
+          "ak": "1_wwa_artificial-intelligence",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3731,12 +3168,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/cybersecurity/",
-          "ak": "1_wwa_cybersecurity"
+          "ps": "cybersecurity",
+          "ak": "1_wwa_cybersecurity",
+          "lk": ""
         },
         {
           "k": "Architecture",
-          "s": null,
+          "s": "—",
           "deg": 2,
           "eu": {
             "r": 3600,
@@ -3748,12 +3186,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/architektura/",
-          "ak": "2_wwa_architektura"
+          "ps": "architektura",
+          "ak": "2_wwa_architektura",
+          "lk": ""
         },
         {
           "k": "Management",
-          "s": null,
+          "s": "—",
           "deg": 2,
           "eu": {
             "r": 2900,
@@ -3765,8 +3204,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/management/",
-          "ak": "2_wwa_management"
+          "ps": "management",
+          "ak": "2_wwa_management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3782,8 +3222,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/marketing-and-public-relations/",
-          "ak": "2_wwa_marketing-and-public-relations"
+          "ps": "marketing-and-public-relations",
+          "ak": "2_wwa_marketing-and-public-relations",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3799,8 +3240,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/project-management/",
-          "ak": "2_wwa_project-management"
+          "ps": "project-management",
+          "ak": "2_wwa_project-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3816,14 +3258,15 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/sustainable-development-management/",
-          "ak": "2_wwa_sustainable-development-management"
+          "ps": "sustainable-development-management",
+          "ak": "2_wwa_sustainable-development-management",
+          "lk": ""
         }
       ],
       "wro": [
         {
           "k": "Management",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 2600,
@@ -3835,8 +3278,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-management/",
-          "ak": "1_wro_wroclaw-management"
+          "ps": "wroclaw-management",
+          "ak": "1_wro_wroclaw-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3852,8 +3296,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-business-management/",
-          "ak": "1_wro_business-management"
+          "ps": "wroclaw-business-management",
+          "ak": "1_wro_business-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3869,12 +3314,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-digital-marketing-with-ai/",
-          "ak": "1_wro_wroclaw-digital-marketing-with-ai"
+          "ps": "wroclaw-digital-marketing-with-ai",
+          "ak": "1_wro_wroclaw-digital-marketing-with-ai",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
-          "s": null,
+          "s": "—",
           "deg": 1,
           "eu": {
             "r": 2600,
@@ -3886,8 +3332,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-computer-engineering/",
-          "ak": "1_wro_wroclaw-computer-engineering"
+          "ps": "wroclaw-computer-engineering",
+          "ak": "1_wro_wroclaw-computer-engineering",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3903,8 +3350,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-computer-networks-and-cybersecurity/",
-          "ak": "1_wro_wroclaw-computer-networks-and-cybersecurity"
+          "ps": "wroclaw-computer-networks-and-cybersecurity",
+          "ak": "1_wro_wroclaw-computer-networks-and-cybersecurity",
+          "lk": ""
         },
         {
           "k": "Computer Engineering",
@@ -3920,12 +3368,13 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/bachelor/wroclaw-software-engineering/",
-          "ak": "1_wro_inzynieria-oprogramowania"
+          "ps": "wroclaw-software-engineering",
+          "ak": "1_wro_inzynieria-oprogramowania",
+          "lk": ""
         },
         {
           "k": "Management",
-          "s": null,
+          "s": "—",
           "deg": 2,
           "eu": {
             "r": 2600,
@@ -3937,8 +3386,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/wroclaw-management/",
-          "ak": "2_wro_wroclaw-management"
+          "ps": "wroclaw-management",
+          "ak": "2_wro_wroclaw-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3954,8 +3404,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/wroclaw-brand-management/",
-          "ak": "2_wro_wroclaw-brand-management"
+          "ps": "wroclaw-brand-management",
+          "ak": "2_wro_wroclaw-brand-management",
+          "lk": ""
         },
         {
           "k": "Management",
@@ -3971,8 +3422,9 @@
           },
           "rekr": 200,
           "wps": 0,
-          "ps": "https://akademiata.pl/en/offer/master/wroclaw-strategic-human-capital-management/",
-          "ak": "2_wro_wroclaw-strategic-human-capital-management"
+          "ps": "wroclaw-strategic-human-capital-management",
+          "ak": "2_wro_wroclaw-strategic-human-capital-management",
+          "lk": ""
         }
       ]
     }
@@ -5358,7 +4810,7 @@
       "name": "Płatność z góry (rabat jednorazowy)",
       "tag": "−5% lub −10%",
       "short": "Zapłać za semestr lub rok z góry i uzyskaj rabat.",
-      "full": "Termin: do <strong>10 września </strong>(semestr zimowy / cały rok) lub <strong>10 marca</strong> (semestr letni). <strong> <br>5% </strong>przy płatności semestralnej,<strong> <br>10%</strong> przy płatności za rok.<br>",
+      "full": "Termin: do 10 września (semestr zimowy / cały rok) lub 10 marca (semestr letni).  \n5% przy płatności semestralnej, \n10% przy płatności za rok.",
       "sw": [
         "szybki",
         "grupie",
@@ -5367,7 +4819,7 @@
       "isBonus": true,
       "disc": {
         "t": "bonus",
-        "v": 0
+        "v": 0.0
       }
     },
     {
@@ -5378,7 +4830,7 @@
       "name": "Studia krok bliżej, 1000 zł taniej",
       "tag": "−1 000 zł",
       "short": "Rejestracja do 30.08.2026 r.i podpisanie umowy do 30.09.2026 r.",
-      "full": "Zarejestruj się do <strong>30.08.2026</strong> i podpisz umowę do 30.09.2026 r<br>Zniżka <strong>1 000 zł </strong>rozliczona proporcjonalnie w obu semestrach. <br>Łączy się z „<strong>W Grupie Taniej</strong>&quot; i rabatem za płatność z góry.",
+      "full": "Zarejestruj się do 30.08.2026 i podpisz umowę do 30.09.2026 r\nZniżka 1 000 zł rozliczona proporcjonalnie w obu semestrach. \nŁączy się z „W Grupie Taniej\" i rabatem za płatność z góry.",
       "sw": [
         "grupie",
         "jednorazowo"
@@ -5386,7 +4838,7 @@
       "isBonus": false,
       "disc": {
         "t": "fix",
-        "v": 1000
+        "v": 1000.0
       }
     },
     {
@@ -5397,7 +4849,7 @@
       "name": "W Grupie Taniej",
       "tag": "−200 / −400 zł",
       "short": "Zapis razem z grupą znajomych lub rodziny (do 30.09.2026).",
-      "full": "Zapisz się razem z grupą. Jeden z grupy zgłasza wszystkich z 7-dniowym wyprzedzeniem. <br>Dokumenty wszyscy składają tego samego dnia (<strong>do 30.09.2026</strong>). Łączy się z „<strong>Studia krok bliżej, 1000 zł taniej</strong>&quot; i rabatem za płatność z góry.",
+      "full": "Zapisz się razem z grupą. Jeden z grupy zgłasza wszystkich z 7-dniowym wyprzedzeniem. \nDokumenty wszyscy składają tego samego dnia (do 30.09.2026). Łączy się z „Studia krok bliżej, 1000 zł taniej\" i rabatem za płatność z góry.",
       "sw": [
         "szybki",
         "jednorazowo"
@@ -5405,7 +4857,7 @@
       "isBonus": false,
       "disc": {
         "t": "fix",
-        "v": 200
+        "v": 200.0
       },
       "so": [
         {
@@ -5433,7 +4885,7 @@
       "isBonus": false,
       "disc": {
         "t": "fix",
-        "v": 1200
+        "v": 1200.0
       }
     },
     {
@@ -5444,8 +4896,10 @@
       "name": "Przejście do ATA",
       "tag": "−30%",
       "short": "Przeniesienie z innej uczelni – zniżka w semestrze startu.",
-      "full": "Kandydaci przenoszący się z innej uczelni. Zniżka 30% od czesnego w semestrze rozpoczęcia studiów. <br>Wysokość miesięcznej raty czesnego po uwzględnieniu zniżki, wskazana w kalkulatorze, obowiązuje wyłącznie w odniesieniu do pierwszych rat: 6 rat w przypadku płatności w 12 ratach oraz 5 rat w przypadku płatności w 10 ratach.<br>Zniżka nie przysługuje osobom wcześniej skreślonym z listy studentów ATA/WSEiZ. Nie łączy się z innymi promocjami. ",
-      "sw": [],
+      "full": "Kandydaci przenoszący się z innej uczelni. Zniżka 30% od czesnego w semestrze rozpoczęcia studiów. \nWysokość miesięcznej raty czesnego po uwzględnieniu zniżki, wskazana w kalkulatorze, obowiązuje wyłącznie w odniesieniu do pierwszych rat: 6 rat w przypadku płatności w 12 ratach oraz 5 rat w przypadku płatności w 10 ratach.\nZniżka nie przysługuje osobom wcześniej skreślonym z listy studentów ATA/WSEiZ. Nie łączy się z innymi promocjami.",
+      "sw": [
+        "—"
+      ],
       "isBonus": false,
       "disc": {
         "t": "pct",
@@ -5461,7 +4915,9 @@
       "tag": "−20% / −30%",
       "short": "Absolwenci I stopnia ATA/WAB na całe studia II stopnia.",
       "full": "Absolwenci studiów I stopnia ATA, WAB lub WSH: 20% zniżki na całe czesne studiów II stopnia. Wynik końcowy 5,0 (Wrocław): 30%. Nie łączy się z innymi promocjami.",
-      "sw": [],
+      "sw": [
+        "—"
+      ],
       "isBonus": false,
       "disc": {
         "t": "pct",
@@ -5485,9 +4941,11 @@
       "cty": "both",
       "name": "Graduate Continues with Discount",
       "tag": "−20%",
-      "short": "UTA/WSEiZ graduates – 20% off total Master&#039;s tuition.",
+      "short": "UTA/WSEiZ graduates – 20% off total Master's tuition.",
       "full": "Cannot combine with Early Birds.",
-      "sw": [],
+      "sw": [
+        "—"
+      ],
       "isBonus": false,
       "disc": {
         "t": "pct",
