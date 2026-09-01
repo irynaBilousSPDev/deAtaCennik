@@ -1517,21 +1517,36 @@ function akademiata_normalize_theme_lang_code($lang) {
 /**
  * Smart Apply login URL + label for current WPML language.
  *
- * @return array{url: string, title: string}
+ * @return array{url: string, title: string, hint: string}
  */
 function akademiata_get_smartapply_login_link() {
 	$lang = apply_filters('wpml_current_language', null);
 
-	$titles = array(
-		'pl' => 'Zaloguj się',
-		'en' => 'Log in',
-		'uk' => 'Увійти',
-		'ru' => 'Войти',
+	$labels = array(
+		'pl' => array(
+			'title' => 'Zaloguj się',
+			'hint'  => 'Przejdź do logowania Smart Apply (otwiera się w nowej karcie)',
+		),
+		'en' => array(
+			'title' => 'Log in',
+			'hint'  => 'Go to Smart Apply login (opens in a new tab)',
+		),
+		'uk' => array(
+			'title' => 'Увійти',
+			'hint'  => 'Перейти до входу Smart Apply (відкривається в новій вкладці)',
+		),
+		'ru' => array(
+			'title' => 'Войти',
+			'hint'  => 'Перейти к входу Smart Apply (откроется в новой вкладке)',
+		),
 	);
+
+	$config = $labels[ $lang ] ?? $labels['pl'];
 
 	return array(
 		'url'   => 'https://smartapply.akademiata.pl/login',
-		'title' => $titles[ $lang ] ?? $titles['pl'],
+		'title' => $config['title'],
+		'hint'  => $config['hint'],
 	);
 }
 
