@@ -37,9 +37,16 @@ alwaysApply: false
 - Visibility: hide after **2026-10-31**; UABY off; Interior Architecture → none; Architektura I / Wzornictwo I → no `kurs`; `absolwent` only PL study language + 2nd cycle; EN study language → `kurs` only.
 - Dates in copy: base 30.08 / 30.09; after 30.08.2026 auto-extend once to 30.09 / 30.10.
 
-## Homepage → calculator deep links
+## Homepage Promocje (`home_promos`)
 
-- Cards: `home_promos` → each card has `link` (e.g. `/kalkulator-czesnego/?promo=szybki`). Calculator JS reads `?promo=` / `?rekr=` / `&sub=` and selects + scrolls after load.
+- **Copy (name / tag / dates):** `akademiata_get_calculator_promos()` — same PROMOS as calculator/listing; empty card fields filled from JSON; **expired promos hide the card**.
+- **ACF (Front: Page → Promocje):** photos, layout, colors, badge — **wins when non-empty** (headline, value, meta, text, link).
+- **Defaults:** `configure/front-page-defaults/home-promos/content*.php` — layout + `promo_id`; links default to `/oferta/?promo={id}` (`akademiata_get_oferta_page_id()` for WPML).
+- **Listing deep link:** `?promo=` pre-checks promo filter on `page-offer.php` (`ajax-filter.js`).
+
+## Homepage → calculator deep links (single offer)
+
+- Calculator on offer singles still reads `?promo=` / `?rekr=` / `&sub=` (`prices-calculator.js`).
 
 ## Promo expiry (auto from text dates)
 

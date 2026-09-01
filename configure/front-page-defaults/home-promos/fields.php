@@ -126,6 +126,157 @@ function akademiata_home_promos_color_map(): array {
 }
 
 /**
+ * @return array<string, array<string, mixed>>
+ */
+function akademiata_home_promos_promos_by_id(): array {
+	static $index = null;
+
+	if ( $index !== null ) {
+		return $index;
+	}
+
+	$index = [];
+	if ( ! function_exists( 'akademiata_get_calculator_promos' ) ) {
+		return $index;
+	}
+
+	foreach ( akademiata_get_calculator_promos() as $promo ) {
+		if ( ! is_array( $promo ) || empty( $promo['id'] ) ) {
+			continue;
+		}
+		$index[ (string) $promo['id'] ] = $promo;
+	}
+
+	return $index;
+}
+
+/**
+ * @param array<string, mixed> $card
+ * @return array{kind: string, id: string, sub: string}|null
+ */
+function akademiata_home_promos_parse_card_promo_ref( array $card ): ?array {
+	$promo_id = sanitize_key( (string) ( $card['promo_id'] ?? '' ) );
+	$link     = trim( (string) ( $card['link'] ?? '' ) );
+	$sub      = trim( (string) ( $card['sub'] ?? '' ) );
+
+	if ( $link !== '' && strpos( $link, '?' ) !== false ) {
+		$query = (string) parse_url( $link, PHP_URL_QUERY );
+		if ( $query !== '' ) {
+			parse_str( $query, $args );
+			if ( $promo_id === '' && ! empty( $args['promo'] ) ) {
+				$promo_id = sanitize_key( (string) $args['promo'] );
+			}
+			if ( $sub === '' && isset( $args['sub'] ) ) {
+				$sub = trim( (string) $args['sub'] );
+			}
+			if ( ! empty( $args['rekr'] ) ) {
+				return [
+					'kind' => 'rekr',
+					'id'   => sanitize_key( (string) $args['rekr'] ),
+					'sub'  => $sub,
+				];
+			}
+		}
+	}
+
+	if ( $promo_id === '' ) {
+		return null;
+	}
+
+	return [
+		'kind' => 'promo',
+		'id'   => $promo_id,
+		'sub'  => $sub,
+	];
+}
+
+/**
+ * @param array{kind: string, id: string, sub: string} $ref
+ */
+function akademiata_home_promos_offer_listing_url( array $ref ): string {
+	$base = '';
+	if ( function_exists( 'akademiata_get_oferta_page_id' ) ) {
+		$page_id = akademiata_get_oferta_page_id();
+		if ( $page_id > 0 ) {
+			$base = (string) get_permalink( $page_id );
+		}
+	}
+	if ( $base === '' ) {
+		$base = home_url( '/oferta/' );
+	}
+
+	$args = [];
+	if ( ( $ref['kind'] ?? '' ) === 'promo' && ( $ref['id'] ?? '' ) !== '' ) {
+		$args['promo'] = $ref['id'];
+		if ( ( $ref['sub'] ?? '' ) !== '' ) {
+			$args['sub'] = $ref['sub'];
+		}
+	}
+
+	return $args === [] ? $base : add_query_arg( $args, $base );
+}
+
+/**
+ * Fill empty card copy from calculator PROMOS (Excel / prices.json). ACF wins when set.
+ *
+ * @param array<string, mixed> $card
+ * @param array<string, mixed> $promo
+ * @return array<string, mixed>
+ */
+function akademiata_home_promos_apply_promo_copy( array $card, array $promo ): array {
+	$name  = trim( (string) ( $promo['name'] ?? '' ) );
+	$tag   = trim( (string) ( $promo['tag'] ?? '' ) );
+	$short = trim( wp_strip_all_tags( (string) ( $promo['short'] ?? '' ) ) );
+
+	if ( trim( (string) ( $card['headline'] ?? '' ) ) === '' && $name !== '' ) {
+		$card['headline'] = $name;
+	}
+	if ( trim( (string) ( $card['value'] ?? '' ) ) === '' && $tag !== '' ) {
+		$card['value'] = $tag;
+	}
+	if ( trim( (string) ( $card['meta'] ?? '' ) ) === '' && $short !== '' ) {
+		$card['meta'] = $short;
+	}
+
+	return $card;
+}
+
+/**
+ * @param array<int, array<string, mixed>> $cards
+ * @return array<int, array<string, mixed>>
+ */
+function akademiata_home_promos_sync_cards_from_promos( array $cards ): array {
+	$promos_by_id = akademiata_home_promos_promos_by_id();
+	$out          = [];
+
+	foreach ( $cards as $card ) {
+		if ( ! is_array( $card ) ) {
+			continue;
+		}
+
+		$ref = akademiata_home_promos_parse_card_promo_ref( $card );
+		if ( $ref && ( $ref['kind'] ?? '' ) === 'promo' ) {
+			$promo = $promos_by_id[ $ref['id'] ] ?? null;
+			if ( ! is_array( $promo ) ) {
+				continue;
+			}
+			$card = akademiata_home_promos_apply_promo_copy( $card, $promo );
+
+			$link = trim( (string) ( $card['link'] ?? '' ) );
+			if ( $link === '' || stripos( $link, 'kalkulator-czesnego' ) !== false ) {
+				$card['link'] = wp_make_link_relative( akademiata_home_promos_offer_listing_url( $ref ) );
+			}
+		} elseif ( trim( (string) ( $card['link'] ?? '' ) ) === '' && $ref ) {
+			$card['link'] = wp_make_link_relative( akademiata_home_promos_offer_listing_url( $ref ) );
+		}
+
+		$out[] = $card;
+	}
+
+	return $out;
+}
+
+/**
  * @param array<string, mixed>|false|null $acf_group
  * @return array<string, mixed>
  */
@@ -160,16 +311,7 @@ function akademiata_home_promos_fields( $acf_group ): array {
 			}
 		}
 
-		// WPML copies may still hold pre-rollover PL meta while code defaults already moved on.
-		$legacy_szybki_meta = 'Rejestracja do 30.08 · umowa do 30.09.2026';
-		if (
-			in_array( $lang, akademiata_home_promos_localized_langs(), true )
-			&& isset( $merged['cards'][0]['meta'] )
-			&& (string) $merged['cards'][0]['meta'] === $legacy_szybki_meta
-			&& ! empty( $default_cards[0]['meta'] )
-		) {
-			$merged['cards'][0]['meta'] = (string) $default_cards[0]['meta'];
-		}
+		$merged['cards'] = akademiata_home_promos_sync_cards_from_promos( $merged['cards'] );
 	}
 
 	return $merged;
@@ -181,7 +323,17 @@ function akademiata_home_promos_fields( $acf_group ): array {
 function akademiata_home_promos_card_url( array $card ): string {
 	$link = trim( (string) ( $card['link'] ?? '' ) );
 	if ( $link === '' ) {
-		return home_url( '/kalkulator-czesnego/' );
+		$ref = akademiata_home_promos_parse_card_promo_ref( $card );
+		if ( $ref ) {
+			return akademiata_home_promos_offer_listing_url( $ref );
+		}
+		if ( function_exists( 'akademiata_get_oferta_page_id' ) ) {
+			$page_id = akademiata_get_oferta_page_id();
+			if ( $page_id > 0 ) {
+				return (string) get_permalink( $page_id );
+			}
+		}
+		return home_url( '/oferta/' );
 	}
 	if ( preg_match( '#^https?://#i', $link ) ) {
 		return $link;
