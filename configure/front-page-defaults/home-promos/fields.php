@@ -318,6 +318,11 @@ function akademiata_home_promos_fields( $acf_group ): array {
 		$merged['cards'] = akademiata_home_promos_sync_cards_from_promos( $merged['cards'] );
 	}
 
+	// EN homepage: sheet has no EN-study promos for these cards — hide section.
+	if ( $lang === 'en' ) {
+		$merged['show'] = false;
+	}
+
 	return $merged;
 }
 

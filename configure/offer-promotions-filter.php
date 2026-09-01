@@ -467,8 +467,10 @@ function akademiata_offer_matches_calculator_promo($post_id, array $promo) {
  * @return array<int, array<string, mixed>>
  */
 function akademiata_get_listing_promos_for_filter($filter_action) {
-    $promos  = akademiata_get_calculator_promos();
-    $ui_lang = akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'));
+    $promos    = akademiata_get_calculator_promos();
+    $ui_lang   = akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'));
+    // EN site: only promos with lng=en in sheet (absolwent_en). PL/UK/RU: pl promos.
+    $study_lng = ($ui_lang === 'en') ? 'en' : 'pl';
 
     $listing_deg = null;
     if ($filter_action === 'filter_bachelor') {
@@ -481,6 +483,11 @@ function akademiata_get_listing_promos_for_filter($filter_action) {
 
     foreach ($promos as $promo) {
         if (empty($promo['id']) || !is_array($promo)) {
+            continue;
+        }
+
+        $lng = strtolower((string) ($promo['lng'] ?? 'pl'));
+        if ($lng !== $study_lng) {
             continue;
         }
 
