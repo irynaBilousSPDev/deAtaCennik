@@ -12,36 +12,24 @@ if ( $show_cta ) :
 
 	$lang = apply_filters( 'wpml_current_language', null );
 
+	// Smart Apply login — same URL for all langs (locale switch is inside the app).
 	$map = [
-		'pl' => [
-			// 'path'  => '/dzien-otwarty-warszawa-2026/',
-			'path'  => '/oferta/',
-			'title' => 'Oferta',
-			// 'title' => 'Dzień Otwarty',
-		],
-		'en' => [
-			// 'path'  => '/dzien-otwarty-warszawa-2026/',
-			'path'  => '/en/offer/',
-			'title' => 'Study Offer',
-			// 'title' => 'Open Day',
-		],
-		'uk' => [
-			// 'path'  => '/dzien-otwarty-warszawa-2026/',
-			'path'  => '/uk/propozyciya/',
-			'title' => 'Пропозиція',
-			// 'title' => 'День відкритих дверей',
-		],
-		'ru' => [
-			// 'path'  => '/dzien-otwarty-warszawa-2026/',
-			'path'  => '/ru/predlozhenie/',
-			'title' => 'Предложение',
-			// 'title' => 'День открытых дверей',
-		],
+		'pl' => ['title' => 'Zaloguj się'],
+		'en' => ['title' => 'Log in'],
+		'uk' => ['title' => 'Увійти'],
+		'ru' => ['title' => 'Войти'],
 	];
 
+	// Oferta CTA (restore when needed):
+	// 'pl' => ['path' => '/oferta/', 'title' => 'Oferta'],
+	// 'en' => ['path' => '/en/offer/', 'title' => 'Study Offer'],
+	// 'uk' => ['path' => '/uk/propozyciya/', 'title' => 'Пропозиція'],
+	// 'ru' => ['path' => '/ru/predlozhenie/', 'title' => 'Предложение'],
+
 	$config = $map[ $lang ] ?? $map['pl'];
+	$cta_url = 'https://smartapply.akademiata.pl/login';
 	?>
-    <a href="<?php echo esc_url(home_url( $config['path'] ) ); ?>" class="nav-cta-button">
+    <a href="<?php echo esc_url( $cta_url ); ?>" class="nav-cta-button">
 		<?php echo esc_html( $config['title'] ); ?>
     </a>
 <?php endif; ?>
