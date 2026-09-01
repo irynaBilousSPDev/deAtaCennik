@@ -10,6 +10,7 @@ function akademiata_home_promos_promo_i18n_catalog(): array {
 	return [
 		'en' => [
 			'szybki'      => [
+				'headline' => 'One step closer',
 				'name'  => 'One step closer, PLN 1,000 less',
 				'tag'   => '−1,000 PLN',
 				'short' => 'Registration by 30.09.2026 and contract signed by 30.10.2026.',
@@ -47,6 +48,7 @@ function akademiata_home_promos_promo_i18n_catalog(): array {
 		],
 		'uk' => [
 			'szybki'      => [
+				'headline' => 'Навчання на крок ближче',
 				'name'  => 'Навчання на крок ближче, на 1 000 zł дешевше',
 				'tag'   => '−1 000 zł',
 				'short' => 'Реєстрація до 30.09.2026 та підписання договору до 30.10.2026.',
@@ -84,6 +86,7 @@ function akademiata_home_promos_promo_i18n_catalog(): array {
 		],
 		'ru' => [
 			'szybki'      => [
+				'headline' => 'Обучение на шаг ближе',
 				'name'  => 'Обучение на шаг ближе, на 1 000 zł дешевле',
 				'tag'   => '−1 000 zł',
 				'short' => 'Регистрация до 30.09.2026 и подписание договора до 30.10.2026.',
@@ -193,4 +196,40 @@ function akademiata_home_promos_localize_promo( array $promo, ?string $lang = nu
 	}
 
 	return $out;
+}
+
+/**
+ * Home card headline — short title; discount amount stays in the value badge.
+ *
+ * @param array<string, mixed> $promo
+ */
+function akademiata_home_promos_card_headline_from_promo( array $promo, ?string $lang = null ): string {
+	$lang = $lang ?? (
+		function_exists( 'akademiata_normalize_theme_lang_code' )
+			? akademiata_normalize_theme_lang_code( apply_filters( 'wpml_current_language', 'pl' ) )
+			: 'pl'
+	);
+	$id = (string) ( $promo['id'] ?? '' );
+
+	if ( $id === '' ) {
+		return trim( (string) ( $promo['name'] ?? '' ) );
+	}
+
+	if ( $lang !== 'pl' ) {
+		$catalog = akademiata_home_promos_promo_i18n_catalog();
+		$headline = trim( (string) ( $catalog[ $lang ][ $id ]['headline'] ?? '' ) );
+		if ( $headline !== '' ) {
+			return $headline;
+		}
+	}
+
+	$pl_short = [
+		'szybki' => 'Studia krok bliżej',
+	];
+
+	if ( isset( $pl_short[ $id ] ) ) {
+		return $pl_short[ $id ];
+	}
+
+	return trim( (string) ( $promo['name'] ?? '' ) );
 }

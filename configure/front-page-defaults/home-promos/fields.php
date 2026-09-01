@@ -226,12 +226,14 @@ function akademiata_home_promos_offer_listing_url( array $ref ): string {
  */
 function akademiata_home_promos_apply_promo_copy( array $card, array $promo ): array {
 	$promo = akademiata_home_promos_localize_promo( $promo );
-	$name  = trim( (string) ( $promo['name'] ?? '' ) );
 	$tag   = trim( (string) ( $promo['tag'] ?? '' ) );
 	$short = trim( wp_strip_all_tags( (string) ( $promo['short'] ?? '' ) ) );
 
-	if ( trim( (string) ( $card['headline'] ?? '' ) ) === '' && $name !== '' ) {
-		$card['headline'] = $name;
+	if ( trim( (string) ( $card['headline'] ?? '' ) ) === '' ) {
+		$headline = akademiata_home_promos_card_headline_from_promo( $promo );
+		if ( $headline !== '' ) {
+			$card['headline'] = $headline;
+		}
 	}
 	if ( trim( (string) ( $card['value'] ?? '' ) ) === '' && $tag !== '' ) {
 		$card['value'] = $tag;

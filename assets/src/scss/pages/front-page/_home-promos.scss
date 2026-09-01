@@ -156,6 +156,12 @@
     gap: 1.2rem;
   }
 
+  .home-promo--media .home-promo__row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
   .home-promo__headline,
   .home-promo__value,
   .home-promo__text,
@@ -164,6 +170,8 @@
   }
 
   .home-promo__headline {
+    flex: 1;
+    min-width: 0;
     font-size: 2.1rem;
     line-height: 1.2;
     font-weight: vars.$weight-medium;
@@ -185,6 +193,10 @@
     strong {
       font-weight: 900;
     }
+  }
+
+  .home-promo--media .home-promo__value {
+    text-align: left;
   }
 
   .home-promo__text {
