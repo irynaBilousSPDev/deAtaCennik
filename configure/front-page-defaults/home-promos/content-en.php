@@ -87,7 +87,7 @@ return [
 			'value'        => '',
 			'text'         => 'instead of PLN 490 · when you enrol by 30 Oct 2026',
 			'meta'         => '',
-			'link'         => '/oferta/',
+			'link'         => '/kalkulator-czesnego/?rekr=kurs',
 		],
 		[
 			'layout'       => 'solid',

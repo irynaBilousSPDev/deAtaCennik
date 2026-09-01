@@ -87,7 +87,7 @@ return [
 			'value'        => '',
 			'text'         => 'замість 490 zł · при записі до 30.10.2026',
 			'meta'         => '',
-			'link'         => '/oferta/',
+			'link'         => '/kalkulator-czesnego/?rekr=kurs',
 		],
 		[
 			'layout'       => 'solid',

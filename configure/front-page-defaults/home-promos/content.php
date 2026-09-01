@@ -82,7 +82,7 @@ return [
 			'value'        => '',
 			'text'         => 'zamiast 490 zł · przy zapisie do 30.10.2026',
 			'meta'         => '',
-			'link'         => '/oferta/',
+			'link'         => '/kalkulator-czesnego/?rekr=kurs',
 		],
 		[
 			'layout'       => 'solid',
