@@ -467,9 +467,8 @@ function akademiata_offer_matches_calculator_promo($post_id, array $promo) {
  * @return array<int, array<string, mixed>>
  */
 function akademiata_get_listing_promos_for_filter($filter_action) {
-    $promos    = akademiata_get_calculator_promos();
-    $ui_lang   = akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'));
-    $study_lng = ($ui_lang === 'en') ? 'en' : 'pl';
+    $promos  = akademiata_get_calculator_promos();
+    $ui_lang = akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'));
 
     $listing_deg = null;
     if ($filter_action === 'filter_bachelor') {
@@ -485,14 +484,13 @@ function akademiata_get_listing_promos_for_filter($filter_action) {
             continue;
         }
 
-        $lng = strtolower((string) ($promo['lng'] ?? 'pl'));
-        if ($lng !== $study_lng) {
-            continue;
-        }
-
         $deg = (int) ($promo['deg'] ?? 0);
         if ($listing_deg !== null && $deg !== 0 && $deg !== $listing_deg) {
             continue;
+        }
+
+        if ( function_exists( 'akademiata_home_promos_localize_promo' ) ) {
+            $promo = akademiata_home_promos_localize_promo( $promo, $ui_lang );
         }
 
         $visible[] = $promo;

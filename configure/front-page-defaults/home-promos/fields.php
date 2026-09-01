@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__DIR__, 2) . '/lp-defaults/merge.php';
+require_once __DIR__ . '/promo-i18n.php';
 
 /**
  * @return array<string, mixed>
@@ -224,6 +225,7 @@ function akademiata_home_promos_offer_listing_url( array $ref ): string {
  * @return array<string, mixed>
  */
 function akademiata_home_promos_apply_promo_copy( array $card, array $promo ): array {
+	$promo = akademiata_home_promos_localize_promo( $promo );
 	$name  = trim( (string) ( $promo['name'] ?? '' ) );
 	$tag   = trim( (string) ( $promo['tag'] ?? '' ) );
 	$short = trim( wp_strip_all_tags( (string) ( $promo['short'] ?? '' ) ) );
