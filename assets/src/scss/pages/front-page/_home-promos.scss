@@ -176,11 +176,6 @@
     }
   }
 
-  .home-promo--media .home-promo__headline,
-  .home-promo--media .home-promo__value {
-    font-size: 1.95rem;
-  }
-
   .home-promo__value {
     flex-shrink: 0;
     font-size: 2.1rem;
@@ -302,11 +297,6 @@
       font-size: 2.3rem;
     }
 
-    .home-promo--media .home-promo__headline,
-    .home-promo--media .home-promo__value {
-      font-size: 2.05rem;
-    }
-
     .home-promo__text {
       font-size: 1.45rem;
     }
@@ -330,11 +320,6 @@
     .home-promo__headline,
     .home-promo__value {
       font-size: 2.5rem;
-    }
-
-    .home-promo--media .home-promo__headline,
-    .home-promo--media .home-promo__value {
-      font-size: 2.15rem;
     }
   }
 }
