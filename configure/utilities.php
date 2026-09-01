@@ -1515,6 +1515,27 @@ function akademiata_normalize_theme_lang_code($lang) {
 }
 
 /**
+ * Smart Apply login URL + label for current WPML language.
+ *
+ * @return array{url: string, title: string}
+ */
+function akademiata_get_smartapply_login_link() {
+	$lang = apply_filters('wpml_current_language', null);
+
+	$titles = array(
+		'pl' => 'Zaloguj się',
+		'en' => 'Log in',
+		'uk' => 'Увійти',
+		'ru' => 'Войти',
+	);
+
+	return array(
+		'url'   => 'https://smartapply.akademiata.pl/login',
+		'title' => $titles[ $lang ] ?? $titles['pl'],
+	);
+}
+
+/**
  * Theme UI strings by WPML language (when .mo / WPML String Translation is unavailable).
  *
  * @param string $key String identifier.

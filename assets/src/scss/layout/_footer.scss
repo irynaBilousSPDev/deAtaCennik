@@ -38,6 +38,48 @@ footer {
     align-items: flex-end;
   }
 
+  .footer-nav-col {
+    gap: 0;
+
+    @include mixins.max-sm-screen {
+      align-items: center !important;
+    }
+  }
+
+  .footer-login-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.35rem;
+    margin: 0 0 1.25rem;
+    border: 1px solid rgba(vars.$white, 0.85);
+    border-radius: 999px;
+    color: vars.$white;
+    font-size: vars.$font-size-default;
+    font-weight: vars.$weight-medium;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    &__icon {
+      flex-shrink: 0;
+      width: 1.1em;
+      height: 1.1em;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: rgba(vars.$white, 0.12);
+      border-color: vars.$white;
+      color: vars.$white;
+    }
+
+    @include mixins.max-sm-screen {
+      margin-bottom: 1rem;
+    }
+  }
+
   ul {
     display: flex;
     list-style: none;

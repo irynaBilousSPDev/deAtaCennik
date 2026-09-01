@@ -58,7 +58,9 @@
                     </div>
                 </div>
 
-                <div class="order-2 order-xl-3 col-md-6 col-xl-4 item d-flex align-items-center align-items-md-end">
+                <div class="order-2 order-xl-3 col-md-6 col-xl-4 item footer-nav-col d-flex align-items-center align-items-md-end">
+                    <?php get_template_part( 'partials/smartapply-login-link', null, array( 'variant' => 'footer' ) ); ?>
+
                     <nav id="site-navigation" class="main-navigation">
                         <?php wp_nav_menu(array('theme_location' => 'menu-main', 'menu_id' => 'menu-main')); ?>
                     </nav>
