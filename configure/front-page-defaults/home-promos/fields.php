@@ -19,13 +19,40 @@ function akademiata_home_promos_defaults_en(): array {
 /**
  * @return array<string, mixed>
  */
+function akademiata_home_promos_defaults_uk(): array {
+	return require __DIR__ . '/content-uk.php';
+}
+
+/**
+ * @return array<string, mixed>
+ */
+function akademiata_home_promos_defaults_ru(): array {
+	return require __DIR__ . '/content-ru.php';
+}
+
+/**
+ * @return list<string>
+ */
+function akademiata_home_promos_localized_langs(): array {
+	return [ 'en', 'uk', 'ru' ];
+}
+
+/**
+ * @return array<string, mixed>
+ */
 function akademiata_home_promos_defaults(): array {
 	$lang = function_exists('akademiata_normalize_theme_lang_code')
 		? akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'))
 		: 'pl';
 
-	if ($lang === 'en') {
-		return akademiata_home_promos_defaults_en();
+	$map = [
+		'en' => 'akademiata_home_promos_defaults_en',
+		'uk' => 'akademiata_home_promos_defaults_uk',
+		'ru' => 'akademiata_home_promos_defaults_ru',
+	];
+
+	if ( isset( $map[ $lang ] ) && is_callable( $map[ $lang ] ) ) {
+		return $map[ $lang ]();
 	}
 
 	return akademiata_home_promos_defaults_pl();
@@ -33,7 +60,7 @@ function akademiata_home_promos_defaults(): array {
 
 /**
  * Replace values still equal to Polish defaults with the target-language defaults
- * (covers WPML “copy from original” on the EN front page).
+ * (covers WPML “copy from original” on translated front pages).
  *
  * @param array<string, mixed> $merged
  * @param array<string, mixed> $pl
@@ -112,7 +139,7 @@ function akademiata_home_promos_fields( $acf_group ): array {
 		? akademiata_normalize_theme_lang_code(apply_filters('wpml_current_language', 'pl'))
 		: 'pl';
 
-	if ( $lang === 'en' ) {
+	if ( in_array( $lang, akademiata_home_promos_localized_langs(), true ) ) {
 		$merged = akademiata_home_promos_replace_pl_copies( $merged, $defaults_pl, $defaults );
 	}
 
@@ -124,13 +151,24 @@ function akademiata_home_promos_fields( $acf_group ): array {
 				$default_cards[ $i ] ?? ( $default_cards[0] ?? [] ),
 				is_array( $card ) ? $card : null
 			);
-			if ( $lang === 'en' ) {
+			if ( in_array( $lang, akademiata_home_promos_localized_langs(), true ) ) {
 				$merged['cards'][ $i ] = akademiata_home_promos_replace_pl_copies(
 					$merged['cards'][ $i ],
 					is_array( $pl_cards[ $i ] ?? null ) ? $pl_cards[ $i ] : array(),
 					is_array( $default_cards[ $i ] ?? null ) ? $default_cards[ $i ] : array()
 				);
 			}
+		}
+
+		// WPML copies may still hold pre-rollover PL meta while code defaults already moved on.
+		$legacy_szybki_meta = 'Rejestracja do 30.08 · umowa do 30.09.2026';
+		if (
+			in_array( $lang, akademiata_home_promos_localized_langs(), true )
+			&& isset( $merged['cards'][0]['meta'] )
+			&& (string) $merged['cards'][0]['meta'] === $legacy_szybki_meta
+			&& ! empty( $default_cards[0]['meta'] )
+		) {
+			$merged['cards'][0]['meta'] = (string) $default_cards[0]['meta'];
 		}
 	}
 

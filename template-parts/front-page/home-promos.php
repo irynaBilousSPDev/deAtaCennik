@@ -19,9 +19,12 @@ $title = trim( (string) ( $section['title'] ?? '' ) );
 $lang  = function_exists( 'akademiata_normalize_theme_lang_code' )
 	? akademiata_normalize_theme_lang_code( apply_filters( 'wpml_current_language', 'pl' ) )
 	: 'pl';
-$arrow_label = ( $lang === 'en' )
-	? 'Discounts and promotions'
-	: __( 'Zniżki i promocje', 'akademiata' );
+$arrow_labels = [
+	'en' => 'Discounts and promotions',
+	'uk' => 'Знижки та акції',
+	'ru' => 'Скидки и акции',
+];
+$arrow_label = $arrow_labels[ $lang ] ?? __( 'Zniżki i promocje', 'akademiata' );
 $allowed     = akademiata_home_promos_allowed_tags();
 ?>
 <section class="home-promos" aria-labelledby="home-promos-title">

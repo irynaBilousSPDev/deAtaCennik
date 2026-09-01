@@ -21,7 +21,7 @@ return [
 			'headline'     => 'One step closer to studying, <strong>PLN 1,000 less</strong>',
 			'value'        => '',
 			'text'         => 'Discount applied proportionally across both semesters of the 2026/2027 academic year',
-			'meta'         => 'Register by 30 Aug · contract by 30 Sep 2026',
+			'meta'         => 'Register by 30 Sep · contract by 30 Oct 2026',
 			'link'         => '/kalkulator-czesnego/?promo=szybki',
 		],
 		[

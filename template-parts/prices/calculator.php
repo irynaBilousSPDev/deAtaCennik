@@ -148,10 +148,10 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 					'full' => 'Deadline: 10 September (winter / full year) or 10 March (summer). Cannot be combined with "Transfer to ATA" and "Graduate continues with discount (PL)".',
 				],
 				'szybki' => [
-					'name' => 'Fast start',
+					'name' => 'One step closer, PLN 1,000 less',
 					'tag' => '−1,000 PLN',
-					'short' => 'Registration by 30.06.2026 and contract signed by 31.07.2026.',
-					'full' => 'Applies to Bachelor (1st cycle) only. Discount is split proportionally across both semesters.',
+					'short' => 'Registration by 30.09.2026 and contract signed by 30.10.2026.',
+					'full' => 'Register by 30.09.2026 and sign the contract by 30.10.2026. Discount is split proportionally across both semesters. Can be combined with "Cheaper in a group" and upfront payment discount.',
 				],
 				'grupie' => [
 					'name' => 'Cheaper in a group',

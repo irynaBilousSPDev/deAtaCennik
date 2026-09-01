@@ -67,6 +67,28 @@ export default function initPricesCalculator(_$, opts = {}) {
     });
   }
 
+  function extractPromoDateStrings(promo) {
+    const text = [promo.short, promo.full].filter(Boolean).join(' ')
+      .replace(/<[^>]+>/g, '');
+    const re = /(\d{1,2})\.(\d{1,2})\.(\d{4})/g;
+    const dates = [];
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      dates.push(`${m[1]}.${m[2]}.${m[3]}`);
+    }
+    return dates;
+  }
+
+  function replacePromoDatePlaceholders(str, dates) {
+    if (!str || !dates.length) return str;
+    let i = 0;
+    return String(str).replace(/(\d{1,2})\.(\d{1,2})\.(\d{4})/g, () => {
+      const d = dates[Math.min(i, dates.length - 1)];
+      i += 1;
+      return d || '$&';
+    });
+  }
+
   function applyPromoOverride(promo) {
     // Keep eligibility based on promo.lng (study language),
     // but display text based on WPML UI language (UI_LANG).
@@ -76,6 +98,13 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (!ov) return promo;
     const out = Object.assign({}, promo, ov);
     if (ov.so && Array.isArray(ov.so)) out.so = ov.so;
+
+    // EN overrides may ship with stale dates — keep wording, inherit live sheet dates.
+    const dates = extractPromoDateStrings(promo);
+    if (dates.length) {
+      if (out.short) out.short = replacePromoDatePlaceholders(out.short, dates);
+      if (out.full) out.full = replacePromoDatePlaceholders(out.full, dates);
+    }
     return out;
   }
 
@@ -344,7 +373,10 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.RAW = data.RAW || window.RAW;
     window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
     window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
-    window.PROMOS = (data.PROMOS || []).filter(p => p && !isPromoExpired(p));
+    window.PROMOS = (data.PROMOS || []).filter(p => {
+      if (!p) return false;
+      return !isPromoExpired(applyPromoOverride(p));
+    });
     window.BASE = data.BASE || window.BASE;
     window.BASE_EN = data.BASE_EN || window.BASE_EN;
 
