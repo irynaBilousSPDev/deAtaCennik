@@ -363,11 +363,42 @@ body.page-template-page-template-prices{
     }
 
     .pc-was--desktop {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text-muted);
+      color: rgba(0, 0, 0, 0.55);
       line-height: 1.25;
-      margin-top: 6px;
+      font-family: "Lato", serif;
+
+      strong {
+        color: #2E7D32;
+        font-weight: 800;
+      }
+    }
+
+    .pc-price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .pc.pc--promo-price {
+      .pc-price--desktop,
+      .pc-price--mobile {
+        margin-top: 8px;
+        padding: 12px 14px;
+        background: #EAF6EA;
+        border: 1px solid #9BD3A4;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .pr,
+      &.sel .pr {
+        color: #2E7D32;
+      }
     }
 
     // Desktop can still show "Najczęściej wybierany" when JS enables it.
@@ -387,9 +418,7 @@ body.page-template-page-template-prices{
     }
 
     .pc-price--desktop {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
+      display: block;
     }
 
     .pc-unit--desktop {
@@ -449,11 +478,6 @@ body.page-template-page-template-prices{
 
       &.sel .pr {
         color: var(--ata);
-      }
-
-      &.pc--promo-price .pr,
-      &.pc--promo-price.sel .pr {
-        color: var(--green);
       }
 
       .un {
@@ -1289,16 +1313,40 @@ body.page-template-page-template-prices{
       }
 
       .pc-was {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
-        color: var(--text-muted);
+        color: rgba(0, 0, 0, 0.55);
         line-height: 1.25;
-        margin-top: 6px;
+        margin-top: 0;
+        font-family: "Lato", serif;
+
+        strong {
+          color: #2E7D32;
+          font-weight: 800;
+        }
       }
 
-      .pc--promo-price .pr,
-      .pc.pc--promo-price.sel .pr {
-        color: var(--green);
+      .pc.pc--promo-price {
+        .pc-price--mobile {
+          margin-top: 0;
+        }
+
+        .pc-price--desktop,
+        .pc-price--mobile {
+          padding: 12px 14px;
+          background: #EAF6EA;
+          border: 1px solid #9BD3A4;
+          border-radius: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
+        .pr,
+        &.sel .pr {
+          color: #2E7D32;
+        }
       }
 
       .pc-pick {

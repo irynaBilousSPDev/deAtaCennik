@@ -1276,11 +1276,11 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.selP = { jednorazowo: false };
   }
 
-  function planWasLabel(wasPrice, pid) {
+  function planWasHtml(wasPrice, pid) {
     if (!wasPrice) return '';
     const prefix = UI_LANG === 'en' ? 'standard rate' : 'standardowo';
     const suffix = (pid === 'r12' || pid === 'r10') ? ' zł/ratę' : ' zł';
-    return prefix + ' ' + fmt(wasPrice) + suffix;
+    return prefix + ' <strong>' + fmt(wasPrice) + '</strong>' + suffix;
   }
 
   function attachPlanWasPrice(result, item, pid) {
@@ -1291,14 +1291,14 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function setPlanWasPrice(card, pp, pid) {
-    const txt = pp && pp.was ? planWasLabel(pp.was, pid) : '';
+    const html = pp && pp.was ? planWasHtml(pp.was, pid) : '';
     card.querySelectorAll('[data-plan-was], [data-plan-was-desktop]').forEach(el => {
       if (!el) return;
-      if (txt) {
-        el.textContent = txt;
+      if (html) {
+        el.innerHTML = html;
         el.style.display = '';
       } else {
-        el.textContent = '';
+        el.innerHTML = '';
         el.style.display = 'none';
       }
     });
