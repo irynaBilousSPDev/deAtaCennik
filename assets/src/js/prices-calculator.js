@@ -189,8 +189,12 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.BASE = window.BASE || 'https://smartapply.akademiata.pl/pl/apply/';
   window.BASE_EN = window.BASE_EN || 'https://smartapply.akademiata.pl/en/apply/';
 
+  function normalizeStudyLang(lang) {
+    return String(lang || 'pl').trim().toLowerCase() === 'en' ? 'en' : 'pl';
+  }
+
   window.city = window.city || 'wwa';
-  window.lang = window.lang || 'pl';
+  window.lang = normalizeStudyLang(window.lang);
   window.uaby = !!window.uaby;
   window.progIdx = Number.isFinite(window.progIdx) ? window.progIdx : 0;
   window.mode = window.mode || 's';
@@ -401,7 +405,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (FIXED_KEY) {
       const parsed = parseFixedKey(FIXED_KEY);
       if (parsed && parsed.city) window.city = parsed.city;
-      if (FIXED_LANG) window.lang = FIXED_LANG;
+      if (FIXED_LANG) window.lang = normalizeStudyLang(FIXED_LANG);
 
       // Hide locked rows (city/lang/program) on single offer page.
       document.querySelectorAll('[data-prices-row="city"],[data-prices-row="lang"],[data-prices-row="program"]').forEach(el => {
@@ -1253,7 +1257,7 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function itemMatchesZarzadzaniePriceOverride(item) {
     if (!item || !isZarzadzaniePriceOverrideActive()) return false;
-    if (window.lang !== 'pl') return false;
+    if (normalizeStudyLang(window.lang) !== 'pl') return false;
     if (window.city !== 'wwa' && window.city !== 'wro') return false;
     if (!isZarzadzanieCourseKey(item.k)) return false;
     return !!getZarzadzaniePriceOverrideRates(item.deg, window.mode);
@@ -1371,7 +1375,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (sHit) modes.push('s');
       if (nHit) modes.push('n');
 
-      return [Object.assign({}, rep, { modes: programModesFor({ deg: rep.deg, k: rep.k, modes }), dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
+      return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
     }
     
     // Wrocław + UABY checkbox: program list = every row from 🇺🇦 Ceny_UABY (current study language).
@@ -1423,25 +1427,17 @@ export default function initPricesCalculator(_$, opts = {}) {
       const modes = [];
       if (inS) modes.push('s');
       if (inN) modes.push('n');
-      res.push(Object.assign({}, g.rep, { s: null, modes: programModesFor({ deg: g.deg, k: g.k, modes }), dn: g.k }));
+      res.push(Object.assign({}, g.rep, { s: null, modes: modes, dn: g.k }));
       
       g.specs.forEach(sp => {
         const sm = [];
         const cleanSpS = (sp.s || '').trim().toLowerCase();
         if (sl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('s');
         if (nl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('n');
-        res.push(Object.assign({}, sp, { modes: programModesFor(Object.assign({}, sp, { modes: sm })), dn: sp.k + ' — ' + sp.s }));
+        res.push(Object.assign({}, sp, { modes: sm, dn: sp.k + ' — ' + sp.s }));
       });
     });
     return res;
-  }
-
-  function programModesFor(u) {
-    if (!u) return [];
-    if (Number(u.deg) === 2 && isZarzadzanieCourseKey(u.k)) {
-      return ['n'];
-    }
-    return Array.isArray(u.modes) ? u.modes : [];
   }
 
   function getItem() {
@@ -1449,7 +1445,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (!u) return null;
 
     if (window.lang !== 'en' && !u.uabyOnly) {
-      const modes = programModesFor(u);
+      const modes = Array.isArray(u.modes) ? u.modes : [];
       if (modes.length && modes.indexOf(window.mode) < 0) {
         return null;
       }
@@ -1700,7 +1696,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       return;
     }
 
-    const modes = uabyWro ? modesForUabyProgram(u) : programModesFor(u);
+    const modes = uabyWro ? modesForUabyProgram(u) : (Array.isArray(u.modes) ? u.modes : []);
     if (!modes.length) {
       if (mw) mw.style.display = 'none';
       return;
@@ -1854,7 +1850,12 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (pp.cur === 'EUR') unit = '€';
     }
 
-    strong.textContent = `${fromTxt} ${fmt(pp.pr)} ${unit}`.trim();
+    const priceTxt = `${fromTxt} ${fmt(pp.pr)} ${unit}`.trim();
+    if (pp.was && (pid === 'r12' || pid === 'r10')) {
+      strong.innerHTML = `${fromTxt} <s>${fmt(pp.was)} zł/m-c</s> → ${fmt(pp.pr)} ${unit}`;
+    } else {
+      strong.textContent = priceTxt;
+    }
   }
 
   function render() {

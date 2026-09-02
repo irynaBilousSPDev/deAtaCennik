@@ -12,7 +12,12 @@ if ($logical_sync_key === '') {
     return;
 }
 
-$page_lang = (string) apply_filters('wpml_current_language', null);
+$page_lang = function_exists('akademiata_get_offer_study_language_code')
+    ? (string) akademiata_get_offer_study_language_code($post_id)
+    : 'pl';
+if ($page_lang !== 'en') {
+    $page_lang = 'pl';
+}
 
 $acf_fields = get_query_var('acf_fields', []);
 $tuition_fees = is_array($acf_fields['tuition_fees'] ?? null) ? $acf_fields['tuition_fees'] : [];
