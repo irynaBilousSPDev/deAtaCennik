@@ -217,29 +217,58 @@ function akademiata_get_calculator_promos() {
 }
 
 /**
+ * All study language tracks offered by an offer (pl and/or en).
+ *
+ * Bilingual posts (polski/angielski) must match PL promos when Polish is available —
+ * the old single-code helper treated any English hint as EN-only.
+ *
  * @param WP_Term[] $terms
- * @return string pl|en
+ * @return string[] pl|en
  */
-function akademiata_study_language_code_from_terms(array $terms) {
+function akademiata_study_language_codes_from_terms(array $terms) {
+    $codes = array();
+
     foreach ($terms as $term) {
         if (!is_object($term)) {
             continue;
         }
 
-        $slug = strtolower((string) $term->slug);
-        $name = strtolower((string) $term->name);
+        $slug      = strtolower((string) $term->slug);
+        $name      = strtolower((string) $term->name);
+        $haystack  = $slug . ' ' . $name;
+        $has_en    = (strpos($haystack, 'angiel') !== false || strpos($haystack, 'english') !== false);
+        $has_pl    = (strpos($haystack, 'polsk') !== false || strpos($haystack, 'polish') !== false);
 
-        if (
-            strpos($slug, 'angiel') !== false
-            || strpos($slug, 'english') !== false
-            || strpos($name, 'angiel') !== false
-            || strpos($name, 'english') !== false
-        ) {
-            return 'en';
+        if ($has_pl) {
+            $codes[] = 'pl';
+        }
+        if ($has_en) {
+            $codes[] = 'en';
+        }
+        if (!$has_pl && !$has_en) {
+            $codes[] = 'pl';
         }
     }
 
-    return 'pl';
+    $codes = array_values(array_unique($codes));
+
+    return $codes !== array() ? $codes : array( 'pl' );
+}
+
+/**
+ * Primary study language for schema / display (PL when available).
+ *
+ * @param WP_Term[] $terms
+ * @return string pl|en
+ */
+function akademiata_study_language_code_from_terms(array $terms) {
+    $codes = akademiata_study_language_codes_from_terms($terms);
+
+    if (in_array('pl', $codes, true)) {
+        return 'pl';
+    }
+
+    return $codes[0];
 }
 
 /**
@@ -283,7 +312,7 @@ function akademiata_get_offer_city_code($post_id) {
 }
 
 /**
- * @return array<int, array{lng:string,cty:string,deg:int}>
+ * @return array<int, array{lng:string,lngs:string[],cty:string,deg:int}>
  */
 function &akademiata_offer_promo_match_context_store() {
     static $cache = array();
@@ -367,10 +396,13 @@ function akademiata_prime_offer_promo_match_contexts(array $post_ids, $filter_ac
             $deg = ($pt === 'bachelor') ? 1 : (($pt === 'master') ? 2 : 0);
         }
 
+        $lang_codes = akademiata_study_language_codes_from_terms($lang_terms);
+
         $cache[ $post_id ] = array(
-            'lng' => akademiata_study_language_code_from_terms($lang_terms),
-            'cty' => akademiata_city_code_from_terms($city_terms),
-            'deg' => $deg,
+            'lng'  => akademiata_study_language_code_from_terms($lang_terms),
+            'lngs' => $lang_codes,
+            'cty'  => akademiata_city_code_from_terms($city_terms),
+            'deg'  => $deg,
         );
     }
 }
@@ -378,7 +410,7 @@ function akademiata_prime_offer_promo_match_contexts(array $post_ids, $filter_ac
 /**
  * @param int    $post_id
  * @param string $filter_action
- * @return array{lng:string,cty:string,deg:int}
+ * @return array{lng:string,lngs:string[],cty:string,deg:int}
  */
 function akademiata_get_offer_promo_match_context($post_id, $filter_action = '') {
     $post_id = (int) $post_id;
@@ -393,9 +425,10 @@ function akademiata_get_offer_promo_match_context($post_id, $filter_action = '')
     }
 
     return array(
-        'lng' => 'pl',
-        'cty' => 'uni',
-        'deg' => 0,
+        'lng'  => 'pl',
+        'lngs' => array( 'pl' ),
+        'cty'  => 'uni',
+        'deg'  => 0,
     );
 }
 
@@ -426,8 +459,11 @@ function akademiata_get_offer_degree_level($post_id) {
  */
 function akademiata_offer_context_matches_calculator_promo(array $ctx, array $promo) {
     $promo_lng = isset($promo['lng']) ? strtolower((string) $promo['lng']) : 'pl';
+    $offer_lngs = !empty($ctx['lngs']) && is_array($ctx['lngs'])
+        ? array_map('strval', $ctx['lngs'])
+        : array( isset($ctx['lng']) ? (string) $ctx['lng'] : 'pl' );
 
-    if ($promo_lng !== $ctx['lng']) {
+    if (!in_array($promo_lng, $offer_lngs, true)) {
         return false;
     }
 
@@ -713,9 +749,10 @@ function akademiata_filter_offer_ids_by_promotions(array $post_ids, array $promo
         $ctx     = isset($cache[ $post_id ])
             ? $cache[ $post_id ]
             : array(
-                'lng' => 'pl',
-                'cty' => 'uni',
-                'deg' => 0,
+                'lng'  => 'pl',
+                'lngs' => array( 'pl' ),
+                'cty'  => 'uni',
+                'deg'  => 0,
             );
 
         $matches_all = true;
@@ -830,9 +867,10 @@ function akademiata_get_promotion_filter_counts($filter_action, array $base_form
         $ctx     = isset($cache[ $post_id ])
             ? $cache[ $post_id ]
             : array(
-                'lng' => 'pl',
-                'cty' => 'uni',
-                'deg' => 0,
+                'lng'  => 'pl',
+                'lngs' => array( 'pl' ),
+                'cty'  => 'uni',
+                'deg'  => 0,
             );
 
         foreach ($promos as $promo) {
