@@ -372,7 +372,15 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   // Apply fetched data
   function applyData(data) {
-    if (!data || !data.RAW) return;
+    if (!data || !data.RAW) {
+      if (window.RAW && window.RAW.pl) {
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+      try { setEmptyState(true); } catch (e) {}
+      return;
+    }
     window.SA = data.SA || {};
     window.SA_EN = data.SA_EN || {};
     window.SA_ROWS = Array.isArray(data.SA_ROWS) ? data.SA_ROWS : (window.SA_ROWS || []);
@@ -416,9 +424,13 @@ export default function initPricesCalculator(_$, opts = {}) {
       // (Otherwise the page can keep the default "wwa" visibility state.)
       syncVisibility();
     }
-    render();
+    try {
+      render();
+      honorDeepLinkAfterRender();
+    } catch (e) {
+      console.error('[PricesCalculator] render failed', e);
+    }
     setLoading(false);
-    honorDeepLinkAfterRender();
   }
 
   function parseFixedKey(key) {
@@ -473,36 +485,70 @@ export default function initPricesCalculator(_$, opts = {}) {
   // (No local `prices.json` fetch; avoids stale/cached local data.)
   // If `googleApiUrl` is missing, fall back to local `prices.json`.
 
-  function fetchGoogleOnly() {
-    return fetch(withNoCache(GOOGLE_API_URL), { cache: 'no-store' })
-      .then(r => r.json())
-      .then(freshData => {
-        try {
-          lastGoogleHash = stableHash(JSON.stringify(freshData));
-        } catch (e) {}
-        applyData(freshData);
+  function fetchJson(url, timeoutMs) {
+    if (!url) return Promise.reject(new Error('Missing URL'));
+    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = (timeoutMs && ctrl) ? window.setTimeout(() => ctrl.abort(), timeoutMs) : null;
+    return fetch(url, { cache: 'no-store', signal: ctrl ? ctrl.signal : undefined })
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
       })
-      .catch(err => {
-        console.warn('Google API failed', err);
-        // Keep UI client-friendly: stop loader and render empty-state (render() will handle it)
-        setLoading(false);
-        try { setEmptyState(true); } catch (e) {}
-      });
+      .finally(() => { if (timer) window.clearTimeout(timer); });
   }
 
-  function fetchLocalOnly() {
-    return fetch(LOCAL_JSON_URL)
-      .then(r => r.json())
-      .then(localData => applyData(localData))
-      .catch(err => {
-        console.error('Local data source failed', err);
-        setLoading(false);
-        try { setEmptyState(true); } catch (e) {}
-      });
+  function failPriceLoad(err) {
+    if (err) console.warn('[PricesCalculator] Price data unavailable', err);
+    setLoading(false);
+    try { setEmptyState(true); } catch (e) {}
   }
 
-  if (GOOGLE_API_URL) fetchGoogleOnly();
-  else fetchLocalOnly();
+  function loadPrices() {
+    const googleUrl = GOOGLE_API_URL ? withNoCache(GOOGLE_API_URL) : '';
+    const localPromise = fetchJson(LOCAL_JSON_URL, 10000).catch(err => {
+      console.warn('[PricesCalculator] Local prices.json failed', err);
+      return null;
+    });
+    const googlePromise = googleUrl
+      ? fetchJson(googleUrl, 25000).catch(err => {
+          console.warn('[PricesCalculator] Google API failed', err);
+          return null;
+        })
+      : Promise.resolve(null);
+
+    if (!googleUrl) {
+      localPromise.then(data => {
+        if (data && data.RAW) applyData(data);
+        else failPriceLoad();
+      });
+      return;
+    }
+
+    // Show local prices.json immediately; refresh from Google when it responds.
+    let hasData = false;
+    localPromise.then(local => {
+      if (local && local.RAW && !hasData) {
+        applyData(local);
+        hasData = true;
+      }
+    });
+
+    googlePromise.then(google => {
+      if (google && google.RAW) {
+        try {
+          lastGoogleHash = stableHash(JSON.stringify(google));
+        } catch (e) {}
+        applyData(google);
+        hasData = true;
+      }
+    });
+
+    Promise.all([localPromise, googlePromise]).then(([local, google]) => {
+      if (!hasData && !(local && local.RAW) && !(google && google.RAW)) failPriceLoad();
+    });
+  }
+
+  loadPrices();
 
   // Event listeners
   function bindUI() {
