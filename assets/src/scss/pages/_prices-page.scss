@@ -382,17 +382,12 @@ body.page-template-page-template-prices{
     }
 
     .pc.pc--promo-price {
-      .pc-price--desktop,
-      .pc-price--mobile {
-        margin-top: 8px;
-        padding: 12px 14px;
-        background: #EAF6EA;
-        border: 1px solid #9BD3A4;
-        border-radius: 12px;
+      .pc-price--desktop {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
+        gap: 4px;
+        margin-top: 4px;
       }
 
       .pr,
@@ -1328,19 +1323,10 @@ body.page-template-page-template-prices{
 
       .pc.pc--promo-price {
         .pc-price--mobile {
-          margin-top: 0;
-        }
-
-        .pc-price--desktop,
-        .pc-price--mobile {
-          padding: 12px 14px;
-          background: #EAF6EA;
-          border: 1px solid #9BD3A4;
-          border-radius: 12px;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          gap: 6px;
+          gap: 4px;
         }
 
         .pr,
