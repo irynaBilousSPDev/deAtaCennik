@@ -1371,7 +1371,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (sHit) modes.push('s');
       if (nHit) modes.push('n');
 
-      return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
+      return [Object.assign({}, rep, { modes: programModesFor({ deg: rep.deg, k: rep.k, modes }), dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
     }
     
     // Wrocław + UABY checkbox: program list = every row from 🇺🇦 Ceny_UABY (current study language).
@@ -1423,22 +1423,37 @@ export default function initPricesCalculator(_$, opts = {}) {
       const modes = [];
       if (inS) modes.push('s');
       if (inN) modes.push('n');
-      res.push(Object.assign({}, g.rep, { s: null, modes: modes, dn: g.k }));
+      res.push(Object.assign({}, g.rep, { s: null, modes: programModesFor({ deg: g.deg, k: g.k, modes }), dn: g.k }));
       
       g.specs.forEach(sp => {
         const sm = [];
         const cleanSpS = (sp.s || '').trim().toLowerCase();
         if (sl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('s');
         if (nl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('n');
-        res.push(Object.assign({}, sp, { modes: sm, dn: sp.k + ' — ' + sp.s }));
+        res.push(Object.assign({}, sp, { modes: programModesFor(Object.assign({}, sp, { modes: sm })), dn: sp.k + ' — ' + sp.s }));
       });
     });
     return res;
   }
 
+  function programModesFor(u) {
+    if (!u) return [];
+    if (Number(u.deg) === 2 && isZarzadzanieCourseKey(u.k)) {
+      return ['n'];
+    }
+    return Array.isArray(u.modes) ? u.modes : [];
+  }
+
   function getItem() {
     const u = window.unified[window.progIdx];
     if (!u) return null;
+
+    if (window.lang !== 'en' && !u.uabyOnly) {
+      const modes = programModesFor(u);
+      if (modes.length && modes.indexOf(window.mode) < 0) {
+        return null;
+      }
+    }
 
     let item = null;
     if (window.lang === 'en' || u.uabyOnly) {
@@ -1469,8 +1484,9 @@ export default function initPricesCalculator(_$, opts = {}) {
           }
         }
       }
-      if (!item) item = u;
     }
+
+    if (!item) return null;
 
     return applyZarzadzaniePriceOverride(item);
   }
@@ -1684,7 +1700,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       return;
     }
 
-    const modes = uabyWro ? modesForUabyProgram(u) : (Array.isArray(u.modes) ? u.modes : []);
+    const modes = uabyWro ? modesForUabyProgram(u) : programModesFor(u);
     if (!modes.length) {
       if (mw) mw.style.display = 'none';
       return;

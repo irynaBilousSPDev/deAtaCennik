@@ -40,7 +40,7 @@ alwaysApply: false
 
 ## Temporary Zarządzanie PL tuition (until 31 Oct 2026)
 
-- **Scope:** all `k: Zarządzanie` rows, Warsaw + Wrocław, study lang PL (`window.lang === 'pl'`). Not EN Management, not „Zarządzanie i inżynieria produkcji”.
+- **Scope:** all `k: Zarządzanie` rows, Warsaw + Wrocław, study lang PL (`window.lang === 'pl'`). Not EN Management, not „Zarządzanie i inżynieria produkcji”. II stopień = **niestacjonarne only** (`programModesFor`).
 - **Rates (JS override in `prices-calculator.js`; sheet unchanged):** I stacjonarne 12×490 / 10×660; I niestacjonarne 12×450 / 10×620; II niestacjonarne 12×590 / 10×770. II stacjonarne unchanged.
 - **Promos:** sheet promo cards hidden; section title + Regulamin stay; `#promos-inner` empty. Rekr promos (`#rekr-promos`) unchanged. No stacking (`getEA` skipped).
 - **UI:** plan cards (r12/r10): inline `~~990 zł~~ → 490 zł/m-c` (strikethrough old + arrow + green new price).
