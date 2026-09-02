@@ -314,7 +314,9 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (!pending) return false;
 
     if (pending.promo) {
-      const exists = Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === pending.promo);
+      const previewItem = getItem();
+      const promoBlocked = !!(previewItem && previewItem._zarzadzanieOverride);
+      const exists = !promoBlocked && Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === pending.promo);
       if (exists) {
         window.selP = { jednorazowo: false };
         window.selP[pending.promo] = true;
@@ -1229,6 +1231,80 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
   }
 
+  // Temporary Zarządzanie PL tuition (Warsaw + Wrocław; no sheet promos; until 31 Oct 2026).
+  const ZARZADZANIE_PRICE_OVERRIDE_UNTIL = new Date(2026, 9, 31, 23, 59, 59);
+
+  function isZarzadzaniePriceOverrideActive() {
+    return Date.now() <= ZARZADZANIE_PRICE_OVERRIDE_UNTIL.getTime();
+  }
+
+  function isZarzadzanieCourseKey(k) {
+    return normProgName(k) === 'zarzadzanie';
+  }
+
+  function getZarzadzaniePriceOverrideRates(deg, mode) {
+    const map = {
+      '1_s': { r12: 490, r10: 660 },
+      '1_n': { r12: 450, r10: 620 },
+      '2_n': { r12: 590, r10: 770 },
+    };
+    return map[String(deg) + '_' + String(mode)] || null;
+  }
+
+  function itemMatchesZarzadzaniePriceOverride(item) {
+    if (!item || !isZarzadzaniePriceOverrideActive()) return false;
+    if (window.lang !== 'pl') return false;
+    if (window.city !== 'wwa' && window.city !== 'wro') return false;
+    if (!isZarzadzanieCourseKey(item.k)) return false;
+    return !!getZarzadzaniePriceOverrideRates(item.deg, window.mode);
+  }
+
+  function applyZarzadzaniePriceOverride(item) {
+    if (!item || !itemMatchesZarzadzaniePriceOverride(item)) return item;
+    const rates = getZarzadzaniePriceOverrideRates(item.deg, window.mode);
+    if (!rates) return item;
+    return Object.assign({}, item, {
+      _origR10: item.r10,
+      _origR12: item.r12,
+      r10: rates.r10,
+      r12: rates.r12,
+      _zarzadzanieOverride: true,
+    });
+  }
+
+  function clearSheetPromoSelection() {
+    window.selP = { jednorazowo: false };
+  }
+
+  function planWasLabel(wasPrice, pid) {
+    if (!wasPrice) return '';
+    const prefix = UI_LANG === 'en' ? 'standard rate' : 'standardowo';
+    const suffix = (pid === 'r12' || pid === 'r10') ? ' zł/ratę' : ' zł';
+    return prefix + ' ' + fmt(wasPrice) + suffix;
+  }
+
+  function attachPlanWasPrice(result, item, pid) {
+    if (!result || !item || !item._zarzadzanieOverride) return result;
+    if (pid === 'r12' && item._origR12) result.was = item._origR12;
+    if (pid === 'r10' && item._origR10) result.was = item._origR10;
+    return result;
+  }
+
+  function setPlanWasPrice(card, pp, pid) {
+    const txt = pp && pp.was ? planWasLabel(pp.was, pid) : '';
+    card.querySelectorAll('[data-plan-was], [data-plan-was-desktop]').forEach(el => {
+      if (!el) return;
+      if (txt) {
+        el.textContent = txt;
+        el.style.display = '';
+      } else {
+        el.textContent = '';
+        el.style.display = 'none';
+      }
+    });
+    card.classList.toggle('pc--promo-price', !!(pp && pp.was));
+  }
+
   function ensurePlanCardInScroller(plansEl, sel) {
     if (!plansEl || !sel) return;
     const pad = 12;
@@ -1347,30 +1423,40 @@ export default function initPricesCalculator(_$, opts = {}) {
   function getItem() {
     const u = window.unified[window.progIdx];
     if (!u) return null;
-    if (window.lang === 'en' || u.uabyOnly) return u;
 
-    // Single-offer mode: always match the exact row by key + mode.
-    // This avoids incorrect matches when multiple rows share the same course name/degree.
-    if (FIXED_KEY) {
+    let item = null;
+    if (window.lang === 'en' || u.uabyOnly) {
+      item = u;
+    } else if (FIXED_KEY) {
       const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
       for (let i = 0; i < list.length; i++) {
-        if (matchItemByFixedKey(list[i], FIXED_KEY, PARSED_FIXED)) return list[i];
+        if (matchItemByFixedKey(list[i], FIXED_KEY, PARSED_FIXED)) {
+          item = list[i];
+          break;
+        }
       }
-      // If no exact match, return null so empty-state can show.
-      return null;
+    } else {
+      const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
+      const uK = (u.k || '').trim().toLowerCase();
+      const uS = normSpec(u.s).trim().toLowerCase();
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK && normSpec(list[i].s).trim().toLowerCase() === uS) {
+          item = list[i];
+          break;
+        }
+      }
+      if (!item) {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK) {
+            item = list[i];
+            break;
+          }
+        }
+      }
+      if (!item) item = u;
     }
 
-    const list = (window.RAW.pl[window.city] && window.RAW.pl[window.city][window.mode]) || [];
-    const uK = (u.k || '').trim().toLowerCase();
-    const uS = normSpec(u.s).trim().toLowerCase();
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK && normSpec(list[i].s).trim().toLowerCase() === uS) return list[i];
-    }
-    // Fallback: if specialization row isn't present in RAW, match by degree+course name.
-    for (let i = 0; i < list.length; i++) {
-      if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK) return list[i];
-    }
-    return u;
+    return applyZarzadzaniePriceOverride(item);
   }
 
   function getEA(bAnn) {
@@ -1429,7 +1515,8 @@ export default function initPricesCalculator(_$, opts = {}) {
       return null;
     }
 
-    const bon = window.selP['jednorazowo'];
+    const bon = item._zarzadzanieOverride ? false : window.selP['jednorazowo'];
+    const noSheetPromos = !!item._zarzadzanieOverride;
 
     // IMPORTANT: Use exact sheet columns for installment plans:
     // - r12 => R12 column (12 payments)
@@ -1438,19 +1525,27 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (pid === 'r12') {
       if (!item.r12 || item.r12 <= 0) return null;
       const baseTot = Math.round(item.r12 * 12);
-      const ea = getEA(baseTot);
-      return { pr: Math.round(ea.eff / 12), un: 'zł / ratę (12 rat)', cur: 'PLN' };
+      const ea = noSheetPromos ? { eff: baseTot, disc: 0, active: false } : getEA(baseTot);
+      return attachPlanWasPrice(
+        { pr: Math.round(ea.eff / 12), un: 'zł / ratę (12 rat)', cur: 'PLN' },
+        item,
+        pid
+      );
     }
     if (pid === 'r10') {
       if (!item.r10 || item.r10 <= 0) return null;
       const baseTot = Math.round(item.r10 * 10);
-      const ea = getEA(baseTot);
-      return { pr: Math.round(ea.eff / 10), un: 'zł / ratę (10 rat)', cur: 'PLN' };
+      const ea = noSheetPromos ? { eff: baseTot, disc: 0, active: false } : getEA(baseTot);
+      return attachPlanWasPrice(
+        { pr: Math.round(ea.eff / 10), un: 'zł / ratę (10 rat)', cur: 'PLN' },
+        item,
+        pid
+      );
     }
 
     // For upfront payment variants, use annual total based on R12 column.
     const bAnn = (item.r12 || 0) * 12;
-    const ea = getEA(bAnn);
+    const ea = noSheetPromos ? { eff: bAnn, disc: 0, active: false } : getEA(bAnn);
     if (pid === 'sem') {
       if (item.r12 <= 0) return null;
       if (bon) {
@@ -1906,6 +2001,8 @@ export default function initPricesCalculator(_$, opts = {}) {
           }
         }
 
+        setPlanWasPrice(card, pp, pid);
+
         plansEl.appendChild(card);
       });
 
@@ -1926,8 +2023,26 @@ export default function initPricesCalculator(_$, opts = {}) {
       }
     }
 
-    const elig = getElig(u), ps2 = document.getElementById('promos') || document.getElementById('promos-section'), pi = document.getElementById('promos-inner');
-    if (elig.length && !window.uaby) {
+    const zarzadzaniePromoBlocked = !!(item && item._zarzadzanieOverride);
+    if (zarzadzaniePromoBlocked) {
+      clearSheetPromoSelection();
+    }
+
+    const elig = zarzadzaniePromoBlocked ? [] : getElig(u);
+    const ps2 = document.getElementById('promos') || document.getElementById('promos-section');
+    const pi = document.getElementById('promos-inner');
+    if (zarzadzaniePromoBlocked && ps2) {
+      if (ps2) ps2.style.display = '';
+      if (pi) {
+        pi.innerHTML = '';
+        const note = document.createElement('p');
+        note.className = 'promo-rule promo-rule--zarzadzanie';
+        note.textContent = UI_LANG === 'en'
+          ? 'Promotional Management tuition until 31 October 2026. Cannot be combined with other tuition discounts.'
+          : 'Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.';
+        pi.appendChild(note);
+      }
+    } else if (elig.length && !window.uaby) {
       if (ps2) ps2.style.display = '';
       const tpl = document.getElementById('promo-card-template');
       if (pi) pi.innerHTML = '';
@@ -2113,7 +2228,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       const degL = u.deg === 1
         ? (UI_LANG === 'pl' ? 'Studia I stopnia' : 'Bachelor studies')
         : (UI_LANG === 'pl' ? 'Studia II stopnia' : 'Master studies');
-      const tsv = (window.lang === 'pl' && !window.uaby ? getEA(item.r12 * 12).disc : 0) + (ppS.sv || 0);
+      const tsv = (window.lang === 'pl' && !window.uaby && !item._zarzadzanieOverride ? getEA(item.r12 * 12).disc : 0) + (ppS.sv || 0);
       // Design: header line should always be "KIERUNEK · POZIOM" (course name from column D).
       const spLine = (u.k ? String(u.k) : '') + (degL ? ' · ' + degL : '');
       const snLine = (u.s || u.k || '');

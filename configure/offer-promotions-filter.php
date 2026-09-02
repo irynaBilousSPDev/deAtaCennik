@@ -895,6 +895,34 @@ function akademiata_get_promotions_filter_badge_html() {
 }
 
 /**
+ * Temporary Zarządzanie PL tuition campaign (until 31 Oct 2026).
+ */
+function akademiata_is_zarzadzanie_price_override_active() {
+    return wp_date('Y-m-d') <= '2026-10-31';
+}
+
+/**
+ * Offer listing: sheet promos unavailable when Zarządzanie is selected (PL/UK/RU UI).
+ */
+function akademiata_offer_listing_zarzadzanie_promos_blocked() {
+    if (!akademiata_is_zarzadzanie_price_override_active()) {
+        return false;
+    }
+
+    $ui_lang = apply_filters('wpml_current_language', null);
+    if ($ui_lang === 'en') {
+        return false;
+    }
+
+    $selected = akademiata_get_selected_filter_terms_from_request(
+        'program',
+        akademiata_get_offer_listing_filter_keys()
+    );
+
+    return in_array('zarzadzanie', $selected, true);
+}
+
+/**
  * Render promotions filter group (after Miasto in filter sidebar).
  *
  * @param string|null $filter_action
@@ -915,8 +943,13 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
         akademiata_get_offer_listing_filter_keys()
     );
 
+    $zarzadzanie_blocked = akademiata_offer_listing_zarzadzanie_promos_blocked();
+    if ($zarzadzanie_blocked) {
+        $selected = array();
+    }
+
     ?>
-    <div class="taxonomy_group taxonomy_group--promotions mb-3">
+    <div class="taxonomy_group taxonomy_group--promotions mb-3<?php echo $zarzadzanie_blocked ? ' is-zarzadzanie-blocked' : ''; ?>">
         <h2 class="filter_accordion_header filter_accordion_header--promotions" data-tax="promotions">
             <span class="filter_accordion_header__label">
                 <?php echo akademiata_get_promotions_filter_badge_html(); ?>
@@ -925,6 +958,11 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
             <div class="arrow-open-close" aria-hidden="true"></div>
         </h2>
         <div class="accordion-content">
+            <?php if ($zarzadzanie_blocked) : ?>
+                <p class="filter-promo-zarzadzanie-note">
+                    <?php esc_html_e('Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.', 'akademiata'); ?>
+                </p>
+            <?php endif; ?>
             <div class="labels_list filter-promo-cards">
                 <?php foreach ($promos as $promo) :
                     $promo_id     = sanitize_title((string) $promo['id']);
@@ -940,9 +978,10 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                         )
                         : '';
                     $promo_stack  = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
-                    $checked      = in_array($promo_id, $selected, true) ? 'checked' : '';
+                    $checked      = !$zarzadzanie_blocked && in_array($promo_id, $selected, true) ? 'checked' : '';
+                    $card_class   = 'filter-promo-card' . ($zarzadzanie_blocked ? ' is-disabled' : '');
                     ?>
-                    <label class="filter-promo-card">
+                    <label class="<?php echo esc_attr($card_class); ?>">
                         <input type="checkbox"
                                class="filter-promo-card__input"
                                name="promotions[]"
@@ -953,6 +992,7 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                                data-promo-full="<?php echo esc_attr($promo_full); ?>"
                                data-promo-tag="<?php echo esc_attr($promo_tag); ?>"
                                data-promo-stack="<?php echo esc_attr(wp_json_encode($promo_stack)); ?>"
+                            <?php disabled($zarzadzanie_blocked); ?>
                             <?php echo $checked; ?>>
                         <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
                     </label>

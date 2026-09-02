@@ -518,7 +518,58 @@ import { initOfferViewToggle } from './offer-view-toggle';
         syncDesktopFilterBarVisibility();
     }
 
+    function isZarzadzaniePromoBlockEnabled() {
+        const flag = form.data('zarzadzaniePromoBlock');
+        return flag === 1 || flag === '1';
+    }
+
+    function isZarzadzanieProgramSelected() {
+        const slug = form.data('zarzadzanieProgramSlug') || 'zarzadzanie';
+        return form.find(`input[name="program[]"][value="${slug}"]:checked`).length > 0;
+    }
+
+    function updateZarzadzaniePromoBlock() {
+        if (!isZarzadzaniePromoBlockEnabled()) {
+            $('.taxonomy_group--promotions').removeClass('is-zarzadzanie-blocked');
+            form.find('input[name="promotions[]"]').prop('disabled', false);
+            return;
+        }
+
+        const blocked = isZarzadzanieProgramSelected();
+        const $group = $('.taxonomy_group--promotions');
+        $group.toggleClass('is-zarzadzanie-blocked', blocked);
+
+        let $note = $group.find('.filter-promo-zarzadzanie-note');
+        const noteText = (window.akademiataOffer && window.akademiataOffer.zarzadzaniePromoNote)
+            || 'Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.';
+
+        if (blocked && !$note.length) {
+            $note = $('<p>').addClass('filter-promo-zarzadzanie-note').text(noteText);
+            $group.find('.accordion-content').prepend($note);
+        } else if (!blocked) {
+            $note.remove();
+        }
+
+        form.find('input[name="promotions[]"]').each(function () {
+            const $input = $(this);
+            if (blocked) {
+                $input.prop('checked', false).prop('disabled', true);
+                $input.closest('.filter-promo-card').addClass('is-disabled');
+            } else {
+                $input.prop('disabled', false);
+            }
+        });
+
+        if (blocked) {
+            $('#offer-promo-info').empty().addClass('is-empty');
+            Object.keys(openPromoInfoIds).forEach((key) => {
+                delete openPromoInfoIds[key];
+            });
+        }
+    }
+
     function updatePromoStackStates() {
+        updateZarzadzaniePromoBlock();
         const checkedIds = [];
 
         form.find('input[name="promotions[]"]:checked').each(function () {
@@ -530,7 +581,9 @@ import { initOfferViewToggle } from './offer-view-toggle';
             const stack = getPromoStack($input);
             let canSelect = true;
 
-            if (!$input.is(':checked')) {
+            if ($input.is(':disabled') || $input.closest('.filter-promo-card').hasClass('is-disabled')) {
+                canSelect = false;
+            } else if (!$input.is(':checked')) {
                 checkedIds.forEach((oid) => {
                     if (stack.indexOf(oid) < 0) {
                         canSelect = false;

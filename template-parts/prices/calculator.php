@@ -298,12 +298,14 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 				<span class="pr pc-pr--desktop" data-plan-price-desktop></span>
 				<span class="pc-unit pc-unit--desktop" data-plan-unit-desktop></span>
 			</div>
+			<div class="pc-was pc-was--desktop" data-plan-was-desktop style="display:none"></div>
 
 			<!-- Mobile-only price row -->
 			<div class="pc-price pc-price--mobile">
 				<span class="pr" data-plan-price></span>
 				<span class="pc-unit" data-plan-unit></span>
 			</div>
+			<div class="pc-was" data-plan-was style="display:none"></div>
 			<div class="pc-disc" data-plan-disc style="display:none"></div>
 			<div class="sv" data-plan-sv style="display:none"></div>
 			<div class="pc-pick" data-plan-pick style="display:none"><?php echo $is_en ? esc_html__('Most popular', 'akademiata') : esc_html__('Najczęściej wybierany', 'akademiata'); ?></div>

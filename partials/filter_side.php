@@ -15,7 +15,9 @@
     $offer_filter_action = akademiata_get_offer_filter_action();
     ?>
 
-    <form id="ajax-filter-form">
+    <form id="ajax-filter-form"
+          data-zarzadzanie-promo-block="<?php echo akademiata_is_zarzadzanie_price_override_active() ? '1' : '0'; ?>"
+          data-zarzadzanie-program-slug="zarzadzanie">
         <?php foreach ($taxonomies as $taxonomy => $taxonomy_name) :
             $terms = get_terms([
                 'taxonomy' => $taxonomy,

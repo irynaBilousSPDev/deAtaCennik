@@ -394,6 +394,23 @@
   }
 }
 
+.taxonomy_group--promotions.is-zarzadzanie-blocked {
+  .filter-promo-cards {
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .filter-promo-zarzadzanie-note {
+    margin: 0 0 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #5c6570;
+    background: #f6f7f9;
+    border-radius: 10px;
+  }
+}
+
 .offer-promo-info {
   display: contents;
 
