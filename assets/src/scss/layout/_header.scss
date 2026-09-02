@@ -196,6 +196,16 @@ body:not(.home) {
 
   @include mixins.flexbox(row, space-between, center);
 
+  .desktop_visible > .d-flex,
+  .mobile_visible > .d-flex {
+    align-items: center;
+  }
+
+  .main-navigation {
+    display: flex;
+    align-items: center;
+  }
+
   .logo_container {
     @include mixins.flexbox(row, flex-start, center);
 
@@ -246,12 +256,16 @@ body:not(.home) {
 
 #menu-main {
   list-style: none;
-  @include mixins.flexbox(row);
-
+  margin-bottom: 0;
+  @include mixins.flexbox(row, flex-start, center);
 }
 
 header {
   #menu-main {
+    li {
+      display: flex;
+      align-items: center;
+    }
 
     a {
       @include mixins.font-style(vars.$font-size-lg, 24px, vars.$weight-regular);
