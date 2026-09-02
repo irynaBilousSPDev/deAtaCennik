@@ -1898,7 +1898,10 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const priceTxt = `${fromTxt} ${fmt(pp.pr)} ${unit}`.trim();
     if (pp.was && (pid === 'r12' || pid === 'r10')) {
-      strong.innerHTML = `${fromTxt} <s>${fmt(pp.was)} zł/m-c</s> → ${fmt(pp.pr)} ${unit}`;
+      strong.innerHTML =
+        `${fromTxt} <s>${fmt(pp.was)} zł</s>` +
+        ` <span class="price-from-single__arrow" aria-hidden="true">→</span>` +
+        ` <span class="price-from-single__promo">${fmt(pp.pr)} ${unit}</span>`;
     } else {
       strong.textContent = priceTxt;
     }

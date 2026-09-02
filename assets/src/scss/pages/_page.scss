@@ -275,6 +275,15 @@
     margin: 0 1rem;
   }
 
+  .price-from-single__arrow {
+    color: #86868B;
+  }
+
+  .price-from-single__promo {
+    color: #2E7D32;
+    font-weight: 700;
+  }
+
   a {
     text-transform: uppercase;
     @media (max-width: 1035px) {
