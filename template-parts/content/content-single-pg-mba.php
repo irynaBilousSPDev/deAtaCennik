@@ -69,14 +69,16 @@ $top_taxonomies_with_labels = [
                         <?php $price_text = akademiata_pg_mba_get_teaser_price_text($post_id); ?>
                         <?php if ($price_text !== '') : ?>
                             <div id="priseScroll" class="taxonomy_info price_from_single my-5">
-                                <?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_teaser_price_label')); ?>:
-                                <strong>
-                                    <?php _e('już od', 'akademiata'); ?>
-                                    <?php echo $price_text; ?>
-                                </strong>
-                                <a href="#tuition_fees" class="primary_color">
-                                    <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
-                                </a>
+                                <div class="price-from-single__label"><?php echo esc_html(akademiata_get_theme_lang_string('pg_mba_teaser_price_label')); ?>:</div>
+                                <div class="price-from-single__body">
+                                    <strong>
+                                        <?php _e('już od', 'akademiata'); ?>
+                                        <?php echo $price_text; ?>
+                                    </strong>
+                                    <a href="#tuition_fees" class="primary_color">
+                                        <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
+                                    </a>
+                                </div>
                             </div>
                         <?php endif; ?>
 

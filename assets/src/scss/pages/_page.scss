@@ -271,8 +271,20 @@
     font-size: 20px;
   }
 
+  .price-from-single__label {
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .price-from-single__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1rem;
+  }
+
   strong {
-    margin: 0 1rem;
+    margin: 0;
   }
 
   .price-from-single__arrow {
@@ -286,9 +298,6 @@
 
   a {
     text-transform: uppercase;
-    @media (max-width: 1035px) {
-      display: block;
-    }
   }
 }
 

@@ -81,11 +81,13 @@ $show_register_button = !empty($register_url);
                             if ($logical_sync_key !== '') :
                                 ?>
                                 <div id="priseScroll" class="taxonomy_info price_from_single my-5">
-                                    <?php _e('CENA', 'akademiata'); ?>:
-                                    <strong></strong>
-                                    <a href="#tuition_fees" class="primary_color">
-                                        <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
-                                    </a>
+                                    <div class="price-from-single__label"><?php _e('CENA', 'akademiata'); ?>:</div>
+                                    <div class="price-from-single__body">
+                                        <strong></strong>
+                                        <a href="#tuition_fees" class="primary_color">
+                                            <?php _e('SPRAWDŹ CENNIK', 'akademiata'); ?>
+                                        </a>
+                                    </div>
                                 </div>
                             <?php endif; ?>
 
