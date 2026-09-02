@@ -15,6 +15,7 @@ if (!in_array($post_type, array('postgraduate', 'mba'), true)) {
 }
 ?>
 <div id="scroller" class="filter_side">
+    <?php get_template_part('partials/pg-mba-favorites-filter-desktop'); ?>
     <form id="ajax-filter-pg-mba-form">
         <?php foreach ($taxonomies as $taxonomy => $taxonomy_name) :
             $terms = akademiata_get_taxonomy_terms_for_post_type($taxonomy, $post_type);

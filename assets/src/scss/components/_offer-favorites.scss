@@ -1,7 +1,8 @@
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mixins;
 
-.offer-favorite-btn {
+.offer-favorite-btn,
+.pg-mba-favorite-btn {
   position: absolute;
   right: 8px;
   bottom: 8px;
@@ -54,7 +55,8 @@
   }
 }
 
-.offer-favorites-chip {
+.offer-favorites-chip,
+.pg-mba-favorites-chip {
   &[hidden] {
     display: none !important;
   }
@@ -74,11 +76,17 @@
       opacity: 1;
       color: #e53935;
     }
+
+    .pg-mba-favorites-chip__icon {
+      opacity: 1;
+      color: #e53935;
+    }
   }
 }
 
 // Desktop sidebar — same row style as .taxonomy_group .labels_list label
-.offer-favorites-filter--desktop {
+.offer-favorites-filter--desktop,
+.pg-mba-favorites-filter--desktop {
   display: none;
   margin-bottom: 0;
 
@@ -98,14 +106,16 @@
     flex-direction: column;
   }
 
-  .offer-favorites-filter__label {
+  .offer-favorites-filter__label,
+  .pg-mba-favorites-filter__label {
     @include mixins.font-style(vars.$font-size-default, 24px, vars.$weight-semi-regular);
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
     cursor: pointer;
 
-    input[type="checkbox"].offer-favorites-filter__toggle {
+    input[type="checkbox"].offer-favorites-filter__toggle,
+    input[type="checkbox"].pg-mba-favorites-filter__toggle {
       appearance: none;
       -webkit-appearance: none;
       position: relative;
@@ -143,6 +153,16 @@
   }
 
   .card_post_item.is-favorites-hidden {
+    display: none !important;
+  }
+}
+
+.offer_wrapper--pg-mba {
+  .card_post_image {
+    position: relative;
+  }
+
+  .pg_mba_card.is-favorites-hidden {
     display: none !important;
   }
 }

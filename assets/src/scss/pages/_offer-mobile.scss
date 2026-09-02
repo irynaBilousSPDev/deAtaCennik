@@ -793,7 +793,8 @@ $om-filter-card-pad: 16px;
 
         .card_post_item.is-search-hidden,
         .card_post_item.is-favorites-hidden,
-        .pg_mba_card.is-search-hidden {
+        .pg_mba_card.is-search-hidden,
+        .pg_mba_card.is-favorites-hidden {
           display: none !important;
         }
       }
@@ -1199,7 +1200,8 @@ $om-filter-card-pad: 16px;
             object-position: top right;
           }
 
-          .offer-favorite-btn {
+          .offer-favorite-btn,
+          .pg-mba-favorite-btn {
             width: 30px;
             height: 30px;
             right: 6px;

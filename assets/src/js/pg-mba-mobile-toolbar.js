@@ -1,4 +1,5 @@
 import { closeOfferFilterPanel } from './__customFunctions';
+import { applyPgMbaCardFilters, deactivatePgMbaFavoritesFilter } from './pg-mba-favorites';
 
 const TABLET_MAX_WIDTH = 990;
 let lastChipTouchAt = 0;
@@ -22,40 +23,7 @@ function triggerFilterChange(input) {
 }
 
 export function applyPgMbaListingSearch() {
-    const filterResults = document.querySelector('.offer_wrapper--pg-mba #filter-results');
-    if (!filterResults) {
-        return;
-    }
-
-    const searchInput = document.querySelector('.pg-mba-mobile-toolbar .offer-mobile-search__input');
-    const query = searchInput?.value.trim().toLowerCase() || '';
-    let visibleCount = 0;
-
-    filterResults.querySelectorAll('.pg_mba_card').forEach((card) => {
-        const title = card.querySelector('h2')?.textContent.toLowerCase() || '';
-        const searchHidden = Boolean(query) && !title.includes(query);
-        card.classList.toggle('is-search-hidden', searchHidden);
-        if (!searchHidden) {
-            visibleCount += 1;
-        }
-    });
-
-    const noResults = document.getElementById('no-results-message');
-    const totalCards = filterResults.querySelectorAll('.pg_mba_card').length;
-
-    if (!noResults) {
-        return;
-    }
-
-    if (totalCards === 0) {
-        return;
-    }
-
-    if (query && visibleCount === 0) {
-        noResults.style.display = 'block';
-    } else {
-        noResults.style.display = 'none';
-    }
+    applyPgMbaCardFilters();
 }
 
 function getTaxonomyInputs(taxonomy) {
@@ -560,6 +528,7 @@ export function initPgMbaMobileToolbar() {
 
     allChip?.addEventListener('click', () => {
         closePgMbaDropdown();
+        deactivatePgMbaFavoritesFilter();
         document.getElementById('clear-filters')?.click();
         if (searchInput) {
             searchInput.value = '';
@@ -588,7 +557,7 @@ export function initPgMbaMobileToolbar() {
     });
 
     toolbar.addEventListener('click', (event) => {
-        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-mobile-search-toggle, .offer-mobile-search')) {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .pg-mba-favorites-chip, .offer-mobile-search-toggle, .offer-mobile-search')) {
             return;
         }
         if (Date.now() - lastChipTouchAt < 400) {
@@ -598,7 +567,7 @@ export function initPgMbaMobileToolbar() {
     });
 
     toolbar.addEventListener('touchend', (event) => {
-        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .offer-mobile-search-toggle, .offer-mobile-search')) {
+        if (event.target.closest('.offer-view-toggle, .offer-mobile-clear, .pg-mba-favorites-chip, .offer-mobile-search-toggle, .offer-mobile-search')) {
             return;
         }
         const chip = event.target.closest('.offer-mobile-chip--dropdown, .offer-mobile-chip--more');
@@ -632,10 +601,10 @@ export function initPgMbaMobileToolbar() {
     });
 
     document.addEventListener('akademiata:filter-results-updated', () => {
-        applyPgMbaListingSearch();
+        applyPgMbaCardFilters();
         syncChipStates();
     });
 
     syncChipStates();
-    applyPgMbaListingSearch();
+    applyPgMbaCardFilters();
 }

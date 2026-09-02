@@ -18,6 +18,7 @@ $quick_chips = array(
             <button type="button" class="offer-mobile-chip is-active" data-tax="all">
                 <?php echo esc_html(akademiata_get_theme_lang_string('offer_chip_all')); ?>
             </button>
+            <?php get_template_part('partials/pg-mba-favorites-chip'); ?>
             <?php foreach (array('city_pg_mba', 'offer_theme_pg_mba') as $taxonomy) : ?>
                 <button type="button"
                         class="offer-mobile-chip offer-mobile-chip--dropdown"

@@ -3,139 +3,110 @@ $offer_theme_terms = wp_get_post_terms($post->ID, 'offer_theme_pg_mba');
 $offer_theme_slugs = array();
 $city_pg_mba_terms = wp_get_post_terms($post->ID, 'city_pg_mba');
 $city_slug         = '';
+$city_name         = '';
 
 if (!is_wp_error($offer_theme_terms) && !empty($offer_theme_terms)) {
     $offer_theme_slugs = wp_list_pluck($offer_theme_terms, 'slug');
 }
 if (!is_wp_error($city_pg_mba_terms) && !empty($city_pg_mba_terms)) {
     $city_slug = $city_pg_mba_terms[0]->slug;
+    $city_name = esc_html($city_pg_mba_terms[0]->name);
+}
+
+$termsRanking = wp_get_post_terms($post->ID, array('program'));
+$ranking_icon_url = '';
+
+if (!is_wp_error($termsRanking) && !empty($termsRanking)) {
+    foreach ($termsRanking as $term) {
+        $ranking_icon = get_field('ranking_icon', 'program_' . $term->term_id);
+        if (!empty($ranking_icon['url'])) {
+            $ranking_icon_url = esc_url($ranking_icon['url']);
+            break;
+        }
+    }
 }
 ?>
 <div class="card_post_item pg_mba_card"
+     data-post-id="<?php echo esc_attr((string) $post->ID); ?>"
      data-city="<?php echo esc_attr($city_slug); ?>"
      data-post-type="<?php echo esc_attr(get_post_type($post->ID)); ?>"
      data-offer-theme="<?php echo esc_attr(implode(',', $offer_theme_slugs)); ?>">
     <div class="card_post_wrapper">
         <div class="card_post_image">
-
-            <?php
-            // Ranking icon from program taxonomy
-            $termsRanking = wp_get_post_terms($post->ID, ['program']);
-            $ranking_icon_url = '';
-
-            if (!is_wp_error($termsRanking) && !empty($termsRanking)) {
-                foreach ($termsRanking as $term) {
-                    $ranking_icon = get_field('ranking_icon', 'program_' . $term->term_id);
-                    if (!empty($ranking_icon['url'])) {
-                        $ranking_icon_url = esc_url($ranking_icon['url']);
-                        break;
-                    }
-                }
-            }
-
-            if ($ranking_icon_url) :
-                echo '<img class="ranking_icon" src="' . $ranking_icon_url . '" alt="Ranking Icon">';
-            endif;
-
-            // City name from city_pg_mba
-            $city_terms = wp_get_post_terms($post->ID, 'city_pg_mba');
-            $city_name = (!is_wp_error($city_terms) && !empty($city_terms)) ? esc_html($city_terms[0]->name) : '';
-            ?>
+            <?php if ($ranking_icon_url) : ?>
+                <img class="ranking_icon ranking_icon--overlay"
+                     src="<?php echo $ranking_icon_url; ?>"
+                     alt="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_ranking_icon_alt')); ?>">
+            <?php endif; ?>
 
             <?php if ($city_name) : ?>
-                <div class="city_block">
+                <div class="city_block city_block--overlay">
                     <img class="location_icon"
                          src="<?php echo esc_url(get_template_directory_uri() . '/static/img/icon_location.png'); ?>"
-                         alt="<?php _e('Location Icon', 'akademiata'); ?>">
+                         alt="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_location_icon_alt')); ?>">
                     <span><?php echo $city_name; ?></span>
                 </div>
             <?php endif; ?>
-            <?php
-
-            $full_time_price = get_field('full_time') ?: '';
-            $part_time_price = get_field('part_time') ?: '';
-            $currency = apply_filters('wpml_current_language', null) === 'en' ? '€/month' : 'zł/mies.';
-            $price_text = '';
-
-            $source_data = [];
-
-            if (!empty($full_time_price) && is_array($full_time_price)) {
-                $source_data = $full_time_price;
-            } elseif (!empty($part_time_price) && is_array($part_time_price)) {
-                $source_data = $part_time_price;
-            }
-
-            if (!empty($source_data)) {
-                $row = $source_data[0] ?? [];
-                $col_data = $row['col_8_rat'] ?? [];
-
-                if (is_array($col_data)) {
-                    $add_promotion = $col_data['add_promotion_rat8'] ?? [];
-                    $has_promo = (is_array($add_promotion) && in_array('promotion', $add_promotion))
-                        || $add_promotion === 'promotion';
-
-                    if ($has_promo && !empty($col_data['rat8_promotion_price'])) {
-                        $price_text = esc_html($col_data['rat8_promotion_price']) . ' ' . $currency;
-                    } elseif (!empty($col_data['rat8_normal_price'])) {
-                        $price_text = esc_html($col_data['rat8_normal_price']) . ' ' . $currency;
-                    }
-                }
-            }
-            ?>
-<!--            --><?php //if (!empty($price_text)) : ?>
-<!--                <div class="price_from">-->
-<!--                    <div class="price_from__title">--><?php //_e('już od', 'akademiata'); ?><!--</div>-->
-<!--                    <div>-->
-<!--                        --><?php //echo $price_text; ?>
-<!--                    </div>-->
-<!--                </div>-->
-<!--            --><?php //endif; ?>
 
             <?php
-            // Thumbnail
             $thumbnail_url = wp_get_attachment_image_url(get_post_thumbnail_id($post->ID), 'specialization_card_thumb');
             if ($thumbnail_url) :
                 ?>
                 <a title="<?php the_title(); ?>" href="<?php the_permalink(); ?>">
-                    <div class="image_bg" role="img" aria-label="<?= esc_attr(get_the_title()); ?>"
-                         style="background-image: url(<?= esc_url($thumbnail_url); ?>)"></div>
+                    <div class="image_bg" role="img" aria-label="<?php echo esc_attr(get_the_title()); ?>"
+                         style="background-image: url(<?php echo esc_url($thumbnail_url); ?>)"></div>
                 </a>
             <?php endif; ?>
+
+            <button type="button"
+                    class="pg-mba-favorite-btn"
+                    data-post-id="<?php echo esc_attr((string) $post->ID); ?>"
+                    data-post-type="<?php echo esc_attr(get_post_type($post->ID)); ?>"
+                    aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_favorite_add')); ?>"
+                    aria-pressed="false">
+                <svg class="pg-mba-favorite-btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </button>
         </div>
 
         <div class="card_post_body" style="display: flex;flex-direction: column;justify-content: space-between">
             <div>
+                <?php if ($city_name) : ?>
+                    <div class="city_block city_block--inline">
+                        <img class="location_icon"
+                             src="<?php echo esc_url(get_template_directory_uri() . '/static/img/icon_location.png'); ?>"
+                             alt=""
+                             aria-hidden="true">
+                        <span><?php echo $city_name; ?></span>
+                    </div>
+                <?php endif; ?>
                 <h2 class="mb-3"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
 
                 <div class="card_properties_wrapper">
                     <div class="row">
                         <?php
-                        $taxonomy_titles = [
-//                            'type_of_study_pg_mba' => __('Rodzaj studiów', 'akademiata'),
-
+                        $taxonomy_titles = array(
                             'language_pg_mba' => __('Język', 'akademiata'),
                             'duration_pg_mba' => __('Czas trwania', 'akademiata'),
-//                            'diploma_pg_mba' => __('Dyplom', 'akademiata'),
-//                            'form_pg_mba'          => __('Forma studiów', 'akademiata'),
-
-
-                        ];
+                        );
 
                         $all_terms = wp_get_post_terms($post->ID, array_keys($taxonomy_titles));
-                        $grouped_terms = [];
+                        $grouped_terms = array();
 
                         foreach ($all_terms as $term) {
-                            $grouped_terms[$term->taxonomy][] = esc_html($term->name);
+                            $grouped_terms[ $term->taxonomy ][] = esc_html($term->name);
                         }
 
                         foreach ($taxonomy_titles as $taxonomy => $label) {
-                            if (!empty($grouped_terms[$taxonomy])) :
+                            if (!empty($grouped_terms[ $taxonomy ])) :
                                 ?>
                                 <div class="col-6 card_property">
                                     <div class="sub_title"><?php echo $label; ?>:</div>
-                                    <h3><?php echo implode(', ', $grouped_terms[$taxonomy]); ?></h3>
+                                    <h3><?php echo implode(', ', $grouped_terms[ $taxonomy ]); ?></h3>
                                 </div>
-                            <?php endif;
+                            <?php
+                            endif;
                         }
                         ?>
                     </div>

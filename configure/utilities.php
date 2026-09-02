@@ -121,9 +121,12 @@ function enqueue_filter_scripts()
             'ajax-filter-pg-mba',
             'ajax_filter_pg_mba_params',
             array(
-                'ajax_url'      => admin_url('admin-ajax.php'),
-                'filter_action' => $post_type === 'mba' ? 'filter_mba' : 'filter_postgraduate',
-                'lang'          => $lang,
+                'ajax_url'         => admin_url('admin-ajax.php'),
+                'filter_action'    => $post_type === 'mba' ? 'filter_mba' : 'filter_postgraduate',
+                'lang'             => $lang,
+                'favoritesScope'   => akademiata_get_pg_mba_favorites_scope($post_type),
+                'favoriteAdd'      => akademiata_get_theme_lang_string('offer_favorite_add'),
+                'favoriteRemove'   => akademiata_get_theme_lang_string('offer_favorite_remove'),
             )
         );
     }
@@ -200,6 +203,26 @@ function akademiata_get_oferta_page_id() {
     $page_id = $translated_id > 0 ? $translated_id : (int) $page->ID;
 
     return $page_id;
+}
+
+/**
+ * localStorage scope for PG/MBA favorites (separate from bachelor / master).
+ *
+ * @param string|null $post_type postgraduate|mba
+ * @return string postgraduate|mba
+ */
+function akademiata_get_pg_mba_favorites_scope($post_type = null) {
+    if ($post_type === null) {
+        if (is_post_type_archive('mba')) {
+            return 'mba';
+        }
+        if (is_post_type_archive('postgraduate')) {
+            return 'postgraduate';
+        }
+        return 'postgraduate';
+    }
+
+    return in_array($post_type, array('postgraduate', 'mba'), true) ? $post_type : 'postgraduate';
 }
 
 /**

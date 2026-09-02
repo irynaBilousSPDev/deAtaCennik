@@ -1,5 +1,6 @@
 import { initOfferViewToggle } from './offer-view-toggle';
-import { initPgMbaMobileToolbar, applyPgMbaListingSearch } from './pg-mba-mobile-toolbar';
+import { initPgMbaFavorites, applyPgMbaCardFilters } from './pg-mba-favorites';
+import { initPgMbaMobileToolbar } from './pg-mba-mobile-toolbar';
 
 (function ($) {
     if (typeof ajax_filter_pg_mba_params === 'undefined') {
@@ -126,7 +127,7 @@ import { initPgMbaMobileToolbar, applyPgMbaListingSearch } from './pg-mba-mobile
         $('#tags-container').hide();
         debouncedFilterUpdate();
         updateBrowserUrl();
-        applyPgMbaListingSearch();
+        applyPgMbaCardFilters();
     }
 
     function initializeFiltersFromURL() {
@@ -194,5 +195,6 @@ import { initPgMbaMobileToolbar, applyPgMbaListingSearch } from './pg-mba-mobile
 
     initializeFiltersFromURL();
     initOfferViewToggle();
+    initPgMbaFavorites();
     initPgMbaMobileToolbar();
 })(jQuery);
