@@ -355,10 +355,19 @@ body.page-template-page-template-prices{
     // Hide mobile-only plan card parts on desktop.
     .pc-h--mobile,
     .pc-price--mobile,
+    .pc-was:not(.pc-was--desktop),
     .pc-unit,
     .pc-disc,
     .pc-ic {
       display: none;
+    }
+
+    .pc-was--desktop {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      line-height: 1.25;
+      margin-top: 6px;
     }
 
     // Desktop can still show "Najczęściej wybierany" when JS enables it.
@@ -1177,8 +1186,9 @@ body.page-template-page-template-prices{
       }
 
       .pc-price--desktop,
-      .pc-unit--desktop {
-        display: none;
+      .pc-unit--desktop,
+      .pc-was--desktop {
+        display: none !important;
       }
 
       .plans::-webkit-scrollbar {
