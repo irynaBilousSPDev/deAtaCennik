@@ -384,7 +384,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.SA = data.SA || {};
     window.SA_EN = data.SA_EN || {};
     window.SA_ROWS = Array.isArray(data.SA_ROWS) ? data.SA_ROWS : (window.SA_ROWS || []);
-    window.RAW = data.RAW || window.RAW;
+    window.RAW = sanitizeRawPl(data.RAW || window.RAW);
     window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
     window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
     window.PROMOS = (data.PROMOS || []).filter(p => {
@@ -503,12 +503,42 @@ export default function initPricesCalculator(_$, opts = {}) {
     try { setEmptyState(true); } catch (e) {}
   }
 
+  // Drop duplicate SmartApply keys within one mode list (stale Google webapp may repeat rows).
+  function dedupeRawModeList(list) {
+    const seen = new Set();
+    return (list || []).filter(row => {
+      const ak = (row && row.ak ? String(row.ak) : '').trim().toLowerCase();
+      if (!ak) return true;
+      if (seen.has(ak)) return false;
+      seen.add(ak);
+      return true;
+    });
+  }
+
+  function sanitizeRawPl(raw) {
+    if (!raw || !raw.pl) return raw;
+    ['wwa', 'wro'].forEach(city => {
+      const bucket = raw.pl[city];
+      if (!bucket) return;
+      ['s', 'n'].forEach(mode => {
+        if (Array.isArray(bucket[mode])) bucket[mode] = dedupeRawModeList(bucket[mode]);
+      });
+    });
+    return raw;
+  }
+
   function mergePricePayload(local, google) {
-    if (!google || !google.RAW) return local;
-    if (!local || !local.RAW) return google;
-    // RAW.pl from prices.json (Python export); Google API refreshes promos/SA/UABY.
+    if (!google || !google.RAW) return sanitizeRawPl(local || null);
+    if (!local || !local.RAW) {
+      console.warn(
+        '[PricesCalculator] prices.json unavailable — using Google RAW.pl. '
+        + 'Redeploy Apps Script (parseFormaMode_) if modes look wrong.'
+      );
+      return sanitizeRawPl(google);
+    }
+    // Tuition modes/prices: prices.json (= sheet export). Live Google: promos, SmartApply, UABY.
     return Object.assign({}, google, {
-      RAW: local.RAW,
+      RAW: sanitizeRawPl(Object.assign({}, google.RAW, { pl: local.RAW.pl })),
       SA: google.SA || local.SA,
       SA_EN: google.SA_EN || local.SA_EN,
       SA_ROWS: google.SA_ROWS || local.SA_ROWS,
@@ -541,28 +571,17 @@ export default function initPricesCalculator(_$, opts = {}) {
       return;
     }
 
-    // Show local prices.json immediately; merge Google promos/SA on top (RAW.pl stays from prices.json).
-    let hasData = false;
-    localPromise.then(local => {
-      if (local && local.RAW && !hasData) {
-        applyData(local);
-        hasData = true;
-      }
-    });
-
     Promise.all([localPromise, googlePromise]).then(([local, google]) => {
-      if (google && google.RAW) {
-        const merged = mergePricePayload(local, google);
-        if (merged && merged.RAW) {
-          try {
-            lastGoogleHash = stableHash(JSON.stringify(merged));
-          } catch (e) {}
-          applyData(merged);
-          hasData = true;
-          return;
-        }
+      const merged = mergePricePayload(local, google);
+      if (merged && merged.RAW) {
+        try {
+          lastGoogleHash = stableHash(JSON.stringify(merged));
+        } catch (e) {}
+        applyData(merged);
+        return;
       }
-      if (!hasData && !(local && local.RAW)) failPriceLoad();
+      if (local && local.RAW) applyData(local);
+      else failPriceLoad();
     });
   }
 
@@ -796,6 +815,11 @@ export default function initPricesCalculator(_$, opts = {}) {
     const s = normTxt(v);
     // In sheets/data, "—" often means "no specialization"
     return (s === '—' || s === '-') ? '' : s;
+  }
+
+  function programSelectionKey(u) {
+    if (!u) return '';
+    return Number(u.deg) + '|' + (u.k || '').trim().toLowerCase() + '|' + normSpec(u.s).trim().toLowerCase();
   }
 
   function rowMatchesProgram(list, deg, cleanK, specNorm) {
@@ -1324,6 +1348,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     const map = {
       '1_s': { r12: 490, r10: 660 },
       '1_n': { r12: 450, r10: 620 },
+      '2_s': { r12: 590, r10: 770 },
       '2_n': { r12: 590, r10: 770 },
     };
     return map[String(deg) + '_' + String(mode)] || null;
@@ -1686,6 +1711,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   function setSub(pid, v) { window.subP[pid] = v; render(); }
 
   function setCity(c) {
+    window._preserveProgKey = programSelectionKey(window.unified && window.unified[window.progIdx]);
     window.city = c;
     window.progIdx = 0;
     window.selP = { jednorazowo: false };
@@ -1933,6 +1959,11 @@ export default function initPricesCalculator(_$, opts = {}) {
       // City/lang adjusted for promo eligibility — rebuild list below.
     }
     window.unified = buildUnified();
+    if (window._preserveProgKey) {
+      const preservedIdx = window.unified.findIndex(u => programSelectionKey(u) === window._preserveProgKey);
+      if (preservedIdx >= 0) window.progIdx = preservedIdx;
+      window._preserveProgKey = '';
+    }
     if (!deepLinkDone && readDeepLinkPending()) {
       ensureProgramForDeepLink();
       applyDeepLinkSelection();
