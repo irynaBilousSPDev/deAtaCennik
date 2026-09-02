@@ -524,14 +524,18 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function isZarzadzanieProgramSelected() {
-        const slug = form.data('zarzadzanieProgramSlug') || 'zarzadzanie';
-        return form.find(`input[name="program[]"][value="${slug}"]:checked`).length > 0;
+        const slugsRaw = form.data('zarzadzanieProgramSlugs');
+        const slugs = Array.isArray(slugsRaw) && slugsRaw.length
+            ? slugsRaw
+            : [form.data('zarzadzanieProgramSlug') || 'zarzadzanie'];
+        return slugs.some((slug) => form.find(`input[name="program[]"][value="${slug}"]:checked`).length > 0);
     }
 
     function updateZarzadzaniePromoBlock() {
         if (!isZarzadzaniePromoBlockEnabled()) {
             $('.taxonomy_group--promotions').removeClass('is-zarzadzanie-blocked');
             form.find('input[name="promotions[]"]').prop('disabled', false);
+            form.find('.filter-promo-card').removeClass('is-disabled');
             return;
         }
 
@@ -541,11 +545,13 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         form.find('input[name="promotions[]"]').each(function () {
             const $input = $(this);
+            const $card = $input.closest('.filter-promo-card');
             if (blocked) {
                 $input.prop('checked', false).prop('disabled', true);
-                $input.closest('.filter-promo-card').addClass('is-disabled');
+                $card.addClass('is-disabled');
             } else {
                 $input.prop('disabled', false);
+                $card.removeClass('is-disabled');
             }
         });
 
@@ -763,6 +769,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
             removeTag(tagValue);
         }
 
+        updatePromoStackStates();
         triggerFilterUpdate();
         updateBrowserUrl();
     });

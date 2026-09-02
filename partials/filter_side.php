@@ -17,7 +17,7 @@
 
     <form id="ajax-filter-form"
           data-zarzadzanie-promo-block="<?php echo akademiata_is_zarzadzanie_price_override_active() ? '1' : '0'; ?>"
-          data-zarzadzanie-program-slug="zarzadzanie">
+          data-zarzadzanie-program-slugs="<?php echo esc_attr(wp_json_encode(akademiata_get_zarzadzanie_program_filter_slugs())); ?>">
         <?php foreach ($taxonomies as $taxonomy => $taxonomy_name) :
             $terms = get_terms([
                 'taxonomy' => $taxonomy,

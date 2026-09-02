@@ -902,6 +902,15 @@ function akademiata_is_zarzadzanie_price_override_active() {
 }
 
 /**
+ * Program taxonomy slugs that trigger Zarządzanie promo block on listing.
+ *
+ * @return string[]
+ */
+function akademiata_get_zarzadzanie_program_filter_slugs() {
+    return array('zarzadzanie', 'wroclaw-zarzadzanie');
+}
+
+/**
  * Offer listing: sheet promos unavailable when Zarządzanie is selected (PL/UK/RU UI).
  */
 function akademiata_offer_listing_zarzadzanie_promos_blocked() {
@@ -919,7 +928,7 @@ function akademiata_offer_listing_zarzadzanie_promos_blocked() {
         akademiata_get_offer_listing_filter_keys()
     );
 
-    return in_array('zarzadzanie', $selected, true);
+    return (bool) array_intersect(akademiata_get_zarzadzanie_program_filter_slugs(), $selected);
 }
 
 /**
