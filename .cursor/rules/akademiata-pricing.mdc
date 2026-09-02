@@ -42,7 +42,7 @@ alwaysApply: false
 
 - **Scope:** all `k: Zarządzanie` rows, Warsaw + Wrocław, study lang PL (`window.lang === 'pl'`). Not EN Management, not „Zarządzanie i inżynieria produkcji”.
 - **Rates (JS override in `prices-calculator.js`; sheet unchanged):** I stacjonarne 12×490 / 10×660; I niestacjonarne 12×450 / 10×620; II niestacjonarne 12×590 / 10×770. II stacjonarne unchanged.
-- **Promos:** sheet `#promos` hidden when override active (no cards, no copy). Rekr promos (`#rekr-promos`) unchanged. No stacking (`getEA` skipped).
+- **Promos:** sheet promo cards hidden; section title + Regulamin stay; `#promos-inner` empty. Rekr promos (`#rekr-promos`) unchanged. No stacking (`getEA` skipped).
 - **UI:** plan cards show promo price + `standardowo {old} zł/ratę` (`.pc-was`, no strikethrough).
 - **Listing `/oferta/`:** when `program=zarzadzanie` (PL/UK/RU UI), promo checkboxes disabled + grayed (`is-zarzadzanie-blocked`); no user-facing note. Helpers: `akademiata_is_zarzadzanie_price_override_active()`, `akademiata_offer_listing_zarzadzanie_promos_blocked()` in `offer-promotions-filter.php`.
 - **Auto-off:** 1 Nov 2026 — revert to sheet prices + promos without deploy.

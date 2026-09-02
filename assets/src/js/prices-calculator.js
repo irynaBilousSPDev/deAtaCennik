@@ -2032,7 +2032,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     const ps2 = document.getElementById('promos') || document.getElementById('promos-section');
     const pi = document.getElementById('promos-inner');
     if (zarzadzaniePromoBlocked && ps2) {
-      ps2.style.display = 'none';
+      ps2.style.display = '';
       if (pi) pi.innerHTML = '';
     } else if (elig.length && !window.uaby) {
       if (ps2) ps2.style.display = '';
