@@ -12,7 +12,7 @@
  * - /exec                 -> cached fast
  * - /exec?force=1         -> bypass cache, rebuild now
  *
- * @version 2026-05-18
+ * @version 2026-05-19
  */
  
 const CACHE_KEY = "ata_data_live";
@@ -89,6 +89,15 @@ function parseTryb_(val) {
   // Niestacjonarne before Stacjonarne (substring trap).
   if (t === "n" || t.indexOf("niest") === 0 || t.includes("niestacjonarne") || t.includes("zaocz")) return "n";
   if (t === "s" || t.indexOf("stac") === 0 || t.includes("stacjonarne")) return "s";
+  return "s";
+}
+
+/** Programy_PL Forma → one mode bucket (matches prices_generate_json.py). */
+function parseFormaMode_(formStr) {
+  const t = clean(formStr).toLowerCase();
+  if (!t) return "s";
+  if (t.includes("niest") || t === "n") return "n";
+  if (t.includes("stac") || t === "s") return "s";
   return "s";
 }
 
@@ -398,7 +407,7 @@ function generateJSON() {
     const rowsPL = sheetPL.getDataRange().getValues();
     for (let i = 1; i < rowsPL.length; i++) {
       const city = clean(rowsPL[i][0]).toLowerCase().includes("warszawa") ? "wwa" : "wro";
-      const formStr = clean(rowsPL[i][1]).toLowerCase();
+      const modeKey = parseFormaMode_(rowsPL[i][1]);
  
       const course = {
         k: clean(rowsPL[i][3]),
@@ -412,8 +421,7 @@ function generateJSON() {
         ak: clean(rowsPL[i][10])
       };
  
-      if (formStr.includes("stacjonarne") || formStr.includes("obie")) data.RAW.pl[city].s.push(course);
-      if (formStr.includes("niestacjonarne") || formStr.includes("obie")) data.RAW.pl[city].n.push(course);
+      data.RAW.pl[city][modeKey].push(course);
     }
   }
  

@@ -503,6 +503,23 @@ export default function initPricesCalculator(_$, opts = {}) {
     try { setEmptyState(true); } catch (e) {}
   }
 
+  function mergePricePayload(local, google) {
+    if (!google || !google.RAW) return local;
+    if (!local || !local.RAW) return google;
+    // RAW.pl from prices.json (Python export); Google API refreshes promos/SA/UABY.
+    return Object.assign({}, google, {
+      RAW: local.RAW,
+      SA: google.SA || local.SA,
+      SA_EN: google.SA_EN || local.SA_EN,
+      SA_ROWS: google.SA_ROWS || local.SA_ROWS,
+      UABY: google.UABY || local.UABY,
+      UABY_ROWS: google.UABY_ROWS || local.UABY_ROWS,
+      PROMOS: google.PROMOS || local.PROMOS,
+      BASE: google.BASE || local.BASE,
+      BASE_EN: google.BASE_EN || local.BASE_EN,
+    });
+  }
+
   function loadPrices() {
     const googleUrl = GOOGLE_API_URL ? withNoCache(GOOGLE_API_URL) : '';
     const localPromise = fetchJson(LOCAL_JSON_URL, 10000).catch(err => {
@@ -524,7 +541,7 @@ export default function initPricesCalculator(_$, opts = {}) {
       return;
     }
 
-    // Show local prices.json immediately; refresh from Google when it responds.
+    // Show local prices.json immediately; merge Google promos/SA on top (RAW.pl stays from prices.json).
     let hasData = false;
     localPromise.then(local => {
       if (local && local.RAW && !hasData) {
@@ -533,18 +550,19 @@ export default function initPricesCalculator(_$, opts = {}) {
       }
     });
 
-    googlePromise.then(google => {
-      if (google && google.RAW) {
-        try {
-          lastGoogleHash = stableHash(JSON.stringify(google));
-        } catch (e) {}
-        applyData(google);
-        hasData = true;
-      }
-    });
-
     Promise.all([localPromise, googlePromise]).then(([local, google]) => {
-      if (!hasData && !(local && local.RAW) && !(google && google.RAW)) failPriceLoad();
+      if (google && google.RAW) {
+        const merged = mergePricePayload(local, google);
+        if (merged && merged.RAW) {
+          try {
+            lastGoogleHash = stableHash(JSON.stringify(merged));
+          } catch (e) {}
+          applyData(merged);
+          hasData = true;
+          return;
+        }
+      }
+      if (!hasData && !(local && local.RAW)) failPriceLoad();
     });
   }
 
@@ -778,6 +796,16 @@ export default function initPricesCalculator(_$, opts = {}) {
     const s = normTxt(v);
     // In sheets/data, "—" often means "no specialization"
     return (s === '—' || s === '-') ? '' : s;
+  }
+
+  function rowMatchesProgram(list, deg, cleanK, specNorm) {
+    return list.some(x => {
+      if (Number(x.deg) !== Number(deg)) return false;
+      if ((x.k || '').trim().toLowerCase() !== cleanK) return false;
+      const xs = normSpec(x.s).trim().toLowerCase();
+      if (specNorm === null) return !xs;
+      return xs === specNorm;
+    });
   }
   function uabyLookupKey(k, s) {
     const kk = normTxt(k);
@@ -1468,8 +1496,8 @@ export default function initPricesCalculator(_$, opts = {}) {
     const res = [];
     gOrd.forEach(gk => {
       const g = groups[gk];
-      const inS = sl.some(x => x.deg === g.deg && (x.k || '').trim().toLowerCase() === g.cleanK);
-      const inN = nl.some(x => x.deg === g.deg && (x.k || '').trim().toLowerCase() === g.cleanK);
+      const inS = rowMatchesProgram(sl, g.deg, g.cleanK, null);
+      const inN = rowMatchesProgram(nl, g.deg, g.cleanK, null);
       const modes = [];
       if (inS) modes.push('s');
       if (inN) modes.push('n');
@@ -1477,9 +1505,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       
       g.specs.forEach(sp => {
         const sm = [];
-        const cleanSpS = (sp.s || '').trim().toLowerCase();
-        if (sl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('s');
-        if (nl.some(x => x.deg === sp.deg && (x.k || '').trim().toLowerCase() === g.cleanK && (x.s || '').trim().toLowerCase() === cleanSpS)) sm.push('n');
+        const cleanSpS = normSpec(sp.s).trim().toLowerCase();
+        if (rowMatchesProgram(sl, sp.deg, g.cleanK, cleanSpS)) sm.push('s');
+        if (rowMatchesProgram(nl, sp.deg, g.cleanK, cleanSpS)) sm.push('n');
         res.push(Object.assign({}, sp, { modes: sm, dn: sp.k + ' — ' + sp.s }));
       });
     });
@@ -1516,14 +1544,6 @@ export default function initPricesCalculator(_$, opts = {}) {
         if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK && normSpec(list[i].s).trim().toLowerCase() === uS) {
           item = list[i];
           break;
-        }
-      }
-      if (!item) {
-        for (let i = 0; i < list.length; i++) {
-          if (list[i].deg === u.deg && (list[i].k || '').trim().toLowerCase() === uK) {
-            item = list[i];
-            break;
-          }
         }
       }
     }
