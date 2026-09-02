@@ -259,9 +259,12 @@ export function closeOfferFilterPanel() {
 export function initMobileFilterToggle() {
     const sidebar = document.querySelector('#sidebar');
     const isOfferPage = Boolean(document.querySelector('.offer_wrapper--offer-page'));
+    const hasPgMbaToolbar = Boolean(document.querySelector('.pg-mba-mobile-toolbar'));
     const filterButtons = isOfferPage
         ? document.querySelectorAll('.offer-mobile-chip--more')
-        : document.querySelectorAll('.taxonomy-filter-toggle');
+        : hasPgMbaToolbar
+            ? document.querySelectorAll('.pg-mba-mobile-toolbar .offer-mobile-chip--more')
+            : document.querySelectorAll('.taxonomy-filter-toggle');
     const closeButton = document.querySelector('.go-back');
     const resultsButton = document.querySelector('.filter_results');
     const overlay = document.querySelector('.filter-overlay');
@@ -280,6 +283,7 @@ export function initMobileFilterToggle() {
         }
 
         document.getElementById('offer-mobile-dropdown')?.classList.remove('is-open');
+        document.getElementById('pg-mba-mobile-dropdown')?.classList.remove('is-open');
         document.body.classList.remove('offer-dropdown-open');
 
         sidebar.classList.add('open');
@@ -314,7 +318,7 @@ export function initMobileFilterToggle() {
         }, 10);
     };
 
-    if (filterButtons.length === 0 && !isOfferPage) return;
+    if (filterButtons.length === 0 && !isOfferPage && !hasPgMbaToolbar) return;
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {

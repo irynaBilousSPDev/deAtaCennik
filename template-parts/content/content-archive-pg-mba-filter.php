@@ -1,6 +1,6 @@
 <?php
 /**
- * Offer-style filter layout for PG/MBA archives.
+ * Offer-style filter layout for PG/MBA archives (separate templates from page-offer.php).
  */
 
 $post_type = get_query_var('pg_mba_filter_post_type');
@@ -15,8 +15,7 @@ if (!$filter_title) {
         : __('Studia Podyplomowe', 'akademiata');
 }
 
-$mobile_taxonomies = akademiata_get_pg_mba_filter_taxonomies();
-$page_description  = get_query_var('pg_mba_filter_content');
+$page_description = get_query_var('pg_mba_filter_content');
 
 $pg_mba_form_data     = akademiata_parse_pg_mba_filter_form_data();
 $pg_mba_initial_query = new WP_Query(
@@ -34,27 +33,20 @@ $pg_mba_initial_count = (int) $pg_mba_initial_query->post_count;
         }
         ?>
 
-        <h1><?php echo esc_html($filter_title); ?></h1>
+        <div class="offer_page_header">
+            <h1><?php echo esc_html($filter_title); ?></h1>
+        </div>
 
         <?php if (!empty($page_description)) : ?>
             <div class="page-description"><?php echo $page_description; ?></div>
         <?php endif; ?>
 
-        <div class="mobile-taxonomy-slider">
-            <?php foreach ($mobile_taxonomies as $taxonomy => $label) : ?>
-                <button class="taxonomy-filter-toggle" data-tax="<?php echo esc_attr($taxonomy); ?>">
-                    <?php echo esc_html($label); ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
-
-        <?php get_template_part('partials/tags_container'); ?>
+        <?php get_template_part('partials/pg-mba-mobile-toolbar'); ?>
 
         <div id="ajax-loader" style="display: none;">
             <div class="spinner"></div>
         </div>
 
-        <?php get_template_part('partials/offer-view-toggle'); ?>
         <div id="filter-results"
              class="row filter-results--grid"
              data-initial-count="<?php echo esc_attr((string) $pg_mba_initial_count); ?>">
@@ -75,21 +67,20 @@ $pg_mba_initial_count = (int) $pg_mba_initial_query->post_count;
         </div>
     </div>
 
+    <?php get_template_part('partials/pg-mba-mobile-dropdown'); ?>
+
     <div id="sidebar" class="filter_col">
         <div class="mobile-filter-header">
-            <button class="go-back" type="button">
+            <button class="go-back" type="button" aria-label="<?php echo esc_attr(akademiata_get_theme_lang_string('offer_filter_back')); ?>">
                 <span class="go-back__icon"></span>
-                <?php
-                $title_lower = mb_strtolower(mb_substr($filter_title, 0, 1)) . mb_substr($filter_title, 1);
-                echo esc_html__('Filtruj', 'akademiata') . ' ' . esc_html($title_lower);
-                ?>
             </button>
-            <div class="filter_results_wrapper">
-                <button class="filter_results" type="button">
-                    <?php esc_html_e('Pokaż wyniki', 'akademiata'); ?>
-                </button>
-            </div>
-            <button class="clear-filters" type="button"><?php esc_html_e('wyczyść filtry', 'akademiata'); ?></button>
+            <h2 class="mobile-filter-header__title"><?php echo esc_html(akademiata_get_theme_lang_string('offer_filter_panel_title')); ?></h2>
+            <button type="button" class="clear-filters"><?php echo esc_html(akademiata_get_theme_lang_string('offer_clear_filters')); ?></button>
+        </div>
+        <div class="filter_results_wrapper">
+            <button class="filter_results" type="button">
+                <?php echo esc_html(akademiata_get_theme_lang_string('offer_show_results')); ?>
+            </button>
         </div>
 
         <?php get_template_part('partials/tags_container'); ?>

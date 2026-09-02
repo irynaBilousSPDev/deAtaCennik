@@ -1,4 +1,5 @@
 import { initOfferViewToggle } from './offer-view-toggle';
+import { initPgMbaMobileToolbar, applyPgMbaListingSearch } from './pg-mba-mobile-toolbar';
 
 (function ($) {
     if (typeof ajax_filter_pg_mba_params === 'undefined') {
@@ -53,6 +54,10 @@ import { initOfferViewToggle } from './offer-view-toggle';
                     } else {
                         $('#no-results-message').hide();
                     }
+
+                    document.dispatchEvent(new CustomEvent('akademiata:filter-results-updated', {
+                        detail: { reset: true },
+                    }));
                 }
             },
             error(jqXHR, textStatus) {
@@ -121,6 +126,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
         $('#tags-container').hide();
         debouncedFilterUpdate();
         updateBrowserUrl();
+        applyPgMbaListingSearch();
     }
 
     function initializeFiltersFromURL() {
@@ -188,4 +194,5 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     initializeFiltersFromURL();
     initOfferViewToggle();
+    initPgMbaMobileToolbar();
 })(jQuery);

@@ -49,7 +49,8 @@ $om-filter-card-pad: 16px;
   }
 }
 
-.offer-mobile-toolbar {
+.offer-mobile-toolbar,
+.pg-mba-mobile-toolbar {
   @include mixins.ipad-pro-screen {
     display: block;
     padding: 0;
@@ -62,14 +63,16 @@ $om-filter-card-pad: 16px;
   }
 }
 
-.offer-mobile-dropdown {
+.offer-mobile-dropdown,
+.pg-mba-mobile-dropdown {
   @include mixins.ipad-pro-screen {
     display: none;
   }
 }
 
 @include mixins.max-ipad-pro-screen {
-  .offer-mobile-toolbar .offer-listing-selection {
+  .offer-mobile-toolbar .offer-listing-selection,
+  .pg-mba-mobile-toolbar .offer-listing-selection {
     display: block;
     margin: 0 0 10px;
     padding: 0;
@@ -221,7 +224,8 @@ $om-filter-card-pad: 16px;
 
 @include mixins.max-ipad-pro-screen {
   .page-template-page-offer,
-  .page-template-page-offer .page_offer {
+  .page-template-page-offer .page_offer,
+  .page_offer--pg-mba {
     background-color: vars.$white;
   }
 
@@ -230,8 +234,10 @@ $om-filter-card-pad: 16px;
     overflow: hidden;
   }
 
-  .page-template-page-offer {
-    .offer_wrapper--offer-page {
+  .page-template-page-offer,
+  .page_offer--pg-mba {
+    .offer_wrapper--offer-page,
+    .offer_wrapper--pg-mba {
       overflow: visible;
     }
 
@@ -372,7 +378,8 @@ $om-filter-card-pad: 16px;
     }
 
     // —— Toolbar ——
-    .offer-mobile-toolbar {
+    .offer-mobile-toolbar,
+    .pg-mba-mobile-toolbar {
       display: block;
       padding-bottom: 12px;
       background: vars.$white;
@@ -735,7 +742,8 @@ $om-filter-card-pad: 16px;
     }
 
     // —— Legacy reset (offer cards — no _offer-page mobile rules) ——
-    .offer_wrapper--offer-page {
+    .offer_wrapper--offer-page,
+    .offer_wrapper--pg-mba {
       .card_post_item {
         width: auto;
         margin-bottom: 0;
@@ -773,7 +781,8 @@ $om-filter-card-pad: 16px;
     }
 
     // —— Results + cards ——
-    .offer_wrapper--offer-page {
+    .offer_wrapper--offer-page,
+    .offer_wrapper--pg-mba {
       #filter-results.row {
         display: flex;
         flex-wrap: wrap;
@@ -783,7 +792,8 @@ $om-filter-card-pad: 16px;
         gap: 1rem;
 
         .card_post_item.is-search-hidden,
-        .card_post_item.is-favorites-hidden {
+        .card_post_item.is-favorites-hidden,
+        .pg_mba_card.is-search-hidden {
           display: none !important;
         }
       }
@@ -1630,7 +1640,8 @@ $om-filter-card-pad: 16px;
   }
 
   // Quick-filter bottom sheet — direct selector (works when portaled to body)
-  .offer-mobile-dropdown {
+  .offer-mobile-dropdown,
+  .pg-mba-mobile-dropdown {
     display: none;
     position: fixed;
     inset: 0;
@@ -2037,7 +2048,8 @@ $om-filter-card-pad: 16px;
 // Tablet (768–990px) — more breathing room, single-row chips when width allows
 @include mixins.max-ipad-pro-screen {
   @include mixins.ipad-air-screen {
-    .page-template-page-offer {
+    .page-template-page-offer,
+    .page_offer--pg-mba {
       $om-pad-tablet: 24px;
 
       .offer_content {
@@ -2058,7 +2070,8 @@ $om-filter-card-pad: 16px;
         }
       }
 
-      .offer-mobile-toolbar {
+      .offer-mobile-toolbar,
+      .pg-mba-mobile-toolbar {
         padding-bottom: 16px;
       }
 
@@ -2079,7 +2092,8 @@ $om-filter-card-pad: 16px;
         }
       }
 
-      .offer_wrapper--offer-page {
+      .offer_wrapper--offer-page,
+      .offer_wrapper--pg-mba {
         #filter-results.row {
           margin-left: -$om-pad-tablet;
           margin-right: -$om-pad-tablet;
