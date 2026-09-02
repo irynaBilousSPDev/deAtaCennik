@@ -363,31 +363,35 @@ body.page-template-page-template-prices{
     }
 
     .pc-was--desktop {
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(0, 0, 0, 0.55);
-      line-height: 1.25;
-      font-family: "Lato", serif;
-
-      strong {
-        color: #2E7D32;
-        font-weight: 800;
-      }
-    }
-
-    .pc-price-line {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
+      display: none !important;
     }
 
     .pc.pc--promo-price {
-      .pc-price--desktop {
+      .pc-price-line {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-        margin-top: 4px;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pc-was-inline {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        line-height: 1.1;
+        white-space: nowrap;
+
+        s {
+          text-decoration: line-through;
+          text-decoration-color: rgba(0, 0, 0, 0.35);
+        }
+      }
+
+      .pc-price-arrow {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        line-height: 1;
       }
 
       .pr,
@@ -410,6 +414,12 @@ body.page-template-page-template-prices{
     .pc-lbl--desktop,
     .pc-pr--desktop {
       display: block;
+    }
+
+    .pc-price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
     }
 
     .pc-price--desktop {
@@ -1307,26 +1317,28 @@ body.page-template-page-template-prices{
         letter-spacing: -0.02em;
       }
 
-      .pc-was {
-        font-size: 12px;
-        font-weight: 600;
-        color: rgba(0, 0, 0, 0.55);
-        line-height: 1.25;
-        margin-top: 0;
-        font-family: "Lato", serif;
-
-        strong {
-          color: #2E7D32;
-          font-weight: 800;
-        }
-      }
-
       .pc.pc--promo-price {
-        .pc-price--mobile {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 4px;
+        .pc-price-line {
+          align-items: center;
+          gap: 8px;
+        }
+
+        .pc-was-inline {
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--text-muted);
+          white-space: nowrap;
+
+          s {
+            text-decoration: line-through;
+            text-decoration-color: rgba(0, 0, 0, 0.35);
+          }
+        }
+
+        .pc-price-arrow {
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--text-muted);
         }
 
         .pr,

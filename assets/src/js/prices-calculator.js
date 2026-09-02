@@ -1276,11 +1276,8 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.selP = { jednorazowo: false };
   }
 
-  function planWasHtml(wasPrice, pid) {
-    if (!wasPrice) return '';
-    const prefix = UI_LANG === 'en' ? 'standard rate' : 'standardowo';
-    const suffix = (pid === 'r12' || pid === 'r10') ? ' zł/ratę' : ' zł';
-    return prefix + ' <strong>' + fmt(wasPrice) + '</strong>' + suffix;
+  function planWasInlineLabel(wasPrice) {
+    return fmt(wasPrice) + ' zł';
   }
 
   function attachPlanWasPrice(result, item, pid) {
@@ -1291,18 +1288,37 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function setPlanWasPrice(card, pp, pid) {
-    const html = pp && pp.was ? planWasHtml(pp.was, pid) : '';
+    const hasWas = !!(pp && pp.was);
+    card.classList.toggle('pc--promo-price', hasWas);
+
     card.querySelectorAll('[data-plan-was], [data-plan-was-desktop]').forEach(el => {
-      if (!el) return;
-      if (html) {
-        el.innerHTML = html;
-        el.style.display = '';
+      el.innerHTML = '';
+      el.style.display = 'none';
+    });
+
+    card.querySelectorAll('.pc-price-line').forEach(line => {
+      let wasInline = line.querySelector('.pc-was-inline');
+      let arrow = line.querySelector('.pc-price-arrow');
+
+      if (hasWas) {
+        if (!wasInline) {
+          wasInline = document.createElement('span');
+          wasInline.className = 'pc-was-inline';
+          line.insertBefore(wasInline, line.firstChild);
+        }
+        if (!arrow) {
+          arrow = document.createElement('span');
+          arrow.className = 'pc-price-arrow';
+          arrow.setAttribute('aria-hidden', 'true');
+          arrow.textContent = '→';
+          wasInline.insertAdjacentElement('afterend', arrow);
+        }
+        wasInline.innerHTML = '<s>' + planWasInlineLabel(pp.was) + '</s>';
       } else {
-        el.innerHTML = '';
-        el.style.display = 'none';
+        if (wasInline) wasInline.remove();
+        if (arrow) arrow.remove();
       }
     });
-    card.classList.toggle('pc--promo-price', !!(pp && pp.was));
   }
 
   function ensurePlanCardInScroller(plansEl, sel) {
