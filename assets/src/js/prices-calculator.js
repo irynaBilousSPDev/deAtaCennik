@@ -2033,15 +2033,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     const pi = document.getElementById('promos-inner');
     if (zarzadzaniePromoBlocked && ps2) {
       if (ps2) ps2.style.display = '';
-      if (pi) {
-        pi.innerHTML = '';
-        const note = document.createElement('p');
-        note.className = 'promo-rule promo-rule--zarzadzanie';
-        note.textContent = UI_LANG === 'en'
-          ? 'Promotional Management tuition until 31 October 2026. Cannot be combined with other tuition discounts.'
-          : 'Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.';
-        pi.appendChild(note);
-      }
+      if (pi) pi.innerHTML = '';
     } else if (elig.length && !window.uaby) {
       if (ps2) ps2.style.display = '';
       const tpl = document.getElementById('promo-card-template');

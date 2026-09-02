@@ -539,17 +539,6 @@ import { initOfferViewToggle } from './offer-view-toggle';
         const $group = $('.taxonomy_group--promotions');
         $group.toggleClass('is-zarzadzanie-blocked', blocked);
 
-        let $note = $group.find('.filter-promo-zarzadzanie-note');
-        const noteText = (window.akademiataOffer && window.akademiataOffer.zarzadzaniePromoNote)
-            || 'Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.';
-
-        if (blocked && !$note.length) {
-            $note = $('<p>').addClass('filter-promo-zarzadzanie-note').text(noteText);
-            $group.find('.accordion-content').prepend($note);
-        } else if (!blocked) {
-            $note.remove();
-        }
-
         form.find('input[name="promotions[]"]').each(function () {
             const $input = $(this);
             if (blocked) {

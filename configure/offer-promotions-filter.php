@@ -958,11 +958,6 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
             <div class="arrow-open-close" aria-hidden="true"></div>
         </h2>
         <div class="accordion-content">
-            <?php if ($zarzadzanie_blocked) : ?>
-                <p class="filter-promo-zarzadzanie-note">
-                    <?php esc_html_e('Obniżony cennik studiów na kierunku Zarządzanie do 31 października 2026 r. Promocje na czesne nie łączą się z tą ofertą.', 'akademiata'); ?>
-                </p>
-            <?php endif; ?>
             <div class="labels_list filter-promo-cards">
                 <?php foreach ($promos as $promo) :
                     $promo_id     = sanitize_title((string) $promo['id']);
