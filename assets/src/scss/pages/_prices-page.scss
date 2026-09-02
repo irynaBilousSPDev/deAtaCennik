@@ -451,6 +451,11 @@ body.page-template-page-template-prices{
         color: var(--ata);
       }
 
+      &.pc--promo-price .pr,
+      &.pc--promo-price.sel .pr {
+        color: var(--green);
+      }
+
       .un {
         font-size: 12px;
         font-weight: 600;
@@ -1291,8 +1296,9 @@ body.page-template-page-template-prices{
         margin-top: 6px;
       }
 
-      .pc--promo-price .pr {
-        color: #2e7d32;
+      .pc--promo-price .pr,
+      .pc.pc--promo-price.sel .pr {
+        color: var(--green);
       }
 
       .pc-pick {
