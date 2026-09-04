@@ -520,7 +520,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
     function isZarzadzaniePromoBlockEnabled() {
         const flag = form.data('zarzadzaniePromoBlock');
-        return flag === 1 || flag === '1';
+        return flag === 1 || flag === '1' || form.attr('data-zarzadzanie-promo-block') === '1';
     }
 
     function parseFormDataJson(raw, fallback) {
@@ -541,14 +541,17 @@ import { initOfferViewToggle } from './offer-view-toggle';
         const fromAttr = form.attr('data-zarzadzanie-program-slugs');
         const fromData = form.data('zarzadzanieProgramSlugs');
         const slugs = parseFormDataJson(fromAttr || fromData, null);
-        if (Array.isArray(slugs) && slugs.length) return slugs;
-        return [form.data('zarzadzanieProgramSlug') || 'zarzadzanie'];
+        if (Array.isArray(slugs) && slugs.length) return slugs.map(String);
+        return [String(form.data('zarzadzanieProgramSlug') || 'zarzadzanie')];
     }
 
+    // II + Zarządzanie: only these stay clickable (fallback if data-attr missing).
     function getZarzadzanieAllowedPromoIds() {
         const fromAttr = form.attr('data-zarzadzanie-allowed-promos');
         const fromData = form.data('zarzadzanieAllowedPromos');
-        return parseFormDataJson(fromAttr || fromData, []);
+        const parsed = parseFormDataJson(fromAttr || fromData, null);
+        if (Array.isArray(parsed) && parsed.length) return parsed.map(String);
+        return ['absolwent_pl'];
     }
 
     function isZarzadzanieProgramSelected() {
@@ -558,7 +561,12 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function isSecondDegreeListingContext() {
-        const action = String(form.attr('data-offer-filter-action') || form.data('offerFilterAction') || '');
+        const action = String(
+            filterAction
+            || form.attr('data-offer-filter-action')
+            || form.data('offerFilterAction')
+            || ''
+        );
         if (action === 'filter_master') return true;
         if (action === 'filter_bachelor') return false;
 
@@ -578,9 +586,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
     let zarzadzaniePromoWasBlocked = isZarzadzanieProgramSelected();
 
     function clearAllowedZarzadzaniePromoSelection() {
-        const allowIds = getZarzadzanieAllowedPromoIds().map(String);
-        if (!allowIds.length) return;
-
+        const allowIds = getZarzadzanieAllowedPromoIds();
         form.find('input[name="promotions[]"]').each(function () {
             const $input = $(this);
             const id = String($input.val() || '');
@@ -601,17 +607,16 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
 
         const blocked = isZarzadzanieProgramSelected();
-        // Leaving Zarządzanie: drop Absolwent so other sheet promos are selectable again.
+        // Leaving Zarządzanie: drop Absolwent so other sheet promos look free again.
         if (zarzadzaniePromoWasBlocked && !blocked) {
             clearAllowedZarzadzaniePromoSelection();
         }
         zarzadzaniePromoWasBlocked = blocked;
 
         const allowIds = blocked && isSecondDegreeListingContext()
-            ? getZarzadzanieAllowedPromoIds().map(String)
+            ? getZarzadzanieAllowedPromoIds()
             : [];
-        const $group = $('.taxonomy_group--promotions');
-        $group.toggleClass('is-zarzadzanie-blocked', blocked);
+        $('.taxonomy_group--promotions').toggleClass('is-zarzadzanie-blocked', blocked);
 
         form.find('input[name="promotions[]"]').each(function () {
             const $input = $(this);
@@ -636,32 +641,9 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
     }
 
+    // Gray only for Zarządzanie campaign. Stack conflicts: reconcilePromoSelection unchecks.
     function updatePromoStackStates() {
         updateZarzadzaniePromoBlock();
-        const checkedIds = [];
-
-        form.find('input[name="promotions[]"]:checked').each(function () {
-            checkedIds.push($(this).val());
-        });
-
-        form.find('input[name="promotions[]"]').each(function () {
-            const $input = $(this);
-            const stack = getPromoStack($input);
-            let canSelect = true;
-
-            if ($input.is(':disabled') || $input.closest('.filter-promo-card').hasClass('is-disabled')) {
-                canSelect = false;
-            } else if (!$input.is(':checked')) {
-                checkedIds.forEach((oid) => {
-                    if (stack.indexOf(oid) < 0) {
-                        canSelect = false;
-                    }
-                });
-            }
-
-            $input.closest('.filter-promo-card').toggleClass('is-disabled', !canSelect && !$input.is(':checked'));
-        });
-
         updatePromoInfoPanel();
         syncMobilePromoTags();
     }

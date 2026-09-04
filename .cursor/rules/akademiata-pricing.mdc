@@ -44,7 +44,7 @@ alwaysApply: false
 - **Rates (JS override in `prices-calculator.js`; sheet unchanged):** I stacjonarne 12×490 / 10×660; I niestacjonarne 12×450 / 10×620; II stacjonarne + II niestacjonarne 12×590 / 10×770 (Wrocław II stacjonarne Zarządzanie only has s rows in RAW).
 - **Promos:** I — all sheet cards hidden. II — only `absolwent_pl`; when selected, campaign rates off, discount from **sheet** prices (−20%/−30%), no ~~old→new~~ campaign UI. Other sheet promos still blocked. Rekr promos unchanged. Title + Regulamin stay.
 - **UI:** plan cards (r12/r10): inline `~~990 zł~~ → 490 zł/m-c` (strikethrough old + arrow + green new price).
-- **Listing `/oferta/`:** when `program=zarzadzanie` (PL/UK/RU UI), promo checkboxes disabled + grayed (`is-zarzadzanie-blocked`), except on **II-degree** context `absolwent_pl` stays enabled (same as calculator). Helpers: `akademiata_is_zarzadzanie_price_override_active()`, `akademiata_offer_listing_zarzadzanie_promos_blocked()`, `akademiata_get_zarzadzanie_listing_allowed_promo_ids()` in `offer-promotions-filter.php`.
+- **Listing `/oferta/`:** when `program=zarzadzanie` (PL/UK/RU UI), promo checkboxes disabled + grayed (`is-zarzadzanie-blocked`), except on **II-degree** context `absolwent_pl` stays enabled (same as calculator). Without Zarządzanie, all sheet promos stay clickable (stack `sw` only auto-unchecks conflicts — no gray). Helpers: `akademiata_is_zarzadzanie_price_override_active()`, `akademiata_offer_listing_zarzadzanie_promos_blocked()`, `akademiata_get_zarzadzanie_listing_allowed_promo_ids()` in `offer-promotions-filter.php`.
 - **Auto-off:** 1 Nov 2026 — revert to sheet prices + promos without deploy.
 
 ## Homepage Promocje (`home_promos`)
