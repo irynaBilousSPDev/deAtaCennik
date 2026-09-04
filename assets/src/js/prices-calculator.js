@@ -319,7 +319,8 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     if (pending.promo) {
       const previewItem = getItem();
-      const promoBlocked = !!(previewItem && previewItem._zarzadzanieOverride);
+      const promoBlocked = !!(previewItem && previewItem._zarzadzanieOverride)
+        && !isZarzadzanieSheetPromoAllowed(previewItem, pending.promo);
       const exists = !promoBlocked && Array.isArray(window.PROMOS) && window.PROMOS.some(p => p && p.id === pending.promo);
       if (exists) {
         window.selP = { jednorazowo: false };
@@ -1333,8 +1334,12 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
   }
 
-  // Temporary Zarządzanie PL tuition (Warsaw + Wrocław; no sheet promos; until 31 Oct 2026).
+  // Temporary Zarządzanie PL tuition (Warsaw + Wrocław; until 31 Oct 2026).
+  // I: no sheet promos. II: only absolwent_pl (discount from sheet prices; campaign rates off).
   const ZARZADZANIE_PRICE_OVERRIDE_UNTIL = new Date(2026, 9, 31, 23, 59, 59);
+  const ZARZADZANIE_ALLOWED_SHEET_PROMO_BY_DEG = {
+    2: ['absolwent_pl'],
+  };
 
   function isZarzadzaniePriceOverrideActive() {
     return Date.now() <= ZARZADZANIE_PRICE_OVERRIDE_UNTIL.getTime();
@@ -1354,6 +1359,19 @@ export default function initPricesCalculator(_$, opts = {}) {
     return map[String(deg) + '_' + String(mode)] || null;
   }
 
+  function getZarzadzanieAllowedSheetPromoIds(deg) {
+    return ZARZADZANIE_ALLOWED_SHEET_PROMO_BY_DEG[Number(deg)] || [];
+  }
+
+  function isZarzadzanieSheetPromoAllowed(item, promoId) {
+    if (!item || !promoId) return false;
+    return getZarzadzanieAllowedSheetPromoIds(item.deg).indexOf(promoId) >= 0;
+  }
+
+  function isZarzadzanieAbsolwentSelected() {
+    return !!(window.selP && window.selP.absolwent_pl);
+  }
+
   function itemMatchesZarzadzaniePriceOverride(item) {
     if (!item || !isZarzadzaniePriceOverrideActive()) return false;
     if (normalizeStudyLang(window.lang) !== 'pl') return false;
@@ -1364,6 +1382,13 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function applyZarzadzaniePriceOverride(item) {
     if (!item || !itemMatchesZarzadzaniePriceOverride(item)) return item;
+    // II + Absolwent: sheet base prices + % discount; hide campaign 590/770.
+    if (Number(item.deg) === 2 && isZarzadzanieAbsolwentSelected()) {
+      return Object.assign({}, item, {
+        _zarzadzanieOverride: true,
+        _zarzadzanieAbsolwent: true,
+      });
+    }
     const rates = getZarzadzaniePriceOverrideRates(item.deg, window.mode);
     if (!rates) return item;
     return Object.assign({}, item, {
@@ -1377,6 +1402,17 @@ export default function initPricesCalculator(_$, opts = {}) {
 
   function clearSheetPromoSelection() {
     window.selP = { jednorazowo: false };
+  }
+
+  function clearDisallowedZarzadzaniePromos(item) {
+    if (!item || !item._zarzadzanieOverride) return;
+    const allow = getZarzadzanieAllowedSheetPromoIds(item.deg);
+    window.selP = window.selP || { jednorazowo: false };
+    window.selP.jednorazowo = false;
+    Object.keys(window.selP).forEach(id => {
+      if (id === 'jednorazowo') return;
+      if (window.selP[id] && allow.indexOf(id) < 0) window.selP[id] = false;
+    });
   }
 
   function planWasInlineLabel(wasPrice) {
@@ -1635,7 +1671,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
 
     const bon = item._zarzadzanieOverride ? false : window.selP['jednorazowo'];
-    const noSheetPromos = !!item._zarzadzanieOverride;
+    const noSheetPromos = !!item._zarzadzanieOverride && !item._zarzadzanieAbsolwent;
 
     // IMPORTANT: Use exact sheet columns for installment plans:
     // - r12 => R12 column (12 payments)
@@ -2158,13 +2194,15 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const zarzadzaniePromoBlocked = !!(item && item._zarzadzanieOverride);
     if (zarzadzaniePromoBlocked) {
-      clearSheetPromoSelection();
+      clearDisallowedZarzadzaniePromos(item);
     }
 
-    const elig = zarzadzaniePromoBlocked ? [] : getElig(u);
+    const elig = zarzadzaniePromoBlocked
+      ? getElig(u).filter(p => p && isZarzadzanieSheetPromoAllowed(item, p.id))
+      : getElig(u);
     const ps2 = document.getElementById('promos') || document.getElementById('promos-section');
     const pi = document.getElementById('promos-inner');
-    if (zarzadzaniePromoBlocked && ps2) {
+    if (zarzadzaniePromoBlocked && !elig.length && ps2) {
       ps2.style.display = '';
       if (pi) pi.innerHTML = '';
     } else if (elig.length && !window.uaby) {
@@ -2353,7 +2391,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       const degL = u.deg === 1
         ? (UI_LANG === 'pl' ? 'Studia I stopnia' : 'Bachelor studies')
         : (UI_LANG === 'pl' ? 'Studia II stopnia' : 'Master studies');
-      const tsv = (window.lang === 'pl' && !window.uaby && !item._zarzadzanieOverride ? getEA(item.r12 * 12).disc : 0) + (ppS.sv || 0);
+      const tsv = (window.lang === 'pl' && !window.uaby && (!item._zarzadzanieOverride || item._zarzadzanieAbsolwent)
+        ? getEA(item.r12 * 12).disc
+        : 0) + (ppS.sv || 0);
       // Design: header line should always be "KIERUNEK · POZIOM" (course name from column D).
       const spLine = (u.k ? String(u.k) : '') + (degL ? ' · ' + degL : '');
       const snLine = (u.s || u.k || '');
