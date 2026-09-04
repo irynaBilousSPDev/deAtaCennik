@@ -575,15 +575,38 @@ import { initOfferViewToggle } from './offer-view-toggle';
         return hasSecond;
     }
 
+    let zarzadzaniePromoWasBlocked = isZarzadzanieProgramSelected();
+
+    function clearAllowedZarzadzaniePromoSelection() {
+        const allowIds = getZarzadzanieAllowedPromoIds().map(String);
+        if (!allowIds.length) return;
+
+        form.find('input[name="promotions[]"]').each(function () {
+            const $input = $(this);
+            const id = String($input.val() || '');
+            if (allowIds.indexOf(id) < 0 || !$input.is(':checked')) return;
+            $input.prop('checked', false);
+            removeTag(id);
+            delete openPromoInfoIds[id];
+        });
+    }
+
     function updateZarzadzaniePromoBlock() {
         if (!isZarzadzaniePromoBlockEnabled()) {
             $('.taxonomy_group--promotions').removeClass('is-zarzadzanie-blocked');
             form.find('input[name="promotions[]"]').prop('disabled', false);
             form.find('.filter-promo-card').removeClass('is-disabled');
+            zarzadzaniePromoWasBlocked = false;
             return;
         }
 
         const blocked = isZarzadzanieProgramSelected();
+        // Leaving Zarządzanie: drop Absolwent so other sheet promos are selectable again.
+        if (zarzadzaniePromoWasBlocked && !blocked) {
+            clearAllowedZarzadzaniePromoSelection();
+        }
+        zarzadzaniePromoWasBlocked = blocked;
+
         const allowIds = blocked && isSecondDegreeListingContext()
             ? getZarzadzanieAllowedPromoIds().map(String)
             : [];
