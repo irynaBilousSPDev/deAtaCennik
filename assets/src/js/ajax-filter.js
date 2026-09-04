@@ -523,12 +523,40 @@ import { initOfferViewToggle } from './offer-view-toggle';
         return flag === 1 || flag === '1';
     }
 
-    function isZarzadzanieProgramSelected() {
+    function getZarzadzanieProgramSlugs() {
         const slugsRaw = form.data('zarzadzanieProgramSlugs');
-        const slugs = Array.isArray(slugsRaw) && slugsRaw.length
+        return Array.isArray(slugsRaw) && slugsRaw.length
             ? slugsRaw
             : [form.data('zarzadzanieProgramSlug') || 'zarzadzanie'];
-        return slugs.some((slug) => form.find(`input[name="program[]"][value="${slug}"]:checked`).length > 0);
+    }
+
+    function getZarzadzanieAllowedPromoIds() {
+        const ids = form.data('zarzadzanieAllowedPromos');
+        return Array.isArray(ids) ? ids : [];
+    }
+
+    function isZarzadzanieProgramSelected() {
+        return getZarzadzanieProgramSlugs().some(
+            (slug) => form.find(`input[name="program[]"][value="${slug}"]:checked`).length > 0
+        );
+    }
+
+    function isSecondDegreeListingContext() {
+        const action = String(form.data('offerFilterAction') || '');
+        if (action === 'filter_master') return true;
+        if (action === 'filter_bachelor') return false;
+
+        const $degree = form.find('input[name="degree[]"]:checked');
+        if (!$degree.length) return true;
+
+        let hasSecond = false;
+        $degree.each(function () {
+            const slug = String($(this).val() || '');
+            if (slug.indexOf('2-stopnia') >= 0 || slug.indexOf('2-degree') >= 0) {
+                hasSecond = true;
+            }
+        });
+        return hasSecond;
     }
 
     function updateZarzadzaniePromoBlock() {
@@ -540,13 +568,19 @@ import { initOfferViewToggle } from './offer-view-toggle';
         }
 
         const blocked = isZarzadzanieProgramSelected();
+        const allowIds = blocked && isSecondDegreeListingContext()
+            ? getZarzadzanieAllowedPromoIds()
+            : [];
         const $group = $('.taxonomy_group--promotions');
         $group.toggleClass('is-zarzadzanie-blocked', blocked);
 
         form.find('input[name="promotions[]"]').each(function () {
             const $input = $(this);
             const $card = $input.closest('.filter-promo-card');
-            if (blocked) {
+            const id = String($input.val() || '');
+            const allowed = !blocked || allowIds.indexOf(id) >= 0;
+
+            if (!allowed) {
                 $input.prop('checked', false).prop('disabled', true);
                 $card.addClass('is-disabled');
             } else {
@@ -555,7 +589,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
             }
         });
 
-        if (blocked) {
+        if (blocked && !allowIds.length) {
             $('#offer-promo-info').empty().addClass('is-empty');
             Object.keys(openPromoInfoIds).forEach((key) => {
                 delete openPromoInfoIds[key];

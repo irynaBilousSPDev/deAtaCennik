@@ -17,7 +17,9 @@
 
     <form id="ajax-filter-form"
           data-zarzadzanie-promo-block="<?php echo akademiata_is_zarzadzanie_price_override_active() ? '1' : '0'; ?>"
-          data-zarzadzanie-program-slugs="<?php echo esc_attr(wp_json_encode(akademiata_get_zarzadzanie_program_filter_slugs())); ?>">
+          data-zarzadzanie-program-slugs="<?php echo esc_attr(wp_json_encode(akademiata_get_zarzadzanie_program_filter_slugs())); ?>"
+          data-zarzadzanie-allowed-promos="<?php echo esc_attr(wp_json_encode(akademiata_get_zarzadzanie_listing_allowed_promo_ids())); ?>"
+          data-offer-filter-action="<?php echo esc_attr($offer_filter_action); ?>">
         <?php foreach ($taxonomies as $taxonomy => $taxonomy_name) :
             $terms = get_terms([
                 'taxonomy' => $taxonomy,

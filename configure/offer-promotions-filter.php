@@ -911,7 +911,54 @@ function akademiata_get_zarzadzanie_program_filter_slugs() {
 }
 
 /**
+ * Sheet promo IDs still allowed on listing when Zarządzanie II is selected.
+ *
+ * @return string[]
+ */
+function akademiata_get_zarzadzanie_listing_allowed_promo_ids() {
+    return array('absolwent_pl');
+}
+
+/**
+ * Listing is in II-degree context (master page or degree filter includes 2nd cycle).
+ *
+ * @param string|null $filter_action
+ * @return bool
+ */
+function akademiata_offer_listing_is_second_degree_context($filter_action = null) {
+    if ($filter_action === null) {
+        $filter_action = akademiata_get_offer_filter_action();
+    }
+
+    if ($filter_action === 'filter_master') {
+        return true;
+    }
+
+    if ($filter_action === 'filter_bachelor') {
+        return false;
+    }
+
+    $degree = akademiata_get_selected_filter_terms_from_request(
+        'degree',
+        akademiata_get_offer_listing_filter_keys()
+    );
+
+    if ($degree === array()) {
+        return true;
+    }
+
+    foreach ($degree as $slug) {
+        if (strpos((string) $slug, '2-stopnia') !== false || strpos((string) $slug, '2-degree') !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
  * Offer listing: sheet promos unavailable when Zarządzanie is selected (PL/UK/RU UI).
+ * Exception: II-degree context keeps absolwent_pl enabled (same as calculator).
  */
 function akademiata_offer_listing_zarzadzanie_promos_blocked() {
     if (!akademiata_is_zarzadzanie_price_override_active()) {
@@ -953,8 +1000,14 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
     );
 
     $zarzadzanie_blocked = akademiata_offer_listing_zarzadzanie_promos_blocked();
-    if ($zarzadzanie_blocked) {
+    $allowed_while_blocked = $zarzadzanie_blocked
+        ? akademiata_get_zarzadzanie_listing_allowed_promo_ids()
+        : array();
+    if ($zarzadzanie_blocked && !akademiata_offer_listing_is_second_degree_context($filter_action)) {
+        $allowed_while_blocked = array();
         $selected = array();
+    } elseif ($zarzadzanie_blocked) {
+        $selected = array_values(array_intersect($selected, $allowed_while_blocked));
     }
 
     ?>
@@ -982,8 +1035,9 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                         )
                         : '';
                     $promo_stack  = isset($promo['sw']) && is_array($promo['sw']) ? $promo['sw'] : array();
-                    $checked      = !$zarzadzanie_blocked && in_array($promo_id, $selected, true) ? 'checked' : '';
-                    $card_class   = 'filter-promo-card' . ($zarzadzanie_blocked ? ' is-disabled' : '');
+                    $is_allowed   = !$zarzadzanie_blocked || in_array($promo_id, $allowed_while_blocked, true);
+                    $checked      = $is_allowed && in_array($promo_id, $selected, true) ? 'checked' : '';
+                    $card_class   = 'filter-promo-card' . ($is_allowed ? '' : ' is-disabled');
                     ?>
                     <label class="<?php echo esc_attr($card_class); ?>">
                         <input type="checkbox"
@@ -996,7 +1050,7 @@ function akademiata_render_offer_promotions_filter_group($filter_action = null) 
                                data-promo-full="<?php echo esc_attr($promo_full); ?>"
                                data-promo-tag="<?php echo esc_attr($promo_tag); ?>"
                                data-promo-stack="<?php echo esc_attr(wp_json_encode($promo_stack)); ?>"
-                            <?php disabled($zarzadzanie_blocked); ?>
+                            <?php disabled(!$is_allowed); ?>
                             <?php echo $checked; ?>>
                         <span class="filter-promo-card__name"><?php echo esc_html($promo_name); ?></span>
                     </label>
