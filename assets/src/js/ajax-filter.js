@@ -523,16 +523,32 @@ import { initOfferViewToggle } from './offer-view-toggle';
         return flag === 1 || flag === '1';
     }
 
+    function parseFormDataJson(raw, fallback) {
+        if (Array.isArray(raw)) return raw;
+        if (raw && typeof raw === 'object') return raw;
+        if (typeof raw === 'string' && raw.trim()) {
+            try {
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+        return fallback;
+    }
+
     function getZarzadzanieProgramSlugs() {
-        const slugsRaw = form.data('zarzadzanieProgramSlugs');
-        return Array.isArray(slugsRaw) && slugsRaw.length
-            ? slugsRaw
-            : [form.data('zarzadzanieProgramSlug') || 'zarzadzanie'];
+        const fromAttr = form.attr('data-zarzadzanie-program-slugs');
+        const fromData = form.data('zarzadzanieProgramSlugs');
+        const slugs = parseFormDataJson(fromAttr || fromData, null);
+        if (Array.isArray(slugs) && slugs.length) return slugs;
+        return [form.data('zarzadzanieProgramSlug') || 'zarzadzanie'];
     }
 
     function getZarzadzanieAllowedPromoIds() {
-        const ids = form.data('zarzadzanieAllowedPromos');
-        return Array.isArray(ids) ? ids : [];
+        const fromAttr = form.attr('data-zarzadzanie-allowed-promos');
+        const fromData = form.data('zarzadzanieAllowedPromos');
+        return parseFormDataJson(fromAttr || fromData, []);
     }
 
     function isZarzadzanieProgramSelected() {
@@ -542,7 +558,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
     }
 
     function isSecondDegreeListingContext() {
-        const action = String(form.data('offerFilterAction') || '');
+        const action = String(form.attr('data-offer-filter-action') || form.data('offerFilterAction') || '');
         if (action === 'filter_master') return true;
         if (action === 'filter_bachelor') return false;
 
@@ -569,7 +585,7 @@ import { initOfferViewToggle } from './offer-view-toggle';
 
         const blocked = isZarzadzanieProgramSelected();
         const allowIds = blocked && isSecondDegreeListingContext()
-            ? getZarzadzanieAllowedPromoIds()
+            ? getZarzadzanieAllowedPromoIds().map(String)
             : [];
         const $group = $('.taxonomy_group--promotions');
         $group.toggleClass('is-zarzadzanie-blocked', blocked);
