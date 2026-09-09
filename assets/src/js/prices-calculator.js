@@ -2450,15 +2450,24 @@ export default function initPricesCalculator(_$, opts = {}) {
         ? getEA(item.r12 * 12).disc
         : 0) + (ppS.sv || 0);
       // Design: header line should always be "KIERUNEK · POZIOM" (course name from column D).
+      // Second line = specialization only — sheet uses "—" for "no specialization".
       const spLine = (u.k ? String(u.k) : '') + (degL ? ' · ' + degL : '');
-      const snLine = (u.s || u.k || '');
+      const snLine = normSpec(u.s).trim();
       const spEl = sb.querySelector('[data-sum-sp]');
       const snEl = sb.querySelector('[data-sum-sn]');
       const priceEl = sb.querySelector('[data-sum-price]');
       const saveEl = sb.querySelector('[data-sum-save]');
 
       if (spEl) spEl.textContent = spLine;
-      if (snEl) snEl.textContent = snLine;
+      if (snEl) {
+        if (snLine) {
+          snEl.textContent = snLine;
+          snEl.style.display = '';
+        } else {
+          snEl.textContent = '';
+          snEl.style.display = 'none';
+        }
+      }
       if (priceEl) {
         const sumBase = fmt(ppS.pr) + ' ' + ppS.cur;
         priceEl.textContent = isZarzadzanieCampaignPrice(item) && (window.plan === 'r12' || window.plan === 'r10')
