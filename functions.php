@@ -29,6 +29,8 @@ include('configure/configure.php');
 
 include('configure/front-page-defaults/home-promos/fields.php');
 
+include('configure/prices-calculator-i18n.php');
+
 include('configure/youtube-api.php');
 
 include('configure/offer-daily-interest.php');

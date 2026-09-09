@@ -92,14 +92,16 @@ export default function initPricesCalculator(_$, opts = {}) {
   function applyPromoOverride(promo) {
     // Keep eligibility based on promo.lng (study language),
     // but display text based on WPML UI language (UI_LANG).
-    if (!promo || UI_LANG !== 'en') return promo;
-    const map = I18N && I18N.promoOverrides ? I18N.promoOverrides : null;
+    if (!promo || UI_LANG === 'pl') return promo;
+    const byLang = I18N && I18N.promoOverridesByLang ? I18N.promoOverridesByLang : null;
+    const map = (byLang && byLang[UI_LANG])
+      || (UI_LANG === 'en' && I18N && I18N.promoOverrides ? I18N.promoOverrides : null);
     const ov = map && promo.id ? map[promo.id] : null;
     if (!ov) return promo;
     const out = Object.assign({}, promo, ov);
     if (ov.so && Array.isArray(ov.so)) out.so = ov.so;
 
-    // EN overrides may ship with stale dates — keep wording, inherit live sheet dates.
+    // Localized overrides may ship with stale dates — keep wording, inherit live sheet dates.
     const dates = extractPromoDateStrings(promo);
     if (dates.length) {
       if (out.short) out.short = replacePromoDatePlaceholders(out.short, dates);
@@ -1910,9 +1912,9 @@ export default function initPricesCalculator(_$, opts = {}) {
       const items = window.unified.filter(x => x.deg === deg);
       if (!items.length) return;
       const g = document.createElement('optgroup');
-      g.label = UI_LANG === 'pl'
-        ? (deg === 1 ? 'Studia I stopnia' : 'Studia II stopnia')
-        : (deg === 1 ? 'Bachelor / BSc' : 'Master / MA');
+      g.label = deg === 1
+        ? t('deg1Opt', UI_LANG === 'pl' ? 'Studia I stopnia' : 'Bachelor / BSc')
+        : t('deg2Opt', UI_LANG === 'pl' ? 'Studia II stopnia' : 'Master / MA');
       items.forEach(it => {
         const o = document.createElement('option');
         o.value = window.unified.indexOf(it);
@@ -1993,21 +1995,11 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function getPL(pid) {
-    const isEn = UI_LANG === 'en';
-    if (isEn) {
-      if (pid === 'r12') return '12 monthly instalments';
-      if (pid === 'r10') return '10 monthly instalments';
-      if (pid === 'sem') return 'Pay per semester';
-      if (pid === 'rok') return 'Pay annually';
-      return pid;
-    }
-    return pid === 'r12'
-      ? '12 rat miesięcznych'
-      : pid === 'r10'
-        ? '10 rat miesięcznych'
-        : pid === 'sem'
-          ? 'Semestr z góry'
-          : 'Rok z góry';
+    if (pid === 'r12') return t('planR12', '12 rat miesięcznych');
+    if (pid === 'r10') return t('planR10', '10 rat miesięcznych');
+    if (pid === 'sem') return t('planSem', 'Semestr z góry');
+    if (pid === 'rok') return t('planRok', 'Rok z góry');
+    return pid;
   }
 
   function updatePriceFromBanner(pp, pid) {
@@ -2019,8 +2011,7 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     if (!pp || !pid) return;
 
-    const isEn = window.lang === 'en';
-    const fromTxt = isEn ? 'from' : 'już od';
+    const fromTxt = t('fromPrefix', UI_LANG === 'en' ? 'from' : 'już od');
 
     // Unit formatting aligned with existing banner expectations:
     // - PL installments are monthly ("zł/mies.")
@@ -2028,7 +2019,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     let unit = pp.cur || '';
     if (pid === 'r12' || pid === 'r10') {
       if (pp.cur === 'PLN') unit = 'zł/mies.';
-      else if (pp.cur === 'EUR') unit = isEn ? '€/month' : 'EUR/mies.';
+      else if (pp.cur === 'EUR') unit = (UI_LANG === 'en' ? '€/month' : 'EUR/mies.');
     } else {
       // Keep currency only for upfront variants.
       if (pp.cur === 'PLN') unit = 'zł';
@@ -2411,7 +2402,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         if (body && isExp) {
           const bodyText = body.querySelector('[data-promo-body-text]');
           if (bodyText) {
-            const title = pack.conditionsTitle || (UI_LANG === 'en' ? 'Promotion terms:' : 'Warunki skorzystania z promocji:');
+            const title = pack.conditionsTitle || t('conditionsTitle', UI_LANG === 'en' ? 'Promotion terms:' : 'Warunki skorzystania z promocji:');
             const fullRaw = fillRekrPlaceholders(copy.full, deadlines, rekrAmount);
             const steps = String(fullRaw || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
             let html = '<div class="pc-conditions-title">' + formatPromoHtml(title) + '</div>';
@@ -2453,8 +2444,8 @@ export default function initPricesCalculator(_$, opts = {}) {
     const ppS = getPP(window.plan, item, u), sb = document.getElementById('sum-box');
     if (ppS && sb) {
       const degL = u.deg === 1
-        ? (UI_LANG === 'pl' ? 'Studia I stopnia' : 'Bachelor studies')
-        : (UI_LANG === 'pl' ? 'Studia II stopnia' : 'Master studies');
+        ? t('deg1', 'Studia I stopnia')
+        : t('deg2', 'Studia II stopnia');
       const tsv = (window.lang === 'pl' && !window.uaby && (!item._zarzadzanieOverride || item._zarzadzanieAbsolwent)
         ? getEA(item.r12 * 12).disc
         : 0) + (ppS.sv || 0);
@@ -2556,7 +2547,7 @@ export default function initPricesCalculator(_$, opts = {}) {
         const baseRekr = Number(item.rekr || 0);
         const effectiveRekr = rekrPromoOn ? 0 : baseRekr;
         const rekrPack = (I18N && I18N.rekrPromo) ? I18N.rekrPromo : {};
-        const standardLbl = rekrPack.standardFeeLabel || (UI_LANG === 'en' ? 'normally' : 'standardowo');
+        const standardLbl = rekrPack.standardFeeLabel || t('standardFeeLabel', UI_LANG === 'en' ? 'normally' : 'standardowo');
 
         if (window.lang === 'pl') {
           const promoEntry = 0;
