@@ -383,12 +383,15 @@ function akademiata_price_key_study_lang_presence($logical_sync_key) {
  * Study language for the offer tuition calculator (must match prices.json bucket).
  * Bilingual taxonomy prefers PL for promos/schema — that breaks EN-only keys on singles.
  *
- * @param int $post_id
+ * @param int         $post_id
+ * @param string|null $logical_sync_key Optional pre-resolved key (WPML-aware).
  * @return string pl|en
  */
-function akademiata_get_offer_calculator_study_lang($post_id) {
+function akademiata_get_offer_calculator_study_lang($post_id, $logical_sync_key = null) {
     $post_id = (int) $post_id;
-    $key     = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
+    $key     = $logical_sync_key !== null
+        ? trim((string) $logical_sync_key)
+        : akademiata_get_offer_logical_sync_key($post_id);
     $presence = akademiata_price_key_study_lang_presence($key);
 
     if ($presence['en'] && !$presence['pl']) {
@@ -408,6 +411,129 @@ function akademiata_get_offer_calculator_study_lang($post_id) {
     }
 
     return in_array('en', $codes, true) && !in_array('pl', $codes, true) ? 'en' : 'pl';
+}
+
+/**
+ * logical_sync_key for calculator/pricing — prefer a key that exists in prices.json.
+ * UK/RU always use the Polish translation’s key (translated slugs are not in the sheet).
+ *
+ * @param int $post_id
+ * @return string
+ */
+function akademiata_get_offer_logical_sync_key($post_id) {
+    $post_id = (int) $post_id;
+    $post    = get_post($post_id);
+    $own     = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
+
+    $post_lang = null;
+    if ($post && in_array($post->post_type, array( 'bachelor', 'master' ), true)) {
+        $post_lang = apply_filters(
+            'wpml_element_language_code',
+            null,
+            array(
+                'element_id'   => $post_id,
+                'element_type' => 'post_' . $post->post_type,
+            )
+        );
+    }
+
+    // UK/RU (and other non-PL/EN): always take prices key from Polish sibling.
+    if (is_string($post_lang) && $post_lang !== '' && !in_array($post_lang, array( 'pl', 'en' ), true)) {
+        $pl_id = $post
+            ? (int) apply_filters('wpml_object_id', $post_id, $post->post_type, false, 'pl')
+            : 0;
+        if ($pl_id > 0) {
+            $pl_key = trim((string) get_post_meta($pl_id, 'logical_sync_key', true));
+            if ($pl_key !== '' && akademiata_price_key_exists_in_prices($pl_key)) {
+                return $pl_key;
+            }
+        }
+
+        foreach (akademiata_get_offer_translation_logical_sync_keys($post_id) as $key) {
+            if ($key !== '' && akademiata_price_key_exists_in_prices($key)) {
+                return $key;
+            }
+        }
+
+        return $own;
+    }
+
+    $own_ok = $own !== '' && akademiata_price_key_exists_in_prices($own);
+    if ($own_ok) {
+        return $own;
+    }
+
+    foreach (akademiata_get_offer_translation_logical_sync_keys($post_id) as $key) {
+        if ($key !== '' && akademiata_price_key_exists_in_prices($key)) {
+            return $key;
+        }
+    }
+
+    return $own;
+}
+
+/**
+ * @param string $logical_sync_key
+ * @return bool
+ */
+function akademiata_price_key_exists_in_prices($logical_sync_key) {
+    $presence = akademiata_price_key_study_lang_presence($logical_sync_key);
+    return !empty($presence['pl']) || !empty($presence['en']);
+}
+
+/**
+ * logical_sync_key values from all WPML translations of an offer (PL/EN first).
+ *
+ * @param int $post_id
+ * @return list<string>
+ */
+function akademiata_get_offer_translation_logical_sync_keys($post_id) {
+    $post_id = (int) $post_id;
+    $post    = get_post($post_id);
+    if (!$post || !in_array($post->post_type, array( 'bachelor', 'master' ), true)) {
+        return array();
+    }
+
+    $keys = array();
+    $push = static function ($id) use (&$keys) {
+        $id = (int) $id;
+        if ($id <= 0) {
+            return;
+        }
+        $key = trim((string) get_post_meta($id, 'logical_sync_key', true));
+        if ($key !== '' && !in_array($key, $keys, true)) {
+            $keys[] = $key;
+        }
+    };
+
+    $element_type = 'post_' . $post->post_type;
+    $trid         = apply_filters('wpml_element_trid', null, $post_id, $element_type);
+    $translations = $trid
+        ? apply_filters('wpml_get_element_translations', null, $trid, $element_type)
+        : null;
+
+    if (is_array($translations) && $translations !== array()) {
+        // Prefer PL then EN originals — those match prices.json SA / SA_EN.
+        foreach (array( 'pl', 'en' ) as $lang) {
+            if (!empty($translations[ $lang ]->element_id)) {
+                $push((int) $translations[ $lang ]->element_id);
+            }
+        }
+        foreach ($translations as $lang => $row) {
+            if ($lang === 'pl' || $lang === 'en' || empty($row->element_id)) {
+                continue;
+            }
+            $push((int) $row->element_id);
+        }
+        return $keys;
+    }
+
+    foreach (array( 'pl', 'en' ) as $lang) {
+        $tid = (int) apply_filters('wpml_object_id', $post_id, $post->post_type, false, $lang);
+        $push($tid);
+    }
+
+    return $keys;
 }
 
 /**

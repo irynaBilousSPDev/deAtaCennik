@@ -41,6 +41,28 @@ function ata_auto_save_smart_key($post_id, $post) {
     $meta_key = 'logical_sync_key';
     $stored_key = get_post_meta($post_id, $meta_key, true);
 
+    // WPML UK/RU (+ other non-PL/EN): always copy key from Polish — never rebuild from translated slug.
+    $post_lang = apply_filters('wpml_element_language_code', null, [
+        'element_id'   => $post_id,
+        'element_type' => 'post_' . $post->post_type,
+    ]);
+    if (is_string($post_lang) && $post_lang !== '' && !in_array($post_lang, array( 'pl', 'en' ), true)) {
+        $source_id = (int) apply_filters('wpml_object_id', $post_id, $post->post_type, false, 'pl');
+        if ($source_id <= 0) {
+            $default_lang = apply_filters('wpml_default_language', null);
+            if (is_string($default_lang) && $default_lang !== '') {
+                $source_id = (int) apply_filters('wpml_object_id', $post_id, $post->post_type, false, $default_lang);
+            }
+        }
+        if ($source_id > 0 && $source_id !== (int) $post_id) {
+            $source_key = trim((string) get_post_meta($source_id, $meta_key, true));
+            if ($source_key !== '' && $source_key !== (string) $stored_key) {
+                update_post_meta($post_id, $meta_key, $source_key);
+            }
+        }
+        return;
+    }
+
     $expected_key = ata_build_smart_key($post_id, $post);
     if (empty($expected_key) || strpos($expected_key, 'uni') !== false) {
         // City/slug not ready yet.

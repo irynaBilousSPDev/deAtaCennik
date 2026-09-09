@@ -6,14 +6,16 @@
  */
 
 $post_id = get_the_ID();
-$logical_sync_key = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
+$logical_sync_key = function_exists('akademiata_get_offer_logical_sync_key')
+    ? akademiata_get_offer_logical_sync_key($post_id)
+    : trim((string) get_post_meta($post_id, 'logical_sync_key', true));
 
 if ($logical_sync_key === '') {
     return;
 }
 
 $page_lang = function_exists('akademiata_get_offer_calculator_study_lang')
-    ? (string) akademiata_get_offer_calculator_study_lang($post_id)
+    ? (string) akademiata_get_offer_calculator_study_lang($post_id, $logical_sync_key)
     : (function_exists('akademiata_get_offer_study_language_code')
         ? (string) akademiata_get_offer_study_language_code($post_id)
         : 'pl');
