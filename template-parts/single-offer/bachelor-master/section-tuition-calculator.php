@@ -12,9 +12,11 @@ if ($logical_sync_key === '') {
     return;
 }
 
-$page_lang = function_exists('akademiata_get_offer_study_language_code')
-    ? (string) akademiata_get_offer_study_language_code($post_id)
-    : 'pl';
+$page_lang = function_exists('akademiata_get_offer_calculator_study_lang')
+    ? (string) akademiata_get_offer_calculator_study_lang($post_id)
+    : (function_exists('akademiata_get_offer_study_language_code')
+        ? (string) akademiata_get_offer_study_language_code($post_id)
+        : 'pl');
 if ($page_lang !== 'en') {
     $page_lang = 'pl';
 }

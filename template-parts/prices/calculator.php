@@ -14,24 +14,22 @@ $hide_more_btn = (bool) get_query_var('prices_calculator_hide_more_btn', false);
 $layout = (string) get_query_var('prices_calculator_layout', '');
 $is_single_offer_layout = ($layout === 'single-offer');
 
-// Language detection (WPML-first, with fallbacks).
-// This controls:
-// - initial UI state (default selected language button)
-// - EN copy for a few strings until translations are finalized
-$is_en = false;
-if (!empty($fixed_lang)) {
-	$is_en = (strtolower(trim($fixed_lang)) === 'en');
-} else {
-	$wpml_lang = apply_filters('wpml_current_language', null);
-	if (is_string($wpml_lang) && $wpml_lang !== '') {
-		$is_en = (strtolower($wpml_lang) === 'en');
-	} else {
-		$loc = function_exists('determine_locale') ? determine_locale() : get_locale();
-		$is_en = (is_string($loc) && stripos($loc, 'en') === 0);
-	}
+// UI language = WPML page language (EN/UK/RU/PL copy).
+// Study language = fixed_lang on singles (taxonomy) or UI default — never confuse the two.
+$wpml_lang = apply_filters('wpml_current_language', null);
+if (!is_string($wpml_lang) || $wpml_lang === '') {
+	$loc = function_exists('determine_locale') ? determine_locale() : get_locale();
+	$wpml_lang = (is_string($loc) && $loc !== '') ? $loc : 'pl';
 }
+$ui_lang = function_exists('akademiata_normalize_theme_lang_code')
+	? akademiata_normalize_theme_lang_code($wpml_lang)
+	: 'pl';
+$is_en = ($ui_lang === 'en');
 
-$initial_lang = $is_en ? 'en' : 'pl';
+$study_lang = !empty($fixed_lang)
+	? (strtolower(trim($fixed_lang)) === 'en' ? 'en' : 'pl')
+	: ($ui_lang === 'en' ? 'en' : 'pl');
+$initial_lang = $study_lang;
 
 // Miasto × Język studiów → zarządzenie (chmurka). Two separate link sets.
 $regulamin_urls_plans = apply_filters('ata_prices_regulamin_urls_plans', [
@@ -54,17 +52,23 @@ $regulamin_urls_promos = apply_filters('ata_prices_regulamin_urls_promos', [
 		'en' => 'https://chmurka.wseiz.pl/index.php/s/tbbQ2nTs8wtzTXH', // ZARZĄDZENIE 17/2026
 	],
 ]);
-$initial_study_lang = !empty($fixed_lang) ? strtolower(trim($fixed_lang)) : $initial_lang;
+$initial_study_lang = $study_lang;
 $regulamin_url_plans = $regulamin_urls_plans['wwa'][$initial_study_lang] ?? $regulamin_urls_plans['wwa']['pl'];
 $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $regulamin_urls_promos['wwa']['pl'];
+
+$zarzadzanie_note = [
+	'pl' => 'Promocja obowiązuje osoby, które zarejestrują się w systemie rekrutacyjnym po 1 września i dokonają płatności do 31 października.',
+	'en' => 'The promotion applies to candidates who register in the recruitment system after 1 September and make payment by 31 October.',
+	'uk' => 'Акція діє для осіб, які зареєструються в системі рекрутації після 1 вересня та здійснять оплату до 31 жовтня.',
+	'ru' => 'Акция действует для лиц, которые зарегистрируются в системе рекрутации после 1 сентября и произведут оплату до 31 октября.',
+];
 ?>
 
 <script>
-	// Ensure calculator starts in the correct language for the current WPML version.
-	// (The JS bundle defaults to 'pl' unless this is set before it runs.)
-	window.lang = window.lang || <?php echo wp_json_encode($initial_lang); ?>;
-	// UI language (WPML). This should NOT change when user switches "study language".
-	window.PRICES_UI_LANG = window.PRICES_UI_LANG || <?php echo wp_json_encode($initial_lang); ?>;
+	// Study language (sheet RAW.pl / RAW.en). Defaults to taxonomy on offer singles.
+	window.lang = window.lang || <?php echo wp_json_encode($study_lang); ?>;
+	// UI language (WPML). Must NOT follow study-language toggle / fixed_lang.
+	window.PRICES_UI_LANG = window.PRICES_UI_LANG || <?php echo wp_json_encode($ui_lang); ?>;
 </script>
 
 <div id="ata-loader" class="prices-loader" role="status" aria-live="polite">
@@ -190,14 +194,47 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 			'emptyText' => $is_en
 				? __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata')
 				: __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
+			'emptyTitleByLang' => [
+				'pl' => __('Cennik w przygotowaniu', 'akademiata'),
+				'en' => __('Pricing coming soon', 'akademiata'),
+				'uk' => 'Прайс у підготовці',
+				'ru' => 'Прайс в подготовке',
+			],
+			'emptyTextByLang' => [
+				'pl' => __('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'),
+				'en' => __('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata'),
+				'uk' => 'Незабаром опублікуємо актуальний прайс для цієї програми. Якщо потрібна допомога — зв’яжіться з нами.',
+				'ru' => 'Скоро опубликуем актуальный прайс для этой программы. Если нужна помощь — свяжитесь с нами.',
+			],
+			'zarzadzaniePromoNote' => $zarzadzanie_note,
 			'regulaminUrlsPlans' => $regulamin_urls_plans,
 			'regulaminUrlsPromos' => $regulamin_urls_promos,
 		], JSON_UNESCAPED_UNICODE); ?>
 	</script>
 
 	<div class="prices-empty" id="prices-empty" style="display:none" role="status" aria-live="polite">
-		<div class="prices-empty__title" data-empty-title><?php echo $is_en ? esc_html__('Pricing coming soon', 'akademiata') : esc_html__('Cennik w przygotowaniu', 'akademiata'); ?></div>
-		<div class="prices-empty__text" data-empty-text><?php echo $is_en ? esc_html__('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata') : esc_html__('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata'); ?></div>
+		<div class="prices-empty__title" data-empty-title><?php
+			if ($ui_lang === 'en') {
+				echo esc_html__('Pricing coming soon', 'akademiata');
+			} elseif ($ui_lang === 'uk') {
+				echo esc_html('Прайс у підготовці');
+			} elseif ($ui_lang === 'ru') {
+				echo esc_html('Прайс в подготовке');
+			} else {
+				echo esc_html__('Cennik w przygotowaniu', 'akademiata');
+			}
+		?></div>
+		<div class="prices-empty__text" data-empty-text><?php
+			if ($ui_lang === 'en') {
+				echo esc_html__('We will publish the updated pricing for this program soon. If you need help, contact us — we’ll be happy to assist.', 'akademiata');
+			} elseif ($ui_lang === 'uk') {
+				echo esc_html('Незабаром опублікуємо актуальний прайс для цієї програми. Якщо потрібна допомога — зв’яжіться з нами.');
+			} elseif ($ui_lang === 'ru') {
+				echo esc_html('Скоро опубликуем актуальный прайс для этой программы. Если нужна помощь — свяжитесь с нами.');
+			} else {
+				echo esc_html__('Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.', 'akademiata');
+			}
+		?></div>
 	</div>
 
 	<!-- Hidden/locked rows on single offer; JS will hide if fixed-key is present -->
@@ -323,6 +360,7 @@ $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $r
 				<?php echo $is_en ? esc_html__('Terms', 'akademiata') : esc_html__('Regulamin', 'akademiata'); ?><span class="sec-link__arr" aria-hidden="true"></span>
 			</a>
 		</div>
+		<p class="promo-campaign-note" data-zarzadzanie-note style="display:none"></p>
 		<div id="promos-inner"></div>
 
 		<template id="promo-card-template">

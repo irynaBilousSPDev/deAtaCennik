@@ -272,6 +272,145 @@ function akademiata_study_language_code_from_terms(array $terms) {
 }
 
 /**
+ * Whether prices.json RAW contains this logical_sync_key under pl or en.
+ *
+ * @param string $logical_sync_key
+ * @return array{pl:bool,en:bool}
+ */
+function akademiata_price_key_study_lang_presence($logical_sync_key) {
+    $logical_sync_key = strtolower(trim((string) $logical_sync_key));
+    $out              = array(
+        'pl' => false,
+        'en' => false,
+    );
+
+    if ($logical_sync_key === '' || !function_exists('akademiata_get_prices_json_for_schema')) {
+        return $out;
+    }
+
+    $json = akademiata_get_prices_json_for_schema();
+    if (!is_array($json)) {
+        return $out;
+    }
+
+    if (!empty($json['SA'][ $logical_sync_key ]) || !empty($json['SA'][ (string) $logical_sync_key ])) {
+        $out['pl'] = true;
+    }
+    if (!empty($json['SA_EN'][ $logical_sync_key ])) {
+        $out['en'] = true;
+    }
+
+    // Case-insensitive SA map lookup.
+    foreach (array( 'SA' => 'pl', 'SA_EN' => 'en' ) as $map_key => $lang) {
+        if ($out[ $lang ] || empty($json[ $map_key ]) || !is_array($json[ $map_key ])) {
+            continue;
+        }
+        foreach ($json[ $map_key ] as $k => $_url) {
+            if (strtolower((string) $k) === $logical_sync_key) {
+                $out[ $lang ] = true;
+                break;
+            }
+        }
+    }
+
+    $raw = isset($json['RAW']) && is_array($json['RAW']) ? $json['RAW'] : array();
+
+    $row_matches = static function ($row) use ($logical_sync_key) {
+        if (!is_array($row)) {
+            return false;
+        }
+        foreach (array( 'ak', 'lk', 'key', 'logical_sync_key' ) as $field) {
+            if (isset($row[ $field ]) && strtolower(trim((string) $row[ $field ])) === $logical_sync_key) {
+                return true;
+            }
+        }
+        $ps = isset($row['ps']) ? strtolower(trim((string) $row['ps'])) : '';
+        if ($ps !== '' && ($ps === $logical_sync_key || substr($logical_sync_key, -strlen($ps)) === $ps)) {
+            // Prefer ak/lk; ps slug match only when key ends with that slug.
+            $parts = explode('_', $logical_sync_key);
+            if (count($parts) >= 3 && implode('_', array_slice($parts, 2)) === $ps) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (!$out['en'] && !empty($raw['en']) && is_array($raw['en'])) {
+        foreach ($raw['en'] as $city_rows) {
+            if (!is_array($city_rows)) {
+                continue;
+            }
+            // EN bucket is a flat list per city.
+            $list = isset($city_rows[0]) || $city_rows === array() ? $city_rows : array();
+            if ($list === array() && (isset($city_rows['s']) || isset($city_rows['n']))) {
+                $list = array_merge(
+                    isset($city_rows['s']) && is_array($city_rows['s']) ? $city_rows['s'] : array(),
+                    isset($city_rows['n']) && is_array($city_rows['n']) ? $city_rows['n'] : array()
+                );
+            }
+            foreach ($list as $row) {
+                if ($row_matches($row)) {
+                    $out['en'] = true;
+                    break 2;
+                }
+            }
+        }
+    }
+
+    if (!$out['pl'] && !empty($raw['pl']) && is_array($raw['pl'])) {
+        foreach ($raw['pl'] as $city_rows) {
+            if (!is_array($city_rows)) {
+                continue;
+            }
+            foreach (array( 's', 'n' ) as $mode) {
+                if (empty($city_rows[ $mode ]) || !is_array($city_rows[ $mode ])) {
+                    continue;
+                }
+                foreach ($city_rows[ $mode ] as $row) {
+                    if ($row_matches($row)) {
+                        $out['pl'] = true;
+                        break 3;
+                    }
+                }
+            }
+        }
+    }
+
+    return $out;
+}
+
+/**
+ * Study language for the offer tuition calculator (must match prices.json bucket).
+ * Bilingual taxonomy prefers PL for promos/schema — that breaks EN-only keys on singles.
+ *
+ * @param int $post_id
+ * @return string pl|en
+ */
+function akademiata_get_offer_calculator_study_lang($post_id) {
+    $post_id = (int) $post_id;
+    $key     = trim((string) get_post_meta($post_id, 'logical_sync_key', true));
+    $presence = akademiata_price_key_study_lang_presence($key);
+
+    if ($presence['en'] && !$presence['pl']) {
+        return 'en';
+    }
+    if ($presence['pl'] && !$presence['en']) {
+        return 'pl';
+    }
+    if ($presence['en'] && $presence['pl']) {
+        $codes = akademiata_study_language_codes_from_terms(akademiata_get_offer_terms($post_id, 'language'));
+        return in_array('en', $codes, true) && !in_array('pl', $codes, true) ? 'en' : 'pl';
+    }
+
+    $codes = akademiata_study_language_codes_from_terms(akademiata_get_offer_terms($post_id, 'language'));
+    if (count($codes) === 1) {
+        return $codes[0];
+    }
+
+    return in_array('en', $codes, true) && !in_array('pl', $codes, true) ? 'en' : 'pl';
+}
+
+/**
  * @param WP_Term[] $terms
  * @return string wwa|wro|uni
  */

@@ -118,11 +118,15 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     const titleEl = emptyBox.querySelector('[data-empty-title]');
     const textEl = emptyBox.querySelector('[data-empty-text]');
-    const baseTitle = t('emptyTitle', 'Cennik w przygotowaniu');
-    const baseText = t(
-      'emptyText',
-      'Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.'
-    );
+    const byLangTitle = I18N && I18N.emptyTitleByLang ? I18N.emptyTitleByLang : null;
+    const byLangText = I18N && I18N.emptyTextByLang ? I18N.emptyTextByLang : null;
+    const baseTitle = (byLangTitle && byLangTitle[UI_LANG])
+      || t('emptyTitle', 'Cennik w przygotowaniu');
+    const baseText = (byLangText && byLangText[UI_LANG])
+      || t(
+        'emptyText',
+        'Wkrótce udostępnimy aktualny cennik dla tego programu. Jeśli chcesz, skontaktuj się z nami — chętnie pomożemy.'
+      );
 
     if (titleEl) titleEl.textContent = baseTitle;
     // Keep this client-friendly (no technical keys shown).
@@ -1474,43 +1478,95 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
   }
 
+  function getZarzadzaniePromoNoteText() {
+    const map = I18N && I18N.zarzadzaniePromoNote ? I18N.zarzadzaniePromoNote : null;
+    if (map && map[UI_LANG]) return String(map[UI_LANG]);
+    if (map && map.en) return String(map.en);
+    return 'Promocja obowiązuje osoby, które zarejestrują się w systemie rekrutacyjnym po 1 września i dokonają płatności do 31 października.';
+  }
+
+  function isZarzadzanieCampaignPrice(item) {
+    return !!(item && item._zarzadzanieOverride && !item._zarzadzanieAbsolwent);
+  }
+
+  function updateZarzadzaniePromoNote(item) {
+    const noteEl = document.querySelector('[data-zarzadzanie-note]');
+    if (!noteEl) return;
+    if (!isZarzadzanieCampaignPrice(item)) {
+      noteEl.textContent = '';
+      noteEl.style.display = 'none';
+      return;
+    }
+    noteEl.textContent = '* ' + getZarzadzaniePromoNoteText();
+    noteEl.style.display = '';
+  }
+
+  function setPlanPromoAsterisk(card, show) {
+    if (!card) return;
+    card.querySelectorAll('[data-plan-price], [data-plan-price-desktop]').forEach(el => {
+      if (!el) return;
+      const base = String(el.getAttribute('data-price-base') || el.textContent || '').replace(/\*$/, '');
+      el.setAttribute('data-price-base', base);
+      el.textContent = show && base ? (base + '*') : base;
+    });
+  }
+
   // Build program list with strict lang data sourcing
+  function findFixedKeyUnified(lang) {
+    if (!FIXED_KEY) return [];
+
+    if (window.uaby && window.city === 'wro') {
+      const uabyList = buildUabyUnified(lang);
+      const hit = uabyList.find(it => matchItemByFixedKey(it, FIXED_KEY, PARSED_FIXED));
+      if (hit) return [hit];
+    }
+
+    const parsed = parseFixedKey(FIXED_KEY);
+    const city = (parsed && parsed.city) ? parsed.city : window.city;
+    const deg = (parsed && Number.isFinite(parsed.deg)) ? parsed.deg : null;
+
+    if (lang === 'en') {
+      const list = (window.RAW.en && window.RAW.en[city]) || [];
+      const hit = list.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+      if (!hit) return [];
+      return [Object.assign({}, hit, { modes: ['s'], dn: hit.s ? (hit.k + ' — ' + hit.s) : hit.k })];
+    }
+
+    const sl = window.RAW.pl[city] ? (window.RAW.pl[city].s || []) : [];
+    const nl = window.RAW.pl[city] ? (window.RAW.pl[city].n || []) : [];
+
+    const sHit = sl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+    const nHit = nl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
+
+    const rep = sHit || nHit;
+    if (!rep) return [];
+
+    const modes = [];
+    if (sHit) modes.push('s');
+    if (nHit) modes.push('n');
+
+    return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
+  }
+
   function buildUnified() {
     const lang = window.lang;
 
     // Single-offer mode: lock the program list to the post key.
     if (FIXED_KEY) {
-      if (window.uaby && window.city === 'wro') {
-        const uabyList = buildUabyUnified(lang);
-        const hit = uabyList.find(it => matchItemByFixedKey(it, FIXED_KEY, PARSED_FIXED));
-        if (hit) return [hit];
+      let hit = findFixedKeyUnified(lang);
+      // Safety net: bilingual taxonomy used to force PL for calculator, but EN-only
+      // logical_sync_key lives in RAW.en — try the other study language before empty.
+      if (!hit.length) {
+        const other = lang === 'en' ? 'pl' : 'en';
+        hit = findFixedKeyUnified(other);
+        if (hit.length) {
+          window.lang = other;
+          document.querySelectorAll('#lang-row .seg-btn').forEach(btn => {
+            btn.classList.toggle('on', btn.getAttribute('data-val') === other);
+          });
+        }
       }
-
-      const parsed = parseFixedKey(FIXED_KEY);
-      const city = (parsed && parsed.city) ? parsed.city : window.city;
-      const deg = (parsed && Number.isFinite(parsed.deg)) ? parsed.deg : null;
-
-      if (lang === 'en') {
-        const list = (window.RAW.en && window.RAW.en[city]) || [];
-        const hit = list.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
-        if (!hit) return [];
-        return [Object.assign({}, hit, { modes: ['s'], dn: hit.s ? (hit.k + ' — ' + hit.s) : hit.k })];
-      }
-
-      const sl = window.RAW.pl[city] ? (window.RAW.pl[city].s || []) : [];
-      const nl = window.RAW.pl[city] ? (window.RAW.pl[city].n || []) : [];
-
-      const sHit = sl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
-      const nHit = nl.find(it => matchItemByFixedKey(it, FIXED_KEY, parsed) && (deg ? Number(it.deg) === Number(deg) : true));
-
-      const rep = sHit || nHit;
-      if (!rep) return [];
-
-      const modes = [];
-      if (sHit) modes.push('s');
-      if (nHit) modes.push('n');
-
-      return [Object.assign({}, rep, { modes: modes.length ? modes : ['s'], dn: rep.s ? (rep.k + ' — ' + rep.s) : rep.k })];
+      return hit;
     }
     
     // Wrocław + UABY checkbox: program list = every row from 🇺🇦 Ceny_UABY (current study language).
@@ -1581,8 +1637,9 @@ export default function initPricesCalculator(_$, opts = {}) {
 
     if (window.lang !== 'en' && !u.uabyOnly) {
       const modes = Array.isArray(u.modes) ? u.modes : [];
+      // Prefer available forma studiów instead of empty state (e.g. Zarządzanie edge cases).
       if (modes.length && modes.indexOf(window.mode) < 0) {
-        return null;
+        window.mode = modes[0];
       }
     }
 
@@ -2012,6 +2069,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     }
     if (!window.unified.length) {
       // Show friendly empty state instead of leaving UI with blanks.
+      updateZarzadzaniePromoNote(null);
       setEmptyState(true);
 
       // Developer diagnostics (do not show in UI).
@@ -2057,6 +2115,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     updateMB();
     const u = window.unified[window.progIdx], item = getItem();
     if (!item) {
+      updateZarzadzaniePromoNote(null);
       setEmptyState(true);
       try {
         console.warn('[PricesCalculator] No matching RAW row for current selection', {
@@ -2131,6 +2190,10 @@ export default function initPricesCalculator(_$, opts = {}) {
         const price = fmt(pp.pr);
         setTextAll(card, '[data-plan-price]', price);
         setTextAll(card, '[data-plan-price-desktop]', price);
+        card.querySelectorAll('[data-plan-price], [data-plan-price-desktop]').forEach(el => {
+          if (el) el.setAttribute('data-price-base', price);
+        });
+        setPlanPromoAsterisk(card, isZarzadzanieCampaignPrice(item) && (pid === 'r12' || pid === 'r10'));
 
         const unitEl = card.querySelector('[data-plan-unit]');
         const unitDesktopEl = card.querySelector('[data-plan-unit-desktop]');
@@ -2196,6 +2259,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     if (zarzadzaniePromoBlocked) {
       clearDisallowedZarzadzaniePromos(item);
     }
+    updateZarzadzaniePromoNote(item);
 
     const elig = zarzadzaniePromoBlocked
       ? getElig(u).filter(p => p && isZarzadzanieSheetPromoAllowed(item, p.id))
@@ -2404,7 +2468,12 @@ export default function initPricesCalculator(_$, opts = {}) {
 
       if (spEl) spEl.textContent = spLine;
       if (snEl) snEl.textContent = snLine;
-      if (priceEl) priceEl.textContent = fmt(ppS.pr) + ' ' + ppS.cur;
+      if (priceEl) {
+        const sumBase = fmt(ppS.pr) + ' ' + ppS.cur;
+        priceEl.textContent = isZarzadzanieCampaignPrice(item) && (window.plan === 'r12' || window.plan === 'r10')
+          ? (sumBase + '*')
+          : sumBase;
+      }
 
       if (saveEl) {
         if (tsv > 0) {
