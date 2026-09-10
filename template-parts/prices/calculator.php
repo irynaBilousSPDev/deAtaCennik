@@ -62,10 +62,10 @@ $regulamin_url_plans = $regulamin_urls_plans['wwa'][$initial_study_lang] ?? $reg
 $regulamin_url_promos = $regulamin_urls_promos['wwa'][$initial_study_lang] ?? $regulamin_urls_promos['wwa']['pl'];
 
 $zarzadzanie_note = [
-	'pl' => 'Promocja obowiązuje osoby, które zarejestrują się w systemie rekrutacyjnym po 1 września i dokonają płatności do 31 października.',
-	'en' => 'The promotion applies to candidates who register in the recruitment system after 1 September and make payment by 31 October.',
-	'uk' => 'Акція діє для осіб, які зареєструються в системі рекрутації після 1 вересня та здійснять оплату до 31 жовтня.',
-	'ru' => 'Акция действует для лиц, которые зарегистрируются в системе рекрутации после 1 сентября и произведут оплату до 31 октября.',
+	'pl' => '<strong>Warunki promocji</strong>: rejestracja od 1 do 30 września. Podpisanie umowy oraz złożenie wymaganych dokumentów do 30 października.',
+	'en' => '<strong>Promotion terms</strong>: registration from 1 to 30 September. Contract signing and submission of required documents by 30 October.',
+	'uk' => '<strong>Умови акції</strong>: реєстрація з 1 до 30 вересня. Підписання договору та подання необхідних документів до 30 жовтня.',
+	'ru' => '<strong>Условия акции</strong>: регистрация с 1 по 30 сентября. Подписание договора и подача необходимых документов до 30 октября.',
 ];
 
 $i18n_payload = function_exists('akademiata_prices_calculator_i18n_payload')

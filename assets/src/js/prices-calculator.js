@@ -1484,7 +1484,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     const map = I18N && I18N.zarzadzaniePromoNote ? I18N.zarzadzaniePromoNote : null;
     if (map && map[UI_LANG]) return String(map[UI_LANG]);
     if (map && map.en) return String(map.en);
-    return 'Promocja obowiązuje osoby, które zarejestrują się w systemie rekrutacyjnym po 1 września i dokonają płatności do 31 października.';
+    return '<strong>Warunki promocji</strong>: rejestracja od 1 do 30 września. Podpisanie umowy oraz złożenie wymaganych dokumentów do 30 października.';
   }
 
   function isZarzadzanieCampaignPrice(item) {
@@ -1495,11 +1495,11 @@ export default function initPricesCalculator(_$, opts = {}) {
     const noteEl = document.querySelector('[data-zarzadzanie-note]');
     if (!noteEl) return;
     if (!isZarzadzanieCampaignPrice(item)) {
-      noteEl.textContent = '';
+      noteEl.innerHTML = '';
       noteEl.style.display = 'none';
       return;
     }
-    noteEl.textContent = '* ' + getZarzadzaniePromoNoteText();
+    noteEl.innerHTML = '* ' + getZarzadzaniePromoNoteText();
     noteEl.style.display = '';
   }
 
