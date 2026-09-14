@@ -259,7 +259,6 @@ if (!empty($recruitment_rules)) :
                     </div>
                 <?php endif; ?>
 
-
             <?php endif; ?>
 
 

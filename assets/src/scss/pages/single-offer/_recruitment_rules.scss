@@ -205,8 +205,20 @@
 
 }
 
+.digital-competencies-accordion.accordion_universal {
+  margin: 0 0 6rem;
+
+  .default_content ul {
+    column-count: 1;
+  }
+}
+
+.section_digital_competencies {
+  padding-top: 2rem;
+}
+
 .kurs {
-  padding-bottom: 7rem;
+  padding-bottom: 2rem;
 
   .content {
     max-width: 780px;
