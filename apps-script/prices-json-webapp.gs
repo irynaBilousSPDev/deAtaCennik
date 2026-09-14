@@ -275,7 +275,6 @@ function richToHtml_(rich) {
     out += isBold ? `<strong>${t}</strong>` : t;
   }
  
-  // Keep new lines
   return out.replace(/\r\n|\r|\n/g, "<br>");
 }
  
@@ -296,9 +295,7 @@ function generateJSON() {
   const sheetSA = ss.getSheetByName("🔗 SmartApply_URLs");
   if (sheetSA) {
     const rowsSA = sheetSA.getDataRange().getValues();
-    // Some sheets have extra rows above the header (notes, blank rows, merged cells),
-    // or the header may start far below row 1.
-    // Find the first row that looks like a header.
+    // Header may not be row 1 (notes / blanks above).
     let headerRowIdx = -1;
     for (let i = 0; i < Math.min(250, rowsSA.length); i++) {
       const row = rowsSA[i] || [];
@@ -310,12 +307,7 @@ function generateJSON() {
     }
     const header = (headerRowIdx >= 0) ? rowsSA[headerRowIdx].map(x => clean(x).toLowerCase()) : ((rowsSA && rowsSA.length) ? rowsSA[0].map(x => clean(x).toLowerCase()) : []);
 
-    // Support BOTH formats:
-    // 1) New format (your screenshot):
-    //    Lang | Klucz SmartApply | ... | URL SmartApply
-    //    where PL and EN have different keys + links.
-    // 2) Old format:
-    //    key | ... | URL_PL | URL_EN
+    // Lang | Klucz SmartApply | URL SmartApply, or legacy key | URL_PL | URL_EN.
     const idxLang = header.indexOf("lang");
     const idxKey = header.findIndex(h => h.includes("klucz") && h.includes("smartapply"));
     const idxUrl = header.findIndex(h => h.includes("url") && h.includes("smartapply"));
@@ -336,7 +328,7 @@ function generateJSON() {
         if (lang === "en") data.SA_EN[key] = url;
         else data.SA[key] = url; // default to PL
 
-        // Provide row-level data for robust matching (program tabs may not carry the right key).
+        // Row match when program-tab key is missing.
         const cityRaw = idxCity >= 0 ? clean(rowsSA[i][idxCity]) : "";
         const city = cityRaw.toLowerCase().includes("wroc") ? "wro" : (cityRaw.toLowerCase().includes("warsz") ? "wwa" : "");
         const deg = idxDeg >= 0 ? parseInt(clean(rowsSA[i][idxDeg]), 10) || 0 : 0;
@@ -355,9 +347,7 @@ function generateJSON() {
         continue;
       }
 
-      // If we couldn't detect the header, DO NOT assume old positional format.
-      // Your new structure has data rows like: PL | 1_wwa_architektura | ... | https://smartapply...
-      // We'll infer columns by content.
+      // No header: infer lang / key / URL from cell values.
       const row = rowsSA[i] || [];
 
       const looksLikeLang = (v) => {
@@ -369,12 +359,9 @@ function generateJSON() {
         return /^https?:\/\/smartapply\.akademiata\.pl\//i.test(s);
       };
       const looksLikeKey = (v) => {
-        const s = clean(v);
-        // e.g. "1_wwa_architektura", "2_wro_zarzadzanie-projektami"
-        return /^\d+_(wwa|wro)_[a-z0-9-]+$/i.test(s);
+        return /^\d+_(wwa|wro)_[a-z0-9-]+$/i.test(clean(v));
       };
 
-      // Try common new-format positions (Lang, Key, URL) by scanning the row.
       let lang = "";
       let key = "";
       let url = "";
@@ -390,7 +377,7 @@ function generateJSON() {
         continue;
       }
 
-      // Final fallback: old positional (ONLY if values actually look like URLs).
+      // Legacy: key | URL_PL | URL_EN.
       const posKey = clean(row[0]);
       const posPl = clean(row[2]);
       const posEn = clean(row[3]);

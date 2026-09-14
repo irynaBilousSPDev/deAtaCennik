@@ -22,12 +22,14 @@ npm install && npm run build   # or npm run dev
 
 Edit `assets/src/` → outputs `assets/dist/css/main.css` and `assets/dist/js/{main,ajaxFilter,ajaxSlider,vendors}.js`. Rebuild after SCSS/JS changes.
 
-## Comments (PHP, JS, SCSS, config)
+## Comments (PHP, JS, SCSS, Apps Script, config)
 
-- **Short and clear** — label sections or non-obvious business logic only.
-- **Do not** state the obvious (e.g. “separate login (not dev)”, “this is production”, restating the variable name).
-- **Config/env:** section labels only when useful (`# dev`, `# prod`); no prose tutorials in files.
-- **Do not** bulk-rewrite existing comments unless the user asks; apply this to **new or touched** code.
+- **Short** — what the block is for, or non-obvious business logic. One line when possible.
+- **Never address the developer** in code (`you`, `your screenshot`, `if you want`, `as requested`). Talk only in chat.
+- **Do not** leave chat leftovers, tutorials, or restating the next line of code.
+- **Do not** state the obvious (e.g. “this is production”, repeating the variable name).
+- **Config/env:** section labels only when useful (`# dev`, `# prod`).
+- Apply to **new and touched** code; do not bulk-rewrite unrelated files.
 
 ## PHP conventions
 

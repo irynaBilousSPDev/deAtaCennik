@@ -1,14 +1,11 @@
 <div <?php post_class('aktualnosci-article'); ?>>
     <div class="container">
 
-        <!-- Start breadcrumbs -->
         <?php if (function_exists('the_breadcrumb')) {
             the_breadcrumb();
         } ?>
-        <!-- End breadcrumbs -->
 
         <?php
-        // Dynamically get the first category slug
         $categories = get_the_category();
         $category_slug = '';
 
@@ -16,7 +13,6 @@
             $category_slug = $categories[0]->slug;
         }
 
-        // Check if sidebar should be shown based on the current category
         $should_show_sidebar = false;
 
         if (!empty($category_slug)) {
@@ -155,7 +151,6 @@
                             $current_lang = ICL_LANGUAGE_CODE;
                         }
 
-                        // Use the first category of the current post (same as you had)
                         $archive_category_slug = '';
                         if (!empty($categories) && !is_wp_error($categories)) {
                             $archive_category_slug = $categories[0]->slug;

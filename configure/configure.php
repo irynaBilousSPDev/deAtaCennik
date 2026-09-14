@@ -367,7 +367,7 @@ function akademiata_customize_register( $wp_customize ) {
 
 add_action( 'customize_register', 'akademiata_customize_register' );
 
-// remove default image sizes to avoid overcharging server - comment line if you need size
+// Skip default WP image sizes (server load).
 function remove_default_image_sizes($sizes)
 {
     unset($sizes['large']);
@@ -515,7 +515,7 @@ function ata_news_base_by_lang($lang)
  * Build month archive URL like:
  *  PL (default, no prefix if configured) -> /aktualnosci/YYYY/MM/
  *  EN (dir prefix)                       -> /en/news/YYYY/MM/
- * Uses WPML home per language so it matches your WPML URL mode.
+ * Uses WPML home URL for the given language.
  */
 function ata_news_month_link_lang($year, $month, $lang = '')
 {
@@ -602,7 +602,7 @@ add_filter( 'wpseo_title', function ( $title ) {
 		return $title;
 	}
 
-	// Map CPT archive => page slug you use as "base page"
+	// CPT archive → matching page slug.
 	$map = [
 		'postgraduate' => 'studia-podyplomowe',
 		'mba'          => 'studia-mba',

@@ -1,16 +1,9 @@
 <?php
 get_header();
 
-// WPML current language
 $current_lang = apply_filters('wpml_current_language', null);
-
-// Get base page by slug 'kursy' (NOT 'courses')
-$base_page = get_page_by_path('kursy');
-
-// Get translated ID (important for WPML)
+$base_page = get_page_by_path('kursy'); // not 'courses'
 $page_id = $base_page ? apply_filters('wpml_object_id', $base_page->ID, 'page', true, $current_lang) : 0;
-
-// Load content + title from translated page
 $acf_page = $page_id ? get_post($page_id) : null;
 $acf_content = $acf_page ? apply_filters('the_content', $acf_page->post_content) : '';
 $acf_title = $acf_page ? get_the_title($acf_page->ID) : __('Kursy', 'akademiata');

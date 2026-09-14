@@ -17,10 +17,7 @@ if (!empty($youtube_playlist_id)) :  // Fixed incorrect variable reference
                 <?php echo esc_html($title); ?>
             </h2>
             <?php
-            // Pass YouTube playlist ID to template
             set_query_var('data_youtube_playlist', esc_attr($youtube_playlist_id));
-
-            // Load YouTube Slider Template
             get_template_part('template-parts/youtube_slider');
             ?>
         </div>

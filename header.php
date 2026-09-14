@@ -1,10 +1,8 @@
 <?php
 /**
- * The header.
+ * Theme header.
  *
- * This is the template that displays all of the <head> section and everything up until content.
- *
- * @package  akademiata
+ * @package akademiata
  */
 
 ?>
@@ -14,8 +12,7 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Permissions-Policy" content="compute-pressure=()">
-    <!--or add to .htaccess-->
-    <!--    Header always set Permissions-Policy "compute-pressure=()"-->
+    <!-- or Apache: Header always set Permissions-Policy "compute-pressure=()" -->
     <?php wp_head(); ?>
 
     <?php if ( akademiata_is_production() ) : ?>

@@ -45,11 +45,7 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
                         __('Nudne zajęcia', 'akademiata'),
                     ];
                     foreach ($program_percentages as $index => $item) :
-                        // Use provided title or fallback from $titles
                         $title = !empty(trim($item['title'])) ? $item['title'] : ($titles[$index] ?? '');
-//                        $title = $titles[$index];
-
-                        // Ensure percentage exists
                         $percent = $item['percent'] ?? '';
                         ?>
                         <?php if (!empty($percent)) : ?>
@@ -102,14 +98,13 @@ $subjects_study = $acf_fields['subjects_study'] ?? [];
                     // Get ECTS value (fallback to empty string if not set)
                     $ects = isset($program_info['ects']) ? esc_html($program_info['ects']) : '';
 
-                    // Define multiple taxonomies to retrieve
                     $taxonomies = [
                         'program' => __('Kierunek studiów', 'akademiata'),
                         'duration' => __('Czas trwania', 'akademiata'),
                         'obtained_title' => __('Uzyskany tytuł zawodowy', 'akademiata'),
                     ];
 
-                    $counter = 0; // Counter to track iteration order
+                    $counter = 0;
                     ?>
 
                     <div class="program_info_details">

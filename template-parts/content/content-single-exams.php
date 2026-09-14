@@ -117,7 +117,6 @@ if (!function_exists('render_exam_taxonomy_details')) {
 
 
                     <?php
-                    // Optional: keep partners block if you want the same module here
                     $offer_partners = $acf_fields['offer_partners'] ?? [];
                     set_query_var('offer_partners', $offer_partners);
                     locate_template('template-parts/single-offer/offer_partners.php', true, true);

@@ -7,14 +7,11 @@ $is_mobile = wp_is_mobile();
 
 $register_url = !empty($acf_fields['register_url']) ? $acf_fields['register_url'] : '';
 
-// Taxonomy to show on top
 $top_taxonomies_with_labels = [
     'city_pg_mba' => __('MIASTO', 'akademiata'),
 ];
 
  
-
-// Render taxonomy details with conditional column layout
 
 if (!function_exists('render_course_taxonomy_details')) {
     function render_course_taxonomy_details($taxonomies_with_labels)

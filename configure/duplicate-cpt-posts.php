@@ -11,19 +11,16 @@
         wp_die('Invalid post ID.');
     }
 
-    // Get the original post
     $post = get_post($post_id);
 
     if (!$post) {
         wp_die('Post not found.');
     }
 
-    // Check user capability
     if (!current_user_can('edit_posts')) {
         wp_die('You do not have permission to duplicate this post.');
     }
 
-    // Duplicate post data
     $new_post_data = array(
         'post_title'   => $post->post_title . ' (Copy)',
         'post_content' => $post->post_content,
@@ -32,7 +29,6 @@
         'post_author'  => get_current_user_id(),
     );
 
-    // Insert new post
     $new_post_id = wp_insert_post($new_post_data);
 
     if ($new_post_id) {

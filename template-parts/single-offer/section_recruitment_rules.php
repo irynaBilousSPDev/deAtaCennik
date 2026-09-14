@@ -1,7 +1,6 @@
 <?php
 $acf_fields = get_query_var('acf_fields', []);
 $recruitment_rules = !empty($acf_fields['recruitment_rules']) ? $acf_fields['recruitment_rules'] : [];
-// Check if section data exists before rendering
 if (!empty($recruitment_rules)) :
     $title = $recruitment_rules['title'] ?? '';
     $sub_title = $recruitment_rules['sub_title'];

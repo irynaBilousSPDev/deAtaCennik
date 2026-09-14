@@ -52,7 +52,7 @@ export function initializeImageContentSlider(container) {
             slidesToScroll: 1,
             asNavFor: $sliderFor,
             dots: true,
-            appendDots: controlsWrapper,//Move dots to your custom div
+            appendDots: controlsWrapper,
             arrows: false,
             // centerMode: true,
             // focusOnSelect: true,

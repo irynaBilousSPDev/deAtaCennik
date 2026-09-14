@@ -41,7 +41,6 @@ if (have_posts()) :
                             continue;
                         }
 
-                        // Determine template and data for this row (same keys your partial expects)
                         $template_path = !empty($row['accordion_content_template'])
                             ? $row['accordion_content_template']
                             : 'accordion_contact_content.php';
@@ -59,7 +58,6 @@ if (have_posts()) :
                         <div class="accordion_content">
                             <?php
                             if ($template_path && $full_template_path) {
-                                // Provide $content to the included template (as in your original include)
                                 $content = $content_data;
                                 include $full_template_path;
                             } else {

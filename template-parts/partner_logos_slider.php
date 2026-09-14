@@ -1,5 +1,4 @@
 <?php
-// Get repeater rows from ACF Footer Settings options page
 $partner_logos = get_field('partner_logos', 'option');
 ?>
 

@@ -1,7 +1,6 @@
 <?php
 $acf_fields = get_query_var('acf_fields', []);
 $program_for_you = !empty($acf_fields['program_for_you']) ? $acf_fields['program_for_you'] : [];
-// Check if section data exists before rendering
 if (!empty($program_for_you)) :
     $title = $program_for_you['title'];
     $title = $title ? $title : __('Ten program jest dla Ciebie, jeśli:', 'akademiata');

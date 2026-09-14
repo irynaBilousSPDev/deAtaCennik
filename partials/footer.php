@@ -24,7 +24,6 @@
                         </a>
                     </div>
                     <?php
-                    // Get ACF fields from options page
                     $footer_address = get_field('footer_address', 'option');
                     $footer_phone = get_field('footer_phone', 'option');
                     $footer_mail = get_field('footer_mail', 'option');

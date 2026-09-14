@@ -2,7 +2,6 @@
 $full_time_price = get_query_var( 'full_time', [] );
 $part_time_price = get_query_var( 'part_time', [] );
 $is_warsaw       = (bool) get_query_var( 'is_warsaw', false );
-// Check if price data contains at least one actual price
 function has_price_data( $price_data ) {
 	$columns = [ 'col_12_rat', 'col_semester', 'col_year' ];
 
@@ -16,8 +15,6 @@ function has_price_data( $price_data ) {
 
 	return false;
 }
-
-// Render price row helper
 
 function get_available_columns( $price_data, $columns ) {
 	$available = [];

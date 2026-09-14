@@ -3447,12 +3447,7 @@ function render_taxonomy_details($taxonomy_labels, $custom_degree_slug = 'oferta
 }
 
 /**
- * Get the YouTube Playlist ID based on taxonomy terms.
- *
- * This function fetches the YouTube playlist ID from an ACF field in
- * the related "YouTube Shorts" CPT that shares the same taxonomy term
- * as the given post. If a YouTube playlist is already set in the ACF
- * field of the current post, it is returned immediately.
+ * YouTube playlist ID from related shorts CPT, or from the current post ACF field.
  *
  * @param int    $post_id            The ID of the post to check.
  * @param string $category           The taxonomy category to filter by.

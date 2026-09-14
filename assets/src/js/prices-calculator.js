@@ -131,16 +131,13 @@ export default function initPricesCalculator(_$, opts = {}) {
       );
 
     if (titleEl) titleEl.textContent = baseTitle;
-    // Keep this client-friendly (no technical keys shown).
     if (textEl) textEl.textContent = baseText;
 
     emptyBox.style.display = '';
 
-    // Hide the rest of calculator blocks so the UI is just the message.
     document.querySelectorAll('[data-hide-when-empty]').forEach(el => { el.style.display = 'none'; });
   }
   
-  // Init state
   window.SA = window.SA || {};
   window.SA_EN = window.SA_EN || {};
   window.SA_ROWS = window.SA_ROWS || [];
@@ -450,7 +447,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   function matchItemByFixedKey(item, fixedKey, parsed) {
     if (!item || !fixedKey) return false;
 
-    // Preferred: if the data includes the key (future-proof for your sheets column)
+    // Match by logical key if the row has one.
     const candidateKey = (item.lk || item.key || item.logical_key || item.logical_sync_key || item.sync_key || '').toString().trim().toLowerCase();
     if (candidateKey && candidateKey === fixedKey.toLowerCase()) return true;
 
@@ -1165,7 +1162,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     return out.replace(/\r\n|\r|\n/g, '<br>');
   }
   function setPromoCardBody(el, show) {
-    // IMPORTANT: promo body markup lives in the HTML <template>.
+    // Promo body markup is in the HTML <template>.
     // Do not overwrite innerHTML here, only toggle visibility.
     if (!el) return;
     el.style.display = show ? '' : 'none';
@@ -1732,7 +1729,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     const bon = item._zarzadzanieOverride ? false : window.selP['jednorazowo'];
     const noSheetPromos = !!item._zarzadzanieOverride && !item._zarzadzanieAbsolwent;
 
-    // IMPORTANT: Use exact sheet columns for installment plans:
+    // Installment plans: exact sheet columns.
     // - r12 => R12 column (12 payments)
     // - r10 => R10 column (10 payments)
     // Discounts should apply to the total amount for the selected plan.

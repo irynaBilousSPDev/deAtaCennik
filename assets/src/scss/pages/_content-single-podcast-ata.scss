@@ -1,12 +1,10 @@
 @use "../abstracts/variables" as vars;
 @use "../abstracts/mixins" as mixins;
 
-/* Scope all static podcast page styles to this page only */
 .podcast-ata-page {
   font-family: 'Montserrat', -apple-system, sans-serif;
   color: vars.$black;
 
-  /* Match reference container width/padding */
   .container {
     max-width: 1340px;
     margin: 0 auto;
@@ -513,7 +511,7 @@
     margin-bottom: 28px;
   }
 
-  /* CF7 / form controls — match reference HTML */
+  /* CF7 form controls */
   .signup-form {
     // CF7 adds <p> wrappers and <br> between label and input; neutralize them.
     .wpcf7 {
@@ -616,7 +614,7 @@
     }
   }
 
-  /* CF7 status + validation messages — modern look (replaces default bordered boxes) */
+  /* CF7 status / validation */
   .signup-form {
     .wpcf7-response-output {
       margin: 22px 0 0;
@@ -663,9 +661,7 @@
     }
   }
 
-  /* =========================================
-     RESPONSIVE (match reference)
-     ========================================= */
+  /* Responsive */
   @media (max-width: 1024px) {
     .topics-grid { grid-template-columns: repeat(2, 1fr); }
     .guests-scroll { grid-template-columns: repeat(2, 1fr); }
@@ -699,11 +695,10 @@
   }
 }
 
-/* Header menu replacement — only on podcast single */
+/* Podcast single: sticky header */
 body.single-podcast-ata {
   scroll-behavior: smooth;
 
-  /* Make theme header look like the static HTML (sticky + blur) */
   .main_top_nav {
     position: sticky;
     top: 0;
@@ -714,7 +709,7 @@ body.single-podcast-ata {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 
-  /* Match the same container grid as the podcast sections */
+  /* Same container as podcast sections */
   .main_top_nav > .container {
     max-width: 1340px;
     margin: 0 auto;

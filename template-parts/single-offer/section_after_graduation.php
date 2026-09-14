@@ -8,7 +8,6 @@ $youtube_playlist = !empty($after_graduation['id_youtube_playlist']) ? $after_gr
 
 $youtube_playlist_id = get_youtube_playlist_id($post_id, $category, $youtube_acf_field, $youtube_playlist);
 
-// Check if section data exists before rendering
 if (!empty($youtube_playlist_id)) :
     $title = $after_graduation['title'];
     $title = $title ? $title : __('Jakie plany po studiach mają nasi studenci', 'akademiata');
@@ -19,10 +18,7 @@ if (!empty($youtube_playlist_id)) :
                 <?php echo $title; ?>
             </h2>
             <?php
-            // Pass YouTube playlist ID to template
             set_query_var('data_youtube_playlist', esc_attr($youtube_playlist_id));
-
-            // Load YouTube Slider Template
             get_template_part('template-parts/youtube_slider');
             ?>
         </div>

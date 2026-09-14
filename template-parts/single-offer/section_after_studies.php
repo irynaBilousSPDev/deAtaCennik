@@ -1,7 +1,6 @@
 <?php
 $acf_fields = get_query_var('acf_fields', []);
 $after_studies = !empty($acf_fields['after_studies']) ? $acf_fields['after_studies'] : [];
-// Check if section data exists before rendering
 if (!empty($after_studies)) :
     $title = $after_studies['title'];
     $title_section = $title ? $title : __('Co możesz robić po tych studiach?', 'akademiata');

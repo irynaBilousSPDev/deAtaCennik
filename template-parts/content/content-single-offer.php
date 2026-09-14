@@ -127,7 +127,6 @@ $show_register_button = !empty($register_url);
                         ?>
                     </div>
                 </div>
-                <!-- Featured Image Column -->
                 <div class="col-lg-6 offer_header__media">
                     <?php if (!$is_mobile) : ?>
                         <?php get_template_part('template-parts/single-offer/daily-interest-notice'); ?>
@@ -137,19 +136,13 @@ $show_register_button = !empty($register_url);
                     <?php endif; ?>
                     <?php if (has_post_thumbnail()) : ?>
                         <?php
-                        // Get post thumbnail ID
                         $thumbnail_id = get_post_thumbnail_id(get_the_ID());
-
-                        // Set custom image sizes
                         $desktop_size = 'program_banner';
                         $mobile_size = 'specialization_card_thumb';
-
-                        // Get image URLs (with fallback)
                         $image_url_mobile = wp_get_attachment_image_src($thumbnail_id, $mobile_size)[0] ?? '';
                         $image_url_desktop = wp_get_attachment_image_src($thumbnail_id, $desktop_size)[0] ?? '';
                         ?>
 
-                        <!-- Display the Image as Background -->
                         <div class="image_bg responsive-image" role="img"
                              data-mobile="<?php echo esc_url($image_url_mobile); ?>"
                              data-desktop="<?php echo esc_url($image_url_desktop); ?>"
@@ -163,7 +156,6 @@ $show_register_button = !empty($register_url);
     </section>
 
 <?php
-//   Dynamically Load Sections
 $sections = [
     'section_why_study',
     'section_student_testimonials',

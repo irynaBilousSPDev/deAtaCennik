@@ -6,10 +6,8 @@ function akademiata_enqueue_scripts()
 {
     $theme_dir = get_template_directory_uri();
 
-    // Needed by prices calculator + bootstrap plugins.
     wp_enqueue_script('jquery');
 
-    // Fix: correct URL
     wp_enqueue_script(
         'bootstrap-script',
         'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js',
@@ -26,7 +24,6 @@ function akademiata_enqueue_scripts()
         true
     );
 
-    // Optional: add vendors if using splitChunks
     $vendors_js_path = get_template_directory() . '/assets/dist/js/vendors.js';
     $vendors_js_ver  = file_exists($vendors_js_path) ? filemtime($vendors_js_path) : null;
 
@@ -121,16 +118,15 @@ add_action('wp_enqueue_scripts', 'akademiata_enqueue_scripts', 100);
  */
 function akademiata_enqueue_styles()
 {
-    // Get the theme directory URL
     $theme_dir = get_template_directory_uri();
 
-    // Dequeue unnecessary default WordPress styles
+    // Unused WP/Gutenberg styles.
     $styles_to_dequeue = array(
-        'wp-block-library',          // Core Gutenberg block library
-        'wp-block-library-theme',    // Gutenberg block theme styles
-        'wc-block-style',            // WooCommerce block styles
-        'global-styles',             // Global styles from WordPress
-        'classic-theme-styles',      // Classic theme styles
+        'wp-block-library',
+        'wp-block-library-theme',
+        'wc-block-style',
+        'global-styles',
+        'classic-theme-styles',
     );
     foreach ($styles_to_dequeue as $style) {
         wp_dequeue_style($style);
@@ -139,7 +135,6 @@ function akademiata_enqueue_styles()
         'bootstrap-css',
         'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css');
 
-    // Enqueue Adobe Typekit Fonts
     wp_enqueue_style(
         'adobe-fonts',
         'https://use.typekit.net/dic8cvr.css',
@@ -147,14 +142,13 @@ function akademiata_enqueue_styles()
         null
     );
 
-    // Enqueue the main stylesheet (filemtime version busts browser cache on each deploy)
     $main_css_path = get_template_directory() . '/assets/dist/css/main.css';
     $main_css_ver  = file_exists($main_css_path) ? filemtime($main_css_path) : null;
 
     wp_enqueue_style(
         'name-main-css',
         $theme_dir . '/assets/dist/css/main.css',
-        array(), // No dependencies
+        array(),
         $main_css_ver,
         'all'
     );

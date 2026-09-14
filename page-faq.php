@@ -96,7 +96,6 @@ if (!is_wp_error($terms) && !empty($terms)) {
 
                 $title = $row['accordion_title'] ?? $row['title'] ?? get_the_title($pid);
 
-                // Derive body from common shapes in your rows
                 $body = '';
                 if (isset($row['accordion_default_content']['content'])) {
                     $body = $row['accordion_default_content']['content'];

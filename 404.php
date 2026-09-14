@@ -1,7 +1,6 @@
 <?php
 /**
- * The template for displaying 404 pages (Not Found)
- * Place this file in your theme root as 404.php
+ * 404 template.
  */
 ?>
 

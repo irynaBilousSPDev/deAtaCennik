@@ -1197,7 +1197,6 @@ add_filter('post_type_link', function ($post_link, $post) {
         }
     }
 
-    // Base slug (keep your current logic)
     if ($post->post_type === 'mba') {
         $base = 'studia-mba';
     } elseif ($post->post_type === 'postgraduate') {
@@ -1208,13 +1207,10 @@ add_filter('post_type_link', function ($post_link, $post) {
 
     $post_slug = get_post_field('post_name', $post->ID);
 
-    // IMPORTANT: build relative URL first
     $relative = "/{$base}/{$term->slug}/{$post_slug}/";
     $url = home_url($relative);
 
-    // IMPORTANT: do NOT force ICL_LANGUAGE_CODE here
-    // WPML will format URL correctly when permalink is requested in that language context.
-    // If you want, you may apply wpml_permalink using $post_lang (not current page lang):
+    // Relative URL first; WPML formats by post language, not ICL_LANGUAGE_CODE.
     if (!empty($post_lang) && defined('ICL_SITEPRESS_VERSION')) {
         $url = apply_filters('wpml_permalink', $url, $post_lang);
     }
