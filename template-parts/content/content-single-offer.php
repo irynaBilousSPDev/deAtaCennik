@@ -172,8 +172,7 @@ $sections = [
     'section_for_you_if',
     'section_study_program',
     'section_tuition_fees',
-    'section_recruitment_rules',
-    'digital-competencies-accordion',
+    'section_recruitment_rules'
 ];
 
 foreach ($sections as $section) {
