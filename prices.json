@@ -1837,6 +1837,18 @@
           },
           {
             "k": "Zarządzanie",
+            "s": "—",
+            "deg": 1,
+            "r10": 1120,
+            "r12": 950,
+            "rekr": 85,
+            "wps": 490,
+            "ps": "zarzadzanie",
+            "ak": "1_wwa_zarzadzanie",
+            "lk": ""
+          },
+          {
+            "k": "Zarządzanie",
             "s": "Sztuczna inteligencja w zarządzaniu",
             "deg": 1,
             "r10": 1120,

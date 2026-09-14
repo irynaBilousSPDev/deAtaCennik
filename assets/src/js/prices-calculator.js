@@ -484,10 +484,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     return url + sep + '_=' + Date.now();
   }
 
-  // Data loading strategy:
-  // If `googleApiUrl` is provided, treat Google Apps Script as the ONLY source of truth.
-  // (No local `prices.json` fetch; avoids stale/cached local data.)
-  // If `googleApiUrl` is missing, fall back to local `prices.json`.
+  // Google = live sheet. prices.json = fallback if Google fails.
 
   function fetchJson(url, timeoutMs) {
     if (!url) return Promise.reject(new Error('Missing URL'));
@@ -532,26 +529,8 @@ export default function initPricesCalculator(_$, opts = {}) {
   }
 
   function mergePricePayload(local, google) {
-    if (!google || !google.RAW) return sanitizeRawPl(local || null);
-    if (!local || !local.RAW) {
-      console.warn(
-        '[PricesCalculator] prices.json unavailable — using Google RAW.pl. '
-        + 'Redeploy Apps Script (parseFormaMode_) if modes look wrong.'
-      );
-      return sanitizeRawPl(google);
-    }
-    // Tuition modes/prices: prices.json (= sheet export). Live Google: promos, SmartApply, UABY.
-    return Object.assign({}, google, {
-      RAW: sanitizeRawPl(Object.assign({}, google.RAW, { pl: local.RAW.pl })),
-      SA: google.SA || local.SA,
-      SA_EN: google.SA_EN || local.SA_EN,
-      SA_ROWS: google.SA_ROWS || local.SA_ROWS,
-      UABY: google.UABY || local.UABY,
-      UABY_ROWS: google.UABY_ROWS || local.UABY_ROWS,
-      PROMOS: google.PROMOS || local.PROMOS,
-      BASE: google.BASE || local.BASE,
-      BASE_EN: google.BASE_EN || local.BASE_EN,
-    });
+    if (google && google.RAW) return sanitizeRawPl(google);
+    return sanitizeRawPl(local || null);
   }
 
   function loadPrices() {
