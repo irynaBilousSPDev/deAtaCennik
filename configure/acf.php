@@ -94,6 +94,7 @@ function akademiata_acf_load_cf7_forms($field) {
 }
 
 add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_cf7_forms');
+add_filter('acf/load_field/key=field_szk_signup_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
  * ACF local JSON — field groups per page template (acf-json/).

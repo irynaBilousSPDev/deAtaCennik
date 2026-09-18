@@ -608,6 +608,7 @@ add_filter( 'wpseo_title', function ( $title ) {
 		'mba'          => 'studia-mba',
 		'courses'      => 'kursy',
 		'exams'        => 'egzaminy',
+		'szkolenia'    => 'szkolenia',
 	];
 
 	$pt = get_query_var( 'post_type' );

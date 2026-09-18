@@ -139,6 +139,17 @@ function the_breadcrumb()
             echo '<a href="' . esc_url($url) . '">' . esc_html($label) . '</a>' . $sep;
             the_title();
         }
+        // Breadcrumb for single SZKOLENIE
+        elseif (is_singular('szkolenia')) {
+            $url = apply_filters('wpml_permalink', home_url('/szkolenia'), 'pl');
+            $label = apply_filters('wpml_translate_single_string', 'Szkolenia', 'akademiata', 'Szkolenia');
+            echo '<a href="' . esc_url($url) . '">' . esc_html($label) . '</a>' . $sep;
+            the_title();
+        }
+        elseif (is_post_type_archive('szkolenia')) {
+            $label = apply_filters('wpml_translate_single_string', 'Szkolenia', 'akademiata', 'Szkolenia');
+            echo esc_html($label);
+        }
         // Breadcrumb for exams archive
         elseif (is_post_type_archive('exams')) {
             $label = apply_filters(

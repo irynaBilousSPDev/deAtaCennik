@@ -1286,6 +1286,42 @@ function register_exams_cpt()
 add_action('init', 'register_exams_cpt');
 
 /**
+ * CPT: Szkolenia
+ */
+function register_szkolenia_cpt()
+{
+    $labels = array(
+        'name' => __('Szkolenia', 'akademiata'),
+        'singular_name' => __('Szkolenie', 'akademiata'),
+        'menu_name' => __('Szkolenia', 'akademiata'),
+        'add_new' => __('Dodaj nowe', 'akademiata'),
+        'add_new_item' => __('Dodaj nowe szkolenie', 'akademiata'),
+        'edit_item' => __('Edytuj szkolenie', 'akademiata'),
+        'new_item' => __('Nowe szkolenie', 'akademiata'),
+        'view_item' => __('Zobacz szkolenie', 'akademiata'),
+        'search_items' => __('Szukaj szkoleń', 'akademiata'),
+        'not_found' => __('Nie znaleziono szkoleń.', 'akademiata'),
+        'not_found_in_trash' => __('Brak szkoleń w koszu.', 'akademiata'),
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => true,
+        'rewrite' => array(
+            'slug' => 'szkolenia',
+            'with_front' => false,
+        ),
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'author', 'custom-fields', 'revisions'),
+        'menu_icon' => 'dashicons-welcome-learn-more',
+        'show_in_rest' => true,
+    );
+
+    akademiata_register_post_type('szkolenia', $args);
+}
+add_action('init', 'register_szkolenia_cpt');
+
+/**
  * CPT: Podcast ATA
  */
 function register_podcast_ata_cpt()

@@ -14,6 +14,7 @@ alwaysApply: false
 | `single-postgraduate.php`, `single-mba.php` | `template-parts/content/content-single-pg-mba.php` |
 | `single-courses.php` | `content-single-courses.php` |
 | `single-exams.php` | `content-single-exams.php` |
+| `single-szkolenia.php` | `content-single-szkolenia.php` → `template-parts/single-szkolenia/section-*.php` (hero, about, audience, speaker, schedule, signup/CF7) |
 | `single.php` | `content-single-aktualnosci.php` or `content-single.php` + optional `flexible-content/sections/{layout}` |
 
 ## Page templates (root)

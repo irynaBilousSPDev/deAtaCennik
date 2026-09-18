@@ -1,0 +1,445 @@
+[
+    {
+        "key": "group_szkolenia_single",
+        "title": "Szkolenia — single",
+        "fields": [
+            {
+                "key": "field_szk_tab_hero",
+                "label": "Hero",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_hero_badge",
+                "label": "Badge",
+                "name": "szk_hero_badge",
+                "type": "text",
+                "default_value": "BEZPŁATNY WEBINAR · ONLINE"
+            },
+            {
+                "key": "field_szk_hero_title",
+                "label": "Tytuł (puste = tytuł wpisu)",
+                "name": "szk_hero_title",
+                "type": "text",
+                "instructions": "Np. Inżynieria Biotopów w praktyce",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_hero_subtitle",
+                "label": "Podtytuł",
+                "name": "szk_hero_subtitle",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_hero_text",
+                "label": "Opis",
+                "name": "szk_hero_text",
+                "type": "textarea",
+                "rows": 4,
+                "new_lines": "",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_hero_cta_label",
+                "label": "Przycisk CTA",
+                "name": "szk_hero_cta_label",
+                "type": "text",
+                "default_value": "Zapisz się bezpłatnie →"
+            },
+            {
+                "key": "field_szk_hero_cta_note",
+                "label": "Notatka przy CTA",
+                "name": "szk_hero_cta_note",
+                "type": "text",
+                "default_value": "Liczba miejsc ograniczona"
+            },
+            {
+                "key": "field_szk_details_label",
+                "label": "Karta — nagłówek",
+                "name": "szk_details_label",
+                "type": "text",
+                "default_value": "SZCZEGÓŁY SPOTKANIA"
+            },
+            {
+                "key": "field_szk_details_date",
+                "label": "Data",
+                "name": "szk_details_date",
+                "type": "text",
+                "default_value": "",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "key": "field_szk_details_time",
+                "label": "Godzina",
+                "name": "szk_details_time",
+                "type": "text",
+                "default_value": "",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "key": "field_szk_details_time_note",
+                "label": "Notatka pod godziną",
+                "name": "szk_details_time_note",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_details_place",
+                "label": "Miejsce / forma",
+                "name": "szk_details_place",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_details_speaker_photo",
+                "label": "Miniatura prowadzącego (karta)",
+                "name": "szk_details_speaker_photo",
+                "type": "image",
+                "return_format": "array",
+                "preview_size": "thumbnail",
+                "library": "all"
+            },
+            {
+                "key": "field_szk_details_speaker_line",
+                "label": "Linia prowadzącego",
+                "name": "szk_details_speaker_line",
+                "type": "text",
+                "instructions": "Np. Prowadzi: Dorota Szlachcic",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_details_speaker_sub",
+                "label": "Podpis prowadzącego",
+                "name": "szk_details_speaker_sub",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_tab_about",
+                "label": "O spotkaniu",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_about_badge",
+                "label": "Badge",
+                "name": "szk_about_badge",
+                "type": "text",
+                "default_value": "O SPOTKANIU"
+            },
+            {
+                "key": "field_szk_about_title",
+                "label": "Nagłówek",
+                "name": "szk_about_title",
+                "type": "textarea",
+                "rows": 3,
+                "new_lines": "",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_about_content",
+                "label": "Treść",
+                "name": "szk_about_content",
+                "type": "wysiwyg",
+                "tabs": "all",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_szk_tab_audience",
+                "label": "Dla kogo",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_audience_badge",
+                "label": "Badge",
+                "name": "szk_audience_badge",
+                "type": "text",
+                "default_value": "DLA KOGO?"
+            },
+            {
+                "key": "field_szk_audience_title",
+                "label": "Nagłówek",
+                "name": "szk_audience_title",
+                "type": "textarea",
+                "rows": 3,
+                "new_lines": "",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_audience_cards",
+                "label": "Karty",
+                "name": "szk_audience_cards",
+                "type": "repeater",
+                "layout": "block",
+                "button_label": "Dodaj kartę",
+                "min": 0,
+                "max": 6,
+                "collapsed": "",
+                "sub_fields": [
+                    {
+                        "key": "field_szk_audience_card_icon",
+                        "label": "Ikona",
+                        "name": "icon",
+                        "type": "image",
+                        "return_format": "array",
+                        "preview_size": "thumbnail",
+                        "library": "all",
+                        "parent_repeater": "field_szk_audience_cards"
+                    },
+                    {
+                        "key": "field_szk_audience_card_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "",
+                        "parent_repeater": "field_szk_audience_cards"
+                    },
+                    {
+                        "key": "field_szk_audience_card_text",
+                        "label": "Opis",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "",
+                        "parent_repeater": "field_szk_audience_cards"
+                    }
+                ]
+            },
+            {
+                "key": "field_szk_tab_speaker",
+                "label": "Prowadząca",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_speaker_badge",
+                "label": "Badge",
+                "name": "szk_speaker_badge",
+                "type": "text",
+                "default_value": "PROWADZĄCA"
+            },
+            {
+                "key": "field_szk_speaker_photo",
+                "label": "Zdjęcie",
+                "name": "szk_speaker_photo",
+                "type": "image",
+                "return_format": "array",
+                "preview_size": "medium",
+                "library": "all"
+            },
+            {
+                "key": "field_szk_speaker_name",
+                "label": "Imię i nazwisko",
+                "name": "szk_speaker_name",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_speaker_role",
+                "label": "Tytuł / rola",
+                "name": "szk_speaker_role",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_speaker_bio",
+                "label": "Bio",
+                "name": "szk_speaker_bio",
+                "type": "wysiwyg",
+                "tabs": "all",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_szk_tab_schedule",
+                "label": "Harmonogram",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_schedule_badge",
+                "label": "Badge",
+                "name": "szk_schedule_badge",
+                "type": "text",
+                "default_value": "RAMOWY HARMONOGRAM"
+            },
+            {
+                "key": "field_szk_schedule_title",
+                "label": "Nagłówek",
+                "name": "szk_schedule_title",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_schedule_items",
+                "label": "Punkty",
+                "name": "szk_schedule_items",
+                "type": "repeater",
+                "layout": "table",
+                "button_label": "Dodaj punkt",
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "sub_fields": [
+                    {
+                        "key": "field_szk_schedule_time",
+                        "label": "Czas",
+                        "name": "time",
+                        "type": "text",
+                        "default_value": "",
+                        "wrapper": {
+                            "width": "20",
+                            "class": "",
+                            "id": ""
+                        },
+                        "parent_repeater": "field_szk_schedule_items"
+                    },
+                    {
+                        "key": "field_szk_schedule_item_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "default_value": "",
+                        "wrapper": {
+                            "width": "30",
+                            "class": "",
+                            "id": ""
+                        },
+                        "parent_repeater": "field_szk_schedule_items"
+                    },
+                    {
+                        "key": "field_szk_schedule_item_text",
+                        "label": "Opis",
+                        "name": "text",
+                        "type": "textarea",
+                        "rows": 2,
+                        "new_lines": "",
+                        "default_value": "",
+                        "wrapper": {
+                            "width": "50",
+                            "class": "",
+                            "id": ""
+                        },
+                        "parent_repeater": "field_szk_schedule_items"
+                    }
+                ]
+            },
+            {
+                "key": "field_szk_tab_signup",
+                "label": "Zapisy (CF7)",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_szk_signup_badge",
+                "label": "Badge",
+                "name": "szk_signup_badge",
+                "type": "text",
+                "default_value": "ZAPISY"
+            },
+            {
+                "key": "field_szk_signup_title",
+                "label": "Nagłówek",
+                "name": "szk_signup_title",
+                "type": "text",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_signup_text",
+                "label": "Opis",
+                "name": "szk_signup_text",
+                "type": "textarea",
+                "rows": 3,
+                "new_lines": "",
+                "default_value": ""
+            },
+            {
+                "key": "field_szk_signup_perks",
+                "label": "Punkty (checklist)",
+                "name": "szk_signup_perks",
+                "type": "repeater",
+                "layout": "table",
+                "button_label": "Dodaj punkt",
+                "min": 0,
+                "max": 0,
+                "collapsed": "",
+                "sub_fields": [
+                    {
+                        "key": "field_szk_signup_perk_text",
+                        "label": "Tekst",
+                        "name": "text",
+                        "type": "text",
+                        "default_value": "",
+                        "parent_repeater": "field_szk_signup_perks"
+                    }
+                ]
+            },
+            {
+                "key": "field_szk_signup_form_id",
+                "label": "Formularz Contact Form 7",
+                "name": "szk_signup_form_id",
+                "type": "select",
+                "instructions": "Wybierz formularz CF7. Utwórz go w WP Admin → Contact.",
+                "choices": {},
+                "default_value": "",
+                "allow_null": 1,
+                "multiple": 0,
+                "ui": 1,
+                "ajax": 0,
+                "return_format": "value"
+            },
+            {
+                "key": "field_szk_signup_form_note",
+                "label": "Tekst pod przyciskiem formularza",
+                "name": "szk_signup_form_note",
+                "type": "text",
+                "default_value": "Liczba miejsc ograniczona – decyduje kolejność zgłoszeń."
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "szkolenia"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Editable content for single Szkolenia (webinar) pages. CF7 form select populated in configure/acf.php.",
+        "show_in_rest": 0,
+        "modified": 1789723087
+    }
+]

@@ -1,0 +1,547 @@
+@use "../abstracts/variables" as vars;
+@use "../abstracts/mixins" as mixins;
+
+.szkolenia-single {
+  --szk-cream: #f5f0e6;
+  --szk-cream-2: #faf7f1;
+  --szk-ink: #1c1c1c;
+  --szk-muted: #5f5f5f;
+  --szk-green: #16352a;
+  --szk-green-soft: #c9bda3;
+  --szk-cta: #a85a3c;
+  --szk-cta-hover: #914c32;
+  --szk-line: rgba(28, 28, 28, 0.12);
+  --szk-card: #ffffff;
+  --szk-display: "Nunito Sans", serif;
+  --szk-body: #{vars.$font-family-sans-serif};
+
+  color: var(--szk-ink);
+  font-family: var(--szk-body);
+  background: var(--szk-cream-2);
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  #zapisy,
+  #o-spotkaniu,
+  #dla-kogo,
+  #prowadzaca,
+  #harmonogram {
+    scroll-margin-top: 96px;
+  }
+
+  .szk-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(28, 28, 28, 0.06);
+    color: var(--szk-muted);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+
+    &--on-dark {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--szk-green-soft);
+    }
+  }
+
+  .szk-section-title {
+    font-family: var(--szk-display);
+    font-weight: 700;
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    line-height: 1.15;
+    margin: 0 0 24px;
+    color: var(--szk-ink);
+  }
+
+  .szk-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 12px 28px;
+    border-radius: 12px;
+    background: var(--szk-cta);
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 1.6rem;
+    text-decoration: none;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--szk-cta-hover);
+      color: #fff !important;
+    }
+  }
+
+  .szk-prose {
+    font-size: 1.6rem;
+    line-height: 1.65;
+    color: var(--szk-muted);
+
+    p {
+      margin: 0 0 1.2em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    strong {
+      color: var(--szk-ink);
+      font-weight: 700;
+    }
+  }
+
+  /* —— Hero —— */
+  .szk-hero {
+    background: var(--szk-cream);
+    padding: 72px 0 80px;
+  }
+
+  .szk-hero__inner {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .szk-hero__title {
+    font-family: var(--szk-display);
+    font-size: clamp(3.4rem, 5vw, 5.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin: 0 0 12px;
+  }
+
+  .szk-hero__subtitle {
+    font-family: var(--szk-display);
+    font-style: italic;
+    font-size: 2rem;
+    margin: 0 0 20px;
+    color: var(--szk-muted);
+  }
+
+  .szk-hero__text {
+    font-size: 1.65rem;
+    line-height: 1.6;
+    color: var(--szk-muted);
+    max-width: 54ch;
+    margin: 0 0 28px;
+  }
+
+  .szk-hero__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 20px;
+  }
+
+  .szk-hero__cta-note {
+    font-size: 1.35rem;
+    color: var(--szk-muted);
+  }
+
+  .szk-details-card {
+    position: relative;
+    background: var(--szk-card);
+    border-radius: 20px;
+    padding: 28px 28px 24px;
+    box-shadow: 0 12px 40px rgba(22, 53, 42, 0.08);
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -30px;
+      width: 160px;
+      height: 160px;
+      border: 1px solid rgba(22, 53, 42, 0.12);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+  }
+
+  .szk-details-card__label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--szk-muted);
+    margin-bottom: 20px;
+  }
+
+  .szk-details-card__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      font-size: 1.55rem;
+      line-height: 1.4;
+
+      small {
+        display: block;
+        margin-top: 2px;
+        font-size: 1.25rem;
+        color: var(--szk-muted);
+      }
+    }
+  }
+
+  .szk-details-card__ico {
+    flex: 0 0 24px;
+    color: var(--szk-green);
+    margin-top: 2px;
+  }
+
+  .szk-details-card__speaker {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+    padding-top: 18px;
+    border-top: 1px solid var(--szk-line);
+
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    strong {
+      display: block;
+      font-size: 1.45rem;
+    }
+
+    span {
+      display: block;
+      font-size: 1.3rem;
+      color: var(--szk-muted);
+    }
+  }
+
+  /* —— About —— */
+  .szk-about {
+    background: #fff;
+    padding: 80px 0;
+  }
+
+  .szk-about__inner {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  /* —— Audience —— */
+  .szk-audience {
+    background: var(--szk-cream);
+    padding: 80px 0;
+  }
+
+  .szk-audience__title {
+    max-width: 22ch;
+    margin-bottom: 36px;
+  }
+
+  .szk-audience__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .szk-audience-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 28px rgba(22, 53, 42, 0.05);
+
+    h3 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin: 14px 0 10px;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.45rem;
+      line-height: 1.55;
+      color: var(--szk-muted);
+    }
+  }
+
+  .szk-audience-card__icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  /* —— Speaker —— */
+  .szk-speaker {
+    background: var(--szk-green);
+    color: #fff;
+    padding: 80px 0;
+  }
+
+  .szk-speaker__inner {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .szk-speaker__photo img,
+  .szk-speaker__photo-ph {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .szk-speaker__photo-ph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    color: var(--szk-green-soft);
+    font-size: 1.4rem;
+  }
+
+  .szk-speaker__name {
+    font-family: var(--szk-display);
+    font-size: clamp(3rem, 4vw, 4.4rem);
+    font-weight: 700;
+    margin: 0 0 10px;
+    color: #fff;
+  }
+
+  .szk-speaker__role {
+    margin: 0 0 22px;
+    color: var(--szk-green-soft);
+    font-size: 1.55rem;
+    line-height: 1.45;
+  }
+
+  .szk-speaker__bio.szk-prose {
+    color: rgba(255, 255, 255, 0.88);
+
+    strong {
+      color: #fff;
+    }
+  }
+
+  /* —— Schedule —— */
+  .szk-schedule {
+    background: var(--szk-cream);
+    padding: 80px 0;
+  }
+
+  .szk-schedule__list {
+    list-style: none;
+    margin: 28px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--szk-line);
+  }
+
+  .szk-schedule__item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 24px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--szk-line);
+  }
+
+  .szk-schedule__time {
+    font-weight: 700;
+    font-size: 1.55rem;
+  }
+
+  .szk-schedule__body {
+    strong {
+      display: block;
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1.5rem;
+      line-height: 1.55;
+      color: var(--szk-muted);
+    }
+  }
+
+  /* —— Signup —— */
+  .szk-signup {
+    background: var(--szk-cream);
+    padding: 80px 0 96px;
+  }
+
+  .szk-signup__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .szk-signup__text {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--szk-muted);
+    margin: 0 0 24px;
+  }
+
+  .szk-signup__perks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      font-size: 1.55rem;
+      line-height: 1.45;
+    }
+  }
+
+  .szk-signup__check {
+    flex: 0 0 22px;
+    color: var(--szk-green);
+    margin-top: 2px;
+  }
+
+  .szk-signup__form {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 12px 40px rgba(22, 53, 42, 0.08);
+
+    &--empty {
+      color: var(--szk-muted);
+      font-size: 1.5rem;
+    }
+
+    .wpcf7 {
+      margin: 0;
+    }
+
+    .wpcf7-form {
+      display: grid;
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--szk-ink);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid rgba(28, 28, 28, 0.18);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 1.5rem;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 96px;
+    }
+
+    input[type="submit"],
+    .wpcf7-submit {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--szk-cta);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: var(--szk-cta-hover);
+      }
+    }
+
+    .wpcf7-acceptance {
+      font-size: 1.3rem;
+      line-height: 1.45;
+      color: var(--szk-muted);
+      font-weight: 400;
+    }
+
+    .wpcf7-not-valid-tip {
+      font-size: 1.25rem;
+    }
+
+    .wpcf7-response-output {
+      margin: 12px 0 0;
+      font-size: 1.4rem;
+    }
+  }
+
+  .szk-signup__form-note {
+    margin: 14px 0 0;
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--szk-muted);
+  }
+
+  @include mixins.max-ipad-air-screen {
+    .szk-hero__inner,
+    .szk-about__inner,
+    .szk-speaker__inner,
+    .szk-signup__inner {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .szk-audience__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .szk-schedule__item {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .szk-hero,
+    .szk-about,
+    .szk-audience,
+    .szk-speaker,
+    .szk-schedule,
+    .szk-signup {
+      padding: 56px 0;
+    }
+  }
+}
