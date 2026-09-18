@@ -9,6 +9,7 @@ Motyw NIE nadpisuje treści formularza.
 Ukryte szk-* wypełnia motyw z ACF (nazwa / data / godzina / tryb).
 W etykiecie selecta studiów użyj „%szk_studia%” — podmieniane z taksonomii
 „Studia podyplomowe” (checkboxy z boku edycji szkolenia).
+W tekście [acceptance] NIE używaj nawiasów kwadratowych [ ] — CF7 je myli ze shortcode.
 
 
 ----- FORM -----
@@ -36,7 +37,7 @@ W etykiecie selecta studiów użyj „%szk_studia%” — podmieniane z taksonom
 [select* studia id:szk-studia class:szk-cf7__select "Jeszcze się zastanawiam" "Tak, poproszę o informacje" "Nie, dziękuję"]
 </div>
 <div class="szk-cf7__check">
-[acceptance* zgoda] Wyrażam zgodę na przetwarzanie danych osobowych przez ATA w celu organizacji webinaru i przesyłania informacji o nim. [treść zgody RODO do uzupełnienia] [/acceptance]
+[acceptance* zgoda] Wyrażam zgodę na przetwarzanie danych osobowych przez ATA w celu organizacji webinaru i przesyłania informacji o nim. (treść zgody RODO do uzupełnienia) [/acceptance]
 </div>
 [hidden szk-nazwa]
 [hidden szk-data]
