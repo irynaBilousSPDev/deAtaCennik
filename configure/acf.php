@@ -97,6 +97,24 @@ add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_c
 add_filter('acf/load_field/key=field_szk_signup_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
+ * Output ACF WYSIWYG / rich text for Szkolenia (never esc_html — that shows raw &lt;p&gt;).
+ *
+ * @param string $html
+ * @return string
+ */
+function akademiata_szk_richtext($html) {
+	$html = (string) $html;
+	if ($html === '') {
+		return '';
+	}
+	// Double-encoded entities from old textarea → wysiwyg migration.
+	if (strpos($html, '&lt;') !== false && strpos($html, '<p') === false && strpos($html, '<P') === false) {
+		$html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	}
+	return wp_kses_post($html);
+}
+
+/**
  * Szkolenia signup: event meta for CF7 hidden fields / mail.
  *
  * @param int $post_id
@@ -219,9 +237,31 @@ function akademiata_szk_cf7_append_mail_meta($components, $contact_form, $mail =
 add_filter('wpcf7_mail_components', 'akademiata_szk_cf7_append_mail_meta', 10, 3);
 
 /**
- * Optional mail tags: [_szk_nazwa] [_szk_data] [_szk_godzina] [_szk_tryb]
+ * Optional mail tags: [_szk_nazwa] [_szk_data] [_szk_godzina] [_szk_tryb] [_your_email]
  */
 function akademiata_szk_cf7_special_mail_tags($output, $name, $html = false) {
+	// Autoresponder To: — special tag (avoids CF7 “unsafe [email] in To” warning).
+	if ($name === '_your_email') {
+		$email = '';
+		if (class_exists('WPCF7_Submission')) {
+			$submission = WPCF7_Submission::get_instance();
+			if ($submission) {
+				$data = $submission->get_posted_data();
+				if (is_array($data)) {
+					if (!empty($data['email'])) {
+						$email = is_array($data['email']) ? (string) reset($data['email']) : (string) $data['email'];
+					} elseif (!empty($data['your-email'])) {
+						$email = is_array($data['your-email']) ? (string) reset($data['your-email']) : (string) $data['your-email'];
+					}
+				}
+			}
+		}
+		if ($email === '' && !empty($_POST['email'])) {
+			$email = sanitize_email(wp_unslash($_POST['email']));
+		}
+		return $email !== '' && is_email($email) ? $email : $output;
+	}
+
 	$map = array(
 		'_szk_nazwa'   => 'nazwa',
 		'_szk_data'    => 'data',

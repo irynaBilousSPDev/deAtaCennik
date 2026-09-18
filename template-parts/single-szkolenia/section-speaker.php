@@ -38,7 +38,7 @@ if ($name === '' && trim(wp_strip_all_tags($bio)) === '') {
 			<?php endif; ?>
 			<?php if (trim(wp_strip_all_tags($bio)) !== '') : ?>
 				<div class="szk-speaker__bio">
-					<?php echo wp_kses_post($bio); ?>
+					<?php echo akademiata_szk_richtext($bio); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
 			<?php endif; ?>
 		</div>

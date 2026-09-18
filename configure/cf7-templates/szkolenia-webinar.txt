@@ -1,15 +1,18 @@
 Szkolenia / webinar — Contact Form 7
 =====================================
-1. WP Admin → Contact → Add New (lub edytuj istniejący)
-2. Title: np. „Szkolenia webinar”
-3. Wklej sekcje poniżej
-4. Zapisz i wybierz formularz w ACF szkolenia → Formularz Contact Form 7
+WAŻNE — dwie zakładki maila:
 
-Motyw NIE nadpisuje treści formularza.
-Ukryte szk-* wypełnia motyw z ACF (nazwa / data / godzina / tryb).
-W etykiecie selecta studiów użyj „%szk_studia%” — podmieniane z taksonomii
-„Studia podyplomowe” (checkboxy z boku edycji szkolenia).
-W tekście [acceptance] NIE używaj nawiasów kwadratowych [ ] — CF7 je myli ze shortcode.
+  „Adres e-mail” (Mail 1)  = do ATA / admina
+      Odbiorca: [_site_admin_email]   ← NIE [email] !!!
+      Reply-To: [email]
+
+  „Email (2)”              = potwierdzenie dla uczestnika
+      Odbiorca: [_your_email]   ← tag motywu (nie [email] — bez czerwonego warningu)
+
+Jeśli w Mail 1 dasz Odbiorca [email], CF7 krzyczy na czerwono i
+łatwo o problemy z wysyłką / brak maila do biura.
+
+HTML: odznacz „Użyj treści w formacie HTML”, chyba że treść ma tagi <p><br>.
 
 
 ----- FORM -----
@@ -47,7 +50,7 @@ W tekście [acceptance] NIE używaj nawiasów kwadratowych [ ] — CF7 je myli z
 </div>
 
 
------ MAIL (do admina) — zakładka „Adres e-mail” -----
+----- MAIL 1 — zakładka „Adres e-mail” (DO ADMINA) -----
 Odbiorca:
 [_site_admin_email]
 
@@ -60,7 +63,7 @@ Zgłoszenie na szkolenie: [szk-nazwa]
 Dodatkowe nagłówki:
 Reply-To: [email]
 
-Treść wiadomości:
+Treść (HTML WYŁĄCZONE):
 Nowe zgłoszenie na szkolenie / webinar
 
 Imię: [imie]
@@ -76,14 +79,17 @@ Godzina: [szk-godzina]
 Tryb: [szk-tryb]
 
 --
-Wiadomość z formularza na [_site_title] ([_site_url])
+[_site_title] ([_site_url])
 
 
------ MAIL (2) — potwierdzenie dla uczestnika -----
-Zaznacz: „Użyj emaila (2)”
+----- MAIL 2 — zakładka „Email (2)” (DO UCZESTNIKA) -----
+Zaznacz: Użyj emaila (2)
 
 Odbiorca:
-[email]
+[_your_email]
+
+  ↑ specjalny tag motywu (nie [email]) — bez czerwonego ostrzeżenia CF7.
+    Bierze adres z pola formularza [email].
 
 Nadawca:
 [_site_title] <wordpress@dev.akademiata.pl>
@@ -94,7 +100,7 @@ Potwierdzenie zapisu: [szk-nazwa]
 Dodatkowe nagłówki:
 Reply-To: [_site_admin_email]
 
-Treść wiadomości:
+Treść (HTML WYŁĄCZONE):
 Dzień dobry [imie],
 
 dziękujemy za zapis na szkolenie / webinar.
@@ -120,3 +126,9 @@ Jeśli to nie Ty, zignoruj tę wiadomość.
 
 ----- ADDITIONAL SETTINGS -----
 html_class: szk-cf7-form
+
+
+TEST gdy „problem z wysłaniem”:
+1. Wyłącz Email (2) → wyślij → czy Mail 1 dochodzi do admina?
+2. Jeśli nie → SMTP na dev (WP Mail SMTP) / skrzynka wordpress@dev.akademiata.pl
+3. Dopiero potem włącz Email (2) z powrotem

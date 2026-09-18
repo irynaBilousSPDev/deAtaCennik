@@ -47,10 +47,11 @@
                 "key": "field_szk_hero_text",
                 "label": "Opis",
                 "name": "szk_hero_text",
-                "type": "textarea",
-                "rows": 4,
-                "new_lines": "",
-                "default_value": ""
+                "type": "wysiwyg",
+                "tabs": "all",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
             },
             {
                 "key": "field_szk_hero_cta_label",
@@ -239,10 +240,11 @@
                         "key": "field_szk_audience_card_text",
                         "label": "Opis",
                         "name": "text",
-                        "type": "textarea",
-                        "rows": 3,
-                        "new_lines": "",
-                        "default_value": "",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "delay": 0,
                         "parent_repeater": "field_szk_audience_cards"
                     }
                 ]
@@ -361,10 +363,11 @@
                         "key": "field_szk_schedule_item_text",
                         "label": "Opis",
                         "name": "text",
-                        "type": "textarea",
-                        "rows": 2,
-                        "new_lines": "",
-                        "default_value": "",
+                        "type": "wysiwyg",
+                        "tabs": "all",
+                        "toolbar": "basic",
+                        "media_upload": 0,
+                        "delay": 0,
                         "wrapper": {
                             "width": "50",
                             "class": "",
@@ -405,28 +408,7 @@
                 "toolbar": "basic",
                 "media_upload": 0,
                 "delay": 0,
-                "instructions": "Akapity + lista (ul) — na froncie lista ma styl checklisty ze znacznikami."
-            },
-            {
-                "key": "field_szk_signup_perks",
-                "label": "Punkty (checklist)",
-                "name": "szk_signup_perks",
-                "type": "repeater",
-                "layout": "table",
-                "button_label": "Dodaj punkt",
-                "min": 0,
-                "max": 0,
-                "collapsed": "",
-                "sub_fields": [
-                    {
-                        "key": "field_szk_signup_perk_text",
-                        "label": "Tekst",
-                        "name": "text",
-                        "type": "text",
-                        "default_value": "",
-                        "parent_repeater": "field_szk_signup_perks"
-                    }
-                ]
+                "instructions": "Edytor jak Bio. Lista punktowana = checklista na froncie (bez osobnego repeatera)."
             },
             {
                 "key": "field_szk_signup_form_id",
@@ -468,6 +450,6 @@
         "active": true,
         "description": "Editable content for single Szkolenia (webinar) pages. CF7 form select populated in configure/acf.php.",
         "show_in_rest": 0,
-        "modified": 1789724310
+        "modified": 1789735600
     }
 ]

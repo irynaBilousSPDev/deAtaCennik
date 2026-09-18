@@ -169,6 +169,14 @@
     color: var(--szk-body);
     margin: 26px 0 0;
     max-width: 54ch;
+
+    p {
+      margin: 0 0 0.75em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 
   .szk-hero__cta-row {
@@ -398,6 +406,20 @@
       color: var(--szk-muted);
       margin: 0;
     }
+
+    .szk-audience-card__text {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--szk-muted);
+
+      p {
+        margin: 0 0 0.5em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
   }
 
   .szk-audience-card__icon {
@@ -540,6 +562,14 @@
     font-size: 15px;
     color: var(--szk-muted);
     line-height: 1.6;
+
+    p {
+      margin: 0 0 0.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 
   /* —— Signup —— */

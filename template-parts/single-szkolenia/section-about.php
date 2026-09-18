@@ -27,7 +27,7 @@ if ($title === '' && trim(wp_strip_all_tags($content)) === '') {
 		</div>
 		<?php if (trim(wp_strip_all_tags($content)) !== '') : ?>
 			<div class="szk-about__content szk-check-list">
-				<?php echo wp_kses_post($content); ?>
+				<?php echo akademiata_szk_richtext($content); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 		<?php endif; ?>
 	</div>

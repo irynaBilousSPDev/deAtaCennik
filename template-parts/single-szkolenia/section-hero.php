@@ -10,7 +10,7 @@ $title = (string) get_query_var('szk_hero_title', get_the_title());
 
 $badge      = trim((string) ($f['szk_hero_badge'] ?? ''));
 $subtitle   = trim((string) ($f['szk_hero_subtitle'] ?? ''));
-$text       = trim((string) ($f['szk_hero_text'] ?? ''));
+$text       = (string) ($f['szk_hero_text'] ?? '');
 $cta        = trim((string) ($f['szk_hero_cta_label'] ?? ''));
 $cta_note   = trim((string) ($f['szk_hero_cta_note'] ?? ''));
 $det_label  = trim((string) ($f['szk_details_label'] ?? ''));
@@ -41,8 +41,10 @@ $has_details = ($date !== '' || $time !== '' || $place !== '' || $sp_line !== ''
 				<?php if ($subtitle !== '') : ?>
 					<p class="szk-hero__subtitle"><?php echo esc_html($subtitle); ?></p>
 				<?php endif; ?>
-				<?php if ($text !== '') : ?>
-					<p class="szk-hero__text"><?php echo esc_html($text); ?></p>
+				<?php if (trim(wp_strip_all_tags($text)) !== '') : ?>
+					<div class="szk-hero__text">
+						<?php echo akademiata_szk_richtext($text); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</div>
 				<?php endif; ?>
 				<?php if ($cta !== '') : ?>
 					<div class="szk-hero__cta-row">

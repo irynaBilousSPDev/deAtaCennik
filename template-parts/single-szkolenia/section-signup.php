@@ -11,7 +11,6 @@ $badge       = trim((string) ($f['szk_signup_badge'] ?? ''));
 $title       = trim((string) ($f['szk_signup_title'] ?? ''));
 $text        = (string) ($f['szk_signup_text'] ?? '');
 $note        = trim((string) ($f['szk_signup_form_note'] ?? ''));
-$perks       = is_array($f['szk_signup_perks'] ?? null) ? $f['szk_signup_perks'] : array();
 
 if ($title === '' && $form_output === '') {
 	return;
@@ -29,23 +28,8 @@ if ($title === '' && $form_output === '') {
 			<?php endif; ?>
 			<?php if (trim(wp_strip_all_tags($text)) !== '') : ?>
 				<div class="szk-signup__text szk-check-list">
-					<?php echo wp_kses_post($text); ?>
+					<?php echo akademiata_szk_richtext($text); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</div>
-			<?php endif; ?>
-			<?php if ($perks !== array()) : ?>
-				<ul class="szk-signup__perks">
-					<?php foreach ($perks as $perk) :
-						$p = trim((string) ($perk['text'] ?? ''));
-						if ($p === '') {
-							continue;
-						}
-						?>
-						<li>
-							<svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3 9L7 13L15 4" stroke="#2F4A3C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-							<span><?php echo esc_html($p); ?></span>
-						</li>
-					<?php endforeach; ?>
-				</ul>
 			<?php endif; ?>
 		</div>
 

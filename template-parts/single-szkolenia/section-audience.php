@@ -34,9 +34,9 @@ $fallback_icons = array(
 			<div class="szk-audience__grid">
 				<?php foreach ($cards as $i => $card) :
 					$c_title = trim((string) ($card['title'] ?? ''));
-					$c_text  = trim((string) ($card['text'] ?? ''));
+					$c_text  = (string) ($card['text'] ?? '');
 					$icon    = $card['icon'] ?? null;
-					if ($c_title === '' && $c_text === '') {
+					if ($c_title === '' && trim(wp_strip_all_tags($c_text)) === '') {
 						continue;
 					}
 					?>
@@ -49,8 +49,8 @@ $fallback_icons = array(
 						<?php if ($c_title !== '') : ?>
 							<h3><?php echo esc_html($c_title); ?></h3>
 						<?php endif; ?>
-						<?php if ($c_text !== '') : ?>
-							<p><?php echo esc_html($c_text); ?></p>
+						<?php if (trim(wp_strip_all_tags($c_text)) !== '') : ?>
+							<div class="szk-audience-card__text"><?php echo akademiata_szk_richtext($c_text); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 						<?php endif; ?>
 					</article>
 				<?php endforeach; ?>

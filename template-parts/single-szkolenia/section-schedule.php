@@ -29,7 +29,7 @@ if ($title === '' && $items === array()) {
 				<?php foreach ($items as $item) :
 					$time    = trim((string) ($item['time'] ?? ''));
 					$i_title = trim((string) ($item['title'] ?? ''));
-					$i_text  = trim((string) ($item['text'] ?? ''));
+					$i_text  = (string) ($item['text'] ?? '');
 					if ($time === '' && $i_title === '') {
 						continue;
 					}
@@ -40,8 +40,8 @@ if ($title === '' && $items === array()) {
 							<?php if ($i_title !== '') : ?>
 								<div class="szk-schedule__item-title"><?php echo esc_html($i_title); ?></div>
 							<?php endif; ?>
-							<?php if ($i_text !== '') : ?>
-								<div class="szk-schedule__item-text"><?php echo esc_html($i_text); ?></div>
+							<?php if (trim(wp_strip_all_tags($i_text)) !== '') : ?>
+								<div class="szk-schedule__item-text"><?php echo akademiata_szk_richtext($i_text); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 							<?php endif; ?>
 						</div>
 					</div>
