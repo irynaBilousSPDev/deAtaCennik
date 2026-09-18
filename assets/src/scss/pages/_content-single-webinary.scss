@@ -8,8 +8,8 @@
   --web-muted: #5b6660;
   --web-body: #384038;
   --web-green: #2f4a3c;
-  --web-cta: #c1693e;
-  --web-cta-hover: #a34f2c;
+  --web-cta: #f5682c;
+  --web-cta-hover: #d9551f;
   --web-cream: #f7f5ef;
   --web-line: rgba(31, 36, 32, 0.1);
   --web-line-strong: rgba(31, 36, 32, 0.12);
@@ -800,7 +800,7 @@
         text-underline-offset: 2px;
 
         &:hover {
-          color: #c1693e;
+          color: var(--web-cta);
         }
       }
 
@@ -874,30 +874,35 @@
     }
 
     .web-cf7__submit,
-    input[type="submit"],
-    .wpcf7-submit {
+    input.wpcf7-submit,
+    input[type="submit"].wpcf7-submit,
+    .wpcf7-form-control.wpcf7-submit {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 100%;
       min-height: 52px;
-      background: #c1693e;
-      color: #f7f5ef !important;
+      background: #f5682c !important;
+      background-color: #f5682c !important;
+      color: #fff !important;
       font-weight: 600;
       font-size: 16px;
       line-height: 1.2;
       padding: 15px 28px;
       border-radius: 999px;
-      border: none;
+      border: none !important;
       cursor: pointer;
       font-family: var(--web-sans);
       margin-top: 22px;
       box-shadow: none;
-      transition: background 0.15s ease;
+      transition: background 0.15s ease, background-color 0.15s ease;
 
-      &:hover {
-        background: #a34f2c;
-        color: #f7f5ef !important;
+      &:hover,
+      &:focus,
+      &:active {
+        background: #d9551f !important;
+        background-color: #d9551f !important;
+        color: #fff !important;
       }
     }
 
