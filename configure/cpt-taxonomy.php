@@ -1322,6 +1322,91 @@ function register_szkolenia_cpt()
 add_action('init', 'register_szkolenia_cpt');
 
 /**
+ * Szkolenia: which postgraduate study name is promoted (sidebar checkboxes).
+ * Used in CF7 label: „%szk_studia%”.
+ */
+function register_szkolenia_studia_taxonomy()
+{
+	$labels = array(
+		'name'                       => __('Studia podyplomowe', 'akademiata'),
+		'singular_name'              => __('Kierunek studiów', 'akademiata'),
+		'search_items'               => __('Szukaj kierunków', 'akademiata'),
+		'all_items'                  => __('Wszystkie kierunki', 'akademiata'),
+		'parent_item'                => __('Kierunek nadrzędny', 'akademiata'),
+		'parent_item_colon'          => __('Kierunek nadrzędny:', 'akademiata'),
+		'edit_item'                  => __('Edytuj kierunek', 'akademiata'),
+		'update_item'                => __('Aktualizuj kierunek', 'akademiata'),
+		'add_new_item'               => __('Dodaj kierunek', 'akademiata'),
+		'new_item_name'              => __('Nazwa kierunku', 'akademiata'),
+		'menu_name'                  => __('Studia podyplomowe', 'akademiata'),
+		'separate_items_with_commas' => __('Oddziel przecinkami', 'akademiata'),
+		'choose_from_most_used'      => __('Wybierz spośród popularnych', 'akademiata'),
+		'not_found'                  => __('Brak kierunków.', 'akademiata'),
+	);
+
+	register_taxonomy(
+		'szk_studia',
+		array('szkolenia'),
+		array(
+			'labels'            => $labels,
+			'hierarchical'      => true,
+			'public'            => false,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			'show_in_nav_menus' => false,
+			'rewrite'           => false,
+		)
+	);
+}
+add_action('init', 'register_szkolenia_studia_taxonomy', 11);
+
+/**
+ * Default term for the first webinar (label in CF7).
+ */
+function akademiata_szk_ensure_default_studia_term()
+{
+	if (!taxonomy_exists('szk_studia')) {
+		return;
+	}
+	$name = 'Inżynieria Biotopów';
+	$slug = 'inzynieria-biotopow';
+	if (!term_exists($slug, 'szk_studia') && !term_exists($name, 'szk_studia')) {
+		wp_insert_term($name, 'szk_studia', array('slug' => $slug));
+	}
+}
+add_action('init', 'akademiata_szk_ensure_default_studia_term', 20);
+
+/**
+ * Display name of selected szk_studia term(s) for a szkolenie.
+ *
+ * @param int $post_id
+ * @return string
+ */
+function akademiata_szk_get_studia_label($post_id = 0)
+{
+	$post_id = $post_id ? (int) $post_id : get_the_ID();
+	if ($post_id <= 0 || get_post_type($post_id) !== 'szkolenia') {
+		return '';
+	}
+
+	$terms = get_the_terms($post_id, 'szk_studia');
+	if (empty($terms) || is_wp_error($terms)) {
+		return '';
+	}
+
+	$names = array();
+	foreach ($terms as $term) {
+		$n = trim((string) $term->name);
+		if ($n !== '') {
+			$names[] = $n;
+		}
+	}
+
+	return implode(' / ', $names);
+}
+
+/**
  * CPT: Podcast ATA
  */
 function register_podcast_ata_cpt()

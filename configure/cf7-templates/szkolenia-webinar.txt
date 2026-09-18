@@ -1,13 +1,14 @@
 Szkolenia / webinar — Contact Form 7
 =====================================
-1. WP Admin → Contact → Add New
+1. WP Admin → Contact → Add New (lub edytuj istniejący)
 2. Title: np. „Szkolenia webinar”
-3. Wklej sekcje poniżej (Form / Mail / Additional Settings)
-4. Zapisz i wybierz ten formularz w ACF szkolenia → Formularz Contact Form 7
+3. Wklej sekcje poniżej
+4. Zapisz i wybierz formularz w ACF szkolenia → Formularz Contact Form 7
 
-Motyw NIE nadpisuje treści formularza — edytujesz wszystko w CF7.
-Ukryte pola szk-* wypełnia motyw z ACF (nazwa / data / godzina / tryb).
-Na single szkolenia wyłączone jest CF7 autop (<p>/<br>).
+Motyw NIE nadpisuje treści formularza.
+Ukryte szk-* wypełnia motyw z ACF (nazwa / data / godzina / tryb).
+W etykiecie selecta studiów użyj „%szk_studia%” — podmieniane z taksonomii
+„Studia podyplomowe” (checkboxy z boku edycji szkolenia).
 
 
 ----- FORM -----
@@ -31,7 +32,7 @@ Na single szkolenia wyłączone jest CF7 autop (<p>/<br>).
 [select* rola id:szk-rola class:szk-cf7__select "Architekturę / projektowanie / inżynierię" "Zarządzanie obiektami lub terenami" "Biologię / przyrodę / ochronę środowiska" "Inną dziedzinę"]
 </div>
 <div class="szk-cf7__field">
-<label for="szk-studia">Czy interesują Cię studia podyplomowe „Inżynieria Biotopów”?</label>
+<label for="szk-studia">Czy interesują Cię studia podyplomowe „%szk_studia%”?</label>
 [select* studia id:szk-studia class:szk-cf7__select "Jeszcze się zastanawiam" "Tak, poproszę o informacje" "Nie, dziękuję"]
 </div>
 <div class="szk-cf7__check">
@@ -45,11 +46,21 @@ Na single szkolenia wyłączone jest CF7 autop (<p>/<br>).
 </div>
 
 
------ MAIL (do admina) — To / From / Subject ustaw jak zwykle -----
-From: [_site_title] <[_site_admin_email]>
-Subject: Zgłoszenie na szkolenie: [szk-nazwa]
+----- MAIL (do admina) — zakładka „Adres e-mail” -----
+Odbiorca:
+[_site_admin_email]
+
+Nadawca:
+[_site_title] <wordpress@dev.akademiata.pl>
+
+Temat:
+Zgłoszenie na szkolenie: [szk-nazwa]
+
+Dodatkowe nagłówki:
+Reply-To: [email]
 
 Treść wiadomości:
+Nowe zgłoszenie na szkolenie / webinar
 
 Imię: [imie]
 Nazwisko: [nazwisko]
@@ -57,14 +68,53 @@ E-mail: [email]
 Reprezentuje: [rola]
 Studia podyplomowe: [studia]
 
---- Szkolenie / webinar ---
+--- Szkolenie ---
 Nazwa: [szk-nazwa]
 Data: [szk-data]
 Godzina: [szk-godzina]
 Tryb: [szk-tryb]
 
 --
-Ta wiadomość została wysłana z formularza kontaktowego na [_site_title] ([_site_url])
+Wiadomość z formularza na [_site_title] ([_site_url])
+
+
+----- MAIL (2) — potwierdzenie dla uczestnika -----
+Zaznacz: „Użyj emaila (2)”
+
+Odbiorca:
+[email]
+
+Nadawca:
+[_site_title] <wordpress@dev.akademiata.pl>
+
+Temat:
+Potwierdzenie zapisu: [szk-nazwa]
+
+Dodatkowe nagłówki:
+Reply-To: [_site_admin_email]
+
+Treść wiadomości:
+Dzień dobry [imie],
+
+dziękujemy za zapis na szkolenie / webinar.
+
+--- Szczegóły spotkania ---
+Nazwa: [szk-nazwa]
+Data: [szk-data]
+Godzina: [szk-godzina]
+Tryb: [szk-tryb]
+
+Twoje dane zgłoszenia:
+Imię i nazwisko: [imie] [nazwisko]
+E-mail: [email]
+Reprezentujesz: [rola]
+Studia podyplomowe: [studia]
+
+Link do spotkania otrzymasz osobną wiadomością przed startem (jeśli dotyczy).
+
+--
+Ta wiadomość jest potwierdzeniem wysłania formularza na [_site_title] ([_site_url]).
+Jeśli to nie Ty, zignoruj tę wiadomość.
 
 
 ----- ADDITIONAL SETTINGS -----

@@ -252,3 +252,37 @@ function akademiata_szk_cf7_capture_hidden_meta($posted_data) {
 }
 add_filter('wpcf7_posted_data', 'akademiata_szk_cf7_capture_hidden_meta');
 
+/**
+ * Replace %szk_studia% (or default „Inżynieria Biotopów”) with selected taxonomy term.
+ */
+function akademiata_szk_cf7_replace_studia_label($html)
+{
+	if (!is_singular('szkolenia') || !is_string($html) || $html === '') {
+		return $html;
+	}
+
+	$label = function_exists('akademiata_szk_get_studia_label')
+		? akademiata_szk_get_studia_label(get_queried_object_id())
+		: '';
+	if ($label === '') {
+		$label = 'Inżynieria Biotopów';
+	}
+
+	$safe = esc_html($label);
+
+	if (strpos($html, '%szk_studia%') !== false) {
+		return str_replace('%szk_studia%', $safe, $html);
+	}
+
+	// Existing CF7 forms with hardcoded name in the studia question.
+	$replaced = preg_replace(
+		'/(studia podyplomowe\s*[„"]|&bdquo;)([^„"”<]+)([”"]|&rdquo;)/ui',
+		'$1' . $safe . '$3',
+		$html,
+		1
+	);
+
+	return is_string($replaced) ? $replaced : $html;
+}
+add_filter('wpcf7_form_elements', 'akademiata_szk_cf7_replace_studia_label', 20);
+
