@@ -775,7 +775,10 @@
     }
 
     .web-cf7__check {
-      margin: 0;
+      margin: 0 0 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
 
       .wpcf7-form-control-wrap,
       .wpcf7-acceptance,
@@ -783,6 +786,22 @@
         display: block;
         width: 100%;
         margin: 0;
+      }
+
+      .wpcf7-form-control-wrap + .wpcf7-form-control-wrap,
+      .wpcf7-acceptance + .wpcf7-acceptance,
+      p + p {
+        margin-top: 20px;
+      }
+
+      a {
+        color: #2f4a3c;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover {
+          color: #c1693e;
+        }
       }
 
       .wpcf7-list-item label,
@@ -872,7 +891,7 @@
       border: none;
       cursor: pointer;
       font-family: var(--web-sans);
-      margin-top: 4px;
+      margin-top: 22px;
       box-shadow: none;
       transition: background 0.15s ease;
 

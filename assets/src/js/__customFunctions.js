@@ -477,7 +477,6 @@ export function updateResponsiveImages(selector = '.responsive-image') {
     const elements = document.querySelectorAll(selector);
 
     if (!elements || elements.length === 0) {
-        console.warn(`updateResponsiveImages: No elements found for selector "${selector}"`);
         return;
     }
 

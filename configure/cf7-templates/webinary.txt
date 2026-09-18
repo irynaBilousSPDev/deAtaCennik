@@ -23,7 +23,8 @@
 [select* studia id:web-studia class:web-cf7__select "Jeszcze się zastanawiam" "Tak, poproszę o informacje" "Nie, dziękuję"]
 </div>
 <div class="web-cf7__check">
-[acceptance* zgoda] Wyrażam zgodę na przetwarzanie danych osobowych przez ATA w celu organizacji webinaru i przesyłania informacji o nim. (treść zgody RODO do uzupełnienia) [/acceptance]
+[acceptance* polityka] Zapoznałem(-am) się z <a href="https://chmurka.wseiz.pl/index.php/s/fbxaokaRNHsQeFN#pdfviewer" target="_blank" rel="noopener noreferrer">Polityką Prywatności</a> i akceptuję jej postanowienia. [/acceptance]
+[acceptance marketing] Wyrażam zgodę na przetwarzanie moich danych osobowych przez ATA w celu przesyłania informacji handlowych i marketingowych drogą elektroniczną (newsletter, kontakt e-mailowy, itp.). [/acceptance]
 </div>
 [hidden web-nazwa]
 [hidden web-data]
