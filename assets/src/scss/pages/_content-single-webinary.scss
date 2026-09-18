@@ -15,8 +15,8 @@
   --web-line-strong: rgba(31, 36, 32, 0.12);
   --web-line-input: rgba(31, 36, 32, 0.22);
   --web-placeholder: #8a9089;
-  --web-serif: "Newsreader", Georgia, serif;
-  --web-sans: "Public Sans", system-ui, sans-serif;
+  --web-serif: "Nunito Sans", "Lato", sans-serif;
+  --web-sans: "Lato", "Nunito Sans", sans-serif;
 
   box-sizing: border-box;
   width: 100%;
@@ -941,7 +941,7 @@ body.single-webinary {
     align-items: center;
     justify-content: center;
     color: #1f2420 !important;
-    font-family: "Public Sans", system-ui, sans-serif;
+    font-family: "Lato", "Nunito Sans", sans-serif;
     font-weight: 600;
     font-size: 15px;
     line-height: 1.2;
