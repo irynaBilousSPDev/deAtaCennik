@@ -113,7 +113,7 @@ function akademiata_enqueue_scripts()
     if (is_singular('webinary')) {
         wp_add_inline_script(
             'name-main-js',
-            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href=\"#zapisy\"]'):null;if(!a)return;if(!document.body.classList.contains('single-webinary'))return;var el=document.getElementById('zapisy');if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
+            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href=\"#zapisy\"]'):null;if(!a)return;if(!document.body.classList.contains('single-webinary'))return;var el=document.getElementById('zapisy');if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});function btn(f){return f&&f.querySelector?f.querySelector('.wpcf7-submit'):null;}function busy(f,on){var b=btn(f);if(!b)return;if(on){if(!b.getAttribute('data-web-label'))b.setAttribute('data-web-label',b.value);b.value='Wysyłanie…';b.disabled=true;}else{b.disabled=false;b.value=b.getAttribute('data-web-label')||'Zapisz się na webinar';}}document.addEventListener('wpcf7beforesubmit',function(ev){busy(ev.target,true);});document.addEventListener('submit',function(ev){var f=ev.target;if(!f||!f.classList||!f.classList.contains('wpcf7-form'))return;if(!document.body.classList.contains('single-webinary'))return;busy(f,true);},true);['wpcf7mailsent','wpcf7mailfailed','wpcf7invalid','wpcf7spam','wpcf7failed','wpcf7aborted','wpcf7submit'].forEach(function(t){document.addEventListener(t,function(ev){busy(ev.target,false);});});})();",
             'after'
         );
     }

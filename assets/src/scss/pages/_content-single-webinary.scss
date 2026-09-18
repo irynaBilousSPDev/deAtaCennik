@@ -895,7 +895,7 @@
       font-family: var(--web-sans);
       margin-top: 22px;
       box-shadow: none;
-      transition: background 0.15s ease, background-color 0.15s ease;
+      transition: background 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
 
       &:hover,
       &:focus,
@@ -906,20 +906,56 @@
       }
     }
 
+    .wpcf7-form.submitting .wpcf7-submit {
+      opacity: 0.7;
+      cursor: wait;
+      pointer-events: none;
+    }
+
     .wpcf7-spinner {
-      position: absolute;
-      visibility: hidden;
+      display: inline-block;
+      position: relative;
+      margin: 14px auto 0;
+      visibility: visible;
+      opacity: 0;
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(245, 104, 44, 0.25);
+      border-top-color: #f5682c;
+      border-radius: 50%;
+      animation: web-cf7-spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+
+    .wpcf7-form.submitting .wpcf7-spinner {
+      opacity: 1;
     }
 
     .wpcf7-response-output {
-      margin: 0;
-      padding: 12px 14px;
+      margin: 14px 0 0;
+      padding: 14px 16px;
       border: none;
       border-radius: 10px;
-      font-size: 14px;
+      font-size: 15px;
+      font-weight: 600;
       line-height: 1.45;
+      text-align: center;
       background: rgba(47, 74, 60, 0.08);
       color: #2f4a3c;
+    }
+
+    .wpcf7-form.sent .wpcf7-response-output {
+      background: rgba(47, 120, 70, 0.12);
+      color: #1f5c34;
+    }
+
+    .wpcf7-form.failed .wpcf7-response-output,
+    .wpcf7-form.aborted .wpcf7-response-output,
+    .wpcf7-form.spam .wpcf7-response-output,
+    .wpcf7-form.invalid .wpcf7-response-output,
+    .wpcf7-form.unaccepted .wpcf7-response-output {
+      background: rgba(180, 35, 24, 0.1);
+      color: #9b1c1c;
     }
 
     .wpcf7-not-valid-tip {
@@ -932,6 +968,12 @@
 
     .wpcf7-not-valid {
       border-color: rgba(180, 35, 24, 0.45) !important;
+    }
+  }
+
+  @keyframes web-cf7-spin {
+    to {
+      transform: rotate(360deg);
     }
   }
 
