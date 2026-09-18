@@ -1,10 +1,10 @@
 [
     {
-        "key": "group_szkolenia_single",
-        "title": "Szkolenia — single",
+        "key": "group_webinary_single",
+        "title": "Webinary — single",
         "fields": [
             {
-                "key": "field_szk_tab_hero",
+                "key": "field_web_tab_hero",
                 "label": "Hero",
                 "name": "",
                 "type": "tab",
@@ -12,24 +12,24 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_nav_cta_label",
+                "key": "field_web_nav_cta_label",
                 "label": "Menu — przycisk (prawo)",
-                "name": "szk_nav_cta_label",
+                "name": "web_nav_cta_label",
                 "type": "text",
                 "default_value": "Zapisz się na webinar",
                 "instructions": "Sticky pasek pod headerem; scroll do #zapisy. Puste = Zapisz się na webinar."
             },
             {
-                "key": "field_szk_hero_badge",
+                "key": "field_web_hero_badge",
                 "label": "Badge",
-                "name": "szk_hero_badge",
+                "name": "web_hero_badge",
                 "type": "text",
                 "default_value": "Bezpłatny webinar · online"
             },
             {
-                "key": "field_szk_hero_title",
+                "key": "field_web_hero_title",
                 "label": "Tytuł (puste = tytuł wpisu)",
-                "name": "szk_hero_title",
+                "name": "web_hero_title",
                 "type": "textarea",
                 "instructions": "Enter = nowa linia (jak w mockupu: Inżynieria Biotopów / w praktyce)",
                 "rows": 2,
@@ -37,16 +37,16 @@
                 "default_value": ""
             },
             {
-                "key": "field_szk_hero_subtitle",
+                "key": "field_web_hero_subtitle",
                 "label": "Podtytuł",
-                "name": "szk_hero_subtitle",
+                "name": "web_hero_subtitle",
                 "type": "text",
                 "default_value": ""
             },
             {
-                "key": "field_szk_hero_text",
+                "key": "field_web_hero_text",
                 "label": "Opis",
-                "name": "szk_hero_text",
+                "name": "web_hero_text",
                 "type": "wysiwyg",
                 "tabs": "all",
                 "toolbar": "basic",
@@ -54,30 +54,30 @@
                 "delay": 0
             },
             {
-                "key": "field_szk_hero_cta_label",
+                "key": "field_web_hero_cta_label",
                 "label": "Przycisk CTA",
-                "name": "szk_hero_cta_label",
+                "name": "web_hero_cta_label",
                 "type": "text",
                 "default_value": "Zapisz się bezpłatnie"
             },
             {
-                "key": "field_szk_hero_cta_note",
+                "key": "field_web_hero_cta_note",
                 "label": "Notatka przy CTA",
-                "name": "szk_hero_cta_note",
+                "name": "web_hero_cta_note",
                 "type": "text",
                 "default_value": "Liczba miejsc ograniczona"
             },
             {
-                "key": "field_szk_details_label",
+                "key": "field_web_details_label",
                 "label": "Karta — nagłówek",
-                "name": "szk_details_label",
+                "name": "web_details_label",
                 "type": "text",
                 "default_value": "Szczegóły spotkania"
             },
             {
-                "key": "field_szk_details_date",
+                "key": "field_web_details_date",
                 "label": "Data",
-                "name": "szk_details_date",
+                "name": "web_details_date",
                 "type": "text",
                 "default_value": "",
                 "wrapper": {
@@ -87,9 +87,9 @@
                 }
             },
             {
-                "key": "field_szk_details_date_note",
+                "key": "field_web_details_date_note",
                 "label": "Data — drugi wiersz",
-                "name": "szk_details_date_note",
+                "name": "web_details_date_note",
                 "type": "text",
                 "default_value": "",
                 "instructions": "Np. czwartek",
@@ -100,9 +100,9 @@
                 }
             },
             {
-                "key": "field_szk_details_time",
+                "key": "field_web_details_time",
                 "label": "Godzina",
-                "name": "szk_details_time",
+                "name": "web_details_time",
                 "type": "text",
                 "default_value": "",
                 "wrapper": {
@@ -112,9 +112,9 @@
                 }
             },
             {
-                "key": "field_szk_details_time_note",
+                "key": "field_web_details_time_note",
                 "label": "Notatka pod godziną",
-                "name": "szk_details_time_note",
+                "name": "web_details_time_note",
                 "type": "text",
                 "default_value": "",
                 "wrapper": {
@@ -124,9 +124,9 @@
                 }
             },
             {
-                "key": "field_szk_details_place",
+                "key": "field_web_details_place",
                 "label": "Miejsce / forma",
-                "name": "szk_details_place",
+                "name": "web_details_place",
                 "type": "text",
                 "default_value": "",
                 "wrapper": {
@@ -136,9 +136,9 @@
                 }
             },
             {
-                "key": "field_szk_details_place_note",
+                "key": "field_web_details_place_note",
                 "label": "Miejsce — drugi wiersz",
-                "name": "szk_details_place_note",
+                "name": "web_details_place_note",
                 "type": "text",
                 "default_value": "",
                 "instructions": "Np. link po zapisie, na e-mail",
@@ -149,7 +149,7 @@
                 }
             },
             {
-                "key": "field_szk_tab_about",
+                "key": "field_web_tab_about",
                 "label": "O spotkaniu",
                 "name": "",
                 "type": "tab",
@@ -157,25 +157,25 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_about_badge",
+                "key": "field_web_about_badge",
                 "label": "Badge",
-                "name": "szk_about_badge",
+                "name": "web_about_badge",
                 "type": "text",
                 "default_value": "O spotkaniu"
             },
             {
-                "key": "field_szk_about_title",
+                "key": "field_web_about_title",
                 "label": "Nagłówek",
-                "name": "szk_about_title",
+                "name": "web_about_title",
                 "type": "textarea",
                 "rows": 3,
                 "new_lines": "",
                 "default_value": ""
             },
             {
-                "key": "field_szk_about_content",
+                "key": "field_web_about_content",
                 "label": "Treść",
-                "name": "szk_about_content",
+                "name": "web_about_content",
                 "type": "wysiwyg",
                 "tabs": "all",
                 "toolbar": "basic",
@@ -184,7 +184,7 @@
                 "instructions": "Lista (ul) na froncie ma styl checklisty jak w zapisach."
             },
             {
-                "key": "field_szk_tab_audience",
+                "key": "field_web_tab_audience",
                 "label": "Dla kogo",
                 "name": "",
                 "type": "tab",
@@ -192,25 +192,25 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_audience_badge",
+                "key": "field_web_audience_badge",
                 "label": "Badge",
-                "name": "szk_audience_badge",
+                "name": "web_audience_badge",
                 "type": "text",
                 "default_value": "Dla kogo?"
             },
             {
-                "key": "field_szk_audience_title",
+                "key": "field_web_audience_title",
                 "label": "Nagłówek",
-                "name": "szk_audience_title",
+                "name": "web_audience_title",
                 "type": "textarea",
                 "rows": 3,
                 "new_lines": "",
                 "default_value": ""
             },
             {
-                "key": "field_szk_audience_cards",
+                "key": "field_web_audience_cards",
                 "label": "Karty",
-                "name": "szk_audience_cards",
+                "name": "web_audience_cards",
                 "type": "repeater",
                 "layout": "block",
                 "button_label": "Dodaj kartę",
@@ -219,25 +219,25 @@
                 "collapsed": "",
                 "sub_fields": [
                     {
-                        "key": "field_szk_audience_card_icon",
+                        "key": "field_web_audience_card_icon",
                         "label": "Ikona",
                         "name": "icon",
                         "type": "image",
                         "return_format": "array",
                         "preview_size": "thumbnail",
                         "library": "all",
-                        "parent_repeater": "field_szk_audience_cards"
+                        "parent_repeater": "field_web_audience_cards"
                     },
                     {
-                        "key": "field_szk_audience_card_title",
+                        "key": "field_web_audience_card_title",
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
                         "default_value": "",
-                        "parent_repeater": "field_szk_audience_cards"
+                        "parent_repeater": "field_web_audience_cards"
                     },
                     {
-                        "key": "field_szk_audience_card_text",
+                        "key": "field_web_audience_card_text",
                         "label": "Opis",
                         "name": "text",
                         "type": "wysiwyg",
@@ -245,12 +245,12 @@
                         "toolbar": "basic",
                         "media_upload": 0,
                         "delay": 0,
-                        "parent_repeater": "field_szk_audience_cards"
+                        "parent_repeater": "field_web_audience_cards"
                     }
                 ]
             },
             {
-                "key": "field_szk_tab_speaker",
+                "key": "field_web_tab_speaker",
                 "label": "Prowadząca",
                 "name": "",
                 "type": "tab",
@@ -258,16 +258,16 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_speaker_badge",
+                "key": "field_web_speaker_badge",
                 "label": "Badge",
-                "name": "szk_speaker_badge",
+                "name": "web_speaker_badge",
                 "type": "text",
                 "default_value": "Prowadząca"
             },
             {
-                "key": "field_szk_speaker_photo",
+                "key": "field_web_speaker_photo",
                 "label": "Zdjęcie",
-                "name": "szk_speaker_photo",
+                "name": "web_speaker_photo",
                 "type": "image",
                 "return_format": "array",
                 "preview_size": "medium",
@@ -275,25 +275,25 @@
                 "instructions": "Używane też w karcie „Szczegóły spotkania” (hero)."
             },
             {
-                "key": "field_szk_speaker_name",
+                "key": "field_web_speaker_name",
                 "label": "Imię i nazwisko",
-                "name": "szk_speaker_name",
+                "name": "web_speaker_name",
                 "type": "text",
                 "default_value": "",
                 "instructions": "Używane też w karcie szczegółów w hero."
             },
             {
-                "key": "field_szk_speaker_role",
+                "key": "field_web_speaker_role",
                 "label": "Tytuł / rola",
-                "name": "szk_speaker_role",
+                "name": "web_speaker_role",
                 "type": "text",
                 "default_value": "",
                 "instructions": "Drugi wiersz pod nazwiskiem w hero i w sekcji prowadzącej."
             },
             {
-                "key": "field_szk_speaker_bio",
+                "key": "field_web_speaker_bio",
                 "label": "Bio",
-                "name": "szk_speaker_bio",
+                "name": "web_speaker_bio",
                 "type": "wysiwyg",
                 "tabs": "all",
                 "toolbar": "basic",
@@ -301,7 +301,7 @@
                 "delay": 0
             },
             {
-                "key": "field_szk_tab_schedule",
+                "key": "field_web_tab_schedule",
                 "label": "Harmonogram",
                 "name": "",
                 "type": "tab",
@@ -309,23 +309,23 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_schedule_badge",
+                "key": "field_web_schedule_badge",
                 "label": "Badge",
-                "name": "szk_schedule_badge",
+                "name": "web_schedule_badge",
                 "type": "text",
                 "default_value": "Ramowy harmonogram"
             },
             {
-                "key": "field_szk_schedule_title",
+                "key": "field_web_schedule_title",
                 "label": "Nagłówek",
-                "name": "szk_schedule_title",
+                "name": "web_schedule_title",
                 "type": "text",
                 "default_value": ""
             },
             {
-                "key": "field_szk_schedule_items",
+                "key": "field_web_schedule_items",
                 "label": "Punkty",
-                "name": "szk_schedule_items",
+                "name": "web_schedule_items",
                 "type": "repeater",
                 "layout": "table",
                 "button_label": "Dodaj punkt",
@@ -334,7 +334,7 @@
                 "collapsed": "",
                 "sub_fields": [
                     {
-                        "key": "field_szk_schedule_time",
+                        "key": "field_web_schedule_time",
                         "label": "Czas",
                         "name": "time",
                         "type": "text",
@@ -344,10 +344,10 @@
                             "class": "",
                             "id": ""
                         },
-                        "parent_repeater": "field_szk_schedule_items"
+                        "parent_repeater": "field_web_schedule_items"
                     },
                     {
-                        "key": "field_szk_schedule_item_title",
+                        "key": "field_web_schedule_item_title",
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
@@ -357,10 +357,10 @@
                             "class": "",
                             "id": ""
                         },
-                        "parent_repeater": "field_szk_schedule_items"
+                        "parent_repeater": "field_web_schedule_items"
                     },
                     {
-                        "key": "field_szk_schedule_item_text",
+                        "key": "field_web_schedule_item_text",
                         "label": "Opis",
                         "name": "text",
                         "type": "wysiwyg",
@@ -373,12 +373,12 @@
                             "class": "",
                             "id": ""
                         },
-                        "parent_repeater": "field_szk_schedule_items"
+                        "parent_repeater": "field_web_schedule_items"
                     }
                 ]
             },
             {
-                "key": "field_szk_tab_signup",
+                "key": "field_web_tab_signup",
                 "label": "Zapisy (CF7)",
                 "name": "",
                 "type": "tab",
@@ -386,23 +386,23 @@
                 "endpoint": 0
             },
             {
-                "key": "field_szk_signup_badge",
+                "key": "field_web_signup_badge",
                 "label": "Badge",
-                "name": "szk_signup_badge",
+                "name": "web_signup_badge",
                 "type": "text",
                 "default_value": "Zapisy"
             },
             {
-                "key": "field_szk_signup_title",
+                "key": "field_web_signup_title",
                 "label": "Nagłówek",
-                "name": "szk_signup_title",
+                "name": "web_signup_title",
                 "type": "text",
                 "default_value": ""
             },
             {
-                "key": "field_szk_signup_text",
+                "key": "field_web_signup_text",
                 "label": "Opis",
-                "name": "szk_signup_text",
+                "name": "web_signup_text",
                 "type": "wysiwyg",
                 "tabs": "all",
                 "toolbar": "basic",
@@ -411,11 +411,11 @@
                 "instructions": "Edytor jak Bio. Lista punktowana = checklista na froncie (bez osobnego repeatera)."
             },
             {
-                "key": "field_szk_signup_form_id",
+                "key": "field_web_signup_form_id",
                 "label": "Formularz Contact Form 7",
-                "name": "szk_signup_form_id",
+                "name": "web_signup_form_id",
                 "type": "select",
-                "instructions": "Utwórz formularz w Contact → Add New z szablonu configure/cf7-templates/szkolenia-webinar.txt (Form + Mail + html_class: szk-cf7-form). Motyw wypełnia ukryte szk-nazwa/data/godzina/tryb z ACF i dopina meta do maila admina.",
+                "instructions": "Utwórz formularz w Contact → Add New z szablonu configure/cf7-templates/webinary.txt (Form + Mail + html_class: web-cf7-form). Motyw wypełnia ukryte web-nazwa/data/godzina/tryb z ACF i dopina meta do maila admina.",
                 "choices": {},
                 "default_value": "",
                 "allow_null": 1,
@@ -425,9 +425,9 @@
                 "return_format": "value"
             },
             {
-                "key": "field_szk_signup_form_note",
+                "key": "field_web_signup_form_note",
                 "label": "Tekst pod przyciskiem formularza",
-                "name": "szk_signup_form_note",
+                "name": "web_signup_form_note",
                 "type": "text",
                 "default_value": "Liczba miejsc ograniczona – decyduje kolejność zgłoszeń."
             }
@@ -437,7 +437,7 @@
                 {
                     "param": "post_type",
                     "operator": "==",
-                    "value": "szkolenia"
+                    "value": "webinary"
                 }
             ]
         ],
@@ -448,7 +448,7 @@
         "instruction_placement": "label",
         "hide_on_screen": "",
         "active": true,
-        "description": "Editable content for single Szkolenia (webinar) pages. CF7 form select populated in configure/acf.php.",
+        "description": "Editable content for single Webinary (webinar) pages. CF7 form select populated in configure/acf.php.",
         "show_in_rest": 0,
         "modified": 1789735600
     }

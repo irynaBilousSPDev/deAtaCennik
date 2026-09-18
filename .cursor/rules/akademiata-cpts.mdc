@@ -36,7 +36,7 @@ Use **`akademiata_register_post_type( $slug, $args )`** instead of `register_pos
 |-----|-------------------|
 | `courses` | `course_type`, `mode_course`, `duration_course`, `language`, `city_pg_mba`, `instructor_course`, `price_course`, `fee_course` |
 | `exams` | `exam_price`, `exam_date`, `exam_location`, `exam_city` |
-| `szkolenia` | `szk_studia` (Studia podyplomowe — sidebar checkboxes → CF7 „%szk_studia%”); rewrite `/szkolenia/`; ACF + CF7 |
+| `webinary` | `web_studia` (Studia podyplomowe — sidebar checkboxes → CF7 „%web_studia%”); rewrite `/webinary/`; ACF + CF7 |
 | `contact` | `contact_city` |
 | `cadre` | `cadre_group` |
 | `faq` | `faq_topics` |

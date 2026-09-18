@@ -139,15 +139,15 @@ function the_breadcrumb()
             echo '<a href="' . esc_url($url) . '">' . esc_html($label) . '</a>' . $sep;
             the_title();
         }
-        // Breadcrumb for single SZKOLENIE
-        elseif (is_singular('szkolenia')) {
-            $url = apply_filters('wpml_permalink', home_url('/szkolenia'), 'pl');
-            $label = apply_filters('wpml_translate_single_string', 'Szkolenia', 'akademiata', 'Szkolenia');
+        // Breadcrumb for single webinar
+        elseif (is_singular('webinary')) {
+            $url = apply_filters('wpml_permalink', home_url('/webinary'), 'pl');
+            $label = apply_filters('wpml_translate_single_string', 'Webinary', 'akademiata', 'Webinary');
             echo '<a href="' . esc_url($url) . '">' . esc_html($label) . '</a>' . $sep;
             the_title();
         }
-        elseif (is_post_type_archive('szkolenia')) {
-            $label = apply_filters('wpml_translate_single_string', 'Szkolenia', 'akademiata', 'Szkolenia');
+        elseif (is_post_type_archive('webinary')) {
+            $label = apply_filters('wpml_translate_single_string', 'Webinary', 'akademiata', 'Webinary');
             echo esc_html($label);
         }
         // Breadcrumb for exams archive

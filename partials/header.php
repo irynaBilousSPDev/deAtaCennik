@@ -131,17 +131,17 @@
                         </div>
                     </div>
 
-				<?php elseif ( is_singular( 'szkolenia' ) ) : ?>
+				<?php elseif ( is_singular( 'webinary' ) ) : ?>
 					<?php
-					$szk_nav_cta = function_exists( 'get_field' ) ? trim( (string) get_field( 'szk_nav_cta_label' ) ) : '';
-					if ( $szk_nav_cta === '' ) {
-						$szk_nav_cta = __( 'Zapisz się na webinar', 'akademiata' );
+					$web_nav_cta = function_exists( 'get_field' ) ? trim( (string) get_field( 'web_nav_cta_label' ) ) : '';
+					if ( $web_nav_cta === '' ) {
+						$web_nav_cta = __( 'Zapisz się na webinar', 'akademiata' );
 					}
 					?>
                     <div class="desktop_visible">
                         <div class="d-flex align-items-center">
-                            <nav id="szkolenia-navigation" class="szkolenia-navigation" aria-label="<?php esc_attr_e( 'Nawigacja szkolenia', 'akademiata' ); ?>">
-                                <a href="#zapisy" class="szk-nav__cta"><?php echo esc_html( $szk_nav_cta ); ?></a>
+                            <nav id="webinary-navigation" class="webinary-navigation" aria-label="<?php esc_attr_e( 'Nawigacja webinaru', 'akademiata' ); ?>">
+                                <a href="#zapisy" class="web-nav__cta"><?php echo esc_html( $web_nav_cta ); ?></a>
                             </nav>
                             <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
                                 <span class="menu-icon">
@@ -155,7 +155,7 @@
 
                     <div class="mobile_visible">
                         <div class="d-flex align-items-center">
-                            <a href="#zapisy" class="szk-nav__cta mr-3"><?php echo esc_html( $szk_nav_cta ); ?></a>
+                            <a href="#zapisy" class="web-nav__cta mr-3"><?php echo esc_html( $web_nav_cta ); ?></a>
                             <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
                                 <span class="menu-icon">
                                     <span class="bar top-bar"></span>

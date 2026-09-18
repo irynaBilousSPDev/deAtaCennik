@@ -1,20 +1,20 @@
 <?php
 /**
- * Archive: Szkolenia.
+ * Archive: Webinary.
  *
  * @package akademiata
  */
 get_header();
 
 $current_lang = apply_filters('wpml_current_language', null);
-$base_page = get_page_by_path('szkolenia');
+$base_page = get_page_by_path('webinary');
 $page_id = $base_page ? apply_filters('wpml_object_id', $base_page->ID, 'page', true, $current_lang) : 0;
 $acf_page = $page_id ? get_post($page_id) : null;
 $acf_content = $acf_page ? apply_filters('the_content', $acf_page->post_content) : '';
-$acf_title = $acf_page ? get_the_title($acf_page->ID) : __('Szkolenia', 'akademiata');
+$acf_title = $acf_page ? get_the_title($acf_page->ID) : __('Webinary', 'akademiata');
 ?>
 
-<section class="section_szkolenia">
+<section class="section_webinary">
 	<div class="container py-5">
 		<div class="section_header text-center mb-4">
 			<h1><?php echo esc_html($acf_title); ?></h1>
@@ -38,7 +38,7 @@ $acf_title = $acf_page ? get_the_title($acf_page->ID) : __('Szkolenia', 'akademi
 			</div>
 			<?php the_posts_pagination(); ?>
 		<?php else : ?>
-			<p><?php esc_html_e('Nie znaleziono szkoleń.', 'akademiata'); ?></p>
+			<p><?php esc_html_e('Nie znaleziono webinarów.', 'akademiata'); ?></p>
 		<?php endif; ?>
 	</div>
 </section>

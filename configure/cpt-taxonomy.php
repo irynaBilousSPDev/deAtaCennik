@@ -1286,22 +1286,22 @@ function register_exams_cpt()
 add_action('init', 'register_exams_cpt');
 
 /**
- * CPT: Szkolenia
+ * CPT: Webinary
  */
-function register_szkolenia_cpt()
+function register_webinary_cpt()
 {
     $labels = array(
-        'name' => __('Szkolenia', 'akademiata'),
-        'singular_name' => __('Szkolenie', 'akademiata'),
-        'menu_name' => __('Szkolenia', 'akademiata'),
-        'add_new' => __('Dodaj nowe', 'akademiata'),
-        'add_new_item' => __('Dodaj nowe szkolenie', 'akademiata'),
-        'edit_item' => __('Edytuj szkolenie', 'akademiata'),
-        'new_item' => __('Nowe szkolenie', 'akademiata'),
-        'view_item' => __('Zobacz szkolenie', 'akademiata'),
-        'search_items' => __('Szukaj szkoleń', 'akademiata'),
-        'not_found' => __('Nie znaleziono szkoleń.', 'akademiata'),
-        'not_found_in_trash' => __('Brak szkoleń w koszu.', 'akademiata'),
+        'name' => __('Webinary', 'akademiata'),
+        'singular_name' => __('Webinar', 'akademiata'),
+        'menu_name' => __('Webinary', 'akademiata'),
+        'add_new' => __('Dodaj nowy', 'akademiata'),
+        'add_new_item' => __('Dodaj nowy webinar', 'akademiata'),
+        'edit_item' => __('Edytuj webinar', 'akademiata'),
+        'new_item' => __('Nowy webinar', 'akademiata'),
+        'view_item' => __('Zobacz webinar', 'akademiata'),
+        'search_items' => __('Szukaj webinarów', 'akademiata'),
+        'not_found' => __('Nie znaleziono webinarów.', 'akademiata'),
+        'not_found_in_trash' => __('Brak webinarów w koszu.', 'akademiata'),
     );
 
     $args = array(
@@ -1309,23 +1309,23 @@ function register_szkolenia_cpt()
         'public' => true,
         'has_archive' => true,
         'rewrite' => array(
-            'slug' => 'szkolenia',
+            'slug' => 'webinary',
             'with_front' => false,
         ),
         'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'author', 'custom-fields', 'revisions'),
-        'menu_icon' => 'dashicons-welcome-learn-more',
+        'menu_icon' => 'dashicons-video-alt3',
         'show_in_rest' => true,
     );
 
-    akademiata_register_post_type('szkolenia', $args);
+    akademiata_register_post_type('webinary', $args);
 }
-add_action('init', 'register_szkolenia_cpt');
+add_action('init', 'register_webinary_cpt');
 
 /**
- * Szkolenia: which postgraduate study name is promoted (sidebar checkboxes).
- * Used in CF7 label: „%szk_studia%”.
+ * Webinary: which postgraduate study name is promoted (sidebar checkboxes).
+ * Used in CF7 label: „%web_studia%”.
  */
-function register_szkolenia_studia_taxonomy()
+function register_webinary_studia_taxonomy()
 {
 	$labels = array(
 		'name'                       => __('Studia podyplomowe', 'akademiata'),
@@ -1345,8 +1345,8 @@ function register_szkolenia_studia_taxonomy()
 	);
 
 	register_taxonomy(
-		'szk_studia',
-		array('szkolenia'),
+		'web_studia',
+		array('webinary'),
 		array(
 			'labels'            => $labels,
 			'hierarchical'      => true,
@@ -1359,38 +1359,38 @@ function register_szkolenia_studia_taxonomy()
 		)
 	);
 }
-add_action('init', 'register_szkolenia_studia_taxonomy', 11);
+add_action('init', 'register_webinary_studia_taxonomy', 11);
 
 /**
  * Default term for the first webinar (label in CF7).
  */
-function akademiata_szk_ensure_default_studia_term()
+function akademiata_web_ensure_default_studia_term()
 {
-	if (!taxonomy_exists('szk_studia')) {
+	if (!taxonomy_exists('web_studia')) {
 		return;
 	}
 	$name = 'Inżynieria Biotopów';
 	$slug = 'inzynieria-biotopow';
-	if (!term_exists($slug, 'szk_studia') && !term_exists($name, 'szk_studia')) {
-		wp_insert_term($name, 'szk_studia', array('slug' => $slug));
+	if (!term_exists($slug, 'web_studia') && !term_exists($name, 'web_studia')) {
+		wp_insert_term($name, 'web_studia', array('slug' => $slug));
 	}
 }
-add_action('init', 'akademiata_szk_ensure_default_studia_term', 20);
+add_action('init', 'akademiata_web_ensure_default_studia_term', 20);
 
 /**
- * Display name of selected szk_studia term(s) for a szkolenie.
+ * Display name of selected web_studia term(s) for a webinar.
  *
  * @param int $post_id
  * @return string
  */
-function akademiata_szk_get_studia_label($post_id = 0)
+function akademiata_web_get_studia_label($post_id = 0)
 {
 	$post_id = $post_id ? (int) $post_id : get_the_ID();
-	if ($post_id <= 0 || get_post_type($post_id) !== 'szkolenia') {
+	if ($post_id <= 0 || get_post_type($post_id) !== 'webinary') {
 		return '';
 	}
 
-	$terms = get_the_terms($post_id, 'szk_studia');
+	$terms = get_the_terms($post_id, 'web_studia');
 	if (empty($terms) || is_wp_error($terms)) {
 		return '';
 	}

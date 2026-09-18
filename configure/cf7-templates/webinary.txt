@@ -1,0 +1,137 @@
+Webinary / webinar — Contact Form 7
+=====================================
+Konwencja e-mail (cały motyw):
+
+  Pole formularza:  [email* your-email …]
+  W mailach:        [_your_email]   ← tag motywu (Odbiorca Mail 2, Reply-To, treść)
+  NIE używaj:       [email] / pole nazwane „email”
+
+WAŻNE — dwie zakładki maila:
+
+  „Adres e-mail” (Mail 1)  = do ATA / admina
+      Odbiorca: [_site_admin_email]   ← NIE [_your_email] / nie [email]
+      Reply-To: [_your_email]
+
+  „Email (2)”              = potwierdzenie dla uczestnika
+      Odbiorca: [_your_email]
+
+Jeśli w Mail 1 dasz Odbiorca [email] / [_your_email] zamiast admina,
+CF7 krzyczy albo maile idą tylko do uczestnika.
+
+HTML: odznacz „Użyj treści w formacie HTML”, chyba że treść ma tagi <p><br>.
+
+
+----- FORM -----
+<div class="web-cf7">
+<div class="web-cf7__row">
+<div class="web-cf7__field">
+<label for="web-imie">Imię</label>
+[text* imie id:web-imie class:web-cf7__input placeholder "Twoje imię"]
+</div>
+<div class="web-cf7__field">
+<label for="web-nazwisko">Nazwisko</label>
+[text* nazwisko id:web-nazwisko class:web-cf7__input placeholder "Twoje nazwisko"]
+</div>
+</div>
+<div class="web-cf7__field">
+<label for="web-email">Adres e-mail</label>
+[email* your-email id:web-email class:web-cf7__input placeholder "imie.nazwisko@przyklad.pl"]
+</div>
+<div class="web-cf7__field">
+<label for="web-rola">Reprezentujesz</label>
+[select* rola id:web-rola class:web-cf7__select "Architekturę / projektowanie / inżynierię" "Zarządzanie obiektami lub terenami" "Biologię / przyrodę / ochronę środowiska" "Inną dziedzinę"]
+</div>
+<div class="web-cf7__field">
+<label for="web-studia">Czy interesują Cię studia podyplomowe „%web_studia%”?</label>
+[select* studia id:web-studia class:web-cf7__select "Jeszcze się zastanawiam" "Tak, poproszę o informacje" "Nie, dziękuję"]
+</div>
+<div class="web-cf7__check">
+[acceptance* zgoda] Wyrażam zgodę na przetwarzanie danych osobowych przez ATA w celu organizacji webinaru i przesyłania informacji o nim. (treść zgody RODO do uzupełnienia) [/acceptance]
+</div>
+[hidden web-nazwa]
+[hidden web-data]
+[hidden web-godzina]
+[hidden web-tryb]
+[submit class:web-cf7__submit "Zapisz się na webinar"]
+</div>
+
+
+----- MAIL 1 — zakładka „Adres e-mail” (DO ADMINA) -----
+Odbiorca:
+[_site_admin_email]
+
+Nadawca:
+[_site_title] <wordpress@dev.akademiata.pl>
+
+Temat:
+Zgłoszenie na webinar: [web-nazwa]
+
+Dodatkowe nagłówki:
+Reply-To: [_your_email]
+
+Treść (HTML WYŁĄCZONE):
+Nowe zgłoszenie na webinar
+
+Imię: [imie]
+Nazwisko: [nazwisko]
+E-mail: [_your_email]
+Reprezentuje: [rola]
+Studia podyplomowe: [studia]
+
+--- Webinar ---
+Nazwa: [web-nazwa]
+Data: [web-data]
+Godzina: [web-godzina]
+Tryb: [web-tryb]
+
+--
+[_site_title] ([_site_url])
+
+
+----- MAIL 2 — zakładka „Email (2)” (DO UCZESTNIKA) -----
+Zaznacz: Użyj emaila (2)
+
+Odbiorca:
+[_your_email]
+
+Nadawca:
+[_site_title] <wordpress@dev.akademiata.pl>
+
+Temat:
+Potwierdzenie zapisu: [web-nazwa]
+
+Dodatkowe nagłówki:
+Reply-To: [_site_admin_email]
+
+Treść (HTML WYŁĄCZONE):
+Dzień dobry [imie],
+
+dziękujemy za zapis na webinar.
+
+--- Szczegóły spotkania ---
+Nazwa: [web-nazwa]
+Data: [web-data]
+Godzina: [web-godzina]
+Tryb: [web-tryb]
+
+Twoje dane zgłoszenia:
+Imię i nazwisko: [imie] [nazwisko]
+E-mail: [_your_email]
+Reprezentujesz: [rola]
+Studia podyplomowe: [studia]
+
+Link do spotkania otrzymasz osobną wiadomością przed startem (jeśli dotyczy).
+
+--
+Ta wiadomość jest potwierdzeniem wysłania formularza na [_site_title] ([_site_url]).
+Jeśli to nie Ty, zignoruj tę wiadomość.
+
+
+----- ADDITIONAL SETTINGS -----
+html_class: web-cf7-form
+
+
+TEST gdy „problem z wysłaniem”:
+1. Wyłącz Email (2) → wyślij → czy Mail 1 dochodzi do admina?
+2. Jeśli nie → SMTP na dev (WP Mail SMTP) / skrzynka wordpress@dev.akademiata.pl
+3. Dopiero potem włącz Email (2) z powrotem

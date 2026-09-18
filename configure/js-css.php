@@ -110,10 +110,10 @@ function akademiata_enqueue_scripts()
         );
     }
 
-    if (is_singular('szkolenia')) {
+    if (is_singular('webinary')) {
         wp_add_inline_script(
             'name-main-js',
-            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href=\"#zapisy\"]'):null;if(!a)return;if(!document.body.classList.contains('single-szkolenia'))return;var el=document.getElementById('zapisy');if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
+            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href=\"#zapisy\"]'):null;if(!a)return;if(!document.body.classList.contains('single-webinary'))return;var el=document.getElementById('zapisy');if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
             'after'
         );
     }
@@ -161,9 +161,9 @@ function akademiata_enqueue_styles()
         'all'
     );
 
-    if (is_singular('szkolenia')) {
+    if (is_singular('webinary')) {
         wp_enqueue_style(
-            'akademiata-szkolenia-fonts',
+            'akademiata-webinary-fonts',
             'https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap',
             array(),
             null

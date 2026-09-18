@@ -179,10 +179,10 @@ function akademiata_cf7_capture_podcast_episode_date($posted_data) {
 add_filter('wpcf7_posted_data', 'akademiata_cf7_capture_podcast_episode_date');
 
 /**
- * Szkolenia landing: no CF7 <p>/<br> wrapping (pixel form from admin template).
+ * Webinary landing: no CF7 <p>/<br> wrapping (pixel form from admin template).
  */
 add_action('wp', function () {
-	if (!is_singular('szkolenia')) {
+	if (!is_singular('webinary')) {
 		return;
 	}
 	add_filter('wpcf7_autop_or_shortcode', '__return_false');
@@ -190,26 +190,26 @@ add_action('wp', function () {
 }, 20);
 
 /**
- * Fill admin-defined hidden tags with ACF event meta on szkolenia singles.
+ * Fill admin-defined hidden tags with ACF event meta on webinary singles.
  *
- * Paste template: configure/cf7-templates/szkolenia-webinar.txt
+ * Paste template: configure/cf7-templates/webinary.txt
  */
-function akademiata_szk_cf7_fill_hidden_tags($tag) {
-	if (!($tag instanceof WPCF7_FormTag) || !is_singular('szkolenia')) {
+function akademiata_web_cf7_fill_hidden_tags($tag) {
+	if (!($tag instanceof WPCF7_FormTag) || !is_singular('webinary')) {
 		return $tag;
 	}
 
 	$map = array(
-		'szk-nazwa'   => 'nazwa',
-		'szk-data'    => 'data',
-		'szk-godzina' => 'godzina',
-		'szk-tryb'    => 'tryb',
+		'web-nazwa'   => 'nazwa',
+		'web-data'    => 'data',
+		'web-godzina' => 'godzina',
+		'web-tryb'    => 'tryb',
 	);
-	if (!isset($map[ $tag->name ]) || !function_exists('akademiata_szk_cf7_event_meta')) {
+	if (!isset($map[ $tag->name ]) || !function_exists('akademiata_web_cf7_event_meta')) {
 		return $tag;
 	}
 
-	$meta  = akademiata_szk_cf7_event_meta(get_queried_object_id());
+	$meta  = akademiata_web_cf7_event_meta(get_queried_object_id());
 	$value = (string) ($meta[ $map[ $tag->name ] ] ?? '');
 	if ($value === '') {
 		return $tag;
@@ -220,27 +220,27 @@ function akademiata_szk_cf7_fill_hidden_tags($tag) {
 
 	return $tag;
 }
-add_filter('wpcf7_form_tag', 'akademiata_szk_cf7_fill_hidden_tags', 10, 1);
+add_filter('wpcf7_form_tag', 'akademiata_web_cf7_fill_hidden_tags', 10, 1);
 
 /**
  * On AJAX submit, ensure hidden event meta is in posted_data (container post).
  */
-function akademiata_szk_cf7_capture_hidden_meta($posted_data) {
-	if (!is_array($posted_data) || !function_exists('akademiata_szk_cf7_event_meta')) {
+function akademiata_web_cf7_capture_hidden_meta($posted_data) {
+	if (!is_array($posted_data) || !function_exists('akademiata_web_cf7_event_meta')) {
 		return $posted_data;
 	}
 
 	$container_post = isset($_POST['_wpcf7_container_post']) ? absint($_POST['_wpcf7_container_post']) : 0;
-	if ($container_post <= 0 || get_post_type($container_post) !== 'szkolenia') {
+	if ($container_post <= 0 || get_post_type($container_post) !== 'webinary') {
 		return $posted_data;
 	}
 
-	$meta = akademiata_szk_cf7_event_meta($container_post);
+	$meta = akademiata_web_cf7_event_meta($container_post);
 	$keys = array(
-		'szk-nazwa'   => 'nazwa',
-		'szk-data'    => 'data',
-		'szk-godzina' => 'godzina',
-		'szk-tryb'    => 'tryb',
+		'web-nazwa'   => 'nazwa',
+		'web-data'    => 'data',
+		'web-godzina' => 'godzina',
+		'web-tryb'    => 'tryb',
 	);
 	foreach ($keys as $field => $meta_key) {
 		if ($meta[ $meta_key ] !== '') {
@@ -250,28 +250,28 @@ function akademiata_szk_cf7_capture_hidden_meta($posted_data) {
 
 	return $posted_data;
 }
-add_filter('wpcf7_posted_data', 'akademiata_szk_cf7_capture_hidden_meta');
+add_filter('wpcf7_posted_data', 'akademiata_web_cf7_capture_hidden_meta');
 
 /**
- * Replace %szk_studia% (or default „Inżynieria Biotopów”) with selected taxonomy term.
+ * Replace %web_studia% (or default „Inżynieria Biotopów”) with selected taxonomy term.
  */
-function akademiata_szk_cf7_replace_studia_label($html)
+function akademiata_web_cf7_replace_studia_label($html)
 {
-	if (!is_singular('szkolenia') || !is_string($html) || $html === '') {
+	if (!is_singular('webinary') || !is_string($html) || $html === '') {
 		return $html;
 	}
 
-	$label = function_exists('akademiata_szk_get_studia_label')
-		? akademiata_szk_get_studia_label(get_queried_object_id())
+	$label = function_exists('akademiata_web_get_studia_label')
+		? akademiata_web_get_studia_label(get_queried_object_id())
 		: '';
 	if ($label === '') {
 		$label = 'Inżynieria Biotopów';
 	}
 
-	$safe = '<span class="szk-studia-name">' . esc_html($label) . '</span>';
+	$safe = '<span class="web-studia-name">' . esc_html($label) . '</span>';
 
-	if (strpos($html, '%szk_studia%') !== false) {
-		return str_replace('%szk_studia%', $safe, $html);
+	if (strpos($html, '%web_studia%') !== false) {
+		return str_replace('%web_studia%', $safe, $html);
 	}
 
 	// Existing CF7 forms with hardcoded name in the studia question.
@@ -284,5 +284,5 @@ function akademiata_szk_cf7_replace_studia_label($html)
 
 	return is_string($replaced) ? $replaced : $html;
 }
-add_filter('wpcf7_form_elements', 'akademiata_szk_cf7_replace_studia_label', 20);
+add_filter('wpcf7_form_elements', 'akademiata_web_cf7_replace_studia_label', 20);
 

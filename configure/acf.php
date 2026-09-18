@@ -94,15 +94,15 @@ function akademiata_acf_load_cf7_forms($field) {
 }
 
 add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_cf7_forms');
-add_filter('acf/load_field/key=field_szk_signup_form_id', 'akademiata_acf_load_cf7_forms');
+add_filter('acf/load_field/key=field_web_signup_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
- * Output ACF WYSIWYG / rich text for Szkolenia (never esc_html — that shows raw &lt;p&gt;).
+ * Output ACF WYSIWYG / rich text for Webinary (never esc_html — that shows raw &lt;p&gt;).
  *
  * @param string $html
  * @return string
  */
-function akademiata_szk_richtext($html) {
+function akademiata_web_richtext($html) {
 	$html = (string) $html;
 	if ($html === '') {
 		return '';
@@ -115,25 +115,25 @@ function akademiata_szk_richtext($html) {
 }
 
 /**
- * Szkolenia signup: event meta for CF7 hidden fields / mail.
+ * Webinary signup: event meta for CF7 hidden fields / mail.
  *
  * @param int $post_id
  * @return array{nazwa:string,data:string,godzina:string,tryb:string}
  */
-function akademiata_szk_cf7_event_meta($post_id) {
+function akademiata_web_cf7_event_meta($post_id) {
 	$post_id = (int) $post_id;
 	$nazwa   = '';
 	$data    = '';
 	$godzina = '';
 	$tryb    = '';
 
-	if ($post_id > 0 && get_post_type($post_id) === 'szkolenia') {
-		$hero = function_exists('get_field') ? trim((string) get_field('szk_hero_title', $post_id)) : '';
+	if ($post_id > 0 && get_post_type($post_id) === 'webinary') {
+		$hero = function_exists('get_field') ? trim((string) get_field('web_hero_title', $post_id)) : '';
 		$nazwa = $hero !== '' ? $hero : get_the_title($post_id);
 		$nazwa = preg_replace('/\s+/u', ' ', str_replace(array("\r", "\n"), ' ', $nazwa));
-		$data    = function_exists('get_field') ? trim((string) get_field('szk_details_date', $post_id)) : '';
-		$godzina = function_exists('get_field') ? trim((string) get_field('szk_details_time', $post_id)) : '';
-		$tryb    = function_exists('get_field') ? trim((string) get_field('szk_details_place', $post_id)) : '';
+		$data    = function_exists('get_field') ? trim((string) get_field('web_details_date', $post_id)) : '';
+		$godzina = function_exists('get_field') ? trim((string) get_field('web_details_time', $post_id)) : '';
+		$tryb    = function_exists('get_field') ? trim((string) get_field('web_details_place', $post_id)) : '';
 	}
 
 	return array(
@@ -147,48 +147,48 @@ function akademiata_szk_cf7_event_meta($post_id) {
 /**
  * Sanitize a value for a CF7 [hidden name "value"] default.
  */
-function akademiata_szk_cf7_escape_hidden_value($value) {
+function akademiata_web_cf7_escape_hidden_value($value) {
 	$value = (string) $value;
 	$value = str_replace(array('"', '[', ']'), '', $value);
 	return $value;
 }
 
 /**
- * Inject hidden CF7 fields (szkolenie / data / godzina / tryb) on the landing form.
+ * Inject hidden CF7 fields (webinar / data / godzina / tryb) on the landing form.
  */
-function akademiata_szk_cf7_inject_hidden_fields($properties, $contact_form) {
-	if (is_admin() || !is_singular('szkolenia') || !is_array($properties)) {
+function akademiata_web_cf7_inject_hidden_fields($properties, $contact_form) {
+	if (is_admin() || !is_singular('webinary') || !is_array($properties)) {
 		return $properties;
 	}
 
 	$post_id = get_queried_object_id();
-	$form_id = function_exists('get_field') ? (int) get_field('szk_signup_form_id', $post_id) : 0;
+	$form_id = function_exists('get_field') ? (int) get_field('web_signup_form_id', $post_id) : 0;
 	if ($form_id <= 0 || (int) $contact_form->id() !== $form_id) {
 		return $properties;
 	}
 
-	$meta = akademiata_szk_cf7_event_meta($post_id);
+	$meta = akademiata_web_cf7_event_meta($post_id);
 	$block = sprintf(
-		"\n[hidden szk-nazwa \"%s\"]\n[hidden szk-data \"%s\"]\n[hidden szk-godzina \"%s\"]\n[hidden szk-tryb \"%s\"]\n",
-		akademiata_szk_cf7_escape_hidden_value($meta['nazwa']),
-		akademiata_szk_cf7_escape_hidden_value($meta['data']),
-		akademiata_szk_cf7_escape_hidden_value($meta['godzina']),
-		akademiata_szk_cf7_escape_hidden_value($meta['tryb'])
+		"\n[hidden web-nazwa \"%s\"]\n[hidden web-data \"%s\"]\n[hidden web-godzina \"%s\"]\n[hidden web-tryb \"%s\"]\n",
+		akademiata_web_cf7_escape_hidden_value($meta['nazwa']),
+		akademiata_web_cf7_escape_hidden_value($meta['data']),
+		akademiata_web_cf7_escape_hidden_value($meta['godzina']),
+		akademiata_web_cf7_escape_hidden_value($meta['tryb'])
 	);
 
 	$form = isset($properties['form']) ? (string) $properties['form'] : '';
-	if (strpos($form, 'szk-nazwa') === false) {
+	if (strpos($form, 'web-nazwa') === false) {
 		$properties['form'] = rtrim($form) . $block;
 	}
 
 	return $properties;
 }
-add_filter('wpcf7_contact_form_properties', 'akademiata_szk_cf7_inject_hidden_fields', 10, 2);
+add_filter('wpcf7_contact_form_properties', 'akademiata_web_cf7_inject_hidden_fields', 10, 2);
 
 /**
- * Append szkolenie details to CF7 mail body (admin notification).
+ * Append webinar details to CF7 mail body (admin notification).
  */
-function akademiata_szk_cf7_append_mail_meta($components, $contact_form, $mail = null) {
+function akademiata_web_cf7_append_mail_meta($components, $contact_form, $mail = null) {
 	if (!is_array($components) || empty($components['body'])) {
 		return $components;
 	}
@@ -207,21 +207,21 @@ function akademiata_szk_cf7_append_mail_meta($components, $contact_form, $mail =
 	if ($post_id <= 0 && !empty($_POST['_wpcf7_container_post'])) {
 		$post_id = absint(wp_unslash($_POST['_wpcf7_container_post']));
 	}
-	if ($post_id <= 0 || get_post_type($post_id) !== 'szkolenia') {
+	if ($post_id <= 0 || get_post_type($post_id) !== 'webinary') {
 		return $components;
 	}
 
-	$expected = function_exists('get_field') ? (int) get_field('szk_signup_form_id', $post_id) : 0;
+	$expected = function_exists('get_field') ? (int) get_field('web_signup_form_id', $post_id) : 0;
 	if ($expected > 0 && (int) $contact_form->id() !== $expected) {
 		return $components;
 	}
 
-	$meta = akademiata_szk_cf7_event_meta($post_id);
+	$meta = akademiata_web_cf7_event_meta($post_id);
 	if ($meta['nazwa'] === '' && $meta['data'] === '' && $meta['godzina'] === '' && $meta['tryb'] === '') {
 		return $components;
 	}
 
-	$marker = '--- Szkolenie / webinar ---';
+	$marker = '--- Webinar ---';
 	if (strpos((string) $components['body'], $marker) !== false) {
 		return $components;
 	}
@@ -234,13 +234,13 @@ function akademiata_szk_cf7_append_mail_meta($components, $contact_form, $mail =
 
 	return $components;
 }
-add_filter('wpcf7_mail_components', 'akademiata_szk_cf7_append_mail_meta', 10, 3);
+add_filter('wpcf7_mail_components', 'akademiata_web_cf7_append_mail_meta', 10, 3);
 
 /**
- * Optional mail tags: [_szk_nazwa] [_szk_data] [_szk_godzina] [_szk_tryb] [_your_email]
+ * Theme-wide CF7 mail tags: [_your_email] + webinar [_web_*].
+ * Form field name: your-email. In mail always use [_your_email], never [email].
  */
-function akademiata_szk_cf7_special_mail_tags($output, $name, $html = false) {
-	// Autoresponder To: — special tag (avoids CF7 “unsafe [email] in To” warning).
+function akademiata_web_cf7_special_mail_tags($output, $name, $html = false) {
 	if ($name === '_your_email') {
 		$email = '';
 		if (class_exists('WPCF7_Submission')) {
@@ -248,25 +248,28 @@ function akademiata_szk_cf7_special_mail_tags($output, $name, $html = false) {
 			if ($submission) {
 				$data = $submission->get_posted_data();
 				if (is_array($data)) {
-					if (!empty($data['email'])) {
-						$email = is_array($data['email']) ? (string) reset($data['email']) : (string) $data['email'];
-					} elseif (!empty($data['your-email'])) {
+					if (!empty($data['your-email'])) {
 						$email = is_array($data['your-email']) ? (string) reset($data['your-email']) : (string) $data['your-email'];
+					} elseif (!empty($data['email'])) {
+						// Legacy field name.
+						$email = is_array($data['email']) ? (string) reset($data['email']) : (string) $data['email'];
 					}
 				}
 			}
 		}
-		if ($email === '' && !empty($_POST['email'])) {
+		if ($email === '' && !empty($_POST['your-email'])) {
+			$email = sanitize_email(wp_unslash($_POST['your-email']));
+		} elseif ($email === '' && !empty($_POST['email'])) {
 			$email = sanitize_email(wp_unslash($_POST['email']));
 		}
 		return $email !== '' && is_email($email) ? $email : $output;
 	}
 
 	$map = array(
-		'_szk_nazwa'   => 'nazwa',
-		'_szk_data'    => 'data',
-		'_szk_godzina' => 'godzina',
-		'_szk_tryb'    => 'tryb',
+		'_web_nazwa'   => 'nazwa',
+		'_web_data'    => 'data',
+		'_web_godzina' => 'godzina',
+		'_web_tryb'    => 'tryb',
 	);
 	if (!isset($map[ $name ])) {
 		return $output;
@@ -283,10 +286,10 @@ function akademiata_szk_cf7_special_mail_tags($output, $name, $html = false) {
 		$post_id = absint(wp_unslash($_POST['_wpcf7_container_post']));
 	}
 
-	$meta = akademiata_szk_cf7_event_meta($post_id);
+	$meta = akademiata_web_cf7_event_meta($post_id);
 	return $meta[ $map[ $name ] ];
 }
-add_filter('wpcf7_special_mail_tags', 'akademiata_szk_cf7_special_mail_tags', 10, 3);
+add_filter('wpcf7_special_mail_tags', 'akademiata_web_cf7_special_mail_tags', 10, 3);
 
 /**
  * ACF local JSON — field groups per page template (acf-json/).
