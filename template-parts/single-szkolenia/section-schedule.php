@@ -1,6 +1,6 @@
 <?php
 /**
- * Szkolenia single — harmonogram.
+ * Szkolenia — harmonogram.
  *
  * @package akademiata
  */
@@ -16,37 +16,37 @@ if ($title === '' && $items === array()) {
 ?>
 
 <section class="szk-schedule" id="harmonogram">
-	<div class="container">
+	<div class="szk-wrap">
 		<?php if ($badge !== '') : ?>
-			<span class="szk-badge"><?php echo esc_html($badge); ?></span>
+			<span class="szk-tag"><?php echo esc_html($badge); ?></span>
 		<?php endif; ?>
 		<?php if ($title !== '') : ?>
-			<h2 class="szk-section-title"><?php echo esc_html($title); ?></h2>
+			<h2 class="szk-schedule__title"><?php echo esc_html($title); ?></h2>
 		<?php endif; ?>
 
 		<?php if ($items !== array()) : ?>
-			<ol class="szk-schedule__list">
+			<div class="szk-schedule__list">
 				<?php foreach ($items as $item) :
-					$time  = trim((string) ($item['time'] ?? ''));
+					$time    = trim((string) ($item['time'] ?? ''));
 					$i_title = trim((string) ($item['title'] ?? ''));
 					$i_text  = trim((string) ($item['text'] ?? ''));
 					if ($time === '' && $i_title === '') {
 						continue;
 					}
 					?>
-					<li class="szk-schedule__item">
+					<div class="szk-schedule__item">
 						<div class="szk-schedule__time"><?php echo esc_html($time); ?></div>
-						<div class="szk-schedule__body">
+						<div>
 							<?php if ($i_title !== '') : ?>
-								<strong><?php echo esc_html($i_title); ?></strong>
+								<div class="szk-schedule__item-title"><?php echo esc_html($i_title); ?></div>
 							<?php endif; ?>
 							<?php if ($i_text !== '') : ?>
-								<p><?php echo esc_html($i_text); ?></p>
+								<div class="szk-schedule__item-text"><?php echo esc_html($i_text); ?></div>
 							<?php endif; ?>
 						</div>
-					</li>
+					</div>
 				<?php endforeach; ?>
-			</ol>
+			</div>
 		<?php endif; ?>
 	</div>
 </section>

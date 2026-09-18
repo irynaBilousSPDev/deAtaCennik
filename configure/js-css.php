@@ -109,6 +109,14 @@ function akademiata_enqueue_scripts()
             'after'
         );
     }
+
+    if (is_singular('szkolenia')) {
+        wp_add_inline_script(
+            'name-main-js',
+            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('.szkolenia-single a[href^=\"#\"]'):null;if(!a)return;var href=a.getAttribute('href');if(!href||href==='#')return;var el=document.querySelector(href);if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
+            'after'
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'akademiata_enqueue_scripts', 100);
 
@@ -152,6 +160,18 @@ function akademiata_enqueue_styles()
         $main_css_ver,
         'all'
     );
+
+    if (is_singular('szkolenia')) {
+        wp_enqueue_style(
+            'akademiata-szkolenia-fonts',
+            'https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Public+Sans:wght@400;500;600;700&display=swap',
+            array(),
+            null
+        );
+        wp_style_add_data('akademiata-szkolenia-fonts', 'display', 'swap');
+        // Keep mockup fonts ahead of Typekit for this template.
+        wp_dequeue_style('adobe-fonts');
+    }
 
 }
 

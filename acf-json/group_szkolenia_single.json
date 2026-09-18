@@ -16,14 +16,16 @@
                 "label": "Badge",
                 "name": "szk_hero_badge",
                 "type": "text",
-                "default_value": "BEZPŁATNY WEBINAR · ONLINE"
+                "default_value": "Bezpłatny webinar · online"
             },
             {
                 "key": "field_szk_hero_title",
                 "label": "Tytuł (puste = tytuł wpisu)",
                 "name": "szk_hero_title",
-                "type": "text",
-                "instructions": "Np. Inżynieria Biotopów w praktyce",
+                "type": "textarea",
+                "instructions": "Enter = nowa linia (jak w mockupu: Inżynieria Biotopów / w praktyce)",
+                "rows": 2,
+                "new_lines": "",
                 "default_value": ""
             },
             {
@@ -47,7 +49,7 @@
                 "label": "Przycisk CTA",
                 "name": "szk_hero_cta_label",
                 "type": "text",
-                "default_value": "Zapisz się bezpłatnie →"
+                "default_value": "Zapisz się bezpłatnie"
             },
             {
                 "key": "field_szk_hero_cta_note",
@@ -61,7 +63,7 @@
                 "label": "Karta — nagłówek",
                 "name": "szk_details_label",
                 "type": "text",
-                "default_value": "SZCZEGÓŁY SPOTKANIA"
+                "default_value": "Szczegóły spotkania"
             },
             {
                 "key": "field_szk_details_date",
@@ -69,6 +71,19 @@
                 "name": "szk_details_date",
                 "type": "text",
                 "default_value": "",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "key": "field_szk_details_date_note",
+                "label": "Data — drugi wiersz",
+                "name": "szk_details_date_note",
+                "type": "text",
+                "default_value": "",
+                "instructions": "Np. czwartek",
                 "wrapper": {
                     "width": "50",
                     "class": "",
@@ -92,14 +107,37 @@
                 "label": "Notatka pod godziną",
                 "name": "szk_details_time_note",
                 "type": "text",
-                "default_value": ""
+                "default_value": "",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
             },
             {
                 "key": "field_szk_details_place",
                 "label": "Miejsce / forma",
                 "name": "szk_details_place",
                 "type": "text",
-                "default_value": ""
+                "default_value": "",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "key": "field_szk_details_place_note",
+                "label": "Miejsce — drugi wiersz",
+                "name": "szk_details_place_note",
+                "type": "text",
+                "default_value": "",
+                "instructions": "Np. link po zapisie, na e-mail",
+                "wrapper": {
+                    "width": "50",
+                    "class": "",
+                    "id": ""
+                }
             },
             {
                 "key": "field_szk_details_speaker_photo",
@@ -138,7 +176,7 @@
                 "label": "Badge",
                 "name": "szk_about_badge",
                 "type": "text",
-                "default_value": "O SPOTKANIU"
+                "default_value": "O spotkaniu"
             },
             {
                 "key": "field_szk_about_title",
@@ -172,7 +210,7 @@
                 "label": "Badge",
                 "name": "szk_audience_badge",
                 "type": "text",
-                "default_value": "DLA KOGO?"
+                "default_value": "Dla kogo?"
             },
             {
                 "key": "field_szk_audience_title",
@@ -237,7 +275,7 @@
                 "label": "Badge",
                 "name": "szk_speaker_badge",
                 "type": "text",
-                "default_value": "PROWADZĄCA"
+                "default_value": "Prowadząca"
             },
             {
                 "key": "field_szk_speaker_photo",
@@ -285,7 +323,7 @@
                 "label": "Badge",
                 "name": "szk_schedule_badge",
                 "type": "text",
-                "default_value": "RAMOWY HARMONOGRAM"
+                "default_value": "Ramowy harmonogram"
             },
             {
                 "key": "field_szk_schedule_title",
@@ -361,7 +399,7 @@
                 "label": "Badge",
                 "name": "szk_signup_badge",
                 "type": "text",
-                "default_value": "ZAPISY"
+                "default_value": "Zapisy"
             },
             {
                 "key": "field_szk_signup_title",
@@ -440,6 +478,6 @@
         "active": true,
         "description": "Editable content for single Szkolenia (webinar) pages. CF7 form select populated in configure/acf.php.",
         "show_in_rest": 0,
-        "modified": 1789723087
+        "modified": 1789724310
     }
 ]

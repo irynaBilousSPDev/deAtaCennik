@@ -1,19 +1,14 @@
 <?php
 /**
- * Single szkolenie (training).
+ * Single szkolenie — bare layout, pixel mockup (no theme header/footer).
  *
  * @package akademiata
  */
-get_header();
+get_header('szkolenia');
 ?>
 
-	<article id="post-<?php the_ID(); ?>" <?php post_class('single-szkolenia'); ?>>
+	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+		<?php get_template_part('template-parts/content/content-single-szkolenia'); ?>
+	<?php endwhile; endif; ?>
 
-		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
-			<?php get_template_part('template-parts/content/content-single-szkolenia'); ?>
-
-		<?php endwhile; endif; ?>
-	</article>
-
-<?php get_footer(); ?>
+<?php get_footer('szkolenia'); ?>

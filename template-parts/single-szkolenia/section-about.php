@@ -1,6 +1,6 @@
 <?php
 /**
- * Szkolenia single — o spotkaniu.
+ * Szkolenia — o spotkaniu.
  *
  * @package akademiata
  */
@@ -16,17 +16,17 @@ if ($title === '' && trim(wp_strip_all_tags($content)) === '') {
 ?>
 
 <section class="szk-about" id="o-spotkaniu">
-	<div class="container szk-about__inner">
-		<div class="szk-about__left">
+	<div class="szk-wrap szk-about__inner">
+		<div>
 			<?php if ($badge !== '') : ?>
-				<span class="szk-badge"><?php echo esc_html($badge); ?></span>
+				<span class="szk-tag"><?php echo esc_html($badge); ?></span>
 			<?php endif; ?>
 			<?php if ($title !== '') : ?>
-				<h2 class="szk-section-title"><?php echo nl2br(esc_html($title)); ?></h2>
+				<h2 class="szk-about__title"><?php echo nl2br(esc_html($title)); ?></h2>
 			<?php endif; ?>
 		</div>
 		<?php if (trim(wp_strip_all_tags($content)) !== '') : ?>
-			<div class="szk-about__right szk-prose">
+			<div class="szk-about__content">
 				<?php echo wp_kses_post($content); ?>
 			</div>
 		<?php endif; ?>
