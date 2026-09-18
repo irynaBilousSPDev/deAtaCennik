@@ -179,7 +179,7 @@ function akademiata_cf7_capture_podcast_episode_date($posted_data) {
 add_filter('wpcf7_posted_data', 'akademiata_cf7_capture_podcast_episode_date');
 
 /**
- * Webinary landing: no CF7 <p>/<br> wrapping (pixel form from admin template).
+ * Webinary: disable CF7 autop.
  */
 add_action('wp', function () {
 	if (!is_singular('webinary')) {
@@ -190,9 +190,7 @@ add_action('wp', function () {
 }, 20);
 
 /**
- * Fill admin-defined hidden tags with ACF event meta on webinary singles.
- *
- * Paste template: configure/cf7-templates/webinary.txt
+ * Fill web-* hidden CF7 tags from ACF on webinary singles.
  */
 function akademiata_web_cf7_fill_hidden_tags($tag) {
 	if (!($tag instanceof WPCF7_FormTag) || !is_singular('webinary')) {
@@ -223,7 +221,7 @@ function akademiata_web_cf7_fill_hidden_tags($tag) {
 add_filter('wpcf7_form_tag', 'akademiata_web_cf7_fill_hidden_tags', 10, 1);
 
 /**
- * On AJAX submit, ensure hidden event meta is in posted_data (container post).
+ * Fill web-* posted_data from container webinar on AJAX submit.
  */
 function akademiata_web_cf7_capture_hidden_meta($posted_data) {
 	if (!is_array($posted_data) || !function_exists('akademiata_web_cf7_event_meta')) {
@@ -253,7 +251,7 @@ function akademiata_web_cf7_capture_hidden_meta($posted_data) {
 add_filter('wpcf7_posted_data', 'akademiata_web_cf7_capture_hidden_meta');
 
 /**
- * Replace %web_studia% (or default „Inżynieria Biotopów”) with selected taxonomy term.
+ * Replace %web_studia% with selected web_studia term name.
  */
 function akademiata_web_cf7_replace_studia_label($html)
 {
@@ -274,7 +272,7 @@ function akademiata_web_cf7_replace_studia_label($html)
 		return str_replace('%web_studia%', $safe, $html);
 	}
 
-	// Existing CF7 forms with hardcoded name in the studia question.
+	// Existing CF7 forms with hardcoded studia name.
 	$replaced = preg_replace(
 		'/(studia podyplomowe\s*[„"]|&bdquo;)([^„"”<]+)([”"]|&rdquo;)/ui',
 		'$1' . $safe . '$3',

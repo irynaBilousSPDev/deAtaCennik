@@ -97,17 +97,13 @@ add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_c
 add_filter('acf/load_field/key=field_web_signup_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
- * Output ACF WYSIWYG / rich text for Webinary (never esc_html — that shows raw &lt;p&gt;).
- *
- * @param string $html
- * @return string
+ * Safe ACF WYSIWYG output for webinary sections.
  */
 function akademiata_web_richtext($html) {
 	$html = (string) $html;
 	if ($html === '') {
 		return '';
 	}
-	// Double-encoded entities from old textarea → wysiwyg migration.
 	if (strpos($html, '&lt;') !== false && strpos($html, '<p') === false && strpos($html, '<P') === false) {
 		$html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 	}
@@ -115,7 +111,7 @@ function akademiata_web_richtext($html) {
 }
 
 /**
- * Webinary signup: event meta for CF7 hidden fields / mail.
+ * Webinar meta for CF7 hidden fields / mail.
  *
  * @param int $post_id
  * @return array{nazwa:string,data:string,godzina:string,tryb:string}
@@ -145,7 +141,7 @@ function akademiata_web_cf7_event_meta($post_id) {
 }
 
 /**
- * Sanitize a value for a CF7 [hidden name "value"] default.
+ * Escape value for CF7 [hidden name "value"].
  */
 function akademiata_web_cf7_escape_hidden_value($value) {
 	$value = (string) $value;
@@ -154,7 +150,7 @@ function akademiata_web_cf7_escape_hidden_value($value) {
 }
 
 /**
- * Inject hidden CF7 fields (webinar / data / godzina / tryb) on the landing form.
+ * Inject web-* hidden CF7 fields on webinary landing form.
  */
 function akademiata_web_cf7_inject_hidden_fields($properties, $contact_form) {
 	if (is_admin() || !is_singular('webinary') || !is_array($properties)) {
@@ -186,13 +182,12 @@ function akademiata_web_cf7_inject_hidden_fields($properties, $contact_form) {
 add_filter('wpcf7_contact_form_properties', 'akademiata_web_cf7_inject_hidden_fields', 10, 2);
 
 /**
- * Append webinar details to CF7 mail body (admin notification).
+ * Append webinar meta to CF7 admin mail body.
  */
 function akademiata_web_cf7_append_mail_meta($components, $contact_form, $mail = null) {
 	if (!is_array($components) || empty($components['body'])) {
 		return $components;
 	}
-	// Admin notification only (not auto-reply mail_2).
 	if (is_object($mail) && method_exists($mail, 'name') && $mail->name() !== 'mail') {
 		return $components;
 	}
@@ -237,8 +232,7 @@ function akademiata_web_cf7_append_mail_meta($components, $contact_form, $mail =
 add_filter('wpcf7_mail_components', 'akademiata_web_cf7_append_mail_meta', 10, 3);
 
 /**
- * Theme-wide CF7 mail tags: [_your_email] + webinar [_web_*].
- * Form field name: your-email. In mail always use [_your_email], never [email].
+ * CF7 special mail tags: [_your_email], [_web_nazwa|data|godzina|tryb].
  */
 function akademiata_web_cf7_special_mail_tags($output, $name, $html = false) {
 	if ($name === '_your_email') {
@@ -251,7 +245,6 @@ function akademiata_web_cf7_special_mail_tags($output, $name, $html = false) {
 					if (!empty($data['your-email'])) {
 						$email = is_array($data['your-email']) ? (string) reset($data['your-email']) : (string) $data['your-email'];
 					} elseif (!empty($data['email'])) {
-						// Legacy field name.
 						$email = is_array($data['email']) ? (string) reset($data['email']) : (string) $data['email'];
 					}
 				}

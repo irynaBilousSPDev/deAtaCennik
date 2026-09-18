@@ -1,26 +1,3 @@
-Webinary / webinar — Contact Form 7
-=====================================
-Konwencja e-mail (cały motyw):
-
-  Pole formularza:  [email* your-email …]
-  W mailach:        [_your_email]   ← tag motywu (Odbiorca Mail 2, Reply-To, treść)
-  NIE używaj:       [email] / pole nazwane „email”
-
-WAŻNE — dwie zakładki maila:
-
-  „Adres e-mail” (Mail 1)  = do ATA / admina
-      Odbiorca: [_site_admin_email]   ← NIE [_your_email] / nie [email]
-      Reply-To: [_your_email]
-
-  „Email (2)”              = potwierdzenie dla uczestnika
-      Odbiorca: [_your_email]
-
-Jeśli w Mail 1 dasz Odbiorca [email] / [_your_email] zamiast admina,
-CF7 krzyczy albo maile idą tylko do uczestnika.
-
-HTML: odznacz „Użyj treści w formacie HTML”, chyba że treść ma tagi <p><br>.
-
-
 ----- FORM -----
 <div class="web-cf7">
 <div class="web-cf7__row">
@@ -56,7 +33,7 @@ HTML: odznacz „Użyj treści w formacie HTML”, chyba że treść ma tagi <p>
 </div>
 
 
------ MAIL 1 — zakładka „Adres e-mail” (DO ADMINA) -----
+----- MAIL 1 -----
 Odbiorca:
 [_site_admin_email]
 
@@ -69,7 +46,7 @@ Zgłoszenie na webinar: [web-nazwa]
 Dodatkowe nagłówki:
 Reply-To: [_your_email]
 
-Treść (HTML WYŁĄCZONE):
+Treść:
 Nowe zgłoszenie na webinar
 
 Imię: [imie]
@@ -88,9 +65,7 @@ Tryb: [web-tryb]
 [_site_title] ([_site_url])
 
 
------ MAIL 2 — zakładka „Email (2)” (DO UCZESTNIKA) -----
-Zaznacz: Użyj emaila (2)
-
+----- MAIL 2 -----
 Odbiorca:
 [_your_email]
 
@@ -103,7 +78,7 @@ Potwierdzenie zapisu: [web-nazwa]
 Dodatkowe nagłówki:
 Reply-To: [_site_admin_email]
 
-Treść (HTML WYŁĄCZONE):
+Treść:
 Dzień dobry [imie],
 
 dziękujemy za zapis na webinar.
@@ -129,9 +104,3 @@ Jeśli to nie Ty, zignoruj tę wiadomość.
 
 ----- ADDITIONAL SETTINGS -----
 html_class: web-cf7-form
-
-
-TEST gdy „problem z wysłaniem”:
-1. Wyłącz Email (2) → wyślij → czy Mail 1 dochodzi do admina?
-2. Jeśli nie → SMTP na dev (WP Mail SMTP) / skrzynka wordpress@dev.akademiata.pl
-3. Dopiero potem włącz Email (2) z powrotem
