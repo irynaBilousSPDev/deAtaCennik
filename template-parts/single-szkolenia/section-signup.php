@@ -9,7 +9,7 @@ $f           = get_query_var('szk_fields', array());
 $form_output = (string) get_query_var('szk_form_output', '');
 $badge       = trim((string) ($f['szk_signup_badge'] ?? ''));
 $title       = trim((string) ($f['szk_signup_title'] ?? ''));
-$text        = trim((string) ($f['szk_signup_text'] ?? ''));
+$text        = (string) ($f['szk_signup_text'] ?? '');
 $note        = trim((string) ($f['szk_signup_form_note'] ?? ''));
 $perks       = is_array($f['szk_signup_perks'] ?? null) ? $f['szk_signup_perks'] : array();
 
@@ -19,7 +19,7 @@ if ($title === '' && $form_output === '') {
 ?>
 
 <section class="szk-signup" id="zapisy">
-	<div class="szk-wrap szk-signup__inner">
+	<div class="container szk-signup__inner">
 		<div>
 			<?php if ($badge !== '') : ?>
 				<span class="szk-tag"><?php echo esc_html($badge); ?></span>
@@ -27,8 +27,10 @@ if ($title === '' && $form_output === '') {
 			<?php if ($title !== '') : ?>
 				<h2 class="szk-signup__title"><?php echo esc_html($title); ?></h2>
 			<?php endif; ?>
-			<?php if ($text !== '') : ?>
-				<p class="szk-signup__text"><?php echo esc_html($text); ?></p>
+			<?php if (trim(wp_strip_all_tags($text)) !== '') : ?>
+				<div class="szk-signup__text szk-check-list">
+					<?php echo wp_kses_post($text); ?>
+				</div>
 			<?php endif; ?>
 			<?php if ($perks !== array()) : ?>
 				<ul class="szk-signup__perks">

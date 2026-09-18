@@ -20,15 +20,16 @@ $time       = trim((string) ($f['szk_details_time'] ?? ''));
 $time_note  = trim((string) ($f['szk_details_time_note'] ?? ''));
 $place      = trim((string) ($f['szk_details_place'] ?? ''));
 $place_note = trim((string) ($f['szk_details_place_note'] ?? ''));
-$sp_line    = trim((string) ($f['szk_details_speaker_line'] ?? ''));
-$sp_sub     = trim((string) ($f['szk_details_speaker_sub'] ?? ''));
-$sp_photo   = $f['szk_details_speaker_photo'] ?? null;
+// Speaker mini-card: same photo/name/role as section Prowadząca.
+$sp_photo = $f['szk_speaker_photo'] ?? null;
+$sp_line  = trim((string) ($f['szk_speaker_name'] ?? ''));
+$sp_sub   = trim((string) ($f['szk_speaker_role'] ?? ''));
 
-$has_details = ($date !== '' || $time !== '' || $place !== '' || $sp_line !== '');
+$has_details = ($date !== '' || $time !== '' || $place !== '' || $sp_line !== '' || !empty($sp_photo['url']));
 ?>
 
 <section class="szk-hero" id="szk-top">
-	<div class="szk-wrap">
+	<div class="container">
 		<div class="szk-hero__grid">
 			<div>
 				<?php if ($badge !== '') : ?>

@@ -113,7 +113,7 @@ function akademiata_enqueue_scripts()
     if (is_singular('szkolenia')) {
         wp_add_inline_script(
             'name-main-js',
-            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('.szkolenia-single a[href^=\"#\"]'):null;if(!a)return;var href=a.getAttribute('href');if(!href||href==='#')return;var el=document.querySelector(href);if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
+            "(function(){document.addEventListener('click',function(e){var a=e.target&&e.target.closest?e.target.closest('a[href=\"#zapisy\"]'):null;if(!a)return;if(!document.body.classList.contains('single-szkolenia'))return;var el=document.getElementById('zapisy');if(!el)return;e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'});});})();",
             'after'
         );
     }

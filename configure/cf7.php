@@ -268,7 +268,7 @@ function akademiata_szk_cf7_replace_studia_label($html)
 		$label = 'Inżynieria Biotopów';
 	}
 
-	$safe = esc_html($label);
+	$safe = '<span class="szk-studia-name">' . esc_html($label) . '</span>';
 
 	if (strpos($html, '%szk_studia%') !== false) {
 		return str_replace('%szk_studia%', $safe, $html);

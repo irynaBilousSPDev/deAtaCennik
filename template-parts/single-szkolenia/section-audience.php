@@ -22,7 +22,7 @@ $fallback_icons = array(
 ?>
 
 <section class="szk-audience" id="dla-kogo">
-	<div class="szk-wrap">
+	<div class="container">
 		<?php if ($badge !== '') : ?>
 			<span class="szk-tag"><?php echo esc_html($badge); ?></span>
 		<?php endif; ?>

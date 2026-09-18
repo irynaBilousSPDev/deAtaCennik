@@ -71,16 +71,13 @@
     color: var(--szk-cream);
   }
 
-  .szk-wrap {
-    max-width: 1160px;
-    margin: 0 auto;
-    padding-inline: 32px;
+  /* Theme .container — same width/padding as site-wide */
+  .container {
+    width: 100%;
   }
 
-  @media (max-width: 720px) {
-    .szk-wrap {
-      padding-inline: 20px;
-    }
+  #zapisy {
+    scroll-margin-top: 120px;
   }
 
   .szk-tag {
@@ -326,6 +323,39 @@
     }
   }
 
+  /* WYSIWYG check lists (about / signup opis) — like szk-signup__perks */
+  .szk-check-list {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    ul li {
+      position: relative;
+      padding-left: 30px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--szk-body);
+      margin: 0;
+    }
+
+    ul li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.15em;
+      width: 18px;
+      height: 18px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18' fill='none'%3E%3Cpath d='M3 9L7 13L15 4' stroke='%232F4A3C' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-size: 18px 18px;
+    }
+  }
+
   /* —— Audience —— */
   .szk-audience {
     padding-block: 72px;
@@ -547,6 +577,18 @@
     color: var(--szk-body);
     max-width: 46ch;
     margin: 0 0 26px;
+
+    p {
+      margin: 0 0 14px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ul {
+      margin-top: 16px;
+    }
   }
 
   .szk-signup__perks {
@@ -629,6 +671,17 @@
         display: block;
         margin: 0 0 7px;
         line-height: 1.3;
+      }
+
+      > label[for="szk-studia"] {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .szk-studia-name {
+        font-size: 0.96em;
+        font-weight: 700;
       }
     }
 
@@ -839,6 +892,53 @@
   @include mixins.max-ipad-air-screen {
     .szk-hero__title {
       font-size: 40px;
+    }
+  }
+}
+
+/* Header CTA on szkolenia singles (ghost pill, right side) */
+body.single-szkolenia {
+  scroll-behavior: smooth;
+
+  .szkolenia-navigation {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  .szk-nav__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1f2420 !important;
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.2;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(31, 36, 32, 0.25);
+    background: transparent;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+      border-color: #1f2420;
+      color: #1f2420 !important;
+      text-decoration: none;
+      background: rgba(31, 36, 32, 0.04);
+    }
+  }
+
+  .mega-menu-button {
+    margin-left: 8px;
+  }
+
+  @media (max-width: 991px) {
+    .szk-nav__cta {
+      font-size: 13px;
+      padding: 10px 16px;
     }
   }
 }

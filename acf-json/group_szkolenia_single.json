@@ -12,6 +12,14 @@
                 "endpoint": 0
             },
             {
+                "key": "field_szk_nav_cta_label",
+                "label": "Menu — przycisk (prawo)",
+                "name": "szk_nav_cta_label",
+                "type": "text",
+                "default_value": "Zapisz się na webinar",
+                "instructions": "Sticky pasek pod headerem; scroll do #zapisy. Puste = Zapisz się na webinar."
+            },
+            {
                 "key": "field_szk_hero_badge",
                 "label": "Badge",
                 "name": "szk_hero_badge",
@@ -140,30 +148,6 @@
                 }
             },
             {
-                "key": "field_szk_details_speaker_photo",
-                "label": "Miniatura prowadzącego (karta)",
-                "name": "szk_details_speaker_photo",
-                "type": "image",
-                "return_format": "array",
-                "preview_size": "thumbnail",
-                "library": "all"
-            },
-            {
-                "key": "field_szk_details_speaker_line",
-                "label": "Linia prowadzącego",
-                "name": "szk_details_speaker_line",
-                "type": "text",
-                "instructions": "Np. Prowadzi: Dorota Szlachcic",
-                "default_value": ""
-            },
-            {
-                "key": "field_szk_details_speaker_sub",
-                "label": "Podpis prowadzącego",
-                "name": "szk_details_speaker_sub",
-                "type": "text",
-                "default_value": ""
-            },
-            {
                 "key": "field_szk_tab_about",
                 "label": "O spotkaniu",
                 "name": "",
@@ -195,7 +179,8 @@
                 "tabs": "all",
                 "toolbar": "basic",
                 "media_upload": 0,
-                "delay": 0
+                "delay": 0,
+                "instructions": "Lista (ul) na froncie ma styl checklisty jak w zapisach."
             },
             {
                 "key": "field_szk_tab_audience",
@@ -284,21 +269,24 @@
                 "type": "image",
                 "return_format": "array",
                 "preview_size": "medium",
-                "library": "all"
+                "library": "all",
+                "instructions": "Używane też w karcie „Szczegóły spotkania” (hero)."
             },
             {
                 "key": "field_szk_speaker_name",
                 "label": "Imię i nazwisko",
                 "name": "szk_speaker_name",
                 "type": "text",
-                "default_value": ""
+                "default_value": "",
+                "instructions": "Używane też w karcie szczegółów w hero."
             },
             {
                 "key": "field_szk_speaker_role",
                 "label": "Tytuł / rola",
                 "name": "szk_speaker_role",
                 "type": "text",
-                "default_value": ""
+                "default_value": "",
+                "instructions": "Drugi wiersz pod nazwiskiem w hero i w sekcji prowadzącej."
             },
             {
                 "key": "field_szk_speaker_bio",
@@ -412,10 +400,12 @@
                 "key": "field_szk_signup_text",
                 "label": "Opis",
                 "name": "szk_signup_text",
-                "type": "textarea",
-                "rows": 3,
-                "new_lines": "",
-                "default_value": ""
+                "type": "wysiwyg",
+                "tabs": "all",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0,
+                "instructions": "Akapity + lista (ul) — na froncie lista ma styl checklisty ze znacznikami."
             },
             {
                 "key": "field_szk_signup_perks",

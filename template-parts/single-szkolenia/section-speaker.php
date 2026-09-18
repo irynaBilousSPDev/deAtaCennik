@@ -18,7 +18,7 @@ if ($name === '' && trim(wp_strip_all_tags($bio)) === '') {
 ?>
 
 <section class="szk-speaker" id="prowadzaca">
-	<div class="szk-wrap szk-speaker__inner">
+	<div class="container szk-speaker__inner">
 		<div class="szk-speaker__photo">
 			<?php if (!empty($photo['url'])) : ?>
 				<img src="<?php echo esc_url($photo['url']); ?>" alt="<?php echo esc_attr($photo['alt'] ?: $name); ?>" loading="lazy">

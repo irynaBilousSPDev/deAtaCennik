@@ -16,7 +16,7 @@ if ($title === '' && trim(wp_strip_all_tags($content)) === '') {
 ?>
 
 <section class="szk-about" id="o-spotkaniu">
-	<div class="szk-wrap szk-about__inner">
+	<div class="container szk-about__inner">
 		<div>
 			<?php if ($badge !== '') : ?>
 				<span class="szk-tag"><?php echo esc_html($badge); ?></span>
@@ -26,7 +26,7 @@ if ($title === '' && trim(wp_strip_all_tags($content)) === '') {
 			<?php endif; ?>
 		</div>
 		<?php if (trim(wp_strip_all_tags($content)) !== '') : ?>
-			<div class="szk-about__content">
+			<div class="szk-about__content szk-check-list">
 				<?php echo wp_kses_post($content); ?>
 			</div>
 		<?php endif; ?>

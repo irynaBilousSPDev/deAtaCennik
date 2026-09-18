@@ -131,6 +131,41 @@
                         </div>
                     </div>
 
+				<?php elseif ( is_singular( 'szkolenia' ) ) : ?>
+					<?php
+					$szk_nav_cta = function_exists( 'get_field' ) ? trim( (string) get_field( 'szk_nav_cta_label' ) ) : '';
+					if ( $szk_nav_cta === '' ) {
+						$szk_nav_cta = __( 'Zapisz się na webinar', 'akademiata' );
+					}
+					?>
+                    <div class="desktop_visible">
+                        <div class="d-flex align-items-center">
+                            <nav id="szkolenia-navigation" class="szkolenia-navigation" aria-label="<?php esc_attr_e( 'Nawigacja szkolenia', 'akademiata' ); ?>">
+                                <a href="#zapisy" class="szk-nav__cta"><?php echo esc_html( $szk_nav_cta ); ?></a>
+                            </nav>
+                            <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
+                                <span class="menu-icon">
+                                    <span class="bar top-bar"></span>
+                                    <span class="bar middle-bar"></span>
+                                    <span class="bar bottom-bar"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mobile_visible">
+                        <div class="d-flex align-items-center">
+                            <a href="#zapisy" class="szk-nav__cta mr-3"><?php echo esc_html( $szk_nav_cta ); ?></a>
+                            <button class="megaMenuToggle mega-menu-button" aria-label="Toggle menu">
+                                <span class="menu-icon">
+                                    <span class="bar top-bar"></span>
+                                    <span class="bar middle-bar"></span>
+                                    <span class="bar bottom-bar"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
 				<?php else: ?>
 
                     <div class="desktop_visible">
