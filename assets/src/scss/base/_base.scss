@@ -298,4 +298,14 @@ main {
 
 }
 
+/* WPML/OTGS: hide “development site” front-end banner */
+.otgs-development-site-front-end {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
 

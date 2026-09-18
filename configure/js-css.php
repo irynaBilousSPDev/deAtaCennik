@@ -168,9 +168,6 @@ function akademiata_enqueue_styles()
             array(),
             null
         );
-        wp_style_add_data('akademiata-szkolenia-fonts', 'display', 'swap');
-        // Keep mockup fonts ahead of Typekit for this template.
-        wp_dequeue_style('adobe-fonts');
     }
 
 }

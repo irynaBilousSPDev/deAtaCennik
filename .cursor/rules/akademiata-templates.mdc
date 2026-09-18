@@ -14,7 +14,7 @@ alwaysApply: false
 | `single-postgraduate.php`, `single-mba.php` | `template-parts/content/content-single-pg-mba.php` |
 | `single-courses.php` | `content-single-courses.php` |
 | `single-exams.php` | `content-single-exams.php` |
-| `single-szkolenia.php` | Bare layout (`header-szkolenia.php` / `footer-szkolenia.php`, no theme chrome) → `content-single-szkolenia.php` → `section-*.php`; styles from `Main.dc.html` (Newsreader + Public Sans) |
+| `single-szkolenia.php` | Theme header/footer → `content-single-szkolenia.php` → `section-*.php`; content styles from `Main.dc.html` (Newsreader + Public Sans); CF7 hidden `szk-*` + mail meta |
 | `single.php` | `content-single-aktualnosci.php` or `content-single.php` + optional `flexible-content/sections/{layout}` |
 
 ## Page templates (root)

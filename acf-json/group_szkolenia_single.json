@@ -443,7 +443,7 @@
                 "label": "Formularz Contact Form 7",
                 "name": "szk_signup_form_id",
                 "type": "select",
-                "instructions": "Wybierz formularz CF7. Utwórz go w WP Admin → Contact.",
+                "instructions": "Utwórz formularz w Contact → Add New z szablonu configure/cf7-templates/szkolenia-webinar.txt (Form + Mail + html_class: szk-cf7-form). Motyw wypełnia ukryte szk-nazwa/data/godzina/tryb z ACF i dopina meta do maila admina.",
                 "choices": {},
                 "default_value": "",
                 "allow_null": 1,

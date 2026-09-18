@@ -178,3 +178,77 @@ function akademiata_cf7_capture_podcast_episode_date($posted_data) {
 
 add_filter('wpcf7_posted_data', 'akademiata_cf7_capture_podcast_episode_date');
 
+/**
+ * Szkolenia landing: no CF7 <p>/<br> wrapping (pixel form from admin template).
+ */
+add_action('wp', function () {
+	if (!is_singular('szkolenia')) {
+		return;
+	}
+	add_filter('wpcf7_autop_or_shortcode', '__return_false');
+	add_filter('wpcf7_autop', '__return_false');
+}, 20);
+
+/**
+ * Fill admin-defined hidden tags with ACF event meta on szkolenia singles.
+ *
+ * Paste template: configure/cf7-templates/szkolenia-webinar.txt
+ */
+function akademiata_szk_cf7_fill_hidden_tags($tag) {
+	if (!($tag instanceof WPCF7_FormTag) || !is_singular('szkolenia')) {
+		return $tag;
+	}
+
+	$map = array(
+		'szk-nazwa'   => 'nazwa',
+		'szk-data'    => 'data',
+		'szk-godzina' => 'godzina',
+		'szk-tryb'    => 'tryb',
+	);
+	if (!isset($map[ $tag->name ]) || !function_exists('akademiata_szk_cf7_event_meta')) {
+		return $tag;
+	}
+
+	$meta  = akademiata_szk_cf7_event_meta(get_queried_object_id());
+	$value = (string) ($meta[ $map[ $tag->name ] ] ?? '');
+	if ($value === '') {
+		return $tag;
+	}
+
+	$tag->values     = array($value);
+	$tag->raw_values = array($value);
+
+	return $tag;
+}
+add_filter('wpcf7_form_tag', 'akademiata_szk_cf7_fill_hidden_tags', 10, 1);
+
+/**
+ * On AJAX submit, ensure hidden event meta is in posted_data (container post).
+ */
+function akademiata_szk_cf7_capture_hidden_meta($posted_data) {
+	if (!is_array($posted_data) || !function_exists('akademiata_szk_cf7_event_meta')) {
+		return $posted_data;
+	}
+
+	$container_post = isset($_POST['_wpcf7_container_post']) ? absint($_POST['_wpcf7_container_post']) : 0;
+	if ($container_post <= 0 || get_post_type($container_post) !== 'szkolenia') {
+		return $posted_data;
+	}
+
+	$meta = akademiata_szk_cf7_event_meta($container_post);
+	$keys = array(
+		'szk-nazwa'   => 'nazwa',
+		'szk-data'    => 'data',
+		'szk-godzina' => 'godzina',
+		'szk-tryb'    => 'tryb',
+	);
+	foreach ($keys as $field => $meta_key) {
+		if ($meta[ $meta_key ] !== '') {
+			$posted_data[ $field ] = $meta[ $meta_key ];
+		}
+	}
+
+	return $posted_data;
+}
+add_filter('wpcf7_posted_data', 'akademiata_szk_cf7_capture_hidden_meta');
+

@@ -14,6 +14,19 @@ function akademiata_is_production() {
 	return in_array( $host, $production_hosts, true );
 }
 
+/**
+ * Hide WPML/OTGS “development site” front-end banner (CSS + dequeue assets).
+ */
+function akademiata_hide_otgs_development_banner() {
+	wp_dequeue_style('otgs-development-site');
+	wp_dequeue_script('otgs-development-site');
+	wp_add_inline_style(
+		'name-main-css',
+		'.otgs-development-site-front-end{display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;overflow:hidden!important;pointer-events:none!important;}'
+	);
+}
+add_action('wp_enqueue_scripts', 'akademiata_hide_otgs_development_banner', 120);
+
 // Add rewrite rule for safe filtering (low priority to avoid WPML conflict)
 function add_safe_filter_rewrite_rules()
 {

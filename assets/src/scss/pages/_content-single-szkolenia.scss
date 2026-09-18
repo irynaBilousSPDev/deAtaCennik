@@ -1,25 +1,6 @@
 @use "../abstracts/mixins" as mixins;
 
-/* Pixel mockup: Main.dc.html (Newsreader + Public Sans), no theme chrome */
-.szkolenia-bare {
-  margin: 0 !important;
-  padding: 0 !important;
-  background: #f7f5ef !important;
-  color: #1f2420;
-  font-family: "Public Sans", system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  line-height: 1.5;
-}
-
-.szkolenia-bare-main {
-  margin: 0;
-  padding: 0;
-  display: block;
-  width: 100%;
-  min-height: 100vh;
-  background: #f7f5ef;
-}
-
+/* Pixel mockup content (Main.dc.html) — site header/footer stay theme-wide */
 .szkolenia-single {
   --szk-bg: #f7f5ef;
   --szk-bg-soft: #efebe0;
@@ -600,69 +581,133 @@
       color: var(--szk-muted);
     }
 
-    .wpcf7,
-    .wpcf7-form {
+    .wpcf7 {
       margin: 0;
+      width: 100%;
+    }
+
+    .wpcf7-form,
+    .szk-cf7 {
+      margin: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    .szk-cf7-row,
-    .form-grid {
+    .wpcf7-form > p,
+    .szk-cf7 > p {
+      margin: 0;
+    }
+
+    .wpcf7-form br,
+    .szk-cf7 br {
+      display: none;
+    }
+
+    .szk-cf7__row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 18px;
     }
 
     @media (max-width: 640px) {
-      .szk-cf7-row,
-      .form-grid {
+      .szk-cf7__row {
         grid-template-columns: 1fr;
       }
     }
 
-    label {
+    .szk-cf7__field {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+
+    label:not(.wpcf7-list-item-label) {
       font-size: 14px;
       font-weight: 600;
-      color: var(--szk-body);
+      color: #384038;
       display: block;
-      margin-bottom: 7px;
+      margin: 0 0 7px;
+      line-height: 1.3;
     }
 
     .wpcf7-form-control-wrap {
       display: block;
+      width: 100%;
+      margin: 0;
     }
 
+    .szk-cf7__input,
+    .szk-cf7__select,
     input[type="text"],
     input[type="email"],
     input[type="tel"],
     select,
     textarea {
+      display: block;
       width: 100%;
+      max-width: 100%;
+      height: auto;
+      min-height: 48px;
       font-family: var(--szk-sans);
       font-size: 15px;
+      font-weight: 400;
+      line-height: 1.4;
       color: var(--szk-ink);
       padding: 13px 16px;
       border-radius: 10px;
-      border: 1px solid var(--szk-line-input);
+      border: 1px solid rgba(31, 36, 32, 0.22);
       background: #fcfbf8;
+      box-shadow: none;
+      appearance: none;
+      -webkit-appearance: none;
+      margin: 0;
     }
 
-    input::placeholder {
-      color: var(--szk-placeholder);
+    .szk-cf7__select,
+    select {
+      padding-right: 42px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%235B6660' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 12px 8px;
+      cursor: pointer;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #8a9089;
+      opacity: 1;
     }
 
     input:focus,
     select:focus,
-    textarea:focus {
-      outline: 2px solid var(--szk-green);
+    textarea:focus,
+    .szk-cf7__input:focus,
+    .szk-cf7__select:focus {
+      outline: 2px solid #2f4a3c;
       outline-offset: 1px;
+      border-color: rgba(31, 36, 32, 0.22);
+    }
+
+    .szk-cf7__check {
+      margin: 0;
     }
 
     .wpcf7-acceptance,
     .wpcf7-list-item {
       margin: 0;
+      display: block;
+    }
+
+    .wpcf7-acceptance > label,
+    span.wpcf7-list-item > label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0;
+      cursor: pointer;
     }
 
     .wpcf7-list-item-label,
@@ -676,55 +721,78 @@
     input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      accent-color: var(--szk-green);
-      margin-top: 2px;
+      min-width: 18px;
+      flex: none;
+      accent-color: #2f4a3c;
+      margin: 2px 0 0;
       padding: 0;
+      border-radius: 3px;
+      cursor: pointer;
     }
 
-    .wpcf7-acceptance > label,
-    span.wpcf7-list-item > label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
+    .szk-cf7__submit,
     input[type="submit"],
     .wpcf7-submit {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      background: var(--szk-cta);
-      color: var(--szk-cream);
+      min-height: 52px;
+      background: #c1693e;
+      color: #f7f5ef !important;
       font-weight: 600;
       font-size: 16px;
+      line-height: 1.2;
       padding: 15px 28px;
       border-radius: 999px;
       border: none;
       cursor: pointer;
       font-family: var(--szk-sans);
       margin-top: 4px;
+      box-shadow: none;
+      transition: background 0.15s ease;
 
       &:hover {
-        background: var(--szk-cta-hover);
+        background: #a34f2c;
+        color: #f7f5ef !important;
       }
+    }
+
+    .wpcf7-spinner {
+      position: absolute;
+      visibility: hidden;
     }
 
     .wpcf7-response-output {
       margin: 0;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
       font-size: 14px;
+      line-height: 1.45;
+      background: rgba(47, 74, 60, 0.08);
+      color: #2f4a3c;
     }
 
     .wpcf7-not-valid-tip {
-      font-size: 13px;
+      display: block;
+      margin-top: 6px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #b42318;
+    }
+
+    .wpcf7-not-valid {
+      border-color: rgba(180, 35, 24, 0.45) !important;
     }
   }
 
   .szk-signup__form-note {
     font-size: 12.5px;
-    color: var(--szk-placeholder);
+    color: #8a9089;
     text-align: center;
     margin: 0;
+    line-height: 1.4;
   }
 
   @include mixins.max-ipad-air-screen {

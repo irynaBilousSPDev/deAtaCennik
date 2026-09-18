@@ -1,0 +1,71 @@
+Szkolenia / webinar — Contact Form 7
+=====================================
+1. WP Admin → Contact → Add New
+2. Title: np. „Szkolenia webinar”
+3. Wklej sekcje poniżej (Form / Mail / Additional Settings)
+4. Zapisz i wybierz ten formularz w ACF szkolenia → Formularz Contact Form 7
+
+Motyw NIE nadpisuje treści formularza — edytujesz wszystko w CF7.
+Ukryte pola szk-* wypełnia motyw z ACF (nazwa / data / godzina / tryb).
+Na single szkolenia wyłączone jest CF7 autop (<p>/<br>).
+
+
+----- FORM -----
+<div class="szk-cf7">
+<div class="szk-cf7__row">
+<div class="szk-cf7__field">
+<label for="szk-imie">Imię</label>
+[text* imie id:szk-imie class:szk-cf7__input placeholder "Twoje imię"]
+</div>
+<div class="szk-cf7__field">
+<label for="szk-nazwisko">Nazwisko</label>
+[text* nazwisko id:szk-nazwisko class:szk-cf7__input placeholder "Twoje nazwisko"]
+</div>
+</div>
+<div class="szk-cf7__field">
+<label for="szk-email">Adres e-mail</label>
+[email* email id:szk-email class:szk-cf7__input placeholder "imie.nazwisko@przyklad.pl"]
+</div>
+<div class="szk-cf7__field">
+<label for="szk-rola">Reprezentujesz</label>
+[select* rola id:szk-rola class:szk-cf7__select "Architekturę / projektowanie / inżynierię" "Zarządzanie obiektami lub terenami" "Biologię / przyrodę / ochronę środowiska" "Inną dziedzinę"]
+</div>
+<div class="szk-cf7__field">
+<label for="szk-studia">Czy interesują Cię studia podyplomowe „Inżynieria Biotopów”?</label>
+[select* studia id:szk-studia class:szk-cf7__select "Jeszcze się zastanawiam" "Tak, poproszę o informacje" "Nie, dziękuję"]
+</div>
+<div class="szk-cf7__check">
+[acceptance* zgoda] Wyrażam zgodę na przetwarzanie danych osobowych przez ATA w celu organizacji webinaru i przesyłania informacji o nim. [treść zgody RODO do uzupełnienia] [/acceptance]
+</div>
+[hidden szk-nazwa]
+[hidden szk-data]
+[hidden szk-godzina]
+[hidden szk-tryb]
+[submit class:szk-cf7__submit "Zapisz się na webinar"]
+</div>
+
+
+----- MAIL (do admina) — To / From / Subject ustaw jak zwykle -----
+From: [_site_title] <[_site_admin_email]>
+Subject: Zgłoszenie na szkolenie: [szk-nazwa]
+
+Treść wiadomości:
+
+Imię: [imie]
+Nazwisko: [nazwisko]
+E-mail: [email]
+Reprezentuje: [rola]
+Studia podyplomowe: [studia]
+
+--- Szkolenie / webinar ---
+Nazwa: [szk-nazwa]
+Data: [szk-data]
+Godzina: [szk-godzina]
+Tryb: [szk-tryb]
+
+--
+Ta wiadomość została wysłana z formularza kontaktowego na [_site_title] ([_site_url])
+
+
+----- ADDITIONAL SETTINGS -----
+html_class: szk-cf7-form
