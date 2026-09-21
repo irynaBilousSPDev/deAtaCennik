@@ -8,6 +8,7 @@ get_header();
 require_once get_template_directory() . '/configure/lp-defaults/zasady-rekrutacji/fields.php';
 
 $acf_fields = akademiata_zasady_rekrutacji_fields(get_fields());
+$digital_skills = akademiata_zasady_rekrutacji_digital_skills();
 
 /**
  * @param string $text
@@ -217,15 +218,16 @@ $lp_has_photo = static function ($image, $static_key) {
             <?php
             $qn_links = (!empty($quick_nav['links']) && is_array($quick_nav['links'])) ? $quick_nav['links'] : [];
             $qn_has_kompetencje = false;
-            foreach ($qn_links as $link) {
+            foreach ($qn_links as $qn_i => $link) {
                 if (($link['anchor'] ?? '') === '#kompetencje-cyfrowe') {
+                    $qn_links[$qn_i]['text'] = $digital_skills['nav'];
                     $qn_has_kompetencje = true;
                     break;
                 }
             }
             if (!$qn_has_kompetencje) {
                 $qn_links[] = [
-                    'text'   => 'Kompetencje cyfrowe',
+                    'text'   => $digital_skills['nav'],
                     'anchor' => '#kompetencje-cyfrowe',
                 ];
             }
@@ -974,31 +976,30 @@ $lp_has_photo = static function ($image, $static_key) {
     </section>
 
     <section class="section gray" id="kompetencje-cyfrowe">
-        <div class="watermark" aria-hidden="true">Kompetencje</div>
+        <div class="watermark" aria-hidden="true"><?php echo esc_html($digital_skills['watermark']); ?></div>
         <div class="container">
-            <div class="eyebrow">Wymagania cyfrowe</div>
-            <h2 class="section-title">Kompetencje cyfrowe wymagane od kandydatów</h2>
-            <p class="intro">Kandydaci ubiegający się o przyjęcie na studia w ATA powinni posiadać kompetencje cyfrowe umożliwiające przejście procesu rekrutacyjnego w uczelnianym internetowym systemie rekrutacyjnym, a następnie rozpoczęcie kształcenia na wybranym kierunku studiów.</p>
+            <div class="eyebrow"><?php echo esc_html($digital_skills['eyebrow']); ?></div>
+            <h2 class="section-title"><?php echo esc_html($digital_skills['title']); ?></h2>
+            <p class="intro"><?php echo esc_html($digital_skills['intro']); ?></p>
             <div class="docs-layout digital-skills">
                 <div>
-                    <p class="digital-skills__lead">Wymagana jest podstawowa umiejętność korzystania z komputera, w szczególności:</p>
-                    <ul class="checklist">
-                        <li>obsługa przeglądarek internetowych,</li>
-                        <li>obsługa poczty elektronicznej, edytorów tekstu, np. Microsoft Word oraz arkuszy kalkulacyjnych, np. Microsoft Excel,</li>
-                        <li>korzystanie z urządzeń peryferyjnych umożliwiających m.in. wydruk dokumentów,</li>
-                        <li>podstawowa obsługa oprogramowania graficznego umożliwiającego przygotowanie zdjęcia cyfrowego,</li>
-                        <li>korzystanie z narzędzi do wideokonferencji, np. Zoom,</li>
-                        <li>korzystanie z platform i narzędzi wykorzystywanych w kształceniu na odległość i pracy zespołowej, np. Microsoft Teams, Moodle.</li>
-                    </ul>
-                    <div class="note">Do udziału w kształceniu prowadzonym z wykorzystaniem metod i technik kształcenia na odległość niezbędny jest komputer wyposażony w kamerę i mikrofon oraz dostęp do Internetu.</div>
+                    <p class="digital-skills__lead"><?php echo esc_html($digital_skills['lead']); ?></p>
+                    <?php if (!empty($digital_skills['items']) && is_array($digital_skills['items'])) : ?>
+                        <ul class="checklist">
+                            <?php foreach ($digital_skills['items'] as $skill_item) : ?>
+                                <li><?php echo esc_html($skill_item); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                    <div class="note"><?php echo esc_html($digital_skills['note']); ?></div>
                 </div>
                 <article class="download-card">
-                    <h3>Dokument PDF</h3>
-                    <p>Pełna treść wymagań kompetencji cyfrowych do pobrania.</p>
+                    <h3><?php echo esc_html($digital_skills['pdf_title']); ?></h3>
+                    <p><?php echo esc_html($digital_skills['pdf_text']); ?></p>
                     <?php
                     $lp_render_cta(
-                        'Pobierz PDF',
-                        'https://akademiata.pl/wp-content/uploads/2026/09/Kompetencje-cyftowe-ATA.pdf',
+                        $digital_skills['pdf_cta'],
+                        $digital_skills['pdf_url'],
                         'small',
                         ['target' => '_blank', 'rel' => 'noopener noreferrer']
                     );
