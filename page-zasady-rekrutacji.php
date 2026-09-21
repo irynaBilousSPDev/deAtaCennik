@@ -214,9 +214,25 @@ $lp_has_photo = static function ($image, $static_key) {
                     <span><?php echo esc_html($quick_nav['label_text']); ?></span>
                 <?php endif; ?>
             </div>
-            <?php if (!empty($quick_nav['links']) && is_array($quick_nav['links'])) : ?>
+            <?php
+            $qn_links = (!empty($quick_nav['links']) && is_array($quick_nav['links'])) ? $quick_nav['links'] : [];
+            $qn_has_kompetencje = false;
+            foreach ($qn_links as $link) {
+                if (($link['anchor'] ?? '') === '#kompetencje-cyfrowe') {
+                    $qn_has_kompetencje = true;
+                    break;
+                }
+            }
+            if (!$qn_has_kompetencje) {
+                $qn_links[] = [
+                    'text'   => 'Kompetencje cyfrowe',
+                    'anchor' => '#kompetencje-cyfrowe',
+                ];
+            }
+            ?>
+            <?php if ($qn_links !== []) : ?>
                 <div class="qn-links">
-                    <?php foreach ($quick_nav['links'] as $link) :
+                    <?php foreach ($qn_links as $link) :
                         $anchor = $link['anchor'] ?? '#';
                         $text = $link['text'] ?? '';
                         if ($text === '') {
@@ -954,6 +970,41 @@ $lp_has_photo = static function ($image, $static_key) {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+        </div>
+    </section>
+
+    <section class="section gray" id="kompetencje-cyfrowe">
+        <div class="watermark" aria-hidden="true">Kompetencje</div>
+        <div class="container">
+            <div class="eyebrow">Wymagania cyfrowe</div>
+            <h2 class="section-title">Kompetencje cyfrowe wymagane od kandydatów</h2>
+            <p class="intro">Kandydaci ubiegający się o przyjęcie na studia w ATA powinni posiadać kompetencje cyfrowe umożliwiające przejście procesu rekrutacyjnego w uczelnianym internetowym systemie rekrutacyjnym, a następnie rozpoczęcie kształcenia na wybranym kierunku studiów.</p>
+            <div class="docs-layout digital-skills">
+                <div>
+                    <p class="digital-skills__lead">Wymagana jest podstawowa umiejętność korzystania z komputera, w szczególności:</p>
+                    <ul class="checklist">
+                        <li>obsługa przeglądarek internetowych,</li>
+                        <li>obsługa poczty elektronicznej, edytorów tekstu, np. Microsoft Word oraz arkuszy kalkulacyjnych, np. Microsoft Excel,</li>
+                        <li>korzystanie z urządzeń peryferyjnych umożliwiających m.in. wydruk dokumentów,</li>
+                        <li>podstawowa obsługa oprogramowania graficznego umożliwiającego przygotowanie zdjęcia cyfrowego,</li>
+                        <li>korzystanie z narzędzi do wideokonferencji, np. Zoom,</li>
+                        <li>korzystanie z platform i narzędzi wykorzystywanych w kształceniu na odległość i pracy zespołowej, np. Microsoft Teams, Moodle.</li>
+                    </ul>
+                    <div class="note">Do udziału w kształceniu prowadzonym z wykorzystaniem metod i technik kształcenia na odległość niezbędny jest komputer wyposażony w kamerę i mikrofon oraz dostęp do Internetu.</div>
+                </div>
+                <article class="download-card">
+                    <h3>Dokument PDF</h3>
+                    <p>Pełna treść wymagań kompetencji cyfrowych do pobrania.</p>
+                    <?php
+                    $lp_render_cta(
+                        'Pobierz PDF',
+                        'https://akademiata.pl/wp-content/uploads/2026/09/Kompetencje-cyftowe-ATA.pdf',
+                        'small',
+                        ['target' => '_blank', 'rel' => 'noopener noreferrer']
+                    );
+                    ?>
+                </article>
+            </div>
         </div>
     </section>
 

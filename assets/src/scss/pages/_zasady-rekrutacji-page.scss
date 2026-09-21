@@ -1443,6 +1443,30 @@ body.page-template-page-zasady-rekrutacji {
     font-size: 1.4rem;
   }
 
+  .digital-skills {
+    align-items: start;
+
+    .digital-skills__lead {
+      margin: 0 0 18px;
+      color: #4e556d;
+      font-size: 1.6rem;
+    }
+
+    .checklist {
+      margin-bottom: 8px;
+    }
+
+    .note {
+      margin-top: 18px;
+    }
+
+    .download-card {
+      position: sticky;
+      top: calc(var(--rekr-scroll-offset, 150px) + 12px);
+      min-height: 0;
+    }
+  }
+
   .final-strip {
     background: linear-gradient(135deg, #101422, #20263f 72%, #303858);
     border-radius: 28px;
@@ -1538,6 +1562,10 @@ body.page-template-page-zasady-rekrutacji {
     .docs-layout,
     .foreign-apps {
       grid-template-columns: 1fr;
+    }
+
+    .digital-skills .download-card {
+      position: static;
     }
 
     .terms-grid,

@@ -45,7 +45,7 @@ Ten sam wzorzec plików. Pierwsza: **Studiuj to, co Cię kręci** — `page-stud
 
 ### Seria rekrutacji
 
-**Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ). Prefix ACF: `rekr_`. Defaults fallback: `configure/lp-defaults/zasady-rekrutacji/` (merge when ACF empty).
+**Zasady rekrutacji** — `page-zasady-rekrutacji.php` (kompletny hub rekrutacji: ścieżki PL/zagranica, terminy, dokumenty, pliki, kontakt, FAQ, kompetencje cyfrowe). Prefix ACF: `rekr_`. Defaults fallback: `configure/lp-defaults/zasady-rekrutacji/` (merge when ACF empty). Sekcja `#kompetencje-cyfrowe` jest na razie hardcoded (ostatnia na stronie + link w `qn-links`).
 
 ### O Uczelni
 
