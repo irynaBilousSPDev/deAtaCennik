@@ -1,0 +1,270 @@
+@use "../abstracts/variables" as vars;
+
+html.nl-popup-open,
+body.nl-popup-open {
+  overflow: hidden;
+}
+
+.nl-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+
+  &.is-open {
+    display: flex;
+  }
+}
+
+.nl-popup__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 20, 34, 0.38);
+}
+
+.nl-popup__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 100%);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: #fff;
+  border-radius: 32px;
+  padding: 36px 32px 28px;
+  box-shadow: 0 24px 60px rgba(16, 20, 34, 0.18);
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.nl-popup__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ececec;
+  border-radius: 50%;
+  background: #fff;
+  color: #1a1a1a;
+  font-size: 28px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover,
+  &:focus-visible {
+    border-color: vars.$primary;
+    color: vars.$primary;
+    outline: none;
+  }
+}
+
+.nl-popup__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 16px;
+  margin: 0 0 18px;
+  border-radius: 999px;
+  background: vars.$primary;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: vars.$weight-bold;
+}
+
+.nl-popup__title {
+  margin: 0 0 14px;
+  font-family: "Nunito Sans", sans-serif;
+  font-size: 3.2rem;
+  line-height: 1.15;
+  font-weight: vars.$weight-extra-bold;
+  color: #1a1a1a;
+}
+
+.nl-popup__amount {
+  color: vars.$primary;
+}
+
+.nl-popup__lead,
+.nl-popup__thanks {
+  margin: 0 0 22px;
+  color: #4a4a4a;
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+.nl-popup__thanks {
+  font-size: 1.7rem;
+  color: #1a1a1a;
+}
+
+.nl-popup__form {
+  text-align: left;
+}
+
+.nl-popup__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.nl-popup__field {
+  margin: 0 0 14px;
+
+  label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 1.3rem;
+    font-weight: vars.$weight-bold;
+    color: #1a1a1a;
+  }
+}
+
+.nl-popup__input,
+.nl-popup__cf7 input[type="text"],
+.nl-popup__cf7 input[type="email"],
+.nl-popup__cf7 input[type="tel"] {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #ececec;
+  border-radius: 999px;
+  background: #f7f7f7;
+  padding: 0 18px;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  outline: none;
+
+  &:focus {
+    border-color: vars.$primary;
+    background: #fff;
+  }
+
+  &::placeholder {
+    color: #b3b3b3;
+  }
+}
+
+.nl-popup__cf7 {
+  .wpcf7-form-control-wrap {
+    display: block;
+  }
+
+  .wpcf7-not-valid-tip {
+    margin-top: 6px;
+    font-size: 1.2rem;
+    color: #c0392b;
+  }
+
+  .wpcf7-not-valid {
+    border-color: #c0392b;
+  }
+
+  .wpcf7-response-output {
+    display: none;
+  }
+
+  .wpcf7-spinner {
+    display: none;
+  }
+}
+
+.nl-popup__check {
+  margin: 6px 0 18px;
+  text-align: left;
+  color: #4a4a4a;
+  font-size: 1.3rem;
+  line-height: 1.45;
+
+  .wpcf7-form-control-wrap,
+  .wpcf7-acceptance,
+  .wpcf7-list-item {
+    margin: 0;
+  }
+
+  .wpcf7-list-item {
+    display: block;
+    margin: 0;
+  }
+
+  label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-weight: vars.$weight-regular;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+  }
+
+  a {
+    color: vars.$primary;
+    text-decoration: underline;
+  }
+}
+
+.nl-popup__submit,
+.nl-popup__cf7 input.wpcf7-submit {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  background: vars.$primary;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: vars.$weight-extra-bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    filter: brightness(0.96);
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+}
+
+.nl-popup__promo {
+  margin: 18px 0 0;
+  color: #6b6b6b;
+  font-size: 1.25rem;
+  line-height: 1.45;
+
+  a {
+    color: vars.$primary;
+    font-weight: vars.$weight-bold;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 560px) {
+  .nl-popup__dialog {
+    padding: 28px 18px 22px;
+    border-radius: 24px;
+  }
+
+  .nl-popup__title {
+    font-size: 2.6rem;
+  }
+
+  .nl-popup__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

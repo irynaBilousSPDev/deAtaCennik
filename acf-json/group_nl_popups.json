@@ -1,0 +1,299 @@
+[
+    {
+        "key": "group_nl_popups",
+        "title": "Theme: Newsletter popupy",
+        "fields": [
+            {
+                "key": "field_nl_popups_tab_pg",
+                "label": "Podyplomowe (1000 zł)",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_nl_popup_pg",
+                "label": "Popup — studia podyplomowe",
+                "name": "nl_popup_pg",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_nl_popup_pg_enabled",
+                        "label": "Włącz popup",
+                        "name": "enabled",
+                        "type": "true_false",
+                        "ui": 1,
+                        "default_value": 0
+                    },
+                    {
+                        "key": "field_nl_popup_pg_form_id",
+                        "label": "Formularz Contact Form 7",
+                        "name": "form_id",
+                        "type": "select",
+                        "instructions": "Utwórz formularz z szablonu configure/cf7-templates/newsletter-pg.txt (Form + Mail + html_class: nl-popup-form).",
+                        "choices": {},
+                        "default_value": "",
+                        "allow_null": 1,
+                        "multiple": 0,
+                        "ui": 1,
+                        "ajax": 0,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_nl_popup_pg_badge",
+                        "label": "Badge",
+                        "name": "badge",
+                        "type": "text",
+                        "default_value": "Newsletter ATA"
+                    },
+                    {
+                        "key": "field_nl_popup_pg_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "Użyj {amount}, żeby podświetlić kwotę na pomarańczowo.",
+                        "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
+                    },
+                    {
+                        "key": "field_nl_popup_pg_amount",
+                        "label": "Kwota",
+                        "name": "amount",
+                        "type": "text",
+                        "default_value": "1000 zł"
+                    },
+                    {
+                        "key": "field_nl_popup_pg_lead",
+                        "label": "Tekst pod tytułem",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Zostaw swoje dane – skontaktujemy się z Tobą i przekażemy voucher na studia podyplomowe w ATA."
+                    },
+                    {
+                        "key": "field_nl_popup_pg_thank_you",
+                        "label": "Tekst podziękowania",
+                        "name": "thank_you",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 1000 zł zniżki na studia podyplomowe w ATA."
+                    },
+                    {
+                        "key": "field_nl_popup_pg_promo_note",
+                        "label": "Stopka promocji",
+                        "name": "promo_note",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Użyj {link} na miejsce tekstu linku.",
+                        "default_value": "Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}."
+                    },
+                    {
+                        "key": "field_nl_popup_pg_promo_link",
+                        "label": "Tekst linku w stopce",
+                        "name": "promo_link",
+                        "type": "text",
+                        "default_value": "TUTAJ"
+                    },
+                    {
+                        "key": "field_nl_popup_pg_promo_url",
+                        "label": "URL regulaminu promocji",
+                        "name": "promo_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_nl_popup_pg_delay",
+                        "label": "Opóźnienie otwarcia (sekundy)",
+                        "name": "delay",
+                        "type": "number",
+                        "default_value": 8,
+                        "min": 0,
+                        "step": 1
+                    },
+                    {
+                        "key": "field_nl_popup_pg_remember",
+                        "label": "Nie pokazuj ponownie (dni)",
+                        "name": "remember_days",
+                        "type": "number",
+                        "default_value": 14,
+                        "min": 1,
+                        "step": 1
+                    },
+                    {
+                        "key": "field_nl_popup_pg_show_on",
+                        "label": "Automatycznie pokazuj na",
+                        "name": "show_on",
+                        "type": "checkbox",
+                        "choices": {
+                            "singles": "Single oferty",
+                            "archives": "Archiwa / listing"
+                        },
+                        "default_value": [
+                            "singles"
+                        ],
+                        "layout": "vertical",
+                        "return_format": "value"
+                    }
+                ]
+            },
+            {
+                "key": "field_nl_popups_tab_mba",
+                "label": "MBA (2000 zł)",
+                "name": "",
+                "type": "tab",
+                "placement": "top",
+                "endpoint": 0
+            },
+            {
+                "key": "field_nl_popup_mba",
+                "label": "Popup — studia MBA",
+                "name": "nl_popup_mba",
+                "type": "group",
+                "layout": "block",
+                "sub_fields": [
+                    {
+                        "key": "field_nl_popup_mba_enabled",
+                        "label": "Włącz popup",
+                        "name": "enabled",
+                        "type": "true_false",
+                        "ui": 1,
+                        "default_value": 0
+                    },
+                    {
+                        "key": "field_nl_popup_mba_form_id",
+                        "label": "Formularz Contact Form 7",
+                        "name": "form_id",
+                        "type": "select",
+                        "instructions": "Utwórz formularz z szablonu configure/cf7-templates/newsletter-mba.txt (Form + Mail + html_class: nl-popup-form).",
+                        "choices": {},
+                        "default_value": "",
+                        "allow_null": 1,
+                        "multiple": 0,
+                        "ui": 1,
+                        "ajax": 0,
+                        "return_format": "value"
+                    },
+                    {
+                        "key": "field_nl_popup_mba_badge",
+                        "label": "Badge",
+                        "name": "badge",
+                        "type": "text",
+                        "default_value": "Newsletter ATA"
+                    },
+                    {
+                        "key": "field_nl_popup_mba_title",
+                        "label": "Tytuł",
+                        "name": "title",
+                        "type": "text",
+                        "instructions": "Użyj {amount}, żeby podświetlić kwotę na pomarańczowo.",
+                        "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
+                    },
+                    {
+                        "key": "field_nl_popup_mba_amount",
+                        "label": "Kwota",
+                        "name": "amount",
+                        "type": "text",
+                        "default_value": "2000 zł"
+                    },
+                    {
+                        "key": "field_nl_popup_mba_lead",
+                        "label": "Tekst pod tytułem",
+                        "name": "lead",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "default_value": "Zostaw swoje dane – skontaktujemy się z Tobą i przekażemy voucher na studia MBA w ATA."
+                    },
+                    {
+                        "key": "field_nl_popup_mba_thank_you",
+                        "label": "Tekst podziękowania",
+                        "name": "thank_you",
+                        "type": "textarea",
+                        "rows": 4,
+                        "new_lines": "",
+                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 2000 zł zniżki na studia MBA w ATA."
+                    },
+                    {
+                        "key": "field_nl_popup_mba_promo_note",
+                        "label": "Stopka promocji",
+                        "name": "promo_note",
+                        "type": "textarea",
+                        "rows": 3,
+                        "new_lines": "",
+                        "instructions": "Użyj {link} na miejsce tekstu linku.",
+                        "default_value": "Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}."
+                    },
+                    {
+                        "key": "field_nl_popup_mba_promo_link",
+                        "label": "Tekst linku w stopce",
+                        "name": "promo_link",
+                        "type": "text",
+                        "default_value": "TUTAJ"
+                    },
+                    {
+                        "key": "field_nl_popup_mba_promo_url",
+                        "label": "URL regulaminu promocji",
+                        "name": "promo_url",
+                        "type": "url",
+                        "default_value": ""
+                    },
+                    {
+                        "key": "field_nl_popup_mba_delay",
+                        "label": "Opóźnienie otwarcia (sekundy)",
+                        "name": "delay",
+                        "type": "number",
+                        "default_value": 8,
+                        "min": 0,
+                        "step": 1
+                    },
+                    {
+                        "key": "field_nl_popup_mba_remember",
+                        "label": "Nie pokazuj ponownie (dni)",
+                        "name": "remember_days",
+                        "type": "number",
+                        "default_value": 14,
+                        "min": 1,
+                        "step": 1
+                    },
+                    {
+                        "key": "field_nl_popup_mba_show_on",
+                        "label": "Automatycznie pokazuj na",
+                        "name": "show_on",
+                        "type": "checkbox",
+                        "choices": {
+                            "singles": "Single oferty",
+                            "archives": "Archiwa / listing"
+                        },
+                        "default_value": [
+                            "singles"
+                        ],
+                        "layout": "vertical",
+                        "return_format": "value"
+                    }
+                ]
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "options_page",
+                    "operator": "==",
+                    "value": "nl-popups"
+                }
+            ]
+        ],
+        "menu_order": 40,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "Popupy voucher newsletter — studia podyplomowe i MBA.",
+        "show_in_rest": 0,
+        "modified": 1758715200
+    }
+]

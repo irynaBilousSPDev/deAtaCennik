@@ -76,13 +76,28 @@ add_filter('acf/load_field_groups', 'akademiata_hide_button_component_on_posts')
 function akademiata_acf_load_cf7_forms($field) {
     $field['choices'] = array();
 
-    if (post_type_exists('wpcf7_contact_form')) {
+    if (class_exists('WPCF7_ContactForm') && method_exists('WPCF7_ContactForm', 'find')) {
+        $forms = WPCF7_ContactForm::find(array(
+            'posts_per_page' => -1,
+            'orderby'        => 'title',
+            'order'          => 'ASC',
+        ));
+        foreach ($forms as $form) {
+            if (!is_object($form) || !method_exists($form, 'id')) {
+                continue;
+            }
+            $id = (int) $form->id();
+            $title = method_exists($form, 'title') ? $form->title() : '';
+            $field['choices'][ $id ] = sprintf('%s (#%d)', $title !== '' ? $title : 'CF7', $id);
+        }
+    } elseif (post_type_exists('wpcf7_contact_form')) {
         $forms = get_posts(array(
             'post_type'        => 'wpcf7_contact_form',
             'posts_per_page'   => -1,
             'orderby'          => 'title',
             'order'            => 'ASC',
-            'suppress_filters' => false,
+            'suppress_filters' => true,
+            'post_status'      => 'any',
         ));
 
         foreach ($forms as $form) {
@@ -90,11 +105,20 @@ function akademiata_acf_load_cf7_forms($field) {
         }
     }
 
+    if ($field['choices'] === array()) {
+        $field['instructions'] = trim(
+            (string) ($field['instructions'] ?? '')
+            . ' Brak formularzy Contact Form 7 — utwórz je w Kontakt → Formularze kontaktowe (nie Forminator).'
+        );
+    }
+
     return $field;
 }
 
 add_filter('acf/load_field/key=field_pod_signup_form_id', 'akademiata_acf_load_cf7_forms');
 add_filter('acf/load_field/key=field_web_signup_form_id', 'akademiata_acf_load_cf7_forms');
+add_filter('acf/load_field/key=field_nl_popup_pg_form_id', 'akademiata_acf_load_cf7_forms');
+add_filter('acf/load_field/key=field_nl_popup_mba_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
  * Safe ACF WYSIWYG output for webinary sections.

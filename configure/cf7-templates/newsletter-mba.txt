@@ -1,0 +1,71 @@
+----- FORM -----
+<div class="nl-popup__form">
+<div class="nl-popup__row">
+<div class="nl-popup__field">
+<label for="nl-mba-imie">Imię*</label>
+[text* imie id:nl-mba-imie class:nl-popup__input placeholder "Anna"]
+</div>
+<div class="nl-popup__field">
+<label for="nl-mba-telefon">Numer telefonu*</label>
+[tel* telefon id:nl-mba-telefon class:nl-popup__input placeholder "600 000 000"]
+</div>
+</div>
+<div class="nl-popup__field">
+<label for="nl-mba-email">Adres e-mail*</label>
+[email* your-email id:nl-mba-email class:nl-popup__input placeholder "np. anna.kowalska@firma.pl"]
+</div>
+<div class="nl-popup__check">
+[acceptance* zgoda] Wyrażam zgodę na kontakt telefoniczny i mailowy w sprawie vouchera oraz na otrzymywanie newslettera ATA. <a href="https://chmurka.wseiz.pl/index.php/s/fbxaokaRNHsQeFN#pdfviewer" target="_blank" rel="noopener noreferrer">Informacja o przetwarzaniu danych</a>. [/acceptance]
+</div>
+[submit class:nl-popup__submit "Odbieram voucher →"]
+</div>
+
+
+----- MAIL 1 -----
+Odbiorca:
+[_site_admin_email]
+
+Nadawca:
+[_site_title] <wordpress@akademiata.pl>
+
+Temat:
+Voucher 2000 zł — studia MBA: [imie]
+
+Dodatkowe nagłówki:
+Reply-To: [_your_email]
+
+Treść:
+Nowe zgłoszenie po voucher 2000 zł na studia MBA.
+
+Imię: [imie]
+Telefon: [telefon]
+E-mail: [_your_email]
+
+--
+[_site_title] ([_site_url])
+
+
+----- MAIL 2 -----
+Odbiorca:
+[_your_email]
+
+Nadawca:
+[_site_title] <wordpress@akademiata.pl>
+
+Temat:
+Twój voucher 2000 zł na studia MBA w ATA
+
+Dodatkowe nagłówki:
+Reply-To: [_site_admin_email]
+
+Treść:
+Dzień dobry [imie],
+
+dziękujemy za zostawienie danych. Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 2000 zł zniżki na studia MBA w ATA.
+
+--
+[_site_title] ([_site_url])
+
+
+----- ADDITIONAL SETTINGS -----
+html_class: nl-popup-form

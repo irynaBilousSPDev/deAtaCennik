@@ -1,0 +1,71 @@
+----- FORM -----
+<div class="nl-popup__form">
+<div class="nl-popup__row">
+<div class="nl-popup__field">
+<label for="nl-pg-imie">Imię*</label>
+[text* imie id:nl-pg-imie class:nl-popup__input placeholder "Anna"]
+</div>
+<div class="nl-popup__field">
+<label for="nl-pg-telefon">Numer telefonu*</label>
+[tel* telefon id:nl-pg-telefon class:nl-popup__input placeholder "600 000 000"]
+</div>
+</div>
+<div class="nl-popup__field">
+<label for="nl-pg-email">Adres e-mail*</label>
+[email* your-email id:nl-pg-email class:nl-popup__input placeholder "np. anna.kowalska@firma.pl"]
+</div>
+<div class="nl-popup__check">
+[acceptance* zgoda] Wyrażam zgodę na kontakt telefoniczny i mailowy w sprawie vouchera oraz na otrzymywanie newslettera ATA. <a href="https://chmurka.wseiz.pl/index.php/s/fbxaokaRNHsQeFN#pdfviewer" target="_blank" rel="noopener noreferrer">Informacja o przetwarzaniu danych</a>. [/acceptance]
+</div>
+[submit class:nl-popup__submit "Odbieram voucher →"]
+</div>
+
+
+----- MAIL 1 -----
+Odbiorca:
+[_site_admin_email]
+
+Nadawca:
+[_site_title] <wordpress@akademiata.pl>
+
+Temat:
+Voucher 1000 zł — studia podyplomowe: [imie]
+
+Dodatkowe nagłówki:
+Reply-To: [_your_email]
+
+Treść:
+Nowe zgłoszenie po voucher 1000 zł na studia podyplomowe.
+
+Imię: [imie]
+Telefon: [telefon]
+E-mail: [_your_email]
+
+--
+[_site_title] ([_site_url])
+
+
+----- MAIL 2 -----
+Odbiorca:
+[_your_email]
+
+Nadawca:
+[_site_title] <wordpress@akademiata.pl>
+
+Temat:
+Twój voucher 1000 zł na studia podyplomowe w ATA
+
+Dodatkowe nagłówki:
+Reply-To: [_site_admin_email]
+
+Treść:
+Dzień dobry [imie],
+
+dziękujemy za zostawienie danych. Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 1000 zł zniżki na studia podyplomowe w ATA.
+
+--
+[_site_title] ([_site_url])
+
+
+----- ADDITIONAL SETTINGS -----
+html_class: nl-popup-form

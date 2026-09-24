@@ -23,10 +23,12 @@ alwaysApply: false
 | `lpRankingi` | `assets/src/js/lp-rankingi.js` |
 | `offerDailyInterest` | `assets/src/js/offer-daily-interest.js` |
 | `homeDecisionToday` | `assets/src/js/home-decision-today.js` |
+| `siteDailyVisitors` | `assets/src/js/site-daily-visitors.js` |
+| `newsletterPopup` | `assets/src/js/newsletter-popup.js` |
 
 `main.js` imports `_generalScripts.js` (sliders, tabs, YouTube) and `prices-calculator.js`.
 
-Conditional enqueue (`configure/js-css.php`, `configure/offer-daily-interest.php`): `ajaxFilter.js`, `ajaxSlider.js`, `lpRankingi.js`, `offerDailyInterest.js` (single bachelor/master with `register_url`).
+Conditional enqueue (`configure/js-css.php`, `configure/offer-daily-interest.php`, `configure/newsletter-popup.php`): `ajaxFilter.js`, `ajaxSlider.js`, `lpRankingi.js`, `offerDailyInterest.js` (single bachelor/master with `register_url`), `newsletterPopup.js` (when a newsletter popup is enabled).
 
 ## SCSS (`assets/src/scss/main.scss`)
 

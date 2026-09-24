@@ -496,6 +496,13 @@ if (function_exists('acf_add_options_page')) {
         'post_id' => 'contact_warsaw',
     ));
 
+    acf_add_options_sub_page(array(
+        'page_title' => 'Newsletter popupy',
+        'menu_title' => 'Newsletter popupy',
+        'parent_slug' => 'theme-general-settings',
+        'menu_slug' => 'nl-popups',
+    ));
+
 }
 
 
