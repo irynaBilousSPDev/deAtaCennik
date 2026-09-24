@@ -4,9 +4,10 @@ $config = get_query_var('nl_popup_config');
 $form_html = get_query_var('nl_popup_form');
 $auto = (bool) get_query_var('nl_popup_auto');
 
-if (!is_string($key) || $key === '' || !is_array($config) || !is_string($form_html) || $form_html === '') {
+if (!is_string($key) || $key === '' || !is_array($config)) {
     return;
 }
+$form_html = is_string($form_html) ? $form_html : '';
 
 $id = 'nl-popup-' . $key;
 $title_id = $id . '-title';
@@ -48,9 +49,11 @@ $remember = isset($config['remember_days']) ? max(1, (int) $config['remember_day
             <?php if (!empty($config['lead'])) : ?>
                 <p class="nl-popup__lead"><?php echo esc_html($config['lead']); ?></p>
             <?php endif; ?>
-            <div class="nl-popup__cf7">
-                <?php echo $form_html; ?>
-            </div>
+            <?php if ($form_html !== '') : ?>
+                <div class="nl-popup__cf7">
+                    <?php echo $form_html; ?>
+                </div>
+            <?php endif; ?>
         </div>
         <?php if (!empty($config['thank_you'])) : ?>
             <p class="nl-popup__thanks" hidden><?php echo esc_html($config['thank_you']); ?></p>

@@ -17,6 +17,7 @@ Update the relevant `.mdc` file(s) when you:
 - Change **build**, enqueue, or `assets/src` layout → `akademiata-assets.mdc`
 - Change **JSON-LD page templates**, LP schema, or `configure/schema/page*` → `akademiata-schema-pages.mdc`
 - Change **functions.php includes**, remotes, or global conventions → `akademiata-theme.mdc`
+- Comment / ACF-instruction style → `akademiata-comments.mdc` (do not weaken)
 
 Do **not** document removed features (e.g. deleted CPTs) as “do not restore” unless the user asks — describe what **exists now**.
 

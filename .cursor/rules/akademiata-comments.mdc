@@ -1,0 +1,25 @@
+---
+description: Short comments only — never tutorials in code or ACF JSON
+alwaysApply: true
+---
+
+# Comments and ACF copy
+
+This has been requested repeatedly. Do not regress.
+
+## Code (PHP, JS, SCSS, Apps Script, config)
+
+- One short line: what the block is for, or non-obvious business logic.
+- No tutorials, file paths, setup steps, or restating the next line.
+- Never address the editor (`you`, `your`, `if you want`, `as requested`).
+- Do not state the obvious.
+
+## ACF JSON / admin fields
+
+- `instructions`: empty, or max a few words (`{amount}` = kwota).
+- Never write how-to text (CF7 templates, `html_class`, Sync, paths, Forminator vs CF7).
+- `description` on groups: optional short label, not a guide.
+
+## Where to explain
+
+Chat only. Not in JSON, not in field instructions, not in long code comments.

@@ -53,7 +53,7 @@ function akademiata_nl_popup_get($key) {
     }
 
     $defaults = $defaults_all[$key];
-    $acf = function_exists('get_field') ? get_field('nl_popup_' . $key, 'option') : null;
+    $acf = akademiata_nl_popup_read_acf($key);
     if (!is_array($acf)) {
         return $defaults;
     }
@@ -65,7 +65,7 @@ function akademiata_nl_popup_get($key) {
         }
         $val = $acf[$field];
         if ($field === 'show_on') {
-            $out[$field] = (is_array($val) && $val !== []) ? $val : $default_val;
+            $out[$field] = (is_array($val) && $val !== []) ? array_values($val) : $default_val;
             continue;
         }
         if ($field === 'enabled') {
@@ -86,31 +86,69 @@ function akademiata_nl_popup_get($key) {
 
 /**
  * @param string $key pg|mba
+ * @return array<string, mixed>|null
+ */
+function akademiata_nl_popup_read_acf($key) {
+    $name = 'nl_popup_' . $key;
+    if (function_exists('get_field')) {
+        foreach (['option', 'options'] as $id) {
+            $acf = get_field($name, $id);
+            if (is_array($acf) && $acf !== []) {
+                return $acf;
+            }
+        }
+    }
+
+    $raw = get_option('options_' . $name);
+    return is_array($raw) && $raw !== [] ? $raw : null;
+}
+
+/**
+ * @param string $key pg|mba
+ */
+function akademiata_nl_popup_current_cpt() {
+    if (is_singular(['mba', 'postgraduate'])) {
+        return (string) get_post_type();
+    }
+    if (is_post_type_archive('mba') || is_post_type_archive('postgraduate')) {
+        return (string) get_query_var('post_type');
+    }
+    if (is_tax('city_pg_mba')) {
+        global $wp_query;
+        $type = is_object($wp_query) ? (string) $wp_query->get('post_type') : '';
+        return $type !== '' ? $type : 'postgraduate';
+    }
+    if (!is_page()) {
+        return '';
+    }
+    $page = get_queried_object();
+    $slug = ($page && !empty($page->post_name)) ? (string) $page->post_name : '';
+    if (in_array($slug, ['studia-mba', 'mba'], true)) {
+        return 'mba';
+    }
+    if (in_array($slug, ['studia-podyplomowe', 'postgraduate', 'post-graduate'], true)) {
+        return 'postgraduate';
+    }
+    return '';
+}
+
+/**
+ * @param string $key pg|mba
  */
 function akademiata_nl_popup_is_auto_context($key) {
     $config = akademiata_nl_popup_get($key);
-    $show_on = is_array($config['show_on'] ?? null) ? $config['show_on'] : [];
+    $show_on = is_array($config['show_on'] ?? null) ? $config['show_on'] : ['singles'];
     $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
 
-    if (in_array('singles', $show_on, true) && is_singular($cpt)) {
-        return true;
+    if (is_singular($cpt)) {
+        return in_array('singles', $show_on, true);
     }
 
     if (!in_array('archives', $show_on, true)) {
         return false;
     }
 
-    if (is_post_type_archive($cpt)) {
-        return true;
-    }
-
-    if (is_tax('city_pg_mba')) {
-        global $wp_query;
-        $queried_type = is_object($wp_query) ? (string) $wp_query->get('post_type') : '';
-        return $queried_type === $cpt;
-    }
-
-    return false;
+    return akademiata_nl_popup_current_cpt() === $cpt;
 }
 
 /**
@@ -118,11 +156,7 @@ function akademiata_nl_popup_is_auto_context($key) {
  */
 function akademiata_nl_popup_should_render($key) {
     $config = akademiata_nl_popup_get($key);
-    if (empty($config['enabled'])) {
-        return false;
-    }
-    $form_id = isset($config['form_id']) ? (int) $config['form_id'] : 0;
-    return $form_id > 0;
+    return !empty($config['enabled']) && akademiata_nl_popup_is_auto_context($key);
 }
 
 function akademiata_nl_popup_any_enabled() {
@@ -209,10 +243,7 @@ function akademiata_nl_popup_render() {
             continue;
         }
         $config = akademiata_nl_popup_get($key);
-        $form_html = akademiata_nl_popup_cf7_html((int) $config['form_id']);
-        if ($form_html === '') {
-            continue;
-        }
+        $form_html = akademiata_nl_popup_cf7_html((int) ($config['form_id'] ?? 0));
         $auto = akademiata_nl_popup_is_auto_context($key);
         set_query_var('nl_popup_key', $key);
         set_query_var('nl_popup_config', $config);
@@ -221,7 +252,7 @@ function akademiata_nl_popup_render() {
         get_template_part('template-parts/newsletter-popup');
     }
 }
-add_action('wp_footer', 'akademiata_nl_popup_render', 20);
+add_action('wp_footer', 'akademiata_nl_popup_render', 5);
 
 function akademiata_enqueue_newsletter_popup_script() {
     if (is_admin() || !akademiata_nl_popup_any_enabled()) {

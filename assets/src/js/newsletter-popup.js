@@ -169,4 +169,12 @@ document.addEventListener('wpcf7beforesubmit', (event) => {
     });
 });
 
-document.querySelectorAll('.nl-popup').forEach(bindPopup);
+function initNewsletterPopups() {
+    document.querySelectorAll('.nl-popup').forEach(bindPopup);
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNewsletterPopups);
+} else {
+    initNewsletterPopups();
+}

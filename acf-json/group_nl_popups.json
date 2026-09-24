@@ -31,7 +31,6 @@
                         "label": "Formularz Contact Form 7",
                         "name": "form_id",
                         "type": "select",
-                        "instructions": "Utwórz formularz z szablonu configure/cf7-templates/newsletter-pg.txt (Form + Mail + html_class: nl-popup-form).",
                         "choices": {},
                         "default_value": "",
                         "allow_null": 1,
@@ -52,7 +51,7 @@
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
-                        "instructions": "Użyj {amount}, żeby podświetlić kwotę na pomarańczowo.",
+                        "instructions": "{amount}",
                         "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
                     },
                     {
@@ -87,7 +86,7 @@
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Użyj {link} na miejsce tekstu linku.",
+                        "instructions": "{link}",
                         "default_value": "Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}."
                     },
                     {
@@ -124,12 +123,12 @@
                     },
                     {
                         "key": "field_nl_popup_pg_show_on",
-                        "label": "Automatycznie pokazuj na",
+                        "label": "Pokazuj na",
                         "name": "show_on",
                         "type": "checkbox",
                         "choices": {
-                            "singles": "Single oferty",
-                            "archives": "Archiwa / listing"
+                            "singles": "Single",
+                            "archives": "Listingi"
                         },
                         "default_value": [
                             "singles"
@@ -167,7 +166,6 @@
                         "label": "Formularz Contact Form 7",
                         "name": "form_id",
                         "type": "select",
-                        "instructions": "Utwórz formularz z szablonu configure/cf7-templates/newsletter-mba.txt (Form + Mail + html_class: nl-popup-form).",
                         "choices": {},
                         "default_value": "",
                         "allow_null": 1,
@@ -188,7 +186,7 @@
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
-                        "instructions": "Użyj {amount}, żeby podświetlić kwotę na pomarańczowo.",
+                        "instructions": "{amount}",
                         "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
                     },
                     {
@@ -223,7 +221,7 @@
                         "type": "textarea",
                         "rows": 3,
                         "new_lines": "",
-                        "instructions": "Użyj {link} na miejsce tekstu linku.",
+                        "instructions": "{link}",
                         "default_value": "Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}."
                     },
                     {
@@ -260,12 +258,12 @@
                     },
                     {
                         "key": "field_nl_popup_mba_show_on",
-                        "label": "Automatycznie pokazuj na",
+                        "label": "Pokazuj na",
                         "name": "show_on",
                         "type": "checkbox",
                         "choices": {
-                            "singles": "Single oferty",
-                            "archives": "Archiwa / listing"
+                            "singles": "Single",
+                            "archives": "Listingi"
                         },
                         "default_value": [
                             "singles"
@@ -292,8 +290,8 @@
         "instruction_placement": "label",
         "hide_on_screen": "",
         "active": true,
-        "description": "Popupy voucher newsletter — studia podyplomowe i MBA.",
+        "description": "",
         "show_in_rest": 0,
-        "modified": 1758715200
+        "modified": 1758717600
     }
 ]

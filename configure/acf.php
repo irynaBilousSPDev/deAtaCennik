@@ -105,13 +105,6 @@ function akademiata_acf_load_cf7_forms($field) {
         }
     }
 
-    if ($field['choices'] === array()) {
-        $field['instructions'] = trim(
-            (string) ($field['instructions'] ?? '')
-            . ' Brak formularzy Contact Form 7 — utwórz je w Kontakt → Formularze kontaktowe (nie Forminator).'
-        );
-    }
-
     return $field;
 }
 
