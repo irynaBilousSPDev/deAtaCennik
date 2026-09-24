@@ -51,8 +51,8 @@
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
-                        "instructions": "{amount}",
-                        "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
+                        "instructions": "{amount} {br}",
+                        "default_value": "Twoje {amount} zniżki{br}już na Ciebie czeka."
                     },
                     {
                         "key": "field_nl_popup_pg_amount",
@@ -77,7 +77,8 @@
                         "type": "textarea",
                         "rows": 4,
                         "new_lines": "",
-                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 1000 zł zniżki na studia podyplomowe w ATA."
+                        "instructions": "{amount}",
+                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na {amount} na studia podyplomowe w ATA."
                     },
                     {
                         "key": "field_nl_popup_pg_promo_note",
@@ -186,8 +187,8 @@
                         "label": "Tytuł",
                         "name": "title",
                         "type": "text",
-                        "instructions": "{amount}",
-                        "default_value": "Twoje {amount} zniżki już na Ciebie czeka."
+                        "instructions": "{amount} {br}",
+                        "default_value": "Twoje {amount} zniżki{br}już na Ciebie czeka."
                     },
                     {
                         "key": "field_nl_popup_mba_amount",
@@ -212,7 +213,8 @@
                         "type": "textarea",
                         "rows": 4,
                         "new_lines": "",
-                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 2000 zł zniżki na studia MBA w ATA."
+                        "instructions": "{amount}",
+                        "default_value": "Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na {amount} na studia MBA w ATA."
                     },
                     {
                         "key": "field_nl_popup_mba_promo_note",
@@ -292,6 +294,6 @@
         "active": true,
         "description": "",
         "show_in_rest": 0,
-        "modified": 1758717600
+        "modified": 1758718200
     }
 ]

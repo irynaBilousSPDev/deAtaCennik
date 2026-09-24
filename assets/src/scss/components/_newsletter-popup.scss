@@ -1,5 +1,19 @@
 @use "../abstracts/variables" as vars;
 
+$nl-accent: #ff6d2d;
+$nl-ink: #1f2024;
+$nl-muted: #4a4f5a;
+$nl-soft: #5a5f6a;
+$nl-line: #e6e8ec;
+$nl-border: #c9cdd4;
+$nl-close-border: #d5d8de;
+$nl-link: #0b63c8;
+$nl-link-hover: #084a96;
+$nl-req: #c2410c;
+$nl-ok: #17b94a;
+$nl-placeholder: #8a8f99;
+$nl-font: Montserrat, "Helvetica Neue", Helvetica, sans-serif;
+
 html.nl-popup-open,
 body.nl-popup-open {
   overflow: hidden;
@@ -12,225 +26,283 @@ body.nl-popup-open {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 24px 16px;
+  padding: 1.6rem;
+  font-family: $nl-font;
+  color: $nl-ink;
 
   &.is-open {
     display: flex;
+  }
+
+  a {
+    color: $nl-link;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      color: $nl-link-hover;
+    }
   }
 }
 
 .nl-popup__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(16, 20, 34, 0.38);
+  background: rgba(31, 32, 36, 0.55);
 }
 
 .nl-popup__dialog {
   position: relative;
   z-index: 1;
-  width: min(480px, 100%);
-  max-height: calc(100vh - 32px);
+  box-sizing: border-box;
+  width: 76rem;
+  max-width: 100%;
+  max-height: calc(100vh - 3.2rem);
   overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.8rem;
+  padding: 4rem 8rem;
   background: #fff;
-  border-radius: 32px;
-  padding: 36px 32px 28px;
-  box-shadow: 0 24px 60px rgba(16, 20, 34, 0.18);
-  color: #1a1a1a;
+  border-radius: 2.8rem;
+  color: $nl-ink;
   text-align: center;
+  letter-spacing: 0;
+}
+
+.nl-popup.is-thanks .nl-popup__dialog {
+  justify-content: center;
+  min-height: min(56rem, calc(100vh - 3.2rem));
+  padding: 5.6rem 8rem;
 }
 
 .nl-popup__close {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  border: 1px solid #ececec;
+  top: 2.4rem;
+  right: 2.4rem;
+  width: 4.4rem;
+  height: 4.4rem;
+  border: 0.15rem solid $nl-close-border;
   border-radius: 50%;
   background: #fff;
-  color: #1a1a1a;
-  font-size: 28px;
-  line-height: 1;
-  display: grid;
-  place-items: center;
+  color: $nl-ink;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   padding: 0;
 
+  svg {
+    display: block;
+  }
+
   &:hover,
   &:focus-visible {
-    border-color: vars.$primary;
-    color: vars.$primary;
-    outline: none;
+    border-color: $nl-accent;
+    color: $nl-accent;
   }
+}
+
+.nl-popup__offer,
+.nl-popup__head,
+.nl-popup__thanks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nl-popup__offer {
+  gap: 2.8rem;
+  width: 100%;
+}
+
+.nl-popup__head {
+  gap: 2.2rem;
+  width: 100%;
 }
 
 .nl-popup__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
-  padding: 6px 16px;
-  margin: 0 0 18px;
-  border-radius: 999px;
-  background: vars.$primary;
+  padding: 0.9rem 2rem;
+  border-radius: 5rem;
+  background: $nl-accent;
   color: #fff;
-  font-size: 1.3rem;
-  font-weight: vars.$weight-bold;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
-.nl-popup__title {
-  margin: 0 0 14px;
-  font-family: "Nunito Sans", sans-serif;
-  font-size: 3.2rem;
-  line-height: 1.15;
-  font-weight: vars.$weight-extra-bold;
-  color: #1a1a1a;
+h2.nl-popup__title {
+  margin: 0;
+  font-family: $nl-font;
+  font-size: 5.4rem;
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: $nl-ink;
 }
 
 .nl-popup__amount {
-  color: vars.$primary;
+  color: $nl-accent;
 }
 
-.nl-popup__lead,
-.nl-popup__thanks {
-  margin: 0 0 22px;
-  color: #4a4a4a;
-  font-size: 1.5rem;
-  line-height: 1.5;
-}
-
-.nl-popup__thanks {
+.nl-popup__lead {
+  margin: 0;
+  max-width: 50rem;
   font-size: 1.7rem;
-  color: #1a1a1a;
+  font-weight: 500;
+  line-height: 1.5;
+  color: $nl-muted;
 }
 
-.nl-popup__form {
+.nl-popup__form-wrap,
+.nl-popup__cf7,
+.nl-popup__form,
+.nl-popup__cf7 .wpcf7,
+.nl-popup__cf7 form {
+  width: 100%;
+}
+
+.nl-popup__form,
+.nl-popup__cf7 form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
   text-align: left;
+
+  .nl-popup__row {
+    order: 1;
+  }
+
+  > .nl-popup__field {
+    order: 2;
+  }
+
+  .nl-popup__submit-wrap,
+  > .nl-popup__submit,
+  > input.wpcf7-submit,
+  > button.wpcf7-submit {
+    order: 3;
+  }
+
+  .nl-popup__check {
+    order: 4;
+  }
+}
+
+.nl-popup__cf7 {
+  p {
+    margin: 0;
+  }
+
+  .wpcf7-form-control-wrap {
+    display: block;
+  }
+
+  .wpcf7-not-valid-tip {
+    margin-top: 0.6rem;
+    font-size: 1.2rem;
+    color: $nl-req;
+  }
+
+  .wpcf7-not-valid {
+    border-color: $nl-req;
+  }
+
+  .wpcf7-response-output,
+  .wpcf7-spinner {
+    display: none;
+  }
 }
 
 .nl-popup__row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem;
 }
 
 .nl-popup__field {
-  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+  margin: 0;
 
   label {
-    display: block;
-    margin: 0 0 6px;
+    margin: 0;
     font-size: 1.3rem;
-    font-weight: vars.$weight-bold;
-    color: #1a1a1a;
+    font-weight: 700;
+    color: $nl-ink;
+    text-align: left;
   }
+}
+
+.nl-popup__req {
+  color: $nl-req;
 }
 
 .nl-popup__input,
 .nl-popup__cf7 input[type="text"],
 .nl-popup__cf7 input[type="email"],
 .nl-popup__cf7 input[type="tel"] {
+  box-sizing: border-box;
   width: 100%;
-  height: 48px;
-  border: 1px solid #ececec;
-  border-radius: 999px;
-  background: #f7f7f7;
-  padding: 0 18px;
-  font-size: 1.5rem;
-  color: #1a1a1a;
+  height: 5.4rem;
+  border: 0.15rem solid $nl-border;
+  border-radius: 5rem;
+  background: #fff;
+  padding: 0 2.2rem;
+  font-family: $nl-font;
+  font-size: 1.6rem;
+  color: $nl-ink;
   outline: none;
 
   &:focus {
-    border-color: vars.$primary;
-    background: #fff;
+    border-color: $nl-accent;
   }
 
   &::placeholder {
-    color: #b3b3b3;
+    color: $nl-placeholder;
   }
 }
 
-.nl-popup__cf7 {
-  .wpcf7-form-control-wrap {
-    display: block;
-  }
-
-  .wpcf7-not-valid-tip {
-    margin-top: 6px;
-    font-size: 1.2rem;
-    color: #c0392b;
-  }
-
-  .wpcf7-not-valid {
-    border-color: #c0392b;
-  }
-
-  .wpcf7-response-output {
-    display: none;
-  }
-
-  .wpcf7-spinner {
-    display: none;
-  }
-}
-
-.nl-popup__check {
-  margin: 6px 0 18px;
-  text-align: left;
-  color: #4a4a4a;
-  font-size: 1.3rem;
-  line-height: 1.45;
-
-  .wpcf7-form-control-wrap,
-  .wpcf7-acceptance,
-  .wpcf7-list-item {
-    margin: 0;
-  }
-
-  .wpcf7-list-item {
-    display: block;
-    margin: 0;
-  }
-
-  label {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-weight: vars.$weight-regular;
-    cursor: pointer;
-  }
-
-  input[type="checkbox"] {
-    flex: 0 0 auto;
-    width: 18px;
-    height: 18px;
-    margin-top: 2px;
-  }
-
-  a {
-    color: vars.$primary;
-    text-decoration: underline;
-  }
+.nl-popup__submit-wrap {
+  padding-top: 0.4rem;
 }
 
 .nl-popup__submit,
-.nl-popup__cf7 input.wpcf7-submit {
+.nl-popup__cf7 input.wpcf7-submit,
+.nl-popup__cf7 button.wpcf7-submit {
+  box-sizing: border-box;
   width: 100%;
-  min-height: 52px;
+  height: 5.8rem;
   border: 0;
-  border-radius: 999px;
-  background: vars.$primary;
+  border-radius: 5rem;
+  background: $nl-accent;
   color: #fff;
-  font-size: 1.5rem;
-  font-weight: vars.$weight-extra-bold;
-  letter-spacing: 0.04em;
+  font-family: $nl-font;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 0 2.4rem;
+
+  svg {
+    flex: 0 0 auto;
+    display: block;
+  }
 
   &:hover,
   &:focus-visible {
     filter: brightness(0.96);
-    outline: none;
   }
 
   &:disabled {
@@ -239,32 +311,241 @@ body.nl-popup-open {
   }
 }
 
-.nl-popup__promo {
-  margin: 18px 0 0;
-  color: #6b6b6b;
-  font-size: 1.25rem;
-  line-height: 1.45;
+.nl-popup__check {
+  margin: 1.2rem 0 0;
+  color: $nl-muted;
+  font-size: 1.3rem;
+  line-height: 1.5;
 
-  a {
-    color: vars.$primary;
-    font-weight: vars.$weight-bold;
-    text-decoration: none;
-    text-transform: uppercase;
+  .wpcf7-form-control-wrap,
+  .wpcf7-acceptance,
+  .wpcf7-list-item {
+    margin: 0;
+    display: block;
+  }
+
+  label {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    font-weight: 400;
+    color: $nl-muted;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    margin: 0.1rem 0 0;
+    accent-color: $nl-accent;
   }
 }
 
-@media (max-width: 560px) {
-  .nl-popup__dialog {
-    padding: 28px 18px 22px;
-    border-radius: 24px;
+.nl-popup__promo {
+  width: 100%;
+  margin: -1.2rem 0 0;
+  padding-top: 1.6rem;
+  border-top: 0.1rem solid $nl-line;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: $nl-soft;
+  text-align: left;
+
+  a {
+    font-weight: 700;
+  }
+}
+
+.nl-popup__thanks {
+  gap: 2rem;
+  width: 100%;
+  text-align: center;
+}
+
+.nl-popup__thanks-icon {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  background: $nl-ok;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    display: block;
+  }
+}
+
+h2.nl-popup__thanks-title {
+  margin: 0;
+  font-family: $nl-font;
+  font-size: 4.6rem;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: $nl-ink;
+}
+
+.nl-popup__thanks-text {
+  margin: 0;
+  max-width: 52rem;
+  font-size: 1.7rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: $nl-muted;
+}
+
+.nl-popup__thanks-amount {
+  color: $nl-ink;
+  font-weight: 800;
+}
+
+.nl-popup__thanks-cta {
+  margin-top: 0.8rem;
+  box-sizing: border-box;
+  height: 5.8rem;
+  padding: 0 3.2rem;
+  border-radius: 5rem;
+  background: $nl-accent;
+  color: #fff !important;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+
+  &:hover,
+  &:focus-visible {
+    color: #fff !important;
+    filter: brightness(0.96);
   }
 
-  .nl-popup__title {
-    font-size: 2.6rem;
+  svg {
+    display: block;
+  }
+}
+
+@media (max-width: 75.9rem) {
+  .nl-popup__dialog,
+  .nl-popup.is-thanks .nl-popup__dialog {
+    padding: 2.4rem 2.2rem;
+    border-radius: 2.4rem;
+    gap: 2rem;
+    min-height: 0;
+  }
+
+  .nl-popup__offer {
+    gap: 2rem;
+  }
+
+  .nl-popup__close {
+    top: 1.2rem;
+    right: 1.2rem;
+  }
+
+  .nl-popup__head {
+    gap: 1.4rem;
+    padding-top: 0.4rem;
+  }
+
+  .nl-popup__badge {
+    padding: 0.8rem 1.6rem;
+    font-size: 1.3rem;
+    letter-spacing: 0;
+  }
+
+  h2.nl-popup__title {
+    font-size: 3rem;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+
+    br {
+      display: none;
+    }
+  }
+
+  .nl-popup__lead {
+    max-width: none;
+    font-size: 1.4rem;
+  }
+
+  .nl-popup__form,
+  .nl-popup__cf7 form {
+    gap: 1.2rem;
   }
 
   .nl-popup__row {
-    grid-template-columns: 1fr;
-    gap: 0;
+    gap: 1rem;
+  }
+
+  .nl-popup__input,
+  .nl-popup__cf7 input[type="text"],
+  .nl-popup__cf7 input[type="tel"] {
+    height: 5rem;
+    padding: 0 1.8rem;
+  }
+
+  .nl-popup__cf7 input[type="email"] {
+    height: 5rem;
+    padding: 0 2.2rem;
+  }
+
+  .nl-popup__submit-wrap {
+    padding-top: 0.2rem;
+  }
+
+  .nl-popup__submit,
+  .nl-popup__cf7 input.wpcf7-submit,
+  .nl-popup__cf7 button.wpcf7-submit {
+    height: 5.4rem;
+    font-size: 1.5rem;
+  }
+
+  .nl-popup__check {
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+  }
+
+  .nl-popup__promo {
+    margin-top: -0.8rem;
+  }
+
+  .nl-popup__thanks {
+    gap: 1.6rem;
+  }
+
+  .nl-popup__thanks-icon {
+    width: 6.4rem;
+    height: 6.4rem;
+
+    svg {
+      width: 3.2rem;
+      height: 3.2rem;
+    }
+  }
+
+  h2.nl-popup__thanks-title {
+    font-size: 2.8rem;
+
+    br {
+      display: none;
+    }
+  }
+
+  .nl-popup__thanks-text {
+    font-size: 1.4rem;
+  }
+
+  .nl-popup__thanks-cta {
+    width: 100%;
+    height: 5.4rem;
+    margin-top: 0.4rem;
+    font-size: 1.5rem;
   }
 }

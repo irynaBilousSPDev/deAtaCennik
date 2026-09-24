@@ -2,22 +2,24 @@
 <div class="nl-popup__form">
 <div class="nl-popup__row">
 <div class="nl-popup__field">
-<label for="nl-mba-imie">Imię*</label>
-[text* imie id:nl-mba-imie class:nl-popup__input placeholder "Anna"]
+<label for="nl-mba-imie">Imię <span class="nl-popup__req" aria-hidden="true">*</span></label>
+[text* imie id:nl-mba-imie class:nl-popup__input placeholder "np. Anna"]
 </div>
 <div class="nl-popup__field">
-<label for="nl-mba-telefon">Numer telefonu*</label>
-[tel* telefon id:nl-mba-telefon class:nl-popup__input placeholder "600 000 000"]
+<label for="nl-mba-telefon">Numer telefonu <span class="nl-popup__req" aria-hidden="true">*</span></label>
+[tel* telefon id:nl-mba-telefon class:nl-popup__input placeholder "np. 600 000 000"]
 </div>
 </div>
 <div class="nl-popup__field">
-<label for="nl-mba-email">Adres e-mail*</label>
+<label for="nl-mba-email">Adres e-mail <span class="nl-popup__req" aria-hidden="true">*</span></label>
 [email* your-email id:nl-mba-email class:nl-popup__input placeholder "np. anna.kowalska@firma.pl"]
 </div>
-<div class="nl-popup__check">
-[acceptance* zgoda] Wyrażam zgodę na kontakt telefoniczny i mailowy w sprawie vouchera oraz na otrzymywanie newslettera ATA. <a href="https://chmurka.wseiz.pl/index.php/s/fbxaokaRNHsQeFN#pdfviewer" target="_blank" rel="noopener noreferrer">Informacja o przetwarzaniu danych</a>. [/acceptance]
+<div class="nl-popup__submit-wrap">
+[submit class:nl-popup__submit "Odbieram voucher"]
 </div>
-[submit class:nl-popup__submit "Odbieram voucher →"]
+<div class="nl-popup__check">
+[acceptance zgoda] Wyrażam zgodę na kontakt telefoniczny i mailowy w sprawie vouchera oraz na otrzymywanie newslettera ATA. <a href="https://akademiata.pl/polityka-prywatnosci/">Informacja o przetwarzaniu danych</a>. [/acceptance]
+</div>
 </div>
 
 

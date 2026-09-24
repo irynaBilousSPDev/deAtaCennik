@@ -77,17 +77,48 @@ function closePopup(root, remember) {
     }
 }
 
+const SUBMIT_ARROW =
+    '<svg class="nl-popup__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>';
+
+function submitLabel(btn, text) {
+    const label = btn.querySelector('.nl-popup__submit-label');
+    if (label) {
+        label.textContent = text;
+        return;
+    }
+    if ('value' in btn) {
+        btn.value = text;
+    }
+}
+
+function enhanceSubmit(input) {
+    if (!input || input.dataset.nlEnhanced === '1' || input.tagName === 'BUTTON') {
+        return input;
+    }
+    const raw = String(input.value || '').replace(/\s*→\s*$/, '').trim() || 'Odbieram voucher';
+    const btn = document.createElement('button');
+    btn.type = 'submit';
+    btn.className = input.className;
+    btn.dataset.nlEnhanced = '1';
+    btn.dataset.nlLabel = raw;
+    btn.innerHTML = '<span class="nl-popup__submit-label"></span>' + SUBMIT_ARROW;
+    btn.querySelector('.nl-popup__submit-label').textContent = raw;
+    input.replaceWith(btn);
+    return btn;
+}
+
 function markSubmitted(root) {
     const id = root.getAttribute('data-nl-popup') || '';
     writeState(id, { submitted: true, closedAt: Date.now() });
-    const formWrap = root.querySelector('.nl-popup__form-wrap');
+    const offer = root.querySelector('.nl-popup__offer');
     const thanks = root.querySelector('.nl-popup__thanks');
-    if (formWrap) {
-        formWrap.hidden = true;
+    if (offer) {
+        offer.hidden = true;
     }
     if (thanks) {
         thanks.hidden = false;
     }
+    root.classList.add('is-thanks');
 }
 
 function bindPopup(root) {
@@ -98,6 +129,13 @@ function bindPopup(root) {
 
     root.querySelectorAll('[data-nl-close]').forEach((el) => {
         el.addEventListener('click', () => closePopup(root, true));
+    });
+    root.querySelectorAll('.nl-popup__cf7 input.wpcf7-submit').forEach(enhanceSubmit);
+    root.querySelectorAll('.nl-popup__field label').forEach((label) => {
+        if (label.querySelector('.nl-popup__req')) {
+            return;
+        }
+        label.innerHTML = label.innerHTML.replace(/\s*\*\s*$/, ' <span class="nl-popup__req" aria-hidden="true">*</span>');
     });
 
     if (auto && !isBlocked(id, rememberDays)) {
@@ -148,11 +186,15 @@ document.addEventListener('wpcf7beforesubmit', (event) => {
         return;
     }
     const btn = form.querySelector('.wpcf7-submit');
-    if (btn && !btn.getAttribute('data-nl-label')) {
-        btn.setAttribute('data-nl-label', btn.value);
-        btn.value = 'Wysyłanie…';
-        btn.disabled = true;
+    if (!btn) {
+        return;
     }
+    if (!btn.getAttribute('data-nl-label')) {
+        const current = btn.querySelector('.nl-popup__submit-label');
+        btn.setAttribute('data-nl-label', current ? current.textContent : btn.value);
+    }
+    submitLabel(btn, 'Wysyłanie…');
+    btn.disabled = true;
 });
 
 ['wpcf7mailsent', 'wpcf7mailfailed', 'wpcf7invalid', 'wpcf7spam', 'wpcf7failed', 'wpcf7aborted', 'wpcf7submit'].forEach((type) => {
@@ -164,7 +206,7 @@ document.addEventListener('wpcf7beforesubmit', (event) => {
         const btn = form.querySelector('.wpcf7-submit');
         if (btn) {
             btn.disabled = false;
-            btn.value = btn.getAttribute('data-nl-label') || btn.value;
+            submitLabel(btn, btn.getAttribute('data-nl-label') || btn.value || 'Odbieram voucher');
         }
     });
 });

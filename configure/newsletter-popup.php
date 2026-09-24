@@ -13,10 +13,10 @@ function akademiata_nl_popup_defaults() {
             'enabled'       => 0,
             'form_id'       => '',
             'badge'         => 'Newsletter ATA',
-            'title'         => 'Twoje {amount} zniżki już na Ciebie czeka.',
+            'title'         => 'Twoje {amount} zniżki{br}już na Ciebie czeka.',
             'amount'        => '1000 zł',
             'lead'          => 'Zostaw swoje dane – skontaktujemy się z Tobą i przekażemy voucher na studia podyplomowe w ATA.',
-            'thank_you'     => 'Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 1000 zł zniżki na studia podyplomowe w ATA.',
+            'thank_you'     => 'Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na {amount} na studia podyplomowe w ATA.',
             'promo_note'    => 'Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}.',
             'promo_link'    => 'TUTAJ',
             'promo_url'     => '',
@@ -28,10 +28,10 @@ function akademiata_nl_popup_defaults() {
             'enabled'       => 0,
             'form_id'       => '',
             'badge'         => 'Newsletter ATA',
-            'title'         => 'Twoje {amount} zniżki już na Ciebie czeka.',
+            'title'         => 'Twoje {amount} zniżki{br}już na Ciebie czeka.',
             'amount'        => '2000 zł',
             'lead'          => 'Zostaw swoje dane – skontaktujemy się z Tobą i przekażemy voucher na studia MBA w ATA.',
-            'thank_you'     => 'Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na 2000 zł zniżki na studia MBA w ATA.',
+            'thank_you'     => 'Wkrótce skontaktujemy się z Tobą telefonicznie lub mailowo i przekażemy voucher na {amount} na studia MBA w ATA.',
             'promo_note'    => 'Promocja nie łączy się z innymi promocjami i rabatami. Szczegóły i warunki promocji dostępne są {link}.',
             'promo_link'    => 'TUTAJ',
             'promo_url'     => '',
@@ -171,12 +171,54 @@ function akademiata_nl_popup_any_enabled() {
 function akademiata_nl_popup_format_title($text, $amount) {
     $text = is_string($text) ? $text : '';
     $amount = is_string($amount) ? trim($amount) : '';
+    if ($text !== '' && strpos($text, '{br}') === false && preg_match('/\sjuż na Ciebie/u', $text)) {
+        $text = preg_replace('/\s+(już na Ciebie)/u', '{br}$1', $text, 1);
+    }
     $safe = esc_html($text);
-    if ($amount === '' || strpos($text, '{amount}') === false) {
+    if ($amount !== '' && strpos($text, '{amount}') !== false) {
+        $safe = str_replace('{amount}', '<span class="nl-popup__amount">' . esc_html($amount) . '</span>', $safe);
+    }
+    return str_replace('{br}', '<br>', $safe);
+}
+
+/**
+ * @param string $text
+ * @param string $amount
+ * @return string
+ */
+function akademiata_nl_popup_format_thanks($text, $amount) {
+    $text = is_string($text) ? trim($text) : '';
+    $amount = is_string($amount) ? trim($amount) : '';
+    if ($text === '') {
+        return '';
+    }
+    $safe = esc_html($text);
+    if ($amount === '') {
         return $safe;
     }
-    $chip = '<span class="nl-popup__amount">' . esc_html($amount) . '</span>';
-    return str_replace('{amount}', $chip, $safe);
+    $bold = '<strong class="nl-popup__thanks-amount">' . esc_html($amount) . ' zniżki</strong>';
+    if (strpos($text, '{amount}') !== false) {
+        return str_replace('{amount}', $bold, $safe);
+    }
+    $phrase = $amount . ' zniżki';
+    if (strpos($text, $phrase) !== false) {
+        return str_replace(esc_html($phrase), $bold, $safe);
+    }
+    return str_replace(esc_html($amount), '<strong class="nl-popup__thanks-amount">' . esc_html($amount) . '</strong>', $safe);
+}
+
+/**
+ * @param string $key pg|mba
+ * @return string
+ */
+function akademiata_nl_popup_browse_url($key) {
+    $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
+    $link = get_post_type_archive_link($cpt);
+    if (is_string($link) && $link !== '') {
+        return $link;
+    }
+    $slug = $key === 'mba' ? 'studia-mba' : 'studia-podyplomowe';
+    return home_url('/' . $slug . '/');
 }
 
 /**
