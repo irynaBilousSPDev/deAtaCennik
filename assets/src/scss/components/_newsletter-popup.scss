@@ -55,16 +55,17 @@ body.nl-popup-open {
   position: relative;
   z-index: 1;
   box-sizing: border-box;
-  width: 76rem;
-  max-width: 100%;
+  width: 40rem;
+  max-width: min(40rem, calc(100vw - 2.4rem));
+  flex: 0 1 auto;
   max-height: calc(100vh - 3.2rem);
   overflow: auto;
   display: flex;
   flex-direction: column;
-  gap: 2.8rem;
-  padding: 4rem 8rem;
+  gap: 1.3rem;
+  padding: 2rem 2.2rem 1.6rem;
   background: #fff;
-  border-radius: 2.8rem;
+  border-radius: 1.8rem;
   color: $nl-ink;
   text-align: center;
   letter-spacing: 0;
@@ -72,16 +73,16 @@ body.nl-popup-open {
 
 .nl-popup.is-thanks .nl-popup__dialog {
   justify-content: center;
-  min-height: min(56rem, calc(100vh - 3.2rem));
-  padding: 5.6rem 8rem;
+  min-height: 0;
+  padding: 2.4rem 2.2rem;
 }
 
 .nl-popup__close {
   position: absolute;
-  top: 2.4rem;
-  right: 2.4rem;
-  width: 4.4rem;
-  height: 4.4rem;
+  top: 1rem;
+  right: 1rem;
+  width: 2.8rem;
+  height: 2.8rem;
   border: 0.15rem solid $nl-close-border;
   border-radius: 50%;
   background: #fff;
@@ -94,6 +95,8 @@ body.nl-popup-open {
 
   svg {
     display: block;
+    width: 1.4rem;
+    height: 1.4rem;
   }
 
   &:hover,
@@ -112,12 +115,12 @@ body.nl-popup-open {
 }
 
 .nl-popup__offer {
-  gap: 2.8rem;
+  gap: 1.3rem;
   width: 100%;
 }
 
 .nl-popup__head {
-  gap: 2.2rem;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -125,11 +128,11 @@ body.nl-popup-open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 2rem;
+  padding: 0.4rem 1rem;
   border-radius: 5rem;
   background: $nl-accent;
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -138,10 +141,11 @@ body.nl-popup-open {
 h2.nl-popup__title {
   margin: 0;
   font-family: $nl-font;
-  font-size: 5.4rem;
+  font-size: 2.4rem;
   font-weight: 800;
-  line-height: 1.06;
-  letter-spacing: -0.035em;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  word-spacing: 0.04em;
   color: $nl-ink;
 }
 
@@ -151,10 +155,10 @@ h2.nl-popup__title {
 
 .nl-popup__lead {
   margin: 0;
-  max-width: 50rem;
-  font-size: 1.7rem;
+  max-width: 26rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.45;
   color: $nl-muted;
 }
 
@@ -170,7 +174,7 @@ h2.nl-popup__title {
 .nl-popup__cf7 form {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 0.8rem;
   text-align: left;
 
   .nl-popup__row {
@@ -221,19 +225,19 @@ h2.nl-popup__title {
 .nl-popup__row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.6rem;
+  gap: 0.8rem;
 }
 
 .nl-popup__field {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.4rem;
   min-width: 0;
   margin: 0;
 
   label {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: $nl-ink;
     text-align: left;
@@ -250,13 +254,13 @@ h2.nl-popup__title {
 .nl-popup__cf7 input[type="tel"] {
   box-sizing: border-box;
   width: 100%;
-  height: 5.4rem;
+  height: 3.6rem;
   border: 0.15rem solid $nl-border;
   border-radius: 5rem;
   background: #fff;
-  padding: 0 2.2rem;
+  padding: 0 1.2rem;
   font-family: $nl-font;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: $nl-ink;
   outline: none;
 
@@ -270,7 +274,7 @@ h2.nl-popup__title {
 }
 
 .nl-popup__submit-wrap {
-  padding-top: 0.4rem;
+  padding-top: 0.2rem;
 }
 
 .nl-popup__submit,
@@ -278,13 +282,13 @@ h2.nl-popup__title {
 .nl-popup__cf7 button.wpcf7-submit {
   box-sizing: border-box;
   width: 100%;
-  height: 5.8rem;
+  height: 3.6rem;
   border: 0;
   border-radius: 5rem;
   background: $nl-accent;
   color: #fff;
   font-family: $nl-font;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -292,12 +296,14 @@ h2.nl-popup__title {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
-  padding: 0 2.4rem;
+  gap: 0.8rem;
+  padding: 0 1.6rem;
 
   svg {
     flex: 0 0 auto;
     display: block;
+    width: 1.4rem;
+    height: 1.4rem;
   }
 
   &:hover,
@@ -312,9 +318,9 @@ h2.nl-popup__title {
 }
 
 .nl-popup__check {
-  margin: 1.2rem 0 0;
+  margin: 0.4rem 0 0;
   color: $nl-muted;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   line-height: 1.5;
 
   .wpcf7-form-control-wrap,
@@ -326,7 +332,7 @@ h2.nl-popup__title {
 
   label {
     display: flex;
-    gap: 1.2rem;
+    gap: 0.8rem;
     align-items: flex-start;
     font-weight: 400;
     color: $nl-muted;
@@ -335,8 +341,8 @@ h2.nl-popup__title {
 
   input[type="checkbox"] {
     flex: 0 0 auto;
-    width: 2rem;
-    height: 2rem;
+    width: 1.4rem;
+    height: 1.4rem;
     margin: 0.1rem 0 0;
     accent-color: $nl-accent;
   }
@@ -344,10 +350,10 @@ h2.nl-popup__title {
 
 .nl-popup__promo {
   width: 100%;
-  margin: -1.2rem 0 0;
-  padding-top: 1.6rem;
+  margin: -0.4rem 0 0;
+  padding-top: 0.8rem;
   border-top: 0.1rem solid $nl-line;
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: $nl-soft;
   text-align: left;
@@ -358,14 +364,14 @@ h2.nl-popup__title {
 }
 
 .nl-popup__thanks {
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
   text-align: center;
 }
 
 .nl-popup__thanks-icon {
-  width: 8rem;
-  height: 8rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   background: $nl-ok;
   color: #fff;
@@ -375,25 +381,27 @@ h2.nl-popup__title {
 
   svg {
     display: block;
+    width: 2rem;
+    height: 2rem;
   }
 }
 
 h2.nl-popup__thanks-title {
   margin: 0;
   font-family: $nl-font;
-  font-size: 4.6rem;
+  font-size: 2rem;
   font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
   color: $nl-ink;
 }
 
 .nl-popup__thanks-text {
   margin: 0;
-  max-width: 52rem;
-  font-size: 1.7rem;
+  max-width: 26rem;
+  font-size: 1.2rem;
   font-weight: 500;
-  line-height: 1.5;
+  line-height: 1.45;
   color: $nl-muted;
 }
 
@@ -403,14 +411,14 @@ h2.nl-popup__thanks-title {
 }
 
 .nl-popup__thanks-cta {
-  margin-top: 0.8rem;
+  margin-top: 0.4rem;
   box-sizing: border-box;
-  height: 5.8rem;
-  padding: 0 3.2rem;
+  height: 3.6rem;
+  padding: 0 1.8rem;
   border-radius: 5rem;
   background: $nl-accent;
   color: #fff !important;
-  font-size: 1.6rem;
+  font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -418,7 +426,7 @@ h2.nl-popup__thanks-title {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
+  gap: 0.8rem;
 
   &:hover,
   &:focus-visible {
@@ -431,121 +439,24 @@ h2.nl-popup__thanks-title {
   }
 }
 
-@media (max-width: 75.9rem) {
-  .nl-popup__dialog,
-  .nl-popup.is-thanks .nl-popup__dialog {
-    padding: 2.4rem 2.2rem;
-    border-radius: 2.4rem;
-    gap: 2rem;
-    min-height: 0;
+@media (max-width: 37.9rem) {
+  .nl-popup {
+    padding: 1.2rem;
   }
 
-  .nl-popup__offer {
-    gap: 2rem;
-  }
-
-  .nl-popup__close {
-    top: 1.2rem;
-    right: 1.2rem;
-  }
-
-  .nl-popup__head {
-    gap: 1.4rem;
-    padding-top: 0.4rem;
-  }
-
-  .nl-popup__badge {
-    padding: 0.8rem 1.6rem;
-    font-size: 1.3rem;
-    letter-spacing: 0;
-  }
-
-  h2.nl-popup__title {
-    font-size: 3rem;
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-
-    br {
-      display: none;
-    }
-  }
-
-  .nl-popup__lead {
-    max-width: none;
-    font-size: 1.4rem;
-  }
-
-  .nl-popup__form,
-  .nl-popup__cf7 form {
-    gap: 1.2rem;
-  }
-
-  .nl-popup__row {
-    gap: 1rem;
+  h2.nl-popup__title br,
+  h2.nl-popup__thanks-title br {
+    display: none;
   }
 
   .nl-popup__input,
   .nl-popup__cf7 input[type="text"],
+  .nl-popup__cf7 input[type="email"],
   .nl-popup__cf7 input[type="tel"] {
-    height: 5rem;
-    padding: 0 1.8rem;
-  }
-
-  .nl-popup__cf7 input[type="email"] {
-    height: 5rem;
-    padding: 0 2.2rem;
-  }
-
-  .nl-popup__submit-wrap {
-    padding-top: 0.2rem;
-  }
-
-  .nl-popup__submit,
-  .nl-popup__cf7 input.wpcf7-submit,
-  .nl-popup__cf7 button.wpcf7-submit {
-    height: 5.4rem;
-    font-size: 1.5rem;
-  }
-
-  .nl-popup__check {
-    margin-top: 0.8rem;
-    font-size: 1.2rem;
-  }
-
-  .nl-popup__promo {
-    margin-top: -0.8rem;
-  }
-
-  .nl-popup__thanks {
-    gap: 1.6rem;
-  }
-
-  .nl-popup__thanks-icon {
-    width: 6.4rem;
-    height: 6.4rem;
-
-    svg {
-      width: 3.2rem;
-      height: 3.2rem;
-    }
-  }
-
-  h2.nl-popup__thanks-title {
-    font-size: 2.8rem;
-
-    br {
-      display: none;
-    }
-  }
-
-  .nl-popup__thanks-text {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 
   .nl-popup__thanks-cta {
     width: 100%;
-    height: 5.4rem;
-    margin-top: 0.4rem;
-    font-size: 1.5rem;
   }
 }
