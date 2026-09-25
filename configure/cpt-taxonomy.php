@@ -1321,6 +1321,25 @@ function register_webinary_cpt()
 }
 add_action('init', 'register_webinary_cpt');
 
+/** Drop leftover szkolenia rows that share a slug with webinary. */
+function akademiata_retire_szkolenia_posts() {
+	if (get_option('akademiata_szkolenia_slug_retired') === '1') {
+		return;
+	}
+
+	global $wpdb;
+	$wpdb->query(
+		"UPDATE {$wpdb->posts}
+		 SET post_status = 'draft', post_name = CONCAT(post_name, '-szkolenia-old')
+		 WHERE post_type = 'szkolenia'
+		   AND post_name NOT LIKE '%-szkolenia-old'"
+	);
+
+	update_option('akademiata_szkolenia_slug_retired', '1', false);
+	flush_rewrite_rules(false);
+}
+add_action('init', 'akademiata_retire_szkolenia_posts', 20);
+
 /**
  * Webinary: which postgraduate study name is promoted (sidebar checkboxes).
  * Used in CF7 label: „%web_studia%”.
