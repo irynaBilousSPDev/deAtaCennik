@@ -13,7 +13,7 @@ function akademiata_get_recruitment_closed_rules() {
         return $runtime;
     }
 
-    $transient_key = 'akademiata_recruitment_closed_v2';
+    $transient_key = 'akademiata_recruitment_closed_v3';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && array_key_exists('rules', $cached) && is_array($cached['rules'])) {
@@ -21,12 +21,15 @@ function akademiata_get_recruitment_closed_rules() {
         return $runtime;
     }
 
-    $rules = akademiata_recruitment_closed_rules_from_google(5);
-    if ($rules === null) {
+    $rules = akademiata_recruitment_closed_rules_from_google(20);
+    $from_google = $rules !== null;
+    if (!$from_google) {
         $rules = akademiata_recruitment_closed_rules_from_prices_json();
     }
 
-    set_transient($transient_key, array('rules' => $rules), 15 * MINUTE_IN_SECONDS);
+    if ($from_google) {
+        set_transient($transient_key, array('rules' => $rules), 15 * MINUTE_IN_SECONDS);
+    }
     $runtime = $rules;
 
     return $runtime;
@@ -49,7 +52,8 @@ function akademiata_recruitment_closed_rules_from_google($timeout_seconds = 5) {
     $response = wp_remote_get(
         $url,
         array(
-            'timeout' => max(1, (int) $timeout_seconds),
+            'timeout'     => max(1, (int) $timeout_seconds),
+            'redirection' => 5,
         )
     );
 
