@@ -138,7 +138,9 @@ function akademiata_web_attachment_field($value) {
 }
 
 /**
- * Webinar ACF values. Formatting is skipped: WPML exhausts memory inside it.
+ * Webinar field values for the current post (WPML translation included).
+ * format_value is off: ACF formatting re-enters WPML and exhausts memory.
+ * Images are resolved below. Translated copy lives on the translated post.
  *
  * @param int $post_id
  * @return array<string, mixed>
@@ -149,7 +151,13 @@ function akademiata_web_load_fields($post_id) {
 		return array();
 	}
 
+	static $loading = false;
+	if ($loading) {
+		return array();
+	}
+	$loading = true;
 	$acf = get_fields($post_id, false);
+	$loading = false;
 	if (!is_array($acf)) {
 		return array();
 	}
@@ -166,17 +174,6 @@ function akademiata_web_load_fields($post_id) {
 
 	return $acf;
 }
-
-/** Skip ACF formatting on webinary so WPML cannot recurse inside get_field(). */
-add_filter('acf/pre_format_value', function ($check, $value, $post_id) {
-	if ($check !== null) {
-		return $check;
-	}
-	if ((int) $post_id > 0 && get_post_type((int) $post_id) === 'webinary') {
-		return $value;
-	}
-	return $check;
-}, 1, 3);
 
 /**
  * Safe ACF WYSIWYG output for webinary sections.
