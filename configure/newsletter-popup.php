@@ -341,6 +341,7 @@ function akademiata_nl_popup_render() {
 add_action('wp_footer', 'akademiata_nl_popup_render', 5);
 
 function akademiata_enqueue_newsletter_popup_script() {
+    return; // TEMP debug
     if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
