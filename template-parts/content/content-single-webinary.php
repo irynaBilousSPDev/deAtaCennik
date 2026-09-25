@@ -5,7 +5,7 @@
  * @package akademiata
  */
 
-$acf = function_exists('get_fields') ? get_fields() : array();
+$acf = function_exists('akademiata_web_load_fields') ? akademiata_web_load_fields(get_the_ID()) : array();
 if (!is_array($acf)) {
 	$acf = array();
 }

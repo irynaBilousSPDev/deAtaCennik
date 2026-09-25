@@ -114,6 +114,60 @@ add_filter('acf/load_field/key=field_nl_popup_pg_form_id', 'akademiata_acf_load_
 add_filter('acf/load_field/key=field_nl_popup_mba_form_id', 'akademiata_acf_load_cf7_forms');
 
 /**
+ * Image field as url/alt without ACF formatters (those recurse in WPML).
+ *
+ * @param mixed $value
+ * @return array{url:string,alt:string}|null
+ */
+function akademiata_web_attachment_field($value) {
+	if (is_array($value) && !empty($value['url'])) {
+		return array(
+			'url' => (string) $value['url'],
+			'alt' => (string) ($value['alt'] ?? ''),
+		);
+	}
+	$id = is_numeric($value) ? (int) $value : 0;
+	if ($id <= 0) {
+		return null;
+	}
+	$src = wp_get_attachment_image_src($id, 'full');
+	return array(
+		'url' => $src ? (string) $src[0] : '',
+		'alt' => (string) get_post_meta($id, '_wp_attachment_image_alt', true),
+	);
+}
+
+/**
+ * Webinar ACF values. Formatting is skipped: WPML exhausts memory inside it.
+ *
+ * @param int $post_id
+ * @return array<string, mixed>
+ */
+function akademiata_web_load_fields($post_id) {
+	$post_id = (int) $post_id;
+	if ($post_id <= 0 || !function_exists('get_fields')) {
+		return array();
+	}
+
+	$acf = get_fields($post_id, false);
+	if (!is_array($acf)) {
+		return array();
+	}
+
+	$acf['web_speaker_photo'] = akademiata_web_attachment_field($acf['web_speaker_photo'] ?? null);
+	if (!empty($acf['web_audience_cards']) && is_array($acf['web_audience_cards'])) {
+		foreach ($acf['web_audience_cards'] as $i => $card) {
+			if (!is_array($card)) {
+				continue;
+			}
+			$acf['web_audience_cards'][ $i ]['icon'] = akademiata_web_attachment_field($card['icon'] ?? null);
+		}
+	}
+
+	return $acf;
+}
+
+/**
  * Safe ACF WYSIWYG output for webinary sections.
  */
 function akademiata_web_richtext($html) {
