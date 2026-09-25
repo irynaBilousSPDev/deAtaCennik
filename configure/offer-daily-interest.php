@@ -121,6 +121,10 @@ function akademiata_should_show_offer_daily_interest($post_id = null) {
         return false;
     }
 
+    if (function_exists('akademiata_recruitment_is_closed') && akademiata_recruitment_is_closed($post_id)) {
+        return false;
+    }
+
     return !empty(get_field('register_url', $post_id));
 }
 
