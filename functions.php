@@ -11,6 +11,9 @@ include('configure/utilities.php');
 // WPML: fix language switcher links for news date archives
 include('configure/wpml-news-date-switcher.php');
 
+// WPML: prevent fatal recursion on webinary singles (CPT slug = page slug)
+include('configure/wpml-webinary.php');
+
 include('configure/offer-pricing.php');
 
 include('configure/ai-crawler-hints.php');
