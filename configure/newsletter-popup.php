@@ -316,6 +316,7 @@ function akademiata_nl_popup_is_relevant_request() {
 }
 
 function akademiata_nl_popup_render() {
+    return; // TEMP debug
     if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
