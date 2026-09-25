@@ -9,7 +9,7 @@
  * @return string
  */
 function akademiata_get_prices_google_api_url() {
-    return 'https://script.google.com/macros/s/AKfycby89Mt7UgeY6jKnq2YQNwumt_CBp46UVd1mbKvxqEkg_46vjGAeN-8lcL_OokQVFnAW/exec';
+    return 'https://script.google.com/macros/s/AKfycbyc3B68L_FhrLJN0_bIIUiwjPXswfiVpjfL633X46dFVkZBiuD1lIjrHnn4GLkUs4WF/exec';
 }
 
 /**
