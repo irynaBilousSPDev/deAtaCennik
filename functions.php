@@ -46,7 +46,7 @@ include('configure/js-css.php');
 // Contact Form 7 tweaks
 include('configure/cf7.php');
 
-include('configure/newsletter-popup.php');
+include('configure/nl-popup.php');
 
 // SHORTCODES
 
