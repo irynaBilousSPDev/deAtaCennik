@@ -19,9 +19,8 @@
 				<?php endif; ?>
 
 				<?php
-				// Standard WPML: hide langs without a translation (webinary is PL-only for now).
 				$languages = apply_filters( 'wpml_active_languages', null, [
-					'skip_missing' => is_singular( 'webinary' ) ? 1 : 0,
+					'skip_missing' => 0,
 				] );
 
 				if ( ! empty( $languages ) ) : ?>

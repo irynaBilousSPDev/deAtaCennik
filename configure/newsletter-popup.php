@@ -90,6 +90,15 @@ function akademiata_nl_popup_get($key) {
  */
 function akademiata_nl_popup_read_acf($key) {
     $name = 'nl_popup_' . $key;
+
+    // Raw options first — ACF get_field() can loop with WPML on unrelated CPT singles.
+    foreach (['options_' . $name, 'option_' . $name] as $option_key) {
+        $raw = get_option($option_key);
+        if (is_array($raw) && $raw !== []) {
+            return $raw;
+        }
+    }
+
     if (function_exists('get_field')) {
         foreach (['option', 'options'] as $id) {
             $acf = get_field($name, $id);
@@ -99,8 +108,7 @@ function akademiata_nl_popup_read_acf($key) {
         }
     }
 
-    $raw = get_option('options_' . $name);
-    return is_array($raw) && $raw !== [] ? $raw : null;
+    return null;
 }
 
 /**
@@ -136,9 +144,20 @@ function akademiata_nl_popup_current_cpt() {
  * @param string $key pg|mba
  */
 function akademiata_nl_popup_is_auto_context($key) {
+    $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
+
+    // Not an MBA/PG surface — do not run archive/page slug detection (WPML-safe).
+    if (
+        !is_singular($cpt)
+        && !is_post_type_archive($cpt)
+        && !is_tax('city_pg_mba')
+        && !is_page()
+    ) {
+        return false;
+    }
+
     $config = akademiata_nl_popup_get($key);
     $show_on = is_array($config['show_on'] ?? null) ? $config['show_on'] : ['singles'];
-    $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
 
     if (is_singular($cpt)) {
         return in_array('singles', $show_on, true);
@@ -159,8 +178,15 @@ function akademiata_nl_popup_should_render($key) {
     return !empty($config['enabled']) && akademiata_nl_popup_is_auto_context($key);
 }
 
+/** True if either popup is enabled in Theme Settings (not page-context). */
 function akademiata_nl_popup_any_enabled() {
-    return akademiata_nl_popup_should_render('pg') || akademiata_nl_popup_should_render('mba');
+    foreach (['pg', 'mba'] as $key) {
+        $config = akademiata_nl_popup_get($key);
+        if (!empty($config['enabled'])) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
