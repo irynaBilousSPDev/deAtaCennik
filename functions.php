@@ -48,22 +48,6 @@ include('configure/cf7.php');
 
 include('configure/nl-popup.php');
 
-// Probe: confirm FPM loaded this functions.php revision.
-add_action('send_headers', function () {
-	if (function_exists('is_singular') && is_singular('webinary')) {
-		header('X-Ata-Theme-Rev: nl-popup-9e5d546');
-	}
-});
-
-register_shutdown_function(function () {
-	$err = error_get_last();
-	if (!$err || !in_array($err['type'], array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR), true)) {
-		return;
-	}
-	$path = get_template_directory() . '/_webinary-fatal.log';
-	@file_put_contents($path, date('c') . ' ' . print_r($err, true) . "\n", FILE_APPEND);
-});
-
 // SHORTCODES
 
 include('configure/shortcodes.php');
