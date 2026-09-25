@@ -13,7 +13,7 @@ function akademiata_get_recruitment_closed_rules() {
         return $runtime;
     }
 
-    $transient_key = 'akademiata_recruitment_closed_v3';
+    $transient_key = 'akademiata_recruitment_closed_v4';
     $cached        = get_transient($transient_key);
 
     if (is_array($cached) && array_key_exists('rules', $cached) && is_array($cached['rules'])) {
@@ -28,7 +28,7 @@ function akademiata_get_recruitment_closed_rules() {
     }
 
     if ($from_google) {
-        set_transient($transient_key, array('rules' => $rules), 15 * MINUTE_IN_SECONDS);
+        set_transient($transient_key, array('rules' => $rules), MINUTE_IN_SECONDS);
     }
     $runtime = $rules;
 
