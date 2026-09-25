@@ -120,18 +120,49 @@ add_filter('wpml_active_languages', function ($languages) {
 });
 
 /**
- * Webinary may be PL-only until translations exist. After WP core updates, WPML
- * hreflang can hang on missing CPT translation URLs (slug /webinary/ = Page).
- * CPT stays translatable; header uses skip_missing for the switcher.
+ * Webinary singles: after WP core updates, WPML can hang in wp_head while
+ * resolving language URLs / filtered queries (hreflang, adjacent posts).
+ * CPT stays fully translatable; switcher uses skip_missing until translations exist.
  */
 add_action('template_redirect', function () {
 	if (!is_singular('webinary')) {
 		return;
 	}
+
 	add_filter('wpml_seo_head_langs', '__return_false');
 	add_filter('wpml_hreflangs', '__return_empty_array');
+
+	remove_action('wp_head', 'adjacent_posts_rel_link_wp_head', 10);
+	remove_action('wp_head', 'wp_shortlink_wp_head', 10);
+
 	global $sitepress;
 	if ($sitepress && is_object($sitepress)) {
 		remove_action('wp_head', array($sitepress, 'head_langs'));
+	}
+
+	// Drop any remaining WPML callbacks still hooked to wp_head for this request.
+	global $wp_filter;
+	if (!empty($wp_filter['wp_head']) && $wp_filter['wp_head'] instanceof WP_Hook) {
+		foreach ($wp_filter['wp_head']->callbacks as $priority => $callbacks) {
+			foreach ($callbacks as $id => $cb) {
+				if (empty($cb['function'])) {
+					continue;
+				}
+				$fn = $cb['function'];
+				$label = '';
+				if (is_string($fn)) {
+					$label = $fn;
+				} elseif (is_array($fn)) {
+					if (is_object($fn[0])) {
+						$label = get_class($fn[0]);
+					} elseif (is_string($fn[0])) {
+						$label = $fn[0];
+					}
+				}
+				if ($label !== '' && preg_match('/wpml|sitepress|WPML_/i', $label)) {
+					unset($wp_filter['wp_head']->callbacks[ $priority ][ $id ]);
+				}
+			}
+		}
 	}
 }, 0);
