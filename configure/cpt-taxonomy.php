@@ -1321,26 +1321,6 @@ function register_webinary_cpt()
 }
 add_action('init', 'register_webinary_cpt');
 
-/** Webinary are PL-only — do not treat as WPML-translated. */
-add_filter('wpml_is_translated_post_type', function ($translated, $type) {
-	return $type === 'webinary' ? false : $translated;
-}, 10, 2);
-
-add_filter('wpml_is_translated_taxonomy', function ($translated, $tax) {
-	return $tax === 'web_studia' ? false : $translated;
-}, 10, 2);
-
-/** Drop WPML hreflang on webinary singles (same broken URL path as the switcher). */
-add_action('template_redirect', function () {
-	if (!is_singular('webinary')) {
-		return;
-	}
-	global $sitepress;
-	if ($sitepress && is_object($sitepress)) {
-		remove_action('wp_head', array($sitepress, 'head_langs'));
-	}
-}, 0);
-
 /**
  * Webinary: which postgraduate study name is promoted (sidebar checkboxes).
  * Used in CF7 label: „%web_studia%”.

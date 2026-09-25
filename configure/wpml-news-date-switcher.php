@@ -119,3 +119,19 @@ add_filter('wpml_active_languages', function ($languages) {
     return $languages;
 });
 
+/**
+ * Webinary may be PL-only until translations exist. After WP core updates, WPML
+ * hreflang can hang on missing CPT translation URLs (slug /webinary/ = Page).
+ * CPT stays translatable; header uses skip_missing for the switcher.
+ */
+add_action('template_redirect', function () {
+	if (!is_singular('webinary')) {
+		return;
+	}
+	add_filter('wpml_seo_head_langs', '__return_false');
+	add_filter('wpml_hreflangs', '__return_empty_array');
+	global $sitepress;
+	if ($sitepress && is_object($sitepress)) {
+		remove_action('wp_head', array($sitepress, 'head_langs'));
+	}
+}, 0);
