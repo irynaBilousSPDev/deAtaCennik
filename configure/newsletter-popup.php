@@ -144,20 +144,13 @@ function akademiata_nl_popup_current_cpt() {
  * @param string $key pg|mba
  */
 function akademiata_nl_popup_is_auto_context($key) {
-    $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
-
-    // Not an MBA/PG surface — do not run archive/page slug detection (WPML-safe).
-    if (
-        !is_singular($cpt)
-        && !is_post_type_archive($cpt)
-        && !is_tax('city_pg_mba')
-        && !is_page()
-    ) {
+    if (!akademiata_nl_popup_is_relevant_request()) {
         return false;
     }
 
     $config = akademiata_nl_popup_get($key);
     $show_on = is_array($config['show_on'] ?? null) ? $config['show_on'] : ['singles'];
+    $cpt = $key === 'mba' ? 'mba' : 'postgraduate';
 
     if (is_singular($cpt)) {
         return in_array('singles', $show_on, true);
@@ -301,17 +294,29 @@ function akademiata_nl_popup_cf7_html($form_id) {
     );
 }
 
-function akademiata_nl_popup_render() {
-    if (is_admin()) {
-        return;
+/**
+ * Whether this front request can show MBA/PG newsletter popups.
+ * Avoid is_tax()/ACF on unrelated CPT singles (WPML can loop there).
+ */
+function akademiata_nl_popup_is_relevant_request() {
+    if (is_singular(['mba', 'postgraduate'])) {
+        return true;
     }
+    if (is_post_type_archive(['mba', 'postgraduate'])) {
+        return true;
+    }
+    if (is_page()) {
+        return true;
+    }
+    $qo = get_queried_object();
+    if ($qo instanceof WP_Term && !empty($qo->taxonomy) && $qo->taxonomy === 'city_pg_mba') {
+        return true;
+    }
+    return false;
+}
 
-    if (
-        !is_singular(['mba', 'postgraduate'])
-        && !is_post_type_archive(['mba', 'postgraduate'])
-        && !is_tax('city_pg_mba')
-        && !is_page()
-    ) {
+function akademiata_nl_popup_render() {
+    if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
 
@@ -336,17 +341,7 @@ function akademiata_nl_popup_render() {
 add_action('wp_footer', 'akademiata_nl_popup_render', 5);
 
 function akademiata_enqueue_newsletter_popup_script() {
-    if (is_admin()) {
-        return;
-    }
-
-    // MBA/PG popups only — skip unrelated singles (webinary + WPML/ACF loop).
-    if (
-        !is_singular(['mba', 'postgraduate'])
-        && !is_post_type_archive(['mba', 'postgraduate'])
-        && !is_tax('city_pg_mba')
-        && !is_page()
-    ) {
+    if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
 
