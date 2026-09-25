@@ -133,7 +133,7 @@
 
 				<?php elseif ( is_singular( 'webinary' ) ) : ?>
 					<?php
-					$web_nav_cta = function_exists( 'get_field' ) ? trim( (string) get_field( 'web_nav_cta_label' ) ) : '';
+					$web_nav_cta = trim( (string) get_post_meta( get_the_ID(), 'web_nav_cta_label', true ) );
 					if ( $web_nav_cta === '' ) {
 						$web_nav_cta = __( 'Zapisz się na webinar', 'akademiata' );
 					}

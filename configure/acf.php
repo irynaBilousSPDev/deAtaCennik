@@ -195,12 +195,12 @@ function akademiata_web_cf7_event_meta($post_id) {
 	$tryb    = '';
 
 	if ($post_id > 0 && get_post_type($post_id) === 'webinary') {
-		$hero = function_exists('get_field') ? trim((string) get_field('web_hero_title', $post_id)) : '';
+		$hero = trim((string) get_post_meta($post_id, 'web_hero_title', true));
 		$nazwa = $hero !== '' ? $hero : get_the_title($post_id);
 		$nazwa = preg_replace('/\s+/u', ' ', str_replace(array("\r", "\n"), ' ', $nazwa));
-		$data    = function_exists('get_field') ? trim((string) get_field('web_details_date', $post_id)) : '';
-		$godzina = function_exists('get_field') ? trim((string) get_field('web_details_time', $post_id)) : '';
-		$tryb    = function_exists('get_field') ? trim((string) get_field('web_details_place', $post_id)) : '';
+		$data    = trim((string) get_post_meta($post_id, 'web_details_date', true));
+		$godzina = trim((string) get_post_meta($post_id, 'web_details_time', true));
+		$tryb    = trim((string) get_post_meta($post_id, 'web_details_place', true));
 	}
 
 	return array(
@@ -229,7 +229,7 @@ function akademiata_web_cf7_inject_hidden_fields($properties, $contact_form) {
 	}
 
 	$post_id = get_queried_object_id();
-	$form_id = function_exists('get_field') ? (int) get_field('web_signup_form_id', $post_id) : 0;
+	$form_id = (int) get_post_meta($post_id, 'web_signup_form_id', true);
 	if ($form_id <= 0 || (int) $contact_form->id() !== $form_id) {
 		return $properties;
 	}
@@ -277,7 +277,7 @@ function akademiata_web_cf7_append_mail_meta($components, $contact_form, $mail =
 		return $components;
 	}
 
-	$expected = function_exists('get_field') ? (int) get_field('web_signup_form_id', $post_id) : 0;
+	$expected = (int) get_post_meta($post_id, 'web_signup_form_id', true);
 	if ($expected > 0 && (int) $contact_form->id() !== $expected) {
 		return $components;
 	}
