@@ -19,9 +19,8 @@
 				<?php endif; ?>
 
 				<?php
-				// skip_missing=1 on webinary: avoids WPML permalink recursion (CPT slug = page slug)
 				$languages = apply_filters( 'wpml_active_languages', null, [
-					'skip_missing' => is_singular( 'webinary' ) ? 1 : 0,
+					'skip_missing' => 0,
 				] );
 
 				if ( ! empty( $languages ) ) : ?>
