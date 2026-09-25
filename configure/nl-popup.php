@@ -316,6 +316,7 @@ function akademiata_nl_popup_is_relevant_request() {
 }
 
 function akademiata_nl_popup_render() {
+    return;
     if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
@@ -341,6 +342,7 @@ function akademiata_nl_popup_render() {
 add_action('wp_footer', 'akademiata_nl_popup_render', 5);
 
 function akademiata_enqueue_newsletter_popup_script() {
+    return;
     if (is_admin() || !akademiata_nl_popup_is_relevant_request()) {
         return;
     }
