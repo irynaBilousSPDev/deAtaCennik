@@ -912,6 +912,14 @@ $om-filter-card-pad: 16px;
             color: vars.$white !important;
           }
 
+          .button-sing_up.is-recruitment-closed {
+            background: #e5e5e5 !important;
+            border-color: #e5e5e5 !important;
+            color: #6b6b6b !important;
+            white-space: normal;
+            line-height: 1.15;
+          }
+
           .button-sing_up_wrapper {
             flex: 1 1 0 !important;
             min-width: 0 !important;
