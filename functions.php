@@ -48,6 +48,13 @@ include('configure/cf7.php');
 
 include('configure/nl-popup.php');
 
+// Probe: confirm FPM loaded this functions.php revision.
+add_action('send_headers', function () {
+	if (function_exists('is_singular') && is_singular('webinary')) {
+		header('X-Ata-Theme-Rev: nl-popup-772c681');
+	}
+});
+
 // SHORTCODES
 
 include('configure/shortcodes.php');
