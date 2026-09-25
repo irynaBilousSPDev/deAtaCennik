@@ -141,6 +141,7 @@ export default function initPricesCalculator(_$, opts = {}) {
   window.SA = window.SA || {};
   window.SA_EN = window.SA_EN || {};
   window.SA_ROWS = window.SA_ROWS || [];
+  window.CLOSED = window.CLOSED || [];
   window.RAW = window.RAW || { pl: { wwa: { s: [], n: [] }, wro: { s: [], n: [] } }, en: { wwa: [], wro: [] } };
   window.UABY = window.UABY || { pl: {}, en: {} };
   window.UABY_ROWS = window.UABY_ROWS || [];
@@ -391,6 +392,7 @@ export default function initPricesCalculator(_$, opts = {}) {
     window.RAW = sanitizeRawPl(data.RAW || window.RAW);
     window.UABY_ROWS = Array.isArray(data.UABY_ROWS) ? data.UABY_ROWS : [];
     window.UABY = rebuildUabyTree(data.UABY || window.UABY, window.UABY_ROWS);
+    window.CLOSED = Array.isArray(data.CLOSED) ? data.CLOSED : [];
     window.PROMOS = (data.PROMOS || []).filter(p => {
       if (!p) return false;
       return !isPromoExpired(applyPromoOverride(p));
@@ -1961,13 +1963,49 @@ export default function initPricesCalculator(_$, opts = {}) {
       if (hit && hit.url) saVal = String(hit.url).trim();
     }
 
-    if (saVal) {
+    const closedLabel = t('ctaClosed', 'Rekrutacja zakończona');
+    const applyClosed = recruitmentClosedForItem(item);
+
+    if (applyClosed) {
       ba.style.display = '';
+      ba.classList.add('is-recruitment-closed');
+      ba.setAttribute('aria-disabled', 'true');
+      ba.removeAttribute('href');
+      ba.textContent = closedLabel;
+    } else if (saVal) {
+      ba.style.display = '';
+      ba.classList.remove('is-recruitment-closed');
+      ba.removeAttribute('aria-disabled');
       ba.href = saVal.startsWith('http') ? saVal : (window.lang === 'en' ? window.BASE_EN : window.BASE) + saVal;
       ba.textContent = t('ctaApply', 'Zapisz się →');
     } else {
       ba.style.display = 'none';
+      ba.classList.remove('is-recruitment-closed');
+      ba.removeAttribute('aria-disabled');
     }
+  }
+
+  function normRecruitmentName(value) {
+    return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  function recruitmentClosedForItem(item) {
+    const rules = Array.isArray(window.CLOSED) ? window.CLOSED : [];
+    if (!item || !rules.length) return false;
+    const lng = window.lang === 'en' ? 'en' : 'pl';
+    const city = window.city === 'wro' ? 'wro' : (window.city === 'wwa' ? 'wwa' : '');
+    const deg = Number(item.deg) || 0;
+    const name = normRecruitmentName(item.k);
+    if (!city || !name) return false;
+    return rules.some(rule => {
+      if (!rule) return false;
+      const ruleLng = String(rule.lng || 'pl').toLowerCase() === 'en' ? 'en' : 'pl';
+      if (ruleLng !== lng) return false;
+      if (String(rule.city || '') !== city) return false;
+      const ruleDeg = Number(rule.deg) || 0;
+      if (ruleDeg && ruleDeg !== deg) return false;
+      return normRecruitmentName(rule.k) === name;
+    });
   }
 
   function getPL(pid) {

@@ -17,6 +17,8 @@ include('configure/ai-crawler-hints.php');
 
 include('configure/offer-promotions-filter.php');
 
+include('configure/recruitment-closed.php');
+
 include('configure/schema.php');
 
 // ajax filter

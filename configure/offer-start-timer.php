@@ -204,6 +204,10 @@ function akademiata_offer_start_timer_should_show() {
 		return false;
 	}
 
+	if (function_exists('akademiata_recruitment_is_closed') && akademiata_recruitment_is_closed(get_queried_object_id())) {
+		return false;
+	}
+
 	$settings = akademiata_offer_start_timer_get_settings();
 	if (empty($settings['enabled'])) {
 		return false;

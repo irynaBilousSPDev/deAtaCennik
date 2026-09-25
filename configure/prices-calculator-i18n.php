@@ -198,6 +198,12 @@ function akademiata_prices_calculator_ui_strings() {
 			'uk' => 'Записатися →',
 			'ru' => 'Записаться →',
 		),
+		'ctaClosed'         => array(
+			'pl' => 'Rekrutacja zakończona',
+			'en' => 'Recruitment closed',
+			'uk' => 'Рекрутація завершена',
+			'ru' => 'Набор завершён',
+		),
 		'modeFullTime'      => array(
 			'pl' => 'Stacjonarne',
 			'en' => 'Full-time',
@@ -493,6 +499,7 @@ function akademiata_prices_calculator_i18n_payload($ui_lang) {
 	return array(
 		'ctaMore'           => $t('ctaMore'),
 		'ctaApply'          => $t('ctaApply'),
+		'ctaClosed'         => $t('ctaClosed'),
 		'feeAdmission'      => $t('feeAdmission'),
 		'feeApplication'    => $t('feeApplication'),
 		'feeEntry'          => $t('feeEntry'),

@@ -14,9 +14,10 @@ This script matches your current sheet tabs (with emojis):
   - 🌍 Programy_EN
   - 🇺🇦 Ceny_UABY   (row 1 is instructional text, skipped)
   - 🏷️ Promocje
+  - Rekrutacja (optional)
 
 Output JSON (top-level keys) for `assets/src/js/prices-calculator.js`:
-  BASE, BASE_EN, SA, SA_EN, RAW, UABY, PROMOS
+  BASE, BASE_EN, SA, SA_EN, RAW, UABY, PROMOS, CLOSED
 """
 
 from __future__ import annotations
@@ -40,6 +41,7 @@ TAB_PL = "🎓 Programy_PL"
 TAB_EN = "🌍 Programy_EN"
 TAB_UABY = "🇺🇦 Ceny_UABY"
 TAB_PROMOS = "🏷️ Promocje"
+TAB_CLOSED = "Rekrutacja"
 
 def _safe_print(msg: str) -> None:
     """
@@ -497,6 +499,64 @@ def _parse_promos(df: pd.DataFrame) -> List[Dict[str, Any]]:
     return promos
 
 
+def _parse_recruitment_degree(value: Any) -> int:
+    s = _norm_str(value).lower()
+    if not s or s in ("oba", "both", "1 i 2"):
+        return 0
+    if s in ("2", "ii") or s.startswith("ii") or "master" in s:
+        return 2
+    if s in ("1", "i") or "bachelor" in s:
+        return 1
+    try:
+        n = int(float(s))
+    except ValueError:
+        return 0
+    return n if n in (1, 2) else 0
+
+
+def _parse_recruitment_closed(df: pd.DataFrame) -> List[Dict[str, Any]]:
+    cols = {str(c).strip().lower(): c for c in df.columns}
+
+    def col(*hints: str):
+        for key, original in cols.items():
+            if any(hint in key for hint in hints):
+                return original
+        return None
+
+    col_lang = col("język", "jezyk", "lang")
+    col_city = col("miasto")
+    col_deg = col("stop")
+    col_k = col("kierunek")
+    col_closed = col("status", "zamkni", "closed")
+    if col_k is None or col_closed is None:
+        return []
+
+    out: List[Dict[str, Any]] = []
+    for _, row in df.iterrows():
+        flag = _norm_str(row[col_closed]).upper().replace("Ę", "E")
+        if flag not in ("ZAMKNIETA", "TAK", "TRUE", "YES", "1", "T"):
+            continue
+        k = _norm_str(row[col_k])
+        if not k:
+            continue
+        city_raw = _norm_str(row[col_city]).lower() if col_city is not None else ""
+        if "wroc" in city_raw:
+            city = "wro"
+        elif "warsz" in city_raw:
+            city = "wwa"
+        else:
+            continue
+        lang_raw = _norm_str(row[col_lang]).lower() if col_lang is not None else ""
+        lng = "en" if lang_raw.startswith("en") or lang_raw.startswith("ang") else "pl"
+        out.append({
+            "lng": lng,
+            "city": city,
+            "deg": _parse_recruitment_degree(row[col_deg]) if col_deg is not None else 0,
+            "k": k,
+        })
+    return out
+
+
 def generate_json(sheet: str, out_path: str) -> None:
     sheet_id = _sheet_id_from_input(sheet)
     export_url = _xlsx_export_url(sheet_id)
@@ -527,6 +587,7 @@ def generate_json(sheet: str, out_path: str) -> None:
         "UABY": {"pl": {}, "en": {}},
         "UABY_ROWS": [],
         "PROMOS": [],
+        "CLOSED": [],
     }
 
     # --- 🔗 SmartApply_URLs ---
@@ -629,6 +690,14 @@ def generate_json(sheet: str, out_path: str) -> None:
             _safe_print("Parsed: Promocje")
         except Exception as e:
             _safe_print(f"Warning: Promocje parse failed: {e}")
+
+    df = _read_sheet(xls, TAB_CLOSED)
+    if df is not None:
+        try:
+            data["CLOSED"] = _parse_recruitment_closed(df)
+            _safe_print(f"Parsed: Rekrutacja ({len(data['CLOSED'])} closed)")
+        except Exception as e:
+            _safe_print(f"Warning: Rekrutacja parse failed: {e}")
 
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)

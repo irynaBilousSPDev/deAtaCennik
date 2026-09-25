@@ -32,6 +32,7 @@ Tab names must match **exactly** (including emojis):
 | `🌍 Programy_EN` | Yes | Header in row 1, data from row 2 |
 | `🇺🇦 Ceny_UABY` | Yes (Wrocław UABY) | Header row with column names (see below) |
 | `🏷️ Promocje` | Yes | Header in row 1, data from row 2 |
+| `Rekrutacja` | Filled by the script | Unique kierunek rows from `Programy_PL` / `Programy_EN`. Column `Status`: `OTWARTA` or `ZAMKNIĘTA`. |
 
 ---
 
@@ -79,6 +80,20 @@ Tab names must match **exactly** (including emojis):
 
 - **Aktywna** = `TAK` to include the promo.
 - Bold text in cells is preserved in JSON (`<strong>`).
+
+### `Rekrutacja`
+
+The script builds this tab. One row is one kierunek for a language, city, and degree (`1` or `2`), taken from `Programy_PL` and `Programy_EN`. Specializations of that kierunek follow the row. Run `forceManualUpdate` once after pasting the script, and again after program rows change, or just edit a program cell — `onEdit` refreshes the list.
+
+| Język | Miasto | Stopień | Kierunek | Status |
+|-------|--------|---------|----------|--------|
+| PL | Warszawa | 1 | Informatyka | OTWARTA |
+| PL | Warszawa | 2 | Informatyka | ZAMKNIĘTA |
+| EN | Wrocław | 1 | Computer Science | OTWARTA |
+
+- **Status** = `ZAMKNIĘTA` closes signup. `OTWARTA` leaves it open.
+- Existing values stay when the list is rebuilt. A new kierunek starts as `OTWARTA`.
+- JSON key: `CLOSED` — only `ZAMKNIĘTA` rows (`lng`, `city` `wwa`/`wro`, `deg`, `k`).
 
 ---
 

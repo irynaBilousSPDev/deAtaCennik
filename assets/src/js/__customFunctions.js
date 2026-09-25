@@ -7,10 +7,65 @@ export function updateHeaderLink(sourceSelector, targetSelector) {
         const dynamicUrl = $(sourceSelector).attr('href');
         if (dynamicUrl) {
             $(targetSelector).each(function () {
+                if (this.classList && this.classList.contains('is-recruitment-closed')) {
+                    return;
+                }
                 $(this).attr('href', dynamicUrl);
             });
         }
     });
+}
+
+function normRecruitmentName(value) {
+    return String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function recruitmentAttrsMatch(rules, el) {
+    const lngs = String(el.getAttribute('data-rekr-lng') || '').split(',').map(part => part.trim()).filter(Boolean);
+    const city = el.getAttribute('data-rekr-city') || '';
+    const deg = parseInt(el.getAttribute('data-rekr-deg'), 10) || 0;
+    const names = String(el.getAttribute('data-rekr-k') || '').split('|').map(normRecruitmentName).filter(Boolean);
+
+    return rules.some(rule => {
+        if (!rule) return false;
+        const ruleLng = String(rule.lng || 'pl').toLowerCase() === 'en' ? 'en' : 'pl';
+        if (lngs.length && lngs.indexOf(ruleLng) === -1) return false;
+        if (rule.city && rule.city !== city) return false;
+        const ruleDeg = Number(rule.deg) || 0;
+        if (ruleDeg && ruleDeg !== deg) return false;
+        return names.indexOf(normRecruitmentName(rule.k)) !== -1;
+    });
+}
+
+export function initRecruitmentClosedSync() {
+    if (!document.querySelector('[data-rekr-k]')) return;
+    const cfg = window.akademiataRecruitment || {};
+    if (!cfg.restUrl) return;
+
+    fetch(cfg.restUrl, { credentials: 'same-origin', cache: 'no-store' })
+        .then(response => (response.ok ? response.json() : null))
+        .then(data => {
+            if (!data || !Array.isArray(data.rules)) return;
+            const label = data.label || 'Rekrutacja zakończona';
+            document.querySelectorAll('[data-rekr-k]').forEach(el => {
+                if (!recruitmentAttrsMatch(data.rules, el)) return;
+                if (el.classList.contains('is-recruitment-closed')) {
+                    el.textContent = label;
+                    return;
+                }
+                const span = document.createElement('span');
+                span.className = (el.className + ' is-recruitment-closed').trim();
+                span.setAttribute('aria-disabled', 'true');
+                ['data-rekr-lng', 'data-rekr-city', 'data-rekr-deg', 'data-rekr-k'].forEach(name => {
+                    const value = el.getAttribute(name);
+                    if (value) span.setAttribute(name, value);
+                });
+                if (el.id) span.id = el.id;
+                span.textContent = label;
+                el.replaceWith(span);
+            });
+        })
+        .catch(() => {});
 }
 
 export function initMegaMenu(toggleSelector, menuSelector) {

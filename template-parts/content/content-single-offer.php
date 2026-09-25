@@ -15,7 +15,8 @@ if (is_singular(array('bachelor', 'master'))) {
     akademiata_get_offer_terms(get_the_ID());
 }
 
-$show_register_button = !empty($register_url);
+$recruitment_closed = function_exists('akademiata_recruitment_is_closed') && akademiata_recruitment_is_closed(get_the_ID());
+$show_register_button = !empty($register_url) && !$recruitment_closed;
 ?>
     <section class="section_header left_space">
         <div class="container">
@@ -93,18 +94,25 @@ $show_register_button = !empty($register_url);
 
                         </div>
 
-                        <a style="display: none" id="sourceLink" href="<?php echo $register_url; ?>" target="_blank"
+                        <?php if (!$recruitment_closed && $register_url !== '') : ?>
+                        <a style="display: none" id="sourceLink" href="<?php echo esc_url($register_url); ?>" target="_blank"
                            class="button-sing_up offer_button"><?php _e('ZAPISZ SIĘ', 'akademiata'); ?></a>
+                        <?php endif; ?>
                         <!--                        mobile nav-->
                         <?php if ($is_mobile) : ?>
                             <div class="mobile_visible">
 
                                 <div class="d-flex justify-content-center my-5">
 
-                                    <?php if ($show_register_button) : ?>
-                                        <a id="offerButton" href="<?php echo esc_url($register_url); ?>" target="_blank"
-                                           rel="noopener noreferrer"
-                                           class="button-sing_up"><?php _e('ZAPISZ SIĘ', 'akademiata'); ?></a>
+                                    <?php if ($recruitment_closed || $show_register_button) : ?>
+                                        <?php
+                                        akademiata_the_recruitment_cta(array(
+                                            'url'    => $register_url,
+                                            'id'     => 'offerButton',
+                                            'class'  => 'button-sing_up',
+                                            'target' => '_blank',
+                                        ));
+                                        ?>
                                     <?php else : ?>
                                         <div class="single_btn_ended">
                                             <?php get_template_part('partials/button_ended'); ?>

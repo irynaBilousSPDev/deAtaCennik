@@ -132,10 +132,13 @@
                 $register_url = get_field('register_url') ?: home_url();
                 ?>
                 <div class="button-sing_up_wrapper">
-                    <a class="button-sing_up"
-                       href="<?php echo esc_url($register_url); ?>">
-                        <?php echo esc_html(akademiata_get_theme_lang_string('offer_card_register')); ?>
-                    </a>
+                    <?php
+                    akademiata_the_recruitment_cta(array(
+                        'url'   => $register_url,
+                        'class' => 'button-sing_up',
+                        'label' => akademiata_get_theme_lang_string('offer_card_register'),
+                    ));
+                    ?>
                 </div>
             </div>
         </div>

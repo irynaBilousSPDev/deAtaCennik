@@ -2065,6 +2065,12 @@ function akademiata_get_theme_lang_string($key) {
                 'uk' => 'ЗАПИСАТИСЯ',
                 'ru' => 'ЗАПИСАТЬСЯ',
             ),
+            'recruitment_closed' => array(
+                'pl' => 'Rekrutacja zakończona',
+                'en' => 'Recruitment closed',
+                'uk' => 'Рекрутація завершена',
+                'ru' => 'Набор завершён',
+            ),
             'offer_chip_favorites' => array(
                 'pl' => 'Polubione',
                 'en' => 'Favorites',

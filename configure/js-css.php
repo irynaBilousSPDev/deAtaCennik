@@ -70,6 +70,10 @@ function akademiata_enqueue_scripts()
 
     wp_localize_script('name-main-js', 'akademiataOffer', $offer_localize);
 
+    wp_localize_script('name-main-js', 'akademiataRecruitment', array(
+        'restUrl' => rest_url('akademiata/v1/recruitment-closed'),
+    ));
+
     wp_localize_script('name-main-js', 'akademiataYouTube', [
         'proxyUrl' => akademiata_youtube_proxy_url(),
         'nonce'    => wp_create_nonce('wp_rest'),

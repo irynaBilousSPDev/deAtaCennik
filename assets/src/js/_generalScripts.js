@@ -48,6 +48,7 @@ class General {
         CustomFunctions.initializeTabsContainer('.tabs_container');
         CustomFunctions.copyAccountNumber('.copy_account_number');
         CustomFunctions.updateHeaderLink('#sourceLink', '.registration_link');
+        CustomFunctions.initRecruitmentClosedSync();
 
         CustomFunctions.initializeCounterWrapper('.counter_wrapper');
         Sliders.initializePartnerLogosSlider('.partner_logos_slider');

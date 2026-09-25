@@ -40,4 +40,13 @@
                   vars.$button-sing_up-hover-border-color,
                   vars.$button-sing_up-active-bg
   );
+
+  &.is-recruitment-closed {
+    pointer-events: none;
+    cursor: not-allowed;
+    background: #e5e5e5 !important;
+    color: #6b6b6b !important;
+    border-color: #e5e5e5 !important;
+    box-shadow: none !important;
+  }
 }

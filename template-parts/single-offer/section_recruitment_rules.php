@@ -42,10 +42,14 @@ if (!empty($recruitment_rules)) :
                                     <span class="step_number primary_color"><?php echo $key + 1; ?></span> <br>
                                     <?php if ($key === 0) : ?>
                                         <?php _e('Kliknij przycisk', 'akademiata'); ?>
-                                        <?php $register_url = !empty($acf_fields['register_url']) ?
-                                            $acf_fields['register_url'] : ''; ?>
-                                        <a href="<?php echo $register_url; ?>" target="_blank"
-                                           class="button-sing_up"><?php echo __('ZAPISZ SIĘ', 'akademiata') ?></a>
+                                        <?php
+                                        $register_url = !empty($acf_fields['register_url']) ? $acf_fields['register_url'] : '';
+                                        akademiata_the_recruitment_cta(array(
+                                            'url'    => $register_url,
+                                            'class'  => 'button-sing_up',
+                                            'target' => '_blank',
+                                        ));
+                                        ?>
                                     <?php elseif ($key === 1): ?>
                                         <?php _e('Wypełnij formularz', 'akademiata'); ?>
                                     <?php else: ?>

@@ -1018,6 +1018,14 @@ body.page-template-page-template-prices{
       border: none;
       box-shadow: 0 10px 26px rgba(22, 119, 255, 0.28);
 
+      &.is-recruitment-closed {
+        pointer-events: none;
+        cursor: not-allowed;
+        background: #e5e5e5;
+        color: #6b6b6b;
+        box-shadow: none;
+      }
+
       &:hover {
         background: #0f63d7;
         transform: translateY(-2px);

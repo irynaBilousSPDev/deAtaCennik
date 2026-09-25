@@ -107,6 +107,10 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
 
     $register_url = trim((string) get_field('register_url', $post_id));
     $offer_url    = $register_url;
+    if (function_exists('akademiata_recruitment_is_closed') && akademiata_recruitment_is_closed($post_id)) {
+        $register_url = '';
+        $offer_url    = $permalink;
+    }
     $campus_place = array();
 
     $city_terms     = akademiata_schema_get_terms($post_id, 'city');
@@ -186,6 +190,10 @@ function akademiata_schema_build_degree_program($post_id, $expected_post_type) {
         if ($offers !== array()) {
             $schema['offers'] = count($offers) === 1 ? $offers[0] : $offers;
         }
+    }
+
+    if (function_exists('akademiata_recruitment_is_closed') && akademiata_recruitment_is_closed($post_id)) {
+        return $schema;
     }
 
     $apply_url = $register_url !== '' ? $register_url : $offer_url;

@@ -12,7 +12,7 @@
  * - /exec                 -> cached fast
  * - /exec?force=1         -> bypass cache, rebuild now
  *
- * @version 2026-05-19
+ * @version 2026-09-25
  */
  
 const CACHE_KEY = "ata_data_live";
@@ -60,6 +60,8 @@ function forceManualUpdate() {
 }
  
 function refreshCache_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  syncRecruitmentSheet_(ss);
   const cache = CacheService.getScriptCache();
   const jsonString = JSON.stringify(generateJSON());
   putCacheSafe_(cache, CACHE_KEY, jsonString, CACHE_TTL_SECONDS);
@@ -288,7 +290,8 @@ function generateJSON() {
     RAW: { pl: { wwa: { s: [], n: [] }, wro: { s: [], n: [] } }, en: { wwa: [], wro: [] } },
     UABY: { pl: {}, en: {} },
     UABY_ROWS: [],
-    PROMOS: []
+    PROMOS: [],
+    CLOSED: []
   };
  
   // 🔗 SmartApply_URLs
@@ -507,7 +510,212 @@ function generateJSON() {
       data.PROMOS.push(promo);
     }
   }
+
+  data.CLOSED = parseRecruitmentClosed_(ss);
  
   return data;
+}
+
+/** Fill Rekrutacja from Programy_PL / Programy_EN. Keeps OTWARTA / ZAMKNIĘTA. */
+function syncRecruitmentSheet_(ss) {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) return;
+  try {
+    const programs = collectRecruitmentPrograms_(ss);
+    const flags = readRecruitmentFlags_(ss.getSheetByName("Rekrutacja"));
+    const values = [["Język", "Miasto", "Stopień", "Kierunek", "Status"]];
+    programs.forEach(function (item) {
+      values.push([
+        item.lng,
+        item.city,
+        item.deg,
+        item.k,
+        recruitmentIsClosedFlag_(flags, item) ? "ZAMKNIĘTA" : "OTWARTA"
+      ]);
+    });
+
+    let sheet = ss.getSheetByName("Rekrutacja");
+    if (!sheet) sheet = ss.insertSheet("Rekrutacja");
+    if (recruitmentGridEquals_(sheet.getDataRange().getValues(), values)) return;
+
+    sheet.clear();
+    sheet.getRange(1, 1, values.length, 5).setValues(values);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, 5).setFontWeight("bold");
+    if (programs.length) {
+      const rule = SpreadsheetApp.newDataValidation().requireValueInList(["OTWARTA", "ZAMKNIĘTA"], true).setAllowInvalid(false).build();
+      sheet.getRange(2, 5, programs.length, 1).setDataValidation(rule);
+    }
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function collectRecruitmentPrograms_(ss) {
+  const items = [];
+  const seen = {};
+
+  function add(lng, cityRaw, degRaw, kRaw) {
+    const k = clean(kRaw);
+    if (!k || k === "—") return;
+    const city = recruitmentCityLabel_(cityRaw);
+    if (!city) return;
+    const deg = parseRecruitmentDegree_(degRaw) === 2 ? 2 : 1;
+    const key = lng + "|" + city + "|" + deg + "|" + recruitmentNameKey_(k);
+    if (seen[key]) return;
+    seen[key] = true;
+    items.push({ lng: lng, city: city, deg: deg, k: k });
+  }
+
+  const pl = ss.getSheetByName("🎓 Programy_PL");
+  if (pl) {
+    const rows = pl.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) add("PL", rows[i][0], rows[i][2], rows[i][3]);
+  }
+
+  const en = ss.getSheetByName("🌍 Programy_EN");
+  if (en) {
+    const rows = en.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) add("EN", rows[i][0], rows[i][1], rows[i][2]);
+  }
+
+  items.sort(function (a, b) {
+    if (a.lng !== b.lng) return a.lng === "PL" ? -1 : 1;
+    if (a.city !== b.city) return a.city < b.city ? -1 : 1;
+    if (a.deg !== b.deg) return a.deg - b.deg;
+    return String(a.k).localeCompare(String(b.k), "pl");
+  });
+  return items;
+}
+
+function readRecruitmentFlags_(sheet) {
+  const flags = { exact: {}, both: {} };
+  if (!sheet) return flags;
+  const rows = sheet.getDataRange().getValues();
+  let headerIdx = -1;
+  for (let i = 0; i < Math.min(15, rows.length); i++) {
+    const h = (rows[i] || []).map(function (x) { return clean(x).toLowerCase(); });
+    if (h.some(function (v) { return v.indexOf("kierunek") >= 0; }) && h.some(function (v) { return v.indexOf("status") >= 0 || v.indexOf("zamkni") >= 0 || v.indexOf("closed") >= 0; })) {
+      headerIdx = i;
+      break;
+    }
+  }
+  if (headerIdx < 0) return flags;
+
+  const header = rows[headerIdx].map(function (x) { return clean(x).toLowerCase(); });
+  const idxLang = header.findIndex(function (h) { return h.indexOf("język") >= 0 || h.indexOf("jezyk") >= 0 || h === "lang"; });
+  const idxCity = header.findIndex(function (h) { return h.indexOf("miasto") >= 0; });
+  const idxDeg = header.findIndex(function (h) { return h.indexOf("stop") >= 0; });
+  const idxK = header.findIndex(function (h) { return h.indexOf("kierunek") >= 0; });
+  const idxClosed = header.findIndex(function (h) { return h.indexOf("status") >= 0 || h.indexOf("zamkni") >= 0 || h.indexOf("closed") >= 0; });
+
+  for (let i = headerIdx + 1; i < rows.length; i++) {
+    const row = rows[i] || [];
+    const k = clean(idxK >= 0 ? row[idxK] : "");
+    const city = recruitmentCityLabel_(idxCity >= 0 ? row[idxCity] : "");
+    if (!k || !city) continue;
+    const langRaw = clean(idxLang >= 0 ? row[idxLang] : "").toLowerCase();
+    const lng = (langRaw.indexOf("en") === 0 || langRaw.indexOf("ang") === 0) ? "EN" : "PL";
+    const deg = parseRecruitmentDegree_(idxDeg >= 0 ? row[idxDeg] : "");
+    const closed = recruitmentFlagIsClosed_(row[idxClosed]);
+    const name = recruitmentNameKey_(k);
+    if (deg === 0) {
+      if (closed) flags.both[lng + "|" + city + "|" + name] = true;
+      continue;
+    }
+    flags.exact[lng + "|" + city + "|" + deg + "|" + name] = closed;
+  }
+  return flags;
+}
+
+function recruitmentIsClosedFlag_(flags, item) {
+  const name = recruitmentNameKey_(item.k);
+  const exact = item.lng + "|" + item.city + "|" + item.deg + "|" + name;
+  if (Object.prototype.hasOwnProperty.call(flags.exact, exact)) return flags.exact[exact];
+  return !!flags.both[item.lng + "|" + item.city + "|" + name];
+}
+
+function recruitmentFlagIsClosed_(value) {
+  const flag = clean(value).toUpperCase().replace(/Ę/g, "E");
+  return flag === "ZAMKNIETA" || flag === "TAK" || flag === "TRUE" || flag === "YES" || flag === "1" || flag === "T";
+}
+
+function recruitmentCityLabel_(value) {
+  const t = clean(value).toLowerCase();
+  if (t.indexOf("wroc") >= 0) return "Wrocław";
+  if (t.indexOf("warsz") >= 0) return "Warszawa";
+  return "";
+}
+
+function recruitmentNameKey_(value) {
+  return clean(value).toLowerCase().replace(/\s+/g, " ");
+}
+
+function recruitmentGridEquals_(current, next) {
+  if (!current || current.length !== next.length) return false;
+  for (let r = 0; r < next.length; r++) {
+    for (let c = 0; c < 5; c++) {
+      if (clean((current[r] || [])[c]) !== clean((next[r] || [])[c])) return false;
+    }
+  }
+  return true;
+}
+
+/** Tab Rekrutacja: full kierunek list. Status ZAMKNIĘTA closes that language, city, and degree. */
+function parseRecruitmentClosed_(ss) {
+  const sheet = ss.getSheetByName("Rekrutacja");
+  if (!sheet) return [];
+  const rows = sheet.getDataRange().getValues();
+  if (!rows || !rows.length) return [];
+
+  let headerIdx = -1;
+  for (let i = 0; i < Math.min(15, rows.length); i++) {
+    const h = (rows[i] || []).map(x => clean(x).toLowerCase());
+    const hasK = h.some(v => v.indexOf("kierunek") >= 0);
+    const hasClosed = h.some(v => v.indexOf("status") >= 0 || v.indexOf("zamkni") >= 0 || v.indexOf("closed") >= 0);
+    if (hasK && hasClosed) { headerIdx = i; break; }
+  }
+  if (headerIdx < 0) return [];
+
+  const header = rows[headerIdx].map(x => clean(x).toLowerCase());
+  const idxLang = header.findIndex(h => h.indexOf("język") >= 0 || h.indexOf("jezyk") >= 0 || h === "lang");
+  const idxCity = header.findIndex(h => h.indexOf("miasto") >= 0);
+  const idxDeg = header.findIndex(h => h.indexOf("stop") >= 0);
+  const idxK = header.findIndex(h => h.indexOf("kierunek") >= 0);
+  const idxClosed = header.findIndex(h => h.indexOf("status") >= 0 || h.indexOf("zamkni") >= 0 || h.indexOf("closed") >= 0);
+  const out = [];
+
+  for (let i = headerIdx + 1; i < rows.length; i++) {
+    const row = rows[i] || [];
+    if (!recruitmentFlagIsClosed_(row[idxClosed])) continue;
+
+    const k = clean(idxK >= 0 ? row[idxK] : "");
+    if (!k) continue;
+
+    const cityRaw = clean(idxCity >= 0 ? row[idxCity] : "").toLowerCase();
+    const city = cityRaw.indexOf("wroc") >= 0 ? "wro" : (cityRaw.indexOf("warsz") >= 0 ? "wwa" : "");
+    if (!city) continue;
+
+    const langRaw = clean(idxLang >= 0 ? row[idxLang] : "").toLowerCase();
+    const lng = (langRaw.indexOf("en") === 0 || langRaw.indexOf("ang") === 0) ? "en" : "pl";
+
+    out.push({
+      lng: lng,
+      city: city,
+      deg: parseRecruitmentDegree_(idxDeg >= 0 ? row[idxDeg] : ""),
+      k: k
+    });
+  }
+
+  return out;
+}
+
+function parseRecruitmentDegree_(value) {
+  const s = clean(value).toLowerCase();
+  if (!s || s === "oba" || s === "both" || s === "1 i 2") return 0;
+  if (s === "2" || s === "ii" || s.indexOf("ii") === 0 || s.indexOf("master") >= 0) return 2;
+  if (s === "1" || s === "i" || s.indexOf("bachelor") >= 0) return 1;
+  const n = parseInt(s, 10);
+  return (n === 1 || n === 2) ? n : 0;
 }
 
