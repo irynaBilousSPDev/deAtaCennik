@@ -302,7 +302,20 @@ function akademiata_nl_popup_cf7_html($form_id) {
 }
 
 function akademiata_nl_popup_render() {
-    if (is_admin() || !akademiata_nl_popup_any_enabled()) {
+    if (is_admin()) {
+        return;
+    }
+
+    if (
+        !is_singular(['mba', 'postgraduate'])
+        && !is_post_type_archive(['mba', 'postgraduate'])
+        && !is_tax('city_pg_mba')
+        && !is_page()
+    ) {
+        return;
+    }
+
+    if (!akademiata_nl_popup_any_enabled()) {
         return;
     }
 
@@ -323,7 +336,21 @@ function akademiata_nl_popup_render() {
 add_action('wp_footer', 'akademiata_nl_popup_render', 5);
 
 function akademiata_enqueue_newsletter_popup_script() {
-    if (is_admin() || !akademiata_nl_popup_any_enabled()) {
+    if (is_admin()) {
+        return;
+    }
+
+    // MBA/PG popups only — skip unrelated singles (webinary + WPML/ACF loop).
+    if (
+        !is_singular(['mba', 'postgraduate'])
+        && !is_post_type_archive(['mba', 'postgraduate'])
+        && !is_tax('city_pg_mba')
+        && !is_page()
+    ) {
+        return;
+    }
+
+    if (!akademiata_nl_popup_any_enabled()) {
         return;
     }
 
