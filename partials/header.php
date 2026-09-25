@@ -19,9 +19,14 @@
 				<?php endif; ?>
 
 				<?php
-				$languages = apply_filters( 'wpml_active_languages', null, [
-					'skip_missing' => 0,
-				] );
+				// Webinary: no WPML language URL resolution (CPT not translated; avoids fatal on single).
+				if ( is_singular( 'webinary' ) ) {
+					$languages = array();
+				} else {
+					$languages = apply_filters( 'wpml_active_languages', null, [
+						'skip_missing' => 0,
+					] );
+				}
 
 				if ( ! empty( $languages ) ) : ?>
                     <ul class="lan_nav">
