@@ -167,6 +167,17 @@ function akademiata_web_load_fields($post_id) {
 	return $acf;
 }
 
+/** Skip ACF formatting on webinary so WPML cannot recurse inside get_field(). */
+add_filter('acf/pre_format_value', function ($check, $value, $post_id) {
+	if ($check !== null) {
+		return $check;
+	}
+	if ((int) $post_id > 0 && get_post_type((int) $post_id) === 'webinary') {
+		return $value;
+	}
+	return $check;
+}, 1, 3);
+
 /**
  * Safe ACF WYSIWYG output for webinary sections.
  */
